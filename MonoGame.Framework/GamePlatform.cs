@@ -68,6 +68,13 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        private bool _isVisible = true;
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            internal set { _isVisible = value; }
+        }
+        
         private bool _isMouseVisible;
         public bool IsMouseVisible
         {

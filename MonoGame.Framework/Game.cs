@@ -235,6 +235,12 @@ namespace Microsoft.Xna.Framework
             get { return Platform.IsActive; }
         }
 
+
+        public bool IsVisible
+        {
+            get { return Platform.IsVisible; }
+        }
+
         /// <summary>
         /// Indicates if the mouse cursor is visible on the game screen.
         /// </summary>
