@@ -126,6 +126,7 @@ namespace Microsoft.Xna.Framework
 
             _coreWindow.Closed += Window_Closed;
             _coreWindow.Activated += Window_FocusChanged;
+            _coreWindow.VisibilityChanged += Window_VisibilityChanged;
             _coreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
@@ -143,6 +144,11 @@ namespace Microsoft.Xna.Framework
         {
             // Register the CoreWindow with the services registry
             Game.Services.AddService(typeof(CoreWindow), _coreWindow);
+        }
+
+        void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
+        {
+            Platform.IsVisible = args.Visible;
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
