@@ -90,6 +90,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (_buffer.Length - offset > len)
                 len = _buffer.Length - offset;
                 Buffer.BlockCopy(data as Array, 0, _buffer, offset, rows*columns*elementSize);
+            }
+            else if (rows == 3 && columns == 3) //tnc: unwrap loop for Matrix3x3
+            {
+                var source = data as Array;
+                var stride = (columns*elementSize);
+                Buffer.BlockCopy(source, stride*0, _buffer, offset + (rowSize*0), columns*elementSize);
+                Buffer.BlockCopy(source, stride*1, _buffer, offset + (rowSize*1), columns*elementSize);
+                Buffer.BlockCopy(source, stride*2, _buffer, offset + (rowSize*2), columns*elementSize);
+            }
+            else if (rows == 3 && columns == 4) //tnc: unwrap loop for Matrix4x3
+            {
+                var source = data as Array;
+                var stride = (columns*elementSize);
+                Buffer.BlockCopy(source, stride*0, _buffer, offset + (rowSize*0), columns * elementSize);
+                Buffer.BlockCopy(source, stride*1, _buffer, offset + (rowSize*1), columns * elementSize);
+                Buffer.BlockCopy(source, stride*2, _buffer, offset + (rowSize*2), columns * elementSize);
             } else
             {
                 var source = data as Array;
