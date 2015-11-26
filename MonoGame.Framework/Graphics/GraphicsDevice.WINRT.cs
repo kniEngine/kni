@@ -475,10 +475,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     // latency and ensures that the application will only render after each VSync, minimizing 
                     // power consumption.
                     dxgiDevice2.MaximumFrameLatency = 1;
+
+                    _swapChain.Rotation = SharpDX.DXGI.DisplayModeRotation.Identity;
                 }
             }
 
-            _swapChain.Rotation = SharpDX.DXGI.DisplayModeRotation.Identity;
 
             // Obtain the backbuffer for this window which will be the final 3D rendertarget.
             Point targetSize;
@@ -1774,6 +1775,66 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _d3dContext.Flush();
         }
+
+#if (W81 || WP81)
+        
+        internal void SetRotation(DisplayOrientation orientation)
+        {
+            if (!PresentationParameters.LockToNativeOrientation) return;
+
+            PresentationParameters.DisplayOrientation = orientation;
+            //Microsoft.Xna.Framework.Input.Touch.TouchPanel.DisplayWidth = PresentationParameters.BackBufferWidth;
+            //Microsoft.Xna.Framework.Input.Touch.TouchPanel.DisplayHeight = PresentationParameters.BackBufferHeight;
+            Microsoft.Xna.Framework.Input.Touch.TouchPanel.DisplayOrientation = PresentationParameters.DisplayOrientation;
+            //Microsoft.Xna.Framework.Input.Touch.TouchPanel.DisplayOrientation = DisplayOrientation.LandscapeLeft;
+            _swapChain.Rotation = OrientationToRotation(orientation);
+        }
+
+        private SharpDX.DXGI.DisplayModeRotation OrientationToRotation(DisplayOrientation orientation)
+        {
+            
+            DisplayOrientations nativeOrientation =  DisplayInformation.GetForCurrentView().NativeOrientation;
+
+            if(nativeOrientation == DisplayOrientations.Portrait)
+			{
+            	switch (orientation)
+            	{
+	                case DisplayOrientation.Default:
+	                    return SharpDX.DXGI.DisplayModeRotation.Identity;
+	                case DisplayOrientation.Portrait:
+	                    return SharpDX.DXGI.DisplayModeRotation.Identity;
+	                case DisplayOrientation.PortraitDown:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate180;
+	                case DisplayOrientation.LandscapeLeft:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate270;
+	                case DisplayOrientation.LandscapeRight:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate90;
+	                case DisplayOrientation.Unknown:
+	                default:
+	                    return SharpDX.DXGI.DisplayModeRotation.Unspecified;
+            	}
+			}
+            else
+			{
+            	switch (orientation)
+            	{
+	                case DisplayOrientation.Default:
+	                    return SharpDX.DXGI.DisplayModeRotation.Identity;
+	                case DisplayOrientation.LandscapeLeft:
+	                    return SharpDX.DXGI.DisplayModeRotation.Identity;
+	                case DisplayOrientation.LandscapeRight:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate180;
+	                case DisplayOrientation.Portrait:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate270;
+	                case DisplayOrientation.PortraitDown:
+	                    return SharpDX.DXGI.DisplayModeRotation.Rotate90;
+	                case DisplayOrientation.Unknown:
+	                default:
+	                    return SharpDX.DXGI.DisplayModeRotation.Unspecified;
+            	}
+			}
+        }
+#endif
 
 #if (W81 || WP81)
         internal void Trim()
