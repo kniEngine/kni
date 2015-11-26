@@ -12,6 +12,8 @@ namespace Microsoft.Xna.Platform
         internal bool _initialized = false;
         public GenericSwapChainPanel SwapChainPanel { get; set; }
 
+        internal bool _lockToNativeOrientation = false;
+
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
@@ -135,6 +137,8 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
         {
+            presentationParameters.LockToNativeOrientation = this._lockToNativeOrientation;
+
             // The graphics device can use a XAML panel or a window
             // to created the default swapchain target.
             if (this.SwapChainPanel != null)

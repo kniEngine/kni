@@ -171,6 +171,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			get; 
 			set; 
 		}
+
+        public bool LockToNativeOrientation
+        {
+            get;
+            set;
+        }
 		
         /// <summary>
         /// Get or set the RenderTargetUsage for the back buffer.

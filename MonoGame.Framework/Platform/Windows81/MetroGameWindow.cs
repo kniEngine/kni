@@ -165,6 +165,25 @@ namespace Microsoft.Xna.Framework
 
         private void SetViewBounds(double width, double height)
         {
+            // swap width/height when LockToNativeOrientation is enabled 
+            // and CurrentOrientation is not NativeOrientation 
+            if (Game != null && Game.graphicsDeviceManager.LockToNativeOrientation)
+            {
+                DisplayOrientations PortraitAny = DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
+                DisplayOrientations LandscapeAny = DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped;
+                DisplayInformation di = DisplayInformation.GetForCurrentView();
+                var no = di.NativeOrientation;
+                var co = di.CurrentOrientation;
+
+                if (!(PortraitAny.HasFlag(co) && PortraitAny.HasFlag(no)) &&
+                    !(LandscapeAny.HasFlag(co) && LandscapeAny.HasFlag(no)))
+                {
+                    var tmp = width;
+                    width = height;
+                    height = tmp;
+                }
+            }
+
             var dpi = DisplayProperties.LogicalDpi;
             var pixelWidth = (int)Math.Round(width * dpi / 96.0);
             var pixelHeight = (int)Math.Round(height * dpi / 96.0);
@@ -180,6 +199,32 @@ namespace Microsoft.Xna.Framework
                 var dpi = DisplayProperties.LogicalDpi;
                 var pixelWidth = (int)Math.Round(args.Size.Width * dpi / 96.0);
                 var pixelHeight = (int)Math.Round(args.Size.Height * dpi / 96.0);
+
+                // swap width/height when LockToNativeOrientation is enabled 
+                // and CurrentOrientation is not NativeOrientation 
+                if (Game != null && Game.graphicsDeviceManager.LockToNativeOrientation)
+                {
+                    DisplayOrientations PortraitAny = DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
+                    DisplayOrientations LandscapeAny = DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped;
+                    DisplayInformation di = DisplayInformation.GetForCurrentView();
+                    var no = di.NativeOrientation;
+                    var co = di.CurrentOrientation;
+    
+                    if (!(PortraitAny.HasFlag(co) && PortraitAny.HasFlag(no)) &&
+                        !(LandscapeAny.HasFlag(co) && LandscapeAny.HasFlag(no)))
+                    {
+                        	var tmp = pixelWidth;
+                        	pixelWidth = pixelHeight;
+                        	pixelHeight = tmp;
+                    }
+                    //don't do anything if bounds are the same
+                    if (pixelWidth == _viewBounds.Width && pixelHeight == _viewBounds.Height)
+                    {
+                        _isSizeChanged = false;
+                        return;
+                    }
+                }
+
                 _newViewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
             }
         }
@@ -266,6 +311,16 @@ namespace Microsoft.Xna.Framework
 
                 // Set the new orientation.
                 _orientation = _newOrientation;
+
+#if (W81 || WP81)
+                if(Game.graphicsDeviceManager.LockToNativeOrientation)
+                {
+                    Game.GraphicsDevice.SetRotation(_orientation);
+                    // Call the user callback.
+                    OnOrientationChanged();
+                    return;
+                }
+#endif
 
                 // Call the user callback.
                 OnOrientationChanged();
