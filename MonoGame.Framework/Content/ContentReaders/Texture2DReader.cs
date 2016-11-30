@@ -176,6 +176,7 @@ namespace Microsoft.Xna.Framework.Content
             });
 #endif
         			
+			texture.Name = reader.AssetName;
 			return texture;
 		}
     }

@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Framework.Content
         private List<KeyValuePair<int, Action<object>>> sharedResourceFixups;
         private ContentTypeReader[] typeReaders;
 		internal int version;
+        internal int xnbLength;
 		internal int sharedResourceCount;
 
         internal ContentTypeReader[] TypeReaders
@@ -28,13 +29,14 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
-        internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, Action<IDisposable> recordDisposableObject)
+        internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, int xnbLength, Action<IDisposable> recordDisposableObject)
             : base(stream)
         {
             this.recordDisposableObject = recordDisposableObject;
             this.contentManager = manager;
             this.assetName = assetName;
 			this.version = version;
+            this.xnbLength = xnbLength;
         }
 
         public ContentManager ContentManager
@@ -94,7 +96,16 @@ namespace Microsoft.Xna.Framework.Content
 
             var sharedResources = new object[sharedResourceCount];
             for (var i = 0; i < sharedResourceCount; ++i)
-                sharedResources[i] = InnerReadObject<object>(null);
+            {
+                object existingInstance;
+                string key = assetName.Replace('\\', '/') +"_SharedResource_" + i + "_" + this.xnbLength;
+                contentManager.loadedSharedResources.TryGetValue(key, out existingInstance);
+                
+                sharedResources[i] = InnerReadObject<object>(existingInstance);
+
+                if (existingInstance == null)
+                    contentManager.loadedSharedResources[key] = sharedResources[i];
+            }
 
             // Fixup shared resources by calling each registered action
             foreach (var fixup in sharedResourceFixups)

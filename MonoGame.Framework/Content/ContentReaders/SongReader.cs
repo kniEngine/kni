@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Content
 			
 			var durationMs = input.ReadObject<int>();
 
-            return new Song(path, durationMs); 
+            return existingInstance ?? new Song(path, durationMs); 
 		}
 	}
 }
