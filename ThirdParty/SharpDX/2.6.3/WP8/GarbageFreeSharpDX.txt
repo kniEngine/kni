@@ -1,0 +1,3 @@
+https://github.com/sharpdx/SharpDX/issues/451
+https://github.com/nkast/SharpDX/tree/2.6.3_WP8.0_FixGarbage
+https://github.com/sharpdx/SharpDX/pull/541
