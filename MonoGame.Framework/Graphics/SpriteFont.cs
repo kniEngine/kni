@@ -183,9 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		public Vector2 MeasureString(string text)
 		{
 			var source = new CharacterSource(text);
-			Vector2 size;
-			MeasureString(ref source, out size);
-			return size;
+			return MeasureString(ref source);
 		}
 
 		/// <summary>
@@ -198,17 +196,14 @@ namespace Microsoft.Xna.Framework.Graphics
 		public Vector2 MeasureString(StringBuilder text)
 		{
 			var source = new CharacterSource(text);
-			Vector2 size;
-			MeasureString(ref source, out size);
-			return size;
+			return MeasureString(ref source);
 		}
 
-		internal unsafe void MeasureString(ref CharacterSource text, out Vector2 size)
+		private unsafe Vector2 MeasureString(ref CharacterSource text)
 		{
 			if (text.Length == 0)
             {
-				size = Vector2.Zero;
-				return;
+				return Vector2.Zero;
 			}
 
 			var width = 0.0f;
@@ -261,8 +256,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     finalLineHeight = pCurrentGlyph->Cropping.Height;
             }
 
-            size.X = width;
-            size.Y = offset.Y + finalLineHeight;
+            var height = offset.Y + finalLineHeight;
+            return new Vector2(width, height);
 		}
         
         internal unsafe bool TryGetGlyphIndex(char c, out int index)
@@ -318,7 +313,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return glyphIdx;
         }
         
-        internal struct CharacterSource 
+        private struct CharacterSource 
         {
 			private readonly string _string;
 			private readonly StringBuilder _builder;
