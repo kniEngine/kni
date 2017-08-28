@@ -84,7 +84,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     Width = kerning[i].Y,
                     RightSideBearing = kerning[i].Z,
 
-                    WidthIncludingBearings = kerning[i].X + kerning[i].Y + kerning[i].Z
+                    WidthIncludingBearings = kerning[i].X + kerning[i].Y + kerning[i].Z,
+                    
+                    TexCoordTL = new Vector2( glyphBounds[i].X * _texture.TexelWidth, 
+                                              glyphBounds[i].Y * _texture.TexelHeight),
+                    TexCoordBR = new Vector2( (glyphBounds[i].X + glyphBounds[i].Width) * _texture.TexelWidth, 
+                                              (glyphBounds[i].Y + glyphBounds[i].Height) * _texture.TexelHeight),
 				};
                 
                 if(regions.Count == 0 || characters[i] > (regions.Peek().End+1))
@@ -378,6 +383,9 @@ namespace Microsoft.Xna.Framework.Graphics
             /// Width of the character before kerning is applied. 
             /// </summary>
             public float WidthIncludingBearings;
+
+            internal Vector2 TexCoordTL;
+            internal Vector2 TexCoordBR;
 
 			public static readonly Glyph Empty = new Glyph();
 
