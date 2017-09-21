@@ -99,14 +99,30 @@ namespace Microsoft.Xna.Framework
             }
 
             CoreApplication.Suspending += this.CoreApplication_Suspending;
+            CoreApplication.Resuming += this.CoreApplication_Resuming;
 
             Game.PreviousExecutionState = PreviousExecutionState;
         }
 
         private void CoreApplication_Suspending(object sender, SuspendingEventArgs e)
         {
+            if (_runInMainThread)
+                _enableRunLoop = false;
+
             if (this.Game.GraphicsDevice != null)
                 this.Game.GraphicsDevice.Trim();
+        }
+
+        private void CoreApplication_Resuming(object sender, Object e)
+        {
+            if (_runInMainThread)
+            {
+                if (!_enableRunLoop)
+                {
+                    _enableRunLoop = true;
+                    UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
+                }
+            }
         }
 
         public override GameRunBehavior DefaultRunBehavior
@@ -119,8 +135,22 @@ namespace Microsoft.Xna.Framework
             UAPGameWindow.Instance.RunLoop();
         }
 
+        bool _runInMainThread = true;
+        bool _enableRunLoop = false;
         public override void StartRunLoop()
         {
+            if (UAPGameWindow.Instance.CoreWindow.CustomProperties.ContainsKey("RunInMainThread"))
+                _runInMainThread = (bool)UAPGameWindow.Instance.CoreWindow.CustomProperties["RunInMainThread"];
+            if (_runInMainThread)
+            {
+                if (!_enableRunLoop)
+                {
+                    _enableRunLoop = true;
+                    UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
+                }
+                return;
+            }
+            
             var workItemHandler = new WorkItemHandler((action) =>
             {
                 while (true)
@@ -131,6 +161,37 @@ namespace Microsoft.Xna.Framework
             var tickWorker = ThreadPool.RunAsync(workItemHandler, WorkItemPriority.High, WorkItemOptions.TimeSliced);
         }
         
+        private void OnRenderFrame(IdleDispatchedHandlerArgs e)
+        {
+            if (_enableRunLoop)
+                OnRenderFrame(e.IsDispatcherIdle);
+        }
+
+        private void OnRenderFrame()
+        {
+            if (_enableRunLoop)
+            {
+                var dispatcher = UAPGameWindow.Instance.CoreWindow.Dispatcher;
+                if (dispatcher.ShouldYield(CoreDispatcherPriority.Idle))
+                    dispatcher.RunIdleAsync(OnRenderFrame);
+                else
+                    OnRenderFrame(true);
+            }
+        }
+
+        private void OnRenderFrame(bool isQueueEmpty)
+        {
+            UAPGameWindow.Instance.Tick();
+            GamePad.Back = false;
+
+            // Request next frame
+            var dispatcher = UAPGameWindow.Instance.CoreWindow.Dispatcher;
+            if (isQueueEmpty)
+                dispatcher.RunAsync(CoreDispatcherPriority.Low, OnRenderFrame);
+            else
+                dispatcher.RunIdleAsync(OnRenderFrame);
+        }
+
         public override void Exit()
         {
             if (!UAPGameWindow.Instance.IsExiting)
