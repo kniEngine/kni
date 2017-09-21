@@ -42,6 +42,8 @@ namespace Microsoft.Xna.Framework
         private bool _backPressed = false;
 
         #region Internal Properties
+        
+        internal CoreWindow CoreWindow { get { return _coreWindow; } }
 
         internal Game Game { get; set; }
 
