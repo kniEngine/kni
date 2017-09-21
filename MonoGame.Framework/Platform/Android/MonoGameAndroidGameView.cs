@@ -1094,7 +1094,7 @@ namespace Microsoft.Xna.Framework
                     // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                     // the surface is created after the correct viewport is already applied so we must do it again.
                     if (_game.GraphicsDevice != null)
-                        _game.graphicsDeviceManager.ResetClientBounds();
+                        _game.graphicsDeviceManager.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
 
                     if (MonoGame.OpenGL.GL.GetError == null)
                         MonoGame.OpenGL.GL.LoadEntryPoints();
@@ -1139,7 +1139,6 @@ namespace Microsoft.Xna.Framework
                             Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                             // DeviceReset events
-                            _game.graphicsDeviceManager.OnDeviceReset(EventArgs.Empty);
                             _game.GraphicsDevice.OnDeviceReset();
 
                             IsResuming = false;
@@ -1154,7 +1153,6 @@ namespace Microsoft.Xna.Framework
         protected void ContextLostInternal()
         {
             OnContextLost(EventArgs.Empty);
-            _game.graphicsDeviceManager.OnDeviceResetting(EventArgs.Empty);
             if (_game.GraphicsDevice != null)
                 _game.GraphicsDevice.OnDeviceResetting();
         }

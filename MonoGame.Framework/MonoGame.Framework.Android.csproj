@@ -40,7 +40,9 @@
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.StbSharp.cs" />
-    <Compile Include="GraphicsDeviceManager.Legacy.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
     <Compile Include="Input\GamePad.Android.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\KeyboardInput.Android.cs" />
