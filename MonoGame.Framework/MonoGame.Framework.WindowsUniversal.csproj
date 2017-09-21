@@ -39,8 +39,9 @@
 
   <ItemGroup>
     <Compile Include="GamePlatform.Desktop.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManager.WinRT.cs" />
     <Compile Include="Graphics\GraphicsAdapter.cs" />
     <Compile Include="Graphics\Texture2D.StbSharp.cs" />
     <Compile Include="Input\GamePad.UWP.cs" />

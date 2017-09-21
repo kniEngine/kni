@@ -39,7 +39,9 @@
     <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="Platform\Graphics\OpenGL.iOS.cs" />
     <Compile Include="Graphics\Texture2D.StbSharp.cs" />
-    <Compile Include="GraphicsDeviceManager.Legacy.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
     <Compile Include="Input\GamePad.iOS.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\Keyboard.Default.cs" />

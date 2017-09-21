@@ -61,8 +61,9 @@
     <Compile Include="Platform\Graphics\WindowInfo.SDL.cs" />
     <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="GamePlatform.Desktop.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManager.SDL.cs" />
     
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
