@@ -376,6 +376,23 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             _swapChain = new SwapChain1(dxgiFactory2, dxgiDevice2, ref desc, null);
                             nativePanel.SwapChain = _swapChain;
+
+                            // update swapChain2.MatrixTransform on SizeChanged of SwapChainPanel
+                            // sometimes window.SizeChanged and SwapChainPanel.SizeChanged are not synced
+                            PresentationParameters.SwapChainPanel.SizeChanged += (sender, e) =>
+                            {
+                                try
+                                {
+                                    using (var swapChain2 = _swapChain.QueryInterface<SwapChain2>())
+                                    {
+                                        var inverseScale = new RawMatrix3x2();
+                                        inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth / PresentationParameters.BackBufferWidth;
+                                        inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
+                                        swapChain2.MatrixTransform = inverseScale;
+                                    };
+                                }
+                                catch (Exception) { }
+                            };
                         }
                     }
 
@@ -395,8 +412,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 var asyncResult = PresentationParameters.SwapChainPanel.Dispatcher.RunIdleAsync((e) =>
                 {
                     var inverseScale = new RawMatrix3x2();
-                    inverseScale.M11 = 1.0f / PresentationParameters.SwapChainPanel.CompositionScaleX;
-                    inverseScale.M22 = 1.0f / PresentationParameters.SwapChainPanel.CompositionScaleY;
+                    inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth  / PresentationParameters.BackBufferWidth;
+                    inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
                     using (var swapChain2 = _swapChain.QueryInterface<SwapChain2>())
                         swapChain2.MatrixTransform = inverseScale;
                 });
