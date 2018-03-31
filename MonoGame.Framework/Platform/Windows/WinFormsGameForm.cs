@@ -73,6 +73,23 @@ namespace Microsoft.Xna.Framework.Windows
         protected override void WndProc(ref Message m)
         {
             var state = TouchLocationState.Invalid;
+           
+            // TNC: handle those messages internally to avoid garbage from EventArgs
+            switch (m.Msg)
+            {
+                case 0x0014: // WM_ERASEBKGND
+                    return; // skip repaint of the control under the swapchain (PaintEventArgs)
+                case 0x020A: // WM_MOUSEWHEEL
+                    var delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
+                    _window.MouseState.ScrollWheelValue += delta;
+                    return;
+                case 0x020E: // WM_MOUSEHWHEEL
+                    var deltaH = (short)(((ulong)m.WParam >> 16) & 0xffff);
+                    _window.MouseState.HorizontalScrollWheelValue += deltaH;
+                    return;
+                case 0x0200: // WM_MOUSEMOVE
+                    return;
+            }
 
             switch (m.Msg)
             {
