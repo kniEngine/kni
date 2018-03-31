@@ -275,7 +275,21 @@ namespace MonoGame.Framework
         private void OnResize(object sender, EventArgs eventArgs)
         {
             if (_switchingFullScreen || Form.IsResizing)
+            {   
+                // TNC: repaint the window when resizing
+                // gameloop is paused during windows resize
+                try 
+                {
+                    _platform.Game.GraphicsDevice.Present();
+                }
+                catch (Exception ex)
+                {
+#if DEBUG 
+                    throw ex;
+#endif
+                }
                 return;
+            }
 
             // this event can be triggered when moving the window through Windows hotkeys
             // in that case we should no longer center the window after resize
