@@ -251,6 +251,11 @@ namespace Microsoft.Xna.Framework
             EventHelpers.Raise(this, KeyUp, e);
 	    }
 #endif
+#if WINDOWS
+        // TNC: helper for filtering keyboard messages
+        internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
+        internal bool PreFilterMSG_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
+#endif
 
         internal void OnFileDrop(FileDropEventArgs e)
         {
