@@ -35,6 +35,7 @@ namespace Microsoft.Xna.Framework.Windows
 
     [System.ComponentModel.DesignerCategory("Code")]
     internal class WinFormsGameForm : Form
+        , IMessageFilter
     {
         private readonly WinFormsGameWindow _window;
 
@@ -60,6 +61,7 @@ namespace Microsoft.Xna.Framework.Windows
         public WinFormsGameForm(WinFormsGameWindow window)
         {
             _window = window;
+            Application.AddMessageFilter(this);
         }
 
         public void CenterOnPrimaryMonitor()
@@ -68,7 +70,30 @@ namespace Microsoft.Xna.Framework.Windows
                  (Screen.PrimaryScreen.WorkingArea.Width  - Width ) / 2,
                  (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2);
         }
+        
+        // TNC: handle keyboard messages internally to avoid garbage from EventArgs
+        // we need to handle those early in a IMessageFilter to skip OnPreviewKeyDown(PreviewKeyDownEventArgs)
+        bool IMessageFilter.PreFilterMessage(ref Message m)
+        {            
+            if (m.HWnd != this.Handle)
+                return false;
+            
+            switch (m.Msg)
+            {
+                case 0x0100: // WM_KEYDOWN
+                case 0x0101: // WM_KEYUP
+                case 0x0102: // WM_CHAR
+                case 0x0109: // WM_UNICHAR
+                    var c = m.WParam.ToInt32();
+                    if (c == 0x5B && c == 0x5C) return false; // let Left/Right Windows Key through
+                    if (_window.PreFilterMSG_IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
+                    if (_window.PreFilterMSG_IsKeyUpDownAttached())  return false; // let keys through if user subscribed to KeyUp/KwyDown
+                    return true; // skip message
+            }
 
+            return false;
+        }
+        
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
