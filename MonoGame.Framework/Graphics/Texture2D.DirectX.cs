@@ -164,6 +164,24 @@ namespace Microsoft.Xna.Framework.Graphics
                     var rowSize = elementSize * elementsInRow;
                     if (rowSize == databox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
+                    else if (level == 0 && arraySlice == 0 &&
+                             rect.X == 0 && rect.Y == 0 &&
+                             rect.Width == this.Width && rect.Height == this.height &&
+                             startIndex == 0 && elementCount == data.Length)
+                    {
+                        // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
+                        var elementSize2 = SharpDX.Utilities.SizeOf<T>();
+                        if (elementSize2 == 1) // byte[]
+                            elementsInRow = elementsInRow * elementSize;
+
+                        var currentIndex = 0;
+                        for (var row = 0; row < rows; row++)
+                        {
+                            stream.ReadRange(data, currentIndex, elementsInRow);
+                            stream.Seek((databox.RowPitch - rowSize), SeekOrigin.Current);
+                            currentIndex += elementsInRow;
+                        }
+                    }
                     else
                     {
                         // Some drivers may add pitch to rows.
