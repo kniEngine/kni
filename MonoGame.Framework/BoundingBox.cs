@@ -630,14 +630,13 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            var squareDistance = 0.0f;
-            var point = sphere.Center;
-            if (point.X < Min.X) squareDistance += (Min.X - point.X) * (Min.X - point.X);
-            if (point.X > Max.X) squareDistance += (point.X - Max.X) * (point.X - Max.X);
-            if (point.Y < Min.Y) squareDistance += (Min.Y - point.Y) * (Min.Y - point.Y);
-            if (point.Y > Max.Y) squareDistance += (point.Y - Max.Y) * (point.Y - Max.Y);
-            if (point.Z < Min.Z) squareDistance += (Min.Z - point.Z) * (Min.Z - point.Z);
-            if (point.Z > Max.Z) squareDistance += (point.Z - Max.Z) * (point.Z - Max.Z);
+            double squareDistance = 0.0;
+            if (sphere.Center.X < Min.X) squareDistance += (sphere.Center.X - Min.X) * (sphere.Center.X - Min.X);
+            else if (sphere.Center.X > Max.X) squareDistance += (sphere.Center.X - Max.X) * (sphere.Center.X - Max.X);
+            if (sphere.Center.Y < Min.Y) squareDistance += (sphere.Center.Y - Min.Y) * (sphere.Center.Y - Min.Y);
+            else if (sphere.Center.Y > Max.Y) squareDistance += (sphere.Center.Y - Max.Y) * (sphere.Center.Y - Max.Y);
+            if (sphere.Center.Z < Min.Z) squareDistance += (sphere.Center.Z - Min.Z) * (sphere.Center.Z - Min.Z);
+            else if (sphere.Center.Z > Max.Z) squareDistance += (sphere.Center.Z - Max.Z) * (sphere.Center.Z - Max.Z);
             result = squareDistance <= sphere.Radius * sphere.Radius;
         }
 
