@@ -103,6 +103,9 @@ namespace Microsoft.Xna.Framework
 
         /// <summary>
         ///   Check if this <see cref="BoundingBox"/> contains a <see cref="BoundingFrustum"/>.
+        /// WARNING: Reported to not work properly.
+        /// If a BoundingFrustum that is outside a BoundingBox, the returned value will be ContainmentType.Intersects.
+        /// If instead call the equivalent (?) function on the BoundingFrustum.Contains(BoundingBox), we get the right result, namely ContainmentType.Disjoint.
         /// </summary>
         /// <param name="frustum">The <see cref="BoundingFrustum"/> to test for overlap.</param>
         /// <returns>
