@@ -250,7 +250,8 @@ namespace MonoGame.Framework
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
             var key = (Keys) (VkKeyScanEx(e.KeyChar, InputLanguage.CurrentInputLanguage.Handle) & 0xff);
-            OnTextInput(new TextInputEventArgs(e.KeyChar, key));
+            if (IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
+                OnTextInput(new TextInputEventArgs(e.KeyChar, key));
         }
 
         internal void Initialize(int width, int height)

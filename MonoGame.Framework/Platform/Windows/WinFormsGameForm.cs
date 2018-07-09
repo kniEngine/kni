@@ -212,6 +212,9 @@ namespace Microsoft.Xna.Framework.Windows
 
         void HandleKeyMessage(ref Message m)
         {
+            if (!_window.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
+                return;
+
             long virtualKeyCode = m.WParam.ToInt64();
             bool extended = (m.LParam.ToInt64() & 0x01000000) != 0;
             long scancode = (m.LParam.ToInt64() & 0x00ff0000) >> 16;

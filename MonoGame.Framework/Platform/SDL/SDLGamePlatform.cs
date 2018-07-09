@@ -139,16 +139,19 @@ namespace Microsoft.Xna.Framework
                         if (!_keys.Contains(key))
                             _keys.Add(key);
                         char character = (char)ev.Key.Keysym.Sym;
-                        _view.OnKeyDown(new InputKeyEventArgs(key));
+                        if (_view.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
+                            _view.OnKeyDown(new InputKeyEventArgs(key));
                         if (char.IsControl(character))
-                            _view.OnTextInput(new TextInputEventArgs(character, key));
+                            if (_view.IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
+                                _view.OnTextInput(new TextInputEventArgs(character, key));
                         break;
                     }
                     case Sdl.EventType.KeyUp:
                     {
                         var key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
                         _keys.Remove(key);
-                        _view.OnKeyUp(new InputKeyEventArgs(key));
+                        if (_view.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
+                            _view.OnKeyUp(new InputKeyEventArgs(key));
                         break;
                     }
                     case Sdl.EventType.TextInput:
@@ -196,7 +199,8 @@ namespace Microsoft.Xna.Framework
 
                                         if (codepoint >= 0 && codepoint < 0xFFFF)
                                         {
-                                            _view.OnTextInput(new TextInputEventArgs((char)codepoint, KeyboardUtil.ToXna(codepoint)));
+                                            if (_view.IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
+                                                _view.OnTextInput(new TextInputEventArgs((char)codepoint, KeyboardUtil.ToXna(codepoint)));
                                             // UTF16 characters beyond 0xFFFF are not supported (and would require a surrogate encoding that is not supported by the char type)
                                         }
                                     }

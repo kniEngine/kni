@@ -225,6 +225,9 @@ namespace Microsoft.Xna.Framework
 
         private void Dispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
         {
+            if (!IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
+                return;
+
             // NOTE: Dispatcher event is used because KeyDown event doesn't handle Alt key
             var key = InputEvents.KeyTranslate(args.VirtualKey, args.KeyStatus);
             switch (args.EventType)
@@ -396,7 +399,8 @@ namespace Microsoft.Xna.Framework
                 InputEvents.KeyChar ch;
                 while (_inputEvents.TextQueue.TryDequeue(out ch))
                 {
-                    OnTextInput(new TextInputEventArgs(ch.Character, ch.Key));
+                    if (IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
+                        OnTextInput(new TextInputEventArgs(ch.Character, ch.Key));
                 }
             }
 

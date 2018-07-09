@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework
 {
     internal class InputEvents
     {
-        internal class KeyChar
+        internal struct KeyChar
         {
             public char Character;
 
@@ -311,13 +311,12 @@ namespace Microsoft.Xna.Framework
 
             _lastEnqueuedKeyChar = new KeyChar();
             _lastEnqueuedKeyChar.Key = xnaKey;
-            TextQueue.Enqueue(_lastEnqueuedKeyChar);
         }
 
         private void Window_CharacterReceived(CoreWindow sender, CharacterReceivedEventArgs args)
         {
-            if (_lastEnqueuedKeyChar != null)
-                _lastEnqueuedKeyChar.Character = (char)args.KeyCode;
+            _lastEnqueuedKeyChar.Character = (char)args.KeyCode;
+            TextQueue.Enqueue(_lastEnqueuedKeyChar);
         }
 
         private void CoreWindow_SizeChanged(CoreWindow sender, WindowSizeChangedEventArgs args)
