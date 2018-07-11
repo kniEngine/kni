@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            var importer = new OpenAssetImporter("FbxImporter", true);
+            var importer = new OpenAssetImporter("FbxImporter");
             return importer.Import(filename, context);
         }
     }
