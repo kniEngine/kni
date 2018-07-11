@@ -220,25 +220,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private NodeContent _rootNode;
         private List<MaterialContent> _materials;
 
-        // This is used to enable backwards compatibility with
-        // XNA providing a model as expected from the original
-        // FbxImporter and XImporter.
-        private readonly bool _xnaCompatible;
-
         private readonly string _importerName;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public OpenAssetImporter()
-            : this("OpenAssetImporter", false)
+        public OpenAssetImporter() : this("OpenAssetImporter")
         {
         }
 
-        internal OpenAssetImporter(string importerName, bool xnaCompatible)
+        internal OpenAssetImporter(string importerName)
         {            
             _importerName = importerName;
-            _xnaCompatible = xnaCompatible;
         }
 
         /// <summary>
@@ -322,10 +315,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 FindSkeleton();     // Find _rootBone, _bones, _deformationBones.
 
                 // Create _materials.
-                if (_xnaCompatible)
-                    ImportXnaMaterials();
-                else
-                    ImportMaterials();  
+                ImportMaterials();  
 
                 ImportNodes();      // Create _pivots and _rootNode (incl. children).
                 ImportSkeleton();   // Create skeleton (incl. animations) and add to _rootNode.
@@ -349,7 +339,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp <see cref="Material"/>s to standard XNA compatible <see cref="MaterialContent"/>s.
         /// </summary>
-        private void ImportXnaMaterials()
+        private void ImportMaterials()
         {
             _materials = new List<MaterialContent>();
             foreach (var aiMaterial in _scene.Materials)
@@ -388,22 +378,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     material.SpecularColor = ToXna(aiMaterial.ColorSpecular);
 
                 if (aiMaterial.HasShininessStrength)
-                    material.SpecularPower = aiMaterial.Shininess;
+                    material.SpecularPower = aiMaterial.ShininessStrength; // aiMaterial.Shininess; // TNC: maintain backward compatibility. Should this be (ShininessStrength*Shininess)?
                 
                 _materials.Add(material);
             }
         }
 
-        private ExternalReference<TextureContent> ImportTextureContentRef(TextureSlot textureSlot)
+        private ExternalReference<TextureContent> ImportTextureContentRef(TextureSlot textureSlot, bool ext = false)
         {
             var texture = new ExternalReference<TextureContent>(textureSlot.FilePath, _identity);
             texture.OpaqueData.Add("TextureCoordinate", string.Format("TextureCoordinate{0}", textureSlot.UVIndex));
 
-            if (!_xnaCompatible)
+            // ext is set by ImportMaterialsEx()
+            if (ext)
             {
                 texture.OpaqueData.Add("Operation", textureSlot.Operation.ToString());
                 texture.OpaqueData.Add("AddressU", textureSlot.WrapModeU.ToString());
-                texture.OpaqueData.Add("AddressV", textureSlot.WrapModeU.ToString());
+                texture.OpaqueData.Add("AddressV", textureSlot.WrapModeV.ToString());
                 texture.OpaqueData.Add("Mapping", textureSlot.Mapping.ToString());
             }
 
@@ -413,7 +404,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Returns all the Assimp <see cref="Material"/> features as a <see cref="MaterialContent"/>.
         /// </summary>
-        private void ImportMaterials()
+        private void ImportMaterialsExt()
         {
             _materials = new List<MaterialContent>();
             foreach (var aiMaterial in _scene.Materials)
@@ -444,7 +435,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     if (tex.TextureIndex > 0)
                         name += (tex.TextureIndex + 1);
 
-                    material.Textures.Add(name, ImportTextureContentRef(tex));
+                    material.Textures.Add(name, ImportTextureContentRef(tex, true));
                 }
 
                 if (aiMaterial.HasBlendMode)
