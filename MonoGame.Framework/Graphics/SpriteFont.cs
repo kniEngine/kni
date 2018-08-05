@@ -4,6 +4,7 @@
 
 // Original code from SilverSprite Project
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				"Character cannot be resolved by this SpriteFont.";
 		}
 
+        private readonly char[] _characters;
         private readonly Glyph[] _glyphs;
         private readonly CharacterRegion[] _regions;
         private char? _defaultCharacter;
@@ -29,10 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		private readonly Texture2D _texture;
 
-		/// <summary>
-		/// All the glyphs in this SpriteFont.
-		/// </summary>
-		public Glyph[] Glyphs { get { return _glyphs; } }
+        ///<remarks>SpriteBatcher need direct accest to the Glyph array</remarks>
+		internal Glyph[] InternalGlyphs { get { return _glyphs; } }
 
 		class CharComparer: IEqualityComparer<char>
 		{
@@ -64,11 +64,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			Texture2D texture, List<Rectangle> glyphBounds, List<Rectangle> cropping, List<char> characters,
 			int lineSpacing, float spacing, List<Vector3> kerning, char? defaultCharacter)
 		{
-			Characters = new ReadOnlyCollection<char>(characters.ToArray());
 			_texture = texture;
 			LineSpacing = lineSpacing;
 			Spacing = spacing;
 
+            _characters = characters.ToArray();
             _glyphs = new Glyph[characters.Count];
             var regions = new Stack<CharacterRegion>();
 
@@ -78,7 +78,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
 					BoundsInTexture = glyphBounds[i],
 					Cropping = cropping[i],
-                    Character = characters[i],
 
                     LeftSideBearing = kerning[i].X,
                     Width = kerning[i].Y,
@@ -113,6 +112,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _regions = regions.ToArray();
             Array.Reverse(_regions);
 
+            Glyphs = new GlyphCollection(this);
+
 			DefaultCharacter = defaultCharacter;
 		}
 
@@ -122,23 +123,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Can be used to implement custom rendering of a SpriteFont</remarks>
         public Texture2D Texture { get { return _texture; } }
 
-        /// <summary>
-        /// Returns a copy of the dictionary containing the glyphs in this SpriteFont.
-        /// </summary>
-        /// <returns>A new Dictionary containing all of the glyphs in this SpriteFont</returns>
-        /// <remarks>Can be used to calculate character bounds when implementing custom SpriteFont rendering.</remarks>
-        public Dictionary<char, Glyph> GetGlyphs()
-        {
-            var glyphsDictionary = new Dictionary<char, Glyph>(_glyphs.Length, CharComparer.Default);
-            foreach(var glyph in _glyphs)
-                glyphsDictionary.Add(glyph.Character, glyph);
-            return glyphsDictionary;
-        }
-
 		/// <summary>
-		/// Gets a collection of the characters in the font.
-		/// </summary>
-		public ReadOnlyCollection<char> Characters { get; private set; }
+        /// The glyphs in this SpriteFont.
+        /// </summary>
+        ///
+        public readonly GlyphCollection Glyphs;
 
 		/// <summary>
 		/// Gets or sets the character that will be substituted when a
@@ -212,7 +201,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			var offset = Vector2.Zero;
             var firstGlyphOfLine = true;
 
-            fixed (Glyph* pGlyphs = Glyphs)
+            fixed (Glyph* pGlyphs = InternalGlyphs)
             for (var i = 0; i < text.Length; ++i)
             {
                 var c = text[i];
@@ -231,7 +220,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var currentGlyphIndex = GetGlyphIndexOrDefault(c);
-                Debug.Assert(currentGlyphIndex >= 0 && currentGlyphIndex < Glyphs.Length, "currentGlyphIndex was outside the bounds of the array.");
+                Debug.Assert(currentGlyphIndex >= 0 && currentGlyphIndex < InternalGlyphs.Length, "currentGlyphIndex was outside the bounds of the array.");
                 var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                 // The first character on a line might have a negative left side bearing.
@@ -351,10 +340,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		public struct Glyph 
         {
             /// <summary>
-            /// The char associated with this glyph.
-            /// </summary>
-			public char Character;
-            /// <summary>
             /// Rectangle in the font texture where this letter exists.
             /// </summary>
 			public Rectangle BoundsInTexture;
@@ -386,7 +371,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			public override string ToString ()
 			{
-                return "CharacterIndex=" + Character + ", Glyph=" + BoundsInTexture + ", Cropping=" + Cropping + ", Kerning=" + LeftSideBearing + "," + Width + "," + RightSideBearing;
+                return "Glyph=" + BoundsInTexture + ", Cropping=" + Cropping + ", Kerning=" + LeftSideBearing + "," + Width + "," + RightSideBearing;
 			}
 		}
 
@@ -403,5 +388,158 @@ namespace Microsoft.Xna.Framework.Graphics
                 this.StartIndex = startIndex;
             }
         }
+
+        public class GlyphCollection : IDictionary<char, Glyph>
+        {
+            private readonly SpriteFont _spriteFont;
+            private readonly ReadOnlyCollection<char> _keys;
+            private readonly ReadOnlyCollection<Glyph> _values;
+
+            internal GlyphCollection(SpriteFont spriteFont)
+            {
+                _spriteFont = spriteFont;
+                _keys = new ReadOnlyCollection<char>(_spriteFont._characters);
+                _values = new ReadOnlyCollection<Glyph>(_spriteFont._glyphs);
+            }
+
+            public Glyph this[char key]
+            {
+                get
+                {
+                    int glyphIdx;
+                    if (_spriteFont.TryGetGlyphIndex(key, out glyphIdx))
+                        return _spriteFont._glyphs[glyphIdx];
+                    else
+                        throw new KeyNotFoundException();
+                }
+                set { throw new NotSupportedException(); }
+            }
+
+            public int Count { get { return _spriteFont._glyphs.Length; } }
+
+            public bool IsReadOnly { get { return true; } }
+
+            ICollection<char> IDictionary<char, Glyph>.Keys { get { return _keys; } }
+
+            ICollection<Glyph> IDictionary<char, Glyph>.Values { get { return _values; } }
+
+            public bool ContainsKey(char key)
+            {
+                int glyphIdx;
+                return _spriteFont.TryGetGlyphIndex(key, out glyphIdx);
+            }
+
+            public bool TryGetValue(char key, out Glyph value)
+            {
+                int glyphIdx;
+                bool isFound = _spriteFont.TryGetGlyphIndex(key, out glyphIdx);
+                value = (isFound) ? _spriteFont._glyphs[glyphIdx] : default(Glyph);
+                return isFound;
+            }
+
+            bool ICollection<KeyValuePair<char, Glyph>>.Contains(KeyValuePair<char, Glyph> item)
+            {
+                return (_keys.Contains(item.Key) && this[item.Key].Equals(item.Value));
+            }
+
+            public void CopyTo(KeyValuePair<char, Glyph>[] array, int arrayIndex)
+            {
+                foreach (var keyValue in this)
+                    array[arrayIndex++] = keyValue;
+            }
+
+            IEnumerator<KeyValuePair<char, Glyph>> IEnumerable<KeyValuePair<char, Glyph>>.GetEnumerator()
+            {
+                return new CharGlyphPairEnumerator(this, _keys);
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return ((IEnumerable<KeyValuePair<char, Glyph>>)this).GetEnumerator();
+            }
+
+            void IDictionary<char, Glyph>.Add(char key, Glyph value)
+            {
+                throw new NotSupportedException();
+            }
+
+            bool IDictionary<char, Glyph>.Remove(char key)
+            {
+                throw new NotSupportedException();
+            }
+
+            void ICollection<KeyValuePair<char, Glyph>>.Add(KeyValuePair<char, Glyph> item)
+            {
+                throw new NotSupportedException();
+            }
+
+            bool ICollection<KeyValuePair<char, Glyph>>.Remove(KeyValuePair<char, Glyph> item)
+            {
+                throw new NotSupportedException();
+            }
+
+            void ICollection<KeyValuePair<char, Glyph>>.Clear()
+            {
+                throw new NotSupportedException();
+            }
+
+            public struct CharGlyphPairEnumerator : IEnumerator<KeyValuePair<char, Glyph>>
+            {
+                private GlyphCollection _collection;
+                private ReadOnlyCollection<char> _keys;
+                private int i;
+
+                public CharGlyphPairEnumerator(GlyphCollection collection, ReadOnlyCollection<char> keys)
+                {
+                    this._collection = collection;
+                    this._keys = keys;
+                    i = -1;
+                }
+
+                #region IEnumerator<KeyValuePair<char, Glyph>>
+
+                public KeyValuePair<char, Glyph> Current
+                {
+                    get
+                    {
+                        var key = _keys[i];
+                        return new KeyValuePair<char, Glyph>(key, _collection[key]);
+                    }
+                }
+
+                #endregion IEnumerator<KeyValuePair<char, Glyph>>
+
+                #region IEnumerator
+
+                public bool MoveNext()
+                {
+                    return (++i < _keys.Count);
+                }
+
+                object IEnumerator.Current
+                {
+                    get
+                    {
+                        var key = _keys[i];
+                        return new KeyValuePair<char, Glyph>(key, _collection[key]);
+                    }
+                }
+
+                void IDisposable.Dispose()
+                {
+                        _collection = null;
+                        _keys = null;
+                        i = -1;
+                }
+
+                void IEnumerator.Reset()
+                {
+                    i = -1;
+                }
+
+                #endregion IEnumerator
+            }
+        }
+
 	}
 }
