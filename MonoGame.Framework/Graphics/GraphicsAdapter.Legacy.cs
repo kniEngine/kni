@@ -196,6 +196,21 @@ namespace Microsoft.Xna.Framework.Graphics
                 selectedFormat == SurfaceFormat.Dxt5SRgb)
                 selectedFormat = SurfaceFormat.Color;
 
+            // fallback for unsupported renderTarget surface formats on Reach profile.
+            if (graphicsProfile == GraphicsProfile.Reach)
+            {
+                if (selectedFormat == SurfaceFormat.HalfSingle ||
+                    selectedFormat == SurfaceFormat.HalfVector2 ||
+                    selectedFormat == SurfaceFormat.HalfVector4 ||
+                    selectedFormat == SurfaceFormat.HdrBlendable ||
+                    selectedFormat == SurfaceFormat.Rg32 ||
+                    selectedFormat == SurfaceFormat.Rgba1010102 ||
+                    selectedFormat == SurfaceFormat.Rgba64 ||
+                    selectedFormat == SurfaceFormat.Single ||
+                    selectedFormat == SurfaceFormat.Vector2 ||
+                    selectedFormat == SurfaceFormat.Vector4)
+                    selectedFormat = SurfaceFormat.Color;
+            }
 
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
 		}
@@ -402,9 +417,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
-                    bool result = true;
-                    // TODO: check adapter capabilities...
-                    return result;
+#if ANDROID
+                    int maxTextureSize;
+                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize);                    
+                    if (maxTextureSize >= 4096) return true;
+#endif
+                    return false;
                 default:
                     throw new InvalidOperationException();
             }

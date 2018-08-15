@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case GraphicsProfile.Reach:
                     return (highestSupportedLevel >= FeatureLevel.Level_9_1);
                 case GraphicsProfile.HiDef:
-                    return (highestSupportedLevel >= FeatureLevel.Level_10_0);
+                    return (highestSupportedLevel >= FeatureLevel.Level_9_3);
                 default:
                     throw new InvalidOperationException();
             }
