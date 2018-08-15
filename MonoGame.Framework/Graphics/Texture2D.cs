@@ -95,6 +95,16 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
+                throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
+                throw new NotSupportedException("HiDef profile supports a maximum Texture2D size of 4096");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && mipmap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+                throw new NotSupportedException("Reach profile requires mipmapped Texture2D sizes to be powers of two");            
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+                throw new NotSupportedException("Reach profile requires compressed Texture2D sizes to be powers of two");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
+                throw new NotSupportedException("Reach profile does not support Texture2D format "+ format);
             if (width <= 0)
                 throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");
             if (height <= 0)

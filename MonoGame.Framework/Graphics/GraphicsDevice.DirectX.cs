@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework.Graphics
             CreateDeviceResources();
 #endif
 
-            _maxVertexBufferSlots = _d3dDevice.FeatureLevel >= FeatureLevel.Level_11_0 ? SharpDX.Direct3D11.InputAssemblerStage.VertexInputResourceSlotCount : 16;
+            _maxVertexBufferSlots = 16;
         }
 
         private void PlatformInitialize()
@@ -189,32 +189,22 @@ namespace Microsoft.Xna.Framework.Graphics
             // Pass the preferred feature levels based on the
             // target profile that may have been set by the user.
             FeatureLevel[] featureLevels;
-            if (GraphicsProfile == GraphicsProfile.HiDef)
-            {
-                featureLevels = new[]
-                    {
-                        FeatureLevel.Level_11_1,
-                        FeatureLevel.Level_11_0,
-                        FeatureLevel.Level_10_1,
-                        FeatureLevel.Level_10_0,
-                        // Feature levels below 10 are not supported for the HiDef profile
-                    };
-            }
-            else // Reach profile
-            {
-                featureLevels = new[]
-                    {
-                        // For the Reach profile, first try use the highest supported 9_X feature level
-                        FeatureLevel.Level_9_3,
-                        FeatureLevel.Level_9_2,
-                        FeatureLevel.Level_9_1,
-                        // If level 9 is not supported, then just use the highest supported level
-                        FeatureLevel.Level_11_1,
-                        FeatureLevel.Level_11_0,
-                        FeatureLevel.Level_10_1,
-                        FeatureLevel.Level_10_0,
-                    };
-            }
+            var featureLevelsList = new List<FeatureLevel>();
+            // create device with the highest available profile
+            featureLevelsList.Add(FeatureLevel.Level_11_1);
+            featureLevelsList.Add(FeatureLevel.Level_11_0);
+            featureLevelsList.Add(FeatureLevel.Level_10_1);
+            featureLevelsList.Add(FeatureLevel.Level_10_0);
+            featureLevelsList.Add(FeatureLevel.Level_9_3);
+            featureLevelsList.Add(FeatureLevel.Level_9_2);
+            featureLevelsList.Add(FeatureLevel.Level_9_1);
+#if DEBUG
+            featureLevelsList.Clear();
+            // create device specific to profile
+            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(FeatureLevel.Level_9_3);
+            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(FeatureLevel.Level_9_1);
+#endif            
+            featureLevels = featureLevelsList.ToArray();
 
             var driverType = GraphicsAdapter.UseReferenceDevice ? DriverType.Reference : DriverType.Hardware;
         
@@ -580,30 +570,22 @@ namespace Microsoft.Xna.Framework.Graphics
             // Pass the preferred feature levels based on the
             // target profile that may have been set by the user.
             FeatureLevel[] featureLevels;
-            if (GraphicsProfile == GraphicsProfile.HiDef)
-            {
-                featureLevels = new[]
-                    {
-                        FeatureLevel.Level_11_0,
-                        FeatureLevel.Level_10_1,
-                        FeatureLevel.Level_10_0,
-                        // Feature levels below 10 are not supported for the HiDef profile
-                    };
-            }
-            else // Reach profile
-            {
-                featureLevels = new[]
-                    {
-                        // For the Reach profile, first try use the highest supported 9_X feature level
-                        FeatureLevel.Level_9_3,
-                        FeatureLevel.Level_9_2,
-                        FeatureLevel.Level_9_1,
-                        // If level 9 is not supported, then just use the highest supported level
-                        FeatureLevel.Level_11_0,
-                        FeatureLevel.Level_10_1,
-                        FeatureLevel.Level_10_0,
-                    };
-            }
+            var featureLevelsList = new List<FeatureLevel>();
+            // create device with the highest available profile
+            featureLevelsList.Add(FeatureLevel.Level_11_1);
+            featureLevelsList.Add(FeatureLevel.Level_11_0);
+            featureLevelsList.Add(FeatureLevel.Level_10_1);
+            featureLevelsList.Add(FeatureLevel.Level_10_0);
+            featureLevelsList.Add(FeatureLevel.Level_9_3);
+            featureLevelsList.Add(FeatureLevel.Level_9_2);
+            featureLevelsList.Add(FeatureLevel.Level_9_1);
+#if DEBUG
+            featureLevelsList.Clear();
+            // create device specific to profile
+            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(FeatureLevel.Level_9_3);
+            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(FeatureLevel.Level_9_1);
+#endif            
+            featureLevels = featureLevelsList.ToArray();
 
             var driverType = DriverType.Hardware;   //Default value
             switch (GraphicsAdapter.UseDriverType)

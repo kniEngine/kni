@@ -25,9 +25,9 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsTextureArrays = device.GraphicsProfile == GraphicsProfile.HiDef;
             SupportsDepthClamp = device.GraphicsProfile == GraphicsProfile.HiDef;
             SupportsVertexTextures = device.GraphicsProfile == GraphicsProfile.HiDef;
-            SupportsFloatTextures = true;
-            SupportsHalfFloatTextures = true;
-            SupportsNormalized = true;
+            SupportsFloatTextures = device.GraphicsProfile == GraphicsProfile.HiDef;
+            SupportsHalfFloatTextures = device.GraphicsProfile == GraphicsProfile.HiDef;
+            SupportsNormalized = device.GraphicsProfile == GraphicsProfile.HiDef;
 
             SupportsInstancing = true;
             //TNC: TODO: detect suport based on feture level
