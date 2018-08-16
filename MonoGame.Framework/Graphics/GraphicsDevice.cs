@@ -825,6 +825,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("Reach profile supports a maximum of 1 simultaneous rendertargets");
             if (this.GraphicsProfile == GraphicsProfile.HiDef && renderTargetCount > 4)
                 throw new NotSupportedException("HiDef profile supports a maximum of 4 simultaneous rendertargets");
+            if (renderTargetCount > 8)
+                throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
 
             // Try to early out if the current and new bindings are equal.
             if (_currentRenderTargetCount == renderTargetCount)

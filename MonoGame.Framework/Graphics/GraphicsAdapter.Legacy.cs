@@ -423,6 +423,29 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (maxTextureSize >= 4096) return true;
 #endif
                     return false;
+                case GraphicsProfile.FL10_0:                    
+#if ANDROID
+                    int maxTextureSize2;
+                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    
+                    if (maxTextureSize2 >= 8192) return true;
+#endif
+                    return false;
+                case GraphicsProfile.FL10_1:
+#if ANDROID
+                    int maxVertexBufferSlots;
+                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxVertexAttribs, out maxVertexBufferSlots);
+                    if (maxVertexBufferSlots >= 32) return true;
+#endif
+                    return false;
+                case GraphicsProfile.FL11_0:
+#if ANDROID
+                    int maxTextureSize3;
+                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize3);                    
+                    if (maxTextureSize3 >= 16384) return true;
+#endif                  
+                    return false;
+                case GraphicsProfile.FL11_1:
+                    return false;
                 default:
                     throw new InvalidOperationException();
             }
