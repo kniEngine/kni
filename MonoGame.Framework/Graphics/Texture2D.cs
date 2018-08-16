@@ -99,6 +99,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
             if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
                 throw new NotSupportedException("HiDef profile supports a maximum Texture2D size of 4096");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
+                throw new NotSupportedException("FL10_0 profile supports a maximum Texture2D size of 8192");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
+                throw new NotSupportedException("FL10_1 profile supports a maximum Texture2D size of 8192");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
+                throw new NotSupportedException("FL11_0 profile supports a maximum Texture2D size of 16384");
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
+                throw new NotSupportedException("FL11_1 profile supports a maximum Texture2D size of 16384");
             if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && mipmap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires mipmapped Texture2D sizes to be powers of two");            
             if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
