@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework
                 if (_drawOrder != value)
                 {
                     _drawOrder = value;
-                    OnDrawOrderChanged(this, EventArgs.Empty);
+                    OnDrawOrderChanged(EventArgs.Empty);
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework
                 if (_visible != value)
                 {
                     _visible = value;
-                    OnVisibleChanged(this, EventArgs.Empty);
+                    OnVisibleChanged(EventArgs.Empty);
                 }
             }
         }
@@ -106,21 +106,19 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Called when <see cref="Visible"/> changed.
         /// </summary>
-        /// <param name="sender">This <see cref="DrawableGameComponent"/>.</param>
         /// <param name="args">Arguments to the <see cref="VisibleChanged"/> event.</param>
-        protected virtual void OnVisibleChanged(object sender, EventArgs args)
+        protected virtual void OnVisibleChanged(EventArgs args)
         {
-            EventHelpers.Raise(sender, VisibleChanged, args);
+            EventHelpers.Raise(this, VisibleChanged, args);
         }
 
         /// <summary>
         /// Called when <see cref="DrawOrder"/> changed.
         /// </summary>
-        /// <param name="sender">This <see cref="DrawableGameComponent"/>.</param>
         /// <param name="args">Arguments to the <see cref="DrawOrderChanged"/> event.</param>
-        protected virtual void OnDrawOrderChanged(object sender, EventArgs args)
+        protected virtual void OnDrawOrderChanged(EventArgs args)
         {
-            EventHelpers.Raise(sender, DrawOrderChanged, args);
+            EventHelpers.Raise(this, DrawOrderChanged, args);
         }
     }
 }

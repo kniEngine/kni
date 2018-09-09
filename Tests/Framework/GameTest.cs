@@ -277,9 +277,15 @@ namespace MonoGame.Tests {
                 public void PublicEndRun() { EndRun(); }
                 protected override void EndRun() { EndRunCount++; base.EndRun(); }
 
+#if XNA
                 protected override void OnActivated(object sender, EventArgs args) { ActivatedCount++; base.OnActivated(sender, args); }
                 protected override void OnDeactivated(object sender, EventArgs args) { DeactivatedCount++; base.OnDeactivated(sender, args); }
                 protected override void OnExiting(object sender, EventArgs args) { ExitingCount++; base.OnExiting(sender, args); }
+#else
+                protected override void OnActivated(EventArgs args) { ActivatedCount++; base.OnActivated(args); }
+                protected override void OnDeactivated(EventArgs args) { DeactivatedCount++; base.OnDeactivated(args); }
+                protected override void OnExiting(EventArgs args) { ExitingCount++; base.OnExiting(args); }
+#endif
                 protected override void Dispose(bool disposing) { DisposeCount++; base.Dispose(disposing); }
             }
 

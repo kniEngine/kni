@@ -75,8 +75,8 @@ namespace Microsoft.Xna.Framework
             _content = new ContentManager(_services);
 
             Platform = GamePlatform.PlatformCreate(this);
-            Platform.Activated += OnActivated;
-            Platform.Deactivated += OnDeactivated;
+            Platform.Activated += Platform_Activated;
+            Platform.Deactivated += Platform_Deactivated;
             _services.AddService(typeof(GamePlatform), Platform);
 
             // Calling Update() for first time initializes some systems
@@ -97,6 +97,9 @@ namespace Microsoft.Xna.Framework
 		{
 			if (Platform != null) Platform.Log(Message);
 		}
+
+        void Platform_Activated(object sender, EventArgs e) { OnActivated(e); }
+        void Platform_Deactivated(object sender, EventArgs e) { OnDeactivated(e); }
 
         #region IDisposable Implementation
 
@@ -137,8 +140,8 @@ namespace Microsoft.Xna.Framework
 
                     if (Platform != null)
                     {
-                        Platform.Activated -= OnActivated;
-                        Platform.Deactivated -= OnDeactivated;
+                        Platform.Activated -= Platform_Activated;
+                        Platform.Deactivated -= Platform_Deactivated;
                         _services.RemoveService(typeof(GamePlatform));
 
                         Platform.Dispose();
@@ -733,33 +736,30 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Called when the game is exiting. Raises the <see cref="Exiting"/> event.
         /// </summary>
-        /// <param name="sender">This <see cref="Game"/>.</param>
         /// <param name="args">The arguments to the <see cref="Exiting"/> event.</param>
-        protected virtual void OnExiting(object sender, EventArgs args)
+        protected virtual void OnExiting(EventArgs args)
         {
-            EventHelpers.Raise(sender, Exiting, args);
+            EventHelpers.Raise(this, Exiting, args);
         }
 		
         /// <summary>
         /// Called when the game gains focus. Raises the <see cref="Activated"/> event.
         /// </summary>
-        /// <param name="sender">This <see cref="Game"/>.</param>
         /// <param name="args">The arguments to the <see cref="Activated"/> event.</param>
-		protected virtual void OnActivated (object sender, EventArgs args)
+		protected virtual void OnActivated (EventArgs args)
 		{
 			AssertNotDisposed();
-            EventHelpers.Raise(sender, Activated, args);
+            EventHelpers.Raise(this, Activated, args);
 		}
 		
         /// <summary>
         /// Called when the game loses focus. Raises the <see cref="Deactivated"/> event.
         /// </summary>
-        /// <param name="sender">This <see cref="Game"/>.</param>
         /// <param name="args">The arguments to the <see cref="Deactivated"/> event.</param>
-		protected virtual void OnDeactivated (object sender, EventArgs args)
+		protected virtual void OnDeactivated (EventArgs args)
 		{
 			AssertNotDisposed();
-            EventHelpers.Raise(sender, Deactivated, args);
+            EventHelpers.Raise(this, Deactivated, args);
 		}
 
         #endregion Protected Methods
@@ -865,7 +865,7 @@ namespace Microsoft.Xna.Framework
 
 		internal void DoExiting()
 		{
-			OnExiting(this, EventArgs.Empty);
+			OnExiting(EventArgs.Empty);
 			UnloadContent();
 		}
 

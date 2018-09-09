@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework
                 if (_enabled != value)
                 {
                     _enabled = value;
-                    OnEnabledChanged(this, EventArgs.Empty);
+                    OnEnabledChanged(EventArgs.Empty);
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework
                 if (_updateOrder != value)
                 {
                     _updateOrder = value;
-                    OnUpdateOrderChanged(this, EventArgs.Empty);
+                    OnUpdateOrderChanged(EventArgs.Empty);
                 }
             }
         }
@@ -77,21 +77,19 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Called when <see cref="UpdateOrder"/> changed. Raises the <see cref="UpdateOrderChanged"/> event.
         /// </summary>
-        /// <param name="sender">This <see cref="GameComponent"/>.</param>
         /// <param name="args">Arguments to the <see cref="UpdateOrderChanged"/> event.</param>
-        protected virtual void OnUpdateOrderChanged(object sender, EventArgs args)
+        protected virtual void OnUpdateOrderChanged(EventArgs args)
         {
-            EventHelpers.Raise(sender, UpdateOrderChanged, args);
+            EventHelpers.Raise(this, UpdateOrderChanged, args);
         }
 
         /// <summary>
         /// Called when <see cref="Enabled"/> changed. Raises the <see cref="EnabledChanged"/> event.
         /// </summary>
-        /// <param name="sender">This <see cref="GameComponent"/>.</param>
         /// <param name="args">Arguments to the <see cref="EnabledChanged"/> event.</param>
-        protected virtual void OnEnabledChanged(object sender, EventArgs args)
+        protected virtual void OnEnabledChanged(EventArgs args)
         {
-            EventHelpers.Raise(sender, EnabledChanged, args);
+            EventHelpers.Raise(this, EnabledChanged, args);
         }
 
         /// <summary>
