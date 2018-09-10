@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework
 
         public override void BeforeInitialize()
         {
-            var currentOrientation = AndroidCompatibility.GetAbsoluteOrientation();
+            var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(Game.Activity);
 
             switch (Game.Activity.Resources.Configuration.Orientation)
             {

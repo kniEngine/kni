@@ -10,29 +10,57 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// Properties that change from how XNA works by default
     /// </summary>
-    public static class AndroidCompatibility
+    public class AndroidCompatibility
     {
+        private static AndroidCompatibility _current;
+
 		/// <summary>
 		/// Because the Kindle Fire devices default orientation is fliped by 180 degrees from all the other android devices
 		/// on the market we need to do some special processing to make sure that LandscapeLeft is the correct way round.
 		/// This list contains all the Build.Model strings of the effected devices, it should be added to if and when
 		/// more devices exhibit the same issues.
 		/// </summary>
-        private static readonly string[] Kindles = new[] { "KFTT", "KFJWI", "KFJWA", "KFSOWI", "KFTHWA", "KFTHWI", "KFAPWA", "KFAPWI" };
+        private readonly string[] Kindles = new[] { "KFTT", "KFJWI", "KFJWA", "KFSOWI", "KFTHWA", "KFTHWI", "KFAPWA", "KFAPWI" };
 
-        public static bool FlipLandscape { get; private set; }
-        public static Lazy<Orientation> NaturalOrientation { get; private set; }
+        public bool FlipLandscape { get; private set; }
 
-        static AndroidCompatibility()
+        [CLSCompliant(false)]
+        public Orientation NaturalOrientation { get; private set; }
+
+
+        [CLSCompliant(false)]
+        public static AndroidCompatibility Current
         {
-			FlipLandscape = Kindles.Contains(Build.Model);
-            NaturalOrientation = new Lazy<Orientation>(GetDeviceNaturalOrientation);
+            get
+            {
+                if (_current != null)
+                    return _current;
+                else
+                    throw new InvalidOperationException("Not initialized.");
+            }
         }
 
-        private static Orientation GetDeviceNaturalOrientation()
+        internal static void Initialize(Activity activity)
         {
-            var orientation = Game.Activity.Resources.Configuration.Orientation;
-            SurfaceOrientation rotation = Game.Activity.WindowManager.DefaultDisplay.Rotation;
+            if (_current == null)
+                _current = new AndroidCompatibility(activity);
+        }
+
+        private AndroidCompatibility(Activity activity)
+        {
+			FlipLandscape = Kindles.Contains(Build.Model);
+            NaturalOrientation = GetDeviceNaturalOrientation(activity);
+        }
+
+        private Orientation GetDeviceNaturalOrientation(Activity activity)
+        {
+            var orientation = activity.Resources.Configuration.Orientation;
+            SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
+
+            // check if MainActivity setup is correct. 
+            var screenOrientation = activity.RequestedOrientation;
+            if (screenOrientation != Android.Content.PM.ScreenOrientation.FullSensor)
+                throw new InvalidOperationException("NaturalOrientation detection failed. Set ScreenOrientation in MainActivity to FullSensor.");
 
             if (((rotation == SurfaceOrientation.Rotation0 || rotation == SurfaceOrientation.Rotation180) &&
                 orientation == Orientation.Landscape)
@@ -47,19 +75,19 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal static DisplayOrientation GetAbsoluteOrientation(int orientation)
+        internal DisplayOrientation GetAbsoluteOrientation(int degrees)
         {
             // Orientation is reported by the device in degrees compared to the natural orientation
             // Some tablets have a natural landscape orientation, which we need to account for
-            if (NaturalOrientation.Value == Orientation.Landscape)
-                orientation += 270;
+            if (NaturalOrientation == Orientation.Landscape)
+                degrees += 270;
 
-            // Round orientation into one of 4 positions, either 0, 90, 180, 270. 
-            int ort = ((orientation + 45) / 90 * 90) % 360;
+            // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
+            degrees = ( ((degrees + 22) / 45) * 45) % 360;
 
             // Surprisingly 90 degree is landscape right, except on Kindle devices
             var disporientation = DisplayOrientation.Unknown;
-            switch (ort)
+            switch (degrees)
             {
                 case 90: disporientation = FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                     break;
@@ -70,7 +98,7 @@ namespace Microsoft.Xna.Framework
                 case 180: disporientation = DisplayOrientation.PortraitDown;
                     break;
                 default:
-                    disporientation = DisplayOrientation.LandscapeLeft;
+                    disporientation = DisplayOrientation.Unknown;
                     break;
             }
 
@@ -81,9 +109,10 @@ namespace Microsoft.Xna.Framework
         /// Get the absolute orientation of the device, accounting for platform differences.
         /// </summary>
         /// <returns></returns>
-        public static DisplayOrientation GetAbsoluteOrientation()
+        [CLSCompliant(false)]
+        public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
-            var orientation = Game.Activity.WindowManager.DefaultDisplay.Rotation;
+            var orientation = activity.WindowManager.DefaultDisplay.Rotation;
 
             // Landscape degrees (provided by the OrientationListener) are swapped by default
             // Since we use the code used by OrientationListener, we have to swap manually

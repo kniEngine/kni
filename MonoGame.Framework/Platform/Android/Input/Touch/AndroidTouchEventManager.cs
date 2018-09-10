@@ -30,7 +30,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             Vector2 position = Vector2.Zero;
             position.X = e.GetX(e.ActionIndex);
             position.Y = e.GetY(e.ActionIndex);
-            UpdateTouchPosition(ref position);
             int id = e.GetPointerId(e.ActionIndex);
             switch (e.ActionMasked)
             {
@@ -51,7 +50,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                         id = e.GetPointerId(i);
                         position.X = e.GetX(i);
                         position.Y = e.GetY(i);
-                        UpdateTouchPosition(ref position);
                         TouchPanel.AddEvent(id, TouchLocationState.Moved, position);
                     }
                     break;
@@ -68,13 +66,5 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
 
-        void UpdateTouchPosition(ref Vector2 position)
-        {
-            Rectangle clientBounds = _gameWindow.ClientBounds;
-
-            //Fix for ClientBounds
-            position.X -= clientBounds.X;
-            position.Y -= clientBounds.Y;
-        }
     }
 }
