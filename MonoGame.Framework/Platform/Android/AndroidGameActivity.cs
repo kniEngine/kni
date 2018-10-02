@@ -40,6 +40,7 @@ namespace Microsoft.Xna.Framework
 		    filter.AddAction(Intent.ActionScreenOff);
 		    filter.AddAction(Intent.ActionScreenOn);
 		    filter.AddAction(Intent.ActionUserPresent);
+            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
 		    
 		    screenReceiver = new ScreenReceiver();
 		    RegisterReceiver(screenReceiver, filter);
