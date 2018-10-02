@@ -32,6 +32,21 @@ namespace Microsoft.Xna.Framework
                 // This intent is broadcast when the user unlocks the phone
                 OnUnlocked();
             }
+
+            if (intent.Action == Android.Telephony.TelephonyManager.ActionPhoneStateChanged)
+            {
+                if (intent.Extras != null)
+                {
+                    string state = intent.GetStringExtra(Android.Telephony.TelephonyManager.ExtraState);
+                    if (state == Android.Telephony.TelephonyManager.ExtraStateRinging)
+                    {
+                        // TODO: Find a way to set Game.IsActive = false during a call.
+                        // View.ClearFocus() doesn't have any affect. 
+                        // The best we can do currently is to sent the game to foreground.
+                        Game.Activity.MoveTaskToBack(true);
+                    }
+                }
+            }
 		}
 
         private void OnLocked()
