@@ -115,13 +115,24 @@ namespace Microsoft.Xna.Framework
             // Force the Viewport to be correctly set
             Game.graphicsDeviceManager.ResetClientBounds();
         }
-
+        
+        private bool _hasWindowFocus = true;
+        private bool _isActivityActive = false;
+        internal bool IsActivityActive { get { return _isActivityActive; } }
+ 
+        internal void OnWindowFocusChanged(bool hasFocus)
+        {
+            _hasWindowFocus = hasFocus;
+            IsActive = _isActivityActive && _hasWindowFocus;
+        }
+        
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
-            if (!IsActive)
+            if (!_isActivityActive)
             {
-                IsActive = true;
+                _isActivityActive = true;
+                IsActive = _isActivityActive && _hasWindowFocus;
                 _gameWindow.GameView.Resume();
                 if (_MediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
                     MediaPlayer.Resume();
@@ -134,9 +145,10 @@ namespace Microsoft.Xna.Framework
         // EnterBackground
         void Activity_Paused(object sender, EventArgs e)
         {
-            if (IsActive)
+            if (_isActivityActive)
             {
-                IsActive = false;
+                _isActivityActive = false;
+                IsActive = _isActivityActive && _hasWindowFocus;
                 _MediaPlayer_PrevState = MediaPlayer.State;
                 _gameWindow.GameView.Pause();
                 _gameWindow.GameView.ClearFocus();
