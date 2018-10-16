@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Framework
 {
     [CLSCompliant(false)]
     public class MonoGameAndroidGameView : SurfaceView, ISurfaceHolderCallback, View.IOnTouchListener
+        , Java.Lang.IRunnable
     {
         // What is the state of the app, for tracking surface recreation inside this class.
         // This acts as a replacement for the all-out monitor wait approach which caused code to be quite fragile.
@@ -196,16 +197,70 @@ namespace Microsoft.Xna.Framework
             //var syncContext = new SynchronizationContext ();
             var syncContext = SynchronizationContext.Current;
 
-            // We always start a new task, regardless if we render on UI thread or not.
-            renderTask = Task.Factory.StartNew(() =>
-           {
-               WorkerThreadFrameDispatcher(syncContext);
+            if (RenderOnUIThread)
+            {
+                // prepare gameLoop
+                Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
+                stopWatch = System.Diagnostics.Stopwatch.StartNew();
+                tick = 0;
+                prevUpdateTime = DateTime.Now;
+                var looper = Android.OS.Looper.MainLooper;
+                handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
-           }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+                // request first tick.
+                handler.Post(this as Java.Lang.IRunnable);
+            }
+            else
+            {
+                renderTask = Task.Factory.StartNew(() =>
+                {
+                    WorkerThreadFrameDispatcher(syncContext);
+                }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
                 .ContinueWith((t) =>
-               {
-                   OnStopped(EventArgs.Empty);
-               });
+                {
+                    OnStopped(EventArgs.Empty);
+                });
+            }
+        }
+
+        Android.OS.Handler handler;
+        void Java.Lang.IRunnable.Run()
+        {
+            if (!cts.IsCancellationRequested)
+            {
+                bool pauseThread = false;
+                try
+                {
+                    // tick
+                    pauseThread = RunIteration(cts.Token);
+                }
+                finally
+                {
+                    // request next tick
+                    handler.Post(this as Java.Lang.IRunnable);
+                }
+            }
+            else
+            {    
+                bool c = cts.IsCancellationRequested;
+
+                cts = null;
+
+                if (glSurfaceAvailable)
+                    DestroyGLSurface();
+
+                if (glContextAvailable)
+                {
+                    DestroyGLContext();
+                    ContextLostInternal();
+                }
+                
+                _internalState = InternalState.Exited_GameThread;
+
+                OnStopped(EventArgs.Empty);
+            }
+            
+            return;
         }
 
         public virtual void Pause()
@@ -318,19 +373,9 @@ namespace Microsoft.Xna.Framework
 
                 while (!cts.IsCancellationRequested)
                 {
-                    // either use UI thread to render one frame or this worker thread
+                    // use this worker thread to render one frame
                     bool pauseThread = false;
-                    if (RenderOnUIThread)
-                    {
-                        uiThreadSyncContext.Send((s) =>
-                       {
-                           pauseThread = RunIteration(cts.Token);
-                       }, null);
-                    }
-                    else
-                    {
-                        pauseThread = RunIteration(cts.Token);
-                    }
+                    pauseThread = RunIteration(cts.Token);
 
 
                     if (pauseThread)
