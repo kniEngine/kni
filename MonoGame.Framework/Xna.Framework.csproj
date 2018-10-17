@@ -6,6 +6,9 @@
     <BaseOutputPath>..\Artifacts\Xna.Framework\</BaseOutputPath>
     <AssemblyName>Xna.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>5</LangVersion>
