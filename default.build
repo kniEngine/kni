@@ -160,7 +160,7 @@
   <!-- Run the unit tests... will fail if the code hasn't been built. -->
   <target name="run_tests" description="Run all the tests" >
 
-    <if test="${os == 'Win32NT'  }">
+    <if test="${os == 'Win32NT' and '$rununittests'=='true'  }">
       <exec program="MonoGame.Tests.exe" workingdir="Tests/bin/Windows/AnyCPU/Debug/" basedir="Test/bin/Windows/AnyCPU/Debug/"/>
     </if>
 
@@ -169,7 +169,7 @@
 
   <!-- Generate the docs... will fail if the code hasn't been built. -->
   <target name="build_docs" description="Build the documentation." >
-    <if test="${os == 'Win32NT'  }">
+    <if test="${os == 'Win32NT' and '$runbuilddocs'=='true' }">
       <delete dir="${project::get-base-directory()}\Documentation\Output" />
       <exec program="SharpDoc.exe" basedir="ThirdParty\Dependencies\SharpDoc" commandline="-config Documentation\config.xml" />
     </if>

@@ -9,8 +9,8 @@
 
     <DefineConstants>WEB;STBSHARP_INTERNAL</DefineConstants>
     
-    <Version>3.8.9000.0</Version>
-    <AssemblyVersion>3.8.9000.0</AssemblyVersion>
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>5</LangVersion>
