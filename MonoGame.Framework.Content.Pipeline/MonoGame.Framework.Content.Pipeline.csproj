@@ -60,7 +60,7 @@
       <HintPath>..\ThirdParty\Dependencies\SharpDX\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="CppNet">
-      <HintPath>..\ThirdParty\Dependencies\CppNet\CppNet.dll</HintPath>
+      <HintPath>..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
     <Reference Include="Nvidia.TextureTools">
       <HintPath>..\ThirdParty\Dependencies\NVTT\Nvidia.TextureTools.dll</HintPath>
