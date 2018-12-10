@@ -45,17 +45,12 @@ namespace Microsoft.Xna.Framework.Input
             Right = rightValue;
         }
 
-        internal GamePadDPad(Buttons[] buttons) : this()
+        internal GamePadDPad(params Buttons[] buttons) : this()
         {
             foreach (var button in buttons)
             {
                 ConvertButtonToDirection(button);
             }
-        }
-
-        internal GamePadDPad(Buttons button) : this()
-        {
-            ConvertButtonToDirection(button);
         }
 
         /// <summary>
