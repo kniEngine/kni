@@ -295,8 +295,11 @@ namespace MonoGame.Framework
 
         private void OnResizeBegin(object sender, EventArgs e)
         {
-            _isResizeTickEnabled = true;
-            _resizeTickTimer.Enabled = true;
+            // TNC: Revert MG PR 6594
+            // TNC: Issue #1) No proper sync. Update()/Draw() might be called simultaneusly from the main thread when resize ends while it still runs from OnResizeTick().
+            // TNC: Issue #2) Update()/Draw() will be called from different thread. This can cause issues with some libraries, e.g. [ThreadStatic]
+            //_isResizeTickEnabled = true;
+            //_resizeTickTimer.Enabled = true;
         }
 
         private void OnResizeTick(object sender, System.Timers.ElapsedEventArgs e)
