@@ -204,19 +204,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns></returns>
         public Vector3 Project(Vector3 source, Matrix projection, Matrix view, Matrix world)
         {
-            Matrix matrix = Matrix.Multiply(Matrix.Multiply(world, view), projection);
-		    Vector3 vector = Vector3.Transform(source, matrix);
-		    float a = (((source.X * matrix.M14) + (source.Y * matrix.M24)) + (source.Z * matrix.M34)) + matrix.M44;
-		    if (!WithinEpsilon(a, 1f))
+            Matrix.Multiply(ref world, ref view, out view);
+            Matrix.Multiply(ref view, ref projection, out projection);
+            float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
+            Vector3.Transform(ref source, ref projection, out source);
+		    //if (!WithinEpsilon(w, 1f))
 		    {
-		        vector.X = vector.X / a;
-		        vector.Y = vector.Y / a;
-		        vector.Z = vector.Z / a;
+                var invW = 1 / w;
+                source.X = source.X * invW;
+                source.Y = source.Y * invW;
+                source.Z = source.Z * invW;
 		    }
-		    vector.X = (((vector.X + 1f) * 0.5f) * this.width) + this.x;
-		    vector.Y = (((-vector.Y + 1f) * 0.5f) * this.height) + this.y;
-		    vector.Z = (vector.Z * (this.maxDepth - this.minDepth)) + this.minDepth;
-		    return vector;
+            source.X = (((source.X + 1f) * 0.5f) * this.width) + this.x;
+            source.Y = (((-source.Y + 1f) * 0.5f) * this.height) + this.y;
+            source.Z = (source.Z * (this.maxDepth - this.minDepth)) + this.minDepth;
+            return source;
         }
 
         /// <summary>
@@ -233,20 +235,22 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns></returns>
         public Vector3 Unproject(Vector3 source, Matrix projection, Matrix view, Matrix world)
         {
-             Matrix matrix = Matrix.Invert(Matrix.Multiply(Matrix.Multiply(world, view), projection));
+            Matrix.Multiply(ref world, ref view, out view);
+            Matrix.Multiply(ref view, ref projection, out projection);
+            Matrix.Invert(ref projection, out projection);
 		    source.X = (((source.X - this.x) / ((float) this.width)) * 2f) - 1f;
 		    source.Y = -((((source.Y - this.y) / ((float) this.height)) * 2f) - 1f);
 		    source.Z = (source.Z - this.minDepth) / (this.maxDepth - this.minDepth);
-		    Vector3 vector = Vector3.Transform(source, matrix);
-		    float a = (((source.X * matrix.M14) + (source.Y * matrix.M24)) + (source.Z * matrix.M34)) + matrix.M44;
-		    if (!WithinEpsilon(a, 1f))
+            float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
+            Vector3.Transform(ref source, ref projection, out source);
+		    //if (!WithinEpsilon(a, 1f))
 		    {
-		        vector.X = vector.X / a;
-		        vector.Y = vector.Y / a;
-		        vector.Z = vector.Z / a;
+                var invW = 1 / w;
+                source.X = source.X * invW;
+                source.Y = source.Y * invW;
+                source.Z = source.Z * invW;
 		    }
-		    return vector;
-
+            return source;
         }
 		
 		private static bool WithinEpsilon(float a, float b)
