@@ -8,12 +8,13 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Microsoft.Xna.Platform;
+using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 
 namespace Microsoft.Xna.Framework
 {
     [CLSCompliant(false)]
-    public class AndroidGameActivity : Activity
+    public class AndroidGameActivity : VRCardboard.CardboardActivity
     {
         internal Game Game { private get; set; }
 
