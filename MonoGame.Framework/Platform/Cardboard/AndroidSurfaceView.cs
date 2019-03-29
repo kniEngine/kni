@@ -74,6 +74,8 @@ namespace Microsoft.Xna.Framework
             if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);
 
+            Input.Cardboard.Headset.View = this;
+
             this.Holder.SetFormat(Android.Graphics.Format.Rgba8888);
 
             ((VRCardboard.CardboardActivity)context).CardboardView = this;
@@ -792,6 +794,9 @@ namespace Microsoft.Xna.Framework
             if (!_isStarted)
                 return;
             
+
+            UpdateLocalHeadsetState(headTransform, eyeParams1, eyeParams2);
+
             // If distortion correction is enabled the GL context will be set to draw into a framebuffer backed 
             // by a texture at the time of this call. If an implementor needs to change the current framebuffer, 
             // it must be reset back afterwards to the one obtained viaglGetIntegerv(GL_FRAMEBUFFER_BINDING, ...) 
@@ -838,6 +843,65 @@ namespace Microsoft.Xna.Framework
         {
             _eglConfig = config;
         }
+
+
+        Input.Cardboard.HeadsetState _hsState;
+        internal void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
+        {
+            Viewport2XNA(eyeParams1.Viewport, ref _hsState.LeftEye.Viewport);
+            Matrix2XNA(eyeParams1.Transform.GetEyeView(), ref _hsState.LeftEye.View);
+            Matrix2XNA(eyeParams1.Transform.GetPerspective(), ref _hsState.LeftEye.Projection);
+
+            if (eyeParams2 == null)
+            {
+                _hsState.RightEye.Viewport = new Viewport();
+                _hsState.RightEye.View = Microsoft.Xna.Framework.Matrix.Identity;
+                _hsState.RightEye.Projection = Microsoft.Xna.Framework.Matrix.Identity;
+            }
+            else
+            {
+                Viewport2XNA(eyeParams2.Viewport, ref _hsState.RightEye.Viewport);
+                Matrix2XNA(eyeParams2.Transform.GetEyeView(), ref _hsState.RightEye.View);
+                Matrix2XNA(eyeParams2.Transform.GetPerspective(), ref _hsState.RightEye.Projection);
+            }
+        }
+        
+        private void Viewport2XNA(VRCardboard.Viewport viewport, ref Viewport result)
+        {
+            result.X = viewport.X;
+            result.Y = viewport.Y;
+            result.Width = viewport.Width;
+            result.Height = viewport.Height;
+            result.MinDepth = 0f;
+            result.MaxDepth = 1f;
+        }
+
+        private void Matrix2XNA(float[] matrix, ref Matrix result)
+        {
+            result.M11 = matrix[0];
+            result.M12 = matrix[1];
+            result.M13 = matrix[2];
+            result.M14 = matrix[3];
+            result.M21 = matrix[4];
+            result.M22 = matrix[5];
+            result.M23 = matrix[6];
+            result.M24 = matrix[7];
+            result.M31 = matrix[8];
+            result.M32 = matrix[9];
+            result.M33 = matrix[10];
+            result.M34 = matrix[11];
+            result.M41 = matrix[12];
+            result.M42 = matrix[13];
+            result.M43 = matrix[14];
+            result.M44 = matrix[15];
+        }
+        
+        internal void UpdateHeadsetState(out Input.Cardboard.HeadsetState state)
+        {
+            state = _hsState;
+        }
+        
+
         #endregion CardboardView.IRenderer
     }
 }
