@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
 
                 if (GenerateMipmaps)
-                    input.GenerateMipmaps(true);
+                    input.GenerateMipmaps(false);
 
                 for (int f = 0; f < input.Faces.Count; ++f)
                 {
