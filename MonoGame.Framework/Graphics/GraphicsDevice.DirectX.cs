@@ -1397,7 +1397,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (buffer != null)
                     buffer.Dispose();
 
-                buffer = new DynamicVertexBuffer(this, vertexDecl, Math.Max(vertexCount, 2000), BufferUsage.WriteOnly);
+                var requiredVertexCount = Math.Max(vertexCount, 4 * 256);
+                requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
+                buffer = new DynamicVertexBuffer(this, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
                 _userVertexBuffers[vertexDecl] = buffer;
             }
 
@@ -1429,7 +1431,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var indexSize = ReflectionHelpers.SizeOf<T>.Get();
             var indexElementSize = indexSize == 2 ? IndexElementSize.SixteenBits : IndexElementSize.ThirtyTwoBits;
 
-            var requiredIndexCount = Math.Max(indexCount, 6000);
+            var requiredIndexCount = Math.Max(indexCount, 6 * 512);
+            requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
             if (indexElementSize == IndexElementSize.SixteenBits)
             {
                 if (_userIndexBuffer16 == null || _userIndexBuffer16.IndexCount < requiredIndexCount)
