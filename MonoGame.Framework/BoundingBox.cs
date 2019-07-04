@@ -314,20 +314,30 @@ namespace Microsoft.Xna.Framework
             if (count == -1)
                 count = points.Length;
 
-            var minVec = MaxVector3;
-            var maxVec = MinVector3;
-            for (int i = index; i < count; i++)
-            {                
-                minVec.X = (minVec.X < points[i].X) ? minVec.X : points[i].X;
-                minVec.Y = (minVec.Y < points[i].Y) ? minVec.Y : points[i].Y;
-                minVec.Z = (minVec.Z < points[i].Z) ? minVec.Z : points[i].Z;
+            var minVec = points[index];
+            var maxVec = minVec;
+            for (int i = index + 1; i < count; i++)
+            {
+                var ptVector = points[i];
 
-                maxVec.X = (maxVec.X > points[i].X) ? maxVec.X : points[i].X;
-                maxVec.Y = (maxVec.Y > points[i].Y) ? maxVec.Y : points[i].Y;
-                maxVec.Z = (maxVec.Z > points[i].Z) ? maxVec.Z : points[i].Z;
+                if (ptVector.X < minVec.X)
+                    minVec.X = ptVector.X;
+                else if (ptVector.X > maxVec.X)
+                    maxVec.X = ptVector.X;
+                if (ptVector.Y < minVec.Y)
+                    minVec.Y = ptVector.Y;
+                else if (ptVector.Y > maxVec.Y)
+                    maxVec.Y = ptVector.Y;
+                if (ptVector.Z < minVec.Z)
+                    minVec.Z = ptVector.Z;
+                else if (ptVector.Z > maxVec.Z)
+                    maxVec.Z = ptVector.Z;
             }
 
-            return new BoundingBox(minVec, maxVec);
+            BoundingBox result;
+            result.Min = minVec;
+            result.Max = maxVec;
+            return result;
         }
 
 
@@ -347,20 +357,30 @@ namespace Microsoft.Xna.Framework
             if (count == -1)
                 count = points.Count;
 
-            var minVec = MaxVector3;
-            var maxVec = MinVector3;
-            for (int i = index; i < count; i++)
+            var minVec = points[index];
+            var maxVec = minVec;
+            for (int i = index + 1; i < count; i++)
             {
-                minVec.X = (minVec.X < points[i].X) ? minVec.X : points[i].X;
-                minVec.Y = (minVec.Y < points[i].Y) ? minVec.Y : points[i].Y;
-                minVec.Z = (minVec.Z < points[i].Z) ? minVec.Z : points[i].Z;
+                var ptVector = points[i];
 
-                maxVec.X = (maxVec.X > points[i].X) ? maxVec.X : points[i].X;
-                maxVec.Y = (maxVec.Y > points[i].Y) ? maxVec.Y : points[i].Y;
-                maxVec.Z = (maxVec.Z > points[i].Z) ? maxVec.Z : points[i].Z;
+                if (ptVector.X < minVec.X)
+                    minVec.X = ptVector.X;
+                else if (ptVector.X > maxVec.X)
+                    maxVec.X = ptVector.X;
+                if (ptVector.Y < minVec.Y)
+                    minVec.Y = ptVector.Y;
+                else if (ptVector.Y > maxVec.Y)
+                    maxVec.Y = ptVector.Y;
+                if (ptVector.Z < minVec.Z)
+                    minVec.Z = ptVector.Z;
+                else if (ptVector.Z > maxVec.Z)
+                    maxVec.Z = ptVector.Z;
             }
 
-            return new BoundingBox(minVec, maxVec);
+            BoundingBox result;
+            result.Min = minVec;
+            result.Max = maxVec;
+            return result;
         }
 
 
@@ -380,20 +400,28 @@ namespace Microsoft.Xna.Framework
             var maxVec = MinVector3;
             foreach (var ptVector in points)
             {
-                minVec.X = (minVec.X < ptVector.X) ? minVec.X : ptVector.X;
-                minVec.Y = (minVec.Y < ptVector.Y) ? minVec.Y : ptVector.Y;
-                minVec.Z = (minVec.Z < ptVector.Z) ? minVec.Z : ptVector.Z;
-
-                maxVec.X = (maxVec.X > ptVector.X) ? maxVec.X : ptVector.X;
-                maxVec.Y = (maxVec.Y > ptVector.Y) ? maxVec.Y : ptVector.Y;
-                maxVec.Z = (maxVec.Z > ptVector.Z) ? maxVec.Z : ptVector.Z;
+                if (ptVector.X < minVec.X)
+                    minVec.X = ptVector.X;
+                if (ptVector.X > maxVec.X)
+                    maxVec.X = ptVector.X;
+                if (ptVector.Y < minVec.Y)
+                    minVec.Y = ptVector.Y;
+                if (ptVector.Y > maxVec.Y)
+                    maxVec.Y = ptVector.Y;
+                if (ptVector.Z < minVec.Z)
+                    minVec.Z = ptVector.Z;
+                if (ptVector.Z > maxVec.Z)
+                    maxVec.Z = ptVector.Z;
 
                 empty = false;
             }
             if (empty)
                 throw new ArgumentException();
 
-            return new BoundingBox(minVec, maxVec);
+            BoundingBox result;
+            result.Min = minVec;
+            result.Max = maxVec;
+            return result;
         }
 
         /// <summary>
