@@ -34,11 +34,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
             {
                 graphicsDevice.PlatformCreateRenderTarget(
                     this, width, height, mipMap, this.Format, preferredDepthFormat, preferredMultiSampleCount, usage);
-            });
+            }
         }
 
         private void PlatformGraphicsDeviceResetting()

@@ -17,7 +17,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstruct(IndexElementSize indexElementSize, int indexCount)
         {
-            Threading.BlockOnUIThread(GenerateIfRequired);
+            Threading.EnsureUIThread();
+            GenerateIfRequired();
         }
 
         private void PlatformGraphicsDeviceResetting()
@@ -51,18 +52,14 @@ namespace Microsoft.Xna.Framework.Graphics
             // http://www.khronos.org/registry/gles/extensions/OES/OES_mapbuffer.txt
             throw new NotSupportedException("Index buffers are write-only on OpenGL ES platforms");
 #else
-            if (Threading.IsOnUIThread())
-            {
-                GetBufferData(offsetInBytes, data, startIndex, elementCount);
-            }
-            else
-            {
-                Threading.BlockOnUIThread(() => GetBufferData(offsetInBytes, data, startIndex, elementCount));
-            }
+            Threading.EnsureUIThread();
+
+            GetBufferData(offsetInBytes, data, startIndex, elementCount);
 #endif
         }
 
 #if !GLES
+
         private void GetBufferData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
@@ -95,19 +92,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
         {
-            Threading.BlockOnUIThread(SetDataState<T>.Action, new SetDataState<T>
-            {
-                buffer = this,
-                offsetInBytes = offsetInBytes,
-                data = data,
-                startIndex = startIndex,
-                elementCount = elementCount,
-                options = options
-            });
-        }
+            Threading.EnsureUIThread();
 
-        private void PlatformSetDataBody<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct
-        {
             GenerateIfRequired();
 
             var elementSizeInByte = Marshal.SizeOf<T>();
@@ -152,18 +138,5 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        struct SetDataState<T>
-            where T : struct
-        {
-            public IndexBuffer buffer;
-            public int offsetInBytes;
-            public T[] data;
-            public int startIndex;
-            public int elementCount;
-            public SetDataOptions options;
-
-            public static Action<SetDataState<T>> Action =
-                (s) => s.buffer.PlatformSetDataBody(s.offsetInBytes, s.data, s.startIndex, s.elementCount, s.options);
-        }
     }
 }

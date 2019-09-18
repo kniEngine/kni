@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             this.glTarget = TextureTarget.TextureCubeMap;
 
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
             {
                 GL.GenTextures(1, out this.glTexture);
                 GraphicsExtensions.CheckGLError();
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
                     GraphicsExtensions.CheckGLError();
                 }
-            });
+            }
         }
 
         private void PlatformGetData<T>(
@@ -156,7 +156,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
         {
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
+
             {
                 var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
                 var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -188,7 +189,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     dataHandle.Free();
                 }
-            });
+            }
         }
 
         private TextureTarget GetGLCubeFace(CubeMapFace face)
