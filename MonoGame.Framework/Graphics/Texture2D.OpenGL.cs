@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.glTarget = TextureTarget.Texture2D;
             format.GetGLFormat(GraphicsDevice, out glInternalFormat, out glFormat, out glType);
 
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
             {
                 GenerateGLTextureIfRequired();
                 int w = width;
@@ -80,12 +80,14 @@ namespace Microsoft.Xna.Framework.Graphics
                         h = h / 2;
                     ++level;
                 }
-            });
+            }
         }
 
-        private void PlatformSetDataBody<T>(int level, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            Threading.EnsureUIThread();
+
             int w, h;
             GetSizeForLevel(Width, Height, level, out w, out h);
 
@@ -139,9 +141,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetDataBody<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            Threading.EnsureUIThread();
+
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
@@ -192,34 +196,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 dataHandle.Free();
             }
-        }
-
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            Threading.BlockOnUIThread(SetDataState<T>.Action, new SetDataState<T>
-            {
-                texture = this,
-                level = level,
-                data = data,
-                startIndex = startIndex,
-                elementCount = elementCount
-            });
-        }
-
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            Threading.BlockOnUIThread(SetDataRectState<T>.Action, new SetDataRectState<T>
-            {
-                texture = this,
-                level = level,
-                arraySlice = arraySlice,
-                rect = rect,
-                data = data,
-                startIndex = startIndex,
-                elementCount = elementCount
-            });
         }
 
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
@@ -342,11 +318,11 @@ namespace Microsoft.Xna.Framework.Graphics
             colorSpace.Dispose();
 
             Texture2D texture = null;
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
             {
                 texture = new Texture2D(graphicsDevice, (int)width, (int)height, false, SurfaceFormat.Color);
                 texture.SetData(data);
-            });
+            }
 
             return texture;
         }
@@ -378,11 +354,11 @@ namespace Microsoft.Xna.Framework.Graphics
             ConvertToABGR(height, width, pixels);
 
             Texture2D texture = null;
-            Threading.BlockOnUIThread(() =>
+            Threading.EnsureUIThread();
             {
                 texture = new Texture2D(graphicsDevice, width, height, false, SurfaceFormat.Color);
                 texture.SetData<int>(pixels);
-            });
+            }
 
             return texture;
         }
@@ -479,32 +455,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        struct SetDataState<T>
-            where T : struct
-        {
-            public Texture2D texture;
-            public int level;
-            public T[] data;
-            public int startIndex;
-            public int elementCount;
-
-            internal static Action<SetDataState<T>> Action =
-                (s) => s.texture.PlatformSetDataBody(s.level, s.data, s.startIndex, s.elementCount);
-        }
-
-        struct SetDataRectState<T>
-            where T : struct
-        {
-            public Texture2D texture;
-            public int level;
-            public int arraySlice;
-            public Rectangle rect;
-            public T[] data;
-            public int startIndex;
-            public int elementCount;
-
-            public static Action<SetDataRectState<T>> Action =
-                (s) => s.texture.PlatformSetDataBody(s.level, s.arraySlice, s.rect, s.data, s.startIndex, s.elementCount);
-        }
     }
 }

@@ -137,14 +137,9 @@ namespace Microsoft.Xna.Framework
                 _queuedActions.Add(StateActionHelper<TState>.DequeueAction);
             }
 
-            try
-            {
-                resetEvent.Wait(); // we don't know how much time the operation will take, so let's wait indefinitely
-            }
-            finally
-            {
-                ReturnResetEvent(resetEvent);
-            }
+            resetEvent.Wait();
+            ReturnResetEvent(resetEvent);
+
 #endif
         }
 
@@ -164,8 +159,11 @@ namespace Microsoft.Xna.Framework
 
             lock (_resetEventPool)
             {
-                _resetEventPool.Push(resetEvent);
-                return; // return here to skip dispose
+                if (_resetEventPool.Count < 32)
+                {
+                    _resetEventPool.Push(resetEvent);
+                    return; // return here to skip dispose
+                }
             }
 
             resetEvent.Dispose();
