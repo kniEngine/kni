@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Framework
 {
-    public struct InputKeyEventArgs
+    public class InputKeyEventArgs : EventArgs
     {
         /// <summary>
         /// The key that was either pressed or released.
