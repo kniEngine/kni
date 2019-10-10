@@ -79,7 +79,11 @@ namespace Microsoft.Xna.Framework
             if (!_disposed)
             {
                 _disposed = true;
-                UnloadContent();
+                if (disposing)
+                {
+                    UnloadContent();
+                }
+                base.Dispose(disposing);
             }
         }
 
