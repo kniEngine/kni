@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>MonoGame.Framework.WindowsPhone8.9000</id>
+        <version>0.0.0.0</version>
+        <title>MonoGame.Framework.WindowsPhone8.9000</title>
+        <authors>MonoGameTeam</authors>
+        <owners>MonoGameTeam</owners>
+        <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+        <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>
+          This is a custom build of MonoGame framework. Includes bugfixes, performance improvements, less memory garbage per frame, and better memory management.
+
+          This package provides you with MonoGame Framework that works on Windows Phone 8.0.</description>
+        <summary>This package provides you with MonoGame Framework that works on Windows Phone 8.0.</summary>
+
+        <releaseNotes></releaseNotes>
+        <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
+        <language>en-US</language>
+    </metadata>
+    <files>    
+        <file src="NuGetPackages\build\WindowsPhone8\MonoGame.Framework.WindowsPhone8.9000.targets" target="build\wp8\MonoGame.Framework.WindowsPhone8.9000.targets" />
+       
+        <!-- C# Assemblies -->
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\MonoGame.Framework.dll" target="lib\wp8\ARM\MonoGame.Framework.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\MonoGame.Framework.xml" target="lib\wp8\ARM\MonoGame.Framework.xml" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.Direct3D11.dll" target="lib\wp8\ARM\SharpDX.Direct3D11.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.dll" target="lib\wp8\ARM\SharpDX.dll" />
+        <!--<file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.xml" target="build\wp8\ARM\SharpDX.xml" />-->
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.DXGI.dll" target="lib\wp8\ARM\SharpDX.DXGI.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.MediaFoundation.dll" target="lib\wp8\ARM\SharpDX.MediaFoundation.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.WP8.dll" target="lib\wp8\ARM\SharpDX.WP8.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.WP8.winmd" target="lib\wp8\ARM\SharpDX.WP8.winmd" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\ARM\Release\SharpDX.XAudio2.dll" target="lib\wp8\ARM\SharpDX.XAudio2.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\MonoGame.Framework.dll" target="lib\wp8\x86\MonoGame.Framework.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\MonoGame.Framework.xml" target="lib\wp8\x86\MonoGame.Framework.xml" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.Direct3D11.dll" target="lib\wp8\x86\SharpDX.Direct3D11.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.dll" target="lib\wp8\x86\SharpDX.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.DXGI.dll" target="lib\wp8\x86\SharpDX.DXGI.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.MediaFoundation.dll" target="lib\wp8\x86\SharpDX.MediaFoundation.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.WP8.dll" target="lib\wp8\x86\SharpDX.WP8.dll" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.WP8.winmd" target="lib\wp8\x86\SharpDX.WP8.winmd" />
+        <file src="MonoGame.Framework\bin\WindowsPhone\x86\Release\SharpDX.XAudio2.dll" target="lib\wp8\x86\SharpDX.XAudio2.dll" />
+    </files>
+</package>

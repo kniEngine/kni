@@ -2,13 +2,21 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+#if WP8
+extern alias MicrosoftXnaFramework;
+using MsGenre = MicrosoftXnaFramework::Microsoft.Xna.Framework.Media.Genre;
+#endif
 using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Genre : IDisposable
     {
+#if WP8
+        private MsGenre genre;
+#else
         private string genre;
+#endif
 
         /// <summary>
         /// Gets the AlbumCollection for the Genre.
@@ -28,7 +36,11 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
+#if WP8
+                return this.genre.IsDisposed;
+#else
                 return true;
+#endif
             }
         }
 
@@ -39,7 +51,11 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
+#if WP8
+                return this.genre.Name;
+#else
                 return this.genre;
+#endif
             }
         }
 
@@ -54,16 +70,31 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
+#if WP8
+        public static implicit operator Genre(MsGenre genre)
+        {
+            return new Genre(genre);
+        }
+
+        private Genre(MsGenre genre)
+        {
+            this.genre = genre;
+        }
+#else
         public Genre(string genre)
         {
             this.genre = genre;
         }
+#endif
 
         /// <summary>
         /// Immediately releases the unmanaged resources used by this object.
         /// </summary>
         public void Dispose()
         {
+#if WP8
+            this.genre.Dispose();
+#endif
         }
 
         /// <summary>
@@ -71,7 +102,11 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override string ToString()
         {
+#if WP8
+            return this.genre.ToString();
+#else
             return this.genre;
+#endif
         }
 
         /// <summary>
@@ -79,7 +114,11 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override int GetHashCode()
         {
+#if WP8
             return this.genre.GetHashCode();
+#else
+            return this.genre.GetHashCode();
+#endif
         }
     }
 }
