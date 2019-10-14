@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINRT
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 #endif
@@ -68,6 +68,9 @@ namespace Microsoft.Xna.Framework
             // Allow some optional per-platform construction to occur too.
             PlatformConstruct();
 
+#if W81
+            Platform.ViewStateChanged += Platform_ApplicationViewChanged;
+#endif
         }
 
         ~Game()
@@ -127,6 +130,9 @@ namespace Microsoft.Xna.Framework
                         Platform.Deactivated -= Platform_Deactivated;
                         _services.RemoveService(typeof(GamePlatform));
 
+#if W81
+                        Platform.ViewStateChanged -= Platform_ApplicationViewChanged;
+#endif
                         Platform.Dispose();
                         Platform = null;
                     }
@@ -357,7 +363,12 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public event EventHandler<EventArgs> Exiting;
 
-#if WINDOWS_UAP
+#if W81
+        [CLSCompliant(false)]
+        public event EventHandler<ViewStateChangedEventArgs> ApplicationViewChanged;
+#endif
+
+#if WINDOWS_UAP || WINRT
         [CLSCompliant(false)]
         public ApplicationExecutionState PreviousExecutionState { get; internal set; }
 #endif
@@ -371,6 +382,9 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Exit()
         {
+#if W81
+            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+#endif
 #if ANDROID || IOS
             throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
 #endif
@@ -484,7 +498,7 @@ namespace Microsoft.Xna.Framework
         private Stopwatch _gameTimer;
         private long _previousTicks = 0;
         private int _updateFrameLag;
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINRT
         private readonly object _locker = new object();
 #endif
 
@@ -534,6 +548,10 @@ namespace Microsoft.Xna.Framework
 #if (WINDOWS && !DESKTOPGL) || DESKTOPGL || ANDROID || IOS
                     System.Threading.Thread.Sleep(0);
 #elif WINDOWS_UAP
+                    lock (_locker)
+                        System.Threading.Monitor.Wait(_locker, 0);
+#endif
+#if WINRT
                     lock (_locker)
                         System.Threading.Monitor.Wait(_locker, 0);
 #endif
@@ -784,6 +802,14 @@ namespace Microsoft.Xna.Framework
             EndRun();
 			DoExiting();
         }
+
+#if W81
+        private void Platform_ApplicationViewChanged(object sender, ViewStateChangedEventArgs e)
+        {
+            AssertNotDisposed();
+            EventHelpers.Raise(this, ApplicationViewChanged, e);
+        }
+#endif
 
         #endregion Event Handlers
 

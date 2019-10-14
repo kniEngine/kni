@@ -4,7 +4,7 @@
 
 using System;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINRT
 using Windows.UI.ViewManagement;
 #endif
 
@@ -20,7 +20,28 @@ namespace Microsoft.Xna.Framework
             return new MonoGame.Framework.WinFormsGamePlatform(game);
 #elif WINDOWS_UAP
             return new UAPGamePlatform(game);
+#elif WINRT
+            return new MetroGamePlatform(game);
 #endif
         }
-   }
+
+#if (W81 || WP81)
+        public event EventHandler<ViewStateChangedEventArgs> ViewStateChanged;
+
+        private ApplicationViewState _viewState;
+        public ApplicationViewState ViewState
+        {
+            get { return _viewState; }
+            set
+            {
+                if (_viewState == value)
+                    return;
+
+                EventHelpers.Raise(this, ViewStateChanged, new ViewStateChangedEventArgs(value));
+
+                _viewState = value;
+            }
+        }
+#endif
+    }
 }

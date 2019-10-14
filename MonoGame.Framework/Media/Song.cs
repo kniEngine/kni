@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Media
         public Album Album
         {
             get { return _strategy.PlatformGetAlbum(); }
-#if WINDOWS_UAP
+#if WINDOWS_UAP || (W81 || WP81)
             internal set { _strategy.PlatformSetAlbum(value); }
 #endif
         }

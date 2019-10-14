@@ -15,6 +15,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _texture = textureResource;
         }
+ 
+        internal void SetTextureInternal_W81(Resource textureResource)
+        {
+            _texture = textureResource;
+        }
 
         private ShaderResourceView _resourceView;
 
