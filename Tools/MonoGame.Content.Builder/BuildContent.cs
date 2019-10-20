@@ -388,22 +388,36 @@ namespace MonoGame.Content.Builder
                         message = ex.ContentIdentity.SourceFilename;
                         if (!string.IsNullOrEmpty(ex.ContentIdentity.FragmentIdentifier))
                             message += "(" + ex.ContentIdentity.FragmentIdentifier + ")";
-                        message += ": ";
+                        else
+                            message += " ";
                     }
-                    message += ex.Message;
-                    Console.WriteLine(message);
+                    else
+                    {
+                        message = c.SourceFile;
+                        message += " ";
+                    }
+                    message += ": error ";
+
+                    // extract errorCode from message
+                    var match = System.Text.RegularExpressions.Regex.Match(ex.Message, @"([A-Z]+[0-9]+):(.+)");
+                    if (match.Success || match.Groups.Count == 2)
+                        message += match.Groups[1].Value + " : " + match.Groups[2].Value;
+                    else
+                        message += ": " + ex.Message;
+                    
+                    Console.Error.WriteLine(message);
                     ++errorCount;
                 }
                 catch (PipelineException ex)
                 {
-                    Console.Error.WriteLine("{0}: error: {1}", c.SourceFile, ex.Message);
+                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
                     if (ex.InnerException != null)
                         Console.Error.WriteLine(ex.InnerException.ToString());
                     ++errorCount;
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine("{0}: error: {1}", c.SourceFile, ex.Message);
+                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
                     if (ex.InnerException != null)
                         Console.Error.WriteLine(ex.InnerException.ToString());
                     ++errorCount;
@@ -482,7 +496,7 @@ namespace MonoGame.Content.Builder
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine("{0}: error: {1}", c, ex.Message);
+                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
                     if (ex.InnerException != null)
                         Console.Error.WriteLine(ex.InnerException.ToString());
 

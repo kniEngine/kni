@@ -43,9 +43,27 @@ namespace MonoGame.Content.Builder
                 warning = contentIdentity.SourceFilename;
                 if (!string.IsNullOrEmpty(contentIdentity.FragmentIdentifier))
                     warning += "(" + contentIdentity.FragmentIdentifier + ")";
-                warning += ": ";
+                else
+                    warning += " ";
             }
+            else
+            {
+                warning = GetCurrentFilename(contentIdentity);
+                warning += " ";
+            }
+            warning += ": warning ";
             
+            // extract errorCode from message
+            var match = System.Text.RegularExpressions.Regex.Match(message, @"([A-Z]+[0-9]+):(.+)");
+            if (match.Success || match.Groups.Count == 2)
+            {
+                warning += match.Groups[1].Value;
+                warning += " ";
+                message = match.Groups[2].Value;
+            }
+
+            warning += ": ";
+
             if (messageArgs != null && messageArgs.Length != 0)
                 warning += string.Format(message, messageArgs);
             else if (!string.IsNullOrEmpty(message))
