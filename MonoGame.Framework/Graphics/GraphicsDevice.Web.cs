@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        public void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
+        internal void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             WebGL.gl.enable(WebGL.gl.DEPTH_TEST);
             WebGL.gl.depthFunc(WebGL.gl.LEQUAL);
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        public void PlatformPresent()
+        internal void PlatformPresent()
         {
         }
 
