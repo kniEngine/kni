@@ -57,6 +57,27 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
         
+        internal TouchCollection(IList<TouchPanelState.TouchLocationData> touches)
+        {
+            if (touches == null)
+                throw new ArgumentNullException("touches");
+
+            _count = touches.Count;
+
+            _value0 = (_count > 0) ? touches[0].TouchLocation : TouchLocation.Invalid;
+            _value1 = (_count > 1) ? touches[1].TouchLocation : TouchLocation.Invalid;
+            _value2 = (_count > 2) ? touches[2].TouchLocation : TouchLocation.Invalid;
+            _value3 = (_count > 3) ? touches[3].TouchLocation : TouchLocation.Invalid;
+            _collection = null;
+
+            if (_count > 4)
+            {
+                _collection = new TouchLocation[_count];
+                for (int i = 0; i < _count; i++)
+                    _collection[i] = touches[i].TouchLocation;
+            }
+        }
+        
         /// <summary>
         /// Returns <see cref="TouchLocation"/> specified by ID.
         /// </summary>
