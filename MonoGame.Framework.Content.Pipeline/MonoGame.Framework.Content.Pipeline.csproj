@@ -220,6 +220,10 @@
       <PackagePath>runtimes\win-x64\native</PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\ThirdParty\SharpFont\Windows\x64\msvcr110.dll" Visible="false">
+      <PackagePath>runtimes\win-x64\native</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <PropertyGroup>
