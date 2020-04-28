@@ -3,9 +3,6 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using WGI = Windows.Gaming.Input;
 
 namespace Microsoft.Xna.Framework.Input
@@ -18,37 +15,39 @@ namespace Microsoft.Xna.Framework.Input
 
         internal static bool Back;
 
-        private static Dictionary<int, WGI.Gamepad> _gamepads;
-
-        private static readonly object _locker = new object();
+        private static WGI.Gamepad[] _gamepads;
+        static int tmp;
 
         static GamePad()
         {
-            _gamepads = new Dictionary<int, WGI.Gamepad>();
+            _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];
+            var gamepadsTmp = WGI.Gamepad.Gamepads;
+            tmp = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
             var gamepads = WGI.Gamepad.Gamepads;
-            for (int i = 0; i < gamepads.Count; i++)
+            for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
                 _gamepads[i] = gamepads[i];
 
             WGI.Gamepad.GamepadAdded += (o, e) =>
             {
-                lock (_locker)
+                for (int i = 0; i < _gamepads.Length; i++)
                 {
-                    var index = 0;
-                    while (_gamepads.ContainsKey(index))
-                        index++;
-
-                    _gamepads[index] = e;
+                    if (_gamepads[i] == null)
+                    {
+                        _gamepads[i] = e;
+                        break;
+                    }
                 }
             };
 
             WGI.Gamepad.GamepadRemoved += (o, e) =>
             {
-                lock (_locker)
+                for (int i = 0; i < _gamepads.Length; i++)
                 {
-                    int? key = _gamepads.FirstOrDefault(x => x.Value == e).Key;
-
-                    if (key.HasValue)
-                        _gamepads.Remove(key.Value);
+                    if (_gamepads[i] == e)
+                    {
+                        _gamepads[i] = null;
+                        break;
+                    }
                 }
             };
         }
@@ -60,44 +59,40 @@ namespace Microsoft.Xna.Framework.Input
 
         private static GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            lock (_locker)
+            var gamepad = _gamepads[index];
+            if (gamepad == null)
+                return new GamePadCapabilities();
+
+            // we can't check gamepad capabilities for most stuff with Windows.Gaming.Input.Gamepad
+            return new GamePadCapabilities
             {
-                if (!_gamepads.ContainsKey(index))
-                    return new GamePadCapabilities();
-
-                var gamepad = _gamepads[index];
-
-                // we can't check gamepad capabilities for most stuff with Windows.Gaming.Input.Gamepad
-                return new GamePadCapabilities
-                {
-                    IsConnected = true,
-                    GamePadType = GamePadType.GamePad,
-                    HasAButton = true,
-                    HasBButton = true,
-                    HasXButton = true,
-                    HasYButton = true,
-                    HasBackButton = true,
-                    HasStartButton = true,
-                    HasDPadDownButton = true,
-                    HasDPadLeftButton = true,
-                    HasDPadRightButton = true,
-                    HasDPadUpButton = true,
-                    HasLeftShoulderButton = true,
-                    HasRightShoulderButton = true,
-                    HasLeftStickButton = true,
-                    HasRightStickButton = true,
-                    HasLeftTrigger = true,
-                    HasRightTrigger = true,
-                    HasLeftXThumbStick = true,
-                    HasLeftYThumbStick = true,
-                    HasRightXThumbStick = true,
-                    HasRightYThumbStick = true,
-                    HasLeftVibrationMotor = true,
-                    HasRightVibrationMotor = true,
-                    HasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId)),
-                    HasBigButton = false //we can't detect the big button from Windows.Gaming.Input.Gamepad, so it's always false
-                };
-            }
+                IsConnected = true,
+                GamePadType = GamePadType.GamePad,
+                HasAButton = true,
+                HasBButton = true,
+                HasXButton = true,
+                HasYButton = true,
+                HasBackButton = true,
+                HasStartButton = true,
+                HasDPadDownButton = true,
+                HasDPadLeftButton = true,
+                HasDPadRightButton = true,
+                HasDPadUpButton = true,
+                HasLeftShoulderButton = true,
+                HasRightShoulderButton = true,
+                HasLeftStickButton = true,
+                HasRightStickButton = true,
+                HasLeftTrigger = true,
+                HasRightTrigger = true,
+                HasLeftXThumbStick = true,
+                HasLeftYThumbStick = true,
+                HasRightXThumbStick = true,
+                HasRightYThumbStick = true,
+                HasLeftVibrationMotor = true,
+                HasRightVibrationMotor = true,
+                HasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId)),
+                HasBigButton = false //we can't detect the big button from Windows.Gaming.Input.Gamepad, so it's always false
+            };
         }
 
         private static GamePadState GetDefaultState()
@@ -109,79 +104,73 @@ namespace Microsoft.Xna.Framework.Input
 
         private static GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            lock (_locker)
-            {
-                if (!_gamepads.ContainsKey(index))
-                    return (index == 0 ? GetDefaultState() : GamePadState.Default);
-                
-                var state = _gamepads[index].GetCurrentReading();
+            var gamepad = _gamepads[index];
+            if (gamepad == null)
+                return (index == 0 ? GetDefaultState() : GamePadState.Default);
+            
+            var state = gamepad.GetCurrentReading();
 
-                var sticks = new GamePadThumbSticks(
-                        new Vector2((float)state.LeftThumbstickX, (float)state.LeftThumbstickY),
-                        new Vector2((float)state.RightThumbstickX, (float)state.RightThumbstickY),
-                        leftDeadZoneMode,
-                        rightDeadZoneMode
-                    );
+            var sticks = new GamePadThumbSticks(
+                    new Vector2((float)state.LeftThumbstickX, (float)state.LeftThumbstickY),
+                    new Vector2((float)state.RightThumbstickX, (float)state.RightThumbstickY),
+                    leftDeadZoneMode,
+                    rightDeadZoneMode
+                );
 
-                var triggers = new GamePadTriggers(
-                        (float)state.LeftTrigger,
-                        (float)state.RightTrigger
-                    );
+            var triggers = new GamePadTriggers(
+                    (float)state.LeftTrigger,
+                    (float)state.RightTrigger
+                );
 
-                Buttons buttonStates =
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.A) ? Buttons.A : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.B) ? Buttons.B : 0) |
-                    ((state.Buttons.HasFlag(WGI.GamepadButtons.View) || Back) ? Buttons.Back : 0) |
-                    0 | //BigButton is unavailable by Windows.Gaming.Input.Gamepad
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.LeftShoulder) ? Buttons.LeftShoulder : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.LeftThumbstick) ? Buttons.LeftStick : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.RightShoulder) ? Buttons.RightShoulder : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.RightThumbstick) ? Buttons.RightStick : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.Menu) ? Buttons.Start : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.X) ? Buttons.X : 0) |
-                    (state.Buttons.HasFlag(WGI.GamepadButtons.Y) ? Buttons.Y : 0) |
-                    0;
+            Buttons buttonStates =
+                (state.Buttons.HasFlag(WGI.GamepadButtons.A) ? Buttons.A : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.B) ? Buttons.B : 0) |
+                ((state.Buttons.HasFlag(WGI.GamepadButtons.View) || Back) ? Buttons.Back : 0) |
+                0 | //BigButton is unavailable by Windows.Gaming.Input.Gamepad
+                (state.Buttons.HasFlag(WGI.GamepadButtons.LeftShoulder) ? Buttons.LeftShoulder : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.LeftThumbstick) ? Buttons.LeftStick : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.RightShoulder) ? Buttons.RightShoulder : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.RightThumbstick) ? Buttons.RightStick : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.Menu) ? Buttons.Start : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.X) ? Buttons.X : 0) |
+                (state.Buttons.HasFlag(WGI.GamepadButtons.Y) ? Buttons.Y : 0) |
+                0;
 
-                // Check triggers
-                if (triggers.Left > TriggerThreshold)
-                    buttonStates |= Buttons.LeftTrigger;
-                if (triggers.Right > TriggerThreshold)
-                    buttonStates |= Buttons.RightTrigger;
+            // Check triggers
+            if (triggers.Left > TriggerThreshold)
+                buttonStates |= Buttons.LeftTrigger;
+            if (triggers.Right > TriggerThreshold)
+                buttonStates |= Buttons.RightTrigger;
 
-                var buttons = new GamePadButtons(buttonStates);
+            var buttons = new GamePadButtons(buttonStates);
 
-                var dpad = new GamePadDPad(
-                        state.Buttons.HasFlag(WGI.GamepadButtons.DPadUp) ? ButtonState.Pressed : ButtonState.Released,
-                        state.Buttons.HasFlag(WGI.GamepadButtons.DPadDown) ? ButtonState.Pressed : ButtonState.Released,
-                        state.Buttons.HasFlag(WGI.GamepadButtons.DPadLeft) ? ButtonState.Pressed : ButtonState.Released,
-                        state.Buttons.HasFlag(WGI.GamepadButtons.DPadRight) ? ButtonState.Pressed : ButtonState.Released
-                    );
+            var dpad = new GamePadDPad(
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadUp) ? ButtonState.Pressed : ButtonState.Released,
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadDown) ? ButtonState.Pressed : ButtonState.Released,
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadLeft) ? ButtonState.Pressed : ButtonState.Released,
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadRight) ? ButtonState.Pressed : ButtonState.Released
+                );
 
-                var result = new GamePadState(sticks, triggers, buttons, dpad);
-                result.PacketNumber = (int)state.Timestamp;
-                return result;
-            }
+            var result = new GamePadState(sticks, triggers, buttons, dpad);
+            result.PacketNumber = (int)state.Timestamp;
+            return result;
         }
 
         private static bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            lock (_locker)
+            var gamepad = _gamepads[index];
+            if (gamepad == null)
+                return false;
+
+            gamepad.Vibration = new WGI.GamepadVibration
             {
-                if (!_gamepads.ContainsKey(index))
-                    return false;
+                LeftMotor = leftMotor,
+                LeftTrigger = leftTrigger,
+                RightMotor = rightMotor,
+                RightTrigger = rightTrigger
+            };
 
-                var gamepad = _gamepads[index];
-
-                gamepad.Vibration = new WGI.GamepadVibration
-                {
-                    LeftMotor = leftMotor,
-                    LeftTrigger = leftTrigger,
-                    RightMotor = rightMotor,
-                    RightTrigger = rightTrigger
-                };
-
-                return true;
-            }
+            return true;
         }
     }
 }
