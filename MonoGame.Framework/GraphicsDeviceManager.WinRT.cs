@@ -13,6 +13,11 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)] 
         public SwapChainPanel SwapChainPanel { get; set; }
 
+        partial void PlatformConstruct()
+        {
+            _wantFullScreen = UAPGameWindow.Instance.AppView.IsFullScreenMode;
+        }
+
         partial void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
         {
 
