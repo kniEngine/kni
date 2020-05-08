@@ -163,12 +163,16 @@ namespace Microsoft.Xna.Framework
 
         public override void EnterFullScreen()
         {
-            UAPGameWindow.Instance.AppView.TryEnterFullScreenMode();
+            if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())
+            {
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+            }
 		}
 
 		public override void ExitFullScreen()
         {
             UAPGameWindow.Instance.AppView.ExitFullScreenMode();
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
