@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
@@ -281,10 +282,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 return (foundType == null) ? null : foundType.MakeGenericType(genericArguments);
             }
 
-            foundType = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                         from type in assembly.GetTypes()
-                         where type.FullName == typeName || type.Name == typeName
-                         select type).FirstOrDefault();
+            Parallel.ForEach(AppDomain.CurrentDomain.GetAssemblies(), (assembly, state) =>
+            {
+                Parallel.ForEach(assembly.GetTypes(), (type, state2) =>
+                {
+                    if (state.IsStopped)
+                    {
+                        state2.Stop();
+                        return;
+                    }
+                    if (type.FullName == typeName || type.Name == typeName)
+                    {
+                        foundType = type;
+                        state.Stop();
+                    }
+                });
+            });
 
             if (foundType == null)
                 foundType = Type.GetType(expandedName, false, true);
