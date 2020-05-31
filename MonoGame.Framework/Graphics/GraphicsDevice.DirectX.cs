@@ -1553,7 +1553,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
                 int indexCount = GetElementCountArray(primitiveType, primitiveCount);
-                _d3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);
+
+                if (baseInstance > 0)
+                {
+                    if (!GraphicsCapabilities.SupportsBaseIndexInstancing)
+                        throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
+
+                    _d3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);
+                }
+                else
+                {
+                    _d3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, 0);
+                }
             }
         }
 

@@ -30,7 +30,8 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsNormalized = true;
 
             SupportsInstancing = true;
-            SupportsBaseIndexInstancing = true;
+            //TNC: TODO: detect suport based on feture level
+            SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
 
             MaxTextureAnisotropy = (device.GraphicsProfile == GraphicsProfile.Reach) ? 2 : 16;
