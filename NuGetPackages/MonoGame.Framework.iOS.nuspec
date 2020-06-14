@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>MonoGame.Framework.iOS.9000</id>
+    <version>0.0.0.0</version>
+    <title>MonoGame.Framework.iOS.9000</title>
+    <authors>Kastellanos Nikos, MonoGame Team</authors>
+    <owners>Kastellanos Nikos</owners>
+    <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+    <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      This is a custom build of MonoGame framework. Includes bugfixes, performance improvements, less memory garbage per frame, and better memory management.
+
+      This package provides you with MonoGame Framework that works on iOS.</description>
+    <summary>This package provides you with MonoGame Framework that works on iOS.</summary>
+    <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
+    <language>en-US</language>
+  </metadata>
+  <files>
+    <file src="NuGetPackages\build\iOS\MonoGame.Framework.iOS.9000.targets" target="build\MonoGame.Framework.iOS.9000.targets" />
+    
+    <!-- C# Assemblies -->
+    <file src="MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.dll" target="lib\XamariniOS\MonoGame.Framework.dll" />
+    <file src="MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.xml" target="lib\XamariniOS\MonoGame.Framework.xml" />
+  </files>
+</package>
