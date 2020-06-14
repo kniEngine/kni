@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46474D32-2E58-6957-6E64-6F7773324D47}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TwoMGFX</RootNamespace>
+    <AssemblyName>2MGFX</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1591,0436</NoWarn>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <LangVersion>Default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+    <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
+    <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
+    <DocumentationFile>bin\Windows\AnyCPU\Debug\2MGFX.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
+    <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
+    <DocumentationFile>bin\Windows\AnyCPU\Release\2MGFX.xml</DocumentationFile>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="BuildLogger.cs" />
+    <Compile Include="ImporterContext.cs" />
+    <Compile Include="ProcessorContext.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>XNA.Framework.WindowsDX11</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Windows.csproj">
+      <Project>{B950DE10-AC5D-4BD9-B817-51247C4A732D}</Project>
+      <Name>XNA.Framework.Content.Pipeline.Windows</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -334,9 +334,5 @@
       <Project>{4243474D-572E-6E69-646F-77734D474342}</Project>
       <Name>MGCB.Windows.9K</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Build.Tasks\MonoGame.Build.Tasks.Windows.9K.csproj">
-      <Project>{E2D9E2AE-B875-D3D6-92B1-ECDC6C642E54}</Project>
-      <Name>MonoGame.Build.Tasks.Windows.9K</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
