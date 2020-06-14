@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<project name="MonoGame Build Script" default="build" basedir=".">
+
+  <description>The MonoGame automated build script.</description>
+
+  <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
+  <property name="msbuildwin12" value="C:\Program Files (x86)\MSBuild\12.0\Bin\msbuild.exe" />
+  <property name="msbuildwin14" value="C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" />
+  <property name="msbuildwin15" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe" />
+  <property name="msbuildwin" value="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\msbuild.exe" />
+  
+  <!-- Helper default target. -->
+  <target   name="build" 
+            description="Build, run tests, generate docs, and create installers." 
+            depends="build_code,run_tests,build_docs,build_installer" />
+
+  <!-- Some additional helper dependencies. -->
+  <target name="_prebuild" depends="_clean" />
+
+  <!-- Clean the build output directories. -->
+  <target name="_clean">
+    <delete dir="${project::get-base-directory()}\MonoGame.Framework\obj" />
+    <delete dir="${project::get-base-directory()}\MonoGame.Framework.Content.Pipeline\obj" />
+  </target>
+  
+  <!-- Shortcut for building all valid target platforms -->
+  <target name="build_code" description="Build all the projects.">
+    <call target="build_framework"/>
+    <call target="build_windows"/>
+    <call target="build_windowsUAP10" />
+    <call target="build_android" />
+    <call target="build_ios" />
+  </target>
+ 
+
+
+  <!-- Build targets for the various platforms. -->
+
+  <target name="build_framework" description="Build framework" depends="_prebuild">
+
+      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
+
+  </target>
+  
+  <target name="build_windows" description="Build Windows" depends="_prebuild">
+
+      <exec program="${msbuildwin}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug" />
+
+      <exec program="${msbuildwin}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuildwin}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
+      <call target="build_portable"/>
+      
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+
+  </target>
+
+  <target name="build_portable" description="Build Portable" depends="_prebuild">
+	
+    <!-- Convert MonoGame.Framework.dll -->
+    <mkdir dir="MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8" />
+    <exec program="ThirdParty\Dependencies\Piranha\Piranha.exe " commandline='make-portable-skeleton -i MonoGame.Framework\bin\Windows\AnyCPU\Release\MonoGame.Framework.dll -o MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll -p ".NETPortable,Version=v4.0,Profile=Profile328"' />
+    <!-- piranha fails to buils a net4.5 skeleton. workaround is to use the previously build net4.0 skeleton as input -->
+    <!--
+    <mkdir dir="MonoGame.Framework\bin\portable-net45+win8+wpa81+wp8" />
+    <exec program="ThirdParty\Dependencies\Piranha\Piranha.exe " commandline='make-portable-skeleton -i MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll -o "MonoGame.Framework\bin\portable-net45+win8+wpa81+wp8\MonoGame.Framework.dll" -p ".NETPortable,Version=v4.5,Profile=Profile259"' />
+    -->
+
+    <!-- Convert MonoGame.Framework.Content.Pipeline.dll -->
+    <mkdir dir="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8" />
+    <copy file="MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll" tofile="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll" overwrite="true"/>
+    <copy file="MonoGame.Framework.Content.Pipeline\bin\Windows\AnyCPU\Release\MonoGame.Framework.Content.Pipeline.dll" tofile="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8\temp.dll" overwrite="true"/>
+    <exec program="ThirdParty\Dependencies\Piranha\Piranha.exe " workingdir="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8" commandline='make-portable-skeleton -i temp.dll -o MonoGame.Framework.Content.Pipeline.dll -p ".NETPortable,Version=v4.0,Profile=Profile328"' />
+    <delete file="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll" />
+    <delete file="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8\temp.dll" />
+    <!-- piranha fails to buils a net4.5 skeleton. workaround is to use the previously build net4.0 skeleton as input -->
+    <!--
+    <mkdir dir="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8" />
+    <copy file="MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.dll" tofile="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8\MonoGame.Framework.dll" overwrite="true"/>
+    <copy file="MonoGame.Framework.Content.Pipeline\bin\portable-net40+sl5+win8+wpa81+wp8\MonoGame.Framework.Content.Pipeline.dll" tofile="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8\temp.dll" overwrite="true"/>
+    <exec program="ThirdParty\Dependencies\Piranha\Piranha.exe " workingdir="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8" commandline='make-portable-skeleton -i temp.dll -o MonoGame.Framework.Content.Pipeline.dll -p ".NETPortable,Version=v4.5,Profile=Profile259"' />
+    <delete file="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8\MonoGame.Framework.dll" />
+    <delete file="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8\temp.dll" />
+    -->
+
+  </target>
+
+  <target name="build_ios" description="Build iOS" depends="_prebuild">
+    <if test="${os == 'MacOS'}">
+      <if test="${file::exists('/Developer/MonoTouch/MSBuild/Xamarin.ObjcBinding.CSharp.targets') 
+               or file::exists('/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Xamarin.ObjcBinding.CSharp.targets')}">
+        <exec program="msbuild" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
+        <exec program="msbuild" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
+      </if>
+    </if>
+  </target>
+
+  <target name="build_android" description="Build Android" depends="_prebuild">
+
+      <!--
+      <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
+        <exec program="${msbuildwin}" commandline="MonoGame.Framework.Android.9K.sln /t:Clean /p:Configuration=Release" />
+        <exec program="${msbuildwin}" commandline="MonoGame.Framework.Android.9K.sln /t:Build /p:Configuration=Release" />
+      </if>
+      -->
+      <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
+        <exec program="${msbuildwin15}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
+        <exec program="${msbuildwin15}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
+      </if>
+
+  </target>
+
+  <target name="build_windowsUAP10" description="Build Windows 10 UAP" depends="_prebuild">
+
+      <!--
+      <exec program="${msbuildwin}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuildwin}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /p:Configuration=Release' />
+      -->
+      <exec program="${msbuildwin}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
+      <exec program="${msbuildwin}" commandline='XNA.Framework.UAP.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuildwin}" commandline='XNA.Framework.UAP.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
+
+  </target>
+
+
+  <!-- Run the unit tests... will fail if the code hasn't been built. -->
+  <target name="run_tests" description="Run all the tests" >
+
+    <if test="${os == 'Win32NT'  }">
+      <exec program="MonoGame.Tests.exe" workingdir="Tests/bin/Windows/AnyCPU/Debug/" basedir="Test/bin/Windows/AnyCPU/Debug/"/>
+    </if>
+
+  </target>
+
+
+  <!-- Generate the docs... will fail if the code hasn't been built. -->
+  <target name="build_docs" description="Build the documentation." >
+    <if test="${os == 'Win32NT'  }">
+      <delete dir="${project::get-base-directory()}\Documentation\Output" />
+      <exec program="SharpDoc.exe" basedir="ThirdParty\Dependencies\SharpDoc" commandline="-config Documentation\config.xml" />
+    </if>
+  </target>
+
+
+  <!-- Create the installers... will fail if the code hasn't been built. -->
+  <target name="build_installer" description="Build the installers." >
+    <nant buildfile="Templates/VisualStudio2017/default.build" target="build" />
+    <nant buildfile="Templates/VisualStudio2019/default.build" target="build" />
+    <nant buildfile="Templates/default.build" target="build" />
+    <nant buildfile="Templates/VisualStudioForMac/default.build" target="build" />
+    <nant buildfile="Installers/default.build" target="build" />
+  </target>
+
+</project>
