@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>nkast.Xna.Framework</id>
+    <version>0.0.0.0</version>
+    <title>nkast.Xna.Framework</title>
+    <authors>Kastellanos Nikos, MonoGame Team</authors>
+    <owners>Kastellanos Nikos</owners>
+    <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+    <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Core Xna Framework API.</description>
+    <summary>This package provides the base classes of Xna Framework.</summary>
+    <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
+    <language>en-US</language>
+    <references>
+      <reference file="Xna.Framework.dll" />
+    </references>
+  </metadata>
+  <files>
+    
+    <!-- C# Assemblies -->
+    <file src="Artifacts\Xna.Framework\Release\net40\Xna.Framework.dll" target="lib\net40\Xna.Framework.dll" />
+    <file src="Artifacts\Xna.Framework\Release\net40\Xna.Framework.xml" target="lib\net40\Xna.Framework.xml" />
+    <file src="Artifacts\Xna.Framework\Release\netstandard2.0\Xna.Framework.dll"  target="lib\netstandard2.0\Xna.Framework.dll" />
+    <file src="Artifacts\Xna.Framework\Release\netstandard2.0\Xna.Framework.xml"  target="lib\netstandard2.0\Xna.Framework.xml" />
+    <file src="Artifacts\Xna.Framework\Release\netstandard2.0\Xna.Framework.deps.json" target="lib\netstandard2.0\Xna.Framework.deps.json" />
+    
+    
+  </files>
+</package>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>MonoGame.Framework.WindowsUniversal.9000</id>
+        <version>0.0.0.0</version>
+        <title>MonoGame.Framework.WindowsUniversal.9000</title>
+        <authors>Kastellanos Nikos, MonoGame Team</authors>
+        <owners>Kastellanos Nikos</owners>
+        <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+        <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>
+          This is a custom build of MonoGame framework. Includes bugfixes, performance improvements, less memory garbage per frame, and better memory management.
+
+          This package provides you with MonoGame Framework that works on Windows 10, Windows Phone 10 and Xbox One using UWP(Universal Windows Platform).</description>
+        <summary>This package provides you with MonoGame Framework that works on Windows 10, Windows Phone 10 and Xbox One using UWP(Universal Windows Platform).</summary>
+        <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
+        <language>en-US</language>
+        <dependencies>
+            <group targetFramework=".NETCore0.0">
+                <dependency id="SharpDX" version="4.0.1" />
+                <dependency id="SharpDX.Direct2D1" version="4.0.1" />
+                <dependency id="SharpDX.Direct3D11" version="4.0.1" />
+                <dependency id="SharpDX.DXGI" version="4.0.1" />
+                <dependency id="SharpDX.XAudio2" version="4.0.1" />
+                <dependency id="SharpDX.MediaFoundation" version="4.0.1" />
+                <dependency id="SharpDX.XInput" version="4.0.1" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="NuGetPackages\build\WindowsUniversal\MonoGame.Framework.WindowsUniversal.9000.targets" target="build\MonoGame.Framework.WindowsUniversal.9000.targets" />
+                
+        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.dll"                       target="lib\netcore\MonoGame.Framework.dll" />
+        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.pri"                       target="lib\netcore\MonoGame.Framework.pri" />
+        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.xml"                       target="lib\netcore\MonoGame.Framework.xml" />
+      
+    </files>
+</package>
