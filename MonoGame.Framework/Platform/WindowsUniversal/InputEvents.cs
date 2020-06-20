@@ -39,21 +39,6 @@ namespace Microsoft.Xna.Framework
 
         private CoreIndependentInputSource _coreIndependentInputSource;
 
-        /// <summary>
-        /// Sets the cursor of <see cref="CoreIndependentInputSource"/> thread
-        /// </summary>
-        public CoreCursor CoreCursor
-        {
-            set
-            {
-                if (_coreIndependentInputSource != null)
-                    _coreIndependentInputSource.Dispatcher.TryRunAsync(
-                          CoreDispatcherPriority.Normal,
-                        () => _coreIndependentInputSource.PointerCursor = value)
-                        .GetAwaiter().GetResult();
-            }
-        }
-
         public InputEvents(CoreWindow window, UIElement inputElement, TouchQueue touchQueue)
         {
             _touchQueue = touchQueue;
