@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Root bone for this model.
         /// </summary>
-        public ModelBone Root { get; set; }
+        public ModelBone Root { get; internal set; }
 
         /// <summary>
         /// Custom attached object.
@@ -41,11 +41,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         /// </summary>
         public object Tag { get; set; }
-
-		internal Model()
-		{
-
-		}
 
         /// <summary>
         /// Constructs a model. 
@@ -62,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <exception cref="ArgumentNullException">
         /// <paramref name="meshes"/> is null.
         /// </exception>
-        public Model(GraphicsDevice graphicsDevice, List<ModelBone> bones, List<ModelMesh> meshes)
+        internal Model(GraphicsDevice graphicsDevice, List<ModelBone> bones, List<ModelMesh> meshes)
 		{
             if (graphicsDevice == null)
             {
@@ -74,35 +69,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			Bones = new ModelBoneCollection(bones);
 			Meshes = new ModelMeshCollection(meshes);
-		}
-
-        internal void BuildHierarchy()
-		{
-			var globalScale = Matrix.CreateScale(0.01f);
-			
-			foreach(var node in this.Root.Children)
-			{
-				BuildHierarchy(node, this.Root.Transform * globalScale, 0);
-			}
-		}
-		
-		private void BuildHierarchy(ModelBone node, Matrix parentTransform, int level)
-		{
-			node.ModelTransform = node.Transform * parentTransform;
-			
-			foreach (var child in node.Children) 
-			{
-				BuildHierarchy(child, node.ModelTransform, level + 1);
-			}
-			
-			//string s = string.Empty;
-			//
-			//for (int i = 0; i < level; i++) 
-			//{
-			//	s += "\t";
-			//}
-			//
-			//Debug.WriteLine("{0}:{1}", s, node.Name);
 		}
 
         /// <summary>

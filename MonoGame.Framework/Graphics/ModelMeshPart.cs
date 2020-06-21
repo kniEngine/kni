@@ -42,19 +42,19 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-		public IndexBuffer IndexBuffer { get; set; }
+		public IndexBuffer IndexBuffer { get; internal set; }
 
-		public int NumVertices { get; set; }
+		public int NumVertices { get; internal set; }
 
-		public int PrimitiveCount { get; set; }
+		public int PrimitiveCount { get; internal set; }
 
-		public int StartIndex { get; set; }
+		public int StartIndex { get; internal set; }
 
 		public object Tag { get; set; }
 
-		public VertexBuffer VertexBuffer { get; set; }
+		public VertexBuffer VertexBuffer { get; internal set; }
 
-		public int VertexOffset { get; set; }
+		public int VertexOffset { get; internal set; }
 
 		internal int VertexBufferIndex { get; set; }
 
@@ -64,11 +64,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		internal ModelMesh parent;
 
-        /// <summary>
-        /// Using this constructor is strongly discouraged. Adding meshes to models at runtime is
-        /// not supported and may lead to <see cref="NullReferenceException"/>s if parent is not set.
-        /// </summary>
-        [Obsolete("This constructor is deprecated and will be made internal in a future release.")]
-        public ModelMeshPart() { }
+        internal ModelMeshPart() { }
 	}
 }

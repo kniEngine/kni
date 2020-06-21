@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
 		private GraphicsDevice graphicsDevice;
 
-		public ModelMesh(GraphicsDevice graphicsDevice, System.Collections.Generic.List<ModelMeshPart> parts)
+		internal ModelMesh(GraphicsDevice graphicsDevice, System.Collections.Generic.List<ModelMeshPart> parts)
 		{
 			// TODO: Complete member initialization
 			this.graphicsDevice = graphicsDevice;
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		// Summary:
 		//     Gets the BoundingSphere that contains this mesh.
-		public BoundingSphere BoundingSphere { get; set; }
+		public BoundingSphere BoundingSphere { get; internal set; }
 		//
 		// Summary:
 		//     Gets a collection of effects associated with this mesh.
@@ -50,17 +50,17 @@ namespace Microsoft.Xna.Framework.Graphics
 		// Summary:
 		//     Gets the ModelMeshPart objects that make up this mesh. Each part of a mesh
 		//     is composed of a set of primitives that share the same material.
-		public ModelMeshPartCollection MeshParts { get; set; }
+		public ModelMeshPartCollection MeshParts { get; private set; }
 		//
 		// Summary:
 		//     Gets the name of this mesh.
-		public string Name { get; set; }
+		public string Name { get; internal set; }
 		//
 		// Summary:
 		//     Gets the parent bone for this mesh. The parent bone of a mesh contains a
 		//     transformation matrix that describes how the mesh is located relative to
 		//     any parent meshes in a model.
-		public ModelBone ParentBone { get; set; }
+		public ModelBone ParentBone { get; internal set; }
 		//
 		// Summary:
 		//     Gets or sets an object identifying this mesh.
