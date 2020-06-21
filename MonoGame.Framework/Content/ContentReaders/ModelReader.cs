@@ -186,9 +186,7 @@ namespace Microsoft.Xna.Framework.Content
             Model model = new Model(reader.GetGraphicsDevice(), bones, meshes);
 
             model.Root = bones[rootBoneIndex];
-		
-			model.BuildHierarchy();
-			
+
 			// Tag?
             model.Tag = reader.ReadObject<object>();
 			

@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public class ModelBoneCollection : ReadOnlyCollection<ModelBone>
     {
-        public ModelBoneCollection(IList<ModelBone> list)
+        internal ModelBoneCollection(IList<ModelBone> list)
             : base(list)
         {
 
