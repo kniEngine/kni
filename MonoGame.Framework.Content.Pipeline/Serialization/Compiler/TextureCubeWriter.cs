@@ -35,5 +35,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 }
             }
         }
+        
+        public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+            return "Microsoft.Xna.Framework.Content.TextureCubeReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+        }
     }
 }

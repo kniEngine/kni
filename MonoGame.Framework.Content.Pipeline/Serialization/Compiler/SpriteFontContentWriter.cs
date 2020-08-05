@@ -36,10 +36,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <returns>Name of the runtime loader.</returns>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            // Base the reader type string from a known public class in the same namespace in the same assembly
-            Type type = typeof(ContentReader);
-			string readerType = type.Namespace + ".SpriteFontReader, " + type.Assembly.FullName;
-            return readerType;
+            return "Microsoft.Xna.Framework.Content.SpriteFontReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
         }
 
         /// <summary>
