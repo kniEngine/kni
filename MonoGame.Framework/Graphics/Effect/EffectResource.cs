@@ -42,10 +42,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         var assembly = ReflectionHelpers.GetAssembly(typeof(EffectResource));
 
                         var stream = assembly.GetManifestResourceStream(_name);
-                        using (var ms = new MemoryStream())
                         {
-                            stream.CopyTo(ms);
-                            _bytecode = ms.ToArray();
+                            _bytecode = new byte[stream.Length];
+                            stream.Read(_bytecode, 0, (int)stream.Length);
                         }
                     }
                 }
