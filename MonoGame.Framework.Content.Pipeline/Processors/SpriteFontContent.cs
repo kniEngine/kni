@@ -11,9 +11,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
 	public class SpriteFontContent
     {
-        public SpriteFontContent() { }
+        internal SpriteFontContent() { }
 
-        public SpriteFontContent(FontDescription desc)
+        internal SpriteFontContent(FontDescription desc)
         {
             FontName = desc.FontName;
             Style = desc.Style;
@@ -25,27 +25,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             DefaultCharacter = desc.DefaultCharacter;
         }
 
-        public string FontName = string.Empty;
+        internal string FontName = string.Empty;
 
         FontDescriptionStyle Style = FontDescriptionStyle.Regular;
 
-        public float FontSize;
+        internal float FontSize;
 
-        public Texture2DContent Texture = new Texture2DContent();
+        internal Texture2DContent Texture = new Texture2DContent();
 
-        public List<Rectangle> Glyphs = new List<Rectangle>();
+        internal List<Rectangle> Glyphs = new List<Rectangle>();
 
-        public List<Rectangle> Cropping = new List<Rectangle>();
+        internal List<Rectangle> Cropping = new List<Rectangle>();
 
-        public List<Char> CharacterMap = new List<Char>();
+        internal List<Char> CharacterMap = new List<Char>();
 
-        public int VerticalLineSpacing;
+        internal int VerticalLineSpacing;
 
-        public float HorizontalSpacing;
+        internal float HorizontalSpacing;
 
-        public List<Vector3> Kerning = new List<Vector3>();
+        internal List<Vector3> Kerning = new List<Vector3>();
 
-        public Nullable<Char> DefaultCharacter;	 
+        internal Nullable<Char> DefaultCharacter;	 
 
     }
 }
