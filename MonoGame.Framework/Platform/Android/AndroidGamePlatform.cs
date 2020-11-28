@@ -41,7 +41,8 @@ namespace Microsoft.Xna.Framework
 
         public override void Exit()
         {
-            Game.Activity.MoveTaskToBack(true);
+            // Do Nothing: Android games do not "exit" or shut down.
+            throw new NotImplementedException();
         }
 
         public override void RunLoop()
