@@ -268,6 +268,7 @@ namespace Microsoft.Xna.Framework
         public override void Exit()
         {
             // Do Nothing: iOS games do not "exit" or shut down.
+            throw new NotImplementedException();
         }
 
         private void BeginObservingUIApplication()
