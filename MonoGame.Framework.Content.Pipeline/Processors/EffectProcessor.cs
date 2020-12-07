@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             var errorsAndWarningArray = shaderErrorsAndWarnings.Split(new[] { "\n", "\r", Environment.NewLine },
                                                                       StringSplitOptions.RemoveEmptyEntries);
 
-            var errorOrWarning = new Regex(@"(.*)\(([0-9]*(,[0-9]+(-[0-9]+)?)?)\)\s*:\s*(.*)", RegexOptions.Compiled);
+            var errorOrWarning = new Regex(@"(?<Filename>.*)\((?<LineAndColumn>[0-9]*(,([0-9]+)(-[0-9]+)?)?)\)\s*:\s*(?<ErrorType>error|warning)\s*(?<ErrorCode>[A-Z0-9]*)\s*:\s*(?<Message>.*)", RegexOptions.Compiled);
             ContentIdentity identity = null;
             var allErrorsAndWarnings = string.Empty;
 
@@ -173,20 +173,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             for (var i = 0; i < errorsAndWarningArray.Length; i++)
             {
                 var match = errorOrWarning.Match(errorsAndWarningArray[i]);
-                if (!match.Success || match.Groups.Count != 4)
+                if (!match.Success) // || match.Groups.Count != 8)
                 {
                     // Just log anything we don't recognize as a warning.
-                    if (buildFailed)
-                        allErrorsAndWarnings += errorsAndWarningArray[i] + Environment.NewLine;
-                    else
-                        context.Logger.LogWarning(string.Empty, input.Identity, errorsAndWarningArray[i]);
+                    context.Logger.LogWarning(string.Empty, input.Identity, errorsAndWarningArray[i]);
 
                     continue;
                 }
 
-                var fileName = match.Groups[1].Value;
-                var lineAndColumn = match.Groups[2].Value;
-                var message = match.Groups[3].Value;
+                var fileName = match.Groups["Filename"].Value;
+                var lineAndColumn = match.Groups["LineAndColumn"].Value;
+                var errorType = match.Groups["ErrorType"].Value;
+                var errorCode = match.Groups["ErrorCode"].Value;
+                var message = match.Groups["Message"].Value;
 
                 // Try to ensure a good file name for the error message.
                 if (string.IsNullOrEmpty(fileName))
@@ -197,22 +196,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     fileName = Path.Combine(folder, fileName);
                 }
 
-                // If we got an exception then we'll be throwing an exception 
-                // below, so just gather the lines to throw later.
-                if (buildFailed)
+                identity = new ContentIdentity(fileName, input.Identity.SourceTool, lineAndColumn);
+                var errorCodeAndMessage = string.Format("{0}:{1}", errorCode, message);
+
+                switch (errorType)
                 {
-                    if (identity == null)
-                    {
-                        identity = new ContentIdentity(fileName, input.Identity.SourceTool, lineAndColumn);
-                        allErrorsAndWarnings = errorsAndWarningArray[i] + Environment.NewLine;
-                    }
-                    else
-                        allErrorsAndWarnings += errorsAndWarningArray[i] + Environment.NewLine;
-                }
-                else
-                {
-                    identity = new ContentIdentity(fileName, input.Identity.SourceTool, lineAndColumn);
-                    context.Logger.LogWarning(string.Empty, identity, message, string.Empty);
+                    case "warning":
+                        context.Logger.LogWarning(string.Empty, identity, errorCodeAndMessage);
+                        break;
+                    case "error":
+                        throw new InvalidContentException(errorCodeAndMessage, identity);
+                    default:
+                        // log anything we didn't recognize as a warning.
+                        if (allErrorsAndWarnings != string.Empty)
+                            context.Logger.LogWarning(string.Empty, input.Identity, errorsAndWarningArray[i]);
+                        break;
                 }
             }
 
