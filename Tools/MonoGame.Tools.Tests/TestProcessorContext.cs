@@ -93,7 +93,7 @@ namespace MonoGame.Tests.ContentPipeline
                     var property = type.GetProperty(kvp.Key);
                     if (property == null)
                         continue;
-                    property.SetValue(processor, kvp.Value);
+                    property.SetValue(processor, kvp.Value, null);
                 }
                 return processor.Process(input, this);
             }

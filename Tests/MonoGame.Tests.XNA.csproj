@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MonoGame.Tests</RootNamespace>
     <AssemblyName>MonoGame.Tests.XNA</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -72,35 +72,75 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\ThirdParty\NUnit\3.9.0\net40\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunitlite">
-      <HintPath>..\packages\NUnitLite.3.9.0\lib\net45\nunitlite.dll</HintPath>
+      <HintPath>..\ThirdParty\NUnit\3.9.0\net40\nunitlite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\MonoGame.Framework\Graphics\DxtUtil.cs">
       <Link>Utilities\DxtUtil.cs</Link>
     </Compile>
-    <Compile Include="ContentPipeline\AssetTestClasses.cs" />
-    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
-    <Compile Include="ContentPipeline\AudioContentTests.cs" />
-    <Compile Include="ContentPipeline\BitmapContentTests.cs" />
-    <Compile Include="ContentPipeline\FbxImporterTests.cs" />
-    <Compile Include="ContentPipeline\FontDescriptionTests.cs" />
-    <Compile Include="ContentPipeline\IntermediateDeserializerTest.cs" />
-    <Compile Include="ContentPipeline\IntermediateSerializerTest.cs" />
-    <Compile Include="ContentPipeline\MeshBuilderTests.cs" />
-    <Compile Include="ContentPipeline\MeshHelperTest.cs" />
-    <Compile Include="ContentPipeline\ModelProcessorTests.cs" />
-    <Compile Include="ContentPipeline\Mp3ImporterTests.cs" />
-    <Compile Include="ContentPipeline\TestContentBuildLogger.cs" />
-    <Compile Include="ContentPipeline\TestImporterContext.cs" />
-    <Compile Include="ContentPipeline\TestProcessorContext.cs" />
-    <Compile Include="ContentPipeline\TextureContentTests.cs" />
-    <Compile Include="ContentPipeline\TextureProcessorTests.cs" />
-    <Compile Include="ContentPipeline\WavImporterTests.cs" />
-    <Compile Include="ContentPipeline\WmaImporterTests.cs" />
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestClasses.cs" >
+      <Link>ContentPipeline\AssetTestClasses.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestUtility.cs" >
+      <Link>ContentPipeline\AssetTestUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\AudioContentTests.cs" >
+      <Link>ContentPipeline\AudioContentTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\BitmapContentTests.cs" >
+      <Link>ContentPipeline\BitmapContentTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\FbxImporterTests.cs" >
+      <Link>ContentPipeline\FbxImporterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\FontDescriptionTests.cs" >
+      <Link>ContentPipeline\FontDescriptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\IntermediateDeserializerTest.cs" >
+      <Link>ContentPipeline\IntermediateDeserializerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\IntermediateSerializerTest.cs" >
+      <Link>ContentPipeline\IntermediateSerializerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\MeshBuilderTests.cs" >
+      <Link>ContentPipeline\MeshBuilderTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\MeshHelperTest.cs" >
+      <Link>ContentPipeline\MeshHelperTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\ModelProcessorTests.cs" >
+      <Link>ContentPipeline\ModelProcessorTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\Mp3ImporterTests.cs" >
+      <Link>ContentPipeline\Mp3ImporterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestContentBuildLogger.cs" >
+      <Link>ContentPipeline\TestContentBuildLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestImporterContext.cs" >
+      <Link>ContentPipeline\TestImporterContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestProcessorContext.cs" >
+      <Link>ContentPipeline\TestProcessorContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\TextureContentTests.cs" >
+      <Link>ContentPipeline\TextureContentTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\TextureProcessorTests.cs" >
+      <Link>ContentPipeline\TextureProcessorTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\WavImporterTests.cs" >
+      <Link>ContentPipeline\WavImporterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Tools\MonoGame.Tools.Tests\WmaImporterTests.cs" >
+      <Link>ContentPipeline\WmaImporterTests.cs</Link>
+    </Compile>
+    <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
+    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\SoundEffectTest.cs" />
     <Compile Include="Framework\Audio\XactTest.cs" />
     <Compile Include="Framework\ColorTest.cs" />
@@ -167,6 +207,7 @@
     <Compile Include="Framework\RayTest.cs" />
     <Compile Include="Framework\GameTest+Methods.cs" />
     <Compile Include="Runner\PixelArgb.cs" />
+    <Compile Include="Runner\Program.cs" />
     <Compile Include="Runner\Utility.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
     <Compile Include="Framework\GameTest+Properties.cs" />
@@ -177,12 +218,10 @@
     <Compile Include="Framework\Components\UpdateGuard.cs" />
     <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
     <Compile Include="Framework\Visual\VisualTestGame.cs" />
-    <Compile Include="Runner\Windows\Program.cs" />
     <Compile Include="Framework\Components\Colored3DCubeComponent.cs" />
     <Compile Include="Framework\Components\TexturedQuadComponent.cs" />
     <Compile Include="Framework\Components\SpaceshipModelDrawComponent.cs" />
     <Compile Include="Framework\Visual\MiscellaneousTests.cs" />
-    <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -920,7 +959,6 @@
     <None Include="Assets\Textures\SampleCube64DXT1Mips.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
