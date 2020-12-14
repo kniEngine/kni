@@ -43,7 +43,8 @@
     <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Graphics\GraphicsAdapter.cs" />
-    <Compile Include="Graphics\Texture2D.StbSharp.cs" />
+    <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
+    <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Input\GamePad.UWP.cs" />
     <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
