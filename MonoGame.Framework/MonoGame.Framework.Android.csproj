@@ -39,7 +39,8 @@
     <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
-    <Compile Include="Graphics\Texture2D.StbSharp.cs" />
+    <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
+    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
