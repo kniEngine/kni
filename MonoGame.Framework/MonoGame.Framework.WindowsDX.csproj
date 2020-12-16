@@ -22,6 +22,11 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Remove="Input\KeyboardInput.cs" />
+    <Compile Remove="Input\MessageBox.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
@@ -30,9 +35,7 @@
     <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\Keyboard.Windows.cs" />
-    <Compile Include="Input\KeyboardInput.Windows.cs" />
     <Compile Include="Platform\Input\KeysHelper.cs" />
-    <Compile Include="Input\MessageBox.Windows.cs" />
     <Compile Include="Input\Mouse.Windows.cs" />
     <Compile Include="Input\MouseCursor.Windows.cs" />
 
