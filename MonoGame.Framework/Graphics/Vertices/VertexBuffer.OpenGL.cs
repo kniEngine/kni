@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using MonoGame.OpenGL;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -131,7 +132,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            var elementSizeInByte = Marshal.SizeOf<T>();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
             if (elementSizeInByte == vertexStride || elementSizeInByte % vertexStride == 0)
             {
                 // there are no gaps so we can copy in one go

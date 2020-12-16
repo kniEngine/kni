@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using MonoGame.Framework.Utilities;
 
 #if ANGLE
 using OpenTK.Graphics;
@@ -1289,7 +1290,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetBackBufferData<T>(Rectangle? rectangle, T[] data, int startIndex, int count) where T : struct
         {
             var rect = rectangle ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            var tSize = Marshal.SizeOf<T>();
+            var tSize = ReflectionHelpers.SizeOf<T>.Get();
             var flippedY = PresentationParameters.BackBufferHeight - rect.Y - rect.Height;
             GL.ReadPixels(rect.X, flippedY, rect.Width, rect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, data);
 

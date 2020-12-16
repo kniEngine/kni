@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input
             }
             catch (SharpDX.SharpDXException ex)
             {
-                if (ex.HResult == DeviceNotConnectedHResult)
+                if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
                     SetDisconnectedTimeout(index);
@@ -305,7 +305,7 @@ namespace Microsoft.Xna.Framework.Input
             }
             catch (SharpDX.SharpDXException ex)
             {
-                if (ex.HResult == DeviceNotConnectedHResult)
+                if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
                     SetDisconnectedTimeout(index);

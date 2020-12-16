@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (thisAss.FullName != ass.FullName && refAss.All(r => r.FullName != thisAss.FullName))
                 return;
 
-            var definedTypes = ass.DefinedTypes;
+            var definedTypes = ass.GetTypes();
 
             foreach (var type in definedTypes)
             {
