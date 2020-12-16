@@ -1,8 +1,6 @@
 using System;
-using System.IO;
-using Microsoft.Xna.Framework;
-using StbImageSharp;
-using StbImageWriteSharp;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace MonoGame.Tests
 {
@@ -10,34 +8,82 @@ namespace MonoGame.Tests
     {
         public static unsafe FramePixelData FromFile(string filename)
         {
-            var result = ImageResult.FromMemory(File.ReadAllBytes(filename), StbImageSharp.ColorComponents.RedGreenBlueAlpha);
-			var frame = new FramePixelData(result.Width, result.Height);
-			
-			fixed (byte* b = &result.Data[0])
+            using (Bitmap bitmap = (Bitmap)Bitmap.FromFile(filename))
             {
-                for (var i = 0; i < result.Data.Length; i += 4)
+                var frame = new FramePixelData(bitmap.Width, bitmap.Height);
+
+                var bitmapData = bitmap.LockBits(
+                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format32bppArgb);
+
+                try
                 {
-					frame.Data[i / 4] = new Color(b[i + 0], b[i + 1], b[i + 2], b[i + 3]);
+                    byte* pSourceRow = (byte*)bitmapData.Scan0;
+                    int indexFrame = 0;
+                    for (int y = 0; y < frame.Height; ++y)
+                    {
+                        PixelArgb* pPixel = (PixelArgb*)pSourceRow;
+                        for (int x = 0; x < frame.Width; ++x)
+                        {
+                            frame.Data[indexFrame] = new Microsoft.Xna.Framework.Color(
+                                pPixel->R, pPixel->G, pPixel->B, pPixel->A);
+
+                            indexFrame++;
+                            pPixel++;
+                        }
+                        pSourceRow += bitmapData.Stride;
+                    }
                 }
+                finally
+                {
+                    bitmap.UnlockBits(bitmapData);
+                }
+
+                return frame;
             }
-            
-			return frame;
         }
 
         public unsafe void Save(string filename, string attachmentDescription = null)
         {
-			using (var stream = new FileStream(filename, FileMode.Create))
-			{
-				fixed (Color* ptr = &Data[0])
-				{
-					var writer = new ImageWriter();
-					writer.WriteBmp(ptr, Width, Height, StbImageWriteSharp.ColorComponents.RedGreenBlueAlpha, stream);
-				}
-			}
-
-            if (attachmentDescription != null)
+            using (var bitmap = new Bitmap(Width, Height, PixelFormat.Format32bppArgb))
             {
-                NUnit.Framework.TestContext.AddTestAttachment(filename, attachmentDescription);
+                var bitmapData = bitmap.LockBits(
+                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    ImageLockMode.WriteOnly,
+                    PixelFormat.Format32bppArgb);
+
+                try
+                {
+                    byte* pDestRow = (byte*)bitmapData.Scan0;
+                    int indexFrame = 0;
+                    for (int y = 0; y < Height; ++y)
+                    {
+                        PixelArgb* pPixel = (PixelArgb*)pDestRow;
+                        for (int x = 0; x < Width; ++x)
+                        {
+                            pPixel->R = Data[indexFrame].R;
+                            pPixel->G = Data[indexFrame].G;
+                            pPixel->B = Data[indexFrame].B;
+                            pPixel->A = Data[indexFrame].A;
+
+                            indexFrame++;
+                            pPixel++;
+                        }
+                        pDestRow += bitmapData.Stride;
+                    }
+                }
+                finally
+                {
+                    bitmap.UnlockBits(bitmapData);
+                }
+
+                bitmap.Save(filename);
+
+                if (attachmentDescription != null)
+                {
+                    NUnit.Framework.TestContext.AddTestAttachment(filename, attachmentDescription);
+                }
             }
         }
     }
