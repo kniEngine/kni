@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Tests.ContentPipeline;
 using NUnit.Framework;
 #if DESKTOPGL
 using MonoGame.OpenGL;
