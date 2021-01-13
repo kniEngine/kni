@@ -70,10 +70,6 @@
     <PackageReference Version="4.0.1" Include="SharpDX.XInput" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-  </ItemGroup>
-  
   <Import Project="DirectX.targets" />
   <Import Project="XAudio.targets" />
 </Project>
