@@ -243,7 +243,6 @@ Section "VS2012 Templates" VS2012
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\Visual C#\MonoGame"
     File /r '..\..\Templates\VisualStudio2012\*.zip'
-    File /r '..\..\Templates\VisualStudio2010\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2012 not found"
@@ -257,7 +256,7 @@ Section "VS2013 Templates" VS2013
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\MonoGame"
     File /r '..\..\Templates\VisualStudio2013\*.zip'
-    File /r '..\..\Templates\VisualStudio2010\ContentPipelineExtension.zip'
+    File /r '..\..\Templates\VisualStudio2012\ContentPipelineExtension.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2013 not found"
@@ -270,9 +269,9 @@ Section "VS2015 Templates" VS2015
   IfFileExists `$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\MonoGame"
-    File /r '..\..\Templates\VisualStudio2010\ContentPipelineExtension.zip'
-    File /r '..\..\Templates\VisualStudio2013\WindowsPhone8.1.zip'
     File /r '..\..\Templates\VisualStudio2015\*.zip'
+    File /r '..\..\Templates\VisualStudio2013\WindowsPhone8.1.zip'
+    File /r '..\..\Templates\VisualStudio2012\ContentPipelineExtension.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2015 not found"
@@ -330,6 +329,9 @@ SectionEnd
 
 LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBuild extensions for MonoGame"
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
+LangString VS2012Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2012"
+LangString VS2013Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2013"
+LangString VS2015Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2015"
 LangString VS2017Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2017"
 LangString VS2019Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2019"
 LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your start menu"
@@ -337,6 +339,9 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${CoreComponents} $(CoreComponentsDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${VS2012} $(VS2012Desc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${VS2013} $(VS2013Desc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${VS2015} $(VS2015Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
@@ -344,6 +349,27 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 
 Function checkVS2012Redist
  ; TODO: check if VS2012 Redisttributables are installed 
+FunctionEnd
+ 
+Function checkVS2012
+IfFileExists `$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\*.*` end disable
+  disable:
+	 SectionSetFlags ${VS2012} $0
+  end:
+FunctionEnd
+
+Function checkVS2013
+IfFileExists `$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\*.*` end disable
+  disable:
+	 SectionSetFlags ${VS2013} $0
+  end:
+FunctionEnd
+
+Function checkVS2015
+IfFileExists `$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\*.*` end disable
+  disable:
+	 SectionSetFlags ${VS2015} $0
+  end:
 FunctionEnd
 
 Function checkVS2017
@@ -363,6 +389,9 @@ FunctionEnd
 Function .onInit 
   IntOp $0 $0 | ${SF_RO}
   call checkVS2012Redist
+  Call checkVS2012
+  Call checkVS2013
+  Call checkVS2015
   Call checkVS2017
   Call checkVS2019
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
