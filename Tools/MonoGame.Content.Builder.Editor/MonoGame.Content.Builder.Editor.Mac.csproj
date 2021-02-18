@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
@@ -16,10 +17,9 @@
     <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Platform\**\*" />
-    <Compile Remove="Platform\**\*" />
+  <Import Project="MonoGame.Content.Builder.Editor.Common.props" />
 
+  <ItemGroup>
     <Compile Include="Platform\Mac\**\*.cs" />
   </ItemGroup>
 

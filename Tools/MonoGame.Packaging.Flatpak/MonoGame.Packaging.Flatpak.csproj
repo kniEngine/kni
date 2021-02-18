@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <BaseOutputPath>..\..\Artifacts\MonoGame.Packaging.Flatpak</BaseOutputPath>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
@@ -11,6 +12,8 @@
     <Authors>MonoGame Team</Authors>
     <PackageId>MonoGame.Packaging.Flatpak</PackageId>
   </PropertyGroup>
+
+  <Import Project="MonoGame.Packaging.Flatpak.Common.props" />
 
   <ItemGroup>
     <Content Include="MonoGame.Packaging.Flatpak.targets" PackagePath="build\MonoGame.Packaging.Flatpak.targets" />

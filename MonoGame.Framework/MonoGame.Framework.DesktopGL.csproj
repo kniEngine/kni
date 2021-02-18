@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="MonoGame.Build.props" />
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0</TargetFramework>
     <DefineConstants>OPENGL;OPENAL;XNADESIGNPROVIDED;LINUX;DESKTOPGL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -19,21 +21,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <Import Project="Xna.Framework.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
+  
   <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Platform\**\*" />
-    <Compile Remove="Properties\**\*" />
-    <Compile Remove="Utilities\System.Numerics.Vectors\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Platform\**\*" />
-    <None Remove="Utilities\System.Numerics.Vectors\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Graphics\GraphicsAdapter.cs" />
     <Compile Remove="Media\Video.cs" />
     <Compile Remove="Media\VideoPlayer.cs" />
     <Compile Remove="Content\ContentReaders\VideoReader.cs" />
@@ -44,7 +35,6 @@
   <ItemGroup>
     <Compile Include="Platform\TitleContainer.Desktop.cs" />
     <Compile Include="Platform\Audio\OggStream.cs" />
-    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Platform\Graphics\Texture2D.StbSharp.cs" />    
     <Compile Include="Platform\SDL\SDL2.cs" />
@@ -71,6 +61,7 @@
     <Compile Include="Platform\Graphics\WindowInfo.SDL.cs" />
     <Compile Include="Platform\Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="Platform\GamePlatform.Desktop.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Platform\GraphicsDeviceManager.SDL.cs" />
     
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />

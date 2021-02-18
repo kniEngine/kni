@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="MonoGame.Build.props" />
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0-ios</TargetFramework>
     <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -12,22 +14,13 @@
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
   </PropertyGroup>
 
+  <Import Project="Xna.Framework.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
+
   <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Platform\**\*" />
-    <Compile Remove="Properties\**\*" />
-    <Compile Remove="Utilities\System.Numerics.Vectors\**\*" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Platform\**\*" />
-    <None Remove="Utilities\System.Numerics.Vectors\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="GraphicsDeviceManager.cs" />
-    <Compile Remove="Graphics\GraphicsAdapter.cs" />
     <Compile Remove="Graphics\OcclusionQuery.cs" />
   </ItemGroup>
 
@@ -42,7 +35,6 @@
     <Compile Include="Platform\iOS\iOSGameWindow.cs" />
     <Compile Include="Platform\iOS\OrientationConverter.cs" />
 
-    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Platform\GamePlatform.Mobile.cs" />
     <Compile Include="Platform\Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="Platform\Graphics\OpenGL.iOS.cs" />

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -15,10 +16,9 @@
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Platform\**\*" />
-    <Compile Remove="Platform\**\*" />
+  <Import Project="MonoGame.Content.Builder.Editor.Common.props" />
 
+  <ItemGroup>
     <Compile Include="Platform\Windows\**\*.cs" />
   </ItemGroup>
 

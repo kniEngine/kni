@@ -1,0 +1,11 @@
+<Project>
+
+  <ItemGroup>
+    <Compile Include="BuildContent.cs" />
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="SourceFileCollection.cs" />
+  </ItemGroup>
+  
+</Project>

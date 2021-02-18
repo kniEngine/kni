@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
@@ -10,6 +11,8 @@
     <DefineConstants>DESKTOPGL</DefineConstants>
   </PropertyGroup>
 
+  <Import Project="MonoGame.Tests.Common.props" />
+
   <ItemGroup>
     <PackageReference Include="NUnitLite" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
@@ -18,16 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Properties/**/*" />
-    <Compile Remove="Interactive/**/*" />
-    <Compile Remove="Runner/iOS/**/*" />
-
-    <Compile Remove="Framework/WindowsDX/**/*" />
   </ItemGroup>
 
   <ItemGroup>

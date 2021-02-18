@@ -1,0 +1,42 @@
+<Project>
+    
+  <ItemGroup>
+    <Compile Include="Design\Vector2TypeConverter.cs" />
+    <Compile Include="Design\Vector3TypeConverter.cs" />
+    <Compile Include="Design\Vector4TypeConverter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="BoundingBox.cs" />
+    <Compile Include="BoundingFrustum.cs" />
+    <Compile Include="BoundingSphere.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="ContainmentType.cs" />
+    <Compile Include="Curve.cs" />
+    <Compile Include="CurveContinuity.cs" />
+    <Compile Include="CurveKey.cs" />
+    <Compile Include="CurveKeyCollection.cs" />
+    <Compile Include="CurveLoopType.cs" />
+    <Compile Include="CurveTangent.cs" />    
+    <Compile Include="FrameworkDispatcher.cs" />
+    <Compile Include="ICurveEvaluator.cs" />
+    <Compile Include="MathF.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Plane.cs" />
+    <Compile Include="PlaneIntersectionType.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Quaternion.cs" />
+    <Compile Include="Ray.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs" />
+    <Compile Include="Vector4.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="GameTime.cs" />
+    <Compile Include="PlayerIndex.cs" />
+  </ItemGroup>
+
+</Project>

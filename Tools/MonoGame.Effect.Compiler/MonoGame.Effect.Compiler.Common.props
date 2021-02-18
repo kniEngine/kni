@@ -1,0 +1,45 @@
+<Project>
+
+  <ItemGroup>
+    <Compile Include="Effect\TPGParser\Parser.cs" />
+    <Compile Include="Effect\TPGParser\ParseTree.cs" />
+    <Compile Include="Effect\TPGParser\ParseTreeTools.cs" />
+    <Compile Include="Effect\TPGParser\PassInfo.cs" />
+    <Compile Include="Effect\TPGParser\SamplerStateInfo.cs" />
+    <Compile Include="Effect\TPGParser\Scanner.cs" />
+    <Compile Include="Effect\TPGParser\ShaderInfo.cs" />
+    <Compile Include="Effect\TPGParser\TechniqueInfo.cs" />
+    <Compile Include="Effect\CommandLineParser.cs" />
+    <Compile Include="Effect\ConstantBufferData.cs" />
+    <Compile Include="Effect\ConstantBufferData.mojo.cs" />
+    <Compile Include="Effect\ConstantBufferData.sharpdx.cs" />
+    <Compile Include="Effect\ConstantBufferData.writer.cs" />
+    <Compile Include="Effect\EffectObject.cs" />
+    <Compile Include="Effect\EffectObject.hlsl.cs" />
+    <Compile Include="Effect\EffectObject.pssl.cs" />
+    <Compile Include="Effect\EffectObject.writer.cs" />
+    <Compile Include="Effect\IEffectCompilerOutput.cs" />
+    <Compile Include="Effect\MarshalHelper.cs" />
+    <Compile Include="Effect\MojoShader.cs" />
+    <Compile Include="Effect\Options.cs" />
+    <Compile Include="Effect\Preprocessor.cs" />
+    <Compile Include="Effect\ShaderCompilerException.cs" />
+    <Compile Include="Effect\ShaderData.cs" />
+    <Compile Include="Effect\ShaderData.mojo.cs" />
+    <Compile Include="Effect\ShaderData.pssl.cs" />
+    <Compile Include="Effect\ShaderData.sharpdx.cs" />
+    <Compile Include="Effect\ShaderData.writer.cs" />
+    <Compile Include="Effect\ShaderProfile.cs" />
+    <Compile Include="Effect\ShaderProfile.DirectX.cs" />
+    <Compile Include="Effect\ShaderProfile.OpenGL.cs" />
+    <Compile Include="Effect\ShaderResult.cs" />
+    <Compile Include="Effect\TextureFilterType.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>  
+    <Compile Include="GraphicsDevice.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="WineHelper.cs" />
+  </ItemGroup>
+  
+</Project>

@@ -1,0 +1,166 @@
+<Project>
+  
+  <ItemGroup>
+    <Compile Include="Graphics\Font\BitmapUtils.cs" />
+    <Compile Include="Graphics\Font\CharacterRegion.cs" />
+    <Compile Include="Graphics\Font\CharacterRegionTypeConverter.cs" />
+    <Compile Include="Graphics\Font\Glyph.cs" />
+    <Compile Include="Graphics\Font\GlyphCropper.cs" />
+    <Compile Include="Graphics\Font\GlyphPacker.cs" />
+    <Compile Include="Graphics\Font\GrowRule.cs" />
+    <Compile Include="Graphics\Font\IFontImporter.cs" />
+    <Compile Include="Graphics\Font\MaxRectsBin.cs" />    
+    <Compile Include="Graphics\Font\MaxRectsHeuristic.cs" />
+    <Compile Include="Graphics\Font\SharpFontImporter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Graphics\AlphaTestMaterialContent.cs" />
+    <Compile Include="Graphics\AnimationChannel.cs" />
+    <Compile Include="Graphics\AnimationChannelDictionary.cs" />
+    <Compile Include="Graphics\AnimationContent.cs" />
+    <Compile Include="Graphics\AnimationContentDictionary.cs" />
+    <Compile Include="Graphics\AnimationKeyframe.cs" />
+    <Compile Include="Graphics\AtcBitmapContent.cs" />
+    <Compile Include="Graphics\AtcExplicitBitmapContent.cs" />
+    <Compile Include="Graphics\AtcInterpolatedBitmapContent.cs" />
+    <Compile Include="Graphics\BasicMaterialContent.cs" />
+    <Compile Include="Graphics\BitmapContent.cs" />
+    <Compile Include="Graphics\BoneContent.cs" />
+    <Compile Include="Graphics\BoneWeight.cs" />
+    <Compile Include="Graphics\BoneWeightCollection.cs" />
+    <Compile Include="Graphics\DefaultTextureProfile.cs" />
+    <Compile Include="Graphics\DualTextureMaterialContent.cs" />
+    <Compile Include="Graphics\Dxt1BitmapContent.cs" />
+    <Compile Include="Graphics\Dxt3BitmapContent.cs" />
+    <Compile Include="Graphics\Dxt5BitmapContent.cs" />
+    <Compile Include="Graphics\DxtBitmapContent.cs" />
+    <Compile Include="Graphics\EffectContent.cs" />
+    <Compile Include="Graphics\EffectMaterialContent.cs" />
+    <Compile Include="Graphics\EnvironmentMapMaterialContent.cs" />
+    <Compile Include="Graphics\Etc1BitmapContent.cs" />
+    <Compile Include="Graphics\FontDescription.cs" />
+    <Compile Include="Graphics\FontDescriptionStyle.cs" />
+    <Compile Include="Graphics\GeometryContent.cs" />
+    <Compile Include="Graphics\GeometryContentCollection.cs" />
+    <Compile Include="Graphics\GraphicsUtil.cs" />
+    <Compile Include="Graphics\IndexCollection.cs" />
+    <Compile Include="Graphics\IndirectPositionCollection.cs" />
+    <Compile Include="Graphics\LocalizedFontDescription.cs" />
+    <Compile Include="Graphics\MaterialContent.cs" />
+    <Compile Include="Graphics\MeshBuilder.cs" />
+    <Compile Include="Graphics\MeshContent.cs" />
+    <Compile Include="Graphics\MeshHelper.cs" />
+    <Compile Include="Graphics\MipmapChain.cs" />
+    <Compile Include="Graphics\MipmapChainCollection.cs" />
+    <Compile Include="Graphics\NodeContent.cs" />
+    <Compile Include="Graphics\NodeContentCollection.cs" />
+    <Compile Include="Graphics\PixelBitmapContent.cs" />
+    <Compile Include="Graphics\PositionCollection.cs" />
+    <Compile Include="Graphics\PvrtcBitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgb2BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgb4BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgba2BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgba4BitmapContent.cs" />
+    <Compile Include="Graphics\SkinnedMaterialContent.cs" />
+    <Compile Include="Graphics\Texture2DContent.cs" />
+    <Compile Include="Graphics\Texture3DContent.cs" />
+    <Compile Include="Graphics\TextureContent.cs" />
+    <Compile Include="Graphics\TextureCubeContent.cs" />
+    <Compile Include="Graphics\TextureProfile.cs" />
+    <Compile Include="Graphics\TextureReferenceDictionary.cs" />
+    <Compile Include="Graphics\VertexChannel.cs" />
+    <Compile Include="Graphics\VertexChannelCollection.cs" />
+    <Compile Include="Graphics\VertexChannelGeneric.cs" />
+    <Compile Include="Graphics\VertexChannelNames.cs" />
+    <Compile Include="Graphics\VertexContent.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Processors\CompiledEffectContent.cs" />
+    <Compile Include="Processors\EffectProcessor.cs" />
+    <Compile Include="Processors\EffectProcessorDebugMode.cs" />
+    <Compile Include="Processors\FontDescriptionProcessor.cs" />
+    <Compile Include="Processors\FontTextureProcessor.cs" />
+    <Compile Include="Processors\LocalizedFontProcessor.cs" />
+    <Compile Include="Processors\MaterialProcessor.cs" />
+    <Compile Include="Processors\MaterialProcessorDefaultEffect.cs" />
+    <Compile Include="Processors\ModelBoneContent.cs" />
+    <Compile Include="Processors\ModelBoneContentCollection.cs" />
+    <Compile Include="Processors\ModelContent.cs" />
+    <Compile Include="Processors\ModelMeshContent.cs" />
+    <Compile Include="Processors\ModelMeshContentCollection.cs" />
+    <Compile Include="Processors\ModelMeshPartContent.cs" />
+    <Compile Include="Processors\ModelMeshPartContentCollection.cs" />
+    <Compile Include="Processors\ModelProcessor.cs" />
+    <Compile Include="Processors\SpriteFontContent.cs" />
+    <Compile Include="Processors\TextureProcessor.cs" />
+    <Compile Include="Processors\TextureProcessorOutputFormat.cs" />
+    <Compile Include="Processors\VertexBufferContent.cs" />
+    <Compile Include="Processors\VertexDeclarationContent.cs" />
+    <Compile Include="Processors\VideoProcessor.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\AlphaTestEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\BasicEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\CompiledEffectContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\DualTextureEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\EffectMaterialWriter.cs" />
+    <Compile Include="Serialization\Compiler\EnvironmentMapEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\IndexBufferWriter.cs" />
+    <Compile Include="Serialization\Compiler\ModelWriter.cs" />
+    <Compile Include="Serialization\Compiler\SkinnedEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\SpriteFontContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\Texture2DContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\TextureCubeWriter.cs" />
+    <Compile Include="Serialization\Compiler\TextureWriter.cs" />
+    <Compile Include="Serialization\Compiler\VertexBufferWriter.cs" />
+    <Compile Include="Serialization\Compiler\VertexDeclarationWriter.cs" />
+    <Compile Include="Serialization\Compiler\VideoWriter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="DdsLoader.cs" />
+    <Compile Include="EffectImporter.cs" />
+    <Compile Include="FbxImporter.cs" />
+    <Compile Include="FontDescriptionImporter.cs" />
+    <Compile Include="H264Importer.cs" />
+    <Compile Include="OpenAssetImporter.cs" />
+    <Compile Include="TextureImporter.cs" />
+    <Compile Include="VideoContent.cs" />
+    <Compile Include="WmvImporter.cs" />
+    <Compile Include="XImporter.cs" />
+    <Compile Include="XmlImporter.cs" />
+    <Compile Include="Utilities\FreeImageAPI.cs" />
+    <Compile Include="Utilities\FreeImageAPIC.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="ExternalTool.cs" />
+    <Compile Include="LoadedTypeCollection.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Utilities\Vector4Converter.cs" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Compile Include="Builder\Convertors\StringToColorConverter.cs" />
+    <Compile Include="Builder\FileHelper.cs" />
+    <Compile Include="Builder\PathHelper.cs" />
+    <Compile Include="Builder\PipelineBuildEvent.cs" />
+    <Compile Include="Builder\PipelineBuildLogger.cs" />
+    <Compile Include="Builder\PipelineImporterContext.cs" />
+    <Compile Include="Builder\PipelineManager.cs" />
+    <Compile Include="Builder\PipelineProcessorContext.cs" />
+    <Compile Include="Builder\TypeExtensions.cs" />
+    <Compile Include="Builder\XmlColor.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="ContentStats.cs" />
+    <Compile Include="ContentStatsCollection.cs" />
+  </ItemGroup>
+  
+</Project>

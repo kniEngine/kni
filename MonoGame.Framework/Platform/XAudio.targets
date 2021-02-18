@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Platform\Audio\DynamicSoundEffectInstance.XAudio.cs" />
     <Compile Include="Platform\Audio\Microphone.Default.cs" />
     <Compile Include="Platform\Audio\SoundEffect.XAudio.cs" />

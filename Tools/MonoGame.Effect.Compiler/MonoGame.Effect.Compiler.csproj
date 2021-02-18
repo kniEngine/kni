@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
@@ -14,6 +15,8 @@
     <UseAppHost>true</UseAppHost>
   </PropertyGroup>
   
+  <Import Project="MonoGame.Effect.Compiler.Common.props" />
+
   <ItemGroup>
     <Compile Include="..\..\MonoGame.Framework\BoundingBox.cs" />
     <Compile Include="..\..\MonoGame.Framework\BoundingFrustum.cs" />
