@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
@@ -13,6 +14,8 @@
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <UseAppHost>true</UseAppHost>
   </PropertyGroup>
+
+  <Import Project="MonoGame.Tools.Tests.Common.props" />
 
   <ItemGroup>
     <PackageReference Include="NUnitLite" Version="3.13.2" />

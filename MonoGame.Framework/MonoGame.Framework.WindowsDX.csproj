@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
+  <Import Project="MonoGame.Build.props" />
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0-windows</TargetFramework>
     <DefineConstants>WINDOWS;XNADESIGNPROVIDED;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -11,21 +13,10 @@
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Platform\**\*" />
-    <Compile Remove="Properties\**\*" />
-    <Compile Remove="Utilities\System.Numerics.Vectors\**\*" />
-  </ItemGroup>
+  <Import Project="Xna.Framework.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
 
   <ItemGroup>
-    <None Remove="Platform\**\*" />
-    <None Remove="Utilities\System.Numerics.Vectors\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Platform\GamePlatform.Desktop.cs" />
     <Compile Include="Platform\Graphics\SwapChainRenderTarget.cs" />
     <Compile Include="Platform\Graphics\Texture2D.StbSharp.cs" />
@@ -39,6 +30,8 @@
     <Compile Include="Platform\Input\Mouse.Windows.cs" />
     <Compile Include="Platform\Input\MouseCursor.Windows.cs" />
 
+    <Compile Include="Graphics\GraphicsAdapter.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Platform\Media\MediaLibrary.Default.cs" />
     <Compile Include="Platform\Media\MediaManagerState.cs" />
     <Compile Include="Platform\Media\MediaPlayer.WMS.cs" />

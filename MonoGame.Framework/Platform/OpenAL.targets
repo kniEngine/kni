@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Platform\Audio\AudioLoader.cs" />
     <Compile Include="Platform\Audio\DynamicSoundEffectInstance.OpenAL.cs" />
     <Compile Include="Platform\Audio\Microphone.OpenAL.cs" />

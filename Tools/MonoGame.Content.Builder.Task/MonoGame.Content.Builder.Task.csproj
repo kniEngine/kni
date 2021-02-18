@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <BaseOutputPath>..\..\Artifacts\MonoGame.Content.Builder.Task</BaseOutputPath>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <Description>MSBuild task to automatically build content for MonoGame.</Description>
   </PropertyGroup>
+
+  <Import Project="MonoGame.Content.Builder.Task.Common.props" />
 
   <ItemGroup>
     <Content Include="MonoGame.Content.Builder.Task.props" PackagePath="build" />

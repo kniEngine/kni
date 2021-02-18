@@ -1,0 +1,7 @@
+<Project>
+
+  <ItemGroup>
+    <Compile Include="BuildFlatpakTask.cs" />
+  </ItemGroup>
+  
+</Project>

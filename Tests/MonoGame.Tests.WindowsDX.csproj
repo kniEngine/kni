@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <RollForward>Major</RollForward>
@@ -9,6 +10,8 @@
     <GenerateProgramFile>false</GenerateProgramFile>
     <DefineConstants>WINDOWS;DIRECTX</DefineConstants>
   </PropertyGroup>
+
+  <Import Project="MonoGame.Tests.Common.props" />
 
   <ItemGroup>
     <PackageReference Include="NUnitLite" Version="3.13.2" />
@@ -21,11 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Properties/**/*" />
-    <Compile Remove="Interactive/**/*" />
-    <Compile Remove="Runner/iOS/**/*" />
+    <Compile Include="Framework\WindowsDX\Audio\SoundEffectInstanceXAudioTest.cs" />
   </ItemGroup>
 
   <ItemGroup>

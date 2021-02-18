@@ -3,6 +3,7 @@
   <Import Project="..\MonoGame.props" />
 
   <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0</TargetFramework>
     <BaseOutputPath>..\Artifacts\MonoGame.Framework.Content.Pipeline</BaseOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -16,12 +17,14 @@
     <DefineConstants>STBSHARP_INTERNAL</DefineConstants>
   </PropertyGroup>
 
+  <Import Project="MonoGame.Framework.Content.Pipeline.Common.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.Audio.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.Processors.props" />
   <ItemGroup>
-    <Compile Remove="bin\**\*" />
-    <Compile Remove="obj\**\*" />
-    <Compile Remove="Properties\**\*" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
 
+  
   <ItemGroup>
     <Compile Include="..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>

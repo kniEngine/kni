@@ -1,0 +1,150 @@
+<Project>
+  
+  <ItemGroup>
+    <Compile Include="Processors\PassThroughProcessor.cs" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\ArrayWriter.cs" />
+    <Compile Include="Serialization\Compiler\BuiltInContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\DictionaryWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterGeneric.cs" />
+    <Compile Include="Serialization\Compiler\ContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\EnumWriter.cs" />
+    <Compile Include="Serialization\Compiler\ExternalReferenceWriter.cs" />
+    <Compile Include="Serialization\Compiler\MultiArrayWriter.cs" />
+    <Compile Include="Serialization\Compiler\NullableWriter.cs" />
+    <Compile Include="Serialization\Compiler\ReflectiveWriter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\ArraySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializerAttribute.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializerT.cs" />
+    <Compile Include="Serialization\Intermediate\DictionarySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ElementSerializerT.cs" />
+    <Compile Include="Serialization\Intermediate\EnumSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ExternalReferenceSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\GenericCollectionHelper.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateReader.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateWriter.cs" />
+    <Compile Include="Serialization\Intermediate\ListSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NamedValueDictionarySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NamespaceAliasHelper.cs" />
+    <Compile Include="Serialization\Intermediate\NonGenericIListSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NullableSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PackedElementsHelper.cs" />
+    <Compile Include="Serialization\Intermediate\ReflectiveSerializer.cs" />
+  </ItemGroup>  
+  
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\BooleanWriter.cs" />
+    <Compile Include="Serialization\Compiler\ByteWriter.cs" />
+    <Compile Include="Serialization\Compiler\CharWriter.cs" />
+    <Compile Include="Serialization\Compiler\DateTimeWriter.cs" />
+    <Compile Include="Serialization\Compiler\DecimalWriter.cs" />
+    <Compile Include="Serialization\Compiler\DoubleWriter.cs" />
+    <Compile Include="Serialization\Compiler\Int16Writer.cs" />
+    <Compile Include="Serialization\Compiler\Int32Writer.cs" />
+    <Compile Include="Serialization\Compiler\Int64Writer.cs" />
+    <Compile Include="Serialization\Compiler\ListWriter.cs" />
+    <Compile Include="Serialization\Compiler\SByteWriter.cs" />
+    <Compile Include="Serialization\Compiler\SingleWriter.cs" />
+    <Compile Include="Serialization\Compiler\StringWriter.cs" />
+    <Compile Include="Serialization\Compiler\TimeSpanWriter.cs" />
+    <Compile Include="Serialization\Compiler\UInt16Writer.cs" />
+    <Compile Include="Serialization\Compiler\UInt32Writer.cs" />
+    <Compile Include="Serialization\Compiler\UInt64Writer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\BoolSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ByteSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\CharSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\DoubleSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\FloatSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\IntSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\LongSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\SByteSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ShortSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\StringSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\TimeSpanSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\UIntSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ULongSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\UShortSerializer.cs" />
+  </ItemGroup>
+    
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\BoundingBoxWriter.cs" />
+    <Compile Include="Serialization\Compiler\BoundingFrustumWriter.cs" />
+    <Compile Include="Serialization\Compiler\BoundingSphereWriter.cs" />
+    <Compile Include="Serialization\Compiler\ColorWriter.cs" />
+    <Compile Include="Serialization\Compiler\CurveWriter.cs" />
+    <Compile Include="Serialization\Compiler\MatrixWriter.cs" />
+    <Compile Include="Serialization\Compiler\PlaneWriter.cs" />
+    <Compile Include="Serialization\Compiler\PointWriter.cs" />
+    <Compile Include="Serialization\Compiler\QuaternionWriter.cs" />
+    <Compile Include="Serialization\Compiler\RayWriter.cs" />
+    <Compile Include="Serialization\Compiler\RectangleWriter.cs" />
+    <Compile Include="Serialization\Compiler\Vector2Writer.cs" />
+    <Compile Include="Serialization\Compiler\Vector3Writer.cs" />
+    <Compile Include="Serialization\Compiler\Vector4Writer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\ColorSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\CurveKeyCollectionSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\MatrixSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PlaneSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PointSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\QuaternionSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\RectangleSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector2Serializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector3Serializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector4Serializer.cs" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Include="ChildCollection.cs" />
+    <Compile Include="ContentBuildLogger.cs" />
+    <Compile Include="ContentIdentity.cs" />
+    <Compile Include="ContentImporter.cs" />
+    <Compile Include="ContentImporterAttribute.cs" />
+    <Compile Include="ContentImporterContext.cs" />
+    <Compile Include="ContentItem.cs" />
+    <Compile Include="ContentProcessor.cs" />
+    <Compile Include="ContentProcessorAttribute.cs" />
+    <Compile Include="ContentProcessorContext.cs" />
+    <Compile Include="ExternalReference.cs" />
+    <Compile Include="IContentImporter.cs" />
+    <Compile Include="IContentProcessor.cs" />
+    <Compile Include="InvalidContentException.cs" />
+    <Compile Include="NamedValueDictionary.cs" />
+    <Compile Include="OpaqueDataDictionary.cs" />
+    <Compile Include="PipelineComponentScanner.cs" />
+    <Compile Include="PipelineException.cs" />
+    <Compile Include="ProcessorParameter.cs" />
+    <Compile Include="ProcessorParameterCollection.cs" />
+    <Compile Include="TargetPlatform.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Utilities\LZ4\LZ4Codec.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe32.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe32HC.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64HC.Dirty.cs" />
+    <Compile Include="Utilities\PathHelper.cs" />
+  </ItemGroup>
+  
+</Project>
