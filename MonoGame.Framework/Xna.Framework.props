@@ -20,7 +20,6 @@
     <Compile Include="CurveTangent.cs" />    
     <Compile Include="FrameworkDispatcher.cs" />
     <Compile Include="ICurveEvaluator.cs" />
-    <Compile Include="MathF.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Plane.cs" />
