@@ -104,6 +104,7 @@
     <Compile Include="Graphics\TextureCubeContent.cs" />
     <Compile Include="Graphics\TextureProfile.cs" />
     <Compile Include="Graphics\TextureReferenceDictionary.cs" />
+    <Compile Include="Graphics\VectorConverter.cs" />
     <Compile Include="Graphics\VertexChannel.cs" />
     <Compile Include="Graphics\VertexChannelCollection.cs" />
     <Compile Include="Graphics\VertexChannelGeneric.cs" />
