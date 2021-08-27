@@ -121,10 +121,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Design\VectorConversion.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <Compile Include="Graphics\Effect\AlphaTestEffect.cs" />
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
     <Compile Include="Graphics\Effect\DualTextureEffect.cs" />
