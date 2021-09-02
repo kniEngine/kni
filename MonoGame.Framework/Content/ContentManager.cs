@@ -36,8 +36,12 @@ namespace Microsoft.Xna.Framework.Content
 
         private static readonly List<char> targetPlatformIdentifiers = new List<char>()
         {
+            // XNA content identifiers
             'w', // Windows (XNA & DirectX)
             'x', // Xbox360 (XNA)
+            'm', // WindowsPhone7.0 (XNA)
+
+            // content identifiers
             'i', // iOS
             'a', // Android
             'd', // DesktopGL
@@ -61,7 +65,6 @@ namespace Microsoft.Xna.Framework.Content
             // Legacy identifiers... these could be reused in the
             // future if we feel enough time has passed.
 
-            'm', // WindowsPhone7.0 (XNA)
             'p', // PlayStationMobile
             'v', // PSVita
             'g', // Windows (OpenGL)
