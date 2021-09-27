@@ -1,0 +1,49 @@
+<Project>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);BLAZOR</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Graphics\Effect\EffectResource.Blazor.cs" />
+    <Compile Include="Graphics\GraphicsCapabilities.Blazor.cs" />
+    <Compile Include="Graphics\GraphicsDebug.Blazor.cs" />
+    <Compile Include="Graphics\GraphicsDevice.Blazor.cs" />
+    <Compile Include="Graphics\GraphicsDevice.Blazor.FramebufferHelper.cs" />
+    <Compile Include="Graphics\IRenderTarget.Blazor.cs" />
+    <Compile Include="Graphics\OcclusionQuery.Blazor.cs" />
+    <Compile Include="Graphics\RenderTarget2D.Blazor.cs" />
+    <Compile Include="Graphics\RenderTarget3D.Blazor.cs" />
+    <Compile Include="Graphics\RenderTargetCube.Blazor.cs" />
+    <Compile Include="Graphics\SamplerStateCollection.Blazor.cs" />
+    <Compile Include="Graphics\Shader\ConstantBuffer.Blazor.cs" />
+    <Compile Include="Graphics\Shader\Shader.Blazor.cs" />
+    <Compile Include="Graphics\States\BlendState.Blazor.cs" />
+    <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
+    <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />
+    <Compile Include="Graphics\States\SamplerState.Blazor.cs" />
+    <Compile Include="Graphics\Texture.Blazor.cs" />
+    <Compile Include="Graphics\Texture2D.Blazor.cs" />
+    <Compile Include="Graphics\Texture3D.Blazor.cs" />
+    <Compile Include="Graphics\TextureCollection.Blazor.cs" />
+    <Compile Include="Graphics\TextureCube.Blazor.cs" />
+    <Compile Include="Graphics\Vertices\IndexBuffer.Blazor.cs" />
+    <Compile Include="Graphics\Vertices\VertexBuffer.Blazor.cs" />
+    <Compile Include="Graphics\Vertices\VertexElement.Blazor.cs" />
+        
+    <Compile Include="Graphics\Texture2D.StbSharp.cs" />
+    <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
+    <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.mgfxo" />
+  </ItemGroup>
+
+</Project>

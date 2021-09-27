@@ -1,0 +1,10 @@
+<Project>
+  <ItemGroup>
+    <Compile Include="Audio\Xact\WaveBank.Default.cs" />
+    <Compile Include="Audio\Blazor\ConcreteAudioService.cs" />
+    <Compile Include="Audio\Blazor\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\Blazor\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\Blazor\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\Blazor\ConcreteSoundEffectInstance.cs" />
+  </ItemGroup>
+</Project>

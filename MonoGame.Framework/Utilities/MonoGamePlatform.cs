@@ -45,6 +45,11 @@ namespace MonoGame.Framework.Utilities
         WebGL,
 
         /// <summary>
+        /// BLAZOR webassembly platform.
+        /// </summary>
+        BLAZOR,
+
+        /// <summary>
         /// MonoGame Xbox One platform.
         /// </summary>
         XboxOne,
