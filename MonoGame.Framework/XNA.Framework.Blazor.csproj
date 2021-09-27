@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>..\Artifacts\Monogame.Framework\Blazor\</BaseOutputPath>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+
+    <DefineConstants>WEB;STBSHARP_INTERNAL</DefineConstants>
+    
+    <Version>3.8.9000.0</Version>
+    <AssemblyVersion>3.8.9000.0</AssemblyVersion>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>XNADESIGNPROVIDED;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>XNA framework for the WebAssembly.</Description>
+    <PackageTags>monogame;.net core;core;.net standard;standard;Blazor;webassembly</PackageTags>
+    <PackageId>nkast.Xna.Framework.Blazor</PackageId>
+    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
+    <PackageIcon />
+    <RepositoryUrl>https://github.com/nkast/MonoGame/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/nkast/MonoGame/</PackageProjectUrl>
+    <Product>Xna.Framework</Product>
+    <Company>MonoGame Team, Kastellanos Nikos</Company>
+  </PropertyGroup>
+
+  <Import Project="Xna.Framework.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
+
+
+    
+  <ItemGroup>
+
+    <Compile Remove="Input\MessageBox.cs" />
+    <Compile Remove="Input\KeyboardInput.cs" />
+    <None Remove="P:\MonoGame\Images\Icon.png" />
+
+    <Compile Include="Platform\Blazor\BlazorGamePlatform.cs" />
+    <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
+
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.Blazor.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="Graphics\GraphicsAdapter.Blazor.cs" />
+    <Compile Include="GamePlatform.Web.cs" />
+    <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.Blazor.cs" />
+    <Compile Include="Graphics\Vertices\VertexDeclaration.Blazor.cs" />
+    <Compile Include="Input\GamePad.Blazor.cs" />
+    <Compile Include="Input\Joystick.Blazor.cs" />
+    <Compile Include="Input\Keyboard.Blazor.cs" />
+    <Compile Include="Input\Mouse.Blazor.cs" />
+    <Compile Include="Input\MouseCursor.Blazor.cs" />
+    <Compile Include="Media\MediaLibrary.Blazor.cs" />
+    <Compile Include="Media\Song.Blazor.cs" />
+    <Compile Include="Media\Video.Blazor.cs" />
+    <Compile Include="Media\VideoPlayer.Blazor.cs" />
+    <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
+    <Compile Include="TitleContainer.Blazor.cs" />
+    <Compile Include="Utilities\ReflectionHelpers.Legacy.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.Blazor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="nkast.Wasm.Audio" Version="6.0.2" />
+    <PackageReference Include="nkast.Wasm.Canvas" Version="6.0.2" />
+    <PackageReference Include="nkast.Wasm.Dom" Version="6.0.2" />
+    <PackageReference Include="nkast.Wasm.XHR" Version="6.0.2" />
+  </ItemGroup>
+
+  <Import Project="Blazor.targets" />
+  <Import Project="BlazorAudio.targets" />
+</Project>

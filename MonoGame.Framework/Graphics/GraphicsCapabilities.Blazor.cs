@@ -2,14 +2,21 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class GraphicsCapabilities
     {
+
+
         private void PlatformInitialize(GraphicsDevice device)
         {
+            var GL = device._glContext;
+
             SupportsNonPowerOfTwo = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsTextureFilterAnisotropic = true;
+
+            SupportsTextureFilterAnisotropic = false; // TODO: check for TEXTURE_MAX_ANISOTROPY_EXT
 
             SupportsDepth24 = false;
             SupportsPackedDepthStencil = false;
@@ -17,19 +24,19 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsTextureMaxLevel = false;
 
             // Texture compression
-            SupportsDxt1 = true;
-            SupportsS3tc = true;
+            SupportsS3tc = GL.GetExtension("WEBGL_compressed_texture_s3tc");
+            SupportsDxt1 = GL.GetExtension("WEBGL_compressed_texture_s3tc");
 
             SupportsSRgb = true;
 
-            SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.FL10_0;
+            SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsDepthClamp = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.FL10_0;
+            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
 
-            SupportsInstancing = true;
+            SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
@@ -41,19 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private int GetMaxMultiSampleCount(GraphicsDevice device)
         {
-            var format = SharpDXHelper.ToFormat(device.PresentationParameters.BackBufferFormat);
-            // Find the maximum supported level starting with the game's requested multisampling level
-            // and halving each time until reaching 0 (meaning no multisample support).
-            var qualityLevels = 0;
-            var maxLevel = MultiSampleCountLimit;
-            while (maxLevel > 0)
-            {
-                qualityLevels = device._d3dDevice.CheckMultisampleQualityLevels(format, maxLevel);
-                if (qualityLevels > 0)
-                    break;
-                maxLevel /= 2;
-            }
-            return maxLevel;
+            return 0;
         }
     }
 }

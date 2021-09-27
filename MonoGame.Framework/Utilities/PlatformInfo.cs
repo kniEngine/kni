@@ -26,6 +26,8 @@ namespace MonoGame.Framework.Utilities
                 return MonoGamePlatform.tvOS;
 #elif WEB
                 return MonoGamePlatform.WebGL;
+#elif BLAZOR
+                return MonoGamePlatform.BLAZOR;
 #elif WINDOWS && DIRECTX
                 return MonoGamePlatform.Windows;
 #elif WINDOWS_UAP
