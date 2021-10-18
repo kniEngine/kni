@@ -292,20 +292,6 @@ namespace MonoGame.Framework
             MouseState.XButton1 = (buttons & MouseButtons.XButton1) == MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released;
             MouseState.XButton2 = (buttons & MouseButtons.XButton2) == MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released;
 
-            // Don't process touch state if we're not active 
-            // and the mouse is within the client area.
-            if (!_platform.IsActive || !withinClient)
-            {                
-                if (MouseState.LeftButton == ButtonState.Pressed)
-                {
-                    // Release mouse TouchLocation
-                    var touchX = MathHelper.Clamp(MouseState.X, 0, Form.ClientRectangle.Width-1);
-                    var touchY = MathHelper.Clamp(MouseState.Y, 0, Form.ClientRectangle.Height-1);
-                    TouchPanelState.AddEvent(0, TouchLocationState.Released, new Vector2(touchX, touchY), true);
-                }
-                return;
-            }
-            
             TouchLocationState? touchState = null;
             if (MouseState.LeftButton == ButtonState.Pressed)
                 if (previousState == ButtonState.Released)
@@ -314,9 +300,6 @@ namespace MonoGame.Framework
                     touchState = TouchLocationState.Moved;
             else if (previousState == ButtonState.Pressed)
                 touchState = TouchLocationState.Released;
-
-            if (touchState.HasValue)
-                TouchPanelState.AddEvent(0, touchState.Value, new Vector2(MouseState.X, MouseState.Y), true);
         } 
 
         private void OnMouseEnter(object sender, EventArgs e)

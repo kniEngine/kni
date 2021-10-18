@@ -10,11 +10,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
     public class TouchPanelState
     {
         /// <summary>
-        /// The reserved touchId for all mouse touch points.
-        /// </summary>
-        private const int MouseTouchId = 1;
-
-        /// <summary>
         /// The current touch state.
         /// </summary>
         private readonly List<TouchLocation> _touchState = new List<TouchLocation>();
@@ -155,11 +150,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         internal void AddEvent(int id, TouchLocationState state, Vector2 position)
         {
-            AddEvent(id, state, position, false);
-        }
-
-        internal void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
-        {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
             // system drivers.
@@ -173,16 +163,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // and release events.
             // 
             if (state == TouchLocationState.Pressed)
-            {
-                if (isMouse)
-                {
-                    // Mouse pointing devices always use a reserved Id
-                    _touchIds[id] = MouseTouchId;
-                }
-                else
-                {
-                    _touchIds[id] = _nextTouchId++;
-                }
+            {     
+                _touchIds[id] = _nextTouchId++;
             }
 
             // Try to find the touch id.
@@ -195,20 +177,16 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 return;
             }
 
-            if (!isMouse || EnableMouseTouchPoint || EnableMouseGestures)
             {
                 // Add the new touch event keeping the list from getting
                 // too large if no one happens to be requesting the state.
                 var evt = new TouchLocation(touchId, state, position * _touchScale, CurrentTimestamp);
 
-                if (!isMouse || EnableMouseTouchPoint)
-                {
-                    ApplyTouch(_touchState, evt);
-                }
+                ApplyTouch(_touchState, evt);
 
                 //If we have gestures enabled then collect events for those too.
                 //We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                if ((EnabledGestures != GestureType.None || _gestureState.Count > 0) && (!isMouse || EnableMouseGestures))
+                if ((EnabledGestures != GestureType.None || _gestureState.Count > 0))
                 {
                     ApplyTouch(_gestureState, evt);
 
@@ -307,10 +285,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// Gets or sets enabled gestures.
         /// </summary>
         public GestureType EnabledGestures { get; set; }
-
-        public bool EnableMouseTouchPoint { get; set; }
-
-        public bool EnableMouseGestures { get; set; }
 
         /// <summary>
         /// Returns true if a touch gesture is available.

@@ -69,13 +69,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
         }
 
         internal static void AddEvent(int id, TouchLocationState state, Vector2 position)
-        {
-            AddEvent(id, state, position, false);
-        }
-
-        internal static void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
-        {
-            PrimaryWindow.TouchPanelState.AddEvent(id, state, position, isMouse);
+        {         
+            PrimaryWindow.TouchPanelState.AddEvent(id, state, position);
         }
 
         /// <summary>
@@ -132,19 +127,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             get { return PrimaryWindow.TouchPanelState.EnabledGestures; }
             set { PrimaryWindow.TouchPanelState.EnabledGestures = value; }
         }
-
-        public static bool EnableMouseTouchPoint
-        {
-            get { return PrimaryWindow.TouchPanelState.EnableMouseTouchPoint; }
-            set { PrimaryWindow.TouchPanelState.EnableMouseTouchPoint = value; }
-        }
-
-        public static bool EnableMouseGestures
-        {
-            get { return PrimaryWindow.TouchPanelState.EnableMouseGestures; }
-            set { PrimaryWindow.TouchPanelState.EnableMouseGestures = value; }
-        }
-
+        
         /// <summary>
         /// Returns true if a touch gesture is available.
         /// </summary>

@@ -186,7 +186,8 @@ namespace Microsoft.Xna.Framework
 
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
-            _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos, !isTouch);
+            if (isTouch)
+                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
 
             if (!isTouch)
             {
@@ -206,9 +207,9 @@ namespace Microsoft.Xna.Framework
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
             var touchIsDown = pointerPoint.IsInContact;
 
-            if (touchIsDown)
+            if (isTouch && touchIsDown)
             {
-                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Moved, pos, !isTouch);
+                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Moved, pos);
             }
 
             if (!isTouch)
@@ -224,7 +225,8 @@ namespace Microsoft.Xna.Framework
 
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
-            _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Released, pos, !isTouch);
+            if (isTouch) 
+                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
 
             if (!isTouch)
             {
