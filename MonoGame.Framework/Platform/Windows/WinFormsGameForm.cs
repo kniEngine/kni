@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Windows
                 position = PointToClient(position);
                 var vec = new Vector2(position.X, position.Y);
 
-                _window.TouchPanelState.AddEvent(id, state, vec, false);
+                _window.TouchPanelState.AddEvent(id, state, vec);
             }
 
             base.WndProc(ref m);

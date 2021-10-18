@@ -10,16 +10,16 @@ namespace Microsoft.Xna.Framework.Input.Touch
     {
         private readonly ConcurrentQueue<TouchEvent> _queue = new ConcurrentQueue<TouchEvent>();
 
-        public void Enqueue(int id, TouchLocationState state, Vector2 pos, bool isMouse = false)
+        public void Enqueue(int id, TouchLocationState state, Vector2 pos)
         {
-            _queue.Enqueue(new TouchEvent(id, state, pos, isMouse));
+            _queue.Enqueue(new TouchEvent(id, state, pos));
         }
 
         public void ProcessQueued()
         {
             TouchEvent ev;
             while (_queue.TryDequeue(out ev))                
-                TouchPanel.AddEvent(ev.Id, ev.State, ev.Pos, ev.IsMouse);
+                TouchPanel.AddEvent(ev.Id, ev.State, ev.Pos);
         }
 
         private struct TouchEvent
@@ -27,14 +27,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
             public readonly int Id;
             public readonly TouchLocationState State;
             public readonly Vector2 Pos;
-            public readonly bool IsMouse;
 
-            public TouchEvent(int id, TouchLocationState state, Vector2 pos, bool isMouse)
+            public TouchEvent(int id, TouchLocationState state, Vector2 pos)
             {
                 Id = id;
                 State = state;
                 Pos = pos;
-                IsMouse = isMouse;
             }
         }
 
