@@ -653,12 +653,10 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformPresent();
         }
 
-        /*
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
             throw new NotImplementedException();
         }
-        */
 
         partial void PlatformReset();
 

@@ -465,9 +465,6 @@ namespace Microsoft.Xna.Framework
             box.Intersects(ref this, out result);
         }
 
-        /*
-        TODO : Make the public bool Intersects(BoundingFrustum frustum) overload
-
         public bool Intersects(BoundingFrustum frustum)
         {
             if (frustum == null)
@@ -475,8 +472,6 @@ namespace Microsoft.Xna.Framework
 
             throw new NotImplementedException();
         }
-
-        */
 
         /// <summary>
         /// Gets whether or not the other <see cref="BoundingSphere"/> intersects with this sphere.

@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.IO;
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -34,6 +35,16 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotSupportedException("Initializing from MediaSource is not supported");
 		}
 		
+        public void SavePicture(string name, byte[] imageBuffer)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void SavePicture(string name, Stream source)
+        {
+ 			throw new NotImplementedException();
+        }
+
 		public void Dispose()
 		{
 		    PlatformDispose();

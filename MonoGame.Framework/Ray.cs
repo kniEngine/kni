@@ -190,7 +190,6 @@ namespace Microsoft.Xna.Framework
 			result = Intersects(box);
         }
 
-        /*
         public float? Intersects(BoundingFrustum frustum)
         {
             if (frustum == null)
@@ -200,7 +199,6 @@ namespace Microsoft.Xna.Framework
 			
 			return frustum.Intersects(this);			
         }
-        */
 
         /// <summary>
         /// Check if this <see cref="Ray"/> intersects the specified <see cref="BoundingSphere"/>.
