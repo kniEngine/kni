@@ -181,12 +181,10 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
         
-        /*
 		public bool[] GetValueBooleanArray ()
 		{
 			throw new NotImplementedException();
 		}
-        */
 
 		public int GetValueInt32 ()
 		{
@@ -261,12 +259,10 @@ namespace Microsoft.Xna.Framework.Graphics
             return new Quaternion(vecInfo[0], vecInfo[1], vecInfo[2], vecInfo[3]);
         }
 
-        /*
 		public Quaternion[] GetValueQuaternionArray ()
 		{
 			throw new NotImplementedException();
 		}
-        */
 
 		public Single GetValueSingle ()
 		{
@@ -437,12 +433,10 @@ namespace Microsoft.Xna.Framework.Graphics
             StateKey = unchecked(NextStateKey++);
 		}
 
-        /*
 		public void SetValue (bool[] value)
 		{
 			throw new NotImplementedException();
 		}
-        */
 
 		public void SetValue (int value)
 		{
@@ -805,12 +799,10 @@ namespace Microsoft.Xna.Framework.Graphics
             StateKey = unchecked(NextStateKey++);
 		}
 
-        /*
 		public void SetValue (Quaternion[] value)
 		{
 			throw new NotImplementedException();
 		}
-        */
 
 		public void SetValue (Single value)
 		{
@@ -828,12 +820,10 @@ namespace Microsoft.Xna.Framework.Graphics
             StateKey = unchecked(NextStateKey++);
 		}
 		
-        /*
 		public void SetValue (string value)
 		{
 			throw new NotImplementedException();
 		}
-        */
 
 		public void SetValue (Texture value)
 		{
