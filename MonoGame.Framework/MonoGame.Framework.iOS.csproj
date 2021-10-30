@@ -65,8 +65,8 @@
     <Content Include="MonoGame.Framework.iOS.targets" PackagePath="build" />
   </ItemGroup>
 
-  <Import Project="Platform\OpenGL.targets" />
-  <Import Project="Platform\OpenAL.targets" />
-  <Import Project="Platform\Microsoft.Devices.Sensors.targets" />
+  <Import Project="OpenGL.targets" />
+  <Import Project="OpenAL.targets" />
+  <Import Project="Microsoft.Devices.Sensors.targets" />
 </Project>
 

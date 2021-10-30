@@ -79,6 +79,6 @@
     <PackageReference Include="SharpDX.XAudio2" Version="$(SharpDXVersion)" />
   </ItemGroup>
 
-  <Import Project="Platform\DirectX.targets" />
-  <Import Project="Platform\XAudio.targets" />
+  <Import Project="DirectX.targets" />
+  <Import Project="XAudio.targets" />
 </Project>
