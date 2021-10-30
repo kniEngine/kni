@@ -73,6 +73,6 @@
     <PackageReference Version="4.0.1" Include="SharpDX.XInput" />
   </ItemGroup>
 
-  <Import Project="Platform\DirectX.targets" />
-  <Import Project="Platform\XAudio.targets" />
+  <Import Project="DirectX.targets" />
+  <Import Project="XAudio.targets" />
 </Project>
