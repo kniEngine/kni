@@ -15,9 +15,9 @@ using System.Globalization;
 using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using System.Diagnostics;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    public class PipelineManager
+    internal class PipelineManager
     {
         [DebuggerDisplay("ImporterInfo: {type.Name}")]
         private struct ImporterInfo
@@ -58,11 +58,9 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
         public string OutputDirectory { get; private set; }
         public string IntermediateDirectory { get; private set; }
 
-        public ContentStatsCollection ContentStats { get; private set; }
-
         private ContentCompiler _compiler;
 
-        public ContentBuildLogger Logger { get; set; }
+        internal readonly ConsoleLogger Logger;
 
         public List<string> Assemblies { get; private set; }
 
@@ -100,28 +98,24 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
 
             Assemblies = new List<string>();
             Assemblies.Add(null);
-            Logger = new PipelineBuildLogger();
+            Logger = new ConsoleLogger();
 
             ProjectDirectory = PathHelper.NormalizeDirectory(projectDir);
             OutputDirectory = PathHelper.NormalizeDirectory(outputDir);
             IntermediateDirectory = PathHelper.NormalizeDirectory(intermediateDir);
 
-	        RegisterCustomConverters();
-
-            // Load the previous content stats.            
-            ContentStats = new ContentStatsCollection();
-            ContentStats.PreviousStats = ContentStatsCollection.Read(intermediateDir);
+            RegisterCustomConverters();
         }
 
-	    public void AssignTypeConverter<TType, TTypeConverter> ()
-	    {
-		    TypeDescriptor.AddAttributes (typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
-	    }
+        public void AssignTypeConverter<TType, TTypeConverter> ()
+        {
+            TypeDescriptor.AddAttributes (typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
+        }
 
-	    private void RegisterCustomConverters ()
-	    {
-		    AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter> ();
-	    }
+        private void RegisterCustomConverters ()
+        {
+            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter> ();
+        }
 
         public void AddAssembly(string assemblyFilePath)
         {
@@ -157,10 +151,15 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
                 try
                 {
                     Assembly a;
-                    if (string.IsNullOrEmpty(assemblyPath))                                            
-                        a = Assembly.GetExecutingAssembly();                    
+                    if (string.IsNullOrEmpty(assemblyPath))  
+                    {                                          
+                        // Get the build-in Importers
+                        a = typeof(Microsoft.Xna.Framework.Content.Pipeline.TextureImporter).Assembly;
+                    }
                     else                    
+                    {
                         a = Assembly.LoadFrom(assemblyPath);
+                    }
 
                     exportedTypes = a.GetTypes();
                     assemblyTimestamp = File.GetLastWriteTime(a.Location);
@@ -228,7 +227,7 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
                     }
                     else if (t.GetInterface(@"ContentTypeWriter") != null)
                     {
-						// TODO: This doesn't work... how do i find these?
+                        // TODO: This doesn't work... how do i find these?
                         _writers.Add(t);
                     }
                 }
@@ -612,8 +611,6 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
                 // Do we need to rebuild?
                 if (rebuild)
                 {
-                    var startTime = DateTime.UtcNow;
-
                     // Import and process the content.
                     var processedObject = ProcessContent(pipelineEvent);
 
@@ -626,16 +623,6 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
 
                     // Store the new event into the intermediate folder.
                     pipelineEvent.Save(eventFilepath);
-
-                    var buildTime = DateTime.UtcNow - startTime;
-
-                    // Record stat for this file.
-                    ContentStats.RecordStats(pipelineEvent.SourceFile, pipelineEvent.DestFile, pipelineEvent.Processor, processedObject.GetType(), (float)buildTime.TotalSeconds);
-                }
-                else
-                {
-                    // Copy the stats from the previous build.
-                    ContentStats.CopyPreviousStats(pipelineEvent.SourceFile);
                 }
             }
             finally
@@ -861,12 +848,38 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
             }
 
             // No pipeline build event with matching settings found.
-            // Get default asset name (= output file name relative to output folder without ".xnb").
+            // Get default asset name by searching the existing .mgcontent files.
             string directoryName = Path.GetDirectoryName(relativeSourceFileName);
             string fileName = Path.GetFileNameWithoutExtension(relativeSourceFileName);
             string assetName = Path.Combine(directoryName, fileName);
             assetName = PathHelper.Normalize(assetName);
-            return AppendAssetNameSuffix(assetName);
+
+            for (int index = 0; ; index++)
+            {
+                string destFile = assetName + '_' + index;
+                string eventFile;
+                var existingBuildEvent = LoadBuildEvent(destFile, out eventFile);
+                if (existingBuildEvent == null)
+                    return destFile;
+
+                var existingBuildEventDestFile = existingBuildEvent.DestFile;
+                existingBuildEventDestFile = PathHelper.GetRelativePath(ProjectDirectory, existingBuildEventDestFile);
+                existingBuildEventDestFile = Path.Combine(Path.GetDirectoryName(existingBuildEventDestFile), Path.GetFileNameWithoutExtension(existingBuildEventDestFile));
+                existingBuildEventDestFile = PathHelper.Normalize(existingBuildEventDestFile);
+                
+                var fullDestFile = Path.Combine(OutputDirectory, destFile);
+                var relativeDestFile = PathHelper.GetRelativePath(ProjectDirectory, fullDestFile);
+                relativeDestFile = PathHelper.Normalize(relativeDestFile);
+
+                if (existingBuildEventDestFile.Equals(relativeDestFile) &&
+                    existingBuildEvent.Importer  == importerName &&
+                    existingBuildEvent.Processor == processorName)
+                {
+                    var defaultValues = GetProcessorDefaultValues(processorName);
+                    if (PipelineBuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
+                        return destFile;
+                }
+            }
         }
 
         /// <summary>
@@ -899,42 +912,5 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
             return null;
         }
 
-        /// <summary>
-        /// Gets the asset name including a suffix, such as "_0". (The number is incremented
-        /// automatically.
-        /// </summary>
-        /// <param name="baseAssetName">
-        /// The asset name without suffix (relative to output folder).
-        /// </param>
-        /// <returns>The asset name with suffix.</returns>
-        private string AppendAssetNameSuffix(string baseAssetName)
-        {
-            int index = 0;
-            string assetName = baseAssetName + "_0";
-            while (IsAssetNameUsed(assetName))
-            {
-                index++;
-                assetName = baseAssetName + '_' + index;
-            }
-
-            return assetName;
-        }
-
-        /// <summary>
-        /// Determines whether the specified asset name is already used.
-        /// </summary>
-        /// <param name="assetName">The asset name (relative to output folder).</param>
-        /// <returns>
-        /// <see langword="true"/> if the asset name is already used; otherwise,
-        /// <see langword="false"/> if the name is available.
-        /// </returns>
-        private bool IsAssetNameUsed(string assetName)
-        {
-            string destFile = Path.Combine(OutputDirectory, assetName + ".xnb");
-
-            return _pipelineBuildEvents.SelectMany(pair => pair.Value)
-                                       .Select(pipelineEvent => pipelineEvent.DestFile)
-                                       .Any(existingDestFile => destFile.Equals(existingDestFile, StringComparison.OrdinalIgnoreCase));
-        }
     }
 }

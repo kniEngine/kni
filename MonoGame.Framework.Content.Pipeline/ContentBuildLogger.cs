@@ -14,15 +14,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// </summary>
     public abstract class ContentBuildLogger
     {
-        Stack<string> filenames = new Stack<string>();
-        private int indentCount = 0;
+        readonly Stack<string> filenames = new Stack<string>();
 
-        protected string IndentString { get { return String.Empty.PadLeft(Math.Max(0, indentCount), '\t'); } }
-
-        /// <summary>
-        /// Gets or sets the base reference path used when reporting errors during the content build process.
-        /// </summary>
-        public string LoggerRootDirectory { get; set; }
 
         /// <summary>
         /// Initializes a new instance of ContentBuildLogger.
@@ -35,14 +28,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// Returns the relative path to the filename from the root directory.
         /// </summary>
         /// <param name="filename">The target filename.</param>
-        /// <param name="rootDirectory">The root directory. If not specified, the current directory is used.</param>
         /// <returns>The relative path.</returns>
-        string GetRelativePath(string filename, string rootDirectory)
+        string GetRelativePath(string filename)
         {
-            rootDirectory = Path.GetFullPath(string.IsNullOrEmpty(rootDirectory) ? "." : rootDirectory);
+            var currentDirectory = Path.GetFullPath(".");
             filename = Path.GetFullPath(filename);
-            if (filename.StartsWith(rootDirectory))
-                return filename.Substring(rootDirectory.Length);
+            if (filename.StartsWith(currentDirectory))
+                filename = filename.Substring(currentDirectory.Length);
             return filename;
         }
 
@@ -51,15 +43,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         /// <param name="contentIdentity">Identity of a content item. If specified, GetCurrentFilename uses this value to refine the search. If no value is specified, the current PushFile state is used.</param>
         /// <returns>Name of the file being processed.</returns>
-        protected string GetCurrentFilename(
-            ContentIdentity contentIdentity
-            )
+        protected string GetCurrentFilename(ContentIdentity contentIdentity)
         {
+            string filename = null;
+
             if ((contentIdentity != null) && !string.IsNullOrEmpty(contentIdentity.SourceFilename))
-                return GetRelativePath(contentIdentity.SourceFilename, LoggerRootDirectory);
-            if (filenames.Count > 0)
-                return GetRelativePath(filenames.Peek(), LoggerRootDirectory);
-            return null;
+                filename = contentIdentity.SourceFilename;
+            else if (filenames.Count > 0)
+                filename = filenames.Peek();
+
+            // This convert's filepaths to relative if they are rooted in the current directory.
+            // TODO: Move this out to concrete classes.
+            if (filename != null)                
+                filename = GetRelativePath(filename);
+
+            return filename;
         }
 
         /// <summary>
@@ -114,14 +112,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             filenames.Push(filename);
         }
 
-        public void Indent()
-        {
-            indentCount++;
-        }
-
-        public void Unindent()
-        {
-            indentCount--;
-        }
     }
 }

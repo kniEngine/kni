@@ -7,8 +7,23 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace MonoGame.Content.Builder
 {
-    public class ConsoleLogger : ContentBuildLogger
+    internal class ConsoleLogger : ContentBuildLogger
     {
+        private int indentCount = 0;
+
+        public void Indent()
+        {
+            indentCount++;
+        }
+
+        public void Unindent()
+        {
+            indentCount--;
+        }
+
+        protected string IndentString { get { return String.Empty.PadLeft(Math.Max(0, indentCount), '\t'); } }
+
+
         public override void LogMessage(string message, params object[] messageArgs)
         {
 			Console.WriteLine(IndentString + message, messageArgs);

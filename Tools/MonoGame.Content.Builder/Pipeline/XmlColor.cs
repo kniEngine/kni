@@ -5,7 +5,7 @@
 using System.Drawing;
 using System.Xml.Serialization;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
     /// <summary>
     /// Helper for serializing color types with the XmlSerializer.

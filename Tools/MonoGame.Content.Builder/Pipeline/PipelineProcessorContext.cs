@@ -7,9 +7,9 @@ using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    public class PipelineProcessorContext : ContentProcessorContext
+    internal class PipelineProcessorContext : ContentProcessorContext
     {
         private readonly PipelineManager _manager;
 
@@ -33,8 +33,6 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
         public override OpaqueDataDictionary Parameters { get { return _pipelineEvent.Parameters; } }
 
         public override ContentBuildLogger Logger { get { return _manager.Logger; } }
-
-        public override ContentIdentity SourceIdentity { get { return new ContentIdentity(_pipelineEvent.SourceFile); } }
 
         public override void AddDependency(string filename)
         {

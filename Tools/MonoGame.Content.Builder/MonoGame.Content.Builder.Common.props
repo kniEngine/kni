@@ -1,6 +1,18 @@
 <Project>
 
   <ItemGroup>
+    <Compile Include="Pipeline\Convertors\StringToColorConverter.cs" />
+    <Compile Include="Pipeline\FileHelper.cs" />
+    <Compile Include="Pipeline\PathHelper.cs" />
+    <Compile Include="Pipeline\PipelineBuildEvent.cs" />
+    <Compile Include="Pipeline\PipelineImporterContext.cs" />
+    <Compile Include="Pipeline\PipelineManager.cs" />
+    <Compile Include="Pipeline\PipelineProcessorContext.cs" />
+    <Compile Include="Pipeline\TypeExtensions.cs" />
+    <Compile Include="Pipeline\XmlColor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="BuildContent.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleLogger.cs" />

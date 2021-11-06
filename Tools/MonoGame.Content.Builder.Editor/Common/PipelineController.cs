@@ -12,7 +12,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MonoGame.Content.Builder;
-using PathHelper = MonoGame.Framework.Content.Pipeline.Builder.PathHelper;
 
 namespace MonoGame.Tools.Pipeline
 {

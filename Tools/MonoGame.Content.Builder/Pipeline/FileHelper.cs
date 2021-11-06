@@ -4,9 +4,9 @@
 
 using System.IO;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    public static class FileHelper
+    internal static class FileHelper
     {
         /// <summary>
         /// Checks  deletes a file from disk without throwing exceptions.
