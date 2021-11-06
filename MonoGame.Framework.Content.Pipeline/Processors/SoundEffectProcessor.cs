@@ -3,9 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework.Content.Pipeline.Audio;
 using System.IO;
-using MonoGame.Framework.Content.Pipeline.Builder;
+using Microsoft.Xna.Framework.Content.Pipeline.Audio;
+using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {

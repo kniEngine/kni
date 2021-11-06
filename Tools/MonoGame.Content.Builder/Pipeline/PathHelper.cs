@@ -5,9 +5,9 @@
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    public static class PathHelper
+    internal static class PathHelper
     {
         /// <summary>
         /// The/universal/standard/directory/seperator.

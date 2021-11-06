@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
     public class PipelineBuildEvent
     {
@@ -156,7 +156,7 @@ namespace MonoGame.Framework.Content.Pipeline.Builder
                 serializer.Serialize(textWriter, this);
         }
 
-        public bool NeedsRebuild(PipelineManager manager, PipelineBuildEvent cachedEvent)
+        internal bool NeedsRebuild(PipelineManager manager, PipelineBuildEvent cachedEvent)
         {
             // If we have no previously cached build event then we cannot
             // be sure that the state hasn't changed... force a rebuild.

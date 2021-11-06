@@ -11,10 +11,9 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
-using MonoGame.Framework.Content.Pipeline.Builder;
+using MonoGame.Tools.Pipeline.Convertors;
 
 namespace MonoGame.Tools.Pipeline
 {

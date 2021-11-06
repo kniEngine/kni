@@ -1,6 +1,7 @@
 <Project>
 
   <ItemGroup>
+    <Compile Include="Common\Convertors\StringToColorConverter.cs" />
     <Compile Include="Common\ActionStack.cs" />
     <Compile Include="Common\ContentItem.cs" />
     <Compile Include="Common\ContentItem.Importer.cs" />
@@ -18,6 +19,7 @@
     <Compile Include="Common\IView.cs" />
     <Compile Include="Common\MenuInfo.cs" />
     <Compile Include="Common\OutputParser.cs" />
+    <Compile Include="Common\PathHelper.cs" />
     <Compile Include="Common\PipelineController.cs" />
     <Compile Include="Common\PipelineController.ExcludeAction.cs" />
     <Compile Include="Common\PipelineController.IncludeAction.cs" />

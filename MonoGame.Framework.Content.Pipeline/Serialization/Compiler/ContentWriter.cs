@@ -3,11 +3,12 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.Utilities.LZ4;
+using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Content.Pipeline.Builder;
-using System.Collections.Generic;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {

@@ -11,7 +11,6 @@ using System.Xml;
 using MonoGame.Content.Builder;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
-using PathHelper = MonoGame.Framework.Content.Pipeline.Builder.PathHelper;
 
 namespace MonoGame.Tools.Pipeline
 {
@@ -340,11 +339,7 @@ namespace MonoGame.Tools.Pipeline
             line = FormatDivider("Content");
             io.WriteLine(line);
 
-            // Sort the items alphabetically to ensure a consistent output
-            // and better mergability of the resulting MGCB file.
-            var sortedItems = _project.ContentItems.OrderBy(c => c.OriginalPath, StringComparer.InvariantCulture);
-
-            foreach (var i in sortedItems)
+            foreach (var i in _project.ContentItems)
             {
                 // Reject any items that don't pass the filter.              
                 if (filterItem != null && filterItem(i))

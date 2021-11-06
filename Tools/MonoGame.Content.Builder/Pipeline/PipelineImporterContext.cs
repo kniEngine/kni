@@ -4,9 +4,9 @@
 
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    public class PipelineImporterContext : ContentImporterContext
+    internal class PipelineImporterContext : ContentImporterContext
     {
         private readonly PipelineManager _manager;
 

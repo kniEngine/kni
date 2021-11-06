@@ -5,9 +5,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Framework.Content.Pipeline.Builder
+namespace MonoGame.Content.Builder.Pipeline
 {
-    static public class TypeExtensions
+    static internal class TypeExtensions
     {
         public static Color ToColor(this System.Drawing.Color color)
         {

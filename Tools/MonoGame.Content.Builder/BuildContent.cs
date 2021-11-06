@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Content.Pipeline.Builder;
+using MonoGame.Content.Builder.Pipeline;
 
 namespace MonoGame.Content.Builder
 {
@@ -294,7 +294,6 @@ namespace MonoGame.Content.Builder
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
             
             _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath);
-            _manager.Logger = new ConsoleLogger();
             _manager.CompressContent = CompressContent;
 
             // If the intent is to debug build, break at the original location
@@ -416,7 +415,6 @@ namespace MonoGame.Content.Builder
             if (Incremental && !targetChanged)
             {
                 newContent.Merge(previousContent);
-                _manager.ContentStats.MergePreviousStats();
             }
 
             // Delete the old file and write the new content 
@@ -455,8 +453,6 @@ namespace MonoGame.Content.Builder
                             else
                                 Console.WriteLine("Skipping {0} => {1}", c.SourceFile, c.Link);
 
-                            // Copy the stats from the previous stats collection.
-                            _manager.ContentStats.CopyPreviousStats(c.SourceFile);
                             continue;
                         }
                     }
@@ -482,9 +478,6 @@ namespace MonoGame.Content.Builder
                     else
                         Console.WriteLine("{0} => {1}", c.SourceFile, c.Link);
 
-                    // Record content stats on the copy.
-                    _manager.ContentStats.RecordStats(c.SourceFile, dest, "CopyItem", typeof(File), (float)buildTime.TotalSeconds);
-
                     ++successCount;
                 }
                 catch (Exception ex)
@@ -496,9 +489,6 @@ namespace MonoGame.Content.Builder
                     ++errorCount;
                 }
             }
-
-            // Dump the content build stats.
-            _manager.ContentStats.Write(intermediatePath);
         }
 
         [CommandLineParameter(

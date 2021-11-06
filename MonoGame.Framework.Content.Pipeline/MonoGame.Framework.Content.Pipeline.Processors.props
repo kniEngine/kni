@@ -142,25 +142,8 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="Utilities\PathHelper.cs" />
     <Compile Include="Utilities\Vector4Converter.cs" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <Compile Include="Builder\Convertors\StringToColorConverter.cs" />
-    <Compile Include="Builder\FileHelper.cs" />
-    <Compile Include="Builder\PathHelper.cs" />
-    <Compile Include="Builder\PipelineBuildEvent.cs" />
-    <Compile Include="Builder\PipelineBuildLogger.cs" />
-    <Compile Include="Builder\PipelineImporterContext.cs" />
-    <Compile Include="Builder\PipelineManager.cs" />
-    <Compile Include="Builder\PipelineProcessorContext.cs" />
-    <Compile Include="Builder\TypeExtensions.cs" />
-    <Compile Include="Builder\XmlColor.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Include="ContentStats.cs" />
-    <Compile Include="ContentStatsCollection.cs" />
   </ItemGroup>
   
 </Project>
