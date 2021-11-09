@@ -1,9 +1,9 @@
 <Project>
   <ItemGroup>
-    <Compile Include="Platform\Audio\Xact\WaveBank.Default.cs" />
-    <Compile Include="Platform\Audio\DynamicSoundEffectInstance.XAudio.cs" />
-    <Compile Include="Platform\Audio\Microphone.Default.cs" />
-    <Compile Include="Platform\Audio\SoundEffect.XAudio.cs" />
-    <Compile Include="Platform\Audio\SoundEffectInstance.XAudio.cs" />
+    <Compile Include="Audio\Xact\WaveBank.Default.cs" />
+    <Compile Include="Audio\DynamicSoundEffectInstance.XAudio.cs" />
+    <Compile Include="Audio\Microphone.Default.cs" />
+    <Compile Include="Audio\SoundEffect.XAudio.cs" />
+    <Compile Include="Audio\SoundEffectInstance.XAudio.cs" />
   </ItemGroup>
 </Project>

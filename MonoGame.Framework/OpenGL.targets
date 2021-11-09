@@ -10,34 +10,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Platform\Graphics\Effect\EffectResource.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\GraphicsCapabilities.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\GraphicsDebug.Default.cs" />
-    <Compile Include="Platform\Graphics\GraphicsDevice.OpenGL.FramebufferHelper.cs" />
-    <Compile Include="Platform\Graphics\GraphicsDevice.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\IRenderTarget.OpenGL.cs" />
+    <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
+    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
+    <Compile Include="Graphics\GraphicsDebug.Default.cs" />
+    <Compile Include="Graphics\GraphicsDevice.OpenGL.FramebufferHelper.cs" />
+    <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
+    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IGraphicsContext.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IWindowInfo.OpenGL.cs" />    
-    <Compile Include="Platform\Graphics\OcclusionQuery.OpenGL.cs" Condition="'$(MGOpenGL)' != 'GLES'"/>
+    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" Condition="'$(MGOpenGL)' != 'GLES'"/>
     <Compile Include="Platform\Graphics\OpenGL.cs" />
-    <Compile Include="Platform\Graphics\RenderTarget2D.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\RenderTargetCube.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\SamplerStateCollection.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Shader\ConstantBuffer.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Shader\Shader.OpenGL.cs" />
+    <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
+    <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
+    <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
+    <Compile Include="Graphics\Shader\ConstantBuffer.OpenGL.cs" />
+    <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.cs" />
-    <Compile Include="Platform\Graphics\States\BlendState.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\States\DepthStencilState.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\States\RasterizerState.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\States\SamplerState.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Texture.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Texture2D.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Texture3D.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\TextureCollection.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\TextureCube.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Vertices\IndexBuffer.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Vertices\VertexBuffer.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
+    <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
+    <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
+    <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
+    <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
+    <Compile Include="Graphics\Texture.OpenGL.cs" />
+    <Compile Include="Graphics\Texture2D.OpenGL.cs" />
+    <Compile Include="Graphics\Texture3D.OpenGL.cs" />
+    <Compile Include="Graphics\TextureCollection.OpenGL.cs" />
+    <Compile Include="Graphics\TextureCube.OpenGL.cs" />
+    <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
+    <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
+    <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
     <Compile Include="Platform\Threading.cs" />
   </ItemGroup>
 
