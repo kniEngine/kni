@@ -35,28 +35,28 @@
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
-    <Compile Include="Platform\GamePlatform.Mobile.cs" />
-    <Compile Include="Platform\Graphics\GraphicsAdapter.Legacy.cs" />
+    <Compile Include="GamePlatform.Mobile.cs" />
+    <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
-    <Compile Include="Platform\Graphics\Texture2D.StbSharp.cs" />
-    <Compile Include="Platform\GraphicsDeviceManager.Legacy.cs" />
-    <Compile Include="Platform\Input\GamePad.Android.cs" />
-    <Compile Include="Platform\Input\Joystick.Default.cs" />
-    <Compile Include="Platform\Input\KeyboardInput.Android.cs" />
-    <Compile Include="Platform\Input\MessageBox.Android.cs" />
-    <Compile Include="Platform\Input\Mouse.Default.cs" />
-    <Compile Include="Platform\Input\MouseCursor.Default.cs" />
-    <Compile Include="Platform\Media\MediaLibrary.Android.cs" />
-    <Compile Include="Platform\Media\MediaPlayer.Default.cs" />
-    <Compile Include="Platform\Media\Song.Android.cs" />
-    <Compile Include="Platform\Media\Video.Android.cs" />
-    <Compile Include="Platform\Media\VideoPlayer.Android.cs" />
+    <Compile Include="Graphics\Texture2D.StbSharp.cs" />
+    <Compile Include="GraphicsDeviceManager.Legacy.cs" />
+    <Compile Include="Input\GamePad.Android.cs" />
+    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\KeyboardInput.Android.cs" />
+    <Compile Include="Input\MessageBox.Android.cs" />
+    <Compile Include="Input\Mouse.Default.cs" />
+    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\MediaLibrary.Android.cs" />
+    <Compile Include="Media\MediaPlayer.Default.cs" />
+    <Compile Include="Media\Song.Android.cs" />
+    <Compile Include="Media\Video.Android.cs" />
+    <Compile Include="Media\VideoPlayer.Android.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
-    <Compile Include="Platform\TitleContainer.Android.cs" />
+    <Compile Include="TitleContainer.Android.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
-    <Compile Include="Platform\Utilities\ReflectionHelpers.Default.cs" />
+    <Compile Include="Utilities\ReflectionHelpers.Default.cs" />
     
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp"/>
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp"/>
