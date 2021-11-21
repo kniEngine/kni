@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -36,7 +38,6 @@ namespace Microsoft.Xna.Framework.Windows
     {
         private readonly WinFormsGameWindow _window;
 
-        public const int WM_MOUSEHWHEEL = 0x020E;
         public const int WM_POINTERUP = 0x0247;
         public const int WM_POINTERDOWN = 0x0246;
         public const int WM_POINTERUPDATE = 0x0245;
@@ -55,12 +56,6 @@ namespace Microsoft.Xna.Framework.Windows
         public bool AllowAltF4 = true;
 
         internal bool IsResizing { get; set; }
-
-        #region Events
-
-        public event EventHandler<HorizontalMouseWheelEventArgs> MouseHorizontalWheel;
-
-        #endregion
 
         public WinFormsGameForm(WinFormsGameWindow window)
         {
@@ -150,13 +145,6 @@ namespace Microsoft.Xna.Framework.Windows
                     break;
                 case WM_POINTERUPDATE:
                     state = TouchLocationState.Moved;
-                    break;
-                case WM_MOUSEHWHEEL:
-                    var delta = (short)(((ulong)m.WParam >> 16) & 0xffff); ;
-                    var handler = MouseHorizontalWheel;
-
-                    if (handler != null)
-                        handler(this, new HorizontalMouseWheelEventArgs(delta));
                     break;
                 case WM_ENTERSIZEMOVE:
                     IsResizing = true;

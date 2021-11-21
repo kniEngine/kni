@@ -12,11 +12,11 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// The button is released.
         /// </summary>
-        Released,
+        Released = 0,
 
         /// <summary>
         /// The button is pressed.
         /// </summary>
-        Pressed
+        Pressed = 1,
     }
 }

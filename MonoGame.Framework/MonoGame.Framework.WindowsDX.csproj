@@ -44,7 +44,6 @@
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Utilities\ReflectionHelpers.Legacy.cs" />
     <Compile Include="Platform\Utilities\TimerHelper.cs" />
-    <Compile Include="Platform\Windows\HorizontalMouseWheelEventArgs.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include="Platform\Windows\WinFormsGamePlatform.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />

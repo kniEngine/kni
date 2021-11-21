@@ -2,88 +2,113 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using Microsoft.Xna.Framework.Graphics;
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
+using WinFormsCursor = System.Windows.Forms.Cursor;
+using WinFormsCursors = System.Windows.Forms.Cursors;
 
 namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        Cursor _cursor;
-        bool _needsDisposing;
-
-        internal Cursor Cursor { get { return _cursor; } }
-
-        private MouseCursor(Cursor cursor, bool needsDisposing = false)
+        private readonly bool _isBuildInMouseCursor;
+        private IntPtr _handle;
+        
+        WinFormsCursor _winFormsCursor;
+        
+        private IntPtr PlatformGetHandle()
         {
-            _cursor = cursor;
-            _needsDisposing = needsDisposing;
+            return _handle;
+        }
+
+        private bool PlatformIsBuildInMouseCursor
+        {
+            get { return _isBuildInMouseCursor; }
+        }
+
+        internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
+
+
+        private MouseCursor(bool isBuildInMouseCursor, IntPtr handle)
+        {
+            _isBuildInMouseCursor = isBuildInMouseCursor;
+            _handle = handle;
+            _winFormsCursor = new WinFormsCursor(handle);
+        }
+
+        private MouseCursor(bool isBuildInMouseCursor, WinFormsCursor cursor)
+        {
+            _isBuildInMouseCursor = isBuildInMouseCursor;
+            _winFormsCursor = cursor;
         }
 
         private static void PlatformInitalize()
         {
-            Arrow = new MouseCursor(Cursors.Arrow);
-            IBeam = new MouseCursor(Cursors.IBeam);
-            Wait = new MouseCursor(Cursors.WaitCursor);
-            Crosshair = new MouseCursor(Cursors.Cross);
-            WaitArrow = new MouseCursor(Cursors.AppStarting);
-            SizeNWSE = new MouseCursor(Cursors.SizeNWSE);
-            SizeNESW = new MouseCursor(Cursors.SizeNESW);
-            SizeWE = new MouseCursor(Cursors.SizeWE);
-            SizeNS = new MouseCursor(Cursors.SizeNS);
-            SizeAll = new MouseCursor(Cursors.SizeAll);
-            No = new MouseCursor(Cursors.No);
-            Hand = new MouseCursor(Cursors.Hand);
+            Arrow = new MouseCursor(true, WinFormsCursors.Arrow);
+            IBeam = new MouseCursor(true, WinFormsCursors.IBeam);
+            Wait = new MouseCursor(true, WinFormsCursors.WaitCursor);
+            Crosshair = new MouseCursor(true, WinFormsCursors.Cross);
+            WaitArrow = new MouseCursor(true, WinFormsCursors.AppStarting);
+            SizeNWSE = new MouseCursor(true, WinFormsCursors.SizeNWSE);
+            SizeNESW = new MouseCursor(true, WinFormsCursors.SizeNESW);
+            SizeWE = new MouseCursor(true, WinFormsCursors.SizeWE);
+            SizeNS = new MouseCursor(true, WinFormsCursors.SizeNS);
+            SizeAll = new MouseCursor(true, WinFormsCursors.SizeAll);
+            No = new MouseCursor(true, WinFormsCursors.No);
+            Hand = new MouseCursor(true, WinFormsCursors.Hand);
         }
 
-        private static MouseCursor PlatformFromTexture2D(Texture2D texture, int originx, int originy)
+        private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
         {
-            var w = texture.Width;
-            var h = texture.Height;
-            Cursor cursor = null;
-            var bytes = new byte[w * h * 4];
-            texture.GetData(bytes);
-            var gcHandle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-
             // convert ABGR to ARGB
-            for (int i = 0; i < bytes.Length; i += 4)
+            for (int i = 0; i < data.Length; i += 4)
             {
-                var r = bytes[i];
-                bytes[i] = bytes[i + 2];
-                bytes[i + 2] = r;
+                var r = data[i];
+                data[i] = data[i + 2];
+                data[i + 2] = r;
             }
 
+            var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
                 using (var bitmap = new Bitmap(w, h, h * 4, PixelFormat.Format32bppArgb, gcHandle.AddrOfPinnedObject()))
                 {
-                    IconInfo iconInfo = new IconInfo();
-                    GetIconInfo(bitmap.GetHicon(), ref iconInfo);
+                    IconInfo iconInfo = default(IconInfo);
+                    var hIcon = bitmap.GetHicon();
+                    GetIconInfo(hIcon, out iconInfo);
                     iconInfo.xHotspot = originx;
                     iconInfo.yHotspot = originy;
                     iconInfo.fIcon = false;
-                    cursor = new Cursor(CreateIconIndirect(ref iconInfo));
+                    IntPtr handle = CreateIconIndirect(ref iconInfo);
+                    DeleteObject(iconInfo.ColorBitmap);
+                    DeleteObject(iconInfo.MaskBitmap);
+                    DestroyIcon(hIcon);
+                    return new MouseCursor(false, handle);
                 }
             }
             finally
             {
                 gcHandle.Free();
             }
-            return new MouseCursor(cursor, needsDisposing: true);
         }
 
-        private void PlatformDispose()
+        private void PlatformDispose(bool dispose)
         {
-            if (_needsDisposing && _cursor != null)
+            if (dispose)
             {
-                _cursor.Dispose();
-                _cursor = null;
-                _needsDisposing = false;
+                if (_winFormsCursor != null)
+                    _winFormsCursor.Dispose();
             }
+
+            if (_handle != IntPtr.Zero)
+                DestroyIcon(_handle);
+
+            _winFormsCursor = null;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -97,10 +122,16 @@ namespace Microsoft.Xna.Framework.Input
         };
 
         [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetIconInfo(IntPtr hIcon, out IconInfo pIconInfo);
+
+        [DllImport("gdi32.dll")]
+        static extern bool DeleteObject(IntPtr hObject);
+
+        [DllImport("user32.dll")]
         static extern IntPtr CreateIconIndirect([In] ref IconInfo iconInfo);
 
         [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetIconInfo(IntPtr hIcon, ref IconInfo pIconInfo);
+        static extern bool DestroyIcon(IntPtr handle);
     }
 }

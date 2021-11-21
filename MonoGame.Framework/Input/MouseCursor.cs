@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -83,30 +85,45 @@ namespace Microsoft.Xna.Framework.Input
             if (texture.Format != SurfaceFormat.Color && texture.Format != SurfaceFormat.ColorSRgb)
                 throw new ArgumentException("Only Color or ColorSrgb textures are accepted for mouse cursors", "texture");
 
-            return PlatformFromTexture2D(texture, originx, originy);
+            int w = texture.Width;
+            int h = texture.Height;
+            byte[] data = new byte[w * h * 4];
+            texture.GetData(data);
+
+            return PlatformFromTexture2D(data, w, h, originx, originy);
         }
 
-        public IntPtr Handle { get; private set; }
+        public IntPtr Handle { get { return PlatformGetHandle(); } }
 
-        private bool _disposed;
+        private bool _isDisposed;
 
         static MouseCursor()
         {
             PlatformInitalize();
         }
 
-        private MouseCursor(IntPtr handle)
+        ~MouseCursor()
         {
-            Handle = handle;
+            Dispose(false);
         }
 
         public void Dispose()
         {
-            if (_disposed)
-                return;
+            if (PlatformIsBuildInMouseCursor)
+                throw new InvalidOperationException("Disposing Stock MouseCursors is not allowed.");
 
-            PlatformDispose();
-            _disposed = true;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool dispose)
+        {
+            if (_isDisposed)
+                return;
+            
+            PlatformDispose(dispose);
+
+            _isDisposed = true;
         }
     }
 }
