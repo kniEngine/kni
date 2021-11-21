@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -9,17 +11,19 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct MouseState
     {
-        private const byte LeftButtonFlag = 1;
-        private const byte RightButtonFlag = 2;
-        private const byte MiddleButtonFlag = 4;
-        private const byte XButton1Flag = 8;
-        private const byte XButton2Flag = 16;
+        private const int LeftButtonBit = 0;
+        private const int MiddleButtonBit = 1;
+        private const int RightButtonBit = 2;
+        private const int XButton1Bit = 3;
+        private const int XButton2Bit = 4;
 
         private int _x;
         private int _y;
         private int _scrollWheelValue;
         private int _horizontalScrollWheelValue;
-        private byte _buttons;
+        private int _rawX;
+        private int _rawY;
+        private int _buttons;
 
         /// <summary>
         /// Initializes a new instance of the MouseState.
@@ -46,14 +50,14 @@ namespace Microsoft.Xna.Framework.Input
             _x = x;
             _y = y;
             _scrollWheelValue = scrollWheel;
-            _buttons = (byte)(
-                (leftButton == ButtonState.Pressed ? LeftButtonFlag : 0) |
-                (rightButton == ButtonState.Pressed ? RightButtonFlag : 0) |
-                (middleButton == ButtonState.Pressed ? MiddleButtonFlag : 0) |
-                (xButton1 == ButtonState.Pressed ? XButton1Flag : 0) |
-                (xButton2 == ButtonState.Pressed ? XButton2Flag : 0)
-            );
             _horizontalScrollWheelValue = 0;
+            _rawX = 0;
+            _rawY = 0;
+            _buttons = (int)leftButton << LeftButtonBit |
+                       (int)middleButton << MiddleButtonBit |
+                       (int)rightButton << RightButtonBit |
+                       (int)xButton1 << XButton1Bit |
+                       (int)xButton2 << XButton2Bit; ;
         }
 
         /// <summary>
@@ -62,35 +66,38 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="x">Horizontal position of the mouse in relation to the window.</param>
         /// <param name="y">Vertical position of the mouse in relation to the window.</param>
         /// <param name="scrollWheel">Mouse scroll wheel's value.</param>
+        /// <param name="horizontalScrollWheel">Mouse horizontal scroll wheel's value.</param>
+        /// <param name="rawX">Mouse rawX value.</param>
+        /// <param name="rawY">Mouse rawY value.</param>
         /// <param name="leftButton">Left mouse button's state.</param>
         /// <param name="middleButton">Middle mouse button's state.</param>
         /// <param name="rightButton">Right mouse button's state.</param>
         /// <param name="xButton1">XBUTTON1's state.</param>
         /// <param name="xButton2">XBUTTON2's state.</param>
-        /// <param name="horizontalScrollWheel">Mouse horizontal scroll wheel's value.</param>
         /// <remarks>Normally <see cref="Mouse.GetState()"/> should be used to get mouse current state. The constructor is provided for simulating mouse input.</remarks>
         public MouseState(
             int x,
             int y,
             int scrollWheel,
+            int horizontalScrollWheel,
+            int rawX, int rawY,
             ButtonState leftButton,
             ButtonState middleButton,
             ButtonState rightButton,
             ButtonState xButton1,
-            ButtonState xButton2,
-            int horizontalScrollWheel)
+            ButtonState xButton2)
         {
             _x = x;
             _y = y;
             _scrollWheelValue = scrollWheel;
-            _buttons = (byte)(
-                (leftButton == ButtonState.Pressed ? LeftButtonFlag : 0) |
-                (rightButton == ButtonState.Pressed ? RightButtonFlag : 0) |
-                (middleButton == ButtonState.Pressed ? MiddleButtonFlag : 0) |
-                (xButton1 == ButtonState.Pressed ? XButton1Flag : 0) |
-                (xButton2 == ButtonState.Pressed ? XButton2Flag : 0)
-            );
             _horizontalScrollWheelValue = horizontalScrollWheel;
+            _rawX = rawX;
+            _rawY = rawY;
+            _buttons = (int)leftButton << LeftButtonBit |
+                       (int)middleButton << MiddleButtonBit |
+                       (int)rightButton << RightButtonBit |
+                       (int)xButton1 << XButton1Bit |
+                       (int)xButton2 << XButton2Bit;
         }
 
         /// <summary>
@@ -103,9 +110,11 @@ namespace Microsoft.Xna.Framework.Input
         {
             return left._x == right._x &&
                    left._y == right._y &&
-                   left._buttons == right._buttons &&
                    left._scrollWheelValue == right._scrollWheelValue &&
-                   left._horizontalScrollWheelValue == right._horizontalScrollWheelValue;
+                   left._horizontalScrollWheelValue == right._horizontalScrollWheelValue &&
+                   left.RawX == right.RawX &&
+                   left.RawY == right.RawY &&
+                   left._buttons == right._buttons;
         }
 
         /// <summary>
@@ -143,7 +152,9 @@ namespace Microsoft.Xna.Framework.Input
                 hashCode = (hashCode * 397) ^ _y;
                 hashCode = (hashCode * 397) ^ _scrollWheelValue;
                 hashCode = (hashCode * 397) ^ _horizontalScrollWheelValue;
-                hashCode = (hashCode * 397) ^ (int)_buttons;
+                hashCode = (hashCode * 397) ^ RawX.GetHashCode();
+                hashCode = (hashCode * 397) ^ RawY.GetHashCode();
+                hashCode = (hashCode * 397) ^ _buttons;
                 return hashCode;
             }
         }
@@ -159,35 +170,35 @@ namespace Microsoft.Xna.Framework.Input
             else
             {
                 buttons = string.Empty;
-                if ((_buttons & LeftButtonFlag) == LeftButtonFlag)
+                if (LeftButton == ButtonState.Pressed)
                 {
                     if (buttons.Length > 0)
                         buttons += " Left";
                     else
                         buttons += "Left";
                 }
-                if ((_buttons & RightButtonFlag) == RightButtonFlag)
+                if (RightButton == ButtonState.Pressed)
                 {
                     if (buttons.Length > 0)
                         buttons += " Right";
                     else
                         buttons += "Right";
                 }
-                if ((_buttons & MiddleButtonFlag) == MiddleButtonFlag)
+                if (MiddleButton == ButtonState.Pressed)
                 {
                     if (buttons.Length > 0)
                         buttons += " Middle";
                     else
                         buttons += "Middle";
                 }
-                if ((_buttons & XButton1Flag) == XButton1Flag)
+                if (XButton1 == ButtonState.Pressed)
                 {
                     if (buttons.Length > 0)
                         buttons += " XButton1";
                     else
                         buttons += "XButton1";
                 }
-                if ((_buttons & XButton2Flag) == XButton2Flag)
+                if (XButton2 == ButtonState.Pressed)
                 {
                     if (buttons.Length > 0)
                         buttons += " XButton2";
@@ -209,14 +220,8 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public int X
         {
-            get
-            {
-                return _x;
-            }
-            internal set
-            {
-                _x = value;
-            }
+            get { return _x; }
+            internal set { _x = value; }
         }
 
         /// <summary>
@@ -224,14 +229,8 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public int Y
         {
-            get
-            {
-                return _y;
-            }
-            internal set
-            {
-                _y = value;
-            }
+            get { return _y; }
+            internal set { _y = value; }
         }
 
         /// <summary>
@@ -243,80 +242,11 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
-        /// Gets state of the left mouse button.
-        /// </summary>
-        public ButtonState LeftButton
-        {
-            get
-            {
-                return ((_buttons & LeftButtonFlag) > 0) ? ButtonState.Pressed : ButtonState.Released;
-            }
-            internal set
-            {
-                if (value == ButtonState.Pressed)
-                {
-                    _buttons = (byte)(_buttons | LeftButtonFlag);
-                }
-                else
-                {
-                    _buttons = (byte)(_buttons & (~LeftButtonFlag));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets state of the middle mouse button.
-        /// </summary>
-        public ButtonState MiddleButton
-        {
-            get
-            {
-                return ((_buttons & MiddleButtonFlag) > 0) ? ButtonState.Pressed : ButtonState.Released;
-            }
-            internal set
-            {
-                if (value == ButtonState.Pressed)
-                {
-                    _buttons = (byte)(_buttons | MiddleButtonFlag);
-                }
-                else
-                {
-                    _buttons = (byte)(_buttons & (~MiddleButtonFlag));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets state of the right mouse button.
-        /// </summary>
-        public ButtonState RightButton
-        {
-            get
-            {
-                return ((_buttons & RightButtonFlag) > 0) ? ButtonState.Pressed : ButtonState.Released;
-            }
-            internal set
-            {
-                if (value == ButtonState.Pressed)
-                {
-                    _buttons = (byte)(_buttons | RightButtonFlag);
-                }
-                else
-                {
-                    _buttons = (byte)(_buttons & (~RightButtonFlag));
-                }
-            }
-        }
-
-        /// <summary>
         /// Returns cumulative scroll wheel value since the game start.
         /// </summary>
         public int ScrollWheelValue
         {
-            get
-            {
-                return _scrollWheelValue;
-            }
+            get { return _scrollWheelValue; }
             internal set { _scrollWheelValue = value; }
         }
 
@@ -325,11 +255,53 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public int HorizontalScrollWheelValue
         {
-            get
-            {
-                return _horizontalScrollWheelValue;
-            }
+            get { return _horizontalScrollWheelValue; }
             internal set { _horizontalScrollWheelValue = value; }
+        }
+        
+        /// <summary>
+        /// Gets cursor raw X input.
+        /// </summary>        
+        public int RawX
+        {
+            get { return _rawX; }
+            internal set { _rawX = value; }
+        }
+
+        /// <summary>
+        /// Gets cursor raw X input.
+        /// </summary>        
+        public int RawY
+        {
+            get { return _rawY; }
+            internal set { _rawY = value; }
+        }
+
+        /// <summary>
+        /// Gets state of the left mouse button.
+        /// </summary>
+        public ButtonState LeftButton
+        {
+            get { return (ButtonState)((_buttons >> LeftButtonBit) & 1); }
+            internal set { _buttons = _buttons & (~(1 << LeftButtonBit)) | (int)value << LeftButtonBit; }
+        }
+
+        /// <summary>
+        /// Gets state of the middle mouse button.
+        /// </summary>
+        public ButtonState MiddleButton
+        {
+            get { return (ButtonState)((_buttons >> MiddleButtonBit) & 1); }
+            internal set { _buttons = _buttons & (~(1 << MiddleButtonBit)) | (int)value << MiddleButtonBit; }
+        }
+
+        /// <summary>
+        /// Gets state of the right mouse button.
+        /// </summary>
+        public ButtonState RightButton
+        {
+            get { return (ButtonState)((_buttons >> RightButtonBit) & 1); }
+            internal set { _buttons = _buttons & (~(1 << RightButtonBit)) | (int)value << RightButtonBit; }
         }
 
         /// <summary>
@@ -337,21 +309,8 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public ButtonState XButton1
         {
-            get
-            {
-                return ((_buttons & XButton1Flag) > 0) ? ButtonState.Pressed : ButtonState.Released;
-            }
-            internal set
-            {
-                if (value == ButtonState.Pressed)
-                {
-                    _buttons = (byte)(_buttons | XButton1Flag);
-                }
-                else
-                {
-                    _buttons = (byte)(_buttons & (~XButton1Flag));
-                }
-            }
+            get { return (ButtonState)((_buttons >> XButton1Bit) & 1); }
+            internal set { _buttons = _buttons & (~(1 << XButton1Bit)) | (int)value << XButton1Bit; }
         }
 
         /// <summary>
@@ -359,21 +318,9 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public ButtonState XButton2
         {
-            get
-            {
-                return ((_buttons & XButton2Flag) > 0) ? ButtonState.Pressed : ButtonState.Released;
-            }
-            internal set
-            {
-                if (value == ButtonState.Pressed)
-                {
-                    _buttons = (byte)(_buttons | XButton2Flag);
-                }
-                else
-                {
-                    _buttons = (byte)(_buttons & (~XButton2Flag));
-                }
-            }
+            get { return (ButtonState)((_buttons >> XButton2Bit) & 1); }
+            internal set { _buttons = _buttons & (~(1 << XButton2Bit)) | (int)value << XButton2Bit; }
         }
+
     }
 }

@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Input
@@ -11,9 +13,11 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public static partial class Mouse
     {
+        private static readonly MouseState _defaultState = new MouseState();
+        private static MouseCursor _mouseCursor;
+
         internal static GameWindow PrimaryWindow;
 
-        private static readonly MouseState _defaultState = new MouseState();
 
         /// <summary>
         /// Gets or sets the window handle for current mouse processing.
@@ -25,14 +29,11 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
-        /// This API is an extension to XNA.
-        /// Gets mouse state information that includes position and button
-        /// presses for the provided window
+        /// Gets if RawInput is available.
         /// </summary>
-        /// <returns>Current state of the mouse.</returns>
-        public static MouseState GetState(GameWindow window)
+        public static bool IsRawInputAvailable
         {
-            return PlatformGetState(window);
+            get { return PlatformIsRawInputAvailable(); }
         }
 
         /// <summary>
@@ -42,8 +43,12 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Current state of the mouse.</returns>
         public static MouseState GetState()
         {
+#if (DIRECTX && (WINDOWS && !OPENGL)) // WinForms based Windows Desktop
+            return PlatformGetState();
+#endif
+
             if (PrimaryWindow != null)
-                return GetState(PrimaryWindow);
+                return PlatformGetState(PrimaryWindow);
 
             return _defaultState;
         }
@@ -65,6 +70,7 @@ namespace Microsoft.Xna.Framework.Input
         public static void SetCursor(MouseCursor cursor)
         {
             PlatformSetCursor(cursor);
+            _mouseCursor = cursor;
         }
     }
 }

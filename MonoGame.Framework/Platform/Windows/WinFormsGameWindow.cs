@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,9 +27,6 @@ namespace MonoGame.Framework
     class WinFormsGameWindow : GameWindow, IDisposable
     {
         internal WinFormsGameForm Form;
-
-        static private ReaderWriterLockSlim _allWindowsReaderWriterLockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        static private List<WinFormsGameWindow> _allWindows = new List<WinFormsGameWindow>();
 
         private WinFormsGamePlatform _platform;
 
@@ -154,8 +153,6 @@ namespace MonoGame.Framework
 
             // Capture mouse events.
             Mouse.WindowHandle = Form.Handle;
-            Form.MouseWheel += OnMouseScroll;
-            Form.MouseHorizontalWheel += OnMouseHorizontalScroll;
             Form.MouseEnter += OnMouseEnter;
             Form.MouseLeave += OnMouseLeave;            
 
@@ -169,8 +166,6 @@ namespace MonoGame.Framework
             Form.ResizeEnd += OnResizeEnd;
 
             Form.KeyPress += OnKeyPress;
-
-            RegisterToAllWindows();
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -209,34 +204,6 @@ namespace MonoGame.Framework
             Dispose(false);
         }
 
-        private void RegisterToAllWindows()
-        {
-            _allWindowsReaderWriterLockSlim.EnterWriteLock();
-
-            try
-            {
-                _allWindows.Add(this);
-            }
-            finally
-            {
-                _allWindowsReaderWriterLockSlim.ExitWriteLock();
-            }
-        }
-
-        private void UnregisterFromAllWindows()
-        {
-            _allWindowsReaderWriterLockSlim.EnterWriteLock();
-
-            try
-            {
-                _allWindows.Remove(this);
-            }
-            finally
-            {
-                _allWindowsReaderWriterLockSlim.ExitWriteLock();
-            }
-        }
-
         private void OnActivated(object sender, EventArgs eventArgs)
         {
             _platform.IsActive = true;
@@ -256,51 +223,6 @@ namespace MonoGame.Framework
             _platform.IsActive = false;
             Keyboard.SetActive(false);
         }
-
-        private void OnMouseScroll(object sender, MouseEventArgs mouseEventArgs)
-        {
-            MouseState.ScrollWheelValue += mouseEventArgs.Delta;
-        }
-
-        private void OnMouseHorizontalScroll(object sender, HorizontalMouseWheelEventArgs mouseEventArgs)
-        {
-            MouseState.HorizontalScrollWheelValue += mouseEventArgs.Delta;
-        }
-
-        private void UpdateMouseState()
-        {
-            // If we call the form client functions before the form has
-            // been made visible it will cause the wrong window size to
-            // be applied at startup.
-            if (!Form.Visible)
-                return;
-
-            POINTSTRUCT pos;
-            GetCursorPos(out pos);
-            MapWindowPoints(new HandleRef(null, IntPtr.Zero), new HandleRef(Form, Form.Handle), out pos, 1);
-            var clientPos = new System.Drawing.Point(pos.X, pos.Y);
-            var withinClient = Form.ClientRectangle.Contains(clientPos);
-            var buttons = Control.MouseButtons;
-
-            var previousState = MouseState.LeftButton;
-
-            MouseState.X = clientPos.X;
-            MouseState.Y = clientPos.Y;
-            MouseState.LeftButton = (buttons & MouseButtons.Left) == MouseButtons.Left ? ButtonState.Pressed : ButtonState.Released;
-            MouseState.MiddleButton = (buttons & MouseButtons.Middle) == MouseButtons.Middle ? ButtonState.Pressed : ButtonState.Released;
-            MouseState.RightButton = (buttons & MouseButtons.Right) == MouseButtons.Right ? ButtonState.Pressed : ButtonState.Released;
-            MouseState.XButton1 = (buttons & MouseButtons.XButton1) == MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released;
-            MouseState.XButton2 = (buttons & MouseButtons.XButton2) == MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released;
-
-            TouchLocationState? touchState = null;
-            if (MouseState.LeftButton == ButtonState.Pressed)
-                if (previousState == ButtonState.Released)
-                    touchState = TouchLocationState.Pressed;
-                else
-                    touchState = TouchLocationState.Moved;
-            else if (previousState == ButtonState.Pressed)
-                touchState = TouchLocationState.Released;
-        } 
 
         private void OnMouseEnter(object sender, EventArgs e)
         {
@@ -381,7 +303,6 @@ namespace MonoGame.Framework
         {
             if (!_isResizeTickEnabled)
                 return;
-            UpdateWindows();
             Game.Tick();
             _resizeTickTimer.Enabled = true;
         }
@@ -461,27 +382,9 @@ namespace MonoGame.Framework
             var nativeMsg = new NativeMessage();
             do
             {
-                UpdateWindows();
                 Game.Tick();
             }
             while (!PeekMessage(out nativeMsg, IntPtr.Zero, 0, 0, 0) && Form != null && Form.IsDisposed == false);
-        }
-
-        internal void UpdateWindows()
-        {
-            _allWindowsReaderWriterLockSlim.EnterReadLock();
-
-            try
-            {
-                // Update the mouse state for each window.
-                foreach (var window in _allWindows)
-                    if (window.Game == Game)
-                        window.UpdateMouseState();
-            }
-            finally
-            {
-                _allWindowsReaderWriterLockSlim.ExitReadLock();
-            }
         }
 
         private const uint WM_QUIT = 0x12;
@@ -531,7 +434,6 @@ namespace MonoGame.Framework
             {
                 if (Form != null)
                 {
-                    UnregisterFromAllWindows(); 
                     Form.Dispose();
                     Form = null;
                 }

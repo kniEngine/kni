@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -38,7 +40,6 @@ namespace MonoGame.Framework
 
         public override bool BeforeRun()
         {
-            _window.UpdateWindows();
             return base.BeforeRun();
         }
 

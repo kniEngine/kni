@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Input
@@ -17,6 +19,11 @@ namespace Microsoft.Xna.Framework.Input
         {
         }
 
+        private static bool PlatformIsRawInputAvailable()
+        {
+            return false;
+        }
+
         private static MouseState PlatformGetState(GameWindow window)
         {
             return window.MouseState;
@@ -28,9 +35,9 @@ namespace Microsoft.Xna.Framework.Input
             PrimaryWindow.MouseState.Y = y;
         }
 
-        public static void PlatformSetCursor(MouseCursor cursor)
+        private static void PlatformSetCursor(MouseCursor cursor)
         {
-
+            throw new PlatformNotSupportedException();
         }
     }
 }
