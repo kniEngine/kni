@@ -3,24 +3,25 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using SharpDX.MediaFoundation;
 using SharpDX.Multimedia;
-using Windows.UI.Core;
-using Windows.ApplicationModel.Core;
+using Microsoft.Xna.Framework.Media;
 
-namespace Microsoft.Xna.Framework.Media
+
+namespace Microsoft.Xna.Platform.Media
 {
-    public static partial class MediaPlayer
+    internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
         // RAYB: This needs to be turned back into a readonly.
-        private static MediaEngine _mediaEngineEx;
-        private static CoreDispatcher _dispatcher;
+        private MediaEngine _mediaEngineEx;
+        private CoreDispatcher _dispatcher;
 
         private enum SessionState { Stopped, Started, Paused }
-        private static SessionState _sessionState = SessionState.Stopped;
-        private static TimeSpan? _desiredPosition;
+        private SessionState _sessionState = SessionState.Stopped;
 
-        private static void PlatformInitialize()
+        internal ConcreteMediaPlayerStrategy()
         {
             MediaManager.Startup(true);
             using (var factory = new MediaEngineClassFactory())
@@ -32,16 +33,13 @@ namespace Microsoft.Xna.Framework.Media
                 _mediaEngineEx = mediaEngine.QueryInterface<MediaEngineEx>();
             }
 
-
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
-        private static void MediaEngineExOnPlaybackEvent(MediaEngineEvent mediaEvent, long param1, int param2)
+        private void MediaEngineExOnPlaybackEvent(MediaEngineEvent mediaEvent, long param1, int param2)
         {
             if (mediaEvent == MediaEngineEvent.LoadedData)
             {
-                if (_desiredPosition.HasValue)
-                    _mediaEngineEx.CurrentTime = _desiredPosition.Value.TotalSeconds;
                 if (_sessionState == SessionState.Started)
                     _mediaEngineEx.Play();
             }
@@ -54,71 +52,50 @@ namespace Microsoft.Xna.Framework.Media
 
         #region Properties
 
-        private static bool PlatformGetIsMuted()
+        internal override void PlatformSetIsMuted(bool muted)
         {
-            return _isMuted;
+            base.PlatformSetIsMuted(muted);
+
+            _mediaEngineEx.Muted = muted;
         }
 
-        private static void PlatformSetIsMuted(bool muted)
+        internal override void PlatformSetIsRepeating(bool repeating)
         {
-            _isMuted = muted;
+            base.PlatformSetIsRepeating(repeating);
 
-            _mediaEngineEx.Muted = _isMuted;
+            _mediaEngineEx.Loop = repeating;
         }
 
-        private static bool PlatformGetIsRepeating()
-        {
-            return _isRepeating;
-        }
-
-        private static void PlatformSetIsRepeating(bool repeating)
-        {
-            _isRepeating = repeating;
-
-            _mediaEngineEx.Loop = _isRepeating;
-        }
-
-        private static bool PlatformGetIsShuffled()
-        {
-            return _isShuffled;
-        }
-
-        private static void PlatformSetIsShuffled(bool shuffled)
-        {
-            _isShuffled = shuffled;
-        }
-
-        private static TimeSpan PlatformGetPlayPosition()
+        internal override TimeSpan PlatformGetPlayPosition()
         {
             return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime);
         }
 
-        private static bool PlatformGetGameHasControl()
+        internal override bool PlatformGetGameHasControl()
         {
-            // TODO: Fix me!
             return true;
         }
 
-        private static MediaState PlatformGetState()
+        protected override bool PlatformUpdateState(ref MediaState state)
         {
-            return _state;
+            return false;
         }
 
-        private static float PlatformGetVolume()
+        internal override float PlatformGetVolume()
         {
-            return _volume;
+            return base.PlatformGetVolume();
         }
 
-        private static void PlatformSetVolume(float volume)
+        internal override void PlatformSetVolume(float volume)
         {
-            _volume = volume;
+            base.PlatformSetVolume(volume);
 
-            _mediaEngineEx.Volume = _volume;
+            _mediaEngineEx.Volume = volume;
         }
 
         #endregion
 
-        private static void PlatformPause()
+        protected override void PlatformPause()
         {
             if (_sessionState != SessionState.Started)
                 return;
@@ -126,24 +103,23 @@ namespace Microsoft.Xna.Framework.Media
             _mediaEngineEx.Pause();
         }
 
-        private static void PlatformPlaySong(Song song, TimeSpan? startPosition)
+        protected override  void PlatformPlaySong(Song song)
         {
             _mediaEngineEx.Source = song.FilePath;
             _mediaEngineEx.Load();
-            _desiredPosition = startPosition;
             _sessionState = SessionState.Started;
 
             //We start playing when we get a LoadedData event in MediaEngineExOnPlaybackEvent
         }
 
-        private static void PlatformResume()
+        protected override void PlatformResume()
         {
             if (_sessionState != SessionState.Paused)
                 return;
             _mediaEngineEx.Play();
         }
 
-        private static void PlatformStop()
+        protected override void PlatformStop()
         {
             if (_sessionState == SessionState.Stopped)
                 return;

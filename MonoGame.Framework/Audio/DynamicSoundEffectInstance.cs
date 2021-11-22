@@ -2,16 +2,31 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Audio;
 
 namespace Microsoft.Xna.Framework.Audio
 {
     /// <summary>
     /// A <see cref="SoundEffectInstance"/> for which the audio buffer is provided by the game at run time.
     /// </summary>
-    public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
+    public sealed class DynamicSoundEffectInstance : SoundEffectInstance
     {
+        private IDynamicSoundEffectInstanceStrategy _dynamicStrategy;
+
+        private const int TargetPendingBufferCount = 3;
+        private int _buffersNeeded;
+        private bool _initialBuffersNeeded;
+        
+        private int _sampleRate;
+        private AudioChannels _channels;
+        private SoundState _dynamicState;
+
+        internal LinkedListNode<DynamicSoundEffectInstance> DynamicPlayingInstancesNode { get; private set; }
+
         #region Public Properties
 
         /// <summary>
@@ -20,11 +35,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public override bool IsLooped
         {
-            get
-            {
-                return false;
-            }
-
+            get { return false; }
             set
             {
                 AssertNotDisposed();
@@ -38,7 +49,7 @@ namespace Microsoft.Xna.Framework.Audio
             get
             {
                 AssertNotDisposed();
-                return _state;
+                return _dynamicState;
             }
         }
 
@@ -50,7 +61,7 @@ namespace Microsoft.Xna.Framework.Audio
             get
             {
                 AssertNotDisposed();
-                return PlatformGetPendingBufferCount();
+                return _dynamicStrategy.DynamicPlatformGetPendingBufferCount();
             }
         }
 
@@ -64,36 +75,39 @@ namespace Microsoft.Xna.Framework.Audio
 
         #endregion
 
-        private const int TargetPendingBufferCount = 3;
-        private int _buffersNeeded;
-        private int _sampleRate;
-        private AudioChannels _channels;
-        private SoundState _state;
-
         #region Public Constructor
 
         /// <param name="sampleRate">Sample rate, in Hertz (Hz).</param>
         /// <param name="channels">Number of channels (mono or stereo).</param>
-        public DynamicSoundEffectInstance(int sampleRate, AudioChannels channels)
+        public DynamicSoundEffectInstance(int sampleRate, AudioChannels channels) 
+            : base(AudioService.Current)
         {
-            SoundEffect.Initialize();
-            if (SoundEffect._systemState != SoundEffect.SoundSystemState.Initialized)
-                throw new NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
-
             if ((sampleRate < 8000) || (sampleRate > 48000))
                 throw new ArgumentOutOfRangeException("sampleRate");
             if ((channels != AudioChannels.Mono) && (channels != AudioChannels.Stereo))
                 throw new ArgumentOutOfRangeException("channels");
-
+            
             _sampleRate = sampleRate;
             _channels = channels;
-            _state = SoundState.Stopped;
-            PlatformCreate();
-            
+            _dynamicState = SoundState.Stopped;
+
             // This instance is added to the pool so that its volume reflects master volume changes
             // and it contributes to the playing instances limit, but the source/voice is not owned by the pool.
-            _isPooled = false;
-            _isDynamic = true;
+            DynamicPlayingInstancesNode = new LinkedListNode<DynamicSoundEffectInstance>(this);
+            base._isDynamic = true;
+
+            _dynamicStrategy = _audioService._strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
+            _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
+
+            _dynamicStrategy.OnBufferNeeded += _dstrategy_OnBufferNeeded;
+        }
+
+        private void _dstrategy_OnBufferNeeded(object sender, EventArgs e)
+        {
+            lock (AudioService.SyncHandle)
+            {
+                _buffersNeeded++;
+            }
         }
 
         #endregion
@@ -108,7 +122,7 @@ namespace Microsoft.Xna.Framework.Audio
         public TimeSpan GetSampleDuration(int sizeInBytes)
         {
             AssertNotDisposed();
-            return SoundEffect.GetSampleDuration(sizeInBytes, _sampleRate, _channels);
+            return AudioService.GetSampleDuration(sizeInBytes, _sampleRate, _channels);
         }
 
         /// <summary>
@@ -119,32 +133,7 @@ namespace Microsoft.Xna.Framework.Audio
         public int GetSampleSizeInBytes(TimeSpan duration)
         {
             AssertNotDisposed();
-            return SoundEffect.GetSampleSizeInBytes(duration, _sampleRate, _channels);
-        }
-
-        /// <summary>
-        /// Plays or resumes the DynamicSoundEffectInstance.
-        /// </summary>
-        public override void Play()
-        {
-            AssertNotDisposed();
-
-            if (_state != SoundState.Playing)
-            {
-                // Ensure that the volume reflects master volume, which is done by the setter.
-                Volume = Volume;
-
-                // Add the instance to the pool
-                if (!SoundEffectInstancePool.SoundsAvailable)
-                    throw new InstancePlayLimitException();
-                SoundEffectInstancePool.Remove(this);
-
-                PlatformPlay();
-                _state = SoundState.Playing;
-
-                CheckBufferCount();
-                DynamicSoundEffectInstanceManager.AddInstance(this);
-            }
+            return AudioService.GetSampleSizeInBytes(duration, _sampleRate, _channels);
         }
 
         /// <summary>
@@ -152,9 +141,60 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public override void Pause()
         {
-            AssertNotDisposed();
-            PlatformPause();
-            _state = SoundState.Paused;
+            lock (AudioService.SyncHandle)
+            {
+                AssertNotDisposed();
+
+                var state = _dynamicState;
+                switch (state)
+                {
+                    case SoundState.Paused:
+                        return;
+                    case SoundState.Stopped:
+                        return;
+                    case SoundState.Playing:
+                        {
+                            _strategy.PlatformPause();
+                            _dynamicState = SoundState.Paused;
+                            _initialBuffersNeeded = false;
+                        }
+                        return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Plays or resumes the DynamicSoundEffectInstance.
+        /// </summary>
+        public override void Play()
+        {
+            lock (AudioService.SyncHandle)
+            {
+                AssertNotDisposed();
+
+                var state = _dynamicState;
+                switch (state)
+                {
+                    case SoundState.Playing:
+                        return;
+                    case SoundState.Paused:
+                        Resume();
+                        return;
+                    case SoundState.Stopped:
+                        {
+                            // Ensure that the volume reflects master volume, which is done by the setter.
+                            Volume = Volume;
+
+                            _strategy.PlatformPlay(IsLooped);
+                            _dynamicState = SoundState.Playing;
+                            _initialBuffersNeeded = true;
+
+                            _audioService.AddPlayingInstance(this);
+                            _audioService.AddDynamicPlayingInstance(this);
+                        }
+                        return;
+                }               
+            }
         }
 
         /// <summary>
@@ -162,20 +202,28 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public override void Resume()
         {
-            AssertNotDisposed();
-
-            if (_state != SoundState.Playing)
+            lock (AudioService.SyncHandle)
             {
-                Volume = Volume;
+                AssertNotDisposed();
 
-                // Add the instance to the pool
-                if (!SoundEffectInstancePool.SoundsAvailable)
-                    throw new InstancePlayLimitException();
-                SoundEffectInstancePool.Remove(this);
+                var state = _dynamicState;
+                switch (state)
+                {
+                    case SoundState.Playing:
+                        return;
+                    case SoundState.Stopped:
+                        Play();
+                        return;
+                    case SoundState.Paused:
+                        {
+                            Volume = Volume;
+
+                            _strategy.PlatformResume(IsLooped);
+                            _dynamicState = SoundState.Playing;
+                        }
+                        return;
+                }
             }
-
-            PlatformResume();
-            _state = SoundState.Playing;
         }
 
         /// <summary>
@@ -186,29 +234,69 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public override void Stop()
         {
-            Stop(true);
+            lock (AudioService.SyncHandle)
+            {
+                AssertNotDisposed();
+
+                var state = _dynamicState;
+                switch (state)
+                {
+                    case SoundState.Stopped:
+                        {
+                            _dynamicStrategy.DynamicPlatformClearBuffers();
+                        }
+                        return;
+                    case SoundState.Paused:
+                    case SoundState.Playing:
+                        {
+                            _strategy.PlatformStop();
+                            _dynamicState = SoundState.Stopped;
+
+                            _dynamicStrategy.DynamicPlatformClearBuffers();
+                            _initialBuffersNeeded = false;
+
+                            _audioService.RemovePlayingInstance(this);
+                            _audioService.RemoveDynamicPlayingInstance(this);
+                        }
+                        return;
+                }
+            }
         }
 
         /// <summary>
         /// Stops playing the DynamicSoundEffectInstance.
-        /// If the <paramref name="immediate"/> parameter is false, this call has no effect.
         /// </summary>
         /// <remarks>
         /// Calling this also releases all queued buffers.
         /// </remarks>
-        /// <param name="immediate">When set to false, this call has no effect.</param>
         public override void Stop(bool immediate)
         {
-            AssertNotDisposed();
-            
             if (immediate)
             {
-                DynamicSoundEffectInstanceManager.RemoveInstance(this);
+                Stop();
+                return;
+            }
+            
+            lock (AudioService.SyncHandle)
+            {
+                AssertNotDisposed();
 
-                PlatformStop();
-                _state = SoundState.Stopped;
-
-                SoundEffectInstancePool.Add(this);
+                var state = State;
+                switch (state)
+                {
+                    case SoundState.Stopped:
+                        {
+                            _dynamicStrategy.DynamicPlatformClearBuffers();
+                        }
+                        return;
+                    case SoundState.Paused:
+                    case SoundState.Playing:
+                        {
+                            System.Diagnostics.Debug.Assert(IsLooped == false);
+                            _strategy.PlatformRelease(IsLooped);
+                        }
+                        return;
+                }
             }
         }
 
@@ -221,17 +309,6 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="buffer">The buffer containing PCM audio data.</param>
         public void SubmitBuffer(byte[] buffer)
         {
-            AssertNotDisposed();
-            
-            if (buffer.Length == 0)
-                throw new ArgumentException("Buffer may not be empty.");
-
-            // Ensure that the buffer length matches alignment.
-            // The data must be 16-bit, so the length is a multiple of 2 (mono) or 4 (stereo).
-            var sampleSize = 2 * (int)_channels;
-            if (buffer.Length % sampleSize != 0)
-                throw new ArgumentException("Buffer length does not match format alignment.");
-
             SubmitBuffer(buffer, 0, buffer.Length);
         }
 
@@ -246,65 +323,86 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="count">The amount of bytes to use.</param>
         public void SubmitBuffer(byte[] buffer, int offset, int count)
         {
-            AssertNotDisposed();
-            
-            if ((buffer == null) || (buffer.Length == 0))
-                throw new ArgumentException("Buffer may not be null or empty.");
-            if (count <= 0)
-                throw new ArgumentException("Number of bytes must be greater than zero.");
-            if ((offset + count) > buffer.Length)
-                throw new ArgumentException("Buffer is shorter than the specified number of bytes from the offset.");
+            lock (AudioService.SyncHandle)
+            {
+                AssertNotDisposed();
 
-            // Ensure that the buffer length and start position match alignment.
-            var sampleSize = 2 * (int)_channels;
-            if (count % sampleSize != 0)
-                throw new ArgumentException("Number of bytes does not match format alignment.");
-            if (offset % sampleSize != 0)
-                throw new ArgumentException("Offset into the buffer does not match format alignment.");
+                if ((buffer == null) || (buffer.Length == 0))
+                    throw new ArgumentException("Buffer may not be null or empty.");
+                if (count <= 0)
+                    throw new ArgumentException("Number of bytes must be greater than zero.");
+                if ((offset + count) > buffer.Length)
+                    throw new ArgumentException("Buffer is shorter than the specified number of bytes from the offset.");
 
-            PlatformSubmitBuffer(buffer, offset, count);
+                // Ensure that the buffer length and start position match alignment.
+                var sampleSize = 2 * (int)_channels;
+                if (count % sampleSize != 0)
+                    throw new ArgumentException("Number of bytes does not match format alignment.");
+                if (offset % sampleSize != 0)
+                    throw new ArgumentException("Offset into the buffer does not match format alignment.");
+
+                if (PendingBufferCount >= 64)
+                    throw new InvalidOperationException("Buffers Limit Exceeded.");
+
+                _dynamicStrategy.DynamicPlatformSubmitBuffer(buffer, offset, count, _dynamicState);
+            }
         }
 
         #endregion
 
         #region Nonpublic Functions
 
+        internal void Update()
+        {
+            lock (AudioService.SyncHandle)
+            {
+                // Update the buffers
+                _dynamicStrategy.DynamicPlatformUpdateBuffers();
+
+                if (_initialBuffersNeeded)
+                    _buffersNeeded = Math.Max(_buffersNeeded, TargetPendingBufferCount - 1 - PendingBufferCount);
+
+                // Raise the event
+                var bufferNeededHandler = BufferNeeded;
+                if (bufferNeededHandler != null)
+                {
+                    // raise the event for each processed buffer
+                    while(_buffersNeeded-- != 0)
+                        bufferNeededHandler(this, EventArgs.Empty);
+
+                    if (State == SoundState.Playing && PendingBufferCount < TargetPendingBufferCount)
+                        bufferNeededHandler(this, EventArgs.Empty);
+                }
+
+                _initialBuffersNeeded = true;
+                _buffersNeeded = 0;
+            }
+        }
+
         private void AssertNotDisposed()
         {
             if (IsDisposed)
-                throw new ObjectDisposedException(null);
+                throw new ObjectDisposedException("DynamicSoundEffectInstance");
         }
 
         protected override void Dispose(bool disposing)
         {
-            PlatformDispose(disposing);
-            base.Dispose(disposing);
-        }
-
-        private void CheckBufferCount()
-        {
-            if ((PendingBufferCount < TargetPendingBufferCount) && (_state == SoundState.Playing))
-                _buffersNeeded++;
-        }
-
-        internal void UpdateQueue()
-        {
-            // Update the buffers
-            PlatformUpdateQueue();
-
-            // Raise the event
-            var bufferNeededHandler = BufferNeeded;
-
-            if (bufferNeededHandler != null)
+            if(disposing)
             {
-                var eventCount = (_buffersNeeded < 3) ? _buffersNeeded : 3;
-                for (var i = 0; i < eventCount; i++)
-                {
-                    bufferNeededHandler(this, EventArgs.Empty);
-                }
+                if (_dynamicStrategy !=null)
+                    _dynamicStrategy.OnBufferNeeded -= _dstrategy_OnBufferNeeded;
+                base.Dispose(disposing);
+                _dynamicStrategy = null;
+                DynamicPlayingInstancesNode = null;
             }
-
-            _buffersNeeded = 0;
+            else
+            {
+                if (_dynamicStrategy != null)
+                    _dynamicStrategy.OnBufferNeeded -= _dstrategy_OnBufferNeeded;
+                base.Dispose(disposing);
+                _dynamicStrategy = null;
+                DynamicPlayingInstancesNode = null;
+            }
         }
 
         #endregion

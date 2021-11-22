@@ -6,16 +6,17 @@ using System;
 using System.IO;
 using SharpDX;
 using SharpDX.MediaFoundation;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : IEquatable<Song>, IDisposable
+    public sealed partial class Song : SongStrategy
     {
         private Topology _topology;
 
         internal Topology Topology { get { return _topology; } }
 
-        private void PlatformInitialize(string fileName)
+        internal override void PlatformInitialize(string fileName)
         {
             if (_topology != null)
                 return;
@@ -81,61 +82,69 @@ namespace Microsoft.Xna.Framework.Media
             mediaSource.Dispose();
         }
 
-        private void PlatformDispose(bool disposing)
+        internal override void PlatformDispose(bool disposing)
         {
-            if (_topology != null)
+            if (disposing)
             {
-                _topology.Dispose();
-                _topology = null;
+                if (_topology != null)
+                {
+                    _topology.Dispose();
+                    _topology = null;
+                }
             }
         }
-        
-        private Album PlatformGetAlbum()
+
+        internal override Album PlatformGetAlbum()
         {
             return null;
         }
 
-        private Artist PlatformGetArtist()
+        internal override void PlatformSetAlbum(Album album)
+        {
+            
+        }
+
+        internal override Artist PlatformGetArtist()
         {
             return null;
         }
 
-        private Genre PlatformGetGenre()
+        internal override Genre PlatformGetGenre()
         {
             return null;
         }
 
-        private TimeSpan PlatformGetDuration()
+        internal override TimeSpan PlatformGetDuration()
         {
             return _duration;
         }
 
-        private bool PlatformIsProtected()
+        internal override bool PlatformIsProtected()
         {
             return false;
         }
 
-        private bool PlatformIsRated()
+        internal override bool PlatformIsRated()
         {
             return false;
         }
 
-        private string PlatformGetName()
+        internal override string PlatformGetName()
         {
             return Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+        internal override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+        internal override int PlatformGetRating()
         {
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+        internal override int PlatformGetTrackNumber()
         {
             return 0;
         }

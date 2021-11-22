@@ -37,9 +37,9 @@
 
     <Compile Include="Graphics\GraphicsAdapter.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="Media\WMS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
     <Compile Include="Platform\Media\MediaManagerState.cs" />
-    <Compile Include="Media\MediaPlayer.WMS.cs" />
     <Compile Include="Media\Song.WMS.cs" />
     <Compile Include="Media\Video.WMS.cs" />
     <Compile Include="Media\VideoPlayer.WMS.cs" />

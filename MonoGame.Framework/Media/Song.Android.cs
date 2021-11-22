@@ -4,45 +4,48 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : IEquatable<Song>, IDisposable
+    public sealed partial class Song : SongStrategy
     {
         static Android.Media.MediaPlayer _androidPlayer;
         static Song _playingSong;
 
-        private Album album;
-        private Artist artist;
-        private Genre genre;
-        private string name;
-        private TimeSpan duration;
-        private TimeSpan position;
-        private Android.Net.Uri assetUri;
+        private Album _album;
+        private Artist _artist;
+        private Genre _genre;
+        private string _name2;
+        private TimeSpan _duration2;
+        private TimeSpan _position;
+        private Android.Net.Uri _assetUri;
 
         [CLSCompliant(false)]
         public Android.Net.Uri AssetUri
         {
-            get { return this.assetUri; }
+            get { return this._assetUri; }
         }
 
         static Song()
         {
+            // TODO: Move _androidPlayer to MediaPlayer
             _androidPlayer = new Android.Media.MediaPlayer();
             _androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
         internal Song(Album album, Artist artist, Genre genre, string name, TimeSpan duration, Android.Net.Uri assetUri)
         {
-            this.album = album;
-            this.artist = artist;
-            this.genre = genre;
-            this.name = name;
-            this.duration = duration;
-            this.assetUri = assetUri;
+            _strategy = this;
+            this._album = album;
+            this._artist = artist;
+            this._genre = genre;
+            this._name2 = name;
+            this._duration2 = duration;
+            this._assetUri = assetUri;
         }
 
-        private void PlatformInitialize(string fileName)
+        internal override void PlatformInitialize(string fileName)
         {
             // Nothing to do here
         }
@@ -61,24 +64,27 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         internal void SetEventHandler(FinishedPlayingHandler handler)
         {
-            if (DonePlaying != null)
-                return;
-            DonePlaying += handler;
+            if (DonePlaying == null)
+                DonePlaying += handler;
         }
 
-        private void PlatformDispose(bool disposing)
+        internal override void PlatformDispose(bool disposing)
         {
             // Appears to be a noOp on Android
+
+            if (disposing)
+            {
+            }
         }
 
-        internal void Play(TimeSpan? startPosition)
+        internal void Play()
         {
             // Prepare the player
             _androidPlayer.Reset();
 
-            if (assetUri != null)
+            if (_assetUri != null)
             {
-                _androidPlayer.SetDataSource(MediaLibrary.Context, this.assetUri);
+                _androidPlayer.SetDataSource(MediaLibrary.Context, this._assetUri);
             }
             else
             {
@@ -94,8 +100,6 @@ namespace Microsoft.Xna.Framework.Media
             _androidPlayer.Looping = MediaPlayer.IsRepeating;
             _playingSong = this;
 
-            if (startPosition.HasValue)
-                Position = startPosition.Value;
             _androidPlayer.Start();
             _playCount++;
         }
@@ -115,7 +119,7 @@ namespace Microsoft.Xna.Framework.Media
             _androidPlayer.Stop();
             _playingSong = null;
             _playCount = 0;
-            position = TimeSpan.Zero;
+            _position = TimeSpan.Zero;
         }
 
         internal float Volume
@@ -136,9 +140,9 @@ namespace Microsoft.Xna.Framework.Media
             get
             {
                 if (_playingSong == this && _androidPlayer.IsPlaying)
-                    position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
+                    _position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
-                return position;
+                return _position;
             }
             set
             {
@@ -146,53 +150,57 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-
-        private Album PlatformGetAlbum()
+        internal override Album PlatformGetAlbum()
         {
-            return this.album;
+            return this._album;
         }
 
-        private Artist PlatformGetArtist()
+        internal override void PlatformSetAlbum(Album album)
         {
-            return this.artist;
+            this._album = album;
         }
 
-        private Genre PlatformGetGenre()
+        internal override Artist PlatformGetArtist()
         {
-            return this.genre;
+            return this._artist;
         }
 
-        private TimeSpan PlatformGetDuration()
+        internal override Genre PlatformGetGenre()
         {
-            return this.assetUri != null ? this.duration : _duration;
+            return this._genre;
         }
 
-        private bool PlatformIsProtected()
+        internal override TimeSpan PlatformGetDuration()
+        {
+            return this._assetUri != null ? this._duration2 : _duration;
+        }
+
+        internal override bool PlatformIsProtected()
         {
             return false;
         }
 
-        private bool PlatformIsRated()
+        internal override bool PlatformIsRated()
         {
             return false;
         }
 
-        private string PlatformGetName()
+        internal override string PlatformGetName()
         {
-            return this.assetUri != null ? this.name : Path.GetFileNameWithoutExtension(_name);
+            return this._assetUri != null ? this._name2 : Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+        internal override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+        internal override int PlatformGetRating()
         {
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+        internal override int PlatformGetTrackNumber()
         {
             return 0;
         }

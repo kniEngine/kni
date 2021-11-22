@@ -72,8 +72,8 @@ namespace MonoGame.Tests.Framework
             // SoundEffectInstancePool._playingInstances is private
             // and not worth making internal only for this test.
             // Use reflection to get it.
-            var fieldInfo = typeof(SoundEffectInstancePool).GetField("_playingInstances", BindingFlags.NonPublic | BindingFlags.Static);
-            var field = (List<SoundEffectInstance>)fieldInfo.GetValue(null);
+            var fieldInfo = typeof(AudioService).GetField("_playingInstances", BindingFlags.NonPublic | BindingFlags.Instance);
+            var field = (LinkedList<SoundEffectInstance>)fieldInfo.GetValue(AudioService.Current);
 
             return field.Count;
         }

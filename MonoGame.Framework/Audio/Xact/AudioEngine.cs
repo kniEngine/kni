@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Audio;
 
 namespace Microsoft.Xna.Framework.Audio
 {
@@ -56,11 +57,11 @@ namespace Microsoft.Xna.Framework.Audio
         {            
         }
 
-        internal static Stream OpenStream(string filePath, bool useMemoryStream = false)
+        internal static Stream OpenStream(string filePath, bool requireSeek = false)
         {
             var stream = TitleContainer.OpenStream(filePath);
 
-            if (useMemoryStream)
+            if (requireSeek && !stream.CanSeek)
             {
                 var memStream = new MemoryStream();
                 stream.CopyTo(memStream);
@@ -298,7 +299,7 @@ namespace Microsoft.Xna.Framework.Audio
                     _reverbSettings[parameter] = result;
                 }
 
-                SoundEffect.PlatformSetReverbSettings(_reverbSettings);
+                AudioService.Current.SetReverbSettings(_reverbSettings);
             }
         }
         

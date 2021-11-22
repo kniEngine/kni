@@ -1,9 +1,12 @@
 // MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2021 Nick Kastellanos
 ﻿
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Audio;
 
 namespace Microsoft.Xna.Framework.Audio
 {
@@ -13,7 +16,7 @@ namespace Microsoft.Xna.Framework.Audio
     /// <para>The only limit on the number of loaded SoundEffects is restricted by available memory. When a SoundEffect is disposed, all SoundEffectInstances created from it will become invalid.</para>
     /// <para>SoundEffect.Play() can be used for 'fire and forget' sounds. If advanced playback controls like volume or pitch is required, use SoundEffect.CreateInstance().</para>
     /// </remarks>
-    public sealed partial class SoundEffect : IDisposable
+    public sealed class SoundEffect : IDisposable
     {
         #region Internal Audio Data
 
@@ -24,15 +27,13 @@ namespace Microsoft.Xna.Framework.Audio
 
         #endregion
 
+        internal SoundEffectStrategy _strategy { get; set; }
+
         #region Internal Constructors
 
         // Only used from SoundEffect.FromStream.
         private SoundEffect(Stream stream)
         {
-            Initialize();
-            if (_systemState != SoundSystemState.Initialized)
-                throw new NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
-
             /*
               The Stream object must point to the head of a valid PCM wave file. Also, this wave file must be in the RIFF bitstream format.
               The audio format has the following restrictions:
@@ -42,16 +43,13 @@ namespace Microsoft.Xna.Framework.Audio
               Sample rate must be between 8,000 Hz and 48,000 Hz
             */
 
-            PlatformLoadAudioStream(stream, out _duration);
+            _strategy = new ConcreteSoundEffect();
+            _strategy.PlatformLoadAudioStream(stream, out _duration);
         }
 
         // Only used from SoundEffectReader.
         internal SoundEffect(byte[] header, byte[] buffer, int bufferSize, int durationMs, int loopStart, int loopLength)
         {
-            Initialize();
-            if (_systemState != SoundSystemState.Initialized)
-                throw new NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
-
             _duration = TimeSpan.FromMilliseconds(durationMs);
 
             // Peek at the format... handle regular PCM data.
@@ -61,64 +59,36 @@ namespace Microsoft.Xna.Framework.Audio
                 var channels = BitConverter.ToInt16(header, 2);
                 var sampleRate = BitConverter.ToInt32(header, 4);
                 var bitsPerSample = BitConverter.ToInt16(header, 14);
-                PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, (AudioChannels)channels, loopStart, loopLength);
+                _strategy = new ConcreteSoundEffect();
+                _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                 return;
             }
 
             // Everything else is platform specific.
-            PlatformInitializeFormat(header, buffer, bufferSize, loopStart, loopLength);
+            _strategy = new ConcreteSoundEffect();
+            _strategy.PlatformInitializeFormat(header, buffer, 0, bufferSize, loopStart, loopLength);
         }
 
         // Only used from XACT WaveBank.
         internal SoundEffect(MiniFormatTag codec, byte[] buffer, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            Initialize();
-            if (_systemState != SoundSystemState.Initialized)
-                throw new NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
+            _strategy = new ConcreteSoundEffect();
 
-            // Handle the common case... the rest is platform specific.
-            if (codec == MiniFormatTag.Pcm)
+            switch(codec)
             {
-                _duration = TimeSpan.FromSeconds((float)buffer.Length / (sampleRate * blockAlignment));
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, (AudioChannels)channels, loopStart, loopLength);
-                return;
-            }
+                // Handle the common case... the rest is platform specific.
+                case MiniFormatTag.Pcm:
+                    _duration = TimeSpan.FromSeconds((float)buffer.Length / (sampleRate * blockAlignment));
+                    _strategy.PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    return;
 
-            PlatformInitializeXact(codec, buffer, channels, sampleRate, blockAlignment, loopStart, loopLength, out _duration);
-        }
+                case MiniFormatTag.Adpcm:
+                    _duration = TimeSpan.FromSeconds((float)loopLength / sampleRate);
+                    _strategy.PlatformInitializeXactAdpcm(buffer, 0, buffer.Length, channels, sampleRate, blockAlignment, loopStart, loopLength);
+                    return;
 
-        #endregion
-
-        #region Audio System Initialization
-
-        internal enum SoundSystemState
-        {
-            NotInitialized,
-            Initialized,
-            FailedToInitialized
-        }
-
-        internal static SoundSystemState _systemState = SoundSystemState.NotInitialized;
-
-        /// <summary>
-        /// Initializes the sound system for SoundEffect support.
-        /// This method is automatically called when a SoundEffect is loaded, a DynamicSoundEffectInstance is created, or Microphone.All is queried.
-        /// You can however call this method manually (preferably in, or before the Game constructor) to catch any Exception that may occur during the sound system initialization (and act accordingly).
-        /// </summary>
-        public static void Initialize()
-        {
-            if (_systemState != SoundSystemState.NotInitialized)
-                return;
-
-            try
-            {
-                PlatformInitialize();
-                _systemState = SoundSystemState.Initialized;
-            }
-            catch (Exception)
-            {
-                _systemState = SoundSystemState.FailedToInitialized;
-                throw;
+                default:
+                    throw new NotSupportedException("Unsupported sound format!");
             }
         }
 
@@ -151,10 +121,6 @@ namespace Microsoft.Xna.Framework.Audio
         /// <remarks>This only supports uncompressed 16bit PCM wav data.</remarks>
         public SoundEffect(byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
         {
-            Initialize();
-            if (_systemState != SoundSystemState.Initialized)
-                throw new NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
-
             if (sampleRate < 8000 || sampleRate > 48000)
                 throw new ArgumentOutOfRangeException("sampleRate");
             if ((int)channels != 1 && (int)channels != 2)
@@ -189,9 +155,10 @@ namespace Microsoft.Xna.Framework.Audio
             if (((ulong)loopStart + (ulong)loopLength) > (ulong)totalSamples)
                 throw new ArgumentException("Ensure that the loopStart+loopLength region lies within the sample range.", "loopLength");
 
-            _duration = GetSampleDuration(count, sampleRate, channels);
+            _duration = AudioService.GetSampleDuration(count, sampleRate, channels);
 
-            PlatformInitializePcm(buffer, offset, count, 16, sampleRate, channels, loopStart, loopLength);
+            _strategy = new ConcreteSoundEffect();
+            _strategy.PlatformInitializePcm(buffer, offset, count, 16, sampleRate, (int)channels, loopStart, loopLength);
         }
 
         #endregion
@@ -218,40 +185,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <remarks>Creating a SoundEffectInstance before calling SoundEffectInstance.Play() allows you to access advanced playback features, such as volume, pitch, and 3D positioning.</remarks>
         public SoundEffectInstance CreateInstance()
         {
-            var inst = new SoundEffectInstance();
-            PlatformSetupInstance(inst);
-
-            inst._isPooled = false;
-            inst._effect = this;
-
-            return inst;
-        }
-
-        /// <summary>
-        /// Creates a new SoundEffect object based on the specified data stream.
-        /// This internally calls <see cref="FromStream"/>.
-        /// </summary>
-        /// <param name="path">The path to the audio file.</param>
-        /// <returns>The <see cref="SoundEffect"/> loaded from the given file.</returns>
-        /// <remarks>The stream must point to the head of a valid wave file in the RIFF bitstream format.  The formats supported are:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>8-bit unsigned PCM</description>
-        /// <description>16-bit signed PCM</description>
-        /// <description>24-bit signed PCM</description>
-        /// <description>32-bit IEEE float PCM</description>
-        /// <description>MS-ADPCM 4-bit compressed</description>
-        /// <description>IMA/ADPCM (IMA4) 4-bit compressed</description>
-        /// </item>
-        /// </list>
-        /// </remarks>
-        public static SoundEffect FromFile(string path)
-        {
-            if (path == null)
-                throw new ArgumentNullException("path");
-
-            using (var stream = File.OpenRead(path))
-                return FromStream(stream);
+            return new SoundEffectInstance(AudioService.Current, this);
         }
 
         /// <summary>
@@ -278,64 +212,6 @@ namespace Microsoft.Xna.Framework.Audio
 
             return new SoundEffect(stream);
         }
-
-        /// <summary>
-        /// Returns the duration for 16-bit PCM audio.
-        /// </summary>
-        /// <param name="sizeInBytes">The length of the audio data in bytes.</param>
-        /// <param name="sampleRate">Sample rate, in Hertz (Hz). Must be between 8000 Hz and 48000 Hz</param>
-        /// <param name="channels">Number of channels in the audio data.</param>
-        /// <returns>The duration of the audio data.</returns>
-        public static TimeSpan GetSampleDuration(int sizeInBytes, int sampleRate, AudioChannels channels)
-        {
-            if (sizeInBytes < 0)
-                throw new ArgumentException("Buffer size cannot be negative.", "sizeInBytes");
-            if (sampleRate < 8000 || sampleRate > 48000)
-                throw new ArgumentOutOfRangeException("sampleRate");
-
-            var numChannels = (int)channels;
-            if (numChannels != 1 && numChannels != 2)
-                throw new ArgumentOutOfRangeException("channels");
-
-            if (sizeInBytes == 0)
-                return TimeSpan.Zero;
-
-            // Reference
-            // http://tinyurl.com/hq9slfy
-
-            var dur = sizeInBytes / (sampleRate * numChannels * 16f / 8f);
-
-            var duration = TimeSpan.FromSeconds(dur);
-
-            return duration;
-        }
-
-        /// <summary>
-        /// Returns the data size in bytes for 16bit PCM audio.
-        /// </summary>
-        /// <param name="duration">The total duration of the audio data.</param>
-        /// <param name="sampleRate">Sample rate, in Hertz (Hz), of audio data. Must be between 8,000 and 48,000 Hz.</param>
-        /// <param name="channels">Number of channels in the audio data.</param>
-        /// <returns>The size in bytes of a single sample of audio data.</returns>
-        public static int GetSampleSizeInBytes(TimeSpan duration, int sampleRate, AudioChannels channels)
-        {
-            if (duration < TimeSpan.Zero || duration > TimeSpan.FromMilliseconds(0x7FFFFFF))
-                throw new ArgumentOutOfRangeException("duration");
-            if (sampleRate < 8000 || sampleRate > 48000)
-                throw new ArgumentOutOfRangeException("sampleRate");
-
-            var numChannels = (int)channels;
-            if (numChannels != 1 && numChannels != 2)
-                throw new ArgumentOutOfRangeException("channels");
-
-            // Reference
-            // http://tinyurl.com/hq9slfy
-
-            var sizeInBytes = duration.TotalSeconds * (sampleRate * numChannels * 16f / 8f);
-
-            return (int)sizeInBytes;
-        }
-
         #endregion
 
         #region Play
@@ -349,13 +225,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public bool Play()
         {
-            var inst = GetPooledInstance(false);
-            if (inst == null)
-                return false;
-
-            inst.Play();
-
-            return true;
+            return AudioService.Current.Play(this);
         }
 
         /// <summary>Gets an internal SoundEffectInstance and plays it with the specified volume, pitch, and panning.</summary>
@@ -370,40 +240,24 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public bool Play(float volume, float pitch, float pan)
         {
-            var inst = GetPooledInstance(false);
-            if (inst == null)
-                return false;
-
-            inst.Volume = volume;
-            inst.Pitch = pitch;
-            inst.Pan = pan;
-
-            inst.Play();
-
-            return true;
+            return AudioService.Current.Play(this, volume, pitch,  pan);
         }
 
-        /// <summary>
-        /// Returns a sound effect instance from the pool or null if none are available.
-        /// </summary>
-        internal SoundEffectInstance GetPooledInstance(bool forXAct)
-        {
-            if (!SoundEffectInstancePool.SoundsAvailable)
-                return null;
-
-            var inst = SoundEffectInstancePool.GetInstance(forXAct);
-            inst._effect = this;
-            PlatformSetupInstance(inst);
-
-            return inst;
-        }
 
         #endregion
 
         #region Public Properties
 
         /// <summary>Gets the duration of the SoundEffect.</summary>
-        public TimeSpan Duration { get { return _duration; } }
+        public TimeSpan Duration
+        {
+            get
+            {
+                if (_duration.Ticks == 0)
+                    throw new NotSupportedException();
+                return _duration;
+            }
+        }
 
         /// <summary>Gets or sets the asset name of the SoundEffect.</summary>
         public string Name
@@ -436,7 +290,7 @@ namespace Microsoft.Xna.Framework.Audio
                     return;
                 
                 _masterVolume = value;
-                SoundEffectInstancePool.UpdateMasterVolume();
+                AudioService.UpdateMasterVolume();
             }
         }
 
@@ -527,11 +381,32 @@ namespace Microsoft.Xna.Framework.Audio
         /// not at that time.  Unmanaged resources should always be released.</remarks>
         void Dispose(bool disposing)
         {
-            if (!_isDisposed)
+            if (disposing)
             {
-                SoundEffectInstancePool.StopPooledInstances(this);
-                PlatformDispose(disposing);
-                _isDisposed = true;
+                lock (AudioService.SyncHandle)
+                {
+                    if (IsDisposed) return;
+
+                    // Clean up managed objects
+
+                    // Clean up unmanaged resources
+                    AudioService.OnEffectDisposed(this, disposing);
+
+                    _strategy.Dispose();
+                    _strategy = null;
+
+                    _isDisposed = true;
+                }
+            }
+            else
+            {
+                lock (AudioService.SyncHandle)
+                {
+                    if (IsDisposed) return;
+
+                    // Clean up unmanaged resources
+                    AudioService.OnEffectDisposed(this, disposing);
+                }
             }
         }
 

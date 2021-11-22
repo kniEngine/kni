@@ -8,28 +8,29 @@ using Foundation;
 using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song
+    public sealed partial class Song : SongStrategy
     {
-        private Album album;
-        private Artist artist;
-        private Genre genre;
-        private string title;
+        private Album _album;
+        private Artist _artist;
+        private Genre _genre;
+        private string _title;
         private TimeSpan duration;
         #if !TVOS
-        private MPMediaItem mediaItem;
+        private MPMediaItem _mediaItem;
         #endif
         private AVPlayerItem _sound;
-        private AVPlayer _player;
-        private NSUrl assetUrl;
-        private NSObject playToEndObserver;
+        private AVPlayer _player; // TODO: Move _player to MediaPlayer
+        private NSUrl _assetUrl;
+        private NSObject _playToEndObserver;
 
         [CLSCompliant(false)]
         public NSUrl AssetUrl
         {
-            get { return this.assetUrl; }
+            get { return this._assetUrl; }
         }
 
         #if !TVOS
@@ -38,18 +39,19 @@ namespace Microsoft.Xna.Framework.Media
         internal Song(Album album, Artist artist, Genre genre, string title, TimeSpan duration, object mediaItem, NSUrl assetUrl)
         #endif
         {
-            this.album = album;
-            this.artist = artist;
-            this.genre = genre;
-            this.title = title;
+            _strategy = this;
+            this._album = album;
+            this._artist = artist;
+            this._genre = genre;
+            this._title = title;
             this.duration = duration;
             #if !TVOS
-            this.mediaItem = mediaItem;
+            this._mediaItem = mediaItem;
             #endif
-            this.assetUrl = assetUrl;
+            this._assetUrl = assetUrl;
         }
 
-        private void PlatformInitialize(string fileName)
+        internal override void PlatformInitialize(string fileName)
         {
             this.PlatformInitialize(NSUrl.FromFilename(fileName));
         }
@@ -58,22 +60,24 @@ namespace Microsoft.Xna.Framework.Media
         {
             _sound = AVPlayerItem.FromUrl(url);
             _player = AVPlayer.FromPlayerItem(_sound);
-            playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
+            _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
         }
 
-        private void PlatformDispose(bool disposing)
+        internal override void PlatformDispose(bool disposing)
         {
-            if (_sound == null)
-                return;
-                
-            playToEndObserver.Dispose ();
-            playToEndObserver = null;
+            if (disposing)
+            {
+                if (_sound != null)
+                {
+                    _playToEndObserver.Dispose();
+                    _sound.Dispose();
+                    _player.Dispose();
+                }
 
-            _sound.Dispose();
-            _sound = null;
-
-            _player.Dispose();
-            _player = null;
+                _playToEndObserver = null;
+                _sound = null;
+                _player = null;
+            }
         }
 
         internal void OnFinishedPlaying (object sender, NSNotificationEventArgs args)
@@ -87,35 +91,30 @@ namespace Microsoft.Xna.Framework.Media
 		/// </summary>
 		internal void SetEventHandler(FinishedPlayingHandler handler)
 		{
-			if (DonePlaying != null)
-				return;
-			
-			DonePlaying += handler;
+			if (DonePlaying == null)
+			    DonePlaying += handler;
 		}
 
-        internal void Play(TimeSpan? startPosition)
+        internal void Play()
         {
             if (_player == null)
             {
                 // MediaLibrary items are lazy loaded
-                if (assetUrl != null)
-                    this.PlatformInitialize (assetUrl);
+                if (_assetUrl != null)
+                    this.PlatformInitialize(_assetUrl);
                 else
                     return;
             }
 
-            PlatformPlay(startPosition);
+            PlatformPlay();
 
             _playCount++;
         }
 
-        private void PlatformPlay(TimeSpan? startPosition)
+        private void PlatformPlay()
         {
             
-            if (startPosition.HasValue)
-                _player.Seek(CMTime.FromSeconds(startPosition.Value.TotalSeconds, 1));
-            else
-                _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
+            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
             
             _player.Play();
         }
@@ -179,56 +178,61 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        private Album PlatformGetAlbum()
+        internal override Album PlatformGetAlbum()
         {
-            return this.album;
+            return this._album;
         }
 
-        private Artist PlatformGetArtist()
+        internal override void PlatformSetAlbum(Album album)
         {
-            return this.artist;
+            this._album = album;
         }
 
-        private Genre PlatformGetGenre()
+        internal override Artist PlatformGetArtist()
         {
-            return this.genre;
+            return this._artist;
         }
 
-        private TimeSpan PlatformGetDuration()
+        internal override Genre PlatformGetGenre()
+        {
+            return this._genre;
+        }
+
+        internal override TimeSpan PlatformGetDuration()
         {
             #if !TVOS
-            if (this.mediaItem != null)
+            if (this._mediaItem != null)
                 return this.duration;
             #endif
             return _duration;
         }
 
-        private bool PlatformIsProtected()
+        internal override bool PlatformIsProtected()
         {
             return false;
         }
 
-        private bool PlatformIsRated()
+        internal override bool PlatformIsRated()
         {
             return false;
         }
 
-        private string PlatformGetName()
+        internal override string PlatformGetName()
         {
-            return this.title ?? Path.GetFileNameWithoutExtension(_name);
+            return this._title ?? Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+        internal override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+        internal override int PlatformGetRating()
         {
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+        internal override int PlatformGetTrackNumber()
         {
             return 0;
         }

@@ -260,9 +260,9 @@ namespace Microsoft.Xna.Framework.Audio
             _wav.Pitch = _trackPitch + _clipPitch;
 
             if (_clip.UseReverb)
-                _wav.PlatformSetReverbMix(_clipReverbMix);
+                _wav.SetReverbMix(_clipReverbMix);
             if (_clip.FilterEnabled)
-                _wav.PlatformSetFilter(_clip.FilterMode, _trackFilterQFactor, _trackFilterFrequency);
+                _wav.SetFilter(_clip.FilterMode, _trackFilterQFactor, _trackFilterFrequency);
         }
 
         public override void SetFade(float fadeInDuration, float fadeOutDuration)

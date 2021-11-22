@@ -369,8 +369,9 @@ namespace Microsoft.Xna.Framework.Audio
             else
             {
                 streaming = false;
-                var sound = _sounds[trackIndex];
-                return sound.GetPooledInstance(true);
+                var effect = _sounds[trackIndex];
+
+                return AudioService.Current.GetInstance(effect, true);
             }
         }
 

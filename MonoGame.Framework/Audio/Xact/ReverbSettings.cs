@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
     class ReverbSettings
     {

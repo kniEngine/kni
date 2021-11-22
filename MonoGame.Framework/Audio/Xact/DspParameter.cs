@@ -4,7 +4,7 @@
 
 using System.IO;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
     struct DspParameter
     {

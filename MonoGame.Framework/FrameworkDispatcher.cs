@@ -4,7 +4,6 @@
 
 using System;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Framework.Audio;
 
 namespace Microsoft.Xna.Platform
 {
@@ -71,10 +70,6 @@ namespace Microsoft.Xna.Framework
             var updateHandler = _onUpdate;
             if (updateHandler != null)
                 updateHandler();
-
-            DynamicSoundEffectInstanceManager.UpdatePlayingInstances();
-            SoundEffectInstancePool.Update();
-            Microphone.UpdateMicrophones();
         }
     }
 }
