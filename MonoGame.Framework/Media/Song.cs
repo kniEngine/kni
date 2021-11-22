@@ -4,23 +4,26 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class Song : IEquatable<Song>, IDisposable
     {
+        internal SongStrategy _strategy;
         private string _name;
 		private int _playCount = 0;
         private TimeSpan _duration = TimeSpan.Zero;
-        bool disposed;
+        bool _isDisposed;
+
         /// <summary>
         /// Gets the Album on which the Song appears.
         /// </summary>
         public Album Album
         {
-            get { return PlatformGetAlbum(); }
+            get { return _strategy.PlatformGetAlbum(); }
 #if WINDOWS_UAP
-            internal set { PlatformSetAlbum(value); }
+            internal set { _strategy.PlatformSetAlbum(value); }
 #endif
         }
 
@@ -29,7 +32,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Artist Artist
         {
-            get { return PlatformGetArtist(); }
+            get { return _strategy.PlatformGetArtist(); }
         }
 
         /// <summary>
@@ -37,12 +40,12 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Genre Genre
         {
-            get { return PlatformGetGenre(); }
+            get { return _strategy.PlatformGetGenre(); }
         }
         
         public bool IsDisposed
         {
-            get { return disposed; }
+            get { return _isDisposed; }
         }
 
 #if ANDROID || OPENAL || WEB || IOS
@@ -54,14 +57,16 @@ namespace Microsoft.Xna.Framework.Media
         internal Song(string fileName, int durationMS)
             : this(fileName)
         {
+            _strategy = this;
             _duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
 		internal Song(string fileName)
-		{			
+		{
+            _strategy = this;
 			_name = fileName;
 
-            PlatformInitialize(fileName);
+            _strategy.PlatformInitialize(fileName);
         }
 
         ~Song()
@@ -95,14 +100,11 @@ namespace Microsoft.Xna.Framework.Media
         
         void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
-                if (disposing)
-                {
-                    PlatformDispose(disposing);
-                }
+                _strategy.PlatformDispose(disposing);
 
-                disposed = true;
+                _isDisposed = true;
             }
         }
 
@@ -148,37 +150,37 @@ namespace Microsoft.Xna.Framework.Media
 
         public TimeSpan Duration
         {
-            get { return PlatformGetDuration(); }
+            get { return _strategy.PlatformGetDuration(); }
         }	
 
         public bool IsProtected
         {
-            get { return PlatformIsProtected(); }
+            get { return _strategy.PlatformIsProtected(); }
         }
 
         public bool IsRated
         {
-            get { return PlatformIsRated(); }
+            get { return _strategy.PlatformIsRated(); }
         }
 
         public string Name
         {
-            get { return PlatformGetName(); }
+            get { return _strategy.PlatformGetName(); }
         }
 
         public int PlayCount
         {
-            get { return PlatformGetPlayCount(); }
+            get { return _strategy.PlatformGetPlayCount(); }
         }
 
         public int Rating
         {
-            get { return PlatformGetRating(); }
+            get { return _strategy.PlatformGetRating(); }
         }
 
         public int TrackNumber
         {
-            get { return PlatformGetTrackNumber(); }
+            get { return _strategy.PlatformGetTrackNumber(); }
         }
     }
 }

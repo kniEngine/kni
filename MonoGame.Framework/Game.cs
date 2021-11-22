@@ -65,9 +65,6 @@ namespace Microsoft.Xna.Framework
             Platform.Deactivated += Platform_Deactivated;
             _services.AddService(typeof(GamePlatform), Platform);
 
-            // Calling Update() for first time initializes some systems
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-
             // Allow some optional per-platform construction to occur too.
             PlatformConstruct();
 
@@ -134,8 +131,7 @@ namespace Microsoft.Xna.Framework
                         Platform = null;
                     }
 
-                    if (SoundEffect._systemState == SoundEffect.SoundSystemState.Initialized)
-                        SoundEffect.PlatformShutdown();
+                    AudioService.Shutdown();
                 }
 #if ANDROID
                 Activity = null;

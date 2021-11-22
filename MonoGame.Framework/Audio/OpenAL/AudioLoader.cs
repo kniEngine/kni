@@ -4,9 +4,9 @@
 
 using System;
 using System.IO;
-using MonoGame.OpenAL;
+using Microsoft.Xna.Platform.Audio.OpenAL;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
     internal static class AudioLoader
     {

@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Audio
 
                 _wave.Pitch = finalPitch;
                 _wave.Volume = finalVolume;
-                _wave.PlatformSetReverbMix(finalMix);
+                _wave.SetReverbMix(finalMix);
                 _wave.Play();
             }
         }
@@ -311,7 +311,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
             else if (_wave != null)
             {
-                _wave.PlatformSetReverbMix(_useReverb ? _cueReverbMix : 0.0f);
+                _wave.SetReverbMix(_useReverb ? _cueReverbMix : 0.0f);
                 _wave.Pitch = finalPitch;
                 _wave.Volume = finalVolume;
             }

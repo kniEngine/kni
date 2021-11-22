@@ -33,7 +33,7 @@ namespace MonoGame.Tests.Audio
             float pan, float scale, int inputChannels,
             params float[] expectedValues)
         {
-            var outputMatrix = SoundEffectInstance.CalculateOutputMatrix(pan, scale, inputChannels);
+            var outputMatrix = Microsoft.Xna.Platform.Audio.ConcreteSoundEffectInstance.CalculateOutputMatrix(pan, scale, inputChannels);
 
             for (int i = 0; i < expectedValues.Length; i++)
                 Assert.AreEqual(expectedValues[i], outputMatrix[i], "Channel#" + i);

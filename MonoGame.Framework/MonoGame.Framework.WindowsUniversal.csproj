@@ -53,8 +53,8 @@
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
+    <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\MediaLibrary.WinRT.cs" />
-    <Compile Include="Media\MediaPlayer.WME.cs" />
     <Compile Include="Platform\Media\MusicProperties.cs" />
     <Compile Include="Media\Song.WinRT.cs" />
     <Compile Include="Media\VideoPlayer.WME.cs" />

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Xna.Platform.Audio;
 
 namespace Microsoft.Xna.Framework.Audio
 {
@@ -20,18 +21,20 @@ namespace Microsoft.Xna.Framework.Audio
     /// <summary>
     /// Provides microphones capture features. 
     /// </summary>
-    public sealed partial class Microphone
+    public sealed class Microphone
     {
+        MicrophoneStrategy _strategy { get; set; }
+
         #region Internal Constructors
-
-        internal Microphone()
+        
+        internal Microphone() : this(null)
         {
-
         }
 
         internal Microphone(string name)
         {
             Name = name;
+            _strategy = new ConcreteMicrophone();
         }
 
         #endregion
@@ -65,20 +68,13 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        // always true on mobile, this can't be queried on any platform (it was most probably only set to true if the headset was plugged in an XInput controller)
-#if IOS || ANDROID
-        private const bool _isHeadset = true;
-#else
-        private const bool _isHeadset = false;
-#endif
         /// <summary>
         /// Determines if the microphone is a wired headset.
         /// Note: XNA could know if a headset microphone was plugged in an Xbox 360 controller but MonoGame can't.
-        /// Hence, this is always true on mobile platforms, and always false otherwise.
         /// </summary>
         public bool IsHeadset
         {
-            get { return _isHeadset; }
+            get { return _strategy.PlatformIsHeadset(); }
         }
 
         private int _sampleRate = 44100; // XNA default is 44100, don't know if it supports any other rates
@@ -106,7 +102,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         #region Static Members
 
-        private static List<Microphone> _allMicrophones = null;
+        private static ReadOnlyCollection<Microphone> _readOnlyMicrophones = null;
 
         /// <summary>
         /// Returns all compatible microphones.
@@ -115,21 +111,18 @@ namespace Microsoft.Xna.Framework.Audio
         {
             get
             {
-                SoundEffect.Initialize();                
-                if (_allMicrophones == null)
-                    _allMicrophones = new List<Microphone>();
-                return new ReadOnlyCollection<Microphone>(_allMicrophones);
+                if (_readOnlyMicrophones == null)
+                    _readOnlyMicrophones = new ReadOnlyCollection<Microphone>(AudioService.Current._microphones);
+                return _readOnlyMicrophones;
             }
         }
-
-        private static Microphone _default = null;
-
+        
         /// <summary>
         /// Returns the default microphone.
         /// </summary>
         public static Microphone Default
         {
-            get { SoundEffect.Initialize(); return _default; }
+            get { return AudioService.Current._defaultMicrophone; }
         }       
 
         #endregion
@@ -145,7 +138,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             // this should be 10ms aligned
             // this assumes 16bit mono data
-            return SoundEffect.GetSampleDuration(sizeInBytes, _sampleRate, AudioChannels.Mono);
+            return AudioService.GetSampleDuration(sizeInBytes, _sampleRate, AudioChannels.Mono);
         }
 
         /// <summary>
@@ -157,15 +150,26 @@ namespace Microsoft.Xna.Framework.Audio
         {
             // this should be 10ms aligned
             // this assumes 16bit mono data
-            return SoundEffect.GetSampleSizeInBytes(duration, _sampleRate, AudioChannels.Mono);
+            return AudioService.GetSampleSizeInBytes(duration, _sampleRate, AudioChannels.Mono);
         }
 
         /// <summary>
         /// Starts microphone capture.
         /// </summary>
         public void Start()
-        {
-            PlatformStart();
+        { 
+            var state = State;
+            switch (state)
+            {
+                case MicrophoneState.Started:
+                    return;
+                case MicrophoneState.Stopped:
+                    {
+                        _strategy.PlatformStart(Name, _sampleRate, GetSampleSizeInBytes(_bufferDuration));
+                        _state = MicrophoneState.Started;
+                    }
+                    return;
+            }
         }
 
         /// <summary>
@@ -173,7 +177,18 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public void Stop()
         {
-            PlatformStop();
+            var state = State;
+            switch (state)
+            {
+                case MicrophoneState.Started:
+                    {
+                        _strategy.PlatformStop();
+                        _state = MicrophoneState.Stopped;
+                    }
+                    return;
+                case MicrophoneState.Stopped:
+                    return;
+            }
         }
 
         /// <summary>
@@ -195,7 +210,10 @@ namespace Microsoft.Xna.Framework.Audio
         /// <returns>The buffer size, in bytes, of the captured data.</returns>
         public int GetData(byte[] buffer, int offset, int count)
         {
-            return PlatformGetData(buffer, offset, count);
+            if (_state == MicrophoneState.Stopped || BufferReady == null)
+                return 0;
+
+            return _strategy.PlatformGetData(buffer, offset, count);
         }
 
         #endregion
@@ -209,23 +227,29 @@ namespace Microsoft.Xna.Framework.Audio
 
         #endregion
 
+
+        internal void UpdateBuffer()
+        {
+            var state = _state;
+            switch (state)
+            {
+                case MicrophoneState.Started:
+                    {
+                        var handler = BufferReady;
+                        if (handler == null)
+                            return;
+
+                        if (_strategy.PlatformUpdate())
+                            handler.Invoke(this, EventArgs.Empty);
+                    }
+                    return;
+                case MicrophoneState.Stopped:
+                    return;
+            }
+        }
+
         #region Static Methods
 
-        internal static void UpdateMicrophones()
-        {
-            // querying all running microphones for new samples available
-            if (_allMicrophones != null)
-                for (int i = 0; i < _allMicrophones.Count; i++)
-                    _allMicrophones[i].Update();
-        }
-
-        internal static void StopMicrophones()
-        {
-            // stopping all running microphones before shutting down audio devices
-            if (_allMicrophones != null)
-                for (int i = 0; i < _allMicrophones.Count; i++)
-                    _allMicrophones[i].Stop();
-        }
 
         #endregion
     }

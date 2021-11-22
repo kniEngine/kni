@@ -5,80 +5,83 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
-using MonoGame.OpenAL;
+using Microsoft.Xna.Platform.Audio;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : IEquatable<Song>, IDisposable
+    public sealed partial class Song : SongStrategy
     {
-        private OggStream stream;
+        private OggStream _stream;
         private float _volume = 1f;
         private readonly object _sourceMutex = new object();
 
-        private void PlatformInitialize(string fileName)
+        internal override void PlatformInitialize(string fileName)
         {
             // init OpenAL if need be
-            OpenALSoundController.EnsureInitialized();
+            var audioService = AudioService.Current;
 
-            stream = new OggStream(fileName, OnFinishedPlaying);
-            stream.Prepare();
+            _stream = new OggStream(fileName, OnFinishedPlaying);
+            _stream.Prepare();
 
-            _duration = stream.GetLength();
+            _duration = _stream.GetLength();
         }
         
-        internal void SetEventHandler(FinishedPlayingHandler handler) { }
+        internal void SetEventHandler(FinishedPlayingHandler handler)
+        {
+
+        }
 
         internal void OnFinishedPlaying()
         {
-            MediaPlayer.OnSongFinishedPlaying(null, null);
+            MediaPlayer.Strategy.OnSongFinishedPlaying(null, null);
         }
 		
-        void PlatformDispose(bool disposing)
+        internal override void PlatformDispose(bool disposing)
         {
-            lock (_sourceMutex)
+            if (disposing)
             {
-                if (stream == null)
-                    return;
+                lock (_sourceMutex)
+                {
+                    if (_stream != null)
+                        _stream.Dispose();
 
-                stream.Dispose();
-                stream = null;
+                    _stream = null;
+                }
             }
         }
 
-        internal void Play(TimeSpan? startPosition)
+        internal void Play()
         {
-            if (stream == null)
+            if (_stream == null)
                 return;
 
-            stream.Play();
-            if (startPosition != null)
-                stream.SeekToPosition((TimeSpan)startPosition);
-
+            _stream.Play();
             _playCount++;
         }
 
         internal void Resume()
         {
-            if (stream == null)
+            if (_stream == null)
                 return;
 
-            stream.Resume();
+            _stream.Resume();
         }
 
         internal void Pause()
         {
-            if (stream == null)
+            if (_stream == null)
                 return;
 
-            stream.Pause();
+            _stream.Pause();
         }
 
         internal void Stop()
         {
-            if (stream == null)
+            if (_stream == null)
                 return;
 
-            stream.Stop();
+            _stream.Stop();
             _playCount = 0;
         }
 
@@ -86,15 +89,15 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-                if (stream == null)
+                if (_stream == null)
                     return 0.0f;
                 return _volume; 
             }
             set
             {
                 _volume = value;
-                if (stream != null)
-                    stream.Volume = _volume;
+                if (_stream != null)
+                    _stream.Volume = _volume;
             }
         }
 
@@ -102,58 +105,63 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-                if (stream == null)
+                if (_stream == null)
                     return TimeSpan.FromSeconds(0.0);
-                return stream.GetPosition();
+                return _stream.GetPosition();
             }
         }
 
-        private Album PlatformGetAlbum()
+        internal override Album PlatformGetAlbum()
         {
             return null;
         }
 
-        private Artist PlatformGetArtist()
+        internal override void PlatformSetAlbum(Album album)
+        {
+            
+        }
+
+        internal override Artist PlatformGetArtist()
         {
             return null;
         }
 
-        private Genre PlatformGetGenre()
+        internal override Genre PlatformGetGenre()
         {
             return null;
         }
 
-        private TimeSpan PlatformGetDuration()
+        internal override TimeSpan PlatformGetDuration()
         {
             return _duration;
         }
 
-        private bool PlatformIsProtected()
+        internal override bool PlatformIsProtected()
         {
             return false;
         }
 
-        private bool PlatformIsRated()
+        internal override bool PlatformIsRated()
         {
             return false;
         }
 
-        private string PlatformGetName()
+        internal override string PlatformGetName()
         {
             return Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+        internal override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+        internal override int PlatformGetRating()
         {
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+        internal override int PlatformGetTrackNumber()
         {
             return 0;
         }

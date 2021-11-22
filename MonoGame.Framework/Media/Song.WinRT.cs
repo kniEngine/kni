@@ -5,110 +5,114 @@
 using System;
 using System.IO;
 using Windows.Storage;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song
+    public sealed partial class Song : SongStrategy
     {
-        private Album album;
-        private Artist artist;
-        private Genre genre;
+        private Album _album;
+        private Artist _artist;
+        private Genre _genre;
         
-		private MusicProperties musicProperties;
+		private MusicProperties _musicProperties;
 
         [CLSCompliant(false)]
         public StorageFile StorageFile
         {
-            get { return this.musicProperties.File; }
+            get { return this._musicProperties.File; }
         }
         
 		internal Song(Album album, Artist artist, Genre genre, MusicProperties musicProperties)
 		{
-            this.album = album;
-            this.artist = artist;
-            this.genre = genre;
-            this.musicProperties = musicProperties;
+            _strategy = this;
+            this._album = album;
+            this._artist = artist;
+            this._genre = genre;
+            this._musicProperties = musicProperties;
 		}
 
-		private void PlatformInitialize(string fileName)
+        internal override void PlatformInitialize(string fileName)
         {
 
         }
 
-        private void PlatformDispose(bool disposing)
+        internal override void PlatformDispose(bool disposing)
         {
-
+            if (disposing)
+            {
+            }
         }
 
-        private Album PlatformGetAlbum()
+        internal override Album PlatformGetAlbum()
         {
-            return this.album;
+            return this._album;
         }
 
-        private void PlatformSetAlbum(Album album)
+        internal override void PlatformSetAlbum(Album album)
         {
-            this.album = album;
+            this._album = album;
         }
 
-        private Artist PlatformGetArtist()
+        internal override Artist PlatformGetArtist()
         {
-            return this.artist;
+            return this._artist;
         }
 
-        private Genre PlatformGetGenre()
+        internal override Genre PlatformGetGenre()
         {
-            return this.genre;
+            return this._genre;
         }
 
-        private TimeSpan PlatformGetDuration()
+        internal override TimeSpan PlatformGetDuration()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.Duration;
+            if (this._musicProperties != null)
+                return this._musicProperties.Duration;
 
             return _duration;
         }
 
-        private bool PlatformIsProtected()
+        internal override bool PlatformIsProtected()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.IsProtected;
+            if (this._musicProperties != null)
+                return this._musicProperties.IsProtected;
 
             return false;
         }
 
-        private bool PlatformIsRated()
+        internal override bool PlatformIsRated()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.Rating != 0;
+            if (this._musicProperties != null)
+                return this._musicProperties.Rating != 0;
 
             return false;
         }
 
-        private string PlatformGetName()
+        internal override string PlatformGetName()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.Title;
+            if (this._musicProperties != null)
+                return this._musicProperties.Title;
 
             return Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+        internal override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+        internal override int PlatformGetRating()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.Rating;
+            if (this._musicProperties != null)
+                return this._musicProperties.Rating;
 
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+        internal override int PlatformGetTrackNumber()
         {
-            if (this.musicProperties != null)
-                return this.musicProperties.TrackNumber;
+            if (this._musicProperties != null)
+                return this._musicProperties.TrackNumber;
 
             return 0;
         }
