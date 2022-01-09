@@ -42,12 +42,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo" />
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\BasicEffect.ogl.mgfxo" />
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\DualTextureEffect.ogl.mgfxo" />
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\EnvironmentMapEffect.ogl.mgfxo" />
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\SkinnedEffect.ogl.mgfxo" />
-    <EmbeddedResource Include="Platform\Graphics\Effect\Resources\SpriteEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.mgfxo" />
   </ItemGroup>
 
 </Project>
