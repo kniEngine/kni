@@ -14,7 +14,7 @@
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline</RootNamespace>
     <CopyContentFiles>True</CopyContentFiles>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <DefineConstants>STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>STBSHARP_INTERNAL WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <Import Project="MonoGame.Framework.Content.Pipeline.Common.props" />
@@ -227,17 +227,18 @@
     <NoWarn>NU5100</NoWarn>
   </PropertyGroup>
   
-  <ItemGroup>
-    <Content Include="..\Artifacts\MonoGame.Effect.Compiler\$(Configuration)\*" Exclude="..\Artifacts\MonoGame.Effect.Compiler\$(Configuration)\*.nupkg" Visible="false">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
   <Import Project="..\Switch\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\Switch\MonoGame.Framework.Content.Pipeline.targets')" />
   <Import Project="..\XBoxOne\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\XBoxOne\MonoGame.Framework.Content.Pipeline.targets')" />
   <Import Project="..\PlayStation4\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\PlayStation4\MonoGame.Framework.Content.Pipeline.targets')" />
   <Import Project="..\PlayStation5\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\PlayStation5\MonoGame.Framework.Content.Pipeline.targets')" />
   <Import Project="..\PSVita\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\PSVita\MonoGame.Framework.Content.Pipeline.targets')" />
   <Import Project="..\Stadia\MonoGame.Framework.Content.Pipeline.targets" Condition="exists('..\Stadia\MonoGame.Framework.Content.Pipeline.targets')" />
+
+  <Import Project="..\Switch\MonoGame.Effect.Compiler.targets" Condition="exists('..\Switch\MonoGame.Effect.Compiler.targets')" />
+  <Import Project="..\XBoxOne\MonoGame.Effect.Compiler.targets" Condition="exists('..\XBoxOne\MonoGame.Effect.Compiler.targets')" />
+  <Import Project="..\PlayStation4\MonoGame.Effect.Compiler.targets" Condition="exists('..\PlayStation4\MonoGame.Effect.Compiler.targets')" />
+  <Import Project="..\PlayStation5\MonoGame.Effect.Compiler.targets" Condition="exists('..\PlayStation5\MonoGame.Effect.Compiler.targets')" />
+  <Import Project="..\PSVita\MonoGame.Effect.Compiler.targets" Condition="exists('..\PSVita\MonoGame.Effect.Compiler.targets')" />
+  <Import Project="..\Stadia\MonoGame.Effect.Compiler.targets" Condition="exists('..\Stadia\MonoGame.Effect.Compiler.targets')" />
 
 </Project>

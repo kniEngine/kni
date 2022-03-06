@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using System.IO;
 #if DIRECTX
 using System.Collections.Generic;
-using TwoMGFX;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 #endif
 
 namespace MonoGame.Tests.ContentPipeline
