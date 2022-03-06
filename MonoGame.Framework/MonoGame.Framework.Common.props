@@ -127,6 +127,8 @@
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
     <Compile Include="Graphics\Effect\DualTextureEffect.cs" />
     <Compile Include="Graphics\Effect\Effect.cs" />
+    <Compile Include="Graphics\Effect\EffectReader09.cs" />
+    <Compile Include="Graphics\Effect\EffectReader10.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotation.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotationCollection.cs" />
     <Compile Include="Graphics\Effect\EffectHelpers.cs" />
