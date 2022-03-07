@@ -33,7 +33,6 @@
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>
 
-  <Import Project="Xna.Framework.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 
 
@@ -78,6 +77,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="nkast.Xna.Framework" Version="3.8.9100" />
     <PackageReference Include="nkast.Wasm.Audio" Version="6.0.2" />
     <PackageReference Include="nkast.Wasm.Canvas" Version="6.0.2" />
     <PackageReference Include="nkast.Wasm.Dom" Version="6.0.2" />

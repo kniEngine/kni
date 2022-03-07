@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>..\Artifacts\Xna.Framework\</BaseOutputPath>
+    <AssemblyName>Xna.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <DefineConstants>XNADESIGNPROVIDED;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>The core framework.</Description>
+    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework</PackageId>
+  </PropertyGroup>
+
+  <Import Project="Xna.Framework.props" />
+    
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
