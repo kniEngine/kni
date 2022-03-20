@@ -44,33 +44,29 @@ namespace Microsoft.Xna.Framework.Content
             else
                 dictionary.Clear();
 
-            for (int i = 0; i < count; i++)
+            if (ReflectionHelpers.IsValueType(keyType))
             {
-				TKey key;
-				TValue value;
-
-                if (ReflectionHelpers.IsValueType(keyType))
+                for (int i = 0; i < count; i++)
                 {
-                	key = input.ReadObject<TKey>(keyReader);
-				}
-				else
-                {
-                    var readerType = input.Read7BitEncodedInt();
-                    key = readerType > 0 ? input.ReadObject<TKey>(input.TypeReaders[readerType - 1]) : default(TKey);
+                    TKey key = input.ReadObject<TKey>(keyReader);
+                    TValue value = input.ReadObject<TValue>(valueReader);
+                    dictionary.Add(key, value);
                 }
-
-                if (ReflectionHelpers.IsValueType(valueType))
-				{
-                	value = input.ReadObject<TValue>(valueReader);
-				}
-				else
-                {
-                    var readerType = input.Read7BitEncodedInt();
-                    value = readerType > 0 ? input.ReadObject<TValue>(input.TypeReaders[readerType - 1]) : default(TValue);
-                }
-
-                dictionary.Add(key, value);
             }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var keyReaderType = input.Read7BitEncodedInt();
+                    TKey key = keyReaderType > 0 ? input.ReadObject<TKey>(input.TypeReaders[keyReaderType - 1]) : default(TKey);
+
+                    var valueReaderType = input.Read7BitEncodedInt();
+                    TValue value = valueReaderType > 0 ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType - 1]) : default(TValue);
+
+                    dictionary.Add(key, value);
+                }
+            }
+
             return dictionary;
         }
     }

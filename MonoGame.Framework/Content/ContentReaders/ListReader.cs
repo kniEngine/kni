@@ -33,14 +33,18 @@ namespace Microsoft.Xna.Framework.Content
             int count = input.ReadInt32();
             List<T> list = existingInstance;
             if (list == null) list = new List<T>(count);
-            for (int i = 0; i < count; i++)
+
+            if (ReflectionHelpers.IsValueType(typeof(T)))
             {
-                if (ReflectionHelpers.IsValueType(typeof(T)))
+                for (int i = 0; i < count; i++)
 				{
                 	list.Add(input.ReadObject<T>(elementReader));
-				}
-				else
-				{
+                }
+			}
+			else
+			{
+                for (int i = 0; i < count; i++)
+                {
                     var readerType = input.Read7BitEncodedInt();
                 	list.Add(readerType > 0 ? input.ReadObject<T>(input.TypeReaders[readerType - 1]) : default(T));
 				}
