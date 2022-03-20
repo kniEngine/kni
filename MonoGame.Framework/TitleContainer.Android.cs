@@ -11,7 +11,12 @@ namespace Microsoft.Xna.Framework
     {
         private static Stream PlatformOpenStream(string safeName)
         {
-            return Android.App.Application.Context.Assets.Open(safeName);
+            Stream stream = Android.App.Application.Context.Assets.Open(safeName, Android.Content.Res.Access.Random);
+
+            // This results in a ~50% reduction in load times on Android due to slow Android asset streams.
+            stream = new BufferedStream(stream);
+
+            return stream;
         }
     }
 }
