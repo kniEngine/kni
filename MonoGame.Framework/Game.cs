@@ -28,23 +28,8 @@ namespace Microsoft.Xna.Framework
         private ContentManager _content;
         internal GamePlatform Platform;
 
-        private SortingFilteringCollection<IDrawable> _drawables =
-            new SortingFilteringCollection<IDrawable>(
-                d => d.Visible,
-                (d, handler) => d.VisibleChanged += handler,
-                (d, handler) => d.VisibleChanged -= handler,
-                (d1 ,d2) => Comparer<int>.Default.Compare(d1.DrawOrder, d2.DrawOrder),
-                (d, handler) => d.DrawOrderChanged += handler,
-                (d, handler) => d.DrawOrderChanged -= handler);
-
-        private SortingFilteringCollection<IUpdateable> _updateables =
-            new SortingFilteringCollection<IUpdateable>(
-                u => u.Enabled,
-                (u, handler) => u.EnabledChanged += handler,
-                (u, handler) => u.EnabledChanged -= handler,
-                (u1, u2) => Comparer<int>.Default.Compare(u1.UpdateOrder, u2.UpdateOrder),
-                (u, handler) => u.UpdateOrderChanged += handler,
-                (u, handler) => u.UpdateOrderChanged -= handler);
+        private DrawableComponents _drawableComponents = new DrawableComponents();
+        private UpdateableComponents _updateableComponents = new UpdateableComponents();
 
         private IGraphicsDeviceManager _graphicsDeviceManager;
         private IGraphicsDeviceService _graphicsDeviceService;
@@ -699,9 +684,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private static readonly Action<IDrawable, GameTime> DrawAction =
-            (drawable, gameTime) => drawable.Draw(gameTime);
-
         /// <summary>
         /// Called when the game should draw a frame.
         ///
@@ -712,11 +694,8 @@ namespace Microsoft.Xna.Framework
         protected virtual void Draw(GameTime gameTime)
         {
 
-            _drawables.ForEachFilteredItem(DrawAction, gameTime);
+            _drawableComponents.DrawVisibleComponents(gameTime);
         }
-
-        private static readonly Action<IUpdateable, GameTime> UpdateAction =
-            (updateable, gameTime) => updateable.Update(gameTime);
 
         /// <summary>
         /// Called when the game should update.
@@ -727,7 +706,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="gameTime">The elapsed time since the last call to <see cref="Update"/>.</param>
         protected virtual void Update(GameTime gameTime)
         {
-            _updateables.ForEachFilteredItem(UpdateAction, gameTime);
+            _updateableComponents.UpdateEnabledComponent(gameTime);
 		}
 
         /// <summary>
@@ -769,13 +748,20 @@ namespace Microsoft.Xna.Framework
             // Since we only subscribe to ComponentAdded after the graphics
             // devices are set up, it is safe to just blindly call Initialize.
             e.GameComponent.Initialize();
-            CategorizeComponent(e.GameComponent);
+
+            if (e.GameComponent is IUpdateable)
+                _updateableComponents.AddUpdatable((IUpdateable)e.GameComponent);
+            if (e.GameComponent is IDrawable)
+                _drawableComponents.AddDrawable((IDrawable)e.GameComponent);
         }
 
         private void Components_ComponentRemoved(
             object sender, GameComponentCollectionEventArgs e)
         {
-            DecategorizeComponent(e.GameComponent);
+            if (e.GameComponent is IUpdateable)
+                _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
+            if (e.GameComponent is IDrawable)
+                _drawableComponents.RemoveDrawable((IDrawable)e.GameComponent);
         }
 
         private void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
@@ -855,7 +841,17 @@ namespace Microsoft.Xna.Framework
             // 2. Subscribe to Added/Removed events to keep the categorized
             //    lists synced and to Initialize future components as they are
             //    added.            
-            CategorizeComponents();
+
+            _updateableComponents.ClearUpdatables();
+            _drawableComponents.ClearDrawables();
+            for (int i = 0; i < Components.Count; i++)
+            {
+                if (Components[i] is IUpdateable)
+                    _updateableComponents.AddUpdatable((IUpdateable)Components[i]);
+                if (Components[i] is IDrawable)
+                    _drawableComponents.AddDrawable((IDrawable)Components[i]);
+            }
+
             _components.ComponentAdded += Components_ComponentAdded;
             _components.ComponentRemoved += Components_ComponentRemoved;
         }
@@ -898,307 +894,363 @@ namespace Microsoft.Xna.Framework
                 Components[i].Initialize();
         }
 
-        private void CategorizeComponents()
+
+        class DrawableComponents
         {
-            DecategorizeComponents();
-            for (int i = 0; i < Components.Count; ++i)
-                CategorizeComponent(Components[i]);
-        }
+        
+            private readonly List<IDrawable> _drawableComponents = new List<IDrawable>();
+            private readonly List<IDrawable> _visibleComponents = new List<IDrawable>();
+            private bool _isVisibleCacheInvalidated = true;
 
-        // FIXME: I am open to a better name for this method.  It does the
-        //        opposite of CategorizeComponents.
-        private void DecategorizeComponents()
-        {
-            _updateables.Clear();
-            _drawables.Clear();
-        }
+            private readonly List<DrawableJournalEntry> _addDrawableJournal = new List<DrawableJournalEntry>();
+            private readonly List<int> _removeDrawableJournal = new List<int>();
+            private int _addDrawableJournalCount;
 
-        private void CategorizeComponent(IGameComponent component)
-        {
-            if (component is IUpdateable)
-                _updateables.Add((IUpdateable)component);
-            if (component is IDrawable)
-                _drawables.Add((IDrawable)component);
-        }
-
-        // FIXME: I am open to a better name for this method.  It does the
-        //        opposite of CategorizeComponent.
-        private void DecategorizeComponent(IGameComponent component)
-        {
-            if (component is IUpdateable)
-                _updateables.Remove((IUpdateable)component);
-            if (component is IDrawable)
-                _drawables.Remove((IDrawable)component);
-        }
-
-        /// <summary>
-        /// The SortingFilteringCollection class provides efficient, reusable
-        /// sorting and filtering based on a configurable sort comparer, filter
-        /// predicate, and associate change events.
-        /// </summary>
-        class SortingFilteringCollection<T> : ICollection<T>
-        {
-            private readonly List<T> _items;
-            private readonly List<AddJournalEntry<T>> _addJournal;
-            private readonly Comparison<AddJournalEntry<T>> _addJournalSortComparison;
-            private readonly List<int> _removeJournal;
-            private readonly List<T> _cachedFilteredItems;
-            private bool _shouldRebuildCache;
-
-            private readonly Predicate<T> _filter;
-            private readonly Comparison<T> _sort;
-            private readonly Action<T, EventHandler<EventArgs>> _filterChangedSubscriber;
-            private readonly Action<T, EventHandler<EventArgs>> _filterChangedUnsubscriber;
-            private readonly Action<T, EventHandler<EventArgs>> _sortChangedSubscriber;
-            private readonly Action<T, EventHandler<EventArgs>> _sortChangedUnsubscriber;
-
-            public SortingFilteringCollection(
-                Predicate<T> filter,
-                Action<T, EventHandler<EventArgs>> filterChangedSubscriber,
-                Action<T, EventHandler<EventArgs>> filterChangedUnsubscriber,
-                Comparison<T> sort,
-                Action<T, EventHandler<EventArgs>> sortChangedSubscriber,
-                Action<T, EventHandler<EventArgs>> sortChangedUnsubscriber)
+            public void AddDrawable(IDrawable component)
             {
-                _items = new List<T>();
-                _addJournal = new List<AddJournalEntry<T>>();
-                _removeJournal = new List<int>();
-                _cachedFilteredItems = new List<T>();
-                _shouldRebuildCache = true;
-
-                _filter = filter;
-                _filterChangedSubscriber = filterChangedSubscriber;
-                _filterChangedUnsubscriber = filterChangedUnsubscriber;
-                _sort = sort;
-                _sortChangedSubscriber = sortChangedSubscriber;
-                _sortChangedUnsubscriber = sortChangedUnsubscriber;
-
-                _addJournalSortComparison = CompareAddJournalEntry;
+                // NOTE: We subscribe to item events after components in _addDrawableJournal have been merged.
+                _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
+                _isVisibleCacheInvalidated = true;
             }
 
-            private int CompareAddJournalEntry(AddJournalEntry<T> x, AddJournalEntry<T> y)
+            public void RemoveDrawable(IDrawable component)
             {
-                int result = _sort(x.Item, y.Item);
-                if (result != 0)
-                    return result;
-                return x.Order - y.Order;
-            }
+                if (_addDrawableJournal.Remove(new DrawableJournalEntry(component,-1)))
+                    return;
 
-            public void ForEachFilteredItem<TUserData>(Action<T, TUserData> action, TUserData userData)
-            {
-                if (_shouldRebuildCache)
-                {
-                    ProcessRemoveJournal();
-                    ProcessAddJournal();
-
-                    // Rebuild the cache
-                    _cachedFilteredItems.Clear();
-                    for (int i = 0; i < _items.Count; ++i)
-                        if (_filter(_items[i]))
-                            _cachedFilteredItems.Add(_items[i]);
-
-                    _shouldRebuildCache = false;
-                }
-
-                for (int i = 0; i < _cachedFilteredItems.Count; ++i)
-                    action(_cachedFilteredItems[i], userData);
-
-                // If the cache was invalidated as a result of processing items,
-                // now is a good time to clear it and give the GC (more of) a
-                // chance to do its thing.
-                if (_shouldRebuildCache)
-                    _cachedFilteredItems.Clear();
-            }
-
-            public void Add(T item)
-            {
-                // NOTE: We subscribe to item events after items in _addJournal
-                //       have been merged.
-                _addJournal.Add(new AddJournalEntry<T>(_addJournal.Count, item));
-                InvalidateCache();
-            }
-
-            public bool Remove(T item)
-            {
-                if (_addJournal.Remove(AddJournalEntry<T>.CreateKey(item)))
-                    return true;
-
-                var index = _items.IndexOf(item);
+                var index = _drawableComponents.IndexOf(component);
                 if (index >= 0)
                 {
-                    UnsubscribeFromItemEvents(item);
-                    _removeJournal.Add(index);
-                    InvalidateCache();
-                    return true;
+                    component.VisibleChanged -= Component_VisibleChanged;
+                    component.DrawOrderChanged -= Component_DrawOrderChanged;
+                    _removeDrawableJournal.Add(index);
+                    _isVisibleCacheInvalidated = true;
                 }
-                return false;
             }
 
-            public void Clear()
+            public void ClearDrawables()
             {
-                for (int i = 0; i < _items.Count; ++i)
+                for (int i = 0; i < _drawableComponents.Count; i++)
                 {
-                    _filterChangedUnsubscriber(_items[i], Item_FilterPropertyChanged);
-                    _sortChangedUnsubscriber(_items[i], Item_SortPropertyChanged);
+                    _drawableComponents[i].VisibleChanged -= Component_VisibleChanged;
+                    _drawableComponents[i].DrawOrderChanged -= Component_DrawOrderChanged;
                 }
 
-                _addJournal.Clear();
-                _removeJournal.Clear();
-                _items.Clear();
-
-                InvalidateCache();
+                _addDrawableJournal.Clear();
+                _removeDrawableJournal.Clear();
+                _drawableComponents.Clear();
+                _isVisibleCacheInvalidated = true;
             }
 
-            public bool Contains(T item)
+            private void Component_VisibleChanged(object sender, EventArgs e)
             {
-                return _items.Contains(item);
+                _isVisibleCacheInvalidated = true;
             }
 
-            public void CopyTo(T[] array, int arrayIndex)
+            private void Component_DrawOrderChanged(object sender, EventArgs e)
             {
-                _items.CopyTo(array, arrayIndex);
+                var component = (IDrawable)sender;
+                var index = _drawableComponents.IndexOf(component);
+
+                _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
+
+                component.VisibleChanged -= Component_VisibleChanged;
+                component.DrawOrderChanged -= Component_DrawOrderChanged;
+                _removeDrawableJournal.Add(index);
+
+                _isVisibleCacheInvalidated = true;
             }
 
-            public int Count
+            internal void DrawVisibleComponents(GameTime gameTime)
             {
-                get { return _items.Count; }
+                if (_removeDrawableJournal.Count > 0)
+                    ProcessRemoveDrawableJournal();
+                if (_addDrawableJournal.Count > 0)
+                    ProcessAddDrawableJournal();
+
+                // rebuild _visibleComponents
+                if (_isVisibleCacheInvalidated)
+                {
+                    _visibleComponents.Clear();
+                    for (int i = 0; i < _drawableComponents.Count; i++)
+                        if (_drawableComponents[i].Visible)
+                            _visibleComponents.Add(_drawableComponents[i]);
+
+                    _isVisibleCacheInvalidated = false;
+                }
+
+                // draw components
+                for (int i = 0; i < _visibleComponents.Count; i++)
+                    _visibleComponents[i].Draw(gameTime);
+
+                // If the cache was invalidated as a result of processing components,
+                // now is a good time to clear it and give the GC (more of) a
+                // chance to do its thing.
+                if (_isVisibleCacheInvalidated)
+                    _visibleComponents.Clear();
             }
 
-            public bool IsReadOnly
+            private void ProcessRemoveDrawableJournal()
             {
-                get { return false; }
+                // Remove components in reverse.
+                _removeDrawableJournal.Sort();
+                for (int i = _removeDrawableJournal.Count - 1; i >= 0; i--)
+                    _drawableComponents.RemoveAt(_removeDrawableJournal[i]);
+
+                _removeDrawableJournal.Clear();
             }
 
-            public IEnumerator<T> GetEnumerator()
+            private void ProcessAddDrawableJournal()
             {
-                return _items.GetEnumerator();
-            }
-
-            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-            {
-                return ((System.Collections.IEnumerable)_items).GetEnumerator();
-            }
-
-            private static readonly Comparison<int> RemoveJournalSortComparison =
-                (x, y) => Comparer<int>.Default.Compare(y, x); // Sort high to low
-            private void ProcessRemoveJournal()
-            {
-                if (_removeJournal.Count == 0)
-                    return;
-
-                // Remove items in reverse.  (Technically there exist faster
-                // ways to bulk-remove from a variable-length array, but List<T>
-                // does not provide such a method.)
-                _removeJournal.Sort(RemoveJournalSortComparison);
-                for (int i = 0; i < _removeJournal.Count; ++i)
-                    _items.RemoveAt(_removeJournal[i]);
-                _removeJournal.Clear();
-            }
-
-            private void ProcessAddJournal()
-            {
-                if (_addJournal.Count == 0)
-                    return;
-
-                // Prepare the _addJournal to be merge-sorted with _items.
-                // _items is already sorted (because it is always sorted).
-                _addJournal.Sort(_addJournalSortComparison);
+                // Prepare the _addJournal to be merge-sorted with _drawableComponents.
+                // _drawableComponents is always sorted.
+                _addDrawableJournal.Sort(DrawableJournalEntry.CompareAddJournalEntry);
+                _addDrawableJournalCount = 0;
 
                 int iAddJournal = 0;
                 int iItems = 0;
 
-                while (iItems < _items.Count && iAddJournal < _addJournal.Count)
+                while (iItems < _drawableComponents.Count && iAddJournal < _addDrawableJournal.Count)
                 {
-                    var addJournalItem = _addJournal[iAddJournal].Item;
-                    // If addJournalItem is less than (belongs before)
-                    // _items[iItems], insert it.
-                    if (_sort(addJournalItem, _items[iItems]) < 0)
+                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addJournalItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
                     {
-                        SubscribeToItemEvents(addJournalItem);
-                        _items.Insert(iItems, addJournalItem);
-                        ++iAddJournal;
+                        addJournalItem.VisibleChanged += Component_VisibleChanged;
+                        addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
+                        _drawableComponents.Insert(iItems, addJournalItem);
+                        iAddJournal++;
                     }
                     // Always increment iItems, either because we inserted and
                     // need to move past the insertion, or because we didn't
                     // insert and need to consider the next element.
-                    ++iItems;
+                    iItems++;
                 }
 
                 // If _addJournal had any "tail" items, append them all now.
-                for (; iAddJournal < _addJournal.Count; ++iAddJournal)
+                for (; iAddJournal < _addDrawableJournal.Count; iAddJournal++)
                 {
-                    var addJournalItem = _addJournal[iAddJournal].Item;
-                    SubscribeToItemEvents(addJournalItem);
-                    _items.Add(addJournalItem);
+                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    addJournalItem.VisibleChanged += Component_VisibleChanged;
+                    addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
+                    _drawableComponents.Add(addJournalItem);
                 }
 
-                _addJournal.Clear();
+                _addDrawableJournal.Clear();
             }
 
-            private void SubscribeToItemEvents(T item)
+            private struct DrawableJournalEntry
             {
-                _filterChangedSubscriber(item, Item_FilterPropertyChanged);
-                _sortChangedSubscriber(item, Item_SortPropertyChanged);
-            }
+                private readonly int AddOrder;
+                public readonly IDrawable Component;
 
-            private void UnsubscribeFromItemEvents(T item)
-            {
-                _filterChangedUnsubscriber(item, Item_FilterPropertyChanged);
-                _sortChangedUnsubscriber(item, Item_SortPropertyChanged);
-            }
+                public DrawableJournalEntry(IDrawable component, int addOrder)
+                {
+                    Component = component;
+                    this.AddOrder = addOrder;
+                }
 
-            private void InvalidateCache()
-            {
-                _shouldRebuildCache = true;
-            }
+                public override int GetHashCode()
+                {
+                    return Component.GetHashCode();
+                }
 
-            private void Item_FilterPropertyChanged(object sender, EventArgs e)
-            {
-                InvalidateCache();
-            }
+                public override bool Equals(object obj)
+                {
+                    if (!(obj is DrawableJournalEntry))
+                        return false;
 
-            private void Item_SortPropertyChanged(object sender, EventArgs e)
-            {
-                var item = (T)sender;
-                var index = _items.IndexOf(item);
-
-                _addJournal.Add(new AddJournalEntry<T>(_addJournal.Count, item));
-                _removeJournal.Add(index);
-
-                // Until the item is back in place, we don't care about its
-                // events.  We will re-subscribe when _addJournal is processed.
-                UnsubscribeFromItemEvents(item);
-                InvalidateCache();
+                    return object.ReferenceEquals(Component, ((DrawableJournalEntry)obj).Component);
+                }
+                
+                internal static int CompareAddJournalEntry(DrawableJournalEntry x, DrawableJournalEntry y)
+                {
+                    int result = Comparer<int>.Default.Compare(x.Component.DrawOrder, y.Component.DrawOrder);
+                    if (result == 0)
+                        result = x.AddOrder - y.AddOrder;
+                    return result;
+                }
             }
         }
 
-        private struct AddJournalEntry<T>
+        class UpdateableComponents
         {
-            public readonly int Order;
-            public readonly T Item;
 
-            public AddJournalEntry(int order, T item)
+            private readonly List<IUpdateable> _updateableComponents = new List<IUpdateable>();
+            private readonly List<IUpdateable> _enabledComponents = new List<IUpdateable>();
+            private bool _isEnabledCacheInvalidated = true;
+
+            private readonly List<UpdateableJournalEntry> _addUpdateableJournal = new List<UpdateableJournalEntry>();
+            private readonly List<int> _removeUpdateableJournal = new List<int>();
+            private int _addUpdateableJournalCount;
+        
+            public void AddUpdatable(IUpdateable component)
             {
-                Order = order;
-                Item = item;
+                // NOTE: We subscribe to item events after items in _addUpdateableJournal have been merged.
+                _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
+                _isEnabledCacheInvalidated = true;
             }
 
-            public static AddJournalEntry<T> CreateKey(T item)
+            public void RemoveUpdatable(IUpdateable component)
             {
-                return new AddJournalEntry<T>(-1, item);
+                if (_addUpdateableJournal.Remove(new UpdateableJournalEntry(component, -1)))
+                    return;
+
+                var index = _updateableComponents.IndexOf(component);
+                if (index >= 0)
+                {
+                    component.EnabledChanged -= Component_EnabledChanged;
+                    component.UpdateOrderChanged -= Component_UpdateOrderChanged;
+
+                    _removeUpdateableJournal.Add(index);
+                    _isEnabledCacheInvalidated = true;
+                }
             }
 
-            public override int GetHashCode()
+            public void ClearUpdatables()
             {
-                return Item.GetHashCode();
+                for (int i = 0; i < _updateableComponents.Count; i++)
+                {                    
+                    _updateableComponents[i].EnabledChanged -= Component_EnabledChanged;
+                    _updateableComponents[i].UpdateOrderChanged -= Component_UpdateOrderChanged;
+                }
+
+                _addUpdateableJournal.Clear();
+                _removeUpdateableJournal.Clear();
+                _updateableComponents.Clear();
+
+                _isEnabledCacheInvalidated = true;
             }
 
-            public override bool Equals(object obj)
+            private void Component_EnabledChanged(object sender, EventArgs e)
             {
-                if (!(obj is AddJournalEntry<T>))
-                    return false;
+                _isEnabledCacheInvalidated = true;
+            }
 
-                return object.Equals(Item, ((AddJournalEntry<T>)obj).Item);
+            private void Component_UpdateOrderChanged(object sender, EventArgs e)
+            {
+                var component = (IUpdateable)sender;
+                var index = _updateableComponents.IndexOf(component);
+
+                _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
+
+                component.EnabledChanged -= Component_EnabledChanged;
+                component.UpdateOrderChanged -= Component_UpdateOrderChanged;
+                _removeUpdateableJournal.Add(index);
+
+                _isEnabledCacheInvalidated = true;
+            }
+            
+            private void ProcessRemoveUpdateableJournal()
+            {
+                // Remove components in reverse.
+                _removeUpdateableJournal.Sort();
+                for (int i = _removeUpdateableJournal.Count-1; i >= 0; i--)
+                    _updateableComponents.RemoveAt(_removeUpdateableJournal[i]);
+
+                _removeUpdateableJournal.Clear();
+            }
+
+            internal void UpdateEnabledComponent(GameTime gameTime)
+            {
+                if (_removeUpdateableJournal.Count > 0)
+                    ProcessRemoveUpdateableJournal();
+                if (_addUpdateableJournal.Count > 0)
+                    ProcessAddUpdateableJournal();
+
+                // rebuild _enabledComponents
+                if (_isEnabledCacheInvalidated)
+                {
+                    _enabledComponents.Clear();
+                    for (int i = 0; i < _updateableComponents.Count; i++)
+                        if (_updateableComponents[i].Enabled)
+                            _enabledComponents.Add(_updateableComponents[i]);
+
+                    _isEnabledCacheInvalidated = false;
+                }
+
+                // update components
+                for (int i = 0; i < _enabledComponents.Count; i++)
+                    _enabledComponents[i].Update(gameTime);
+
+                // If the cache was invalidated as a result of processing components,
+                // now is a good time to clear it and give the GC (more of) a
+                // chance to do its thing.
+                if (_isEnabledCacheInvalidated)
+                    _enabledComponents.Clear();
+            }
+
+            private void ProcessAddUpdateableJournal()
+            {
+                // Prepare the _addJournal to be merge-sorted with _updateableComponents.
+                // _updateableComponents is always sorted.
+                _addUpdateableJournal.Sort(UpdateableJournalEntry.CompareAddJournalEntry);
+                _addUpdateableJournalCount = 0;
+
+                int iAddJournal = 0;
+                int iItems = 0;
+
+                while (iItems < _updateableComponents.Count && iAddJournal < _addUpdateableJournal.Count)
+                {
+                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addJournalItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
+                    {
+                        addJournalItem.EnabledChanged += Component_EnabledChanged;
+                        addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                        _updateableComponents.Insert(iItems, addJournalItem);
+                        iAddJournal++;
+                    }
+                    // Always increment iItems, either because we inserted and
+                    // need to move past the insertion, or because we didn't
+                    // insert and need to consider the next element.
+                    iItems++;
+                }
+
+                // If _addJournal had any "tail" items, append them all now.
+                for (; iAddJournal < _addUpdateableJournal.Count; iAddJournal++)
+                {
+                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    addJournalItem.EnabledChanged += Component_EnabledChanged;
+                    addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+
+                    _updateableComponents.Add(addJournalItem);
+                }
+
+                _addUpdateableJournal.Clear();
+            }
+
+            private struct UpdateableJournalEntry
+            {
+                private readonly int AddOrder;
+                public readonly IUpdateable Component;
+
+                public UpdateableJournalEntry(IUpdateable component, int addOrder)
+                {
+                    Component = component;
+                    AddOrder = addOrder;
+                }
+
+                public override int GetHashCode()
+                {
+                    return Component.GetHashCode();
+                }
+
+                public override bool Equals(object obj)
+                {
+                    if (!(obj is UpdateableJournalEntry))
+                        return false;
+
+                    return object.Equals(Component, ((UpdateableJournalEntry)obj).Component);
+                }
+
+                internal static int CompareAddJournalEntry(UpdateableJournalEntry x, UpdateableJournalEntry y)
+                {
+                    int result = Comparer<int>.Default.Compare(x.Component.UpdateOrder, y.Component.UpdateOrder);
+                    if (result == 0)
+                        result = x.AddOrder - y.AddOrder;
+                    return result;
+                }
             }
         }
     }
