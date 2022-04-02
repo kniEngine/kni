@@ -290,12 +290,10 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				throw new ContentLoadException("The content file was not found.", fileNotFound);
 			}
-#if !WINDOWS_UAP
 			catch (DirectoryNotFoundException directoryNotFound)
 			{
 				throw new ContentLoadException("The directory was not found.", directoryNotFound);
 			}
-#endif
 			catch (Exception exception)
 			{
 				throw new ContentLoadException("Opening stream error.", exception);
