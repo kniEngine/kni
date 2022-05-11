@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// <summary>
     /// How to grow the bin when a rectangel can't be placed.
     /// </summary>
-    public enum GrowRule
+    internal enum GrowRule
     {
         /// <summary>
         /// Don't grow the bin, throw an exception when full.
