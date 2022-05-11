@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// <summary>
     /// A bin that can pack rectangles using the MaxRects algorithm with several heuristics.
     /// </summary>
-    public class MaxRectsBin
+    internal class MaxRectsBin
     {
         /// <summary>
         /// Width of the bin.

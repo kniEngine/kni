@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// <summary>
     /// Heuristic method to use to choose the rectangles positions.
     /// </summary>
-    public enum MaxRectsHeuristic
+    internal enum MaxRectsHeuristic
     {
         /// <summary>
         /// Best Short Side Fit: Positions the rectangle against the short side of a free rectangle into which it fits the best.
