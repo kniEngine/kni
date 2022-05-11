@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 if (!defaultCharacterFound)
                 {
-                    throw new InvalidOperationException("The specified DefaultCharacter is not part of this font.");
+                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
                 }
             }
 
