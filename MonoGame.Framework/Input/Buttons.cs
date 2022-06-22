@@ -13,11 +13,6 @@ namespace Microsoft.Xna.Framework.Input
     public enum Buttons
     {
         /// <summary>
-        /// No button set.
-        /// </summary>
-        None = 0,
-
-        /// <summary>
         /// Directional pad up.
         /// </summary>
         DPadUp = 1,

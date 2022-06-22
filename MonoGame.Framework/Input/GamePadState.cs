@@ -135,7 +135,6 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            if (button == Microsoft.Xna.Framework.Input.Buttons.None) return false;
             return (GetVirtualButtons() & button) == button;
         }
 
