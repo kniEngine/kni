@@ -38,7 +38,6 @@ namespace Microsoft.Xna.Framework
 
         bool disposed = false;
         ISurfaceHolder mHolder;
-        System.Drawing.Size size;
 
         ManualResetEvent _waitForPausedStateProcessed = new ManualResetEvent(false);
         ManualResetEvent _waitForResumedStateProcessed = new ManualResetEvent(false);
@@ -1197,48 +1196,6 @@ namespace Microsoft.Xna.Framework
         private EGLConfig eglConfig;
         private EGLContext eglContext;
         private EGLSurface eglSurface;
-
-        /// <summary>The visibility of the window. Always returns true.</summary>
-        /// <value></value>
-        /// <exception cref="T:System.ObjectDisposed">The instance has been disposed</exception>
-        public virtual bool Visible
-        {
-            get
-            {
-                EnsureUndisposed();
-                return true;
-            }
-            set
-            {
-                EnsureUndisposed();
-            }
-        }
-
-        /// <summary>The size of the current view.</summary>
-        /// <value>A <see cref="T:System.Drawing.Size" /> which is the size of the current view.</value>
-        /// <exception cref="T:System.ObjectDisposed">The instance has been disposed</exception>
-        public virtual System.Drawing.Size Size
-        {
-            get
-            {
-                EnsureUndisposed();
-                return size;
-            }
-            set
-            {
-                EnsureUndisposed();
-                if (size != value)
-                {
-                    size = value;
-                    OnResize(EventArgs.Empty);
-                }
-            }
-        }
-
-        private void OnResize(EventArgs eventArgs)
-        {
-
-        }
 
         #endregion
 
