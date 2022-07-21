@@ -519,27 +519,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void ApplyState(bool applyShaders)
-        {
-            PlatformBeginApplyState();
-
-            PlatformApplyBlend();
-
-            if (_depthStencilStateDirty)
-            {
-                _actualDepthStencilState.PlatformApplyState(this);
-                _depthStencilStateDirty = false;
-            }
-
-            if (_rasterizerStateDirty)
-            {
-                _actualRasterizerState.PlatformApplyState(this);
-                _rasterizerStateDirty = false;
-            }
-
-            PlatformApplyState(applyShaders);
-        }
-
         public void Clear(Color color)
         {
             var options = ClearOptions.Target;

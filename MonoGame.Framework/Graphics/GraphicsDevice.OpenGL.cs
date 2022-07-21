@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // some drivers won't clear with stencil test disabled
             DepthStencilState = this.clearDepthStencilState;
 		    BlendState = BlendState.Opaque;
-            ApplyState(false);
+            PlatformApplyState();
 
             ClearBufferMask bufferMask = 0;
             if ((options & ClearOptions.Target) == ClearOptions.Target)
@@ -962,9 +962,31 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-        internal void PlatformBeginApplyState()
+        private void PlatformApplyState()
         {
             Threading.EnsureUIThread();
+
+            {
+                PlatformApplyBlend();
+            }
+
+            if (_depthStencilStateDirty)
+            {
+                _actualDepthStencilState.PlatformApplyState(this);
+                _depthStencilStateDirty = false;
+            }
+
+            if (_rasterizerStateDirty)
+            {
+                _actualRasterizerState.PlatformApplyState(this);
+                _rasterizerStateDirty = false;
+            }
+
+            if (_scissorRectangleDirty)
+            {
+                PlatformApplyScissorRectangle();
+                _scissorRectangleDirty = false;
+            }
         }
 
         private void PlatformApplyBlend(bool force = false)
@@ -987,22 +1009,18 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void PlatformApplyState(bool applyShaders)
+        private void PlatformApplyScissorRectangle()
         {
-            if ( _scissorRectangleDirty )
-	        {
-                var scissorRect = _scissorRectangle;
-                if (!IsRenderTargetBound)
-                    scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
-                GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-                GraphicsExtensions.CheckGLError();
-	            _scissorRectangleDirty = false;
-	        }
+            var scissorRect = _scissorRectangle;
+            if (!IsRenderTargetBound)
+                scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
+            GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
+            GraphicsExtensions.CheckGLError();
+            _scissorRectangleDirty = false;
+        }
 
-            // If we're not applying shaders then early out now.
-            if (!applyShaders)
-                return;
-
+        private void PlatformApplyIndexBuffer()
+        {
             if (_indexBufferDirty)
             {
                 if (_indexBuffer != null)
@@ -1012,7 +1030,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 _indexBufferDirty = false;
             }
+        }
 
+        private void PlatformApplyVertexBuffers()
+        {
+        }
+
+        private void PlatformApplyShaders()
+        {
             if (_vertexShader == null)
                 throw new InvalidOperationException("A vertex shader must be set!");
             if (_pixelShader == null)
@@ -1050,7 +1075,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            ApplyState(true);
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -1073,7 +1101,10 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
             where T : struct
         {
-            ApplyState(true);
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -1105,7 +1136,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
-            ApplyState(true);   
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             ApplyAttribs(_vertexShader, 0);
 
@@ -1122,7 +1156,10 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             where T : struct
         {
-            ApplyState(true);
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -1162,7 +1199,10 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             where T : struct
         {
-            ApplyState(true);
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -1202,7 +1242,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!GraphicsCapabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
-            ApplyState(true);
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
 
             var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
