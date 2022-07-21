@@ -1254,22 +1254,41 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new ArgumentException();
         }
 
-        internal void PlatformBeginApplyState()
+        private void PlatformApplyState()
         {
             Debug.Assert(_d3dContext != null, "The d3d context is null!");
+
+            if (_blendFactorDirty || _blendStateDirty)
+            {
+                PlatformApplyBlend();
+                _blendFactorDirty = false;
+                _blendStateDirty = false;
+            }
+
+            if (_depthStencilStateDirty)
+            {
+                _actualDepthStencilState.PlatformApplyState(this);
+                _depthStencilStateDirty = false;
+            }
+
+            if (_rasterizerStateDirty)
+            {
+                _actualRasterizerState.PlatformApplyState(this);
+                _rasterizerStateDirty = false;
+            }
+
+            if (_scissorRectangleDirty)
+            {
+                PlatformApplyScissorRectangle();
+                _scissorRectangleDirty = false;
+            }
         }
 
         private void PlatformApplyBlend()
         {
-            if (_blendFactorDirty || _blendStateDirty)
-            {
-                var state = _actualBlendState.GetDxState(this);
-                var factor = GetBlendFactor();
-                _d3dContext.OutputMerger.SetBlendState(state, factor);
-
-                _blendFactorDirty = false;
-                _blendStateDirty = false;
-            }
+            var state = _actualBlendState.GetDxState(this);
+            var factor = GetBlendFactor();
+            _d3dContext.OutputMerger.SetBlendState(state, factor);
         }
 
         private SharpDX.Mathematics.Interop.RawColor4 GetBlendFactor()
@@ -1281,23 +1300,21 @@ namespace Microsoft.Xna.Framework.Graphics
 					BlendFactor.A / 255.0f);
         }
 
-        internal void PlatformApplyState(bool applyShaders)
+        private void PlatformApplyScissorRectangle()
         {
             // NOTE: This code assumes _d3dContext has been locked by the caller.
 
-            if (_scissorRectangleDirty)
-            {
-                _d3dContext.Rasterizer.SetScissorRectangle(
-                    _scissorRectangle.X,
-                    _scissorRectangle.Y,
-                    _scissorRectangle.Right,
-                    _scissorRectangle.Bottom);
-                _scissorRectangleDirty = false;
-            }
+            _d3dContext.Rasterizer.SetScissorRectangle(
+                _scissorRectangle.X,
+                _scissorRectangle.Y,
+                _scissorRectangle.Right,
+                _scissorRectangle.Bottom);
+            _scissorRectangleDirty = false;
+        }
 
-            // If we're not applying shaders then early out now.
-            if (!applyShaders)
-                return;
+        private void PlatformApplyIndexBuffer()
+        {
+            // NOTE: This code assumes _d3dContext has been locked by the caller.
 
             if (_indexBufferDirty)
             {
@@ -1311,6 +1328,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 _indexBufferDirty = false;
             }
+        }
+
+        private void PlatformApplyVertexBuffers()
+        {
+            // NOTE: This code assumes _d3dContext has been locked by the caller.
 
             if (_vertexBuffersDirty)
             {
@@ -1336,7 +1358,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     _vertexBufferSlotsUsed = 0;
                 }
             }
+        }
 
+        private void PlatformApplyShaders()
+        {
+            // NOTE: This code assumes _d3dContext has been locked by the caller.
+            
             if (_vertexShader == null)
                 throw new InvalidOperationException("A vertex shader must be set!");
             if (_pixelShader == null)
@@ -1468,14 +1495,21 @@ namespace Microsoft.Xna.Framework.Graphics
             return startIndex;
         }
 
+        private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
+        {
+            _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+        }
+
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
-
+                PlatformApplyPrimitiveType(primitiveType);
                 var indexCount = GetElementCountArray(primitiveType, primitiveCount);
                 _d3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
             }
@@ -1487,9 +1521,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                PlatformApplyPrimitiveType(primitiveType);
                 _d3dContext.Draw(vertexCount, startVertex);
             }
         }
@@ -1498,9 +1535,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                PlatformApplyPrimitiveType(primitiveType);
                 _d3dContext.Draw(vertexCount, vertexStart);
             }
         }
@@ -1513,9 +1553,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                PlatformApplyPrimitiveType(primitiveType);
                 _d3dContext.DrawIndexed(indexCount, startIndex, startVertex);
             }
         }
@@ -1528,9 +1571,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                PlatformApplyPrimitiveType(primitiveType);
                 _d3dContext.DrawIndexed(indexCount, startIndex, startVertex);
             }
         }
@@ -1540,9 +1586,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (_d3dContext)
             {
-                ApplyState(true);
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GetElementCountArray(primitiveType, primitiveCount);
 
                 if (baseInstance > 0)

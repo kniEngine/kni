@@ -63,15 +63,51 @@ namespace Microsoft.Xna.Framework.Graphics
             return null;
         }
 		
-        internal void PlatformBeginApplyState()
+        private void PlatformApplyState()
         {
+            if (_blendFactorDirty || _blendStateDirty)
+            {
+                PlatformApplyBlend();
+                _blendFactorDirty = false;
+                _blendStateDirty = false;
+            }
+
+            if (_depthStencilStateDirty)
+            {
+                _actualDepthStencilState.PlatformApplyState(this);
+                _depthStencilStateDirty = false;
+            }
+
+            if (_rasterizerStateDirty)
+            {
+                _actualRasterizerState.PlatformApplyState(this);
+                _rasterizerStateDirty = false;
+            }
+
+            if (_scissorRectangleDirty)
+            {
+                PlatformApplyScissorRectangle();
+                _scissorRectangleDirty = false;
+            }
         }
 
         private void PlatformApplyBlend()
         {
         }
 
-        internal void PlatformApplyState(bool applyShaders)
+        internal void PlatformApplyScissorRectangle()
+        {
+        }
+
+        internal void PlatformApplyIndexBuffer()
+        {
+        }
+
+        internal void PlatformApplyVertexBuffers()
+        {
+        }
+
+        internal void PlatformApplyShaders()
         {
         }
 
