@@ -32,6 +32,8 @@ namespace Microsoft.Xna.Framework.Graphics
         internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
         private int _vertexBufferSlotsUsed;
 
+        private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
+
 #if WINDOWS_UAP
 
         // Declare Direct2D Objects
@@ -1497,7 +1499,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
+            if (_lastPrimitiveType == primitiveType)
+                return;
+
             _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+            _lastPrimitiveType = primitiveType;
         }
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
@@ -1517,13 +1523,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct
         {
+            // TODO: Do not set public VertexBuffers.
+            //       Bind directly to d3dContext and set dirty flags.
             var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, vertexCount, vertexDeclaration);
 
             lock (_d3dContext)
             {
                 PlatformApplyState();
-                PlatformApplyIndexBuffer();
-                PlatformApplyVertexBuffers();
+                //PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
 
                 PlatformApplyPrimitiveType(primitiveType);
@@ -1536,7 +1544,7 @@ namespace Microsoft.Xna.Framework.Graphics
             lock (_d3dContext)
             {
                 PlatformApplyState();
-                PlatformApplyIndexBuffer();
+                //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
 
@@ -1547,6 +1555,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
+            // TODO: Do not set public VertexBuffers and Indices.
+            //       Bind directly to d3dContext and set dirty flags.
             var indexCount = GetElementCountArray(primitiveType, primitiveCount);
             var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
@@ -1554,8 +1564,8 @@ namespace Microsoft.Xna.Framework.Graphics
             lock (_d3dContext)
             {
                 PlatformApplyState();
-                PlatformApplyIndexBuffer();
-                PlatformApplyVertexBuffers();
+                PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
 
                 PlatformApplyPrimitiveType(primitiveType);
@@ -1565,6 +1575,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
+            // TODO: Do not set public VertexBuffers and Indices.
+            //       Bind directly to d3dContext and set dirty flags.
             var indexCount = GetElementCountArray(primitiveType, primitiveCount);
             var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
@@ -1572,8 +1584,8 @@ namespace Microsoft.Xna.Framework.Graphics
             lock (_d3dContext)
             {
                 PlatformApplyState();
-                PlatformApplyIndexBuffer();
-                PlatformApplyVertexBuffers();
+                PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
 
                 PlatformApplyPrimitiveType(primitiveType);

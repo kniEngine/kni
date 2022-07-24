@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private static BufferBindingInfo[] _bufferBindingInfos;
         private static int _activeBufferBindingInfosCount;
         private static bool[] _newEnabledVertexAttributes;
-        internal static readonly List<int> _enabledVertexAttributes = new List<int>();
+        internal static readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
         internal static bool _attribsDirty;
 
         internal FramebufferHelper framebufferHelper;
@@ -1102,16 +1102,17 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
-            _indexBufferDirty = true;
+            _vertexBuffersDirty = true;
 
             // Pin the buffers.
             var vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
@@ -1157,13 +1158,14 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
             _indexBufferDirty = true;
@@ -1200,13 +1202,14 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
             _indexBufferDirty = true;
