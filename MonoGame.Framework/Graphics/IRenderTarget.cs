@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Represents a render target.
     /// </summary>
-    internal partial interface IRenderTarget
+    internal interface IRenderTarget
     {
         /// <summary>
         /// Gets the width of the render target in pixels
@@ -54,6 +54,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <value>The height of the render target in pixels.</value>
         int Height { get; }
+
+        int MultiSampleCount { get; }
 
         /// <summary>
         /// Gets the usage mode of the render target.

@@ -3,30 +3,23 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget2D
+    public partial class RenderTarget2D : IRenderTargetGL
     {
         private static Action<RenderTarget2D> DisposeAction =
             (t) => t.GraphicsDevice.PlatformDeleteRenderTarget(t);
 
-        int IRenderTarget.GLTexture
-        {
-            get { return glTexture; }
-        }
+        int IRenderTargetGL.GLTexture { get { return glTexture; } }
+        TextureTarget IRenderTargetGL.GLTarget { get { return glTarget; } }
+        int IRenderTargetGL.GLColorBuffer { get; set; }
+        int IRenderTargetGL.GLDepthBuffer { get; set; }
+        int IRenderTargetGL.GLStencilBuffer { get; set; }
 
-        TextureTarget IRenderTarget.GLTarget
-        {
-            get { return glTarget; }
-        }
-
-        int IRenderTarget.GLColorBuffer { get; set; }
-        int IRenderTarget.GLDepthBuffer { get; set; }
-        int IRenderTarget.GLStencilBuffer { get; set; }
-
-        TextureTarget IRenderTarget.GetFramebufferTarget(RenderTargetBinding renderTargetBinding)
+        TextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
         {
             return glTarget;
         }

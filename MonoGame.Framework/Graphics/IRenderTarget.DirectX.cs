@@ -4,9 +4,9 @@
 
 using SharpDX.Direct3D11;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal partial interface IRenderTarget
+    internal interface IRenderTargetDX11
     {
         /// <summary>
         /// Gets the <see cref="RenderTargetView"/> for the specified array slice.
@@ -22,6 +22,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Gets the <see cref="DepthStencilView"/>.
         /// </summary>
         /// <returns>The <see cref="DepthStencilView"/>. Can be <see langword="null"/>.</returns>
-        DepthStencilView GetDepthStencilView();
+        DepthStencilView GetDepthStencilView(int arraySlice);
     }
 }

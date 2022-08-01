@@ -3,12 +3,13 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX.DXGI;
 using SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTargetCube
+    public partial class RenderTargetCube : IRenderTargetDX11
     {
         private RenderTargetView[] _renderTargetViews;
         private DepthStencilView _depthStencilView;
@@ -84,16 +85,12 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        /// <inheritdoc/>
-        [CLSCompliant(false)]
-        public RenderTargetView GetRenderTargetView(int arraySlice)
+        RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
         {
             return _renderTargetViews[arraySlice];
         }
 
-        /// <inheritdoc/>
-        [CLSCompliant(false)]
-        public DepthStencilView GetDepthStencilView()
+        DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
         {
             return _depthStencilView;
         }

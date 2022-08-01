@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 #if ANGLE
 using OpenTK.Graphics;
@@ -704,12 +705,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
+            var renderTargetGL = (IRenderTargetGL)renderTarget;
             if (color != 0)
-                renderTarget.GLColorBuffer = color;
+                renderTargetGL.GLColorBuffer = color;
             else
-                renderTarget.GLColorBuffer = renderTarget.GLTexture;
-            renderTarget.GLDepthBuffer = depth;
-            renderTarget.GLStencilBuffer = stencil;
+                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
+            renderTargetGL.GLDepthBuffer = depth;
+            renderTargetGL.GLStencilBuffer = stencil;
         }
 
         internal void PlatformDeleteRenderTarget(IRenderTarget renderTarget)
@@ -719,10 +721,11 @@ namespace Microsoft.Xna.Framework.Graphics
             var stencil = 0;
             var colorIsRenderbuffer = false;
 
-            color = renderTarget.GLColorBuffer;
-            depth = renderTarget.GLDepthBuffer;
-            stencil = renderTarget.GLStencilBuffer;
-            colorIsRenderbuffer = color != renderTarget.GLTexture;
+            var renderTargetGL = (IRenderTargetGL)renderTarget;
+            color = renderTargetGL.GLColorBuffer;
+            depth = renderTargetGL.GLDepthBuffer;
+            stencil = renderTargetGL.GLStencilBuffer;
+            colorIsRenderbuffer = color != renderTargetGL.GLTexture;
 
             if (color != 0)
             {
@@ -779,8 +782,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.framebufferHelper.BindFramebuffer(glResolveFramebuffer);
                     for (var i = 0; i < this._currentRenderTargetCount; ++i)
                     {
-                        var rt = this._currentRenderTargetBindings[i].RenderTarget as IRenderTarget;
-                        this.framebufferHelper.FramebufferTexture2D((int)(FramebufferAttachment.ColorAttachment0 + i), (int) rt.GetFramebufferTarget(renderTargetBinding), rt.GLTexture);
+                        var renderTargetGL = (IRenderTargetGL)this._currentRenderTargetBindings[i].RenderTarget;
+                        this.framebufferHelper.FramebufferTexture2D((int)(FramebufferAttachment.ColorAttachment0 + i), (int)renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture);
                     }
                     this.glResolveFramebuffers.Add((RenderTargetBinding[])this._currentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
@@ -813,12 +816,12 @@ namespace Microsoft.Xna.Framework.Graphics
             for (var i = 0; i < this._currentRenderTargetCount; ++i)
             {
                 renderTargetBinding = this._currentRenderTargetBindings[i];
-                renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-                if (renderTarget.LevelCount > 1)
+                if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
-                    GL.BindTexture((TextureTarget)renderTarget.GLTarget, renderTarget.GLTexture);
+                    var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+                    GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
                     GraphicsExtensions.CheckGLError();
-                    this.framebufferHelper.GenerateMipmap((int)renderTarget.GLTarget);
+                    this.framebufferHelper.GenerateMipmap((int)renderTargetGL.GLTarget);
                 }
             }
         }
@@ -831,18 +834,19 @@ namespace Microsoft.Xna.Framework.Graphics
                 this.framebufferHelper.GenFramebuffer(out glFramebuffer);
                 this.framebufferHelper.BindFramebuffer(glFramebuffer);
                 var renderTargetBinding = this._currentRenderTargetBindings[0];
-                var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-                this.framebufferHelper.FramebufferRenderbuffer((int)FramebufferAttachment.DepthAttachment, renderTarget.GLDepthBuffer, 0);
-                this.framebufferHelper.FramebufferRenderbuffer((int)FramebufferAttachment.StencilAttachment, renderTarget.GLStencilBuffer, 0);
+                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+                this.framebufferHelper.FramebufferRenderbuffer((int)FramebufferAttachment.DepthAttachment, renderTargetGL.GLDepthBuffer, 0);
+                this.framebufferHelper.FramebufferRenderbuffer((int)FramebufferAttachment.StencilAttachment, renderTargetGL.GLStencilBuffer, 0);
                 for (var i = 0; i < this._currentRenderTargetCount; ++i)
                 {
                     renderTargetBinding = this._currentRenderTargetBindings[i];
-                    renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
+                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
                     var attachement = (int)(FramebufferAttachment.ColorAttachment0 + i);
-                    if (renderTarget.GLColorBuffer != renderTarget.GLTexture)
-                        this.framebufferHelper.FramebufferRenderbuffer(attachement, renderTarget.GLColorBuffer, 0);
+                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                        this.framebufferHelper.FramebufferRenderbuffer(attachement, renderTargetGL.GLColorBuffer, 0);
                     else
-                        this.framebufferHelper.FramebufferTexture2D(attachement, (int)renderTarget.GetFramebufferTarget(renderTargetBinding), renderTarget.GLTexture, 0, renderTarget.MultiSampleCount);
+                        this.framebufferHelper.FramebufferTexture2D(attachement, (int)renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
                 }
 
 #if DEBUG
