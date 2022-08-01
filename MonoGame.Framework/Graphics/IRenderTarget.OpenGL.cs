@@ -4,18 +4,16 @@
 
 using MonoGame.OpenGL;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal partial interface IRenderTarget
+    internal interface IRenderTargetGL
     {
         int GLTexture { get; }
         TextureTarget GLTarget { get; }
         int GLColorBuffer { get; set; }
         int GLDepthBuffer { get; set; }
         int GLStencilBuffer { get; set; }
-        int MultiSampleCount { get; }
-        int LevelCount { get; }
 
-        TextureTarget GetFramebufferTarget(RenderTargetBinding renderTargetBinding);
+        TextureTarget GetFramebufferTarget(int arraySlice);
     }
 }

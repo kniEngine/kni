@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using SharpDX;
 using SharpDX.Direct3D;
@@ -1188,19 +1189,19 @@ namespace Microsoft.Xna.Framework.Graphics
             for (var i = 0; i < _currentRenderTargetCount; i++)
             {
                 var binding = _currentRenderTargetBindings[i];
-                var target = (IRenderTarget)binding.RenderTarget;
-                _currentRenderTargets[i] = target.GetRenderTargetView(binding.ArraySlice);
+                var targetDX = (IRenderTargetDX11)binding.RenderTarget;
+                _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            var renderTarget = (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
-            _currentDepthStencilView = renderTarget.GetDepthStencilView();
+            var renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.
             lock (_d3dContext)
                 _d3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
 
-            return renderTarget;
+            return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
         }
 
 #if WINDOWS_UAP

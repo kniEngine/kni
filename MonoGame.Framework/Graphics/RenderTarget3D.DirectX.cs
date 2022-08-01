@@ -3,11 +3,12 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget3D
+    public partial class RenderTarget3D : IRenderTargetDX11
     {
         private int _currentSlice;
         private RenderTargetView _renderTargetView;
@@ -58,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-	    RenderTargetView IRenderTarget.GetRenderTargetView(int arraySlice)
+	    RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
 	    {
             if (arraySlice >= Depth)
                 throw new ArgumentOutOfRangeException("The arraySlice is out of range for this Texture3D.");
@@ -93,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        return _renderTargetView;
 	    }
 
-	    DepthStencilView IRenderTarget.GetDepthStencilView()
+	    DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
 	    {
 	        return _depthStencilView;
 	    }
