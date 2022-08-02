@@ -3,13 +3,14 @@
   <Import Project="MonoGame.Build.props" />
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
     <DefineConstants>OPENGL;OPENAL;XNADESIGNPROVIDED;LINUX;DESKTOPGL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime supporting Windows, Linux and macOS using SDL2 and OpenGL.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;desktopgl</PackageTags>
     <PackageId>MonoGame.Framework.DesktopGL</PackageId>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
     <CopyContentFiles>True</CopyContentFiles>
   </PropertyGroup>
 
