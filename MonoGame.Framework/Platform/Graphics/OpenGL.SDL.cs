@@ -26,7 +26,7 @@ namespace MonoGame.OpenGL
                 return default(T);
             }
 
-#if NETSTANDARD
+#if NETSTANDARD1_2_OR_GREATER
             return Marshal.GetDelegateForFunctionPointer<T>(ret);
 #else
             return (T)(object)Marshal.GetDelegateForFunctionPointer(ret, typeof(T));
