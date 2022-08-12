@@ -149,28 +149,6 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   SetOutPath '$INSTDIR\Assemblies\Windows\net6.0-windows'
   File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\*.*'
 
-  ; Install Windows 8 Store Assemblies
-  SetOutPath '$INSTDIR\Assemblies\Windows8'
-  File '..\..\MonoGame.Framework\bin\Windows8\AnyCPU\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\Windows8\AnyCPU\Release\*.xml'
-
-    ; Install Windows Phone 8.1 Assemblies
-  SetOutPath '$INSTDIR\Assemblies\WindowsPhone81'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone81\AnyCPU\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone81\AnyCPU\Release\*.xml'
-
-  ; Install Windows Phone ARM Assemblies
-  SetOutPath '$INSTDIR\Assemblies\WindowsPhone\ARM'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\ARM\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\ARM\Release\*.xml'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\ARM\Release\*.winmd'
-
-  ; Install Windows Phone x86 Assemblies
-  SetOutPath '$INSTDIR\Assemblies\WindowsPhone\x86'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\x86\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\x86\Release\*.xml'
-  File '..\..\MonoGame.Framework\bin\WindowsPhone\x86\Release\*.winmd'
-
   ; Install Windows 10 UAP Assemblies
   SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'
   ;File '..\..\MonoGame.Framework\bin\WindowsUniversal\Release\uap10.0\*.dll'
@@ -188,10 +166,6 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
 
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Desktop OpenGL' '' '$INSTDIR\Assemblies\DesktopGL'
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows' '' '$INSTDIR\Assemblies\Windows'
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.5.50709\AssemblyFoldersEx\${APPNAME} for Windows Store' '' '$INSTDIR\Assemblies\Windows8'
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.5.50709\AssemblyFoldersEx\${APPNAME} for Windows Phone 8.1' '' '$INSTDIR\Assemblies\WindowsPhone81'
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows Phone ARM' '' '$INSTDIR\Assemblies\WindowsPhone\ARM'
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows Phone x86' '' '$INSTDIR\Assemblies\WindowsPhone\x86'
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows 10 Universal' '' '$INSTDIR\Assemblies\WindowsUniversal'
   WriteRegStr HKLM 'SOFTWARE\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android' '' '$INSTDIR\Assemblies\Android'
   WriteRegStr HKLM 'SOFTWARE\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS' '' '$INSTDIR\Assemblies\iOS'
@@ -202,12 +176,7 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   Is64bit:
     WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Desktop OpenGL' '' '$INSTDIR\Assemblies\DesktopGL'
     WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows' '' '$INSTDIR\Assemblies\Windows'
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.5.50709\AssemblyFoldersEx\${APPNAME} for Windows Store' '' '$INSTDIR\Assemblies\Windows8'
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.5.50709\AssemblyFoldersEx\${APPNAME} for Windows Phone 8.1' '' '$INSTDIR\Assemblies\WindowsPhone81'
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android' '' '$INSTDIR\Assemblies\Android'
     WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS' '' '$INSTDIR\Assemblies\iOS'
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows Phone ARM' '' '$INSTDIR\Assemblies\WindowsPhone\ARM'
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows Phone x86' '' '$INSTDIR\Assemblies\WindowsPhone\x86'
     WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows 10 Universal' '' '$INSTDIR\Assemblies\WindowsUniversal'
 
   End32Bitvs64BitCheck:
@@ -235,48 +204,6 @@ Section "VS012 Redistributables (x64)" VS2012Redist
   File "..\..\ThirdParty\VCRedist\vcredist2012_x64.exe"
   ExecWait '"$INSTDIR\vcredist2012_x64.exe"  /passive /norestart'
   
-SectionEnd
-
-Section "VS2012 Templates" VS2012
-
-  IfFileExists `$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\Visual C#\*.*` InstallTemplates CannotInstallTemplates
-  InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\Visual C#\MonoGame"
-    File /r '..\..\Templates\VisualStudio2012\*.zip'
-    GOTO EndTemplates
-  CannotInstallTemplates:
-    DetailPrint "Visual Studio 2012 not found"
-  EndTemplates:
-
-SectionEnd
-
-Section "VS2013 Templates" VS2013
-
-  IfFileExists `$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
-  InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\MonoGame"
-    File /r '..\..\Templates\VisualStudio2013\*.zip'
-    File /r '..\..\Templates\VisualStudio2012\ContentPipelineExtension.zip'
-    GOTO EndTemplates
-  CannotInstallTemplates:
-    DetailPrint "Visual Studio 2013 not found"
-  EndTemplates:
-
-SectionEnd
-
-Section "VS2015 Templates" VS2015
-
-  IfFileExists `$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
-  InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\MonoGame"
-    File /r '..\..\Templates\VisualStudio2015\*.zip'
-    File /r '..\..\Templates\VisualStudio2013\WindowsPhone8.1.zip'
-    File /r '..\..\Templates\VisualStudio2012\ContentPipelineExtension.zip'
-    GOTO EndTemplates
-  CannotInstallTemplates:
-    DetailPrint "Visual Studio 2015 not found"
-  EndTemplates:
-
 SectionEnd
 
 Section "VS2017 Templates" VS2017
@@ -329,9 +256,6 @@ SectionEnd
 
 LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBuild extensions for MonoGame"
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
-LangString VS2012Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2012"
-LangString VS2013Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2013"
-LangString VS2015Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2015"
 LangString VS2017Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2017"
 LangString VS2019Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2019"
 LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your start menu"
@@ -339,9 +263,6 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${CoreComponents} $(CoreComponentsDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
-  !insertmacro MUI_DESCRIPTION_TEXT ${VS2012} $(VS2012Desc)
-  !insertmacro MUI_DESCRIPTION_TEXT ${VS2013} $(VS2013Desc)
-  !insertmacro MUI_DESCRIPTION_TEXT ${VS2015} $(VS2015Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
@@ -349,27 +270,6 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 
 Function checkVS2012Redist
  ; TODO: check if VS2012 Redisttributables are installed 
-FunctionEnd
- 
-Function checkVS2012
-IfFileExists `$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\*.*` end disable
-  disable:
-	 SectionSetFlags ${VS2012} $0
-  end:
-FunctionEnd
-
-Function checkVS2013
-IfFileExists `$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\*.*` end disable
-  disable:
-	 SectionSetFlags ${VS2013} $0
-  end:
-FunctionEnd
-
-Function checkVS2015
-IfFileExists `$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\*.*` end disable
-  disable:
-	 SectionSetFlags ${VS2015} $0
-  end:
 FunctionEnd
 
 Function checkVS2017
@@ -389,9 +289,6 @@ FunctionEnd
 Function .onInit 
   IntOp $0 $0 | ${SF_RO}
   call checkVS2012Redist
-  Call checkVS2012
-  Call checkVS2013
-  Call checkVS2015
   Call checkVS2017
   Call checkVS2019
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
@@ -450,7 +347,6 @@ Section "Uninstall"
   ${EndIf}
   
   RMDir /r "$DOCUMENTS\Visual Studio 2010\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2012\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\MonoGame"

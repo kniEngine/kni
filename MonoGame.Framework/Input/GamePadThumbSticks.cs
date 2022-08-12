@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct GamePadThumbSticks
     {
-#if DIRECTX && !WINDOWS_UAP && !WP8 && !WP81
+#if DIRECTX && !WINDOWS_UAP
         // XInput Xbox 360 Controller dead zones
         // Dead zones are slighty different between left and right sticks, this may come from Microsoft usability tests
         private const float leftThumbDeadZone = SharpDX.XInput.Gamepad.LeftThumbDeadZone / (float)short.MaxValue;

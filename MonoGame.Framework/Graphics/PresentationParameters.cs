@@ -7,9 +7,6 @@ using System;
 #if WINDOWS_UAP
 using Windows.UI.Xaml.Controls;
 #endif
-#if (W81 || WP81)
-using Windows.UI.Xaml.Controls;
-#endif
 
 #if IOS
 using UIKit;
@@ -102,10 +99,6 @@ namespace Microsoft.Xna.Framework.Graphics
         [CLSCompliant(false)]
         public SwapChainPanel SwapChainPanel { get; set; }
 #endif
-#if (W81 || WP81)
-        [CLSCompliant(false)]
-        public GenericSwapChainPanel SwapChainPanel { get; set; }
-#endif
 
         /// <summary>
         /// Get or set the depth stencil format for the back buffer.
@@ -123,9 +116,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
 			get
             {
-#if (W81 || WP81) || WP8
-                return true; // Always return true for Windows 8
-#endif
 				 return isFullScreen;
             }
             set
@@ -171,12 +161,6 @@ namespace Microsoft.Xna.Framework.Graphics
 			get; 
 			set; 
 		}
-
-        public bool LockToNativeOrientation
-        {
-            get;
-            set;
-        }
 		
         /// <summary>
         /// Get or set the RenderTargetUsage for the back buffer.

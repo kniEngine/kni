@@ -45,24 +45,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                     if (pointerDevice.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
                         isConnected = true;
                 }
-#elif (W81 || WP81)
-                // Is a touch device present?
-                // Iterate through all pointer devices and find the maximum number of concurrent touches possible
-                maximumTouchCount = 0;
-                var pointerDevices = Windows.Devices.Input.PointerDevice.GetPointerDevices();
-                foreach (var pointerDevice in pointerDevices)
-                {
-                    maximumTouchCount = Math.Max(maximumTouchCount, (int)pointerDevice.MaxContacts);
-
-                    if (pointerDevice.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
-                        isConnected = true;
-                }
-#elif WP8
-                // There is no API on WP8, XNA returns 4 according to the docs
-                // http://msdn.microsoft.com/en-nz/library/ff434208.aspx
-                // http://en.wikipedia.org/wiki/Windows_Phone_8#Hardware_requirements
-                isConnected = true;
-                maximumTouchCount = 4;
 #elif WINDOWS
                 maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
                 isConnected = (maximumTouchCount > 0);

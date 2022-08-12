@@ -14,10 +14,6 @@ namespace Microsoft.Xna.Framework
             return new iOSGamePlatform(game);
 #elif ANDROID
             return new AndroidGamePlatform(game);
-#elif WP81
-            return new MetroGamePlatform(game);
-#elif WP8
-            return new MonoGame.Framework.WindowsPhone.WindowsPhoneGamePlatform(game);
 #elif WEB
             return new WebGamePlatform(game);
 #endif

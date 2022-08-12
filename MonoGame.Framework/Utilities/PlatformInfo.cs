@@ -43,9 +43,6 @@ namespace MonoGame.Framework.Utilities
 #elif STADIA
                 return MonoGamePlatform.Stadia;
 #endif
-#if WP8 || WP81 || W81
-                return MonoGamePlatform.WindowsUniversal;
-#endif
             }
         }
 

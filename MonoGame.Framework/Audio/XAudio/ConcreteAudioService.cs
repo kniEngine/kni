@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 if (Device == null)
                 {
-#if DEBUG && !(WINDOWS_UAP || WINRT)
+#if DEBUG && !(WINDOWS_UAP)
                     try
                     {
                         //Fails if the XAudio2 SDK is not installed
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // Just use the default device.
-#if (WINDOWS_UAP || WINRT)
+#if (WINDOWS_UAP)
                 string deviceId = null;
 #else
                 const int deviceId = 0;
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // The autodetected value of MasterVoice.ChannelMask corresponds to the speaker layout.
-#if (WINDOWS_UAP || WINRT)
+#if (WINDOWS_UAP)
                 Speakers = (Speakers)MasterVoice.ChannelMask;
 #else
                 Speakers = Device.Version == XAudio2Version.Version27

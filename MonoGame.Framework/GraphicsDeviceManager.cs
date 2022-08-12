@@ -381,16 +381,5 @@ namespace Microsoft.Xna.Framework
             _strategy.ApplyChanges();
         }
 
-        public bool LockToNativeOrientation 
-        {
-#if (W81 || WP81)
-            get { return ((ConcreteGraphicsDeviceManager)_strategy)._lockToNativeOrientation; }
-            set { ((ConcreteGraphicsDeviceManager)_strategy)._lockToNativeOrientation = value; }
-#else
-            get { return false; }
-            set { throw new PlatformNotSupportedException(); }
-#endif
-        }
-
     }
 }

@@ -24,11 +24,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         Xbox360,
 
-        /// <summary>
-        /// Windows Phone
-        /// </summary>
-        WindowsPhone,
-
         // MonoGame-specific platforms listed below
 
         /// <summary>
@@ -66,12 +61,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// (MonoGame)
         /// </summary>
         NativeClient,
-
-        /// <summary>
-        /// Windows Phone 8
-        /// (MonoGame)
-        /// </summary>
-        WindowsPhone8,
 
         /// <summary>
         /// Raspberry Pi

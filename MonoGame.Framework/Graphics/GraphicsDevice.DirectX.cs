@@ -649,11 +649,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var descr = new ModeDescription
             {
                 Format = format,
-#if WINRT
-                Scaling = DisplayModeScaling.Stretched,
-#else
                 Scaling = DisplayModeScaling.Unspecified,
-#endif
                 Width = PresentationParameters.BackBufferWidth,
                 Height = PresentationParameters.BackBufferHeight,
             };
@@ -684,11 +680,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var target = new ModeDescription
             {
                 Format = format,
-#if WINRT
-                Scaling = DisplayModeScaling.Stretched,
-#else
                 Scaling = DisplayModeScaling.Unspecified,
-#endif
                 Width = PresentationParameters.BackBufferWidth,
                 Height = PresentationParameters.BackBufferHeight,
             };

@@ -2,13 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#if WP8
-extern alias MicrosoftXnaFramework;
-using MsAlbum = MicrosoftXnaFramework::Microsoft.Xna.Framework.Media.Album;
-#endif
 using System;
 using System.IO;
-#if WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
 using Windows.Storage.FileProperties;
 #elif IOS
 using System.Drawing;
@@ -24,31 +20,23 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Album : IDisposable
     {
-#if WP8
-        private MsAlbum album;
-#else
         private Artist artist;
         private Genre genre;
         private string album;
         private SongCollection songCollection;
-#if WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
         private StorageItemThumbnail thumbnail;
 #elif IOS && !TVOS
         private MPMediaItemArtwork thumbnail;
 #elif ANDROID
         private Android.Net.Uri thumbnail;
 #endif
-#endif
 
         public Artist Artist
         {
             get
             {
-#if WP8
-                return album.Artist;
-#else
                 return this.artist;
-#endif
             }
         }
 
@@ -59,11 +47,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return album.Duration;
-#else
                 return TimeSpan.Zero; // Not implemented
-#endif
             }
         }
 
@@ -74,11 +58,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return album.Genre;
-#else
                 return this.genre;
-#endif
             }
         }
 
@@ -89,9 +69,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return this.album.HasArt;
-#elif WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
                 return this.thumbnail != null;
 #elif IOS && !TVOS
                 // If album art is missing the bounds will be: Infinity, Infinity, 0, 0
@@ -111,11 +89,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return album.IsDisposed;
-#else
                 return false;
-#endif
             }
         }
 
@@ -126,11 +100,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return album.Name;
-#else
                 return this.album;
-#endif
             }
         }
 
@@ -141,33 +111,18 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return new SongCollection(album.Songs);
-#else
                 return this.songCollection;
-#endif
             }
         }
 
-#if WP8
-        public static explicit operator Album(MsAlbum album)
-        {
-            return new Album(album);
-        }
-
-        private Album(MsAlbum album)
-        {
-            this.album = album;
-        }
-#else
-        private Album(SongCollection songCollection, string name, Artist artist, Genre genre)
+       private Album(SongCollection songCollection, string name, Artist artist, Genre genre)
         {
             this.songCollection = songCollection;
             this.album = name;
             this.artist = artist;
             this.genre = genre;
         }
-#if WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
         internal Album(SongCollection songCollection, string name, Artist artist, Genre genre, StorageItemThumbnail thumbnail)
             : this(songCollection, name, artist, genre)
         {
@@ -186,16 +141,13 @@ namespace Microsoft.Xna.Framework.Media
             this.thumbnail = thumbnail;
         }
 #endif
-#endif
 
         /// <summary>
         /// Immediately releases the unmanaged resources used by this object.
         /// </summary>
         public void Dispose()
         {
-#if WP8
-            this.album.Dispose();
-#elif WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
             if (this.thumbnail != null)
                 this.thumbnail.Dispose();
 #endif
@@ -230,9 +182,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Stream GetAlbumArt()
         {
-#if WP8
-            return this.album.GetAlbumArt();
-#elif WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
             if (this.HasArt)
                 return this.thumbnail.AsStream();
             return null;
@@ -260,9 +210,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Stream GetThumbnail()
         {
-#if WP8
-            return this.album.GetThumbnail();
-#elif WINDOWS_UAP || (W81 || WP81)
+#if WINDOWS_UAP
             if (this.HasArt)
                 return this.thumbnail.AsStream();
 

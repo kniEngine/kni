@@ -1,4 +1,4 @@
-﻿#if WINDOWS_UAP || (W81 || WP81)
+﻿#if WINDOWS_UAP
 
 using System;
 using System.IO;

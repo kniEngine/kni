@@ -2,21 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#if WP8
-extern alias MicrosoftXnaFramework;
-using MsArtist = MicrosoftXnaFramework::Microsoft.Xna.Framework.Media.Artist;
-#endif
 using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Artist : IDisposable
     {
-#if WP8
-        private MsArtist artist;
-#else
         private string artist;
-#endif
 
         /// <summary>
         /// Gets the AlbumCollection for the Artist.
@@ -36,11 +28,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return this.artist.IsDisposed;
-#else
                 return true;
-#endif
             }
         }
 
@@ -51,11 +39,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WP8
-                return this.artist.Name;
-#else
                 return this.artist;
-#endif
             }
         }
 
@@ -70,31 +54,16 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-#if WP8
-        public static implicit operator Artist(MsArtist artist)
-        {
-            return new Artist(artist);
-        }
-
-        private Artist(MsArtist artist)
-        {
-            this.artist = artist;
-        }
-#else
         public Artist(string artist)
         {
             this.artist = artist;
         }
-#endif
 
         /// <summary>
         /// Immediately releases the unmanaged resources used by this object.
         /// </summary>
         public void Dispose()
         {
-#if WP8
-            this.artist.Dispose();
-#endif
         }
 
         /// <summary>

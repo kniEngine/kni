@@ -255,25 +255,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformReload(Stream textureStream)
         {
-#if WP8
-            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
-                try
-                {
-                    var bitmapImage = new System.Windows.Media.Imaging.BitmapImage();
-                    bitmapImage.SetSource(textureStream);
-                    var bitmap = new System.Windows.Media.Imaging.WriteableBitmap(bitmapImage);
-
-                    // Convert from ARGB to ABGR 
-                    ConvertToABGR_WP8(bitmap.PixelHeight, bitmap.PixelWidth, bitmap.Pixels);
-
-                    this.SetData<int>(bitmap.Pixels);
-
-                    textureStream.Dispose();
-                }
-                catch { }
-            });
-#endif
         }
     }
 }

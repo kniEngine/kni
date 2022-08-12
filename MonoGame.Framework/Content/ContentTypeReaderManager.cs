@@ -105,9 +105,6 @@ namespace Microsoft.Xna.Framework.Content
 #if ANDROID || (IOS && !TVOS) || MONOMAC || (WINDOWS && !OPENGL) || WINDOWS_UAP
                 var hVideoReader = new VideoReader();
 #endif
-#if ((WINRT) && !WP8)
-                var hVideoReader = new VideoReader();
-#endif
             }
 #pragma warning restore 0219, 0649
 
