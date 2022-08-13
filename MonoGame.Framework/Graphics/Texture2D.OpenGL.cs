@@ -306,8 +306,8 @@ namespace Microsoft.Xna.Framework.Graphics
 #if IOS
         private static Texture2D PlatformFromStream(GraphicsDevice graphicsDevice, CGImage cgImage)
         {
-            var width = cgImage.Width;
-            var height = cgImage.Height;
+            int width = (int)cgImage.Width;
+            int height = (int)cgImage.Height;
 
             var data = new byte[width * height * 4];
 
