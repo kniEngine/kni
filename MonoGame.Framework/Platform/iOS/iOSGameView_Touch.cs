@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework {
 		// TODO: Review FillTouchCollection
 		private void FillTouchCollection (NSSet touches)
 		{
-			if (touches.Count == 0)
+			if ((long)touches.Count == 0)
 				return;
 
 			var touchesArray = touches.ToArray<UITouch> ();
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework {
 				//Get position touch
 				var location = touch.LocationInView (touch.View);
 				var position = GetOffsetPosition (new Vector2 ((float)location.X, (float)location.Y), true);
-				var id = touch.Handle.GetHashCode();
+				var id = (int)(long)(IntPtr)touch.Handle;
 
 				switch (touch.Phase) 
                 {

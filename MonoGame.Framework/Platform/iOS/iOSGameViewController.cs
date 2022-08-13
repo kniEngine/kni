@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework
                 // iOS 8+ reports resolution correctly in all cases
                 if (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight)
                 {
-					frame = new CGRect(0, 0, (nfloat)Math.Max(screen.Bounds.Width, screen.Bounds.Height), (nfloat)Math.Min(screen.Bounds.Width, screen.Bounds.Height));
+					frame = new CGRect(0, 0, (double)Math.Max(screen.Bounds.Width, screen.Bounds.Height), (double)Math.Min(screen.Bounds.Width, screen.Bounds.Height));
                 }
                 else
                 {

@@ -1,14 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
 
   <Import Project="..\MonoGame.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\Android</BaseOutputPath>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFramework>net6.0-android</TargetFramework>
+    <TargetFramework>monoandroid90</TargetFramework>
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
@@ -21,6 +21,10 @@
     <PackageId>MonoGame.Framework.Android</PackageId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+  
   <Import Project="Xna.Framework.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 

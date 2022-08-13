@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Input
         static bool IndexIsUsed(GCControllerPlayerIndex index)
         {
             foreach (var ctrl in GCController.Controllers)
-                if (ctrl.PlayerIndex == index) return true;
+                if ((long)ctrl.PlayerIndex == (long)index) return true;
 
             return false;
         }
@@ -28,11 +28,15 @@ namespace Microsoft.Xna.Framework.Input
                 return;
             foreach (var controller in GCController.Controllers)
             {
-                if (controller.PlayerIndex == index)
+                if ((long)controller.PlayerIndex == (long)index)
                     break;
-                if (controller.PlayerIndex == GCControllerPlayerIndex.Unset)
+                if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
                 {
+#if XAMARINIOS
+                    controller.PlayerIndex = (System.nint)(long)index;
+#else
                     controller.PlayerIndex = index;
+#endif
                     break;
                 }
             }
@@ -48,7 +52,7 @@ namespace Microsoft.Xna.Framework.Input
             {
                 if (controller == null)
                     continue;
-                if (controller.PlayerIndex == ind)
+                if ((long)controller.PlayerIndex == (long)ind)
                     return GetCapabilities(controller);
             }
             return new GamePadCapabilities { IsConnected = false };
@@ -125,7 +129,7 @@ namespace Microsoft.Xna.Framework.Input
                 if (controller == null)
                     continue;
 
-                if (controller.PlayerIndex != ind)
+                if ((long)controller.PlayerIndex != (long)ind)
                     continue;
 
                 connected = true;
