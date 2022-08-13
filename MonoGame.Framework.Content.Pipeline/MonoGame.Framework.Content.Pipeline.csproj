@@ -1,20 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework.Content.Pipeline</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0</TargetFramework>
-    <BaseOutputPath>..\Artifacts\MonoGame.Framework.Content.Pipeline</BaseOutputPath>
+    <AssemblyName>MonoGame.Framework.Content.Pipeline</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline</RootNamespace>
+    <DefineConstants>STBSHARP_INTERNAL WINDOWS</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>The Monogame Content Pipeline for Windows, Mac and Linux is used to compile raw content to xnb files.</Description>
     <PackageTags>monogame;content;content pipeline</PackageTags>
     <PackageId>MonoGame.Framework.Content.Pipeline</PackageId>
-    <AssemblyName>MonoGame.Framework.Content.Pipeline</AssemblyName>
-    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline</RootNamespace>
     <CopyContentFiles>True</CopyContentFiles>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <DefineConstants>STBSHARP_INTERNAL WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <Import Project="MonoGame.Framework.Content.Pipeline.Common.props" />

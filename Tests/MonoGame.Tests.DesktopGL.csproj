@@ -1,14 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <MonoGamePlatform>DesktopGL</MonoGamePlatform>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\$(MonoGamePlatform)</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
+    <OutputType>Exe</OutputType>
+    <UseAppHost>true</UseAppHost>
+    <AssemblyName>MonoGame.Tests</AssemblyName>
+    <DefineConstants>DESKTOPGL</DefineConstants>    
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <DefineConstants>DESKTOPGL</DefineConstants>
   </PropertyGroup>
 
   <Import Project="MonoGame.Tests.Common.props" />
