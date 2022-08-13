@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
-MinimumVisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 16.0.29728.190
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.DesktopGL", "MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj", "{5B5871CA-AD66-4B5E-B097-B7144CF1B570}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Content.Pipeline", "MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj", "{EE9F056F-8B59-4F41-9AC4-B54E43CD89B5}"
