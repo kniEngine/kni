@@ -1,10 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="MonoGame.Build.props" />
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\iOS</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0-ios</TargetFramework>
     <LangVersion>5</LangVersion>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MGOpenGL>GLES</MGOpenGL>
@@ -12,7 +19,6 @@
     <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
     <PackageId>MonoGame.Framework.iOS</PackageId>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
   </PropertyGroup>
 

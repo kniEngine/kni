@@ -1,10 +1,16 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
-  <Import Project="MonoGame.Build.props" />
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\WindowsUniversal</BaseOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>uap10.0</TargetFramework>
     <LangVersion>5</LangVersion>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <!-- TODO: NET45 is here for reflection API (Utilities\ReflectionHelpers), but does not make sense semantically -->
     <DefineConstants>WINDOWS_UAP;DIRECTX11_1;NET45;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

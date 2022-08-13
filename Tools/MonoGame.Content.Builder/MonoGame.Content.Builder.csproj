@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Exe</OutputType>
     <RollForward>Major</RollForward>
     <Description>The MonoGame Content Builder (MGCB) command line tool is used for optimizing content for runtime use.</Description>
     <BaseOutputPath>..\..\Artifacts\MonoGame.Content.Builder</BaseOutputPath>

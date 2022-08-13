@@ -1,14 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <MonoGamePlatform>WindowsDX</MonoGamePlatform>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\$(MonoGamePlatform)</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <RollForward>Major</RollForward>
+    <OutputType>Exe</OutputType>
+    <UseAppHost>true</UseAppHost>
+    <AssemblyName>MonoGame.Tests</AssemblyName>
+    <DefineConstants>WINDOWS;DIRECTX</DefineConstants>    
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <DefineConstants>WINDOWS;DIRECTX</DefineConstants>
   </PropertyGroup>
 
   <Import Project="MonoGame.Tests.Common.props" />

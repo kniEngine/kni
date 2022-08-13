@@ -1,10 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="MonoGame.Build.props" />
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\WindowsDX</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net6.0-windows;net40</TargetFrameworks>
+    <TargetFrameworks>net40;net6.0-windows</TargetFrameworks>
     <LangVersion>5</LangVersion>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>WINDOWS;XNADESIGNPROVIDED;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>true</UseWindowsForms>
@@ -12,7 +19,6 @@
     <Description>The MonoGame runtime for Windows using DirectX API's.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;windowsdx</PackageTags>
     <PackageId>MonoGame.Framework.WindowsDX</PackageId>
-    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <Import Project="Xna.Framework.props" />

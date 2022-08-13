@@ -2,23 +2,21 @@
 
   <Import Project="..\MonoGame.props" />
   <PropertyGroup>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <BaseOutputPath>..\Artifacts\Monogame.Framework\Blazor\</BaseOutputPath>
-    <AssemblyName>Monogame.Framework</AssemblyName>
-    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
 
     <DefineConstants>WEB;STBSHARP_INTERNAL</DefineConstants>
     
     <Version>3.8.9100.0</Version>
     <AssemblyVersion>3.8.9100.0</AssemblyVersion>
 
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>5</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>XNADESIGNPROVIDED;</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
