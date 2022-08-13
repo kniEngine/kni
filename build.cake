@@ -135,15 +135,6 @@ Task("Prep")
     dnPublishSettings.SelfContained = false;
 });
 
-Task("BuildConsoleCheck")
-    .IsDependentOn("Prep")
-    .WithCriteria(() => IsRunningOnWindows())
-    .Does(() =>
-{
-    DotNetRestore("MonoGame.Framework/MonoGame.Framework.ConsoleCheck.csproj");
-    DotNetBuild("MonoGame.Framework/MonoGame.Framework.ConsoleCheck.csproj");
-});
-
 Task("BuildDesktopGL")
     .IsDependentOn("Prep")
     .Does(() =>
@@ -323,7 +314,6 @@ Task("SanityCheck")
     .IsDependentOn("Prep");
 
 Task("BuildAll")
-    .IsDependentOn("BuildConsoleCheck")
     .IsDependentOn("BuildDesktopGL")
     .IsDependentOn("BuildWindowsDX")
     .IsDependentOn("BuildAndroid")
