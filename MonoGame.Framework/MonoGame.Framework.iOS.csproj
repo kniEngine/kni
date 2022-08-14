@@ -55,6 +55,7 @@
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
+    <Compile Include="Input\Oculus\Default\ConcreteTouchControllerStrategy.cs" />
     <Compile Include="Input\GamePad.iOS.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\Keyboard.Default.cs" />

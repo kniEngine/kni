@@ -266,6 +266,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="Input\Oculus\TouchController.cs" />
+    <Compile Include="Input\Oculus\TouchButtons.cs" />
+    <Compile Include="Input\Oculus\TouchButtonState.cs" />
+    <Compile Include="Input\Oculus\TouchControllerState.cs" />
+    <Compile Include="Input\Oculus\TouchControllerType.cs" />
+    <Compile Include="Input\Oculus\TouchControllerStrategy.cs" />
     <Compile Include="Input\Touch\GestureSample.cs" />
     <Compile Include="Input\Touch\GestureType.cs" />
     <Compile Include="Input\Touch\TouchCollection.cs" />
