@@ -88,6 +88,16 @@ namespace Microsoft.Xna.Framework.Input
         Y = 32768,    
 
         /// <summary>
+        /// Left grip.
+        /// </summary>
+        LeftGrip = 524288,
+
+        /// <summary>
+        /// Right grip.
+        /// </summary>
+        RightGrip = 1048576,
+
+        /// <summary>
         /// Left stick is towards the left.
         /// </summary>
         LeftThumbstickLeft = 2097152,
