@@ -232,6 +232,19 @@ Section "VS2019 Templates" VS2019
 
 SectionEnd
 
+Section "VS2022 Templates" VS2022
+
+  IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` InstallTemplates CannotInstallTemplates
+  InstallTemplates:
+    SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
+    File /r '..\..\Templates\VisualStudio2022\ProjectTemplates\*.zip'
+    GOTO EndTemplates
+  CannotInstallTemplates:
+    DetailPrint "Visual Studio 2022 not found"
+  EndTemplates:
+
+SectionEnd
+
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts" Menu
 	CreateDirectory $SMPROGRAMS\${APPNAME}
@@ -258,6 +271,7 @@ LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBu
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
 LangString VS2017Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2017"
 LangString VS2019Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2019"
+LangString VS2022Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2022"
 LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your start menu"
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -265,6 +279,7 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -286,11 +301,19 @@ IfFileExists `$DOCUMENTS\Visual Studio 2019\*.*` end disable
   end:
 FunctionEnd
 
+Function checkVS2022
+IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` end disable
+  disable:
+	 SectionSetFlags ${VS2022} $0
+  end:
+FunctionEnd
+
 Function .onInit 
   IntOp $0 $0 | ${SF_RO}
   call checkVS2012Redist
   Call checkVS2017
   Call checkVS2019
+  Call checkVS2022
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${core_id} $0
 FunctionEnd
@@ -351,6 +374,7 @@ Section "Uninstall"
   RMDir /r "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\MonoGame"
+  RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "${MSBuildInstallDir}"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
 

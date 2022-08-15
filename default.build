@@ -156,6 +156,7 @@
   <target name="build_installer" description="Build the installers." >
     <nant buildfile="Templates/VisualStudio2017/default.build" target="build" />
     <nant buildfile="Templates/VisualStudio2019/default.build" target="build" />
+    <nant buildfile="Templates/VisualStudio2022/default.build" target="build" />
     <nant buildfile="Templates/default.build" target="build" />
     <nant buildfile="Templates/VisualStudioForMac/default.build" target="build" />
     <nant buildfile="Installers/default.build" target="build" />
