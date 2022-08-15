@@ -4,11 +4,11 @@
     <Description>A MonoGame game project for the Windows desktop using DirectX.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
-    <LanguageTag>C#</LanguageTag>
-    <PlatformTag>Windows</PlatformTag>
-    <ProjectTypeTag>Games</ProjectTypeTag>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>games</ProjectTypeTag>
     <ProjectTypeTag>MonoGame</ProjectTypeTag>
-    <ProjectTypeTag>Desktop</ProjectTypeTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <SortOrder>43100</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>

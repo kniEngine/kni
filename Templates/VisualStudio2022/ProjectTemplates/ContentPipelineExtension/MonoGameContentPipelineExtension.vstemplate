@@ -4,13 +4,14 @@
     <Description>A MonoGame project for creating a custom content importer and processor</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
-    <LanguageTag>C#</LanguageTag>
-    <PlatformTag>Windows</PlatformTag>
-    <PlatformTag>Linux</PlatformTag>
-    <PlatformTag>macOS</PlatformTag>
-    <ProjectTypeTag>Games</ProjectTypeTag>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <PlatformTag>linux</PlatformTag>
+    <PlatformTag>macos</PlatformTag>
+    <ProjectTypeTag>games</ProjectTypeTag>
     <ProjectTypeTag>MonoGame</ProjectTypeTag>
-    <ProjectTypeTag>Extensions</ProjectTypeTag>
+    <ProjectTypeTag>library</ProjectTypeTag>
+    <ProjectTypeTag>extension</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <SortOrder>43200</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>

@@ -4,11 +4,11 @@
     <Description>A MonoGame game project for Android which requires "Mono for Android" by Xamarin.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
-    <LanguageTag>C#</LanguageTag>
-    <PlatformTag>Android</PlatformTag>
-    <ProjectTypeTag>Games</ProjectTypeTag>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>android</PlatformTag>
+    <ProjectTypeTag>games</ProjectTypeTag>
     <ProjectTypeTag>MonoGame</ProjectTypeTag>
-    <ProjectTypeTag>Mobile</ProjectTypeTag>
+    <ProjectTypeTag>mobile</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <SortOrder>43200</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>

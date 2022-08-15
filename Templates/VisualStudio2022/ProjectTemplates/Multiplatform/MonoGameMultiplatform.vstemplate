@@ -7,16 +7,16 @@
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
-    <LanguageTag>C#</LanguageTag>
-    <PlatformTag>Android</PlatformTag>
-    <PlatformTag>Windows</PlatformTag>
-    <PlatformTag>Linux</PlatformTag>
-    <PlatformTag>macOS</PlatformTag>
-    <ProjectTypeTag>Games</ProjectTypeTag>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>android</PlatformTag>
+    <PlatformTag>windows</PlatformTag>
+    <PlatformTag>linux</PlatformTag>
+    <PlatformTag>macos</PlatformTag>
+    <ProjectTypeTag>games</ProjectTypeTag>
     <ProjectTypeTag>MonoGame</ProjectTypeTag>
-    <ProjectTypeTag>Desktop</ProjectTypeTag>
-    <ProjectTypeTag>Mobile</ProjectTypeTag>
-    <ProjectTypeTag>UWP</ProjectTypeTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <ProjectTypeTag>mobile</ProjectTypeTag>
+    <ProjectTypeTag>uwp</ProjectTypeTag>
     <SortOrder>43100</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
 		<DefaultName>Game</DefaultName>

@@ -4,11 +4,11 @@
     <Description>A MonoGame game project for iOS which requires Xamarin.iOS.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
-    <LanguageTag>C#</LanguageTag>
-    <PlatformTag>iOS</PlatformTag>
-    <ProjectTypeTag>Games</ProjectTypeTag>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>ios</PlatformTag>
+    <ProjectTypeTag>games</ProjectTypeTag>
     <ProjectTypeTag>MonoGame</ProjectTypeTag>
-    <ProjectTypeTag>Mobile</ProjectTypeTag>
+    <ProjectTypeTag>mobile</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <SortOrder>43300</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
