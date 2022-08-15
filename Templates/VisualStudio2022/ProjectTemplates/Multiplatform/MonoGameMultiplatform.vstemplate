@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
 	<TemplateData>
-		<Name>MonoGame Multiplatform Project</Name>
+		<Name>MonoGame Multiplatform Project (.NET Framework,Xamarin)</Name>
     <Description>A MonoGame project for multiple platforms with shared content.</Description>
 		<TemplateID>MonoGame.Multiplatform</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>

@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>MonoGame iOS Project</Name>
+    <Name>MonoGame iOS Project (Xamarin)</Name>
     <Description>A MonoGame game project for iOS which requires Xamarin.iOS.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>MonoGame</ProjectSubType>
