@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using MonoGame.Utilities.Png;
 using StbImageSharp;

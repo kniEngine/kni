@@ -3,7 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Runtime.InteropServices;
+using MonoGame.Framework.Utilities;
 
 namespace MonoGame.OpenGL
 {
@@ -26,11 +26,7 @@ namespace MonoGame.OpenGL
                 return default(T);
             }
 
-#if NETSTANDARD1_2_OR_GREATER
-            return Marshal.GetDelegateForFunctionPointer<T>(ret);
-#else
-            return (T)(object)Marshal.GetDelegateForFunctionPointer(ret, typeof(T));
-#endif
+            return ReflectionHelpers.GetDelegateForFunctionPointer<T>(ret);
         }
 
         private static IGraphicsContext PlatformCreateContext (IWindowInfo info)

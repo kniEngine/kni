@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                      int left, int top, int right, int bottom, int front, int back,
                                      T[] data, int startIndex, int elementCount, int width, int height, int depth)
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {

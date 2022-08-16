@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int w, h;
             GetSizeForLevel(Width, Height, level, out w, out h);
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
             var startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0 && !_glIsCompressedTexture)
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
             var startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0)

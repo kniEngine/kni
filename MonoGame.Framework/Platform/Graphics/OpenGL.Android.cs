@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Security;
 using Android.Opengl;
 using Javax.Microedition.Khronos.Egl;

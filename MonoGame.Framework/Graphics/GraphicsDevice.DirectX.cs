@@ -1441,7 +1441,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             DynamicIndexBuffer buffer;
 
-            var indexSize = ReflectionHelpers.SizeOf<T>.Get();
+            var indexSize = ReflectionHelpers.SizeOf<T>();
             var indexElementSize = indexSize == 2 ? IndexElementSize.SixteenBits : IndexElementSize.ThirtyTwoBits;
 
             var requiredIndexCount = Math.Max(indexCount, 6 * 512);
@@ -1691,7 +1691,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                 // We need to copy each row separately and skip trailing zeroes.
                                 stream.Seek(0, SeekOrigin.Begin);
 
-                                var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+                                var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
                                 for (var row = 0; row < rows; row++)
                                 {
                                     int i;

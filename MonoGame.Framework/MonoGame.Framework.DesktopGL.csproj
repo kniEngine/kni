@@ -53,7 +53,6 @@
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.Default.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
     <Compile Include="Media\Song.NVorbis.cs" />

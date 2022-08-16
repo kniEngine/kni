@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetData<T>(T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct
         {
-            var elementSizeInBytes = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
             base.SetDataInternal<T>(0, data, startIndex, elementCount, elementSizeInBytes, options);
         }
     }

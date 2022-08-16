@@ -68,6 +68,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         /// <summary>
+        /// Gets the size of the specified type, in bytes.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The size of the specified type, in bytes.</returns>
+        /// <remarks>Call this method to compute offset parameters for the Write method. If the specified 
+        /// data type cannot be packed into a vertex buffer—for example, if type is not a valid value type—a 
+        /// NotSupportedException is thrown.</remarks>
+        /// <exception cref="NotSupportedException">type is not a valid value type</exception>
+        public static int SizeOf<T>() where T : struct
+        {
+            Type type = typeof(T);
+            if (type.IsAutoLayout)
+                throw new NotSupportedException("The vertex type must have a fixed layout");
+
+            return MonoGame.Framework.Utilities.ReflectionHelpers.SizeOf<T>();
+        }
+
+        /// <summary>
         /// Writes additional data into the vertex buffer. Writing begins at the specified byte offset, and each value is spaced according to the specified stride value (in bytes).
         /// </summary>
         /// <typeparam name="T">Type being written.</typeparam>
