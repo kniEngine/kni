@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -64,7 +65,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!type.IsValueType || type.IsAutoLayout)
                 throw new NotSupportedException("The vertex type must be a struct and have a fixed layout");
 
-            return Marshal.SizeOf(type);
+            return ReflectionHelpers.SizeOf(type);
+        }
+
+        /// <summary>
+        /// Gets the size of the specified type, in bytes.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The size of the specified type, in bytes.</returns>
+        /// <remarks>Call this method to compute offset parameters for the Write method. If the specified 
+        /// data type cannot be packed into a vertex buffer—for example, if type is not a valid value type—a 
+        /// NotSupportedException is thrown.</remarks>
+        /// <exception cref="NotSupportedException">type is not a valid value type</exception>
+        public static int SizeOf<T>() where T : struct
+        {
+            Type type = typeof(T);
+            if (type.IsAutoLayout)
+                throw new NotSupportedException("The vertex type must have a fixed layout");
+
+            return ReflectionHelpers.SizeOf<T>();
         }
 
         /// <summary>

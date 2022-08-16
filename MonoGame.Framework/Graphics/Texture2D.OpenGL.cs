@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int w, h;
             GetSizeForLevel(Width, Height, level, out w, out h);
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Threading.EnsureUIThread();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
             GL.DeleteFramebuffers(1, ref framebufferId);
 #else
-            var tSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var tSizeInByte = ReflectionHelpers.SizeOf<T>();
             GL.BindTexture(TextureTarget.Texture2D, this.glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSizeInByte, 8));
 

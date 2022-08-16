@@ -67,7 +67,6 @@
     <Compile Include="Media\VideoPlayer.Blazor.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
     <Compile Include="TitleContainer.Blazor.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.Legacy.cs" />
   </ItemGroup>
   
   <ItemGroup>

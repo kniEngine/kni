@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>The IndexElementSize enum value that matches the type</returns>
         static IndexElementSize SizeForType(GraphicsDevice graphicsDevice, Type type)
         {
-            switch (ReflectionHelpers.ManagedSizeOf(type))
+            switch (ReflectionHelpers.SizeOf(type))
             {
                 case 2:
                     return IndexElementSize.SixteenBits;
