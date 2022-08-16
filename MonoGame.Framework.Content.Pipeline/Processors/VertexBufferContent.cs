@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -64,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!type.IsValueType || type.IsAutoLayout)
                 throw new NotSupportedException("The vertex type must be a struct and have a fixed layout");
 
-            return Marshal.SizeOf(type);
+            return ReflectionHelpers.SizeOf(type);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (type.IsAutoLayout)
                 throw new NotSupportedException("The vertex type must have a fixed layout");
 
-            return MonoGame.Framework.Utilities.ReflectionHelpers.SizeOf<T>();
+            return ReflectionHelpers.SizeOf<T>();
         }
 
         /// <summary>
