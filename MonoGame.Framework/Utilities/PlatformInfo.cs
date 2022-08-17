@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace MonoGame.Framework.Utilities
 {
     /// <summary>
@@ -42,6 +44,8 @@ namespace MonoGame.Framework.Utilities
                 return MonoGamePlatform.PlayStation5;
 #elif STADIA
                 return MonoGamePlatform.Stadia;
+#elif REF
+                throw new PlatformNotSupportedException();
 #endif
             }
         }
