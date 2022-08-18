@@ -5,6 +5,8 @@
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.iOS.nuspec				-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9100.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9100.0  -Properties Configuration=Release
 
+dotnet pack MonoGame.Framework\Xna.Framework.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
+
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.Portable.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9100.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.Content.Pipeline.Portable.nuspec -OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9100.0  -Properties Configuration=Release
 

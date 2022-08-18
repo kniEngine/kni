@@ -106,6 +106,12 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   SetOutPath '$INSTDIR\Assemblies\Framework\netstandard2.0'
   File '..\..\Artifacts\Xna.Framework\Release\netstandard2.0\*.*'
   
+  ; Install Reference Assemblies
+  SetOutPath '$INSTDIR\Assemblies\Ref\net40'
+  File '..\..\Artifacts\Monogame.Framework\Ref\Release\net40\*.*'
+  SetOutPath '$INSTDIR\Assemblies\Ref\netstandard2.0'
+  File '..\..\Artifacts\Monogame.Framework\Ref\Release\netstandard2.0\*.*'
+  
   ; Install Android Assemblies
   SetOutPath '$INSTDIR\Assemblies\Android'
   File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.dll'
