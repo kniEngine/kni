@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\MonoGame.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\Monogame.Framework\Ref</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <DefineConstants>REF</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Reference XNA framework for libraries.</Description>
+    <PackageTags>monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
+    <PackageId>nkast.Xna.Framework.Ref</PackageId>
+    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
+    <PackageIcon />
+    <RepositoryUrl>https://github.com/kniengine/kni/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/kniengine/kni/</PackageProjectUrl>
+    <Product>Xna.Framework</Product>
+    <Company>MonoGame Team, Kastellanos Nikos</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Xna.Framework.csproj" />
+  </ItemGroup>
+  <Import Project="MonoGame.Framework.Common.props" />
+
+  <ItemGroup>
+
+    <Compile Remove="Input\MessageBox.cs" />
+    <Compile Remove="Input\KeyboardInput.cs" />
+    <None Remove="P:\MonoGame\Images\Icon.png" />
+
+    <Compile Include="Input\Oculus\Default\ConcreteTouchControllerStrategy.cs" />
+	  
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.Ref.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="Graphics\GraphicsAdapter.Ref.cs" />
+    <Compile Include="GamePlatform.Ref.cs" />
+    <Compile Include="Input\GamePad.Ref.cs" />
+    <Compile Include="Input\Joystick.Ref.cs" />
+    <Compile Include="Input\Keyboard.Ref.cs" />
+    <Compile Include="Input\Mouse.Ref.cs" />
+    <Compile Include="Input\MouseCursor.Ref.cs" />
+    <Compile Include="Media\MediaLibrary.Ref.cs" />
+    <Compile Include="Media\Song.Ref.cs" />
+    <Compile Include="Media\Video.Ref.cs" />
+    <Compile Include="Media\VideoPlayer.Ref.cs" />
+    <Compile Include="Media\Ref\ConcreteMediaPlayer.cs" />
+    <Compile Include="TitleContainer.Ref.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.Ref.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Import Project="RefGraphics.targets" />
+  <Import Project="RefAudio.targets" />
+</Project>
