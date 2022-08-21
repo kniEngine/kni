@@ -39,7 +39,7 @@
   <ItemGroup>
     <Content Include="Assets/**/*" CopyToOutputDirectory="PreserveNewest" />
 
-    <Content Include="..\MonoGame.Framework\Graphics\Effect\Resources\*.fx*">
+    <Content Include="..\MonoGame.Framework\Graphics\Effect\Shaders\*.fx*">
       <Link>Assets\Effects\Stock\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
