@@ -117,13 +117,18 @@ namespace Microsoft.Xna.Platform
             presentationParameters.DisplayOrientation = this.Game.Window.CurrentOrientation;
             presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
 
-            // always initialize MultiSampleCount to the maximum, if users want to overwrite
-            // this they have to respond to the PreparingDeviceSettingsEvent and modify
-            // args.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount
+            presentationParameters.MultiSampleCount = 0;
             if (this.PreferMultiSampling)
-                presentationParameters.MultiSampleCount = (GraphicsDevice != null) ? GraphicsDevice.GraphicsCapabilities.MaxMultiSampleCount : 32;
-            else
-                presentationParameters.MultiSampleCount = 0;
+            {   
+                if ((GraphicsDevice != null))
+                {
+                    presentationParameters.MultiSampleCount = GraphicsDevice.GraphicsCapabilities.MaxMultiSampleCount;
+                }
+                else
+                {
+                    presentationParameters.MultiSampleCount = 0;
+                }
+            }
 
             return presentationParameters;
         }
