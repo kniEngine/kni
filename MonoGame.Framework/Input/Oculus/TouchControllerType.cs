@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (C)2022 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 
 
