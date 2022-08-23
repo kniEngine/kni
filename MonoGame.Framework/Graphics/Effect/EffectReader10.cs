@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -40,6 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 effect._shaders = ReadShaders();
                 effect.Parameters = ReadParameters();
                 effect.Techniques = ReadTechniques(effect);
+
                 effect.CurrentTechnique = effect.Techniques[0];
 
                 // Check file tail to ensure we parsed the content correctly.
@@ -76,10 +79,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var buffer = new ConstantBuffer(graphicsDevice,
-                                                sizeInBytes,
+                                                name,
                                                 parameters,
                                                 offsets,
-                                                name);
+                                                sizeInBytes);
                 return buffer;
             }
 
@@ -125,20 +128,19 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             case EffectParameterType.Bool:
                             case EffectParameterType.Int32:
+                                {
 #if !OPENGL
-                                // Under most platforms we properly store integers and 
-                                // booleans in an integer type.
-                                //
-                                // MojoShader on the otherhand stores everything in float
-                                // types which is why this code is disabled under OpenGL.
-					            {
-					                var buffer = new int[rowCount * columnCount];								
+                                    // MojoShader stores Integers and Booleans in a float type.
+                                    var buffer = new float[rowCount * columnCount];
+#else
+                                    // Integers and Booleans are stored in an integer type.
+					                var buffer = new int[rowCount * columnCount];
+#endif
                                     for (var j = 0; j < buffer.Length; j++)
                                         buffer[j] = ReadInt32();
                                     data = buffer;
-                                    break;
-					            }
-#endif
+                                }
+                                break;
 
                             case EffectParameterType.Single:
                                 {
@@ -146,18 +148,17 @@ namespace Microsoft.Xna.Framework.Graphics
                                     for (var j = 0; j < buffer.Length; j++)
                                         buffer[j] = ReadSingle();
                                     data = buffer;
-                                    break;
                                 }
+                                break;
 
                             case EffectParameterType.String:
-                                // TODO: We have not investigated what a string
-                                // type should do in the parameter list.  Till then
-                                // throw to let the user know.
-                                throw new NotSupportedException();
+                                    throw new NotImplementedException();
 
                             default:
-                                // NOTE: We skip over all other types as they 
-                                // don't get added to the constant buffer.
+                                {
+                                    Debug.WriteLine("Parameter {0} of type {1} is ignored", name, type.ToString());
+                                    // throw new NotImplementedException();
+                                }
                                 break;
                         }
                     }

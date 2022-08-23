@@ -2,6 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal sealed class ConstantBufferCollection
@@ -50,11 +53,11 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if OPENGL
-        internal void SetConstantBuffers(GraphicsDevice device, ShaderProgram shaderProgram)
+        internal void SetConstantBuffers(ShaderProgram shaderProgram)
 #elif BLAZOR
-        internal void SetConstantBuffers(GraphicsDevice device, ShaderProgram shaderProgram)
+        internal void SetConstantBuffers(ShaderProgram shaderProgram)
 #else
-        internal void SetConstantBuffers(GraphicsDevice device)
+        internal void SetConstantBuffers()
 #endif
         {
             // If there are no constant buffers then skip it.
@@ -69,11 +72,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (buffer != null && !buffer.IsDisposed)
                 {
 #if OPENGL
-                    buffer.PlatformApply(device, shaderProgram);
+                    buffer.PlatformApplyEx(_stage, i, shaderProgram);
 #elif BLAZOR
-                    buffer.PlatformApply(device, shaderProgram);
+                    buffer.PlatformApplyEx(_stage, i, shaderProgram);
 #else
-                    buffer.PlatformApply(device, _stage, i);
+                    buffer.PlatformApply(_stage, i);
 #endif
                 }
 

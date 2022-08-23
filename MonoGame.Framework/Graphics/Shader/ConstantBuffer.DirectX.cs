@@ -2,10 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    internal partial class ConstantBuffer
     {
         private SharpDX.Direct3D11.Buffer _cbuffer;
 
@@ -27,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _dirty = true;
         }
 
-        internal void PlatformApply(GraphicsDevice device, ShaderStage stage, int slot)
+        internal void PlatformApply(ShaderStage stage, int slot)
         {
             if (_cbuffer == null)
                 PlatformInitialize();
@@ -50,11 +52,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 d3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer);
         }
 
-        protected override void Dispose(bool disposing)
+        private void PlatformDispose(bool disposing)
         {
             if (disposing)
+            {
                 SharpDX.Utilities.Dispose(ref _cbuffer);
-            base.Dispose(disposing);
+            }
+
         }
     }
 }

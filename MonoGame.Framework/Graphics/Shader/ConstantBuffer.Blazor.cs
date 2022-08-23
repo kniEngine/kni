@@ -2,13 +2,19 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class ConstantBuffer
     {
+        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
+
         private ShaderProgram _shaderProgram = null;
         private WebGLUniformLocation _location;
 
@@ -39,9 +45,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
         }
 
-        public unsafe void PlatformApply(GraphicsDevice device, ShaderProgram program)
+        internal unsafe void PlatformApplyEx(ShaderStage stage, int slot, ShaderProgram program)
         {
-            // NOTE: We assume here the program has 
+            // NOTE: We assume here the program has
             // already been set on the device.
 
             // If the program changed then lookup the
@@ -72,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // and cast this correctly... else it doesn't work as i guess
                 // GL is checking the type of the uniform.
 
-                GraphicsDevice._glContext.Uniform4fv(_location, _buffer);
+                GL.Uniform4fv(_location, _buffer);
                 GraphicsExtensions.CheckGLError();
             }
 
@@ -80,6 +86,14 @@ namespace Microsoft.Xna.Framework.Graphics
             _dirty = false;
 
             _lastConstantBufferApplied = this;
+        }
+
+        private void PlatformDispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
         }
     }
 }

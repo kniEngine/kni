@@ -12,6 +12,9 @@
 #define TECHNIQUE(name, vsname, psname ) \
 	technique name { pass { VertexShader = compile vs_4_0_level_9_1 vsname (); PixelShader = compile ps_4_0_level_9_1 psname(); } }
 
+#define TECHNIQUE_9_3(name, vsname, psname ) \
+	technique name { pass { VertexShader = compile vs_4_0_level_9_3 vsname (); PixelShader = compile ps_4_0_level_9_3 psname(); } }
+
 #define BEGIN_CONSTANTS     cbuffer Parameters : register(b0) {
 #define MATRIX_CONSTANTS
 #define END_CONSTANTS       };
@@ -39,6 +42,9 @@
 
 #define TECHNIQUE(name, vsname, psname ) \
 	technique name { pass { VertexShader = compile vs_2_0 vsname (); PixelShader = compile ps_2_0 psname(); } }
+
+#define TECHNIQUE_9_3(name, vsname, psname ) \
+	technique name { pass { VertexShader = compile vs_3_0 vsname (); PixelShader = compile ps_3_0 psname(); } }
 
 #define BEGIN_CONSTANTS
 #define MATRIX_CONSTANTS
