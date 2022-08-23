@@ -116,9 +116,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 using (var stream = new MemoryStream())
                 {
                     using (var writer = new BinaryWriter(stream))
+                    {
                         effect.Write(writer, options);
-
-                    result = new CompiledEffectContent(stream.GetBuffer());
+                        result = new CompiledEffectContent(stream.ToArray());
+                    }
                 }
             }
             catch (Exception ex)

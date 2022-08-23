@@ -26,6 +26,7 @@
   <!-- Shortcut for building all valid target platforms -->
   <target name="build_code" description="Build all the projects.">
     <call target="build_framework"/>
+    <call target="build_ref"/>
     <call target="build_windows"/>
     <call target="build_windowsUAP10" />
     <call target="build_android" />
@@ -40,6 +41,13 @@
 
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
+
+  </target>
+    
+  <target name="build_ref" description="Build reference" depends="_prebuild">
+
+      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
 
   </target>
   
@@ -156,6 +164,7 @@
   <target name="build_installer" description="Build the installers." >
     <nant buildfile="Templates/VisualStudio2017/default.build" target="build" />
     <nant buildfile="Templates/VisualStudio2019/default.build" target="build" />
+    <nant buildfile="Templates/VisualStudio2022/default.build" target="build" />
     <nant buildfile="Templates/default.build" target="build" />
     <nant buildfile="Templates/VisualStudioForMac/default.build" target="build" />
     <nant buildfile="Installers/default.build" target="build" />

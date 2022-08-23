@@ -31,6 +31,9 @@
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="Xna.Framework.csproj" />
+  </ItemGroup>
   <Import Project="MonoGame.Framework.Common.props" />
 
 
@@ -64,7 +67,6 @@
     <Compile Include="Media\VideoPlayer.Blazor.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
     <Compile Include="TitleContainer.Blazor.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.Legacy.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -77,7 +79,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="nkast.Xna.Framework" Version="3.8.9100" />
     <PackageReference Include="nkast.Wasm.Audio" Version="6.0.2" />
     <PackageReference Include="nkast.Wasm.Canvas" Version="6.0.2" />
     <PackageReference Include="nkast.Wasm.Dom" Version="6.0.2" />

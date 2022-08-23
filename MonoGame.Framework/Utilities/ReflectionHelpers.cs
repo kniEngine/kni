@@ -4,6 +4,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace MonoGame.Framework.Utilities
 {
@@ -11,11 +12,7 @@ namespace MonoGame.Framework.Utilities
     {
         public static bool IsValueType(Type targetType)
         {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
-#if NET45            
+#if WINRT
             return targetType.GetTypeInfo().IsValueType;
 #else
             return targetType.IsValueType;
@@ -24,11 +21,7 @@ namespace MonoGame.Framework.Utilities
 
         public static Type GetBaseType(Type targetType)
         {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
-#if NET45            
+#if WINRT
             return targetType.GetTypeInfo().BaseType;
 #else
             return targetType.BaseType;
@@ -40,11 +33,7 @@ namespace MonoGame.Framework.Utilities
         /// </summary>
         public static Assembly GetAssembly(Type targetType)
         {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
-#if NET45            
+#if WINRT
             return targetType.GetTypeInfo().Assembly;
 #else
             return targetType.Assembly;
@@ -56,27 +45,19 @@ namespace MonoGame.Framework.Utilities
         /// </summary>
         public static bool IsConcreteClass(Type t)
         {
-            if (t == null)
-            {
-                throw new NullReferenceException("Must supply the t (type) parameter");
-            }
-
             if (t == typeof(object))
                 return false;
-#if NET45            
+#if WINRT
             var ti = t.GetTypeInfo();
-            if (ti.IsClass && !ti.IsAbstract)
-                return true;
+            return (ti.IsClass && !ti.IsAbstract);
 #else            
-            if (t.IsClass && !t.IsAbstract)
-                return true;
+            return (t.IsClass && !t.IsAbstract);
 #endif
-            return false;
         }
 
         public static MethodInfo GetMethodInfo(Type type, string methodName)
         {
-#if NET45            
+#if WINRT
             return type.GetTypeInfo().GetDeclaredMethod(methodName);
 #else
             return type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -85,12 +66,7 @@ namespace MonoGame.Framework.Utilities
 
         public static MethodInfo GetPropertyGetMethod(PropertyInfo property)
         {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
-#if NET45            
+#if WINRT
             return property.GetMethod;
 #else
             return property.GetGetMethod();
@@ -99,12 +75,7 @@ namespace MonoGame.Framework.Utilities
 
         public static MethodInfo GetPropertySetMethod(PropertyInfo property)
         {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
-#if NET45            
+#if WINRT
             return property.SetMethod;
 #else
             return property.GetSetMethod();
@@ -113,10 +84,7 @@ namespace MonoGame.Framework.Utilities
 
         public static T GetCustomAttribute<T>(MemberInfo member) where T : Attribute
         {
-            if (member == null)
-                throw new NullReferenceException("Must supply the member parameter");
-
-#if NET45            
+#if WINRT
             return member.GetCustomAttribute(typeof(T)) as T;
 #else
             return Attribute.GetCustomAttribute(member, typeof(T)) as T;
@@ -130,17 +98,9 @@ namespace MonoGame.Framework.Utilities
         /// </summary>
         public static bool PropertyIsPublic(PropertyInfo property)
         {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
             var getMethod = GetPropertyGetMethod(property);
 
-            if (getMethod == null || !getMethod.IsPublic)
-                return false;
-
-            return true;
+            return (getMethod != null && getMethod.IsPublic);
         }
 
         /// <summary>
@@ -148,11 +108,6 @@ namespace MonoGame.Framework.Utilities
         /// </summary>
         public static bool IsAssignableFrom(Type type, object value)
         {
-            if (type == null)
-                throw new ArgumentNullException("type");
-            if (value == null)
-                throw new ArgumentNullException("value");
-
             return IsAssignableFromType(type, value.GetType());
         }
 
@@ -161,18 +116,50 @@ namespace MonoGame.Framework.Utilities
         /// </summary>
         public static bool IsAssignableFromType(Type type, Type objectType)
         {
-            if (type == null)
-                throw new ArgumentNullException("type");
-            if (objectType == null)
-                throw new ArgumentNullException("objectType");
-#if NET45
-            if (type.GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()))
-                return true;
+#if WINRT
+            return (type.GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()));
 #else
-            if (type.IsAssignableFrom(objectType))
-                return true;     
+            return (type.IsAssignableFrom(objectType));
 #endif
-            return false;
+        }
+
+        internal static TDelegate GetDelegateForFunctionPointer<TDelegate>(IntPtr ptr)
+        {
+#if NET40 || NET45
+            return (TDelegate)(object)Marshal.GetDelegateForFunctionPointer(ptr, typeof(TDelegate));
+#else
+            return Marshal.GetDelegateForFunctionPointer<TDelegate>(ptr);
+#endif
+        }
+
+        /// <summary>
+        /// Fallback handler for Marshal.SizeOf(type)
+        /// </summary>
+        internal static int SizeOf(Type type)
+        {
+            return Marshal.SizeOf(type);
+        }
+
+        internal static int SizeOf<T>()
+        {
+            return ManagedSizeOf<T>.Value;
+        }
+
+        /// <summary>
+        /// Generics handler for Marshal.SizeOf
+        /// </summary>
+        private static class ManagedSizeOf<T>
+        {
+            static public int Value { get; private set; }
+
+            static ManagedSizeOf()
+            {
+#if NET40 || NET45
+                Value = Marshal.SizeOf(typeof(T));
+#else
+                Value = Marshal.SizeOf<T>();
+#endif
+            }
         }
     }
 }

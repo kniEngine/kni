@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
 using MonoGame.Framework.Utilities;

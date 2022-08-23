@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             // We need to copy each row separatly and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
-                            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+                            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
                             for (var row = 0; row < rows; row++)
                             {
                                 int i;
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try

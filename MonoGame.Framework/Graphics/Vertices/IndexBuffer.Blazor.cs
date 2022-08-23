@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GenerateIfRequired();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var sizeInBytes = elementSizeInByte * elementCount;
 
             var bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);

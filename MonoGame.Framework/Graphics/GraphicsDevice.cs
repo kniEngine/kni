@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using MonoGame.Framework.Utilities;
-using System.Runtime.InteropServices;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -1265,7 +1264,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>.Get())
+            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
 
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
@@ -1367,7 +1366,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>.Get())
+            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
 
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
@@ -1487,7 +1486,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 height = PresentationParameters.BackBufferHeight;
             }
 
-            var tSize = ReflectionHelpers.SizeOf<T>.Get();
+            var tSize = ReflectionHelpers.SizeOf<T>();
             var fSize = PresentationParameters.BackBufferFormat.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");

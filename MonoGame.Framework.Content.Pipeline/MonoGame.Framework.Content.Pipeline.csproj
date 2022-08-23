@@ -44,9 +44,6 @@
     <Compile Include="..\MonoGame.Framework\Platform\Utilities\AssemblyHelper.cs">
       <Link>Utilities\AssemblyHelper.cs</Link>
     </Compile>
-    <Compile Include="..\MonoGame.Framework\Utilities\ReflectionHelpers.Default.cs">
-      <Link>Utilities\ReflectionHelpers.Default.cs</Link>
-    </Compile>
     <Compile Include="..\MonoGame.Framework\Graphics\GraphicsExtensions.cs">
       <Link>Utilities\GraphicsExtensions.cs</Link>
     </Compile>

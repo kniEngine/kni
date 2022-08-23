@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
             GraphicsExtensions.CheckGLError();
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             // Pointer to the start of data to read in the index buffer
             ptr = new IntPtr(ptr.ToInt64() + offsetInBytes);
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GenerateIfRequired();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
+            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             var sizeInBytes = elementSizeInByte * elementCount;
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

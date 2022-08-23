@@ -1,11 +1,11 @@
 <Project>
-    
+
   <ItemGroup>
     <Compile Include="Design\Vector2TypeConverter.cs" />
     <Compile Include="Design\Vector3TypeConverter.cs" />
     <Compile Include="Design\Vector4TypeConverter.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingFrustum.cs" />
@@ -17,7 +17,7 @@
     <Compile Include="CurveKey.cs" />
     <Compile Include="CurveKeyCollection.cs" />
     <Compile Include="CurveLoopType.cs" />
-    <Compile Include="CurveTangent.cs" />    
+    <Compile Include="CurveTangent.cs" />
     <Compile Include="FrameworkDispatcher.cs" />
     <Compile Include="ICurveEvaluator.cs" />
     <Compile Include="MathHelper.cs" />
@@ -32,7 +32,7 @@
     <Compile Include="Vector3.cs" />
     <Compile Include="Vector4.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="GameTime.cs" />
     <Compile Include="PlayerIndex.cs" />

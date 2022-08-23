@@ -69,23 +69,39 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingFrustum.cs" />
     <Compile Include="BoundingSphere.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="ContainmentType.cs" />
-    <Compile Include="CurveContinuity.cs" />
     <Compile Include="Curve.cs" />
-    <Compile Include="CurveKeyCollection.cs" />
+    <Compile Include="CurveContinuity.cs" />
     <Compile Include="CurveKey.cs" />
+    <Compile Include="CurveKeyCollection.cs" />
     <Compile Include="CurveLoopType.cs" />
     <Compile Include="CurveTangent.cs" />
+    <Compile Include="FrameworkDispatcher.cs" />
+    <Compile Include="ICurveEvaluator.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Plane.cs" />
+    <Compile Include="PlaneIntersectionType.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Quaternion.cs" />
+    <Compile Include="Ray.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs" />
+    <Compile Include="Vector4.cs" />
+    <Compile Include="GameTime.cs" />
+    <Compile Include="PlayerIndex.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
     <Compile Include="EventHelpers.cs" />
     <Compile Include="FileDropEventArgs.cs" />
-    <Compile Include="FrameworkDispatcher.cs" />
     <Compile Include="FrameworkResources.cs" />
     <Compile Include="GameComponentCollection.cs" />
     <Compile Include="GameComponentCollectionEventArgs.cs" />
@@ -95,32 +111,18 @@
     <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="GameRunBehavior.cs" />
     <Compile Include="GameServiceContainer.cs" />
-    <Compile Include="GameTime.cs" />
     <Compile Include="GameWindow.cs" />
-    <Compile Include="ICurveEvaluator.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
-    <Compile Include="MathHelper.cs" />
-    <Compile Include="Matrix.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="Plane.cs" />
-    <Compile Include="PlaneIntersectionType.cs" />
-    <Compile Include="PlayerIndex.cs" />
-    <Compile Include="Point.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
-    <Compile Include="Quaternion.cs" />
-    <Compile Include="Ray.cs" />
-    <Compile Include="Rectangle.cs" />
     <Compile Include="ReusableItemList.cs" />
     <Compile Include="TextInputEventArgs.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.WinRT.cs" />
-    <Compile Include="Vector2.cs" />
-    <Compile Include="Vector3.cs" />
-    <Compile Include="Vector4.cs" />
 
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
@@ -493,7 +495,6 @@
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\FileHelpers.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.Default.cs" />
     <Compile Include="Utilities\Lz4Stream\Lz4DecoderStream.cs" />
     <Compile Include="Utilities\LzxStream\LzxDecoderStream.cs" />
     <Compile Include="Utilities\ZLibStream\ZlibStream.cs" />
@@ -607,8 +608,4 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <PropertyGroup>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' != 'v4.0' And '$(TargetFrameworkVersion)' != 'v3.5' And '$(TargetFrameworkVersion)' != 'v3.0' And '$(TargetFrameworkVersion)' != 'v2.0' ">$(DefineConstants);NET45</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
-  </PropertyGroup>
 </Project>
