@@ -92,27 +92,27 @@ struct VSOutput
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
-    float4 Specular   : COLOR1;
 };
 
-struct VSOutputNoFog
+struct VSOutputFog
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
+    float4 Specular   : COLOR1;
 };
 
 struct VSOutputTx
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
-    float4 Specular   : COLOR1;
     float2 TexCoord   : TEXCOORD0;
 };
 
-struct VSOutputTxNoFog
+struct VSOutputTxFog
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
+    float4 Specular   : COLOR1;
     float2 TexCoord   : TEXCOORD0;
 };
 
@@ -137,15 +137,15 @@ struct VSOutputTx2
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
-    float4 Specular   : COLOR1;
     float2 TexCoord   : TEXCOORD0;
     float2 TexCoord2  : TEXCOORD1;
 };
 
-struct VSOutputTx2NoFog
+struct VSOutputTx2Fog
 {
     float4 PositionPS : SV_Position;
     float4 Diffuse    : COLOR0;
+    float4 Specular   : COLOR1;
     float2 TexCoord   : TEXCOORD0;
     float2 TexCoord2  : TEXCOORD1;
 };

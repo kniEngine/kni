@@ -88,7 +88,7 @@ CommonVSOutputPixelLighting ComputeCommonVSOutputPixelLighting(float4 position, 
 }
 
 
-#define SetCommonVSOutputParamsPixelLighting \
+#define SetCommonVSOutputParamsPixelLightingFog \
     vout.PositionPS = cout.Pos_ps; \
     vout.PositionWS = float4(cout.Pos_ws, cout.FogFactor); \
     vout.NormalWS = cout.Normal_ws;

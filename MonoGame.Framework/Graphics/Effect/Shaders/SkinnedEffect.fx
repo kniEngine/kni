@@ -70,14 +70,14 @@ void Skin(inout VSInputNmTxWeights vin, uniform int boneCount)
 
 
 // Vertex shader: vertex lighting, one bone.
-VSOutputTx VSSkinnedVertexLightingOneBone(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedVertexLightingOneBone(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 1);
     
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 3);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -86,14 +86,14 @@ VSOutputTx VSSkinnedVertexLightingOneBone(VSInputNmTxWeights vin)
 
 
 // Vertex shader: vertex lighting, two bones.
-VSOutputTx VSSkinnedVertexLightingTwoBones(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedVertexLightingTwoBones(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 2);
     
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 3);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -102,14 +102,14 @@ VSOutputTx VSSkinnedVertexLightingTwoBones(VSInputNmTxWeights vin)
 
 
 // Vertex shader: vertex lighting, four bones.
-VSOutputTx VSSkinnedVertexLightingFourBones(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedVertexLightingFourBones(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 4);
     
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 3);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -118,14 +118,14 @@ VSOutputTx VSSkinnedVertexLightingFourBones(VSInputNmTxWeights vin)
 
 
 // Vertex shader: one light, one bone.
-VSOutputTx VSSkinnedOneLightOneBone(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedOneLightOneBone(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 1);
 
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 1);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -134,14 +134,14 @@ VSOutputTx VSSkinnedOneLightOneBone(VSInputNmTxWeights vin)
 
 
 // Vertex shader: one light, two bones.
-VSOutputTx VSSkinnedOneLightTwoBones(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedOneLightTwoBones(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 2);
 
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 1);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -150,14 +150,14 @@ VSOutputTx VSSkinnedOneLightTwoBones(VSInputNmTxWeights vin)
 
 
 // Vertex shader: one light, four bones.
-VSOutputTx VSSkinnedOneLightFourBones(VSInputNmTxWeights vin)
+VSOutputTxFog VSSkinnedOneLightFourBones(VSInputNmTxWeights vin)
 {
-    VSOutputTx vout;
+    VSOutputTxFog vout;
     
     Skin(vin, 4);
 
     CommonVSOutput cout = ComputeCommonVSOutputWithLighting(vin.Position, vin.Normal, 1);
-    SetCommonVSOutputParams;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
 
@@ -173,7 +173,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingOneBone(VSInputNmTxWeights vin)
     Skin(vin, 1);
 
     CommonVSOutputPixelLighting cout = ComputeCommonVSOutputPixelLighting(vin.Position, vin.Normal);
-    SetCommonVSOutputParamsPixelLighting;
+    SetCommonVSOutputParamsPixelLightingFog;
     
     vout.Diffuse = float4(1, 1, 1, DiffuseColor.a);
     vout.TexCoord = vin.TexCoord;
@@ -190,7 +190,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingTwoBones(VSInputNmTxWeights vin)
     Skin(vin, 2);
 
     CommonVSOutputPixelLighting cout = ComputeCommonVSOutputPixelLighting(vin.Position, vin.Normal);
-    SetCommonVSOutputParamsPixelLighting;
+    SetCommonVSOutputParamsPixelLightingFog;
     
     vout.Diffuse = float4(1, 1, 1, DiffuseColor.a);
     vout.TexCoord = vin.TexCoord;
@@ -207,7 +207,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingFourBones(VSInputNmTxWeights vin)
     Skin(vin, 4);
 
     CommonVSOutputPixelLighting cout = ComputeCommonVSOutputPixelLighting(vin.Position, vin.Normal);
-    SetCommonVSOutputParamsPixelLighting;
+    SetCommonVSOutputParamsPixelLightingFog;
     
     vout.Diffuse = float4(1, 1, 1, DiffuseColor.a);
     vout.TexCoord = vin.TexCoord;
@@ -217,7 +217,7 @@ VSOutputPixelLightingTx VSSkinnedPixelLightingFourBones(VSInputNmTxWeights vin)
 
 
 // Pixel shader: vertex lighting.
-float4 PSSkinnedVertexLighting(VSOutputTx pin) : SV_Target0
+float4 PSSkinnedVertexLightingFog(VSOutputTxFog pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
     
@@ -229,7 +229,7 @@ float4 PSSkinnedVertexLighting(VSOutputTx pin) : SV_Target0
 
 
 // Pixel shader: vertex lighting, no fog.
-float4 PSSkinnedVertexLightingNoFog(VSOutputTx pin) : SV_Target0
+float4 PSSkinnedVertexLighting(VSOutputTxFog pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
     
@@ -262,22 +262,22 @@ float4 PSSkinnedPixelLighting(VSOutputPixelLightingTx pin) : SV_Target0
 // defined to match the indexing in SkinnedEffect.cs.
 
 TECHNIQUE( SkinnedEffect_VertexLighting_OneBone,		VSSkinnedVertexLightingOneBone,		PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_VertexLighting_OneBone_NoFog,	VSSkinnedVertexLightingOneBone,		PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_VertexLighting_OneBone_Fog,	VSSkinnedVertexLightingOneBone,		PSSkinnedVertexLightingFog );
 TECHNIQUE( SkinnedEffect_VertexLighting_TwoBone,		VSSkinnedVertexLightingTwoBones,	PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_VertexLighting_TwoBone_NoFog,	VSSkinnedVertexLightingTwoBones,	PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_VertexLighting_TwoBone_Fog,	VSSkinnedVertexLightingTwoBones,	PSSkinnedVertexLightingFog );
 TECHNIQUE( SkinnedEffect_VertexLighting_FourBone,		VSSkinnedVertexLightingFourBones,	PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_VertexLighting_FourBone_NoFog,	VSSkinnedVertexLightingFourBones,	PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_VertexLighting_FourBone_Fog,	VSSkinnedVertexLightingFourBones,	PSSkinnedVertexLightingFog );
 
 TECHNIQUE( SkinnedEffect_OneLight_OneBone,			VSSkinnedOneLightOneBone,	PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_OneLight_OneBone_NoFog,	VSSkinnedOneLightOneBone,	PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_OneLight_OneBone_Fog,		VSSkinnedOneLightOneBone,	PSSkinnedVertexLightingFog );
 TECHNIQUE( SkinnedEffect_OneLight_TwoBone,			VSSkinnedOneLightTwoBones,	PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_OneLight_TwoBone_NoFog,	VSSkinnedOneLightTwoBones,	PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_OneLight_TwoBone_Fog,		VSSkinnedOneLightTwoBones,	PSSkinnedVertexLightingFog );
 TECHNIQUE( SkinnedEffect_OneLight_FourBone,			VSSkinnedOneLightFourBones,	PSSkinnedVertexLighting );
-TECHNIQUE( SkinnedEffect_OneLight_FourBone_NoFog,	VSSkinnedOneLightFourBones,	PSSkinnedVertexLightingNoFog );
+TECHNIQUE( SkinnedEffect_OneLight_FourBone_Fog,		VSSkinnedOneLightFourBones,	PSSkinnedVertexLightingFog );
 
 TECHNIQUE( SkinnedEffect_PixelLighting_OneBone,			VSSkinnedPixelLightingOneBone,		PSSkinnedPixelLighting );
-TECHNIQUE( SkinnedEffect_PixelLighting_OneBone_NoFog,	VSSkinnedPixelLightingOneBone,		PSSkinnedPixelLighting );
+TECHNIQUE( SkinnedEffect_PixelLighting_OneBone_Fog,		VSSkinnedPixelLightingOneBone,		PSSkinnedPixelLighting );
 TECHNIQUE( SkinnedEffect_PixelLighting_TwoBone,			VSSkinnedPixelLightingTwoBones,		PSSkinnedPixelLighting );
-TECHNIQUE( SkinnedEffect_PixelLighting_TwoBone_NoFog,	VSSkinnedPixelLightingTwoBones,		PSSkinnedPixelLighting );
+TECHNIQUE( SkinnedEffect_PixelLighting_TwoBone_Fog,		VSSkinnedPixelLightingTwoBones,		PSSkinnedPixelLighting );
 TECHNIQUE( SkinnedEffect_PixelLighting_FourBone,		VSSkinnedPixelLightingFourBones,	PSSkinnedPixelLighting );
-TECHNIQUE( SkinnedEffect_PixelLighting_FourBone_NoFog,	VSSkinnedPixelLightingFourBones,	PSSkinnedPixelLighting );
+TECHNIQUE( SkinnedEffect_PixelLighting_FourBone_Fog,	VSSkinnedPixelLightingFourBones,	PSSkinnedPixelLighting );

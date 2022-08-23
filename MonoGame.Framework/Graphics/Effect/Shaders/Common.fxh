@@ -48,11 +48,11 @@ CommonVSOutput ComputeCommonVSOutput(float4 position)
 
 #define SetCommonVSOutputParams \
     vout.PositionPS = cout.Pos_ps; \
+    vout.Diffuse = cout.Diffuse;
+
+
+#define SetCommonVSOutputParamsFog \
+    vout.PositionPS = cout.Pos_ps; \
     vout.Diffuse = cout.Diffuse; \
     vout.Specular = float4(cout.Specular, cout.FogFactor);
-
-
-#define SetCommonVSOutputParamsNoFog \
-    vout.PositionPS = cout.Pos_ps; \
-    vout.Diffuse = cout.Diffuse;
 

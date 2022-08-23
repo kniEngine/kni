@@ -486,7 +486,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 int shaderIndex = 0;
                 
-                if (!fogEnabled)
+                if (fogEnabled)
                     shaderIndex += 1;
                 
                 if (fresnelEnabled)
