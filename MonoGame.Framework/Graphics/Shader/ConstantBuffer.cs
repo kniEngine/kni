@@ -162,13 +162,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Array source = data as Array;
                 int stride = (columns * elementSize);
-                int len = rows * stride;
-
-                // take care of shader compiler optimization
-                if (_buffer.Length - offset > len)
-                    len = _buffer.Length - offset;
-
-                Buffer.BlockCopy(source, 0, _buffer, offset, len);
+                Buffer.BlockCopy(source, 0, _buffer, offset, rows * stride);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
