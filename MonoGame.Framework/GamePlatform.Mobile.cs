@@ -14,8 +14,6 @@ namespace Microsoft.Xna.Framework
             return new iOSGamePlatform(game);
 #elif ANDROID
             return new AndroidGamePlatform(game);
-#elif WEB
-            return new WebGamePlatform(game);
 #endif
         }
     }

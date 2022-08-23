@@ -26,8 +26,6 @@ namespace MonoGame.Framework.Utilities
                 return MonoGamePlatform.iOS;
 #elif TVOS
                 return MonoGamePlatform.tvOS;
-#elif WEB
-                return MonoGamePlatform.WebGL;
 #elif BLAZOR
                 return MonoGamePlatform.BLAZOR;
 #elif WINDOWS && DIRECTX
