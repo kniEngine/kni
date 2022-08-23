@@ -1390,8 +1390,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            _vertexConstantBuffers.SetConstantBuffers(this);
-            _pixelConstantBuffers.SetConstantBuffers(this);
+            _vertexConstantBuffers.SetConstantBuffers();
+            _pixelConstantBuffers.SetConstantBuffers();
 
             VertexTextures.SetTextures(this);
             VertexSamplerStates.PlatformSetSamplers(this);

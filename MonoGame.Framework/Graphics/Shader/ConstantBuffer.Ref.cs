@@ -2,6 +2,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class ConstantBuffer
@@ -16,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        public unsafe void PlatformApply(GraphicsDevice device, ShaderStage stage, int slot)
+        internal unsafe void PlatformApply(ShaderStage stage, int slot)
         {
             throw new PlatformNotSupportedException();
         }

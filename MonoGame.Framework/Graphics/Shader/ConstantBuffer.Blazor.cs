@@ -2,8 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using nkast.Wasm.Canvas.WebGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -39,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
         }
 
-        public unsafe void PlatformApply(GraphicsDevice device, ShaderProgram program)
+        internal unsafe void PlatformApplyEx(ShaderStage stage, int slot, ShaderProgram program)
         {
             // NOTE: We assume here the program has 
             // already been set on the device.
