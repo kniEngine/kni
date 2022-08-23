@@ -79,10 +79,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var buffer = new ConstantBuffer(graphicsDevice,
-                                                sizeInBytes,
+                                                name,
                                                 parameters,
                                                 offsets,
-                                                name);
+                                                sizeInBytes);
                 return buffer;
             }
 
