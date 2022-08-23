@@ -49,9 +49,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-#if WEB
-        internal void SetConstantBuffers(GraphicsDevice device, int shaderProgram)
-#elif OPENGL
+#if OPENGL
         internal void SetConstantBuffers(GraphicsDevice device, ShaderProgram shaderProgram)
 #elif BLAZOR
         internal void SetConstantBuffers(GraphicsDevice device, ShaderProgram shaderProgram)
@@ -70,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-#if OPENGL || WEB
+#if OPENGL
                     buffer.PlatformApply(device, shaderProgram);
 #elif BLAZOR
                     buffer.PlatformApply(device, shaderProgram);
