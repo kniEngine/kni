@@ -261,6 +261,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out MaxTextureSlots);
             GraphicsExtensions.CheckGLError();
+            MaxTextureSlots = Math.Min(MaxTextureSlots, 16);
 
             GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();
