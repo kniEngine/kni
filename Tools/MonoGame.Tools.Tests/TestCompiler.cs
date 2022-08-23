@@ -65,7 +65,8 @@ namespace MonoGame.Tests.ContentPipeline
             TargetPlatform.PlayStation5,
             TargetPlatform.XboxOne,
             TargetPlatform.Switch,
-            TargetPlatform.Web
+            TargetPlatform.Web,
+            TargetPlatform.Blazor
         };
         static readonly IReadOnlyCollection<GraphicsProfile> GraphicsProfiles = new[]
         {

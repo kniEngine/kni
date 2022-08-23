@@ -21,7 +21,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     platform == TargetPlatform.Windows ||
                     platform == TargetPlatform.WindowsStoreApp ||
                     platform == TargetPlatform.iOS ||
-                    platform == TargetPlatform.Web;
+                    platform == TargetPlatform.Web ||
+                    platform == TargetPlatform.Blazor;
         }
 
         private static bool IsCompressedTextureFormat(TextureProcessorOutputFormat format)
@@ -63,7 +64,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                             platform == TargetPlatform.DesktopGL ||
                             platform == TargetPlatform.MacOSX ||
                             platform == TargetPlatform.NativeClient ||
-                            platform == TargetPlatform.Web)
+                            platform == TargetPlatform.Web ||
+                            platform == TargetPlatform.Blazor)
                 {
                     if (format != TextureProcessorOutputFormat.DxtCompressed)
                         throw new PlatformNotSupportedException(format + " platform only supports DXT texture compression");

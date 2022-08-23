@@ -96,7 +96,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// WebAssembly and Bridge.NET
         /// </summary>
-        Web
+        Web,
+
+        /// <summary>
+        /// WebAssembly/Blazor
+        /// </summary>
+        Blazor,
     }
 
 
