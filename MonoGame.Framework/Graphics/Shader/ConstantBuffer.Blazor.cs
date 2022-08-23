@@ -84,5 +84,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _lastConstantBufferApplied = this;
         }
+
+        private void PlatformDispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }

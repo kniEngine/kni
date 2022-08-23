@@ -21,5 +21,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+
+        private void PlatformDispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }

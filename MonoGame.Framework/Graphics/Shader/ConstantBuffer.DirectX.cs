@@ -7,7 +7,7 @@
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    internal partial class ConstantBuffer
     {
         private SharpDX.Direct3D11.Buffer _cbuffer;
 
@@ -52,11 +52,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 d3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer);
         }
 
-        protected override void Dispose(bool disposing)
+        private void PlatformDispose(bool disposing)
         {
             if (disposing)
+            {
                 SharpDX.Utilities.Dispose(ref _cbuffer);
-            base.Dispose(disposing);
+            }
+
         }
     }
 }
