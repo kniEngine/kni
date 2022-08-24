@@ -52,38 +52,20 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-#if OPENGL
-        internal void SetConstantBuffers(ShaderProgram shaderProgram)
-#elif BLAZOR
-        internal void SetConstantBuffers(ShaderProgram shaderProgram)
-#else
         internal void SetConstantBuffers()
-#endif
         {
-            // If there are no constant buffers then skip it.
-            if (_valid == 0)
-                return;
+            var validMask = _valid;
 
-            var valid = _valid;
-
-            for (var i = 0; i < _buffers.Length; i++)
+            for (var i = 0; i < _buffers.Length && validMask != 0; i++)
             {
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-#if OPENGL
-                    buffer.PlatformApplyEx(_stage, i, shaderProgram);
-#elif BLAZOR
-                    buffer.PlatformApplyEx(_stage, i, shaderProgram);
-#else
                     buffer.PlatformApply(_stage, i);
-#endif
                 }
 
-                // Early out if this is the last one.
-                valid &= ~(1 << i);
-                if (valid == 0)
-                    return;
+                // clear buffer bit
+                validMask &= ~(1 << i);
             }
         }
 

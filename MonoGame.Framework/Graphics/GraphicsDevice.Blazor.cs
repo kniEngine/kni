@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
         internal DepthStencilState _lastDepthStencilState = new DepthStencilState();
         internal RasterizerState _lastRasterizerState = new RasterizerState();
 
+        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
+
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
         private int ShaderProgramHash
@@ -709,8 +711,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _vertexShaderDirty = _pixelShaderDirty = false;
             }
 
-            _vertexConstantBuffers.SetConstantBuffers(_shaderProgram);
-            _pixelConstantBuffers.SetConstantBuffers(_shaderProgram);
+            _vertexConstantBuffers.SetConstantBuffers();
+            _pixelConstantBuffers.SetConstantBuffers();
 
             Textures.SetTextures(this);
             SamplerStates.PlatformSetSamplers(this);
