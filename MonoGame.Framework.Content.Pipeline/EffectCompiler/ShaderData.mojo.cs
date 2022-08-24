@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 SamplerStateInfo state;
                 if (samplerStates.TryGetValue(originalSamplerName, out state))
                 {
-                    sampler.state = SamplerStateContent.FromSamplerStateInfo(state);
+                    sampler.state = state.State;
                     sampler.parameterName = state.TextureName ?? originalSamplerName;
                 }
 
