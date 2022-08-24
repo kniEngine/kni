@@ -4,10 +4,6 @@
 
 // Copyright (C)2021 Nick Kastellanos
 
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
-
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -37,61 +33,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             FilterMode = TextureFilterModeContent.Default;
             ComparisonFunction = CompareFunctionContent.Never;
         }
-        
-        public static SamplerStateContent FromSamplerStateInfo(SamplerStateInfo info)
-        {
-            // create state
-            SamplerStateContent state = new SamplerStateContent();
 
-            state.AddressU = info.AddressU;
-            state.AddressV = info.AddressV;
-            state.AddressW = info.AddressW;
-
-            state.BorderColor = info.BorderColor;
-
-            state.MaxAnisotropy = info.MaxAnisotropy;
-            state.MaxMipLevel = info.MaxMipLevel;
-            state.MipMapLevelOfDetailBias = info.MipMapLevelOfDetailBias;
-
-            // Figure out what kind of filter to set based on each
-            // individual min, mag, and mip filter settings.
-            //
-            // NOTE: We're treating "None" and "Point" the same here
-            // and disabling mipmapping further below.
-            //
-            if (info.MinFilter == TextureFilterTypeContent.Anisotropic)
-                state.Filter = TextureFilterContent.Anisotropic;
-            else if (info.MinFilter == TextureFilterTypeContent.Linear && info.MagFilter == TextureFilterTypeContent.Linear && info.MipFilter == TextureFilterTypeContent.Linear)
-                state.Filter = TextureFilterContent.Linear;
-            else if (info.MinFilter == TextureFilterTypeContent.Linear && info.MagFilter == TextureFilterTypeContent.Linear && info.MipFilter <= TextureFilterTypeContent.Point)
-                state.Filter = TextureFilterContent.LinearMipPoint;
-            else if (info.MinFilter == TextureFilterTypeContent.Linear && info.MagFilter <= TextureFilterTypeContent.Point && info.MipFilter == TextureFilterTypeContent.Linear)
-                state.Filter = TextureFilterContent.MinLinearMagPointMipLinear;
-            else if (info.MinFilter == TextureFilterTypeContent.Linear && info.MagFilter <= TextureFilterTypeContent.Point && info.MipFilter <= TextureFilterTypeContent.Point)
-                state.Filter = TextureFilterContent.MinLinearMagPointMipPoint;
-            else if (info.MinFilter <= TextureFilterTypeContent.Point && info.MagFilter == TextureFilterTypeContent.Linear && info.MipFilter == TextureFilterTypeContent.Linear)
-                state.Filter = TextureFilterContent.MinPointMagLinearMipLinear;
-            else if (info.MinFilter <= TextureFilterTypeContent.Point && info.MagFilter == TextureFilterTypeContent.Linear && info.MipFilter <= TextureFilterTypeContent.Point)
-                state.Filter = TextureFilterContent.MinPointMagLinearMipPoint;
-            else if (info.MinFilter <= TextureFilterTypeContent.Point && info.MagFilter <= TextureFilterTypeContent.Point && info.MipFilter <= TextureFilterTypeContent.Point)
-                state.Filter = TextureFilterContent.Point;
-            else if (info.MinFilter <= TextureFilterTypeContent.Point && info.MagFilter <= TextureFilterTypeContent.Point && info.MipFilter == TextureFilterTypeContent.Linear)
-                state.Filter = TextureFilterContent.PointMipLinear;
-
-            // Do we need to disable mipmapping?
-            if (info.MipFilter == TextureFilterTypeContent.None)
-            {
-                // TODO: This is the only option we have right now for 
-                // disabling mipmapping.  We should add support for MinLod
-                // and MaxLod which potentially does a better job at this.
-                state.MipMapLevelOfDetailBias = -16.0f;
-                state.MaxMipLevel = 0;
-            }
-
-            return state;
-        }
     }
-    
+
     /// <summary>
     /// Defines modes for addressing texels using texture coordinates that are outside of the range of 0.0 to 1.0.
     /// </summary>

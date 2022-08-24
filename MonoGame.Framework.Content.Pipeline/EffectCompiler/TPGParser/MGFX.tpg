@@ -247,14 +247,14 @@ BlendOps -> (BlendOp_Add|BlendOp_Subtract|BlendOp_RevSubtract|BlendOp_Min|BlendO
 	return	$BlendOp_Add ?? $BlendOp_Subtract ?? $BlendOp_RevSubtract ?? $BlendOp_Min ?? $BlendOp_Max;
 };
 
-CmpFunc_Never -> Never { return CompareFunction.Never; };
-CmpFunc_Less -> Less { return CompareFunction.Less; };
-CmpFunc_Equal -> Equal { return CompareFunction.Equal; };
-CmpFunc_LessEqual -> LessEqual { return CompareFunction.LessEqual; };
-CmpFunc_Greater -> Greater { return CompareFunction.Greater; };
-CmpFunc_NotEqual -> NotEqual { return CompareFunction.NotEqual; };
-CmpFunc_GreaterEqual -> GreaterEqual { return CompareFunction.GreaterEqual; };
-CmpFunc_Always -> Always { return CompareFunction.Always; };
+CmpFunc_Never -> Never { return CompareFunctionContent.Never; };
+CmpFunc_Less -> Less { return CompareFunctionContent.Less; };
+CmpFunc_Equal -> Equal { return CompareFunctionContent.Equal; };
+CmpFunc_LessEqual -> LessEqual { return CompareFunctionContent.LessEqual; };
+CmpFunc_Greater -> Greater { return CompareFunctionContent.Greater; };
+CmpFunc_NotEqual -> NotEqual { return CompareFunctionContent.NotEqual; };
+CmpFunc_GreaterEqual -> GreaterEqual { return CompareFunctionContent.GreaterEqual; };
+CmpFunc_Always -> Always { return CompareFunctionContent.Always; };
 CmpFunc -> (CmpFunc_Never|CmpFunc_Less|CmpFunc_Equal|CmpFunc_LessEqual|CmpFunc_Greater|CmpFunc_NotEqual|CmpFunc_GreaterEqual|CmpFunc_Always)
 {
 	return	$CmpFunc_Never ?? $CmpFunc_Less ?? $CmpFunc_Equal ?? $CmpFunc_LessEqual ?? $CmpFunc_Greater ?? $CmpFunc_NotEqual ?? $CmpFunc_GreaterEqual ?? $CmpFunc_Always;
@@ -285,12 +285,12 @@ Render_State_DepthBias -> DepthBias Equals Number Semicolon { (paramlist[0] as P
 Render_State_SlopeScaleDepthBias -> SlopeScaleDepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).SlopeScaleDepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_ZEnable -> ZEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ZEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_ZWriteEnable -> ZWriteEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ZWriteEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
-Render_State_ZFunc -> ZFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).DepthBufferFunction = (CompareFunction)$CmpFunc; return null; };
+Render_State_ZFunc -> ZFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).DepthBufferFunction = (CompareFunctionContent)$CmpFunc; return null; };
 Render_State_MultiSampleAntiAlias -> MultiSampleAntiAlias Equals Boolean Semicolon { (paramlist[0] as PassInfo).MultiSampleAntiAlias = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_ScissorTestEnable -> ScissorTestEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ScissorTestEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_StencilEnable -> StencilEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).StencilEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_StencilFail -> StencilFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilFail = (StencilOperation)$StencilOp; return null; };
-Render_State_StencilFunc -> StencilFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).StencilFunc = (CompareFunction)$CmpFunc; return null; };
+Render_State_StencilFunc -> StencilFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).StencilFunc = (CompareFunctionContent)$CmpFunc; return null; };
 Render_State_StencilMask -> StencilMask Equals Number Semicolon { (paramlist[0] as PassInfo).StencilMask = ParseTreeTools.ParseInt((string)$Number); return null; };
 Render_State_StencilPass -> StencilPass Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilPass = (StencilOperation)$StencilOp; return null; };
 Render_State_StencilRef -> StencilRef Equals Number Semicolon { (paramlist[0] as PassInfo).StencilRef = ParseTreeTools.ParseInt((string)$Number); return null; };
@@ -356,19 +356,19 @@ PixelShader_Pass_Expression -> PixelShader Equals Compile ShaderModel Identifier
    return null;
 };
 
-AddressMode_Clamp -> Clamp { return TextureAddressMode.Clamp; };
-AddressMode_Wrap -> Wrap { return TextureAddressMode.Wrap; };
-AddressMode_Mirror -> Mirror { return TextureAddressMode.Mirror; };
-AddressMode_Border -> Border { return TextureAddressMode.Border; };
+AddressMode_Clamp -> Clamp { return TextureAddressModeContent.Clamp; };
+AddressMode_Wrap -> Wrap { return TextureAddressModeContent.Wrap; };
+AddressMode_Mirror -> Mirror { return TextureAddressModeContent.Mirror; };
+AddressMode_Border -> Border { return TextureAddressModeContent.Border; };
 AddressMode -> (AddressMode_Clamp|AddressMode_Wrap|AddressMode_Mirror|AddressMode_Border)
 {
 	return $AddressMode_Clamp ?? $AddressMode_Wrap ?? $AddressMode_Mirror ?? $AddressMode_Border;
 };
 
-TextureFilter_None -> None { return TextureFilterType.None; };
-TextureFilter_Linear -> Linear { return TextureFilterType.Linear; };
-TextureFilter_Point -> Point { return TextureFilterType.Point; };
-TextureFilter_Anisotropic -> Anisotropic { return TextureFilterType.Anisotropic; };
+TextureFilter_None -> None { return TextureFilterTypeContent.None; };
+TextureFilter_Linear -> Linear { return TextureFilterTypeContent.Linear; };
+TextureFilter_Point -> Point { return TextureFilterTypeContent.Point; };
+TextureFilter_Anisotropic -> Anisotropic { return TextureFilterTypeContent.Anisotropic; };
 TextureFilter -> (TextureFilter_None|TextureFilter_Linear|TextureFilter_Point|TextureFilter_Anisotropic)
 {
 	return $TextureFilter_None ?? $TextureFilter_Linear ?? $TextureFilter_Point ?? $TextureFilter_Anisotropic;
@@ -376,13 +376,13 @@ TextureFilter -> (TextureFilter_None|TextureFilter_Linear|TextureFilter_Point|Te
 
 // Sampler States
 Sampler_State_Texture -> Texture Equals (LessThan|OpenParenthesis) Identifier (GreaterThan|CloseParenthesis) Semicolon { (paramlist[0] as SamplerStateInfo).TextureName = (string)$Identifier; return null; };
-Sampler_State_MinFilter -> MinFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MinFilter = (TextureFilterType)$TextureFilter; return null; };
-Sampler_State_MagFilter -> MagFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MagFilter = (TextureFilterType)$TextureFilter; return null; };
-Sampler_State_MipFilter -> MipFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MipFilter = (TextureFilterType)$TextureFilter; return null; };
-Sampler_State_Filter -> Filter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).Filter = (TextureFilterType)$TextureFilter; return null; };
-Sampler_State_AddressU -> AddressU Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressU = (TextureAddressMode)$AddressMode; return null; };
-Sampler_State_AddressV -> AddressV Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressV = (TextureAddressMode)$AddressMode; return null; };
-Sampler_State_AddressW -> AddressW Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressW = (TextureAddressMode)$AddressMode; return null; };
+Sampler_State_MinFilter -> MinFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MinFilter = (TextureFilterTypeContent)$TextureFilter; return null; };
+Sampler_State_MagFilter -> MagFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MagFilter = (TextureFilterTypeContent)$TextureFilter; return null; };
+Sampler_State_MipFilter -> MipFilter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).MipFilter = (TextureFilterTypeContent)$TextureFilter; return null; };
+Sampler_State_Filter -> Filter Equals TextureFilter Semicolon { (paramlist[0] as SamplerStateInfo).Filter = (TextureFilterTypeContent)$TextureFilter; return null; };
+Sampler_State_AddressU -> AddressU Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressU = (TextureAddressModeContent)$AddressMode; return null; };
+Sampler_State_AddressV -> AddressV Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressV = (TextureAddressModeContent)$AddressMode; return null; };
+Sampler_State_AddressW -> AddressW Equals AddressMode Semicolon { (paramlist[0] as SamplerStateInfo).AddressW = (TextureAddressModeContent)$AddressMode; return null; };
 Sampler_State_BorderColor -> BorderColor Equals HexColor Semicolon { (paramlist[0] as SamplerStateInfo).BorderColor = ParseTreeTools.ParseColor((string)$HexColor); return null; };
 Sampler_State_MaxMipLevel -> MaxMipLevel Equals Number Semicolon { (paramlist[0] as SamplerStateInfo).MaxMipLevel = ParseTreeTools.ParseInt((string)$Number); return null; };
 Sampler_State_MaxAnisotropy -> MaxAnisotropy Equals Number Semicolon { (paramlist[0] as SamplerStateInfo).MaxAnisotropy = ParseTreeTools.ParseInt((string)$Number); return null; };

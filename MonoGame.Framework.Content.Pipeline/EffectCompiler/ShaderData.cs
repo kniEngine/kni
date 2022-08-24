@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			public string samplerName;
 			public string parameterName;
 			public int parameter;
-			public SamplerStateContent state;
+			public SamplerState state;
 		}
 
 		public struct Attribute

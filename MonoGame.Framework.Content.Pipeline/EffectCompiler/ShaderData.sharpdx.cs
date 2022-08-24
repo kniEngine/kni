@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             if (samplerStates.TryGetValue(samplerName, out state))
                             {
                                 sampler.parameterName = state.TextureName ?? samplerName;
-                                sampler.state = SamplerStateContent.FromSamplerStateInfo(state);
+                                sampler.state = state.State;
                             }
                             else
                             {
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                 {
                                     if (samplerName == s.TextureName)
                                     {
-                                        sampler.state = SamplerStateContent.FromSamplerStateInfo(s);
+                                        sampler.state = s.State;
                                         samplerName = s.Name;
                                         break;
                                     }
