@@ -42,10 +42,13 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
         }
 
-        internal unsafe void PlatformApplyEx(ShaderStage stage, int slot, ShaderProgram program)
+        internal unsafe void PlatformApply(ShaderStage stage, int slot)
         {
-            // NOTE: We assume here the program has 
+            System.Diagnostics.Debug.Assert(slot == 0);
+
+            // NOTE: We assume here the program has
             // already been set on the device.
+            ShaderProgram program = GraphicsDevice.PlatformShaderProgram;
 
             // If the program changed then lookup the
             // uniform again and apply the state.

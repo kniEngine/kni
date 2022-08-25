@@ -140,6 +140,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private float _lastClearDepth = 1.0f;
         private int _lastClearStencil = 0;
 
+        internal ShaderProgram PlatformShaderProgram { get { return _shaderProgram; } }
+
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
         private int ShaderProgramHash
@@ -1072,8 +1074,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _vertexShaderDirty = _pixelShaderDirty = false;
             }
 
-            _vertexConstantBuffers.SetConstantBuffers(_shaderProgram);
-            _pixelConstantBuffers.SetConstantBuffers(_shaderProgram);
+            _vertexConstantBuffers.SetConstantBuffers();
+            _pixelConstantBuffers.SetConstantBuffers();
 
             Textures.SetTextures(this);
             SamplerStates.PlatformSetSamplers(this);
