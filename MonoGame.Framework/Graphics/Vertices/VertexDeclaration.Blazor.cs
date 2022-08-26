@@ -51,8 +51,9 @@ namespace Microsoft.Xna.Framework.Graphics
             var attrInfo = GetAttributeInfo(shader, programHash);
 
             // Apply the vertex attribute info
-            foreach (var element in attrInfo.Elements)
+            for (int i=0; i< attrInfo.Elements.Count; i++)
             {
+                var element = attrInfo.Elements[i];
                 GL.VertexAttribPointer(element.AttributeLocation,
                     element.NumberOfElements,
                     element.VertexAttribPointerType,
