@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal DepthStencilState _lastDepthStencilState = new DepthStencilState();
         internal RasterizerState _lastRasterizerState = new RasterizerState();
 
-        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
+        internal ShaderProgram PlatformShaderProgram { get { return _shaderProgram; } }
 
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
