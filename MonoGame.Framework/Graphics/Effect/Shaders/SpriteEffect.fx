@@ -19,18 +19,18 @@ MATRIX_CONSTANTS
 END_CONSTANTS
 
 
-struct VSOutput
+struct VSOutputFog
 {
 	float4 position		: SV_Position;
 	float4 color		: COLOR0;
     float2 texCoord		: TEXCOORD0;
 };
 
-VSOutput SpriteVertexShader(	float4 position	: POSITION0,
+VSOutputFog SpriteVertexShader(	float4 position	: POSITION0,
 								float4 color	: COLOR0,
 								float2 texCoord	: TEXCOORD0)
 {
-	VSOutput output;
+	VSOutputFog output;
     output.position = mul(position, MatrixTransform);
 	output.color = color;
 	output.texCoord = texCoord;
@@ -38,7 +38,7 @@ VSOutput SpriteVertexShader(	float4 position	: POSITION0,
 }
 
 
-float4 SpritePixelShader(VSOutput input) : SV_Target0
+float4 SpritePixelShader(VSOutputFog input) : SV_Target0
 {
     return SAMPLE_TEXTURE(Texture, input.texCoord) * input.color;
 }

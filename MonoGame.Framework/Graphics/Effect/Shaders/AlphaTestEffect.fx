@@ -30,6 +30,20 @@ END_CONSTANTS
 
 
 // Vertex shader: basic.
+VSOutputTxFog VSAlphaTestFog(VSInputTx vin)
+{
+    VSOutputTxFog vout;
+    
+    CommonVSOutput cout = ComputeCommonVSOutput(vin.Position);
+    SetCommonVSOutputParamsFog;
+    
+    vout.TexCoord = vin.TexCoord;
+
+    return vout;
+}
+
+
+// Vertex shader: no fog.
 VSOutputTx VSAlphaTest(VSInputTx vin)
 {
     VSOutputTx vout;
@@ -43,21 +57,22 @@ VSOutputTx VSAlphaTest(VSInputTx vin)
 }
 
 
-// Vertex shader: no fog.
-VSOutputTxNoFog VSAlphaTestNoFog(VSInputTx vin)
+// Vertex shader: vertex color.
+VSOutputTxFog VSAlphaTestVcFog(VSInputTxVc vin)
 {
-    VSOutputTxNoFog vout;
+    VSOutputTxFog vout;
     
     CommonVSOutput cout = ComputeCommonVSOutput(vin.Position);
-    SetCommonVSOutputParamsNoFog;
+    SetCommonVSOutputParamsFog;
     
     vout.TexCoord = vin.TexCoord;
-
+    vout.Diffuse *= vin.Color;
+    
     return vout;
 }
 
 
-// Vertex shader: vertex color.
+// Vertex shader: vertex color, no fog.
 VSOutputTx VSAlphaTestVc(VSInputTxVc vin)
 {
     VSOutputTx vout;
@@ -72,23 +87,8 @@ VSOutputTx VSAlphaTestVc(VSInputTxVc vin)
 }
 
 
-// Vertex shader: vertex color, no fog.
-VSOutputTxNoFog VSAlphaTestVcNoFog(VSInputTxVc vin)
-{
-    VSOutputTxNoFog vout;
-    
-    CommonVSOutput cout = ComputeCommonVSOutput(vin.Position);
-    SetCommonVSOutputParamsNoFog;
-    
-    vout.TexCoord = vin.TexCoord;
-    vout.Diffuse *= vin.Color;
-    
-    return vout;
-}
-
-
 // Pixel shader: less/greater compare function.
-float4 PSAlphaTestLtGt(VSOutputTx pin) : SV_Target0
+float4 PSAlphaTestLtGtFog(VSOutputTxFog pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
 
@@ -101,7 +101,7 @@ float4 PSAlphaTestLtGt(VSOutputTx pin) : SV_Target0
 
 
 // Pixel shader: less/greater compare function, no fog.
-float4 PSAlphaTestLtGtNoFog(VSOutputTxNoFog pin) : SV_Target0
+float4 PSAlphaTestLtGt(VSOutputTx pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
     
@@ -112,7 +112,7 @@ float4 PSAlphaTestLtGtNoFog(VSOutputTxNoFog pin) : SV_Target0
 
 
 // Pixel shader: equal/notequal compare function.
-float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
+float4 PSAlphaTestEqNeFog(VSOutputTxFog pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
     
@@ -125,7 +125,7 @@ float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
 
 
 // Pixel shader: equal/notequal compare function, no fog.
-float4 PSAlphaTestEqNeNoFog(VSOutputTxNoFog pin) : SV_Target0
+float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
 {
     float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
     
@@ -138,14 +138,14 @@ float4 PSAlphaTestEqNeNoFog(VSOutputTxNoFog pin) : SV_Target0
 // NOTE: The order of the techniques here are
 // defined to match the indexing in AlphaTestEffect.cs.
 
-TECHNIQUE( AlphaTestEffect_LTGT,					VSAlphaTest,		PSAlphaTestLtGt );
-TECHNIQUE( AlphaTestEffect_LTGT_NoFog,				VSAlphaTestNoFog,	PSAlphaTestLtGtNoFog );
-TECHNIQUE( AlphaTestEffect_LTGT_VertexColor,		VSAlphaTestVc,		PSAlphaTestLtGt );
-TECHNIQUE( AlphaTestEffect_LTGT_VertexColor_NoFog,	VSAlphaTestVcNoFog,	PSAlphaTestLtGtNoFog );
+TECHNIQUE( AlphaTestEffect_LTGT,					VSAlphaTest,	PSAlphaTestLtGt );
+TECHNIQUE( AlphaTestEffect_LTGT_Fog,				VSAlphaTestFog,		PSAlphaTestLtGtFog );
+TECHNIQUE( AlphaTestEffect_LTGT_VertexColor,		VSAlphaTestVc,	PSAlphaTestLtGt );
+TECHNIQUE( AlphaTestEffect_LTGT_VertexColor_Fog,	VSAlphaTestVcFog,	PSAlphaTestLtGtFog );
 
-TECHNIQUE( AlphaTestEffect_EQNE,					VSAlphaTest,		PSAlphaTestEqNe );
-TECHNIQUE( AlphaTestEffect_EQNE_NoFog,				VSAlphaTestNoFog,	PSAlphaTestEqNeNoFog );
-TECHNIQUE( AlphaTestEffect_EQNE_VertexColor,		VSAlphaTestVc,		PSAlphaTestEqNe );
-TECHNIQUE( AlphaTestEffect_EQNE_VertexColor_NoFog,	VSAlphaTestVcNoFog,	PSAlphaTestEqNeNoFog );
+TECHNIQUE( AlphaTestEffect_EQNE,					VSAlphaTest,	PSAlphaTestEqNe );
+TECHNIQUE( AlphaTestEffect_EQNE_Fog,				VSAlphaTestFog,		PSAlphaTestEqNeFog );
+TECHNIQUE( AlphaTestEffect_EQNE_VertexColor,		VSAlphaTestVc,	PSAlphaTestEqNe );
+TECHNIQUE( AlphaTestEffect_EQNE_VertexColor_Fog,	VSAlphaTestVcFog,	PSAlphaTestEqNeFog );
 
 
