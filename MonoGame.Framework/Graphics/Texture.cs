@@ -91,8 +91,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(width > 0, "The width is negative!");
 
-            int pitch;
-
             switch (_format)
             {
                 case SurfaceFormat.Dxt1:
@@ -111,15 +109,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.Dxt5SRgb:
                 case SurfaceFormat.RgbPvrtc4Bpp:
                 case SurfaceFormat.RgbaPvrtc4Bpp:                    
-                    pitch = ((width + 3) / 4) * _format.GetSize();
-                    break;
+                    return ((width + 3) / 4) * _format.GetSize();
 
                 default:
-                    pitch = width * _format.GetSize();
-                    break;
+                    return width * _format.GetSize();
             };
-
-            return pitch;
         }
 
         internal protected override void GraphicsDeviceResetting()

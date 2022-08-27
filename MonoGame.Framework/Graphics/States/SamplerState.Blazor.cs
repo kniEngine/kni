@@ -45,7 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.LINEAR);
                     GraphicsExtensions.CheckGLError();
                     break;
-                    throw new NotImplementedException();
                 case TextureFilter.Anisotropic:
                     if (GraphicsDevice.GraphicsCapabilities.SupportsTextureFilterAnisotropic)
                     {

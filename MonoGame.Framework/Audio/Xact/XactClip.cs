@@ -58,7 +58,8 @@ namespace Microsoft.Xna.Framework.Audio
                 var timeStamp = ((eventInfo >> 5) & 0xFFFF) * 0.001f;
                 var unknown = eventInfo >> 21;
 
-                switch (eventId) {
+                switch (eventId)
+                {
                 case 0:
                     // Stop Event
                     throw new NotImplementedException("Stop event");

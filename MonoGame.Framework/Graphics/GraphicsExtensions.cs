@@ -59,9 +59,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.HalfVector4:
                     return 4;
-            }
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         public static VertexPointerType OpenGLVertexPointerType(this VertexElementFormat elementFormat)
@@ -103,9 +104,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.HalfVector4:
                     return VertexPointerType.Float;
-            }
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
 		public static VertexAttribPointerType OpenGLVertexAttribPointerType(this VertexElementFormat elementFormat)
@@ -149,9 +151,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.HalfVector4:
                     return VertexAttribPointerType.HalfFloat;
 #endif
-            }
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         public static bool OpenGLVertexAttribNormalized(this VertexElement element)
@@ -219,9 +222,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.HalfVector4:
                     return ColorPointerType.HalfFloat;
 #endif
-			}
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
        public static NormalPointerType OpenGLNormalPointerType(this VertexElementFormat elementFormat)
@@ -265,9 +269,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.HalfVector4:
                     return NormalPointerType.HalfFloat;
 #endif
-			}
-
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
        public static TexCoordPointerType OpenGLTexCoordPointerType(this VertexElementFormat elementFormat)
@@ -311,15 +315,17 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.HalfVector4:
                     return TexCoordPointerType.HalfFloat;
 #endif
-			}
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+			}
         }
 
 		
 		public static BlendEquationMode GetBlendEquationMode (this BlendFunction function)
 		{
-			switch (function) {
+			switch (function)
+            {
 			case BlendFunction.Add:
 				return BlendEquationMode.FuncAdd;
 #if WINDOWS || DESKTOPGL || IOS
@@ -340,7 +346,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public static BlendingFactorSrc GetBlendFactorSrc (this Blend blend)
 		{
-			switch (blend) {
+			switch (blend)
+            {
             case Blend.BlendFactor:
                 return BlendingFactorSrc.ConstantColor;
 			case Blend.DestinationAlpha:
@@ -375,7 +382,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public static BlendingFactorDest GetBlendFactorDest (this Blend blend)
 		{
-			switch (blend) {
+			switch (blend)
+            {
             case Blend.BlendFactor:
                 return BlendingFactorDest.ConstantColor;
             case Blend.DestinationAlpha:
@@ -518,7 +526,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var supportsNormalized = graphicsDevice.GraphicsCapabilities.SupportsNormalized;
             var isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.glMajorVersion == 2;
 
-			switch (format) {
+			switch (format)
+            {
 			case SurfaceFormat.Color:
 				glInternalFormat = PixelInternalFormat.Rgba;
 				glFormat = PixelFormat.Rgba;
@@ -807,8 +816,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.RgbPvrtc2Bpp:
                 case SurfaceFormat.RgbPvrtc4Bpp:
                     return true;
+                default:
+                    return false;
             }
-            return false;
         }
 
         public static int GetSize(this SurfaceFormat surfaceFormat)
@@ -909,8 +919,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.HalfVector4:
                     return 8;
+
+                default:
+                    return 0;
             }
-            return 0;
         }
 
         public static void GetBlockSize(this SurfaceFormat surfaceFormat, out int width, out int height)

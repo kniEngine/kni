@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
-    }
+                    }
                     GL.Enable(EnableCap.PolygonOffsetFill);
                     GL.PolygonOffset(this.SlopeScaleDepthBias, this.DepthBias * depthMul);
                 }

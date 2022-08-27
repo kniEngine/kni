@@ -100,9 +100,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 2;
                 case VertexElementFormat.HalfVector4:
                     return 4;
+                default:
+                    throw new ArgumentException();
             }
-
-            throw new ArgumentException();
         }
 
         private static WebGLDataType OpenGLVertexAttribPointerType(VertexElementFormat elementFormat)
@@ -138,9 +138,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return WebGLDataType.SHORT;
-            }
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         private static bool OpenGLVertexAttribNormalized(VertexElement element)

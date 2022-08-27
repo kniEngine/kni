@@ -217,8 +217,8 @@ namespace Microsoft.Xna.Framework
                     case 13: return M42;
                     case 14: return M43;
                     case 15: return M44;
+                    default: throw new ArgumentOutOfRangeException();
                 }
-                throw new ArgumentOutOfRangeException();
             }
 
             set

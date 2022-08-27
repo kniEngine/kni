@@ -89,9 +89,9 @@ namespace Microsoft.Xna.Framework.Windows
                     if (_window.PreFilterMSG_IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
                     if (_window.PreFilterMSG_IsKeyUpDownAttached())  return false; // let keys through if user subscribed to KeyUp/KwyDown
                     return true; // skip message
+                default:
+                    return false;
             }
-
-            return false;
         }
         
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
