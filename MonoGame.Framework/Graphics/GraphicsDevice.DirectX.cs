@@ -1368,10 +1368,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _d3dContext.VertexShader.Set(_vertexShader.VertexShader);
 
-                unchecked
-                {
-                    _graphicsMetrics._vertexShaderCount++;
-                }
+                unchecked { _graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
@@ -1384,10 +1381,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _d3dContext.PixelShader.Set(_pixelShader.PixelShader);
                 _pixelShaderDirty = false;
 
-                unchecked
-                {
-                    _graphicsMetrics._pixelShaderCount++;
-                }
+                unchecked { _graphicsMetrics._pixelShaderCount++; }
             }
 
             _vertexConstantBuffers.SetConstantBuffers();

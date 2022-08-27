@@ -53,10 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindTexture(tex.glTarget, tex.glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    unchecked
-                    {
-                        _graphicsDevice._graphicsMetrics._textureCount++;
-                    }
+                    unchecked { _graphicsDevice._graphicsMetrics._textureCount++; }
                 }
 
                 _dirty &= ~mask;

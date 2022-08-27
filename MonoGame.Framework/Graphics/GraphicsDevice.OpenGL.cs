@@ -1057,18 +1057,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (_vertexShaderDirty)
                 {
-                    unchecked
-                    {
-                        _graphicsMetrics._vertexShaderCount++;
-                    }
+                    unchecked { _graphicsMetrics._vertexShaderCount++; }
                 }
 
                 if (_pixelShaderDirty)
                 {
-                    unchecked
-                    {
-                        _graphicsMetrics._pixelShaderCount++;
-                    }
+                    unchecked { _graphicsMetrics._pixelShaderCount++; }
                 }
 
                 _vertexShaderDirty = _pixelShaderDirty = false;
