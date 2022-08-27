@@ -30,14 +30,16 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             set
             {
-                if (_applyToVertexStage && !_graphicsDevice.GraphicsCapabilities.SupportsVertexTextures)
+                if (!_applyToVertexStage || _graphicsDevice.GraphicsCapabilities.SupportsVertexTextures)
+                {
+                    if (_textures[index] != value)
+                    {
+                        _textures[index] = value;
+                        _dirty |= 1 << index;
+                    }
+                }
+                else
                     throw new NotSupportedException("Vertex textures are not supported on this device.");
-
-                if (_textures[index] == value)
-                    return;
-
-                _textures[index] = value;
-                _dirty |= 1 << index;
             }
         }
 
@@ -60,9 +62,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void SetTextures(GraphicsDevice device)
         {
-            if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
-                return;
-            PlatformSetTextures(device);
+            if (!_applyToVertexStage || device.GraphicsCapabilities.SupportsVertexTextures)
+            {
+                PlatformSetTextures(device);
+            }
         }
     }
 }

@@ -276,30 +276,33 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
 
-                if (regionIdx == -1)
+                if (regionIdx != -1)
+                {
+                    index = pRegions[regionIdx].StartIndex + (c - pRegions[regionIdx].Start);
+                    return true;
+                }
+                else
                 {
                     index = -1;
                     return false;
                 }
-
-                index = pRegions[regionIdx].StartIndex + (c - pRegions[regionIdx].Start);
             }
-
-            return true;
         }
 
         internal int GetGlyphIndexOrDefault(char c)
         {
             int glyphIdx;
-            if (!TryGetGlyphIndex(c, out glyphIdx))
+            if (TryGetGlyphIndex(c, out glyphIdx))
             {
-                if (_defaultGlyphIndex == -1)
-                    throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
-
-                return _defaultGlyphIndex;
+                return glyphIdx;
             }
             else
-                return glyphIdx;
+            {
+                if (_defaultGlyphIndex != -1)
+                    return _defaultGlyphIndex;
+                else
+                    throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
+            }
         }
         
         private struct CharacterSource 

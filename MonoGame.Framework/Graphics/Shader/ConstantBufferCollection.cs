@@ -28,18 +28,18 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _buffers[index]; }
             set
             {
-                if (_buffers[index] == value)
-                    return;
-
-                if (value != null)
+                if (_buffers[index] != value)
                 {
-                    _buffers[index] = value;
-                    _valid |= 1 << index;
-                }
-                else
-                {
-                    _buffers[index] = null;
-                    _valid &= ~(1 << index);
+                    if (value != null)
+                    {
+                        _buffers[index] = value;
+                        _valid |= 1 << index;
+                    }
+                    else
+                    {
+                        _buffers[index] = null;
+                        _valid &= ~(1 << index);
+                    }
                 }
             }
         }
