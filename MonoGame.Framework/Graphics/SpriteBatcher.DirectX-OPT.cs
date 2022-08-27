@@ -294,7 +294,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     _device.DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        baseVertex, 0, numVertices,
+                        baseVertex, //0, numVertices,
                         0, primitiveCount);
                 }
             }
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // If no custom effect is defined, then simply render.
                 _device.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    baseVertex, 0, numVertices,
+                    baseVertex, //0, numVertices,
                     0, primitiveCount);
             } 
         }
