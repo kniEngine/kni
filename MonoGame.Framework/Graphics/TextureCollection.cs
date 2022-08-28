@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _graphicsDevice = graphicsDevice;
             _textures = new Texture[maxTextures];
             _applyToVertexStage = applyToVertexStage;
-            _dirty = int.MaxValue;
+            Dirty();
             PlatformInit();
         }
 
@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _textures[i] = null;
 
             PlatformClear();
-            _dirty = int.MaxValue;
+            Dirty();
         }
 
         /// <summary>
@@ -58,7 +58,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal void Dirty()
         {
-            _dirty = int.MaxValue;
+            for (var i = 0; i < _textures.Length; i++)
+                _dirty |= (1 << i);
         }
 
         internal void SetTextures(GraphicsDevice device)
