@@ -34,8 +34,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (_textures[index] != value)
                     {
+                        int mask = 1 << index;
                         _textures[index] = value;
-                        _dirty |= 1 << index;
+                        _dirty |= mask;
                     }
                 }
                 else

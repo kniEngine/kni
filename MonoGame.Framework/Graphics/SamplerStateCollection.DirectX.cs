@@ -12,7 +12,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetSamplerState(int index)
         {
-            _d3dDirty |= 1 << index;
+            var mask = 1 << index;
+            _d3dDirty |= mask;
         }
 
         private void PlatformClear()
@@ -40,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     else
                         shaderStage = device._d3dContext.VertexShader;
 
-                    for (var i = 0; i < _actualSamplers.Length; i++)
+                    for (var i = 0;  _d3dDirty != 0 && i < _actualSamplers.Length; i++)
                     {
                         var mask = 1 << i;
                         if ((_d3dDirty & mask) == 0)
@@ -53,9 +54,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         shaderStage.SetSampler(i, state);
 
+                        // clear sampler bit
                         _d3dDirty &= ~mask;
-                        if (_d3dDirty == 0)
-                            break;
                     }
 
                     _d3dDirty = 0;

@@ -38,8 +38,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (_textures[i] == targets[k].RenderTarget)
                     {
-                        // Immediately clear the texture from the device.
-                        _dirty &= ~(1 << i);
+                        var mask = 1 << i;
+                        // clear texture bit
+                        _dirty &= ~mask;
                         _textures[i] = null;
                         shaderStage.SetShaderResource(i, null);
                         break;
@@ -65,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 else
                     shaderStage = device._d3dContext.VertexShader;
 
-                for (var i = 0; i < _textures.Length; i++)
+                for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
                 {
                     var mask = 1 << i;
                     if ((_dirty & mask) == 0)
@@ -83,8 +84,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         shaderStage.SetShaderResource(i, null);
 
                     _dirty &= ~mask;
-                    if (_dirty == 0)
-                        break;
                 }
 
                 _dirty = 0;
