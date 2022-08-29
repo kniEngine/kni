@@ -349,9 +349,10 @@ namespace Microsoft.Xna.Framework.Input
                     return Buttons.Start;
                 case Keycode.Back:
                     return Buttons.Back;
-            }
 
-            return 0;
+                default:
+                    return 0;
+            }
         }
 
         internal static void Initialize()

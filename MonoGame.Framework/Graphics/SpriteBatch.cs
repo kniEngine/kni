@@ -781,7 +781,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     p.Y += pCurrentGlyph->BoundsInTexture.Height - spriteFont.LineSpacing;
                 p.Y += pCurrentGlyph->Cropping.Y;
 
-                Vector2.Transform(ref p, ref transformation, out p);
+                //Opt: Vector2.Transform(ref p, ref transformation, out p);
+                float tpx = (p.X * transformation.M11);
+                float tpy = (p.X * transformation.M12);
+                tpx += (p.Y * transformation.M21) + transformation.M41;
+                tpy += (p.Y * transformation.M22) + transformation.M42;
 
                 var item = _batcher.CreateBatchItem();               
                 item.Texture = spriteFont.Texture;
@@ -805,8 +809,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (rotation == 0f)
                 {
-                    item.Set(p.X,
-                            p.Y,
+                    item.Set(tpx,
+                            tpy,
                             pCurrentGlyph->BoundsInTexture.Width * scale.X,
                             pCurrentGlyph->BoundsInTexture.Height * scale.Y,
                             color,
@@ -816,8 +820,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    item.Set(p.X,
-                            p.Y,
+                    item.Set(tpx,
+                            tpy,
                             0,
                             0,
                             pCurrentGlyph->BoundsInTexture.Width * scale.X,
@@ -961,7 +965,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         p.Y += pCurrentGlyph->BoundsInTexture.Height - spriteFont.LineSpacing;
                     p.Y += pCurrentGlyph->Cropping.Y;
 
-                    Vector2.Transform(ref p, ref transformation, out p);
+                    //Opt: Vector2.Transform(ref p, ref transformation, out p);
+                    float tpx = (p.X * transformation.M11);
+                    float tpy = (p.X * transformation.M12);
+                    tpx += (p.Y * transformation.M21) + transformation.M41;
+                    tpy += (p.Y * transformation.M22) + transformation.M42;
 
                     var item = _batcher.CreateBatchItem();
                     item.Texture = spriteFont.Texture;
@@ -985,8 +993,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     if (rotation == 0f)
                     {
-                        item.Set(p.X,
-                                p.Y,
+                        item.Set(tpx,
+                                tpy,
                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,
                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
                                 color,
@@ -996,8 +1004,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     else
                     {
-                        item.Set(p.X,
-                                p.Y,
+                        item.Set(tpx,
+                                tpy,
                                 0,
                                 0,
                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,
@@ -1234,7 +1242,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     p.Y += pCurrentGlyph->BoundsInTexture.Height - spriteFont.LineSpacing;
                 p.Y += pCurrentGlyph->Cropping.Y;
 
-                Vector2.Transform(ref p, ref transformation, out p);
+                //Opt: Vector2.Transform(ref p, ref transformation, out p);
+                float tpx = (p.X * transformation.M11);
+                float tpy = (p.X * transformation.M12);
+                tpx += (p.Y * transformation.M21) + transformation.M41;
+                tpy += (p.Y * transformation.M22) + transformation.M42;
                 
                 var item = _batcher.CreateBatchItem();               
                 item.Texture = spriteFont.Texture;
@@ -1258,8 +1270,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (rotation == 0f)
                 {
-                    item.Set(p.X,
-                            p.Y,
+                    item.Set(tpx,
+                            tpy,
                             pCurrentGlyph->BoundsInTexture.Width * scale.X,
                             pCurrentGlyph->BoundsInTexture.Height * scale.Y,
                             color,
@@ -1269,8 +1281,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    item.Set(p.X,
-                            p.Y,
+                    item.Set(tpx,
+                            tpy,
                             0,
                             0,
                             pCurrentGlyph->BoundsInTexture.Width * scale.X,
@@ -1414,7 +1426,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         p.Y += pCurrentGlyph->BoundsInTexture.Height - spriteFont.LineSpacing;
                     p.Y += pCurrentGlyph->Cropping.Y;
 
-                    Vector2.Transform(ref p, ref transformation, out p);
+                    //Opt: Vector2.Transform(ref p, ref transformation, out p);
+                    float tpx = (p.X * transformation.M11);
+                    float tpy = (p.X * transformation.M12);
+                    tpx += (p.Y * transformation.M21) + transformation.M41;
+                    tpy += (p.Y * transformation.M22) + transformation.M42;
 
                     var item = _batcher.CreateBatchItem();
                     item.Texture = spriteFont.Texture;
@@ -1438,8 +1454,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     if (rotation == 0f)
                     {
-                        item.Set(p.X,
-                                p.Y,
+                        item.Set(tpx,
+                                tpy,
                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,
                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
                                 color,
@@ -1449,8 +1465,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     else
                     {
-                        item.Set(p.X,
-                                p.Y,
+                        item.Set(tpx,
+                                tpy,
                                 0,
                                 0,
                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,

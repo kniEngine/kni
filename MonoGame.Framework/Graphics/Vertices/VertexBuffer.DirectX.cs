@@ -15,6 +15,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
+                if (_buffer != null)
+                    return _buffer;
+                
                 GenerateIfRequired();
                 return _buffer;
             }

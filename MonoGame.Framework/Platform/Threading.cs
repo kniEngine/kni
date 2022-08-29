@@ -85,7 +85,9 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="InvalidOperationException">Thrown if the code is not currently running on the UI thread.</exception>
         public static void EnsureUIThread()
         {
-            if (!IsOnUIThread())
+            if (_mainThreadId == Thread.CurrentThread.ManagedThreadId)
+                return;
+            else
                 throw new InvalidOperationException("Operation not called on UI thread.");
         }
 

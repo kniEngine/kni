@@ -99,7 +99,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             switch (state)
             {
-                case ALSourceState.Playing: return;
+                case ALSourceState.Playing:
+                    return;
                 case ALSourceState.Paused:
                     Resume();
                     return;

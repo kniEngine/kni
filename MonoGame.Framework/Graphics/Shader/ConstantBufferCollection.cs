@@ -28,18 +28,15 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _buffers[index]; }
             set
             {
-                if (_buffers[index] == value)
-                    return;
-
-                if (value != null)
+                if (_buffers[index] != value)
                 {
                     _buffers[index] = value;
-                    _valid |= 1 << index;
-                }
-                else
-                {
-                    _buffers[index] = null;
-                    _valid &= ~(1 << index);
+
+                    var mask = 1 << index;
+                    if (value != null)
+                        _valid |= mask;
+                    else
+                        _valid &= ~mask;
                 }
             }
         }
@@ -56,16 +53,18 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var validMask = _valid;
 
-            for (var i = 0; i < _buffers.Length && validMask != 0; i++)
+            for (var i = 0; validMask != 0 && i < _buffers.Length; i++)
             {
+
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
                     buffer.PlatformApply(_stage, i);
                 }
 
+                var mask = 1 << i;
                 // clear buffer bit
-                validMask &= ~(1 << i);
+                validMask &= ~mask;
             }
         }
 

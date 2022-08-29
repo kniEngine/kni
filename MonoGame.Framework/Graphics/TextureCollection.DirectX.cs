@@ -12,13 +12,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ClearTargets(GraphicsDevice device, RenderTargetBinding[] targets)
         {
-            if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
-                return;
-
-            if (_applyToVertexStage)
-                ClearTargets(targets, device._d3dContext.VertexShader);
-            else
+            if (!_applyToVertexStage)
+            {
                 ClearTargets(targets, device._d3dContext.PixelShader);
+            }
+            else
+            {
+                if (device.GraphicsCapabilities.SupportsVertexTextures)
+                    ClearTargets(targets, device._d3dContext.VertexShader);
+            }
         }
 
         private void ClearTargets(RenderTargetBinding[] targets, SharpDX.Direct3D11.CommonShaderStage shaderStage)
@@ -36,8 +38,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (_textures[i] == targets[k].RenderTarget)
                     {
-                        // Immediately clear the texture from the device.
-                        _dirty &= ~(1 << i);
+                        var mask = 1 << i;
+                        // clear texture bit
+                        _dirty &= ~mask;
                         _textures[i] = null;
                         shaderStage.SetShaderResource(i, null);
                         break;
@@ -52,40 +55,33 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void PlatformSetTextures(GraphicsDevice device)
         {
-            // Skip out if nothing has changed.
-            if (_dirty == 0)
-                return;
-
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-            SharpDX.Direct3D11.CommonShaderStage shaderStage;
-            if (_applyToVertexStage)
-                shaderStage = device._d3dContext.VertexShader;
-            else
-                shaderStage = device._d3dContext.PixelShader;
-
-            for (var i = 0; i < _textures.Length; i++)
+            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 var mask = 1 << i;
                 if ((_dirty & mask) == 0)
                     continue;
 
+                // NOTE: We make the assumption here that the caller has
+                // locked the d3dContext for us to use.
+                SharpDX.Direct3D11.CommonShaderStage shaderStage;
+                if (!_applyToVertexStage)
+                    shaderStage = device._d3dContext.PixelShader;
+                else
+                    shaderStage = device._d3dContext.VertexShader;
+
                 var tex = _textures[i];
 
-                if (_textures[i] == null || _textures[i].IsDisposed)
-                    shaderStage.SetShaderResource(i, null);
-                else
+                if (tex != null && !tex.IsDisposed)
                 {
-                    shaderStage.SetShaderResource(i, _textures[i].GetShaderResourceView());
+                    shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
                     unchecked { _graphicsDevice._graphicsMetrics._textureCount++; }
                 }
-                _dirty &= ~mask;
-                if (_dirty == 0)
-                    break;
-            }
+                else
+                    shaderStage.SetShaderResource(i, null);
 
-            _dirty = 0;
+                _dirty &= ~mask;
+            }
         }
     }
 }

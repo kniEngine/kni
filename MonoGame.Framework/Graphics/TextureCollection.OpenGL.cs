@@ -23,11 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void PlatformSetTextures(GraphicsDevice device)
         {
-            // Skip out if nothing has changed.
-            if (_dirty == 0)
-                return;
-
-            for (var i = 0; i < _textures.Length; i++)
+            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 var mask = 1 << i;
                 if ((_dirty & mask) == 0)
@@ -56,12 +52,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     unchecked { _graphicsDevice._graphicsMetrics._textureCount++; }
                 }
 
+                // clear texture bit
                 _dirty &= ~mask;
-                if (_dirty == 0)
-                    break;
             }
-
-            _dirty = 0;
         }
     }
 }

@@ -89,7 +89,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns></returns>
         public SpriteBatchItem CreateBatchItem()
         {
-            if (_batchItemCount >= _batchItemList.Length)
+            if (_batchItemCount < _batchItemList.Length)
+            {
+                return _batchItemList[_batchItemCount++];
+            }
+            else
             {
                 var oldSize = _batchItemList.Length;
                 var newSize = oldSize + oldSize/2; // grow by x1.5
@@ -99,9 +103,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     _batchItemList[i]=new SpriteBatchItem();
 
                 EnsureArrayCapacity(Math.Min(newSize, MaxBatchSize));
+                return _batchItemList[_batchItemCount++];
             }
-            var item = _batchItemList[_batchItemCount++];
-            return item;
         }
 
         /// <summary>
@@ -291,7 +294,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     _device.DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        baseVertex, 0, numVertices,
+                        baseVertex, //0, numVertices,
                         0, primitiveCount);
                 }
             }
@@ -301,7 +304,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // If no custom effect is defined, then simply render.
                 _device.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    baseVertex, 0, numVertices,
+                    baseVertex, //0, numVertices,
                     0, primitiveCount);
             } 
         }

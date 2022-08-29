@@ -165,8 +165,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         case FramebufferErrorCode.FramebufferIncompleteMissingAttachment: message = "No images are attached to the framebuffer."; break;
                         case FramebufferErrorCode.FramebufferUnsupported: message = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions."; break;
                         case FramebufferErrorCode.FramebufferIncompleteMultisample: message = "Not all attached images have the same number of samples."; break;
+                        default:
+                            throw new InvalidOperationException(message);
                     }
-                    throw new InvalidOperationException(message);
                 }
             }
         }

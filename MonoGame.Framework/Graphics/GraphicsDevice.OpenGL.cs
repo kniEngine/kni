@@ -890,9 +890,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     return GLPrimitiveType.Triangles;
                 case PrimitiveType.TriangleStrip:
                     return GLPrimitiveType.TriangleStrip;
+                default:
+                    throw new ArgumentException();
             }
-
-            throw new ArgumentException();
         }
 
         /// <summary>

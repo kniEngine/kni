@@ -51,8 +51,9 @@ namespace Microsoft.Xna.Framework.Graphics
             var attrInfo = GetAttributeInfo(shader, programHash);
 
             // Apply the vertex attribute info
-            foreach (var element in attrInfo.Elements)
+            for (int i=0; i< attrInfo.Elements.Count; i++)
             {
+                var element = attrInfo.Elements[i];
                 GL.VertexAttribPointer(element.AttributeLocation,
                     element.NumberOfElements,
                     element.VertexAttribPointerType,
@@ -99,9 +100,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 2;
                 case VertexElementFormat.HalfVector4:
                     return 4;
+                default:
+                    throw new ArgumentException();
             }
-
-            throw new ArgumentException();
         }
 
         private static WebGLDataType OpenGLVertexAttribPointerType(VertexElementFormat elementFormat)
@@ -137,9 +138,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return WebGLDataType.SHORT;
-            }
 
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         private static bool OpenGLVertexAttribNormalized(VertexElement element)

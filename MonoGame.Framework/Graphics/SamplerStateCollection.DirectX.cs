@@ -12,55 +12,50 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetSamplerState(int index)
         {
-            _d3dDirty |= 1 << index;
+            var mask = 1 << index;
+            _d3dDirty |= mask;
         }
 
         private void PlatformClear()
         {
-            _d3dDirty = int.MaxValue;
+            PlatformDirty();
         }
 
         private void PlatformDirty()
         {
-            _d3dDirty = int.MaxValue;
+            for (var i = 0; i < _actualSamplers.Length; i++)
+                _d3dDirty |= (1 << i);
         }
 
         internal void PlatformSetSamplers(GraphicsDevice device)
         {
-            if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
-                return;
-
-            // Skip out if nothing has changed.
-            if (_d3dDirty == 0)
-                return;
-
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-            SharpDX.Direct3D11.CommonShaderStage shaderStage;
-            if (_applyToVertexStage)
-	            shaderStage = device._d3dContext.VertexShader;
-            else
-	            shaderStage = device._d3dContext.PixelShader;
-
-            for (var i = 0; i < _actualSamplers.Length; i++)
+            if (!_applyToVertexStage || device.GraphicsCapabilities.SupportsVertexTextures)
             {
-                var mask = 1 << i;
-                if ((_d3dDirty & mask) == 0)
-                    continue;
+                for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
+                {
+                    var mask = 1 << i;
+                    if ((_d3dDirty & mask) == 0)
+                        continue;
 
-                var sampler = _actualSamplers[i];
-                SharpDX.Direct3D11.SamplerState state = null;
-                if (sampler != null)
-                    state = sampler.GetState(device);
+                    // NOTE: We make the assumption here that the caller has
+                    // locked the d3dContext for us to use.
+                    SharpDX.Direct3D11.CommonShaderStage shaderStage;
+                    if (!_applyToVertexStage)
+                        shaderStage = device._d3dContext.PixelShader;
+                    else
+                        shaderStage = device._d3dContext.VertexShader;
 
-                shaderStage.SetSampler(i, state);
+                    var sampler = _actualSamplers[i];
+                    SharpDX.Direct3D11.SamplerState state = null;
+                    if (sampler != null)
+                        state = sampler.GetState(device);
 
-                _d3dDirty &= ~mask;
-                if (_d3dDirty == 0)
-                    break;
+                    shaderStage.SetSampler(i, state);
+
+                    // clear sampler bit
+                    _d3dDirty &= ~mask;
+                }
             }
-
-            _d3dDirty = 0;
         }
     }
 }

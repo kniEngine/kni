@@ -93,7 +93,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLEquationFunc.REVERSE_SUBTRACT;
                 case BlendFunction.Subtract:
                     return WebGLEquationFunc.SUBTRACT;
-
                 default:
                     throw new ArgumentException();
             }

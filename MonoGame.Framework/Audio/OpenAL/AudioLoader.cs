@@ -70,8 +70,9 @@ namespace Microsoft.Xna.Platform.Audio
                     return (blockAlignment - 7) * 2 + 2;
                 case ALFormat.StereoMSAdpcm:
                     return (blockAlignment / 2 - 7) * 2 + 2;
+                default:
+                    return 0;
             }
-            return 0;
         }
 
         /// <summary>

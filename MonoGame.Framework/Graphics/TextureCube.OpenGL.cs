@@ -208,8 +208,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     return TextureTarget.TextureCubeMapPositiveZ;
                 case CubeMapFace.NegativeZ:
                     return TextureTarget.TextureCubeMapNegativeZ;
+                default:
+                    throw new ArgumentException();
             }
-            throw new ArgumentException();
         }
     }
 }

@@ -95,16 +95,16 @@ namespace Microsoft.Xna.Framework.Graphics
             const int elementSize = 4;
             const int rowSize = elementSize * 4;
 
-            int elementByteCount = 0;
-
             var elements = param.Elements;
             if (elements.Count > 0)
             {
+                int elementByteCount = 0;
                 for (var i=0; i < elements.Count; i++)
                 {
                     int subElementByteCount = SetParameter(elements[i], offset + elementByteCount);
                     elementByteCount += subElementByteCount;
                 }
+                return elementByteCount;
             }
             else if (param.Data != null)
             {
@@ -117,21 +117,22 @@ namespace Microsoft.Xna.Framework.Graphics
                         // TODO: HLSL can be told to use row-major. We should handle that too.
                         if (param.ParameterClass == EffectParameterClass.Matrix)
                         {
-                            elementByteCount = (param.ColumnCount * rowSize);
                             SetData(offset, param.ColumnCount, param.RowCount, param.Data);
+                            return (param.ColumnCount * rowSize);
                         }
                         else
                         {
-                            elementByteCount = (param.RowCount * rowSize);
                             SetData(offset, param.RowCount, param.ColumnCount, param.Data);
+                            return (param.RowCount * rowSize);
                         }
-                        break;
                     default:
                         throw new NotSupportedException("Not supported!");
                 }
             }
-
-            return elementByteCount;
+            else
+            {
+                return 0;
+            }
         }
 
         private void SetData(int offset, int rows, int columns, object data)

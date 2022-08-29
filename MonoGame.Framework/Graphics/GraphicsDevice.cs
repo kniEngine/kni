@@ -1491,9 +1491,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     return primitiveCount + 2;
                 case PrimitiveType.PointList:
                     return primitiveCount;
+                default:
+                    throw new NotSupportedException();                        
             }
-
-            throw new NotSupportedException();
         }
 
         // uniformly scales down the given rectangle by 10%

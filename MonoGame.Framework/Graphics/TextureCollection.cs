@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _graphicsDevice = graphicsDevice;
             _textures = new Texture[maxTextures];
             _applyToVertexStage = applyToVertexStage;
-            _dirty = int.MaxValue;
+            Dirty();
             PlatformInit();
         }
 
@@ -30,14 +30,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             set
             {
-                if (_applyToVertexStage && !_graphicsDevice.GraphicsCapabilities.SupportsVertexTextures)
+                if (!_applyToVertexStage || _graphicsDevice.GraphicsCapabilities.SupportsVertexTextures)
+                {
+                    if (_textures[index] != value)
+                    {
+                        int mask = 1 << index;
+                        _textures[index] = value;
+                        _dirty |= mask;
+                    }
+                }
+                else
                     throw new NotSupportedException("Vertex textures are not supported on this device.");
-
-                if (_textures[index] == value)
-                    return;
-
-                _textures[index] = value;
-                _dirty |= 1 << index;
             }
         }
 
@@ -47,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _textures[i] = null;
 
             PlatformClear();
-            _dirty = int.MaxValue;
+            Dirty();
         }
 
         /// <summary>
@@ -55,14 +58,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal void Dirty()
         {
-            _dirty = int.MaxValue;
+            for (var i = 0; i < _textures.Length; i++)
+                _dirty |= (1 << i);
         }
 
         internal void SetTextures(GraphicsDevice device)
         {
-            if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
-                return;
-            PlatformSetTextures(device);
+            if (!_applyToVertexStage || device.GraphicsCapabilities.SupportsVertexTextures)
+            {
+                PlatformSetTextures(device);
+            }
         }
     }
 }
