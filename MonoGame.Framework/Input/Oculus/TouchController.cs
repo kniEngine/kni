@@ -9,26 +9,37 @@ namespace Microsoft.Xna.Framework.Input.Oculus
 {
     public class TouchController
     {
-        private static TouchControllerStrategy _strategy;
+        public static IOculusInput DeviceHandle { get; set; }
 
         static TouchController()
         {
-            _strategy = new ConcreteTouchControllerStrategy();
         }
 
         public static GamePadCapabilities GetCapabilities(TouchControllerType type)
         {
-            return _strategy.GetCapabilities(type);
+            var device = DeviceHandle;
+            if (device != null)
+                return device.GetCapabilities(type);
+            else
+                return default(GamePadCapabilities);
         }
 
         public static TouchControllerState GetState(TouchControllerType type)
         {
-            return _strategy.GetState(type);
+            var device = DeviceHandle;
+            if (device != null)
+                return device.GetState(type);
+            else
+                return new TouchControllerState();
         }
 
         public static bool SetVibration(TouchControllerType type, float amplitude)
         {
-            return _strategy.SetVibration(type, amplitude);
+            var device = DeviceHandle;
+            if (device != null)
+                return device.SetVibration(type, amplitude);
+            else
+                return false;
         }
 
     }

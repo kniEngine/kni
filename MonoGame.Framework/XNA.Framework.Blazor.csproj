@@ -47,8 +47,6 @@
     <Compile Include="Platform\Blazor\BlazorGamePlatform.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
-    <Compile Include="Input\Oculus\Default\ConcreteTouchControllerStrategy.cs" />
-	  
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Blazor.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

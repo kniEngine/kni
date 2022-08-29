@@ -41,8 +41,6 @@
     <Compile Remove="Input\KeyboardInput.cs" />
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
-    <Compile Include="Input\Oculus\Default\ConcreteTouchControllerStrategy.cs" />
-	  
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Ref.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
