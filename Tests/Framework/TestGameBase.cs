@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Tests.Components;
 
-#if (IOS || TVOS)
+#if IOS || TVOS
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
@@ -133,14 +133,14 @@ namespace MonoGame.Tests {
 				if (_isExiting)
 					AbsorbQuitMessage ();
 			}
-#elif (IOS || TVOS) || ANDROID
+#elif IOS || TVOS || ANDROID
 			RunOnMainThreadAndWait();
 #else
 			base.Run (GameRunBehavior.Synchronous);
 #endif
 		}
 
-#if (IOS || TVOS) || ANDROID
+#if IOS || TVOS || ANDROID
 		private void RunOnMainThreadAndWait()
 		{
 			var exitEvent = new ManualResetEvent(false);
@@ -163,7 +163,7 @@ namespace MonoGame.Tests {
 		}
 #endif
 
-#if (IOS || TVOS)
+#if IOS || TVOS
 		private void InvokeRunOnMainThread()
 		{
 			Exception ex = null;

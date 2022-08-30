@@ -6,7 +6,7 @@ using System;
 using System.IO;
 #if WINDOWS_UAP
 using Windows.Storage.FileProperties;
-#elif (IOS || TVOS)
+#elif IOS || TVOS
 using System.Drawing;
 using CoreGraphics;
 using MediaPlayer;

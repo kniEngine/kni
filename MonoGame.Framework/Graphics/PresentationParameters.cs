@@ -8,7 +8,7 @@ using System;
 using Windows.UI.Xaml.Controls;
 #endif
 
-#if (IOS || TVOS)
+#if IOS || TVOS
 using UIKit;
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Clear()
         {
             backBufferFormat = SurfaceFormat.Color;
-#if (IOS || TVOS)
+#if IOS || TVOS
 			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
 			var width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
 			var height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);

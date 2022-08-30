@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
 			case BlendFunction.Add:
 				return BlendEquationMode.FuncAdd;
-#if WINDOWS || DESKTOPGL || (IOS || TVOS)
+#if WINDOWS || DESKTOPGL || IOS || TVOS
 			case BlendFunction.Max:
 				return BlendEquationMode.Max;
 			case BlendFunction.Min:
@@ -546,7 +546,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				glType = PixelType.UnsignedShort565;
 				break;
 			case SurfaceFormat.Bgra4444:
-#if (IOS || TVOS) || ANDROID
+#if IOS || TVOS || ANDROID
 				glInternalFormat = PixelInternalFormat.Rgba;
 #else
 				glInternalFormat = PixelInternalFormat.Rgba4;

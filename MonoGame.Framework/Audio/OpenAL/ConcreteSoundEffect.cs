@@ -9,7 +9,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
 
-#if (IOS || TVOS)
+#if IOS || TVOS
 using AudioToolbox;
 using AudioUnit;
 #endif

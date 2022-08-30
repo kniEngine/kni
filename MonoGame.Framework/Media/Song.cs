@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Media
             get { return _isDisposed; }
         }
 
-#if ANDROID || OPENAL || (IOS || TVOS) || BLAZOR
+#if ANDROID || OPENAL || IOS || TVOS || BLAZOR
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
 #if !DESKTOPGL
         event FinishedPlayingHandler DonePlaying;

@@ -371,7 +371,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Exit()
         {
-#if ANDROID || (IOS || TVOS)
+#if ANDROID || IOS || TVOS
             throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
 #endif
             _shouldExit = true;
@@ -528,7 +528,7 @@ namespace Microsoft.Xna.Framework
                 /*
                 if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
                 {
-#if (WINDOWS && !DESKTOPGL) || DESKTOPGL || ANDROID || (IOS || TVOS)
+#if (WINDOWS && !DESKTOPGL) || DESKTOPGL || ANDROID || IOS || TVOS
                     System.Threading.Thread.Sleep(0);
 #elif WINDOWS_UAP
                     lock (_locker)
@@ -657,7 +657,7 @@ namespace Microsoft.Xna.Framework
         protected virtual void Initialize()
         {
             // TODO: This should be removed once all platforms use the new GraphicsDeviceManager
-#if ANDROID || (IOS || TVOS)
+#if ANDROID || IOS || TVOS
             // applyChanges
             {
                 Platform.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);

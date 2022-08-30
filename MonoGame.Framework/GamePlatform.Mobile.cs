@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework
     {
         internal static GamePlatform PlatformCreate(Game game)
         {
-#if (IOS || TVOS)
+#if IOS || TVOS
             return new iOSGamePlatform(game);
 #elif ANDROID
             return new AndroidGamePlatform(game);

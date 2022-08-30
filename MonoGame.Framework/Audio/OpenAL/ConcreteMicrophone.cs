@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Audio;
 
 #if OPENAL
 using Microsoft.Xna.Platform.Audio.OpenAL;
-#if (IOS || TVOS) || MONOMAC
+#if IOS || TVOS || MONOMAC
 using AudioToolbox;
 using AudioUnit;
 using AVFoundation;
