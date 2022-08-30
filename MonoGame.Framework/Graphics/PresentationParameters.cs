@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 isFullScreen = value;				
-#if (IOS || TVOS) && !TVOS
+#if IOS
 				UIApplication.SharedApplication.StatusBarHidden = isFullScreen;
 #endif
 
@@ -201,7 +201,7 @@ namespace Microsoft.Xna.Framework.Graphics
             backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;     
 #endif
             deviceWindowHandle = IntPtr.Zero;
-#if (IOS || TVOS) && !TVOS
+#if IOS
 			isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
 #else
             // isFullScreen = false;
