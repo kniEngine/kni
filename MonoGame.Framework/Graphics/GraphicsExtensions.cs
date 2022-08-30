@@ -606,7 +606,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 glInternalFormat = PixelInternalFormat.CompressedSrgbAlphaS3tcDxt5Ext;
                 glFormat = (PixelFormat)GLPixelFormat.CompressedTextureFormats;
                 break;
-#if !(IOS || TVOS) && !ANDROID && !ANGLE
+#if !IOS && !TVOS && !ANDROID && !ANGLE
             case SurfaceFormat.Rgba1010102:
                 glInternalFormat = PixelInternalFormat.Rgb10A2ui;
                 glFormat = PixelFormat.Rgba;
