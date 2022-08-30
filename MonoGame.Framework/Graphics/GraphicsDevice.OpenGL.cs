@@ -421,13 +421,13 @@ namespace Microsoft.Xna.Framework.Graphics
 				bufferMask = bufferMask | ClearBufferMask.DepthBufferBit;
 			}
 
-#if MONOMAC || IOS
+#if MONOMAC || (IOS || TVOS)
             if (GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt) == FramebufferErrorCode.FramebufferComplete)
             {
 #endif
                 GL.Clear(bufferMask);
                 GraphicsExtensions.CheckGLError();
-#if MONOMAC || IOS
+#if MONOMAC || (IOS || TVOS)
             }
 #endif
            		

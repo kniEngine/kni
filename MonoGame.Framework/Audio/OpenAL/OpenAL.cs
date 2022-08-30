@@ -622,7 +622,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             return GetString(device, (int)p);
         }
 
-#if IOS
+#if (IOS || TVOS)
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcsuspendcontext(IntPtr context);
         internal static d_alcsuspendcontext SuspendContext = FuncLoader.LoadFunction<d_alcsuspendcontext>(AL.NativeLibrary, "alcSuspendContext");

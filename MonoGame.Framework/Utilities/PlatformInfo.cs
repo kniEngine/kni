@@ -22,7 +22,7 @@ namespace MonoGame.Framework.Utilities
                 return MonoGamePlatform.Android;
 #elif DESKTOPGL
                 return MonoGamePlatform.DesktopGL;
-#elif IOS && !TVOS
+#elif (IOS || TVOS) && !TVOS
                 return MonoGamePlatform.iOS;
 #elif TVOS
                 return MonoGamePlatform.tvOS;

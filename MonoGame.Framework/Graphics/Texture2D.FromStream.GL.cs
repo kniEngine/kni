@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using MonoGame.Utilities.Png;
 
-#if IOS
+#if (IOS || TVOS)
 using UIKit;
 using CoreGraphics;
 using Foundation;
@@ -31,8 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D
     {
-        #region IOS
-#if IOS
+        #region (IOS || TVOS)
+#if (IOS || TVOS)
         private unsafe static Texture2D PlatformFromStream_IOS(GraphicsDevice graphicsDevice, Stream stream)
         {
 			using (var uiImage = UIImage.LoadFromData(NSData.FromStream(stream)))
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return texture;
         }
 #endif
-        #endregion IOS
+        #endregion (IOS || TVOS)
 
  
         #region ANDROID

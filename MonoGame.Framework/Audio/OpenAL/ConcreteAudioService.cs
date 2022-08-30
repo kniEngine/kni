@@ -18,7 +18,7 @@ using Android.Content;
 using Android.Media;
 #endif
 
-#if IOS
+#if (IOS || TVOS)
 using Microsoft.Xna.Framework;
 using AudioToolbox;
 using AudioUnit;
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Platform.Audio
                     AlcUpdateBuffers, updateBuffers,
                     0
                 };
-#elif IOS
+#elif (IOS || TVOS)
                 AVAudioSession.SharedInstance().Init();
 
                 // NOTE: Do not override AVAudioSessionCategory set by the game developer:
@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Platform.Audio
 #if DESKTOPGL || ANGLE
             // MacOS & Linux shares a limit of 256.
             return 256;
-#elif IOS
+#elif (IOS || TVOS)
             // Reference: http://stackoverflow.com/questions/3894044/maximum-number-of-openal-sound-buffers-on-iphone
             return 32;
 #elif ANDROID

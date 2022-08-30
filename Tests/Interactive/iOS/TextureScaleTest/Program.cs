@@ -10,7 +10,7 @@
 #region Using Statements
 using System;
 
-#if IOS
+#if (IOS || TVOS)
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif

@@ -202,7 +202,7 @@ namespace Microsoft.Xna.Framework.Storage
 		private IAsyncResult OpenContainer (string displayName, AsyncCallback callback, object state)
 		{
 
-#if !ANDROID && !IOS && !NETFX_CORE
+#if !ANDROID && !(IOS || TVOS) && !NETFX_CORE
             try
             {
                 OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Framework.Storage
 		//     A user-created object used to uniquely identify the request, or null.
 		public static IAsyncResult BeginShowSelector (int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
 		{
-#if !ANDROID && !IOS && !NETFX_CORE
+#if !ANDROID && !(IOS || TVOS) && !NETFX_CORE
 			var del = new ShowSelectorAsynchronousShowNoPlayer (Show);
 
 #if WINDOWS_UAP
@@ -359,7 +359,7 @@ namespace Microsoft.Xna.Framework.Storage
 		//     A user-created object used to uniquely identify the request, or null.
 		public static IAsyncResult BeginShowSelector (PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
 		{
-#if !ANDROID && !IOS && !NETFX_CORE
+#if !ANDROID && !(IOS || TVOS) && !NETFX_CORE
 			var del = new ShowSelectorAsynchronousShow (Show);
 #if WINDOWS_UA
             showDelegate = del;
@@ -417,7 +417,7 @@ namespace Microsoft.Xna.Framework.Storage
 		public StorageContainer EndOpenContainer (IAsyncResult result)
 		{
 
-#if !ANDROID && !IOS && !NETFX_CORE
+#if !ANDROID && !(IOS || TVOS) && !NETFX_CORE
 			StorageContainer returnValue = null;
             try
             {
@@ -480,7 +480,7 @@ namespace Microsoft.Xna.Framework.Storage
 		public static StorageDevice EndShowSelector (IAsyncResult result) 
 		{
 
-#if !ANDROID && !IOS && !NETFX_CORE
+#if !ANDROID && !(IOS || TVOS) && !NETFX_CORE
             if (!result.IsCompleted)
             {
 				// Wait for the WaitHandle to become signaled.

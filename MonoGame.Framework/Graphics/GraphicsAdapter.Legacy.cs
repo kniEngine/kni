@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#if IOS
+#if (IOS || TVOS)
 using UIKit;
 #elif ANDROID
 using Android.Views;
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private DisplayModeCollection _supportedDisplayModes;
 
 
-#if IOS
+#if (IOS || TVOS)
 		private UIScreen _screen;
         internal GraphicsAdapter(UIScreen screen)
         {
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-#if IOS
+#if (IOS || TVOS)
                 return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
                        (int)(_screen.Bounds.Height * _screen.Scale),
                        SurfaceFormat.Color);
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_adapters == null)
                 {
-#if IOS
+#if (IOS || TVOS)
 					_adapters = new ReadOnlyCollection<GraphicsAdapter>(
 						new [] {new GraphicsAdapter(UIScreen.MainScreen)});
 #else
