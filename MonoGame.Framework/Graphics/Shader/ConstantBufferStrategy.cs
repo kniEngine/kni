@@ -16,14 +16,26 @@ namespace Microsoft.Xna.Platform.Graphics
         internal bool _dirty;
         internal ulong _stateKey;
 
-        protected ConstantBufferStrategy(GraphicsDevice graphicsDevice)
+        protected ConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
         {
             this.GraphicsDevice = graphicsDevice;
+
+            this._name = name;
+            this._parameters = parameters;
+            this._offsets = offsets;
+            this._buffer = new byte[sizeInBytes];
         }
 
         protected ConstantBufferStrategy(ConstantBufferStrategy source)
         {
+            // shared
             this.GraphicsDevice = source.GraphicsDevice;
+            this._name = source._name;
+            this._parameters = source._parameters;
+            this._offsets = source._offsets;
+
+            // copies
+            this._buffer = (byte[])source._buffer.Clone();
         }
 
         public abstract object Clone();
@@ -49,6 +61,12 @@ namespace Microsoft.Xna.Platform.Graphics
             if (disposing)
             {                
                 GraphicsDevice = null;
+
+                _name = null;
+                _parameters = null;
+                _offsets = null;
+                _buffer = null;
+                _dirty = true;
             }
 
         }

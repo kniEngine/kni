@@ -20,14 +20,9 @@ namespace Microsoft.Xna.Framework.Graphics
                               int[] parameterOffsets,
                               int sizeInBytes)
         {
-            _strategy = new ConcreteConstantBufferStrategy(device);
+            _strategy = new ConcreteConstantBufferStrategy(device, name, parameterIndexes, parameterOffsets, sizeInBytes);
 
             GraphicsDevice = device;
-
-            _strategy._name = name;
-            _strategy._parameters = parameterIndexes;
-            _strategy._offsets = parameterOffsets;
-            _strategy._buffer = new byte[sizeInBytes];
 
             PlatformInitialize();
             _strategy.PlatformInitialize();
@@ -37,14 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GraphicsDevice = cloneSource.GraphicsDevice;
 
-            // Share the immutable types.
-            _strategy._name = cloneSource._strategy._name;
-            _strategy._parameters = cloneSource._strategy._parameters;
-            _strategy._offsets = cloneSource._strategy._offsets;
-
-            // Clone the mutable types.
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
-            _strategy._buffer = (byte[])cloneSource._strategy._buffer.Clone();
             _strategy.PlatformInitialize();
             PlatformInitialize();
         }

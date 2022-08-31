@@ -9,8 +9,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
     internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
     {
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice)
+        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+            : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
         }
 
