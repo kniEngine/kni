@@ -44,10 +44,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private int ComputeHashKey()
         {
-            var data = new byte[_parameters.Length];
-            for (var i = 0; i < _parameters.Length; i++)
+            var data = new byte[Parameters.Length];
+            for (var i = 0; i < Parameters.Length; i++)
             {
-                unchecked { data[i] = (byte)(_parameters[i] | _offsets[i]); }
+                unchecked { data[i] = (byte)(Parameters[i] | Offsets[i]); }
             }
 
             return MonoGame.Framework.Utilities.Hash.ComputeHash(data);
@@ -71,36 +71,36 @@ namespace Microsoft.Xna.Framework.Graphics
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = program.GetUniformLocation(_name);
+                var location = program.GetUniformLocation(Name);
                 if (location == -1)
                     return;
 
                 _shaderProgram = program;
                 _location = location;
-                _dirty = true;
+                Dirty = true;
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
             if (!Object.ReferenceEquals(this, _lastConstantBufferApplied))
-                _dirty = true;
+                Dirty = true;
 
             // If the buffer content hasn't changed then we're
             // done... use the previously set uniform state.
-            if (!_dirty)
+            if (!Dirty)
                 return;
 
-            fixed (byte* bytePtr = _buffer)
+            fixed (byte* bytePtr = Buffer)
             {
                 // TODO: We need to know the type of buffer float/int/bool
                 // and cast this correctly... else it doesn't work as i guess
                 // GL is checking the type of the uniform.
 
-                GL.Uniform4(_location, _buffer.Length / 16, (float*)bytePtr);
+                GL.Uniform4(_location, Buffer.Length / 16, (float*)bytePtr);
                 GraphicsExtensions.CheckGLError();
             }
 
             // Clear the dirty flag.
-            _dirty = false;
+            Dirty = false;
 
             _lastConstantBufferApplied = this;
         }

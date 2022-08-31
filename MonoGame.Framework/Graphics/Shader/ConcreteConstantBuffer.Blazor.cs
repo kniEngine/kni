@@ -53,36 +53,36 @@ namespace Microsoft.Xna.Framework.Graphics
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = program.GetUniformLocation(_name);
+                var location = program.GetUniformLocation(Name);
                 if (location == null)
                     return;
 
                 _shaderProgram = program;
                 _location = location;
-                _dirty = true;
+                Dirty = true;
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
             if (!Object.ReferenceEquals(this, _lastConstantBufferApplied))
-                _dirty = true;
+                Dirty = true;
 
             // If the buffer content hasn't changed then we're
             // done... use the previously set uniform state.
-            if (!_dirty)
+            if (!Dirty)
                 return;
 
-            fixed (void* bytePtr = _buffer)
+            fixed (void* bytePtr = Buffer)
             {
                 // TODO: We need to know the type of buffer float/int/bool
                 // and cast this correctly... else it doesn't work as i guess
                 // GL is checking the type of the uniform.
 
-                GL.Uniform4fv(_location, _buffer);
+                GL.Uniform4fv(_location, Buffer);
                 GraphicsExtensions.CheckGLError();
             }
 
             // Clear the dirty flag.
-            _dirty = false;
+            Dirty = false;
 
             _lastConstantBufferApplied = this;
         }
