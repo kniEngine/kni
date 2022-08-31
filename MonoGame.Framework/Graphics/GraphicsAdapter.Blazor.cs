@@ -35,13 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private DisplayModeCollection _supportedDisplayModes;
 
 
-#if IOS
-		private UIScreen _screen;
-        internal GraphicsAdapter(UIScreen screen)
-        {
-            _screen = screen;
-        }
-#elif DESKTOPGL
+#if DESKTOPGL
         int _displayIndex;
 #else
         internal GraphicsAdapter()
@@ -73,11 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-#if IOS
-                return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
-                       (int)(_screen.Bounds.Height * _screen.Scale),
-                       SurfaceFormat.Color);
-#elif ANDROID
+#if ANDROID
                 View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
                 return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
 #elif DESKTOPGL
@@ -113,12 +103,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_adapters == null)
                 {
-#if IOS
-					_adapters = new ReadOnlyCollection<GraphicsAdapter>(
-						new [] {new GraphicsAdapter(UIScreen.MainScreen)});
-#else
                     _adapters = new ReadOnlyCollection<GraphicsAdapter>(new[] { new GraphicsAdapter() });
-#endif
                 }
 
                 return _adapters;

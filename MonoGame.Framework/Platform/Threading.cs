@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
-#if IOS
+#if IOS || TVOS
 using Foundation;
 using OpenGLES;
 #endif
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-#if IOS
+#if IOS || TVOS
         public static EAGLContext BackgroundContext;
 #endif
 
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework
         {
             EnsureUIThread();
 
-#if IOS
+#if IOS || TVOS
             lock (BackgroundContext)
             {
                 // Make the context current on this thread if it is not already
@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework
                 _queuedActions.Clear();
             }
 
-#if IOS
+#if IOS || TVOS
                 // Must flush the GL calls so the GPU asset is ready for the main context to use it
                 GL.Flush();
                 GraphicsExtensions.CheckGLError();

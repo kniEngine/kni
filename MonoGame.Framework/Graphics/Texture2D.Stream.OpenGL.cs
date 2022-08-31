@@ -8,7 +8,7 @@ using MonoGame.Framework.Utilities;
 using MonoGame.Utilities.Png;
 using StbImageSharp;
 
-#if IOS
+#if IOS || TVOS
 using UIKit;
 using CoreGraphics;
 using Foundation;
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 stream.Seek(0, SeekOrigin.Begin);
             }
 
-#if IOS
+#if IOS || TVOS
              return PlatformFromStream_IOS(graphicsDevice, stream);
 #elif ANDROID
             return PlatformFromStream_ANDROID(graphicsDevice, stream);

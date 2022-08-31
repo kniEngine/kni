@@ -327,18 +327,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Utilities\Deflate\CRC32.cs" />
-    <Compile Include="Utilities\Deflate\Deflate.cs" />
-    <Compile Include="Utilities\Deflate\DeflateStream.cs" />
-    <Compile Include="Utilities\Deflate\GZipStream.cs" />
-    <Compile Include="Utilities\Deflate\Inflate.cs" />
-    <Compile Include="Utilities\Deflate\InfTree.cs" />
-    <Compile Include="Utilities\Deflate\Tree.cs" />
-    <Compile Include="Utilities\Deflate\Zlib.cs" />
-    <Compile Include="Utilities\Deflate\ZlibBaseStream.cs" />
-    <Compile Include="Utilities\Deflate\ZlibCodec.cs" />
-    <Compile Include="Utilities\Deflate\ZlibConstants.cs" />
-    <Compile Include="Utilities\Deflate\ZlibStream.cs" />
     <Compile Include="Utilities\Lz4Stream\Lz4DecoderStream.cs" />
     <Compile Include="Utilities\LzxStream\LzxDecoderStream.cs" />
     <Compile Include="Utilities\ZLibStream\ZlibStream.cs" />
@@ -372,7 +360,6 @@
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IGraphicsDeviceManager.cs" />
-    <Compile Include="IPlatformBackButton.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
