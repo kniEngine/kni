@@ -39,7 +39,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public abstract object Clone();
-        internal abstract void PlatformInitialize();
         internal abstract void PlatformApply(ShaderStage stage, int slot);
         internal abstract void PlatformClear();
 

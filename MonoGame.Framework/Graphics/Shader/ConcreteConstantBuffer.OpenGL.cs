@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new ConcreteConstantBufferStrategy(this);
         }
 
-        internal override void PlatformInitialize()
+        private void PlatformInitialize()
         {
             var data = new byte[_parameters.Length];
             for (var i = 0; i < _parameters.Length; i++)

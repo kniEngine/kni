@@ -26,11 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformInitialize()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         internal override void PlatformClear()
         {
             throw new PlatformNotSupportedException();

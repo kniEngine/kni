@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new ConcreteConstantBufferStrategy(this);
         }
 
-        internal override void PlatformInitialize()
+        private void PlatformInitialize()
         {
             // Allocate the hardware constant buffer.
             var desc = new SharpDX.Direct3D11.BufferDescription();
