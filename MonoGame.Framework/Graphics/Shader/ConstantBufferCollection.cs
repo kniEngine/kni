@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.PlatformApply(_stage, i);
+                    buffer.Apply(_stage, i);
                 }
 
                 var mask = 1 << i;

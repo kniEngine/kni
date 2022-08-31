@@ -52,6 +52,12 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformInitialize();
         }
 
+
+        internal void Apply(ShaderStage stage, int slot)
+        {
+            PlatformApply(stage, slot);
+        }
+
         internal void Clear()
         {
             PlatformClear();
