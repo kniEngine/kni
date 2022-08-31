@@ -4,6 +4,7 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using Microsoft.Xna.Platform.Graphics;
 using System;
 
 
@@ -11,6 +12,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class ConstantBuffer : GraphicsResource
     {
+        private ConstantBufferStrategy _strategy;
+
         private readonly string _name;
         private readonly int[] _parameters;
         private readonly int[] _offsets;
@@ -28,6 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
                               int[] parameterOffsets,
                               int sizeInBytes)
         {
+            _strategy = new ConcreteConstantBufferStrategy(device);
+
             GraphicsDevice = device;
 
             _name = name;
@@ -36,6 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _buffer = new byte[sizeInBytes];
 
             PlatformInitialize();
+            _strategy.PlatformInitialize();
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
@@ -48,18 +54,22 @@ namespace Microsoft.Xna.Framework.Graphics
             _offsets = cloneSource._offsets;
 
             // Clone the mutable types.
+            _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
             _buffer = (byte[])cloneSource._buffer.Clone();
+            _strategy.PlatformInitialize();
             PlatformInitialize();
         }
 
 
         internal void Apply(ShaderStage stage, int slot)
         {
+            _strategy.PlatformApply(stage, slot);
             PlatformApply(stage, slot);
         }
 
         internal void Clear()
         {
+            _strategy.PlatformClear();
             PlatformClear();
         }
 
@@ -198,6 +208,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (disposing)
             {
+                if (_strategy != null)
+                    _strategy.Dispose();
+
+                _strategy = null;
             }
 
             base.Dispose(disposing);
