@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Framework
         internal bool IsTextInputAttached() { return (TextInput != null); }
         internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
 #endif
-#if (WINDOWS || DESKTOPGL)
+#if WINDOWS || DESKTOPGL
         // TNC: helper for filtering keyboard messages
         internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
         internal bool PreFilterMSG_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}

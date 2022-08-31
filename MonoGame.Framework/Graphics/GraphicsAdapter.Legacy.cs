@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#elif (WINDOWS || DESKTOPGL)
+#elif WINDOWS || DESKTOPGL
                 using (var graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
                 {
                     var dc = graphics.GetHdc();
