@@ -396,7 +396,6 @@
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
     <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
-    <Compile Include="Graphics\Shader\ConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.cs" />

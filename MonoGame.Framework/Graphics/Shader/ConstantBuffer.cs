@@ -10,7 +10,7 @@ using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    internal class ConstantBuffer : GraphicsResource
     {
         private ConstantBufferStrategy _strategy;
         
@@ -24,7 +24,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GraphicsDevice = device;
 
-            PlatformInitialize();
             _strategy.PlatformInitialize();
         }
 
@@ -34,20 +33,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
             _strategy.PlatformInitialize();
-            PlatformInitialize();
         }
 
 
         internal void Apply(ShaderStage stage, int slot)
         {
             _strategy.PlatformApply(stage, slot);
-            PlatformApply(stage, slot);
         }
 
         internal void Clear()
         {
             _strategy.PlatformClear();
-            PlatformClear();
         }
 
         public void Update(EffectParameterCollection parameters)
@@ -181,8 +177,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            PlatformDispose(disposing);
-
             if (disposing)
             {
                 if (_strategy != null)
