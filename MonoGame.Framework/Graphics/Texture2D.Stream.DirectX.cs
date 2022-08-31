@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 stream.Seek(0, SeekOrigin.Begin);
             }
             
-#if (WINDOWS || DESKTOPGL) || WINDOWS_UAP
+#if WINDOWS || WINDOWS_UAP
             if (stream.CanSeek)
                 return PlatformFromStream_DX(graphicsDevice, stream);
 #endif
