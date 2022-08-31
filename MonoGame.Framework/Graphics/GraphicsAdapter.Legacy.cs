@@ -451,7 +451,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if (WINDOWS || DESKTOPGL) && !OPENGL
+#if WINDOWS
         [System.Runtime.InteropServices.DllImport("gdi32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, ExactSpelling = true)]
         public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 

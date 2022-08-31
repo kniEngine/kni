@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Current state of the mouse.</returns>
         public static MouseState GetState()
         {
-#if (DIRECTX && ((WINDOWS || DESKTOPGL) && !OPENGL)) // WinForms based Windows Desktop
+#if WINDOWS
             return PlatformGetState();
 #endif
 
