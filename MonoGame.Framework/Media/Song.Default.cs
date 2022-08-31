@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Media
         internal override void PlatformInitialize(string fileName)
         {
 
-#if MONOMAC || ((WINDOWS || DESKTOPGL) && OPENGL)
+#if MONOMAC || DESKTOPGL
 
             using (var s = File.OpenRead(_name))
             {
