@@ -27,12 +27,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformInitialize()
         {
-            var data = new byte[_parameters.Length];
-            for (var i = 0; i < _parameters.Length; i++)
+            var data = new byte[_strategy._parameters.Length];
+            for (var i = 0; i < _strategy._parameters.Length; i++)
             {
                 unchecked
                 {
-                    data[i] = (byte)(_parameters[i] | _offsets[i]);
+                    data[i] = (byte)(_strategy._parameters[i] | _strategy._offsets[i]);
                 }
             }
 
@@ -57,36 +57,36 @@ namespace Microsoft.Xna.Framework.Graphics
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = program.GetUniformLocation(_name);
+                var location = program.GetUniformLocation(_strategy._name);
                 if (location == null)
                     return;
 
                 _shaderProgram = program;
                 _location = location;
-                _dirty = true;
+                _strategy._dirty = true;
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
             if (!Object.ReferenceEquals(this, _lastConstantBufferApplied))
-                _dirty = true;
+                _strategy._dirty = true;
 
             // If the buffer content hasn't changed then we're
             // done... use the previously set uniform state.
-            if (!_dirty)
+            if (!_strategy._dirty)
                 return;
 
-            fixed (void* bytePtr = _buffer)
+            fixed (void* bytePtr = _strategy._buffer)
             {
                 // TODO: We need to know the type of buffer float/int/bool
                 // and cast this correctly... else it doesn't work as i guess
                 // GL is checking the type of the uniform.
 
-                GL.Uniform4fv(_location, _buffer);
+                GL.Uniform4fv(_location, _strategy._buffer);
                 GraphicsExtensions.CheckGLError();
             }
 
             // Clear the dirty flag.
-            _dirty = false;
+            _strategy._dirty = false;
 
             _lastConstantBufferApplied = this;
         }

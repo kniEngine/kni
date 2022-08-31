@@ -9,6 +9,13 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         public GraphicsDevice GraphicsDevice { get; private set; }
 
+        internal string _name;
+        internal int[] _parameters;
+        internal int[] _offsets;
+        internal byte[] _buffer;
+        internal bool _dirty;
+        internal ulong _stateKey;
+
         protected ConstantBufferStrategy(GraphicsDevice graphicsDevice)
         {
             this.GraphicsDevice = graphicsDevice;
