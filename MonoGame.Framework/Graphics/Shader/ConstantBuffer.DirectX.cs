@@ -9,58 +9,21 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class ConstantBuffer
     {
-        private SharpDX.Direct3D11.Buffer _cbuffer;
 
         private void PlatformInitialize()
         {
-            // Allocate the hardware constant buffer.
-            var desc = new SharpDX.Direct3D11.BufferDescription();
-            desc.SizeInBytes = _strategy._buffer.Length;
-            desc.Usage = SharpDX.Direct3D11.ResourceUsage.Default;
-            desc.BindFlags = SharpDX.Direct3D11.BindFlags.ConstantBuffer;
-            desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
-            lock (GraphicsDevice._d3dContext)
-                _cbuffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice._d3dDevice, desc);
         }
 
         private void PlatformClear()
         {
-            SharpDX.Utilities.Dispose(ref _cbuffer);
-            _strategy._dirty = true;
         }
 
         internal void PlatformApply(ShaderStage stage, int slot)
         {
-            if (_cbuffer == null)
-                PlatformInitialize();
-
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-            var d3dContext = GraphicsDevice._d3dContext;
-
-            // Update the hardware buffer.
-            if (_strategy._dirty)
-            {
-                d3dContext.UpdateSubresource(_strategy._buffer, _cbuffer);
-                _strategy._dirty = false;
-            }
-            
-            // Set the buffer to the right stage.
-            switch(stage)
-            {
-                case ShaderStage.Pixel:  d3dContext.PixelShader.SetConstantBuffer(slot,  _cbuffer); break;
-                case ShaderStage.Vertex: d3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
-                default: throw new System.ArgumentException();
-            }
         }
 
         private void PlatformDispose(bool disposing)
         {
-            if (disposing)
-            {
-                SharpDX.Utilities.Dispose(ref _cbuffer);
-            }
-
         }
     }
 }

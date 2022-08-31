@@ -9,17 +9,14 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformInitialize()
         {
-            throw new PlatformNotSupportedException();
         }
 
         private void PlatformClear()
         {
-            throw new PlatformNotSupportedException();
         }
 
         internal unsafe void PlatformApply(ShaderStage stage, int slot)
         {
-            throw new PlatformNotSupportedException();
         }
 
         private void PlatformDispose(bool disposing)
