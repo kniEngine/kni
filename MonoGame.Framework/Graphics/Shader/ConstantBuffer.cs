@@ -23,8 +23,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new ConcreteConstantBufferStrategy(device, name, parameterIndexes, parameterOffsets, sizeInBytes);
 
             GraphicsDevice = device;
-
-            _strategy.PlatformInitialize();
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
@@ -32,7 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsDevice = cloneSource.GraphicsDevice;
 
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
-            _strategy.PlatformInitialize();
         }
 
 

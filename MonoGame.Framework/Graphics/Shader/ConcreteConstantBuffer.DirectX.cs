@@ -19,11 +19,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
+            PlatformInitialize();
         }
 
         private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
             : base(source)
         {
+            PlatformInitialize();
         }
 
         public override object Clone()
