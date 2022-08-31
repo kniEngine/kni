@@ -19,13 +19,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
-            PlatformInitialize();
+            _cbuffer = CreateD3D11Buffer();
         }
 
         private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
             : base(source)
         {
-            PlatformInitialize();
+            _cbuffer = CreateD3D11Buffer();
         }
 
         public override object Clone()
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new ConcreteConstantBufferStrategy(this);
         }
 
-        private void PlatformInitialize()
+        private SharpDX.Direct3D11.Buffer CreateD3D11Buffer()
         {
             // Allocate the hardware constant buffer.
             var desc = new SharpDX.Direct3D11.BufferDescription();
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
             desc.SizeInBytes = _buffer.Length;
             lock (GraphicsDevice._d3dContext)
-                _cbuffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice._d3dDevice, desc);
+                return new SharpDX.Direct3D11.Buffer(GraphicsDevice._d3dDevice, desc);
         }
 
         internal override void PlatformClear()
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal unsafe override void PlatformApply(ShaderStage stage, int slot)
         {
             if (_cbuffer == null)
-                PlatformInitialize();
+                _cbuffer = CreateD3D11Buffer();
 
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.

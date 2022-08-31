@@ -22,19 +22,19 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// A hash value which can be used to compare constant buffers.
         /// </summary>
-        internal int HashKey { get; private set; }
+        internal readonly int HashKey;
 
 
         public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
-            PlatformInitialize();
+            HashKey = ComputeHashKey();
         }
 
         private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
             : base(source)
         {
-            PlatformInitialize();
+            HashKey = source.HashKey;
         }
 
         public override object Clone()
@@ -42,18 +42,15 @@ namespace Microsoft.Xna.Framework.Graphics
             return new ConcreteConstantBufferStrategy(this);
         }
 
-        private void PlatformInitialize()
+        private int ComputeHashKey()
         {
             var data = new byte[_parameters.Length];
             for (var i = 0; i < _parameters.Length; i++)
             {
-                unchecked
-                {
-                    data[i] = (byte)(_parameters[i] | _offsets[i]);
-                }
+                unchecked { data[i] = (byte)(_parameters[i] | _offsets[i]); }
             }
 
-            HashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(data);
+            return MonoGame.Framework.Utilities.Hash.ComputeHash(data);
         }
 
         internal override void PlatformClear()
