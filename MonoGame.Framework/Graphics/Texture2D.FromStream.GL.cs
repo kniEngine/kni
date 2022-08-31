@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         
         #region DESKTOPGL 
-#if (DESKTOPGL && (WINDOWS || DESKTOPGL))
+#if DESKTOPGL
         private unsafe static Texture2D PlatformFromStream_DESKTOPGL(GraphicsDevice graphicsDevice, Stream stream)
         {
             System.Drawing.Bitmap image = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(stream);
