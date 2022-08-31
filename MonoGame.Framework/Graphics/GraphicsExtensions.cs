@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.NormalizedShort4:
                     return VertexAttribPointerType.Short;
                 
-#if WINDOWS || DESKTOPGL
+#if (WINDOWS || DESKTOPGL) || DESKTOPGL
                case VertexElementFormat.HalfVector2:
                     return VertexAttribPointerType.HalfFloat;
 
@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
 			case BlendFunction.Add:
 				return BlendEquationMode.FuncAdd;
-#if WINDOWS || DESKTOPGL || IOS || TVOS
+#if (WINDOWS || DESKTOPGL) || DESKTOPGL || IOS || TVOS
 			case BlendFunction.Max:
 				return BlendEquationMode.Max;
 			case BlendFunction.Min:
@@ -440,7 +440,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if WINDOWS || DESKTOPGL || ANGLE
+#if (WINDOWS || DESKTOPGL) || DESKTOPGL || ANGLE
         /// <summary>
         /// Convert a <see cref="SurfaceFormat"/> to an OpenTK.Graphics.ColorFormat.
         /// This is used for setting up the backbuffer format of the OpenGL context.

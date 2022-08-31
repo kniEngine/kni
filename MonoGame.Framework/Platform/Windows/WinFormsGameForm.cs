@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Windows
                         m.Result = new IntPtr(flags);
                         return;
                     }
-#if (WINDOWS && DIRECTX)
+#if ((WINDOWS || DESKTOPGL) && DIRECTX)
                 case WM_KEYDOWN:
                     HandleKeyMessage(ref m);
                     switch (m.WParam.ToInt32())

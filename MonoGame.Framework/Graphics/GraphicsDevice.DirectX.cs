@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		float _dpi; 
 #endif
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
 
         SwapChain _swapChain;
 
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			CreateDeviceResources();
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
             CreateDeviceResources();
 #endif
 
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformInitialize()
         {
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
             CorrectBackBufferSize();
 #endif
             CreateSizeDependentResources();
@@ -493,7 +493,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         partial void PlatformReset()
         {
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
             CorrectBackBufferSize();
 #endif
 
@@ -537,7 +537,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #endif
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
 
         private void CorrectBackBufferSize()
         {
@@ -902,7 +902,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ApplyRenderTargets(null);
         }
 
-#endif // WINDOWS
+#endif // (WINDOWS || DESKTOPGL)
 
 
         /// <summary>
@@ -1071,7 +1071,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
 #endif
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
 
             try
             {

@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#elif WINDOWS
+#elif (WINDOWS || DESKTOPGL)
                 using (var graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
                 {
                     var dc = graphics.GetHdc();
@@ -451,7 +451,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if WINDOWS && !OPENGL
+#if (WINDOWS || DESKTOPGL) && !OPENGL
         [System.Runtime.InteropServices.DllImport("gdi32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, ExactSpelling = true)]
         public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 

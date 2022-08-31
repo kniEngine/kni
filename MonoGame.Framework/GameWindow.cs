@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public virtual bool AllowAltF4 { get { return _allowAltF4; } set { _allowAltF4 = value; } }
 
-#if (WINDOWS && !WINDOWS_UAP) || DESKTOPGL
+#if ((WINDOWS || DESKTOPGL) && !WINDOWS_UAP) || DESKTOPGL
         /// <summary>
         /// The location of this window on the desktop, eg: global coordinate space
         /// which stretches across all screens.
@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
-#if WINDOWS || WINDOWS_UAP || DESKTOPGL|| ANGLE
+#if (WINDOWS || DESKTOPGL) || WINDOWS_UAP || DESKTOPGL|| ANGLE
 
         /// <summary>
 		/// Use this event to user text input.
@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Framework
             EventHelpers.Raise(this, ScreenDeviceNameChanged, EventArgs.Empty);
 		}
 
-#if WINDOWS || WINDOWS_UAP || DESKTOPGL || ANGLE
+#if (WINDOWS || DESKTOPGL) || WINDOWS_UAP || DESKTOPGL || ANGLE
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>
@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Framework
         internal bool IsTextInputAttached() { return (TextInput != null); }
         internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
 #endif
-#if WINDOWS
+#if (WINDOWS || DESKTOPGL)
         // TNC: helper for filtering keyboard messages
         internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
         internal bool PreFilterMSG_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
