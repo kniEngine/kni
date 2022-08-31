@@ -9,6 +9,49 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct GamePadCapabilities
     {
+        public GamePadCapabilities(
+            GamePadType gamePadType, string displayName, string identifier, bool isConnected, 
+            bool hasAButton, bool hasBButton, bool hasXButton, bool hasYButton,            
+            bool hasStartButton, bool hasBackButton,  bool hasBigButton, 
+            bool hasDPadDownButton, bool hasDPadLeftButton, bool hasDPadRightButton, bool hasDPadUpButton, 
+            bool hasLeftShoulderButton, bool hasLeftStickButton, 
+            bool hasRightShoulderButton, bool hasRightStickButton,            
+            bool hasLeftXThumbStick, bool hasLeftYThumbStick, 
+            bool hasRightXThumbStick, bool hasRightYThumbStick, 
+            bool hasLeftTrigger, bool hasRightTrigger, 
+            bool hasLeftVibrationMotor, bool hasRightVibrationMotor, 
+            bool hasVoiceSupport) : this()
+        {
+            GamePadType = gamePadType;
+            DisplayName = displayName;
+            Identifier = identifier;
+            IsConnected = isConnected;
+            HasAButton = hasAButton;
+            HasBButton = hasBButton;
+            HasXButton = hasXButton;
+            HasYButton = hasYButton;
+            HasStartButton = hasStartButton;
+            HasBackButton = hasBackButton;
+            HasBigButton = hasBigButton;
+            HasDPadDownButton = hasDPadDownButton;
+            HasDPadLeftButton = hasDPadLeftButton;
+            HasDPadRightButton = hasDPadRightButton;
+            HasDPadUpButton = hasDPadUpButton;
+            HasLeftShoulderButton = hasLeftShoulderButton;
+            HasLeftStickButton = hasLeftStickButton;
+            HasRightShoulderButton = hasRightShoulderButton;
+            HasRightStickButton = hasRightStickButton;
+            HasLeftXThumbStick = hasLeftXThumbStick;
+            HasLeftYThumbStick = hasLeftYThumbStick;
+            HasRightXThumbStick = hasRightXThumbStick;
+            HasRightYThumbStick = hasRightYThumbStick;
+            HasLeftTrigger = hasLeftTrigger;
+            HasRightTrigger=hasRightTrigger;
+            HasLeftVibrationMotor = hasLeftVibrationMotor;
+            HasRightVibrationMotor=hasRightVibrationMotor;
+            HasVoiceSupport = hasVoiceSupport;
+        }
+
         /// <summary>
         /// Gets a value indicating if the controller is connected.
         /// </summary>
