@@ -12,6 +12,7 @@ using MonoGame.Framework.Utilities;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 using Vector4 = Microsoft.Xna.Framework.Vector4;
+using Matrix = Microsoft.Xna.Framework.Matrix;
 
 #if __IOS__ || __TVOS__ || MONOMAC
 using ObjCRuntime;
@@ -755,6 +756,12 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal unsafe delegate void UniformMatrix4fvDelegate(int location, int count, bool transpose, Matrix* values);
+        internal static UniformMatrix4fvDelegate UniformMatrix4fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void ScissorDelegate(int x, int y, int width, int height);
         internal static ScissorDelegate Scissor;
 
@@ -1344,7 +1351,7 @@ namespace MonoGame.OpenGL
             Uniform2fv = LoadFunction<Uniform2fvDelegate> ("glUniform2fv");
             Uniform3fv = LoadFunction<Uniform3fvDelegate> ("glUniform3fv");
             Uniform4fv = LoadFunction<Uniform4fvDelegate> ("glUniform4fv");
-
+            UniformMatrix4fv = LoadFunction<UniformMatrix4fvDelegate> ("glUniformMatrix4fv");
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
 
             ReadBuffer = LoadFunction<ReadBufferDelegate> ("glReadBuffer");
@@ -1601,6 +1608,11 @@ namespace MonoGame.OpenGL
         internal static unsafe void Uniform4(int location, int count, Vector4* value)
         {
             Uniform4fv(location, count, value);
+        }
+
+        internal static unsafe void UniformMatrix4x4(int location, int count, bool transpose, Matrix* value)
+        {
+            UniformMatrix4fv(location, count, transpose, value);
         }
 
         internal unsafe static string GetString (StringName name)
