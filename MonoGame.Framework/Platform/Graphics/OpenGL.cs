@@ -717,6 +717,12 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform1fDelegate(int location, float value);
+        internal static Uniform1fDelegate Uniform1f;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal unsafe delegate void Uniform4fvDelegate(int location, int count, Vector4* values);
         internal static Uniform4fvDelegate Uniform4fv;
 
@@ -1306,6 +1312,7 @@ namespace MonoGame.OpenGL
 
             // uniforms OpenGL Version >= 2.0
             Uniform1i = LoadFunction<Uniform1iDelegate> ("glUniform1i");
+            Uniform1f = LoadFunction<Uniform1fDelegate> ("glUniform1f");
             Uniform4fv = LoadFunction<Uniform4fvDelegate> ("glUniform4fv");
 
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
@@ -1534,6 +1541,11 @@ namespace MonoGame.OpenGL
         internal static unsafe void Uniform4(int location, Vector4 value)
         {
             Uniform4fv(location, 1, &value);
+        }
+
+        internal static void Uniform1(int location, float value)
+        {
+            Uniform1f(location, value);
         }
 
         internal static unsafe void Uniform4(int location, int count, Vector4* value)
