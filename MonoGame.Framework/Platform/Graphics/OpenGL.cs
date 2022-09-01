@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MonoGame.Framework.Utilities;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Vector4 = Microsoft.Xna.Framework.Vector4;
 
 #if __IOS__ || __TVOS__ || MONOMAC
@@ -731,6 +732,12 @@ namespace MonoGame.OpenGL
         [MonoNativeFunctionWrapper]
         internal unsafe delegate void Uniform1fvDelegate(int location, int count, float* values);
         internal static Uniform1fvDelegate Uniform1fv;
+        
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform2fvDelegate(int location, int count, Vector2* values);
+        internal static Uniform2fvDelegate Uniform2fv;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1327,6 +1334,7 @@ namespace MonoGame.OpenGL
             Uniform1f = LoadFunction<Uniform1fDelegate> ("glUniform1f");
             Uniform1iv = LoadFunction<Uniform1ivDelegate> ("glUniform1iv");
             Uniform1fv = LoadFunction<Uniform1fvDelegate> ("glUniform1fv");
+            Uniform2fv = LoadFunction<Uniform2fvDelegate> ("glUniform2fv");
             Uniform4fv = LoadFunction<Uniform4fvDelegate> ("glUniform4fv");
 
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
@@ -1570,6 +1578,11 @@ namespace MonoGame.OpenGL
         internal static unsafe void Uniform1(int location, int count, float* value)
         {
             Uniform1fv(location, count, value);
+        }
+
+        internal static unsafe void Uniform2(int location, int count, Vector2* value)
+        {
+            Uniform2fv(location, count, value);
         }
 
         internal static unsafe void Uniform4(int location, int count, Vector4* value)
