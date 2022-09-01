@@ -762,6 +762,12 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal unsafe delegate void UniformMatrix3fvDelegate(int location, int count, bool transpose, float* values);
+        internal static UniformMatrix3fvDelegate UniformMatrix3fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal unsafe delegate void UniformMatrix4fvDelegate(int location, int count, bool transpose, Matrix* values);
         internal static UniformMatrix4fvDelegate UniformMatrix4fv;
 
@@ -1358,6 +1364,7 @@ namespace MonoGame.OpenGL
             Uniform3fv = LoadFunction<Uniform3fvDelegate> ("glUniform3fv");
             Uniform4fv = LoadFunction<Uniform4fvDelegate> ("glUniform4fv");
             UniformMatrix2fv = LoadFunction<UniformMatrix2fvDelegate> ("glUniformMatrix2fv");
+            UniformMatrix3fv = LoadFunction<UniformMatrix3fvDelegate> ("glUniformMatrix3fv");
             UniformMatrix4fv = LoadFunction<UniformMatrix4fvDelegate> ("glUniformMatrix4fv");
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
 
@@ -1620,6 +1627,11 @@ namespace MonoGame.OpenGL
         internal static unsafe void UniformMatrix2x2(int location, int count, bool transpose, float* value)
         {
             UniformMatrix2fv(location, count, transpose, value);
+        }
+
+        internal static unsafe void UniformMatrix3x3(int location, int count, bool transpose, float* value)
+        {
+            UniformMatrix3fv(location, count, transpose, value);
         }
 
         internal static unsafe void UniformMatrix4x4(int location, int count, bool transpose, Matrix* value)
