@@ -1367,6 +1367,10 @@ namespace MonoGame.OpenGL
             UniformMatrix3fv = LoadFunction<UniformMatrix3fvDelegate> ("glUniformMatrix3fv");
             UniformMatrix4fv = LoadFunction<UniformMatrix4fvDelegate> ("glUniformMatrix4fv");
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
+            // uniforms OpenGL Version >= 2.1
+            // ... UniformMatrix 2x3,2x4, 3x2, 3x4, 4x2, 4x3
+            // uniforms OpenGL Version >= 3.0
+            // ... Uniform 1ui,1uiv,2ui,2uiv,2ui,2uiv,2ui,2uiv
 
             ReadBuffer = LoadFunction<ReadBufferDelegate> ("glReadBuffer");
             DrawBuffer = LoadFunction<DrawBufferDelegate> ("glDrawBuffer");
