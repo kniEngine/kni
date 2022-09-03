@@ -77,15 +77,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#elif WINDOWS
-                using (var graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    var dc = graphics.GetHdc();
-                    int width = GetDeviceCaps(dc, HORZRES);
-                    int height = GetDeviceCaps(dc, VERTRES);
-                    graphics.ReleaseHdc(dc);
-                    return new DisplayMode(width, height, SurfaceFormat.Color);
-                }
 #else
                 return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
@@ -371,12 +362,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if WINDOWS && !OPENGL
-        [System.Runtime.InteropServices.DllImport("gdi32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
-
-        private const int HORZRES = 8;
-        private const int VERTRES = 10;
-#endif
     }
 }
