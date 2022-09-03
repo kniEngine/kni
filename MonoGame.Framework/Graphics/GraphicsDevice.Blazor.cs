@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -65,17 +67,21 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             for (var x = 0; x < attrs.Length; x++)
             {
-                if (attrs[x] && !_enabledVertexAttributes.Contains(x))
+                if (attrs[x])
                 {
-                    _enabledVertexAttributes.Add(x);
-                    GL.EnableVertexAttribArray(x);
-                    GraphicsExtensions.CheckGLError();
+                    if (_enabledVertexAttributes.Add(x))
+                    {
+                        GL.EnableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
                 }
-                else if (!attrs[x] && _enabledVertexAttributes.Contains(x))
+                else
                 {
-                    _enabledVertexAttributes.Remove(x);
-                    GL.DisableVertexAttribArray(x);
-                    GraphicsExtensions.CheckGLError();
+                    if (_enabledVertexAttributes.Remove(x))
+                    {
+                        GL.DisableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
                 }
             }
         }
