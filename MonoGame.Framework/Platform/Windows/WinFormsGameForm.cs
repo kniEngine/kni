@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Windows
                         m.Result = new IntPtr(flags);
                         return;
                     }
-#if WINDOWS
+
                 case WM_KEYDOWN:
                     HandleKeyMessage(ref m);
                     switch (m.WParam.ToInt32())
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Windows
                 case WM_DROPFILES:
                     HandleDropMessage(ref m);
                     break;
-#endif
+
                 case WM_SYSCOMMAND:
 
                     var wParam = m.WParam.ToInt32();
