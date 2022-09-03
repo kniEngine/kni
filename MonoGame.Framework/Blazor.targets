@@ -16,7 +16,7 @@
     <Compile Include="Graphics\RenderTarget3D.Blazor.cs" />
     <Compile Include="Graphics\RenderTargetCube.Blazor.cs" />
     <Compile Include="Graphics\SamplerStateCollection.Blazor.cs" />
-    <Compile Include="Graphics\Shader\ConstantBuffer.Blazor.cs" />
+	<Compile Include="Graphics\Shader\ConcreteConstantBuffer.Blazor.cs" />
     <Compile Include="Graphics\Shader\Shader.Blazor.cs" />
     <Compile Include="Graphics\States\BlendState.Blazor.cs" />
     <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
