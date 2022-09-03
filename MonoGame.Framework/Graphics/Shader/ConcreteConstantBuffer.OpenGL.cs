@@ -89,13 +89,14 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!Dirty)
                 return;
 
-            fixed (byte* bytePtr = Buffer)
+            fixed (void* bytePtr = Buffer)
             {
                 // TODO: We need to know the type of buffer float/int/bool
                 // and cast this correctly... else it doesn't work as i guess
                 // GL is checking the type of the uniform.
 
-                GL.Uniform4(_location, Buffer.Length / 16, (float*)bytePtr);
+                System.Diagnostics.Debug.Assert((Buffer.Length % 16) == 0);
+                GL.Uniform4(_location, Buffer.Length >> 4, (Vector4*)bytePtr);
                 GraphicsExtensions.CheckGLError();
             }
 
