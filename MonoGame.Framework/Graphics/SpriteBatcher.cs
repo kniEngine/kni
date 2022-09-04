@@ -53,6 +53,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private short[] _index;
 
         private VertexPositionColorTexture[] _vertexArray;
+        private int _baseQuad;
+        private DynamicVertexBuffer _vertexBuffer;
+        private IndexBuffer _indexBuffer;
 
         public SpriteBatcher(GraphicsDevice device, int capacity = 0)
         {
@@ -144,6 +147,15 @@ namespace Microsoft.Xna.Framework.Graphics
             _index = newIndex;
 
             _vertexArray = new VertexPositionColorTexture[4 * numBatchItems];
+
+            if (_vertexBuffer != null) _vertexBuffer.Dispose();
+            var quadCount = (4 * numBatchItems);
+            quadCount = quadCount * 4; //ensure vertex used 4 times before reset/Discard.
+            _vertexBuffer = new DynamicVertexBuffer(_device, VertexPositionColorTexture.VertexDeclaration, quadCount, BufferUsage.WriteOnly);
+            _baseQuad = 0;
+            if (_indexBuffer != null) _indexBuffer.Dispose();
+            _indexBuffer = new IndexBuffer(_device, IndexElementSize.SixteenBits, newIndex.Length, BufferUsage.WriteOnly);
+            _indexBuffer.SetData(newIndex);
         }
 
         /// <summary>
@@ -180,7 +192,6 @@ namespace Microsoft.Xna.Framework.Graphics
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
             {
-                int baseQuad = 0;
                 int spriteCount = 0;
                 Texture2D tex = null;
 
@@ -191,10 +202,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     numBatchesToProcess = MaxBatchSize;
                 }
 
+                _device.SetVertexBuffer(_vertexBuffer);
+                _device.Indices = _indexBuffer;
+
                 // Avoid the array checking overhead by using pointer indexing!
                 fixed (VertexPositionColorTexture* vertexArrayFixedPtr = _vertexArray)
                 {
                     var vertexArrayPtr = vertexArrayFixedPtr;
+
+                    var mode = SetDataOptions.NoOverwrite;
+                    if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
+                    {
+                        mode = SetDataOptions.Discard;
+                        _baseQuad = 0;
+                    }
 
                     // create batch
                     for (int i = 0; i < numBatchesToProcess; i++, vertexArrayPtr += 4)
@@ -207,6 +228,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         *(vertexArrayPtr + 2) = item.vertexBL;
                         *(vertexArrayPtr + 3) = item.vertexBR;
                     }
+
+                    var stride = VertexPositionColorTexture.VertexDeclaration.VertexStride;
+                    _vertexBuffer.SetData(_baseQuad * 4 * stride,
+                        _vertexArray, 0, numBatchesToProcess * 4,
+                        stride, mode);
                 }
 
                 // draw batch
@@ -219,9 +245,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (shouldFlush)
                     {
                         if (spriteCount > 0)
-                            FlushVertexArray(baseQuad, spriteCount, effect, tex);
+                            FlushVertexArray(_baseQuad, spriteCount, effect, tex);
 
-                        baseQuad += spriteCount;
+                        _baseQuad += spriteCount;
                         spriteCount = 0;
                         tex = item.Texture;
                     }
@@ -231,7 +257,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 // flush the remaining vertexArray data
                 if (spriteCount > 0)
-                    FlushVertexArray(baseQuad, spriteCount, effect, tex);
+                    FlushVertexArray(_baseQuad, spriteCount, effect, tex);
+                _baseQuad += spriteCount;
 
                 // Update our batch count to continue the process of culling down
                 // large batches
@@ -257,11 +284,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _device.Textures[0] = texture;
 
-                _device.DrawUserIndexedPrimitives(
+                _device.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    _vertexArray, baseVertex, numVertices,
-                    _index, 0, primitiveCount,
-                    VertexPositionColorTexture.VertexDeclaration);
+                    baseVertex, //0, numVertices,
+                    0, primitiveCount);
             }
             else // If the effect is not null, then apply each pass and render the geometry
             {
@@ -274,11 +300,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     // because pass.Apply() might have set a texture from the effect.
                     _device.Textures[0] = texture;
 
-                    _device.DrawUserIndexedPrimitives(
+                    _device.DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        _vertexArray, baseVertex, numVertices,
-                        _index, 0, primitiveCount,
-                        VertexPositionColorTexture.VertexDeclaration);
+                        baseVertex, //0, numVertices,
+                        0, primitiveCount);
                 }
             }
         }
@@ -303,6 +328,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (disposing)
                 {
+                    _vertexBuffer.Dispose();
+                    _indexBuffer.Dispose();
+
+                    _vertexBuffer = null;
+                    _indexBuffer = null;
                     _batchItemList = null;
                     _vertexArray = null;
                     _index = null;
