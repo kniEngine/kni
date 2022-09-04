@@ -322,16 +322,18 @@ namespace Microsoft.Xna.Framework.Graphics
         protected bool isDisposed = false;
         protected virtual void Dispose(bool disposing)
         {
-            if (isDisposed) return;
-            if (disposing)
+            if (!isDisposed)
             {
-                _vertexBuffer.Dispose();
-                _indexBuffer.Dispose();
-            }
-            _vertexBuffer = null;
-            _indexBuffer = null;
+                if (disposing)
+                {
+                    _vertexBuffer.Dispose();
+                    _indexBuffer.Dispose();
 
-            isDisposed = true;
+                    _vertexBuffer = null;
+                    _indexBuffer = null;
+                }
+                isDisposed = true;
+            }
         }
 
         #endregion

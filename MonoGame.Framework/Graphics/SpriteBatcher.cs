@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// batched and will process them into short.MaxValue groups (strided by 6 for the number of vertices
     /// sent to the GPU). 
     /// </summary>
-    internal class SpriteBatcher
+    internal class SpriteBatcher : IDisposable
     {
         /*
          * Note that this class is fundamental to high performance for SpriteBatch games. Please exercise
@@ -270,6 +270,36 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
         }
+
+        #region IDisposable Members
+
+        ~SpriteBatcher()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected bool isDisposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!isDisposed)
+            {
+                if (disposing)
+                {
+                    _batchItemList = null;
+                    _vertexArray = null;
+                    _index = null;
+                }
+                isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }
 
