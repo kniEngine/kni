@@ -223,12 +223,14 @@ namespace Microsoft.Xna.Framework.Graphics
                         element.Normalized,
                         vertexStride,
                         (IntPtr)(offset.ToInt64() + element.Offset));
+                    GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (GraphicsCapabilities.SupportsInstancing) 
+                    if (GraphicsCapabilities.SupportsInstancing)
+                    {
                         GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
-
-                    GraphicsExtensions.CheckGLError();
+                        GraphicsExtensions.CheckGLError();
+                    }
                 }
 
                 _bufferBindingInfos[slot].VertexOffset = offset;
