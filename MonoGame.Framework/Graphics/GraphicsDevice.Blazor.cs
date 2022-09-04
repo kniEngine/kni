@@ -113,10 +113,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindBuffer(WebGLBufferType.ARRAY, vertexBufferBinding.VertexBuffer.vbo);
                 GraphicsExtensions.CheckGLError();
 
-                // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
-                if (!GraphicsCapabilities.SupportsInstancing && vertexBufferBinding.InstanceFrequency > 0)
-                    throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
-
                 for (int e = 0; e < attrInfo.Elements.Count; e++)
                 {
                     var element = attrInfo.Elements[e];
@@ -134,6 +130,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new NotImplementedException();
                         //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
                         //GraphicsExtensions.CheckGLError();
+                    }
+                    else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
+                    {
+                        if (vertexBufferBinding.InstanceFrequency > 0)
+                            throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
                     }
                 }
 
