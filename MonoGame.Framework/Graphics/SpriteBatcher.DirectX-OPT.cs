@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         private short[] _index;
 
-        private int _baseVertex;
+        private int _baseQuad;
         private DynamicVertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
 
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var quadCount = (4 * numBatchItems);
             quadCount = quadCount * 4; //ensure vertex used 4 times before reset/Discard.
             _vertexBuffer = new DynamicVertexBuffer(_device, VertexPositionColorTexture.VertexDeclaration, quadCount, BufferUsage.WriteOnly);
-            _baseVertex = 0;
+            _baseQuad = 0;
             if (_indexBuffer != null) _indexBuffer.Dispose();
             _indexBuffer = new IndexBuffer(_device, IndexElementSize.SixteenBits, newIndex.Length, BufferUsage.WriteOnly);
             _indexBuffer.SetData(newIndex);
@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
             {
-                int vertexCount = 0;
+                int spriteCount = 0;
                 Texture2D tex = null;
 
                 int numBatchesToProcess = batchCount;
@@ -208,16 +208,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     //map vertexBaffer
                     var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
-                    if (_baseVertex + numBatchesToProcess * 4 > _vertexBuffer.VertexCount)
+                    if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
                     {
                         mode = SharpDX.Direct3D11.MapMode.WriteDiscard;
-                        _baseVertex = 0;
+                        _baseQuad = 0;
                     }
                     var dataBox = _device._d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
                     var vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch
-                    vertexArrayPtr += _baseVertex;
+                    vertexArrayPtr += _baseQuad * 4;
                     for (int i = 0; i < numBatchesToProcess; i++, vertexArrayPtr += 4)
                     {
                         SpriteBatchItem item = _batchItemList[batchIndex + i];
@@ -233,7 +233,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 // draw batch
-                for (int i = 0; i < numBatchesToProcess; i++, vertexCount += 4)
+                for (int i = 0; i < numBatchesToProcess; i++, spriteCount++)
                 {
                     SpriteBatchItem item = _batchItemList[batchIndex++];
 
@@ -241,11 +241,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     var shouldFlush = !ReferenceEquals(item.Texture, tex);
                     if (shouldFlush)
                     {
-                        if (vertexCount > 0)
-                            FlushVertexArray(_baseVertex, vertexCount, effect, tex);
+                        if (spriteCount > 0)
+                            FlushVertexArray(_baseQuad, spriteCount, effect, tex);
 
-                        _baseVertex += vertexCount;
-                        vertexCount = 0;
+                        _baseQuad += spriteCount;
+                        spriteCount = 0;
                         tex = item.Texture;
                         _device.Textures[0] = tex;
                     }
@@ -254,9 +254,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     item.Texture = null;
                 }
                 // flush the remaining vertexArray data
-                if (vertexCount > 0)
-                    FlushVertexArray(_baseVertex, vertexCount, effect, tex);
-                _baseVertex += vertexCount;
+                if (spriteCount > 0)
+                    FlushVertexArray(_baseQuad, spriteCount, effect, tex);
+                _baseQuad += spriteCount;
 
                 // Update our batch count to continue the process of culling down
                 // large batches
@@ -269,12 +269,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Sends the triangle list to the graphics device. Here is where the actual drawing starts.
         /// </summary>
-        /// <param name="numVertices">The number of vertices to draw.</param>
+        /// <param name="spriteCount">The number of sprites to draw.</param>
         /// <param name="effect">The custom effect to apply to the geometry.</param>
         /// <param name="texture">The texture to draw.</param>
-        private void FlushVertexArray(int baseVertex, int numVertices, Effect effect, Texture texture)
+        private void FlushVertexArray(int baseQuad, int spriteCount, Effect effect, Texture texture)
         {
-            int primitiveCount = (numVertices / 4) * 2;
+            int baseVertex = baseQuad * 4;
+            int numVertices = spriteCount * 4;
+            int primitiveCount = spriteCount * 2;
 
             if (effect == null) // If no custom effect is defined, then simply render.
             {

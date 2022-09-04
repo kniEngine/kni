@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
             {
-                int vertexCount = 0;
+                int spriteCount = 0;
                 Texture2D tex = null;
 
                 int numBatchesToProcess = batchCount;
@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     var vertexArrayPtr = vertexArrayFixedPtr;
 
                     // create and draw batch
-                    for (int i = 0; i < numBatchesToProcess; i++, vertexCount += 4, batchIndex++, vertexArrayPtr += 4)
+                    for (int i = 0; i < numBatchesToProcess; i++, spriteCount++, batchIndex++, vertexArrayPtr += 4)
                     {
                         SpriteBatchItem item = _batchItemList[batchIndex];
 
@@ -201,10 +201,10 @@ namespace Microsoft.Xna.Framework.Graphics
                         var shouldFlush = !ReferenceEquals(item.Texture, tex);
                         if (shouldFlush)
                         {
-                            if (vertexCount > 0)
-                                FlushVertexArray(vertexCount, effect, tex);
+                            if (spriteCount > 0)
+                                FlushVertexArray(spriteCount, effect, tex);
 
-                            vertexCount = 0;
+                            spriteCount = 0;
                             vertexArrayPtr = vertexArrayFixedPtr;
                             tex = item.Texture;
                             _device.Textures[0] = tex;
@@ -221,8 +221,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
                 // flush the remaining vertexArray data
-                if (vertexCount > 0)
-                    FlushVertexArray(vertexCount, effect, tex);
+                if (spriteCount > 0)
+                    FlushVertexArray(spriteCount, effect, tex);
 
                 // Update our batch count to continue the process of culling down
                 // large batches
@@ -235,12 +235,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Sends the triangle list to the graphics device. Here is where the actual drawing starts.
         /// </summary>
-        /// <param name="numVertices">The number of vertices to draw.</param>
+        /// <param name="spriteCount">The number of sprites to draw.</param>
         /// <param name="effect">The custom effect to apply to the geometry.</param>
         /// <param name="texture">The texture to draw.</param>
-        private void FlushVertexArray(int numVertices, Effect effect, Texture texture)
+        private void FlushVertexArray(int spriteCount, Effect effect, Texture texture)
         {
-            int primitiveCount = (numVertices / 4) * 2;
+            int numVertices = spriteCount * 4;
+            int primitiveCount = spriteCount * 2;
 
             if (effect == null) // If no custom effect is defined, then simply render.
             {
