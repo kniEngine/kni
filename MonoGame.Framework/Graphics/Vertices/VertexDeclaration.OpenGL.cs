@@ -30,11 +30,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
-                    Offset = ve.Offset,
                     AttributeLocation = attributeLocation,
                     NumberOfElements = ve.VertexElementFormat.OpenGLNumberOfElements(),
                     VertexAttribPointerType = ve.VertexElementFormat.OpenGLVertexAttribPointerType(),
                     Normalized = ve.OpenGLVertexAttribNormalized(),
+                    Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
             }
@@ -77,11 +77,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal class Element
             {
-                public int Offset;
                 public int AttributeLocation;
                 public int NumberOfElements;
                 public VertexAttribPointerType VertexAttribPointerType;
                 public bool Normalized;
+                public int Offset;
             }
 
             internal List<Element> Elements;
