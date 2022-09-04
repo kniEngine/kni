@@ -214,8 +214,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!GraphicsCapabilities.SupportsInstancing && vertexBufferBinding.InstanceFrequency > 0)
                     throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
 
-                foreach (var element in attrInfo.Elements)
+                for (int e = 0; e < attrInfo.Elements.Count; e++)
                 {
+                    var element = attrInfo.Elements[e];
                     GL.VertexAttribPointer(element.AttributeLocation,
                         element.NumberOfElements,
                         element.VertexAttribPointerType,
@@ -240,11 +241,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (bindingsChanged)
             {
-                Array.Clear(_newEnabledVertexAttributes, 0, _newEnabledVertexAttributes.Length);
+                for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
+                    _newEnabledVertexAttributes[eva] = false;
                 for (var slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
-                    foreach (var element in _bufferBindingInfos[slot].AttributeInfo.Elements)
+                    for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    {
+                        var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
+                    }
                 }
                 _activeBufferBindingInfosCount = _vertexBuffers.Count;
             }
