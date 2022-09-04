@@ -241,7 +241,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     var shouldFlush = !ReferenceEquals(item.Texture, tex);
                     if (shouldFlush)
                     {
-                        FlushVertexArray(_baseVertex, vertexCount, effect, tex);
+                        if (vertexCount > 0)
+                            FlushVertexArray(_baseVertex, vertexCount, effect, tex);
 
                         _baseVertex += vertexCount;
                         vertexCount = 0;
@@ -253,7 +254,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     item.Texture = null;
                 }
                 // flush the remaining vertexArray data
-                FlushVertexArray(_baseVertex, vertexCount, effect, tex);
+                if (vertexCount > 0)
+                    FlushVertexArray(_baseVertex, vertexCount, effect, tex);
                 _baseVertex += vertexCount;
 
                 // Update our batch count to continue the process of culling down
@@ -272,12 +274,18 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="texture">The texture to draw.</param>
         private void FlushVertexArray(int baseVertex, int numVertices, Effect effect, Texture texture)
         {
-            if (numVertices == 0) return;
-
             int primitiveCount = (numVertices / 4) * 2;
 
-            // If the effect is not null, then apply each pass and render the geometry
-            if (effect != null)
+            if (effect == null) // If no custom effect is defined, then simply render.
+            {
+                _device.Textures[0] = texture;
+
+                _device.DrawIndexedPrimitives(
+                    PrimitiveType.TriangleList,
+                    baseVertex, //0, numVertices,
+                    0, primitiveCount);
+            }
+            else // If the effect is not null, then apply each pass and render the geometry
             {
                 var passes = effect.CurrentTechnique.Passes;
                 foreach (var pass in passes)
@@ -293,16 +301,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         baseVertex, //0, numVertices,
                         0, primitiveCount);
                 }
-            }
-            else
-            {
-                _device.Textures[0] = texture;
-
-                // If no custom effect is defined, then simply render.
-                _device.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    baseVertex, //0, numVertices,
-                    0, primitiveCount);
             }
         }
 
