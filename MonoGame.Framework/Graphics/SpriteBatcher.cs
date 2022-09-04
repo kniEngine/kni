@@ -29,7 +29,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// The maximum number of batch items that can be processed per iteration
         /// </summary>
-        private const int MaxBatchSize = short.MaxValue / 6; // 6 = 4 vertices unique and 2 shared, per quad
+        // the upper limit is the range of 16bit indices, (ushort.MaxValue+1)/4 = 16384 vertices per quad.
+        // or (short.MaxValue+1)/4 = 8192 if we are using shorts instead of usigned shorts.
+        private const int MaxBatchSize = 4096;
 
         /// <summary>
         /// The list of batch items to process.
