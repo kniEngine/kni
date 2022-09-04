@@ -129,11 +129,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (GraphicsCapabilities.SupportsInstancing) 
+                    if (GraphicsCapabilities.SupportsInstancing)
                     {
                         throw new NotImplementedException();
                         //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
-                        GraphicsExtensions.CheckGLError();
+                        //GraphicsExtensions.CheckGLError();
                     }
                 }
 

@@ -64,8 +64,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (GraphicsDevice.GraphicsCapabilities.SupportsInstancing)
                 {
+                    throw new NotImplementedException();
                     //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
-                    GraphicsExtensions.CheckGLError();
+                    //GraphicsExtensions.CheckGLError();
                 }
             }
             GraphicsDevice.SetVertexAttributeArray(attrInfo.EnabledAttributes);
