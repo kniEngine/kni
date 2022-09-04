@@ -249,7 +249,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         _baseQuad += spriteCount;
                         spriteCount = 0;
                         tex = item.Texture;
-                        _device.Textures[0] = tex;
                     }
 
                     // Release the texture.

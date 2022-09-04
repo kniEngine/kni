@@ -209,7 +209,6 @@ namespace Microsoft.Xna.Framework.Graphics
                             spriteCount = 0;
                             vertexArrayPtr = vertexArrayFixedPtr;
                             tex = item.Texture;
-                            _device.Textures[0] = tex;
                         }
 
                         // store the SpriteBatchItem data in our vertexArray
@@ -247,6 +246,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (effect == null) // If no custom effect is defined, then simply render.
             {
+                _device.Textures[0] = texture;
+
                 _device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     _vertexArray, 0, numVertices,
