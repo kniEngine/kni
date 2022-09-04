@@ -180,8 +180,10 @@ namespace Microsoft.Xna.Framework.Graphics
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
             {
+                int baseQuad = 0;
                 int spriteCount = 0;
                 Texture2D tex = null;
+
 
                 int numBatchesToProcess = batchCount;
                 if (numBatchesToProcess > MaxBatchSize)
@@ -194,36 +196,42 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     var vertexArrayPtr = vertexArrayFixedPtr;
 
-                    // create and draw batch
-                    for (int i = 0; i < numBatchesToProcess; i++, spriteCount++, batchIndex++, vertexArrayPtr += 4)
+                    // create batch
+                    for (int i = 0; i < numBatchesToProcess; i++, vertexArrayPtr += 4)
                     {
-                        SpriteBatchItem item = _batchItemList[batchIndex];
-
-                        // if the texture changed, we need to flush and bind the new texture
-                        var shouldFlush = !ReferenceEquals(item.Texture, tex);
-                        if (shouldFlush)
-                        {
-                            if (spriteCount > 0)
-                                FlushVertexArray(spriteCount, effect, tex);
-
-                            spriteCount = 0;
-                            vertexArrayPtr = vertexArrayFixedPtr;
-                            tex = item.Texture;
-                        }
+                        SpriteBatchItem item = _batchItemList[batchIndex + i];
 
                         // store the SpriteBatchItem data in our vertexArray
                         *(vertexArrayPtr + 0) = item.vertexTL;
                         *(vertexArrayPtr + 1) = item.vertexTR;
                         *(vertexArrayPtr + 2) = item.vertexBL;
                         *(vertexArrayPtr + 3) = item.vertexBR;
-
-                        // Release the texture.
-                        item.Texture = null;
                     }
+                }
+
+                // draw batch
+                for (int i = 0; i < numBatchesToProcess; i++, spriteCount++)
+                {
+                    SpriteBatchItem item = _batchItemList[batchIndex++];
+
+                    // if the texture changed, we need to flush and bind the new texture
+                    var shouldFlush = !ReferenceEquals(item.Texture, tex);
+                    if (shouldFlush)
+                    {
+                        if (spriteCount > 0)
+                            FlushVertexArray(baseQuad, spriteCount, effect, tex);
+
+                        baseQuad += spriteCount;
+                        spriteCount = 0;
+                        tex = item.Texture;
+                    }
+
+                    // Release the texture.
+                    item.Texture = null;
                 }
                 // flush the remaining vertexArray data
                 if (spriteCount > 0)
-                    FlushVertexArray(spriteCount, effect, tex);
+                    FlushVertexArray(baseQuad, spriteCount, effect, tex);
 
                 // Update our batch count to continue the process of culling down
                 // large batches
@@ -239,8 +247,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="spriteCount">The number of sprites to draw.</param>
         /// <param name="effect">The custom effect to apply to the geometry.</param>
         /// <param name="texture">The texture to draw.</param>
-        private void FlushVertexArray(int spriteCount, Effect effect, Texture texture)
+        private void FlushVertexArray(int baseQuad, int spriteCount, Effect effect, Texture texture)
         {
+            int baseVertex = baseQuad * 4;
             int numVertices = spriteCount * 4;
             int primitiveCount = spriteCount * 2;
 
@@ -250,7 +259,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 _device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    _vertexArray, 0, numVertices,
+                    _vertexArray, baseVertex, numVertices,
                     _index, 0, primitiveCount,
                     VertexPositionColorTexture.VertexDeclaration);
             }
@@ -267,7 +276,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     _device.DrawUserIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        _vertexArray, 0, numVertices,
+                        _vertexArray, baseVertex, numVertices,
                         _index, 0, primitiveCount,
                         VertexPositionColorTexture.VertexDeclaration);
                 }
