@@ -178,8 +178,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
             {
-                int startIndex = 0;
-                int index = 0;
+                int vertexCount = 0;
                 Texture2D tex = null;
 
                 int numBatchesToProcess = batchCount;
@@ -194,7 +193,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     var vertexArrayPtr = vertexArrayFixedPtr;
 
                     // create and draw batch
-                    for (int i = 0; i < numBatchesToProcess; i++, batchIndex++, index += 4, vertexArrayPtr += 4)
+                    for (int i = 0; i < numBatchesToProcess; i++, vertexCount += 4, batchIndex++, vertexArrayPtr += 4)
                     {
                         SpriteBatchItem item = _batchItemList[batchIndex];
 
@@ -202,9 +201,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         var shouldFlush = !ReferenceEquals(item.Texture, tex);
                         if (shouldFlush)
                         {
-                            FlushVertexArray(startIndex, index, effect, tex);
+                            FlushVertexArray(vertexCount, effect, tex);
 
-                            startIndex = index = 0;
+                            vertexCount = 0;
                             vertexArrayPtr = vertexArrayFixedPtr;
                             tex = item.Texture;
                             _device.Textures[0] = tex;
@@ -221,7 +220,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
                 // flush the remaining vertexArray data
-                FlushVertexArray(startIndex, index, effect, tex);
+                FlushVertexArray(vertexCount, effect, tex);
 
                 // Update our batch count to continue the process of culling down
                 // large batches
@@ -234,16 +233,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Sends the triangle list to the graphics device. Here is where the actual drawing starts.
         /// </summary>
-        /// <param name="start">Start index of vertices to draw. Not used except to compute the count of vertices to draw.</param>
-        /// <param name="end">End index of vertices to draw. Not used except to compute the count of vertices to draw.</param>
+        /// <param name="numVertices">The number of vertices to draw.</param>
         /// <param name="effect">The custom effect to apply to the geometry.</param>
         /// <param name="texture">The texture to draw.</param>
-        private void FlushVertexArray(int start, int end, Effect effect, Texture texture)
+        private void FlushVertexArray(int numVertices, Effect effect, Texture texture)
         {
-            if (start == end)
-                return;
+            if (numVertices == 0) return;
 
-            int vertexCount = end - start;
+            int primitiveCount = (numVertices / 4) * 2;
 
             // If the effect is not null, then apply each pass and render the geometry
             if (effect != null)
@@ -259,8 +256,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     _device.DrawUserIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        _vertexArray, 0, vertexCount,
-                        _index, 0, (vertexCount / 4) * 2,
+                        _vertexArray, 0, numVertices,
+                        _index, 0, primitiveCount,
                         VertexPositionColorTexture.VertexDeclaration);
                 }
             }
@@ -269,8 +266,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 // If no custom effect is defined, then simply render.
                 _device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    _vertexArray, 0, vertexCount,
-                    _index, 0, (vertexCount / 4) * 2,
+                    _vertexArray, 0, numVertices,
+                    _index, 0, primitiveCount,
                     VertexPositionColorTexture.VertexDeclaration);
             }
         }
