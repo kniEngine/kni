@@ -32,11 +32,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
-                    Offset = ve.Offset,
                     AttributeLocation = attributeLocation,
                     NumberOfElements = OpenGLNumberOfElements(ve.VertexElementFormat),
                     VertexAttribPointerType = OpenGLVertexAttribPointerType(ve.VertexElementFormat),
                     Normalized = OpenGLVertexAttribNormalized(ve),
+                    Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
             }
@@ -177,11 +177,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal class Element
             {
-                public int Offset;
                 public int AttributeLocation;
                 public int NumberOfElements;
                 public WebGLDataType VertexAttribPointerType;
                 public bool Normalized;
+                public int Offset;
             }
 
             internal List<Element> Elements;

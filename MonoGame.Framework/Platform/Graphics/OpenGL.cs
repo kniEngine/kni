@@ -9,6 +9,10 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MonoGame.Framework.Utilities;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Vector3 = Microsoft.Xna.Framework.Vector3;
+using Vector4 = Microsoft.Xna.Framework.Vector4;
+using Matrix = Microsoft.Xna.Framework.Matrix;
 
 #if __IOS__ || __TVOS__ || MONOMAC
 using ObjCRuntime;
@@ -710,14 +714,62 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal unsafe delegate void Uniform4fvDelegate(int location, int size, float* values);
+        internal delegate void Uniform1iDelegate(int location, int value);
+        internal static Uniform1iDelegate Uniform1i;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform1fDelegate(int location, float value);
+        internal static Uniform1fDelegate Uniform1f;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform1ivDelegate(int location, int count, int* values);
+        internal static Uniform1ivDelegate Uniform1iv;
+        
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform1fvDelegate(int location, int count, float* values);
+        internal static Uniform1fvDelegate Uniform1fv;
+        
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform2fvDelegate(int location, int count, Vector2* values);
+        internal static Uniform2fvDelegate Uniform2fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform3fvDelegate(int location, int count, Vector3* values);
+        internal static Uniform3fvDelegate Uniform3fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void Uniform4fvDelegate(int location, int count, Vector4* values);
         internal static Uniform4fvDelegate Uniform4fv;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void Uniform1iDelegate(int location, int value);
-        internal static Uniform1iDelegate Uniform1i;
+        internal unsafe delegate void UniformMatrix2fvDelegate(int location, int count, bool transpose, float* values);
+        internal static UniformMatrix2fvDelegate UniformMatrix2fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void UniformMatrix3fvDelegate(int location, int count, bool transpose, float* values);
+        internal static UniformMatrix3fvDelegate UniformMatrix3fv;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void UniformMatrix4fvDelegate(int location, int count, bool transpose, Matrix* values);
+        internal static UniformMatrix4fvDelegate UniformMatrix4fv;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1302,9 +1354,23 @@ namespace MonoGame.OpenGL
             DrawBuffers = LoadFunction<DrawBuffersDelegate> ("glDrawBuffers");
             DrawElements = LoadFunction<DrawElementsDelegate> ("glDrawElements");
             DrawArrays = LoadFunction<DrawArraysDelegate> ("glDrawArrays");
+
+            // uniforms OpenGL Version >= 2.0
             Uniform1i = LoadFunction<Uniform1iDelegate> ("glUniform1i");
+            Uniform1f = LoadFunction<Uniform1fDelegate> ("glUniform1f");
+            Uniform1iv = LoadFunction<Uniform1ivDelegate> ("glUniform1iv");
+            Uniform1fv = LoadFunction<Uniform1fvDelegate> ("glUniform1fv");
+            Uniform2fv = LoadFunction<Uniform2fvDelegate> ("glUniform2fv");
+            Uniform3fv = LoadFunction<Uniform3fvDelegate> ("glUniform3fv");
             Uniform4fv = LoadFunction<Uniform4fvDelegate> ("glUniform4fv");
+            UniformMatrix2fv = LoadFunction<UniformMatrix2fvDelegate> ("glUniformMatrix2fv");
+            UniformMatrix3fv = LoadFunction<UniformMatrix3fvDelegate> ("glUniformMatrix3fv");
+            UniformMatrix4fv = LoadFunction<UniformMatrix4fvDelegate> ("glUniformMatrix4fv");
             ReadPixelsInternal = LoadFunction<ReadPixelsDelegate>("glReadPixels");
+            // uniforms OpenGL Version >= 2.1
+            // ... UniformMatrix 2x3,2x4, 3x2, 3x4, 4x2, 4x3
+            // uniforms OpenGL Version >= 3.0
+            // ... Uniform 1ui,1uiv,2ui,2uiv,2ui,2uiv,2ui,2uiv
 
             ReadBuffer = LoadFunction<ReadBufferDelegate> ("glReadBuffer");
             DrawBuffer = LoadFunction<DrawBufferDelegate> ("glDrawBuffer");
@@ -1522,12 +1588,59 @@ namespace MonoGame.OpenGL
                 DepthRanged(min, max);
         }
 
-        internal static void Uniform1 (int location, int value) {
+        internal static void Uniform1(int location, int value)
+        {
             Uniform1i(location, value);
         }
+        
+        internal static unsafe void Uniform4(int location, Vector4 value)
+        {
+            Uniform4fv(location, 1, &value);
+        }
 
-        internal static unsafe void Uniform4 (int location, int size, float* value) {
-            Uniform4fv(location, size, value);
+        internal static void Uniform1(int location, float value)
+        {
+            Uniform1f(location, value);
+        }
+
+        internal static unsafe void Uniform1(int location, int count, int* value)
+        {
+            Uniform1iv(location, count, value);
+        }
+
+        internal static unsafe void Uniform1(int location, int count, float* value)
+        {
+            Uniform1fv(location, count, value);
+        }
+
+        internal static unsafe void Uniform2(int location, int count, Vector2* value)
+        {
+            Uniform2fv(location, count, value);
+        }
+
+        internal static unsafe void Uniform3(int location, int count, Vector3* value)
+        {
+            Uniform3fv(location, count, value);
+        }
+
+        internal static unsafe void Uniform4(int location, int count, Vector4* value)
+        {
+            Uniform4fv(location, count, value);
+        }
+
+        internal static unsafe void UniformMatrix2x2(int location, int count, bool transpose, float* value)
+        {
+            UniformMatrix2fv(location, count, transpose, value);
+        }
+
+        internal static unsafe void UniformMatrix3x3(int location, int count, bool transpose, float* value)
+        {
+            UniformMatrix3fv(location, count, transpose, value);
+        }
+
+        internal static unsafe void UniformMatrix4x4(int location, int count, bool transpose, Matrix* value)
+        {
+            UniformMatrix4fv(location, count, transpose, value);
         }
 
         internal unsafe static string GetString (StringName name)

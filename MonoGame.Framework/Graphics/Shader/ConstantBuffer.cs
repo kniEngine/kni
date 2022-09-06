@@ -4,57 +4,43 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using Microsoft.Xna.Platform.Graphics;
 using System;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    internal class ConstantBuffer : GraphicsResource
     {
-        private readonly string _name;
-        private readonly int[] _parameters;
-        private readonly int[] _offsets;
-        private readonly byte[] _buffer;
-
-        private ulong _stateKey;
-
-        private bool _dirty;
-        private bool Dirty { get { return _dirty; } }
-
-
+        private ConstantBufferStrategy _strategy;
+        
         public ConstantBuffer(GraphicsDevice device,
                               string name,
                               int[] parameterIndexes,
                               int[] parameterOffsets,
                               int sizeInBytes)
         {
+            _strategy = new ConcreteConstantBufferStrategy(device, name, parameterIndexes, parameterOffsets, sizeInBytes);
+
             GraphicsDevice = device;
-
-            _name = name;
-            _parameters = parameterIndexes;
-            _offsets = parameterOffsets;
-            _buffer = new byte[sizeInBytes];
-
-            PlatformInitialize();
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
         {
             GraphicsDevice = cloneSource.GraphicsDevice;
 
-            // Share the immutable types.
-            _name = cloneSource._name;
-            _parameters = cloneSource._parameters;
-            _offsets = cloneSource._offsets;
+            _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
+        }
 
-            // Clone the mutable types.
-            _buffer = (byte[])cloneSource._buffer.Clone();
-            PlatformInitialize();
+
+        internal void Apply(ShaderStage stage, int slot)
+        {
+            _strategy.PlatformApply(stage, slot);
         }
 
         internal void Clear()
         {
-            PlatformClear();
+            _strategy.PlatformClear();
         }
 
         public void Update(EffectParameterCollection parameters)
@@ -70,24 +56,24 @@ namespace Microsoft.Xna.Framework.Graphics
             // If our state key becomes larger than the 
             // next state key then the keys have rolled 
             // over and we need to reset.
-            if (_stateKey > EffectParameter.NextStateKey)
-                _stateKey = 0;
+            if (_strategy.StateKey > EffectParameter.NextStateKey)
+                _strategy.StateKey = 0;
             
-            for (var p = 0; p < _parameters.Length; p++)
+            for (var p = 0; p < _strategy.Parameters.Length; p++)
             {
-                var index = _parameters[p];
+                var index = _strategy.Parameters[p];
                 var param = parameters[index];
 
-                if (param.StateKey < _stateKey)
+                if (param.StateKey < _strategy.StateKey)
                     continue;
 
-                var offset = _offsets[p];
-                _dirty = true;
+                var offset = _strategy.Offsets[p];
+                _strategy.Dirty = true;
 
                 SetParameter(param, offset);
             }
 
-            _stateKey = EffectParameter.NextStateKey;
+            _strategy.StateKey = EffectParameter.NextStateKey;
         }
 
         private int SetParameter(EffectParameter param, int offset)
@@ -149,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (data is Array)
                 {
                     Array source = data as Array;
-                    Buffer.BlockCopy(source, 0, _buffer, offset, elementSize);
+                    Buffer.BlockCopy(source, 0, _strategy.Buffer, offset, elementSize);
                 }
                 else
                 {
@@ -163,16 +149,16 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Array source = data as Array;
                 int stride = (columns * elementSize);
-                Buffer.BlockCopy(source, 0, _buffer, offset, rows * stride);
+                Buffer.BlockCopy(source, 0, _strategy.Buffer, offset, rows * stride);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
                 Array source = data as Array;
                 int stride = (columns*elementSize);
-                Buffer.BlockCopy(source, stride*0, _buffer, offset + (rowSize*0), stride);
-                Buffer.BlockCopy(source, stride*1, _buffer, offset + (rowSize*1), stride);
-                Buffer.BlockCopy(source, stride*2, _buffer, offset + (rowSize*2), stride);
+                Buffer.BlockCopy(source, stride*0, _strategy.Buffer, offset + (rowSize*0), stride);
+                Buffer.BlockCopy(source, stride*1, _strategy.Buffer, offset + (rowSize*1), stride);
+                Buffer.BlockCopy(source, stride*2, _strategy.Buffer, offset + (rowSize*2), stride);
             }
             else
             {
@@ -180,7 +166,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int stride = (columns*elementSize);
                 for (int y = 0; y < rows; y++)
                 {
-                    Buffer.BlockCopy(source, stride * y, _buffer, offset + (rowSize * y), stride);
+                    Buffer.BlockCopy(source, stride * y, _strategy.Buffer, offset + (rowSize * y), stride);
                 }
             }
         }
@@ -188,10 +174,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            PlatformDispose(disposing);
-
             if (disposing)
             {
+                if (_strategy != null)
+                    _strategy.Dispose();
+
+                _strategy = null;
             }
 
             base.Dispose(disposing);

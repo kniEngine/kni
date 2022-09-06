@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -115,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private ShaderProgramCache _programCache;
         private ShaderProgram _shaderProgram = null;
 
-        static readonly float[] _posFixup = new float[4];
+        Vector4 _posFixup;
 
         private static BufferBindingInfo[] _bufferBindingInfos;
         private static int _activeBufferBindingInfosCount;
@@ -162,17 +164,21 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             for (var x = 0; x < attrs.Length; x++)
             {
-                if (attrs[x] && !_enabledVertexAttributes.Contains(x))
+                if (attrs[x])
                 {
-                    _enabledVertexAttributes.Add(x);
-                    GL.EnableVertexAttribArray(x);
-                    GraphicsExtensions.CheckGLError();
+                    if (_enabledVertexAttributes.Add(x))
+                    {
+                        GL.EnableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
                 }
-                else if (!attrs[x] && _enabledVertexAttributes.Contains(x))
+                else
                 {
-                    _enabledVertexAttributes.Remove(x);
-                    GL.DisableVertexAttribArray(x);
-                    GraphicsExtensions.CheckGLError();
+                    if (_enabledVertexAttributes.Remove(x))
+                    {
+                        GL.DisableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
                 }
             }
         }
@@ -208,8 +214,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!GraphicsCapabilities.SupportsInstancing && vertexBufferBinding.InstanceFrequency > 0)
                     throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
 
-                foreach (var element in attrInfo.Elements)
+                for (int e = 0; e < attrInfo.Elements.Count; e++)
                 {
+                    var element = attrInfo.Elements[e];
                     GL.VertexAttribPointer(element.AttributeLocation,
                         element.NumberOfElements,
                         element.VertexAttribPointerType,
@@ -234,11 +241,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (bindingsChanged)
             {
-                Array.Clear(_newEnabledVertexAttributes, 0, _newEnabledVertexAttributes.Length);
+                for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
+                    _newEnabledVertexAttributes[eva] = false;
                 for (var slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
-                    foreach (var element in _bufferBindingInfos[slot].AttributeInfo.Elements)
+                    for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    {
+                        var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
+                    }
                 }
                 _activeBufferBindingInfosCount = _vertexBuffers.Count;
             }
@@ -942,31 +953,28 @@ namespace Microsoft.Xna.Framework.Graphics
             // 1.0 or -1.0 to turn the rendering upside down for offscreen rendering. PosFixup.x
             // contains 1.0 to allow a mad.
 
-            _posFixup[0] = 1.0f;
-            _posFixup[1] = 1.0f;
-            if (UseHalfPixelOffset)
+            _posFixup.X = 1.0f;
+            _posFixup.Y = 1.0f;
+            if (!UseHalfPixelOffset)
             {
-                _posFixup[2] = (63.0f/64.0f)/Viewport.Width;
-                _posFixup[3] = -(63.0f/64.0f)/Viewport.Height;
+                _posFixup.Z = 0f;
+                _posFixup.W = 0f;
             }
             else
             {
-                _posFixup[2] = 0f;
-                _posFixup[3] = 0f;
+                _posFixup.Z =  (63.0f/64.0f)/Viewport.Width;
+                _posFixup.W = -(63.0f/64.0f)/Viewport.Height;
             }
 
             //If we have a render target bound (rendering offscreen)
             if (IsRenderTargetBound)
             {
                 //flip vertically
-                _posFixup[1] *= -1.0f;
-                _posFixup[3] *= -1.0f;
+                _posFixup.Y = -_posFixup.Y;
+                _posFixup.W = -_posFixup.W;
             }
-
-            fixed (float* floatPtr = _posFixup)
-            {
-                GL.Uniform4(posFixupLoc, 1, floatPtr);
-            }
+            
+            GL.Uniform4(posFixupLoc, _posFixup);
             GraphicsExtensions.CheckGLError();
         }
 

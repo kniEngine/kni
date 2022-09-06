@@ -366,6 +366,7 @@
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
+    <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
@@ -438,7 +439,7 @@
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
     <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
-    <Compile Include="Graphics\Shader\ConstantBuffer.OpenGL.cs" />
+    <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />

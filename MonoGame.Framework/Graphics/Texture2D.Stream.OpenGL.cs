@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
              return PlatformFromStream_IOS(graphicsDevice, stream);
 #elif ANDROID
             return PlatformFromStream_ANDROID(graphicsDevice, stream);
-#elif (DESKTOPGL && WINDOWS)
+#elif DESKTOPGL && (NET40 || NET40_OR_GREATER)
             return PlatformFromStream_DESKTOPGL(graphicsDevice, stream);
 #else
             byte[] bytes;

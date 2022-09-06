@@ -343,6 +343,7 @@
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
+    <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
@@ -381,7 +382,7 @@
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
     <Compile Include="Graphics\RenderTargetCube.DirectX.cs" />
     <Compile Include="Graphics\SamplerStateCollection.DirectX.cs" />
-    <Compile Include="Graphics\Shader\ConstantBuffer.DirectX.cs" />
+    <Compile Include="Graphics\Shader\ConcreteConstantBuffer.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
