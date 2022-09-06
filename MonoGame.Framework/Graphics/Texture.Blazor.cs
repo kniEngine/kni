@@ -30,12 +30,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
+                if (glTexture != null)
+                    glTexture.Dispose();
+                glTexture = null;
+                glLastSamplerState = null;
             }
-
-            if (glTexture != null)
-                glTexture.Dispose();
-            glTexture = null;
-            glLastSamplerState = null;
 
             base.Dispose(disposing);
         }
