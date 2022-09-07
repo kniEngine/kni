@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -117,7 +119,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     using (var writer = new BinaryWriter(stream))
                     {
-                        effect.Write(writer, options);
+                        Write(effect, writer, options);
                         result = new CompiledEffectContent(stream.ToArray());
                     }
                 }
@@ -131,6 +133,44 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 #else
             throw new NotImplementedException();
 #endif
+        }
+
+
+        private const string MGFXHeader = "MGFX";
+        private const int Version = 10;
+
+        /// <summary>
+        /// Writes the effect for loading later.
+        /// </summary>
+        private void Write(EffectObject effect, BinaryWriter writer, Options options)
+        {
+            // Write a very simple header for identification and versioning.
+            writer.Write(MGFXHeader.ToCharArray());
+            writer.Write((byte)Version);
+
+            // Write an simple identifier for DX11 vs GLSL
+            // so we can easily detect the correct shader type.
+            var profile = (byte)options.Profile.FormatId;
+            writer.Write(profile);
+
+            // Write the rest to a memory stream.
+            using (MemoryStream memStream = new MemoryStream())
+            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, options))
+            {
+                memWriter.WriteEffect(effect);
+
+                // Calculate a hash code from memory stream
+                // and write it to the header.
+                var effectKey = MonoGame.Framework.Utilities.Hash.ComputeHash(memStream);
+                writer.Write((Int32)effectKey);
+
+                //write content from memory stream to final stream.
+                memStream.WriteTo(writer.BaseStream);
+            }
+
+            // Write a tail to be used by the reader for validation.
+            if (Version >= 10)
+                writer.Write(MGFXHeader.ToCharArray());
         }
 
 #if WINDOWS
