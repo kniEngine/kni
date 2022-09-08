@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +19,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 			ParameterIndex = new List<int> ();
 			ParameterOffset = new List<int> ();
-			Parameters = new List<EffectObject.d3dx_parameter> ();
+			Parameters = new List<EffectObject.EffectParameterContent> ();
 
 			int minRegister = short.MaxValue;
 			int maxRegister = 0;
@@ -40,9 +46,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Size = Math.Max(maxRegister - minRegister, 0) * registerSize;
         }
 
-        private static EffectObject.d3dx_parameter GetParameterFromSymbol(MojoShader.MOJOSHADER_symbol symbol)
+        private static EffectObject.EffectParameterContent GetParameterFromSymbol(MojoShader.MOJOSHADER_symbol symbol)
         {
-            var param = new EffectObject.d3dx_parameter();
+            var param = new EffectObject.EffectParameterContent();
             param.rows = symbol.info.rows;
             param.columns = symbol.info.columns;
             param.name = symbol.name ?? string.Empty;
@@ -55,15 +61,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             switch (symbol.info.parameter_class)
             {
                 case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_SCALAR:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.SCALAR;
+                    param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
                     break;
 
                 case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_VECTOR:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.VECTOR;
+                    param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
                     break;
 
                 case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_MATRIX_COLUMNS:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.MATRIX_COLUMNS;
+                    param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
                     break;
 
                 default:
@@ -73,15 +79,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             switch (symbol.info.parameter_type)
             {
                 case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_BOOL:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.BOOL;
+                    param.type = EffectObject.PARAMETER_TYPE.BOOL;
                     break;
 
                 case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_FLOAT:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.FLOAT;
+                    param.type = EffectObject.PARAMETER_TYPE.FLOAT;
                     break;
 
                 case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_INT:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.INT;
+                    param.type = EffectObject.PARAMETER_TYPE.INT;
                     break;
 
                 default:
@@ -96,7 +102,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             if (param.member_count > 0)
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.member_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
 
                 var members = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_symbol>(
                     symbol.info.members, (int)symbol.info.member_count);
@@ -109,10 +115,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
             else
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.element_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
                 for (var i = 0; i < param.element_count; i++)
                 {
-                    var mparam = new EffectObject.d3dx_parameter();
+                    var mparam = new EffectObject.EffectParameterContent();
 
                     mparam.name = string.Empty;
                     mparam.semantic = string.Empty;

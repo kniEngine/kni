@@ -119,14 +119,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write(state.MipMapLevelOfDetailBias);
         }
 
-        private void WriteParameters(EffectObject.d3dx_parameter[] parameters, int count)
+        private void WriteParameters(EffectObject.EffectParameterContent[] parameters, int count)
         {
             Write7BitEncodedInt(count);
             for (var i = 0; i < count; i++)
                 WriteParameter(parameters[i]);
         }
 
-        private void WriteParameter(EffectObject.d3dx_parameter param)
+        private void WriteParameter(EffectObject.EffectParameterContent param)
         {
             var class_ = EffectObject.ToXNAParameterClass(param.class_);
             var type = EffectObject.ToXNAParameterType(param.type);
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        private void WriteTechniques(EffectObject.d3dx_technique[] techniques)
+        private void WriteTechniques(EffectObject.EffectTechniqueContent[] techniques)
         {
             Write((byte)techniques.Length);
             foreach (var technique in techniques)
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        private void WritePasses(EffectObject.d3dx_technique technique)
+        private void WritePasses(EffectObject.EffectTechniqueContent technique)
         {
             Write((byte)technique.pass_count);
             for (var p = 0; p < technique.pass_count; p++)
@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        private void WriteEffectPass(EffectObject.d3dx_pass pass)
+        private void WriteEffectPass(EffectObject.EffectPassContent pass)
         {
             Write(pass.name);
             WriteAnnotations(pass.annotation_handles);
@@ -266,7 +266,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write(rasterizerState.SlopeScaleDepthBias);
         }
 
-        private void WriteAnnotations(EffectObject.d3dx_parameter[] annotations)
+        private void WriteAnnotations(EffectObject.EffectParameterContent[] annotations)
         {
             var count = annotations == null ? 0 : annotations.Length;
             Write((byte)count);
