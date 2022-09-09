@@ -598,7 +598,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.
@@ -757,7 +759,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.
@@ -941,7 +945,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.
@@ -1059,7 +1065,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.
@@ -1218,7 +1226,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.
@@ -1402,7 +1412,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         continue;
                     }
 
-                    var currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    int currentGlyphIndex = spriteFont.GetGlyphIndexOrDefault(c);
+                    if (currentGlyphIndex == -1)
+                        throw new ArgumentException(SpriteFont.Errors.TextContainsUnresolvableCharacters, "text");
                     var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                     // The first character on a line might have a negative left side bearing.

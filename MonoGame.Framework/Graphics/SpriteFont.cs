@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 // Original code from SilverSprite Project
 using System;
 using System.Collections;
@@ -219,7 +221,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     continue;
                 }
 
-                var currentGlyphIndex = GetGlyphIndexOrDefault(c);
+                int currentGlyphIndex = GetGlyphIndexOrDefault(c);
+                if (currentGlyphIndex == -1)
+                    throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
+
                 Debug.Assert(currentGlyphIndex >= 0 && currentGlyphIndex < InternalGlyphs.Length, "currentGlyphIndex was outside the bounds of the array.");
                 var pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
@@ -298,10 +303,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                if (_defaultGlyphIndex != -1)
-                    return _defaultGlyphIndex;
-                else
-                    throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
+                return _defaultGlyphIndex;
             }
         }
         
