@@ -171,10 +171,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <param name="text">The text to measure.</param>
 		/// <returns>The size, in pixels, of 'text' when rendered in
 		/// this font.</returns>
-		public Vector2 MeasureString(string text)
+		public unsafe Vector2 MeasureString(string text)
 		{
-			var source = new CharacterSource(text);
-			return MeasureString(ref source);
+            char* pChars = stackalloc char[text.Length];
+            int* pGlyphIndices = stackalloc int[text.Length];
+            GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
+            return MeasureString(pChars, pGlyphIndices, text.Length);
 		}
 
 		/// <summary>
@@ -184,18 +186,18 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <param name="text">The text to measure.</param>
 		/// <returns>The size, in pixels, of 'text' when rendered in
 		/// this font.</returns>
-		public Vector2 MeasureString(StringBuilder text)
+		public unsafe Vector2 MeasureString(StringBuilder text)
 		{
-			var source = new CharacterSource(text);
-			return MeasureString(ref source);
+            char* pChars = stackalloc char[text.Length];
+            int* pGlyphIndices = stackalloc int[text.Length];
+            GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
+            return MeasureString(pChars, pGlyphIndices, text.Length);
 		}
 
-		private unsafe Vector2 MeasureString(ref CharacterSource text)
+		internal unsafe Vector2 MeasureString(char* pChars, int* pGlyphIndices, int charsCount)
 		{
-			if (text.Length == 0)
-            {
+			if (charsCount == 0)
 				return Vector2.Zero;
-			}
 
 			var width = 0.0f;
 			var finalLineHeight = (float)LineSpacing;
@@ -204,9 +206,9 @@ namespace Microsoft.Xna.Framework.Graphics
             var firstGlyphOfLine = true;
 
             fixed (Glyph* pGlyphs = InternalGlyphs)
-            for (var i = 0; i < text.Length; ++i)
+            for (var i = 0; i < charsCount; ++i)
             {
-                var c = text[i];
+                var c = pChars[i];
 
                 if (c == '\r')
                     continue;
@@ -221,7 +223,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     continue;
                 }
 
-                int currentGlyphIndex = GetGlyphIndexOrDefault(c);
+                int currentGlyphIndex = pGlyphIndices[i];
                 if (currentGlyphIndex == -1)
                     throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
 
@@ -257,86 +259,75 @@ namespace Microsoft.Xna.Framework.Graphics
         internal unsafe bool TryGetGlyphIndex(char c, out int index)
         {
             fixed (CharacterRegion* pRegions = _regions)
+                return TryGetGlyphIndex(pRegions, c, out index);
+        }
+        
+        private unsafe bool TryGetGlyphIndex(CharacterRegion* pRegions, char c, out int index)
+        {
+            // Get region Index
+            int regionIdx = -1;
+            var l = 0;
+            var r = _regions.Length - 1;
+            while (l <= r)
             {
-                // Get region Index 
-                int regionIdx = -1;
-                var l = 0;
-                var r = _regions.Length - 1;
-                while (l <= r)
+                var m = (l + r) >> 1;
+                Debug.Assert(m >= 0 && m < _regions.Length, "Index was outside the bounds of the array.");
+                if (pRegions[m].End < c)
                 {
-                    var m = (l + r) >> 1;                    
-                    Debug.Assert(m >= 0 && m < _regions.Length, "Index was outside the bounds of the array.");
-                    if (pRegions[m].End < c)
-                    {
-                        l = m + 1;
-                    }
-                    else if (pRegions[m].Start > c)
-                    {
-                        r = m - 1;
-                    }
-                    else
-                    {
-                        regionIdx = m;
-                        break;
-                    }
+                    l = m + 1;
                 }
-
-                if (regionIdx != -1)
+                else if (pRegions[m].Start > c)
                 {
-                    index = pRegions[regionIdx].StartIndex + (c - pRegions[regionIdx].Start);
-                    return true;
+                    r = m - 1;
                 }
                 else
                 {
-                    index = -1;
-                    return false;
+                    regionIdx = m;
+                    break;
+                }
+            }
+
+            if (regionIdx != -1)
+            {
+                index = pRegions[regionIdx].StartIndex + (c - pRegions[regionIdx].Start);
+                return true;
+            }
+            else
+            {
+                index = -1;
+                return false;
+            }
+        }
+
+        internal unsafe void GetGlyphIndexes(StringBuilder text, char* pChars, int* pGlyphIndices, int charsCount)
+        {
+            fixed (CharacterRegion* pRegions = _regions)
+            {
+                for (var i = 0; i < charsCount; i++)
+                {
+                    pChars[i] = text[i];
+                    if (!TryGetGlyphIndex(pRegions, pChars[i], out pGlyphIndices[i]))
+                    {
+                        pGlyphIndices[i] = _defaultGlyphIndex;
+                    }
                 }
             }
         }
 
-        internal int GetGlyphIndexOrDefault(char c)
+        internal unsafe void GetGlyphIndexes(string text, char* pChars, int* pGlyphIndices, int charsCount)
         {
-            int glyphIdx;
-            if (TryGetGlyphIndex(c, out glyphIdx))
+            fixed (CharacterRegion* pRegions = _regions)
             {
-                return glyphIdx;
-            }
-            else
-            {
-                return _defaultGlyphIndex;
+                for (var i = 0; i < charsCount; i++)
+                {
+                    pChars[i] = text[i];
+                    if (!TryGetGlyphIndex(pRegions, pChars[i], out pGlyphIndices[i]))
+                    {
+                        pGlyphIndices[i] = _defaultGlyphIndex;
+                    }
+                }
             }
         }
-        
-        private struct CharacterSource 
-        {
-			private readonly string _string;
-			private readonly StringBuilder _builder;
-
-			public CharacterSource(string s)
-			{
-				_string = s;
-				_builder = null;
-				Length = s.Length;
-			}
-
-			public CharacterSource(StringBuilder builder)
-			{
-				_builder = builder;
-				_string = null;
-				Length = _builder.Length;
-			}
-
-			public readonly int Length;
-			public char this [int index] 
-            {
-				get 
-                {
-					if (_string != null)
-						return _string[index];
-					return _builder[index];
-				}
-			}
-		}
 
         /// <summary>
         /// Struct that defines the spacing, Kerning, and bounds of a character.
