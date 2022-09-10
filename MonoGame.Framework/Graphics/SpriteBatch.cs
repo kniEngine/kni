@@ -247,28 +247,28 @@ namespace Microsoft.Xna.Framework.Graphics
             if (rotation == 0f)
             {
                 item.Set(position.X - origin.X,
-                        position.Y - origin.Y,
-                        w,
-                        h,
-                        color,
-                        _texCoordTL,
-                        _texCoordBR,
-                        layerDepth);
+                         position.Y - origin.Y,
+                         w,
+                         h,
+                         layerDepth,
+                         color,
+                         _texCoordTL,
+                         _texCoordBR);
             }
             else
             {
                 item.Set(position.X,
-                        position.Y,
-                        -origin.X,
-                        -origin.Y,
-                        w,
-                        h,
-                        (float)Math.Sin(rotation),
-                        (float)Math.Cos(rotation),
-                        color,
-                        _texCoordTL,
-                        _texCoordBR,
-                        layerDepth);
+                         position.Y,
+                         -origin.X,
+                         -origin.Y,
+                         w,
+                         h,
+                         (float)Math.Sin(rotation),
+                         (float)Math.Cos(rotation),
+                         layerDepth,
+                         color,
+                         _texCoordTL,
+                         _texCoordBR);
             }
 
             FlushIfNeeded();
@@ -384,28 +384,28 @@ namespace Microsoft.Xna.Framework.Graphics
             if (rotation == 0f)
             {
                 item.Set(destinationRectangle.X - origin.X,
-                        destinationRectangle.Y - origin.Y,
-                        destinationRectangle.Width,
-                        destinationRectangle.Height,
-                        color,
-                        _texCoordTL,
-                        _texCoordBR,
-                        layerDepth);
+                         destinationRectangle.Y - origin.Y,
+                         destinationRectangle.Width,
+                         destinationRectangle.Height,
+                         layerDepth,
+                         color,
+                         _texCoordTL,
+                         _texCoordBR);
             }
             else
             {
                 item.Set(destinationRectangle.X,
-                        destinationRectangle.Y,
-                        -origin.X,
-                        -origin.Y,
-                        destinationRectangle.Width,
-                        destinationRectangle.Height,
-                        (float)Math.Sin(rotation),
-                        (float)Math.Cos(rotation),
-                        color,
-                        _texCoordTL,
-                        _texCoordBR,
-                        layerDepth);
+                         destinationRectangle.Y,
+                         -origin.X,
+                         -origin.Y,
+                         destinationRectangle.Width,
+                         destinationRectangle.Height,
+                         (float)Math.Sin(rotation),
+                         (float)Math.Cos(rotation),
+                         layerDepth,
+                         color,
+                         _texCoordTL,
+                         _texCoordBR);
             }
 
             FlushIfNeeded();
@@ -459,10 +459,10 @@ namespace Microsoft.Xna.Framework.Graphics
                      position.Y,
                      size.X,
                      size.Y,
+                     0,
                      color,
                      _texCoordTL,
-                     _texCoordBR,
-                     0);
+                     _texCoordBR);
 
             FlushIfNeeded();
         }
@@ -502,10 +502,10 @@ namespace Microsoft.Xna.Framework.Graphics
                      destinationRectangle.Y,
                      destinationRectangle.Width,
                      destinationRectangle.Height,
+                     0,
                      color,
                      _texCoordTL,
-                     _texCoordBR,
-                     0);
+                     _texCoordBR);
 
             FlushIfNeeded();
         }
@@ -530,10 +530,10 @@ namespace Microsoft.Xna.Framework.Graphics
                      position.Y,
                      texture.Width,
                      texture.Height,
+                     0,
                      color,
                      Vector2.Zero,
-                     Vector2.One,
-                     0);
+                     Vector2.One);
 
             FlushIfNeeded();
         }
@@ -558,10 +558,10 @@ namespace Microsoft.Xna.Framework.Graphics
                      destinationRectangle.Y,
                      destinationRectangle.Width,
                      destinationRectangle.Height,
+                     0,
                      color,
                      Vector2.Zero,
-                     Vector2.One,
-                     0);
+                     Vector2.One);
 
             FlushIfNeeded();
         }
@@ -656,10 +656,11 @@ namespace Microsoft.Xna.Framework.Graphics
                              p.Y,
                              pCurrentGlyph->BoundsInTexture.Width,
                              pCurrentGlyph->BoundsInTexture.Height,
+                             0,
                              color,
                              pCurrentGlyph->TexCoordTL,
-                             pCurrentGlyph->TexCoordBR,
-                             0);
+                             pCurrentGlyph->TexCoordBR
+                             );
 
                     offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
                 }
@@ -919,28 +920,28 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (rotation == 0f)
                     {
                         item.Set(tpx,
-                                tpy,
-                                pCurrentGlyph->BoundsInTexture.Width * scale.X,
-                                pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                color,
-                                _texCoordTL,
-                                _texCoordBR,
-                                layerDepth);
+                                 tpy,
+                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,
+                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
+                                 layerDepth,
+                                 color,
+                                 _texCoordTL,
+                                 _texCoordBR);
                     }
                     else
                     {
                         item.Set(tpx,
-                                tpy,
-                                0,
-                                0,
-                                pCurrentGlyph->BoundsInTexture.Width * scale.X,
-                                pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                sin,
-                                cos,
-                                color,
-                                _texCoordTL,
-                                _texCoordBR,
-                                layerDepth);
+                                 tpy,
+                                 0,
+                                 0,
+                                 pCurrentGlyph->BoundsInTexture.Width * scale.X,
+                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
+                                 sin,
+                                 cos,
+                                 layerDepth,
+                                 color,
+                                 _texCoordTL,
+                                 _texCoordBR);
                     }
 
                     offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
@@ -1144,28 +1145,27 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (rotation == 0f)
                     {
                         item.Set(tpx,
-                                tpy,
-                                pCurrentGlyph->BoundsInTexture.Width * scale.X,
-                                pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                color,
-                                _texCoordTL,
-                                _texCoordBR,
-                                layerDepth);
+                                 tpy,
+                                 pCurrentGlyph->BoundsInTexture.Width  * scale.X,
+                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
+                                 layerDepth,
+                                 color,
+                                 _texCoordTL, _texCoordBR);
                     }
                     else
                     {
                         item.Set(tpx,
-                                tpy,
-                                0,
-                                0,
-                                pCurrentGlyph->BoundsInTexture.Width * scale.X,
-                                pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                sin,
-                                cos,
-                                color,
-                                _texCoordTL,
-                                _texCoordBR,
-                                layerDepth);
+                                 tpy,
+                                 0,
+                                 0,
+                                 pCurrentGlyph->BoundsInTexture.Width  * scale.X,
+                                 pCurrentGlyph->BoundsInTexture.Height * scale.Y,
+                                 sin,
+                                 cos,
+                                 layerDepth,
+                                 color,
+                                 _texCoordTL,
+                                 _texCoordBR);
                     }
 
                     offset.X += pCurrentGlyph->Width + (rtl ? pCurrentGlyph->LeftSideBearing : pCurrentGlyph->RightSideBearing);
