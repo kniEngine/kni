@@ -4,6 +4,7 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,36 +13,38 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public static class Preprocessor
+    public class Preprocessor
     {
-        public static string Preprocess(
-            EffectContent input, ContentProcessorContext context, IDictionary<string, string> defines)
+        public CppNet.Preprocessor _pp = new CppNet.Preprocessor();
+
+
+        internal void AddMacro(string name, string value)
+        {
+            _pp.addMacro(name, value);
+        }
+
+        public string Preprocess(EffectContent input, ContentProcessorContext context)
         {
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
             var dependencies = new List<string>();            
-
-            var pp = new CppNet.Preprocessor();
-
-            pp.EmitExtraLineInfo = false;
-            pp.addFeature(Feature.LINEMARKERS);
-            pp.setListener(new MGErrorListener(context.Logger));
-            pp.setFileSystem(new MGFileSystem(dependencies));
-            pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
-
-            foreach (var define in defines)
-                pp.addMacro(define.Key, define.Value);
-
+            
+            _pp.EmitExtraLineInfo = false;
+            _pp.addFeature(Feature.LINEMARKERS);
+            _pp.setListener(new MGErrorListener(context.Logger));
+            _pp.setFileSystem(new MGFileSystem(dependencies));
+            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
+            
             string effectCode = input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
+            _pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
 
             var result = new StringBuilder();
 
             var endOfStream = false;
             while (!endOfStream)
             {
-                var token = pp.token();
+                var token = _pp.token();
                 switch (token.getType())
                 {
                     case CppNet.Token.EOF:

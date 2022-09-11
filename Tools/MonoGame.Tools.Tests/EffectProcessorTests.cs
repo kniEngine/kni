@@ -56,13 +56,12 @@ namespace MonoGame.Tests.ContentPipeline
             var processorContext = new TestProcessorContext(TargetPlatform.Windows, Path.ChangeExtension(filename, ".xnb"));
 
             // Preprocess.
-            var mgDependencies = new List<string>();
-            var mgPreprocessed = Preprocessor.Preprocess(effect, processorContext,
-                    new Dictionary<string, string> { { "TEST2", "1" } }
-                );
+            Preprocessor pp = new Preprocessor();
+            pp.AddMacro("TEST2", "1");
+            var mgPreprocessed = pp.Preprocess(effect, processorContext);
 
-            Assert.That(mgDependencies, Has.Count.EqualTo(1));
-            Assert.That(Path.GetFileName(mgDependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));
+            Assert.That(processorContext._dependencies, Has.Count.EqualTo(1));
+            Assert.That(Path.GetFileName(processorContext._dependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));
 
             Assert.That(mgPreprocessed, Does.Not.Contain("Foo"));
             Assert.That(mgPreprocessed, Does.Contain("Bar"));

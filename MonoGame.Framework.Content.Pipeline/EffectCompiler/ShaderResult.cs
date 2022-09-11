@@ -26,53 +26,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public bool Debug { get; private set; }
 
-        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options)
+        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options, string effectCode)
         {
-            var macros = new Dictionary<string, string>();
-            macros.Add("MGFX", "1");
-
-            options.Profile.AddMacros(macros);
-
-            // If we're building shaders for debug set that flag too.
-            if (options.Debug)
-                macros.Add("DEBUG", "1");
-
-            if (!string.IsNullOrEmpty(options.Defines))
-            {
-                var defines = options.Defines.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var define in defines)
-                {
-                    var name = define;
-                    var value = "1";
-                    if (define.Contains("="))
-                    {
-                        var parts = define.Split('=');
-
-                        if (parts.Length > 0)
-                            name = parts[0].Trim();
-
-                        if (parts.Length > 1)
-                            value = parts[1].Trim();
-                    }
-
-                    macros.Add(name, value);
-                }
-            }
-
-            // Pre-process the file,
-            // resolving all #includes and macros.
-            string newFile = Preprocessor.Preprocess(input, context, macros);
-
             // Parse the resulting file for techniques and passes.
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
-            var tree = new Parser(new Scanner()).Parse(newFile, fullPath);
+            var tree = new Parser(new Scanner()).Parse(effectCode, fullPath);
             if (tree.Errors.Count > 0)
             {
                 var errors = String.Empty;
                 foreach (var error in tree.Errors)
+                {
+                    
                     errors += string.Format("{0}({1},{2}) : {3}\r\n", error.File, error.Line, error.Column, error.Message);
+                }
 
-                throw new Exception(errors);
+                throw new InvalidContentException(errors, input.Identity);
             }
 
             // Evaluate the results of the parse tree.
@@ -80,7 +48,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Remove the samplers and techniques so that the shader compiler
             // gets a clean file without any FX file syntax in it.
-            var cleanFile = newFile;
+            var cleanFile = effectCode;
             WhitespaceNodes(TokenType.Technique_Declaration, tree.Nodes, ref cleanFile);
             WhitespaceNodes(TokenType.Sampler_Declaration_States, tree.Nodes, ref cleanFile);
 
@@ -104,14 +72,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // We must have at least one technique.
             if (shaderInfo.Techniques.Count <= 0)
-                throw new Exception("The effect must contain at least one technique and pass!");
+                throw new InvalidContentException("The effect must contain at least one technique and pass!",
+                    input.Identity);
 
             result.Profile = options.Profile;
             result.Debug = options.Debug;
 
             return result;
         }
-                
+
         public static void WhitespaceNodes(TokenType type, List<ParseNode> nodes, ref string sourceFile)
         {
             for (var i = 0; i < nodes.Count; i++)

@@ -19,10 +19,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
         }
 
-        internal override void AddMacros(Dictionary<string, string> macros)
+        internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
         {
-            macros.Add("HLSL", "1");
-            macros.Add("SM4", "1");
+            yield return new KeyValuePair<string, string>("HLSL", "1");
+            yield return new KeyValuePair<string, string>("SM4", "1");
         }
 
         internal override void ValidateShaderModels(PassInfo pass)

@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return _profiles.FirstOrDefault(p => p.Name == name);
         }
 
-        internal abstract void AddMacros(Dictionary<string, string> macros);
+        internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
 
         internal abstract void ValidateShaderModels(PassInfo pass);
 

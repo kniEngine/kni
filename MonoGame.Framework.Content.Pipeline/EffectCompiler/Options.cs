@@ -10,8 +10,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         // - Include extra debug information in the compiled effect.
         public bool Debug;
-
-        // Semicolon-delimited define assignments
-        public string Defines;
     }
 }

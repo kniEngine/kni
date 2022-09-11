@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using MonoGame.Framework.Utilities;
+using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -59,13 +60,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
 
             options.Debug = DebugMode == EffectProcessorDebugMode.Debug;
-            options.Defines = Defines;
+
 
             // Parse the MGFX file expanding includes, macros, and returning the techniques.
             ShaderResult shaderResult;
             try
             {
-                shaderResult = ShaderResult.FromString(input, context, options);
+                string effectCode = Preprocess(input, context, options);
+
+                shaderResult = ShaderResult.FromString(input, context, options, effectCode);
             }
             catch (InvalidContentException)
             {
@@ -117,6 +120,48 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return result;
+        }
+        
+        // Pre-process the file,
+        // resolving all #includes and macros.
+        private string Preprocess(EffectContent input, ContentProcessorContext context, Options options)
+        {
+            Preprocessor pp = new Preprocessor();
+
+            pp.AddMacro("MGFX", "1");
+
+            // If we're building shaders for debug set that flag too.
+            if (options.Debug)
+                pp.AddMacro("DEBUG", "1");
+
+            foreach (var macro in options.Profile.GetMacros())
+                pp.AddMacro(macro.Key, macro.Value);
+
+            if (!string.IsNullOrEmpty(Defines))
+            {
+                var defines = Defines.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var define in defines)
+                {
+                    var name = define;
+                    var value = "1";
+                    if (define.Contains("="))
+                    {
+                        var parts = define.Split('=');
+
+                        if (parts.Length > 0)
+                            name = parts[0].Trim();
+
+                        if (parts.Length > 1)
+                            value = parts[1].Trim();
+                    }
+
+                    pp.AddMacro(name, value);
+                }
+            }
+
+            string effectCode = pp.Preprocess(input, context);
+
+            return effectCode;
         }
 
 

@@ -1,4 +1,11 @@
-﻿using System;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +17,7 @@ namespace MonoGame.Tests.ContentPipeline
         private readonly TargetPlatform _targetPlatform;
         private readonly string _outputFilename;
         private readonly TestContentBuildLogger _logger;
+        internal readonly List<string> _dependencies = new List<string>();
 
         public TestProcessorContext(    TargetPlatform targetPlatform,
                                         string outputFilename)
@@ -61,6 +69,7 @@ namespace MonoGame.Tests.ContentPipeline
 
         public override void AddDependency(string filename)
         {
+            _dependencies.Add(filename);
         }
 
         public override void AddOutputFile(string filename)
