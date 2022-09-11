@@ -20,15 +20,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public string FileContent { get; private set; }
 
-        public List<string> Dependencies { get; private set; }
-
         public List<string> AdditionalOutputFiles { get; private set; }
 
         public ShaderProfile Profile { get; private set; }
 
         public bool Debug { get; private set; }
 
-        static internal ShaderResult FromString(EffectContent input, Options options, IEffectCompilerOutput output)
+        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options)
         {
             var macros = new Dictionary<string, string>();
             macros.Add("MGFX", "1");
@@ -62,9 +60,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Pre-process the file,
-            // resolving all #includes and macros.            
-            var dependencies = new List<string>();
-            string newFile = Preprocessor.Preprocess(input, macros, dependencies, output);
+            // resolving all #includes and macros.
+            string newFile = Preprocessor.Preprocess(input, context, macros);
 
             // Parse the resulting file for techniques and passes.
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
@@ -90,7 +87,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Setup the rest of the shader info.
             ShaderResult result = new ShaderResult();
             result.ShaderInfo = shaderInfo;
-            result.Dependencies = dependencies;
             result.FilePath = fullPath;
             result.FileContent = cleanFile;
             result.AdditionalOutputFiles = new List<string>();

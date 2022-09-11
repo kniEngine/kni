@@ -7,7 +7,6 @@
     <Compile Include="EffectCompiler\EffectObject.cs" />
     <Compile Include="EffectCompiler\EffectObject.hlsl.cs" />
     <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
-    <Compile Include="EffectCompiler\IEffectCompilerOutput.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
     <Compile Include="EffectCompiler\MojoShader.cs" />
     <Compile Include="EffectCompiler\Options.cs" />

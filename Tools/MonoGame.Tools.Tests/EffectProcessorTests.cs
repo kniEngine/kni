@@ -52,12 +52,14 @@ namespace MonoGame.Tests.ContentPipeline
             effect.Name = Path.GetFileNameWithoutExtension(filename);
             effect.EffectCode = File.ReadAllText(filename);
 
+
+            var processorContext = new TestProcessorContext(TargetPlatform.Windows, Path.ChangeExtension(filename, ".xnb"));
+
             // Preprocess.
             var mgDependencies = new List<string>();
-            var mgPreprocessed = Preprocessor.Preprocess(effect, new Dictionary<string, string>
-            {
-                { "TEST2", "1" }
-            }, mgDependencies, new TestEffectCompilerOutput());
+            var mgPreprocessed = Preprocessor.Preprocess(effect, processorContext,
+                    new Dictionary<string, string> { { "TEST2", "1" } }
+                );
 
             Assert.That(mgDependencies, Has.Count.EqualTo(1));
             Assert.That(Path.GetFileName(mgDependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));
@@ -71,19 +73,6 @@ namespace MonoGame.Tests.ContentPipeline
 
             // Check that we can actually compile this file.
             BuildEffect(filename, TargetPlatform.Windows);
-        }
-
-        private class TestEffectCompilerOutput : IEffectCompilerOutput
-        {
-            public void WriteWarning(string file, int line, int column, string message)
-            {
-                Console.WriteLine("Warning: {0}({1},{2}): {3}", file, line, column, message);
-            }
-
-            public void WriteError(string file, int line, int column, string message)
-            {
-                Console.WriteLine("Error: {0}({1},{2}): {3}", file, line, column, message);
-            }
         }
 #endif
 

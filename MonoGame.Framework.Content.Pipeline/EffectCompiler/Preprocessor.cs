@@ -15,16 +15,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     public static class Preprocessor
     {
         public static string Preprocess(
-            EffectContent input, IDictionary<string, string> defines, List<string> dependencies,
-            IEffectCompilerOutput output)
+            EffectContent input, ContentProcessorContext context, IDictionary<string, string> defines)
         {
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
+            var dependencies = new List<string>();            
 
             var pp = new CppNet.Preprocessor();
 
             pp.EmitExtraLineInfo = false;
             pp.addFeature(Feature.LINEMARKERS);
-            pp.setListener(new MGErrorListener(output));
+            pp.setListener(new MGErrorListener(context.Logger));
             pp.setFileSystem(new MGFileSystem(dependencies));
             pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
 
@@ -74,6 +74,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
                 }
             }
+
+            // Add the include dependencies so that if they change
+            // it will trigger a rebuild of this effect.
+            foreach (var dep in dependencies)
+                context.AddDependency(dep);
 
             return result.ToString();
         }
@@ -162,26 +167,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private class MGErrorListener : PreprocessorListener
         {
-            private readonly IEffectCompilerOutput _output;
+            private readonly ContentBuildLogger _logger;
 
-            public MGErrorListener(IEffectCompilerOutput output)
+            public MGErrorListener(ContentBuildLogger logger)
             {
-                _output = output;
+                _logger = logger;
             }
 
             public void handleWarning(Source source, int line, int column, string msg)
             {
-                _output.WriteWarning(GetPath(source), line, column, msg);
+                _logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
             }
 
             public void handleError(Source source, int line, int column, string msg)
             {
-                _output.WriteError(GetPath(source), line, column, msg);
+                throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
             }
 
-            private string GetPath(Source source)
+            private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
             {
-                return ((MGStringLexerSource) source).Path;
+                string file = ((MGStringLexerSource)source).Path;
+                return new ContentIdentity(file, null, line + "," + column);
             }
 
             public void handleSourceChange(Source source, string ev)

@@ -65,13 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             ShaderResult shaderResult;
             try
             {
-                shaderResult = ShaderResult.FromString(input, options,
-                    new ContentPipelineEffectCompilerOutput(context));
-
-                // Add the include dependencies so that if they change
-                // it will trigger a rebuild of this effect.
-                foreach (var dep in shaderResult.Dependencies)
-                    context.AddDependency(dep);
+                shaderResult = ShaderResult.FromString(input, context, options);
             }
             catch (InvalidContentException)
             {
@@ -161,31 +155,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Write a tail to be used by the reader for validation.
             if (Version >= 10)
                 writer.Write(MGFXHeader.ToCharArray());
-        }
-
-        private class ContentPipelineEffectCompilerOutput : IEffectCompilerOutput
-        {
-            private readonly ContentProcessorContext _context;
-
-            public ContentPipelineEffectCompilerOutput(ContentProcessorContext context)
-            {
-                _context = context;
-            }
-
-            public void WriteWarning(string file, int line, int column, string message)
-            {
-                _context.Logger.LogWarning(null, CreateContentIdentity(file, line, column), message);
-            }
-
-            public void WriteError(string file, int line, int column, string message)
-            {
-                throw new InvalidContentException(message, CreateContentIdentity(file, line, column));
-            }
-
-            private static ContentIdentity CreateContentIdentity(string file, int line, int column)
-            {
-                return new ContentIdentity(file, null, line + "," + column);
-            }
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
