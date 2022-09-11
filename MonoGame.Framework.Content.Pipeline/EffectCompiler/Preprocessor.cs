@@ -1,17 +1,24 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CppNet;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     public static class Preprocessor
     {
         public static string Preprocess(
-            string effectCode, string filePath, IDictionary<string, string> defines, List<string> dependencies,
+            EffectContent input, IDictionary<string, string> defines, List<string> dependencies,
             IEffectCompilerOutput output)
         {
-            var fullPath = Path.GetFullPath(filePath);
+            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
 
             var pp = new CppNet.Preprocessor();
 
@@ -24,6 +31,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             foreach (var define in defines)
                 pp.addMacro(define.Key, define.Value);
 
+            string effectCode = input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
             pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));

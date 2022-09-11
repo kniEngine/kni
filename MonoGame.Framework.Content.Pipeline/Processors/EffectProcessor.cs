@@ -53,7 +53,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public override CompiledEffectContent Process(EffectContent input, ContentProcessorContext context)
         {
             var options = new Options();
-            var sourceFile = input.Identity.SourceFilename;
 
             options.Profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
             if (options.Profile == null)
@@ -66,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             ShaderResult shaderResult;
             try
             {
-                shaderResult = ShaderResult.FromFile(sourceFile, options, 
+                shaderResult = ShaderResult.FromString(input, options,
                     new ContentPipelineEffectCompilerOutput(context));
 
                 // Add the include dependencies so that if they change

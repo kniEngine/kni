@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using NUnit.Framework;
@@ -6,6 +12,7 @@ using System.IO;
 #if DIRECTX
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 #endif
 
 namespace MonoGame.Tests.ContentPipeline
@@ -39,13 +46,15 @@ namespace MonoGame.Tests.ContentPipeline
         [Test]
         public void TestPreprocessor()
         {
-            var effectFile = "Assets/Effects/PreprocessorTest.fx";
-            var effectCode = File.ReadAllText(effectFile);
-            var fullPath = Path.GetFullPath(effectFile);
+            var filename = "Assets/Effects/PreprocessorTest.fx";
+            var effect = new EffectContent();
+            effect.Identity = new ContentIdentity(filename);
+            effect.Name = Path.GetFileNameWithoutExtension(filename);
+            effect.EffectCode = File.ReadAllText(filename);
 
             // Preprocess.
             var mgDependencies = new List<string>();
-            var mgPreprocessed = Preprocessor.Preprocess(effectCode, fullPath, new Dictionary<string, string>
+            var mgPreprocessed = Preprocessor.Preprocess(effect, new Dictionary<string, string>
             {
                 { "TEST2", "1" }
             }, mgDependencies, new TestEffectCompilerOutput());
@@ -61,7 +70,7 @@ namespace MonoGame.Tests.ContentPipeline
             Assert.That(mgPreprocessed, Does.Not.Contain("BAR"));
 
             // Check that we can actually compile this file.
-            BuildEffect(effectFile, TargetPlatform.Windows);
+            BuildEffect(filename, TargetPlatform.Windows);
         }
 
         private class TestEffectCompilerOutput : IEffectCompilerOutput

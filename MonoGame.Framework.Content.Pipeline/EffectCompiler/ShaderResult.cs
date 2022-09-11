@@ -2,10 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -25,14 +28,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public bool Debug { get; private set; }
 
-
-        static internal ShaderResult FromFile(string path, Options options, IEffectCompilerOutput output)
-        {
-            var effectSource = File.ReadAllText(path);
-            return FromString(effectSource, path, options, output);
-        }
-
-        static internal ShaderResult FromString(string effectSource, string filePath, Options options, IEffectCompilerOutput output)
+        static internal ShaderResult FromString(EffectContent input, Options options, IEffectCompilerOutput output)
         {
             var macros = new Dictionary<string, string>();
             macros.Add("MGFX", "1");
@@ -66,12 +62,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Pre-process the file,
-            // resolving all #includes and macros.
-            var fullPath = Path.GetFullPath(filePath);
+            // resolving all #includes and macros.            
             var dependencies = new List<string>();
-            string newFile = Preprocessor.Preprocess(effectSource, fullPath, macros, dependencies, output);
+            string newFile = Preprocessor.Preprocess(input, macros, dependencies, output);
 
             // Parse the resulting file for techniques and passes.
+            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
             var tree = new Parser(new Scanner()).Parse(newFile, fullPath);
             if (tree.Errors.Count > 0)
             {
