@@ -12,8 +12,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     internal partial class ConstantBufferData
     {
         public ConstantBufferData (string name,
-                                MojoShader.MOJOSHADER_symbolRegisterSet set, 
-                                MojoShader.MOJOSHADER_symbol[] symbols)
+                                MojoShader.SymbolRegisterSet set, 
+                                MojoShader.Symbol[] symbols)
 		{
 			Name = name ?? string.Empty;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			int minRegister = short.MaxValue;
 			int maxRegister = 0;
 
-			var registerSize = (set == MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL ? 1 : 4) * 4;
+			var registerSize = (set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
 
 			foreach (var symbol in symbols) {
 				if (symbol.register_set != set)
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Size = Math.Max(maxRegister - minRegister, 0) * registerSize;
         }
 
-        private static EffectObject.EffectParameterContent GetParameterFromSymbol(MojoShader.MOJOSHADER_symbol symbol)
+        private static EffectObject.EffectParameterContent GetParameterFromSymbol(MojoShader.Symbol symbol)
         {
             var param = new EffectObject.EffectParameterContent();
             param.rows = symbol.info.rows;
@@ -54,21 +54,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             param.name = symbol.name ?? string.Empty;
             param.semantic = string.Empty; // TODO: How do i do this with only MojoShader?
 
-            var registerSize = (symbol.register_set == MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL ? 1 : 4) * 4;
+            var registerSize = (symbol.register_set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
             var offset = (int)symbol.register_index * registerSize;
             param.bufferOffset = offset;
 
             switch (symbol.info.parameter_class)
             {
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_SCALAR:
+                case MojoShader.SymbolClass.SCALAR:
                     param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_VECTOR:
+                case MojoShader.SymbolClass.VECTOR:
                     param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_MATRIX_COLUMNS:
+                case MojoShader.SymbolClass.MATRIX_COLUMNS:
                     param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
                     break;
 
@@ -78,15 +78,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             switch (symbol.info.parameter_type)
             {
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_BOOL:
+                case MojoShader.SymbolType.BOOL:
                     param.type = EffectObject.PARAMETER_TYPE.BOOL;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_FLOAT:
+                case MojoShader.SymbolType.FLOAT:
                     param.type = EffectObject.PARAMETER_TYPE.FLOAT;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_INT:
+                case MojoShader.SymbolType.INT:
                     param.type = EffectObject.PARAMETER_TYPE.INT;
                     break;
 
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
 
-                var members = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_symbol>(
+                var members = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
                     symbol.info.members, (int)symbol.info.member_count);
 
                 for (var i = 0; i < param.member_count; i++)

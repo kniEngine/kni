@@ -616,35 +616,35 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
         }
 
-        static internal VertexElementUsageContent ToXNAVertexElementUsage(MojoShader.MOJOSHADER_usage usage)
+        static internal VertexElementUsageContent ToXNAVertexElementUsage(MojoShader.Usage usage)
         {
             switch (usage)
             {
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_POSITION:
+                case MojoShader.Usage.POSITION:
                     return VertexElementUsageContent.Position;
-		        case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BLENDWEIGHT:
+		        case MojoShader.Usage.BLENDWEIGHT:
                     return VertexElementUsageContent.BlendWeight;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BLENDINDICES:
+                case MojoShader.Usage.BLENDINDICES:
                     return VertexElementUsageContent.BlendIndices;
-		        case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_NORMAL:
+		        case MojoShader.Usage.NORMAL:
                     return VertexElementUsageContent.Normal;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_POINTSIZE:
+                case MojoShader.Usage.POINTSIZE:
                     return VertexElementUsageContent.PointSize;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TEXCOORD:
+                case MojoShader.Usage.TEXCOORD:
                     return VertexElementUsageContent.TextureCoordinate;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TANGENT:
+                case MojoShader.Usage.TANGENT:
                     return VertexElementUsageContent.Tangent;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BINORMAL:
+                case MojoShader.Usage.BINORMAL:
                     return VertexElementUsageContent.Binormal;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TESSFACTOR:
+                case MojoShader.Usage.TESSFACTOR:
                     return VertexElementUsageContent.TessellateFactor;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_COLOR:
+                case MojoShader.Usage.COLOR:
                     return VertexElementUsageContent.Color;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_FOG:
+                case MojoShader.Usage.FOG:
                     return VertexElementUsageContent.Fog;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_DEPTH:
+                case MojoShader.Usage.DEPTH:
                     return VertexElementUsageContent.Depth;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_SAMPLE:
+                case MojoShader.Usage.SAMPLE:
                     return VertexElementUsageContent.Sample;
 
                 default:
@@ -777,19 +777,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                         switch (sampler.type)
                         {
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_1D:
+                            case MojoShader.SamplerType.SAMPLER_1D:
                                 param.type = PARAMETER_TYPE.TEXTURE1D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_2D:
+                            case MojoShader.SamplerType.SAMPLER_2D:
                                 param.type = PARAMETER_TYPE.TEXTURE2D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_VOLUME:
+                            case MojoShader.SamplerType.SAMPLER_VOLUME:
                                 param.type = PARAMETER_TYPE.TEXTURE3D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_CUBE:
+                            case MojoShader.SamplerType.SAMPLER_CUBE:
                                 param.type = PARAMETER_TYPE.TEXTURECUBE;
                                 break;
                         }
