@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -15,12 +17,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private static readonly Regex GlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
 
         public OpenGLShaderProfile()
-            : base("OpenGL", ShaderProfileType.OpenGL)
+            : base("OpenGL", ShaderProfileType.OpenGL_Mojo)
         {                
         }
 
         internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
         {
+            yield return new KeyValuePair<string, string>("__OPENGL__", "1");
+            yield return new KeyValuePair<string, string>("__MOJOSHADER__", "1");
+
+            // deprecated macros. Left for backward compatibility with MonoGame.
             yield return new KeyValuePair<string, string>("GLSL", "1");
             yield return new KeyValuePair<string, string>("OPENGL", "1");
         }

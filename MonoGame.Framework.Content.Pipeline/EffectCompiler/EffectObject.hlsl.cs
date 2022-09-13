@@ -28,6 +28,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility;
                 }
 
+                // force D3DCompiler to generate legacy bytecode that is compatible with MojoShader.
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo)
+                {
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
+                }
+
                 if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
                 {
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.SkipOptimization;

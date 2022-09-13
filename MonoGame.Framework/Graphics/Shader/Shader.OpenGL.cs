@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private static ShaderProfileType PlatformProfile()
         {
-            return ShaderProfileType.OpenGL;
+            return ShaderProfileType.OpenGL_Mojo;
         }
 
         private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)

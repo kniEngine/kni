@@ -38,15 +38,15 @@ float4 PS_Main(VSOutput input) : COLOR0
     return input.Color;
 }
 
-#if SM4
-
-#define PS_PROFILE ps_4_0
-#define VS_PROFILE vs_4_0
-
-#else
+#if __OPENGL__
 
 #define PS_PROFILE ps_3_0
 #define VS_PROFILE vs_3_0
+
+#else
+
+#define PS_PROFILE ps_4_0
+#define VS_PROFILE vs_4_0
 
 #endif
 

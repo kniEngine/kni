@@ -43,7 +43,7 @@ namespace MonoGame.EffectCompiler
                 TargetPlatform targetPlatform;
                 if (options.Profile == ShaderProfileType.DirectX_11)
                     targetPlatform = TargetPlatform.Windows;
-                else if (options.Profile == ShaderProfileType.OpenGL)
+                else if (options.Profile == ShaderProfileType.OpenGL_Mojo)
                     targetPlatform = TargetPlatform.DesktopGL;
                 else
                     throw new InvalidOperationException("Profile");

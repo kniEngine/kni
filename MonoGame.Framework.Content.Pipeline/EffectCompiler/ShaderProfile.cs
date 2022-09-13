@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +17,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     public enum ShaderProfileType
     {
-        OpenGL     = 0,
-        DirectX_11 = 1,
+        OpenGL_Mojo = 0,
+        DirectX_11  = 1,
     }
 
     [TypeConverter(typeof(StringConverter))]
@@ -30,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile OpenGL = FromName("OpenGL");
+        public static readonly ShaderProfile OpenGL_Mojo = FromName("OpenGL_Mojo");
 
         public static readonly ShaderProfile DirectX_11 = FromName("DirectX_11");
 

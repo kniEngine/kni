@@ -12,8 +12,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
     internal enum ShaderProfileType
     {
-        OpenGL     = 0,
-        DirectX_11 = 1,
+        OpenGL_Mojo = 0,
+        DirectX_11  = 1,
     }
 
     // TODO: We should convert the types below 
