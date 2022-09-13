@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile OpenGL_Mojo = FromName("OpenGL_Mojo");
+        public static readonly ShaderProfile OpenGL_Mojo = FromType(ShaderProfileType.OpenGL_Mojo);
 
-        public static readonly ShaderProfile DirectX_11 = FromName("DirectX_11");
+        public static readonly ShaderProfile DirectX_11 = FromType(ShaderProfileType.DirectX_11);
 
         /// <summary>
         /// Returns all the loaded shader profiles.
@@ -66,11 +66,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
         /// <summary>
-        /// Returns the profile by name or null if no match is found.
+        /// Returns the profile by type or null if no match is found.
         /// </summary>
-        public static ShaderProfile FromName(string name)
+        public static ShaderProfile FromType(ShaderProfileType profileType)
         {
-            return _profiles.FirstOrDefault(p => p.Name == name);
+            return _profiles.FirstOrDefault(p => p.ProfileType == profileType);
         }
 
         internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
