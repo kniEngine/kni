@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using SharpDX.Direct3D;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 // Copyright (C)2022 Nick Kastellanos
 
@@ -8,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal partial class ShaderData
     {
-        public static ShaderData CreateHLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, bool debug)
+        public static ShaderData CreateHLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
         {
             var dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
             dxshader._attributes = new Attribute[0];
@@ -17,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             var stripFlags = SharpDX.D3DCompiler.StripFlags.CompilerStripReflectionData |
                              SharpDX.D3DCompiler.StripFlags.CompilerStripTestBlobs;
 
-            if (!debug)
+            if (debugMode != EffectProcessorDebugMode.Debug)
                 stripFlags |= SharpDX.D3DCompiler.StripFlags.CompilerStripDebugInformation;
 
             using (var original = new SharpDX.D3DCompiler.ShaderBytecode(byteCode))

@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 namespace MonoGame.EffectCompiler
 {
     public enum ShaderProfile
@@ -20,8 +22,8 @@ namespace MonoGame.EffectCompiler
 
         public ShaderProfile Profile = ShaderProfile.OpenGL;
 
-        [CommandLineParser.Name("Debug", "\t\t - Include extra debug information in the compiled effect.")]
-        public bool Debug;
+        [CommandLineParser.Name("Config", "\t\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
+        public string Config;
 
         [CommandLineParser.Name("Defines", "\t - Semicolon-delimited define assignments")]
         public string Defines;

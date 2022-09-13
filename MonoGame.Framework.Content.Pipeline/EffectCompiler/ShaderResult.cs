@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -24,9 +25,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public ShaderProfile Profile { get; private set; }
 
-        public bool Debug { get; private set; }
+        public EffectProcessorDebugMode Debug { get; private set; }
 
-        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options, string effectCode)
+        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options, EffectProcessorDebugMode debugMode, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
@@ -76,7 +77,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     input.Identity);
 
             result.Profile = options.Profile;
-            result.Debug = options.Debug;
+            result.Debug = debugMode;
 
             return result;
         }

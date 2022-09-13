@@ -36,6 +36,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// </summary>
         /// <value>A list of define assignments delimited by semicolons.</value>
         public virtual string Defines { get { return defines; } set { defines = value; } }
+        
 
         /// <summary>
         /// Initializes a new instance of EffectProcessor.
@@ -53,14 +54,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <remarks>If you get an error during processing, compilation stops immediately. The effect processor displays an error message. Once you fix the current error, it is possible you may get more errors on subsequent compilation attempts.</remarks>
         public override CompiledEffectContent Process(EffectContent input, ContentProcessorContext context)
         {
+            if (DebugMode == EffectProcessorDebugMode.Auto)
+            {
+                if (String.Equals(context.BuildConfiguration, "Debug", StringComparison.OrdinalIgnoreCase))
+                    DebugMode = EffectProcessorDebugMode.Debug;
+            }
+
             var options = new Options();
 
             options.Profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
             if (options.Profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
-
-            options.Debug = DebugMode == EffectProcessorDebugMode.Debug;
-
+            
 
             // Parse the MGFX file expanding includes, macros, and returning the techniques.
             ShaderResult shaderResult;
@@ -68,7 +73,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             {
                 string effectCode = Preprocess(input, context, options);
 
-                shaderResult = ShaderResult.FromString(input, context, options, effectCode);
+                shaderResult = ShaderResult.FromString(input, context, options, DebugMode, effectCode);
             }
             catch (InvalidContentException)
             {
@@ -121,7 +126,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return result;
         }
-        
+
+
         // Pre-process the file,
         // resolving all #includes and macros.
         private string Preprocess(EffectContent input, ContentProcessorContext context, Options options)
@@ -131,7 +137,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             pp.AddMacro("MGFX", "1");
 
             // If we're building shaders for debug set that flag too.
-            if (options.Debug)
+            if (DebugMode == EffectProcessorDebugMode.Debug)
                 pp.AddMacro("DEBUG", "1");
 
             foreach (var macro in options.Profile.GetMacros())

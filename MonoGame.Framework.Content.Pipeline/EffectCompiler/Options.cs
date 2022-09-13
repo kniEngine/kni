@@ -7,8 +7,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     internal class Options
     {
         public ShaderProfile Profile = ShaderProfile.OpenGL;
-
-        // - Include extra debug information in the compiled effect.
-        public bool Debug;
     }
 }
