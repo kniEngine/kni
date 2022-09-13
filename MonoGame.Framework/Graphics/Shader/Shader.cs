@@ -10,6 +10,12 @@ using System.IO;
 namespace Microsoft.Xna.Framework.Graphics
 {
 
+    internal enum ShaderProfileType
+    {
+        OpenGL     = 0,
+        DirectX_11 = 1,
+    }
+
     // TODO: We should convert the types below 
     // into the start of a Shader reflection API.
 
@@ -46,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Returns the platform specific shader profile identifier.
         /// </summary>
-        public static int Profile { get { return PlatformProfile(); } }
+        public static ShaderProfileType Profile { get { return PlatformProfile(); } }
 
         /// <summary>
         /// A hash value which can be used to compare shaders.

@@ -13,15 +13,21 @@ using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
+    public enum ShaderProfileType
+    {
+        OpenGL     = 0,
+        DirectX_11 = 1,
+    }
+
     [TypeConverter(typeof(StringConverter))]
     public abstract class ShaderProfile
     {
         private static readonly LoadedTypeCollection<ShaderProfile> _profiles = new LoadedTypeCollection<ShaderProfile>();
 
-        protected ShaderProfile(string name, byte formatId)
+        protected ShaderProfile(string name, ShaderProfileType profileType)
         {
             Name = name;
-            FormatId = formatId;
+            ProfileType = profileType;
         }
 
         public static readonly ShaderProfile OpenGL = FromName("OpenGL");
@@ -44,7 +50,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// <summary>
         /// Returns the format identifier used in the MGFX file format.
         /// </summary>
-        public byte FormatId { get; private set; }
+        public ShaderProfileType ProfileType { get; private set; }
 
         internal abstract bool Supports(string platform);
         

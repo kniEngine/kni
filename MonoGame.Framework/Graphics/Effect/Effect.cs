@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -30,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             public readonly int Signature;
             public readonly int Version;
-            public readonly int Profile;
+            public readonly ShaderProfileType Profile;
             public readonly int EffectKey;
             public readonly int HeaderSize;
 
@@ -39,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int offset = 0;
                 Signature = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
                 Version = (int)effectCode[index + offset]; offset += 1;
-                Profile = (int)effectCode[index + offset]; offset += 1;
+                Profile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
                 EffectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
                 HeaderSize = offset;
             }

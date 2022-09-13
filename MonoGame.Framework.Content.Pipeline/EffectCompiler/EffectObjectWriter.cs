@@ -11,13 +11,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     class EffectObjectWriter : BinaryWriter
     {
         private readonly int Version;
-        private readonly ShaderProfile _profile;
+        private readonly ShaderProfileType _profile;
 
-        public EffectObjectWriter(Stream output, int version, ShaderProfile profile) : base(output)
+        public EffectObjectWriter(Stream output, int version, ShaderProfileType profileType) : base(output)
         {
             System.Diagnostics.Debug.Assert(version == 10);
             this.Version = version;
-            this._profile = profile;
+            this._profile = profileType;
         }
 
         protected void WritePackedInt(int value)

@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private static readonly Regex HlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(9_1|9_2|9_3))?$", RegexOptions.Compiled);
 
         public DirectX11ShaderProfile()
-            : base("DirectX_11", 1)
+            : base("DirectX_11", ShaderProfileType.DirectX_11)
         {
         }
 

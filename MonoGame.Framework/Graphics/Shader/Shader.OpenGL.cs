@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -17,9 +19,9 @@ namespace Microsoft.Xna.Framework.Graphics
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
 
-        private static int PlatformProfile()
+        private static ShaderProfileType PlatformProfile()
         {
-            return 0;
+            return ShaderProfileType.OpenGL;
         }
 
         private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)

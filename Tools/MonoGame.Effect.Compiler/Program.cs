@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace MonoGame.EffectCompiler
@@ -40,12 +41,12 @@ namespace MonoGame.EffectCompiler
                 var processor = new EffectProcessor();
                 processor.Defines = options.Defines;
                 TargetPlatform targetPlatform;
-                if (options.Profile == ShaderProfile.DirectX_11)
+                if (options.Profile == ShaderProfileType.DirectX_11)
                     targetPlatform = TargetPlatform.Windows;
-                else if (options.Profile == ShaderProfile.OpenGL)
+                else if (options.Profile == ShaderProfileType.OpenGL)
                     targetPlatform = TargetPlatform.DesktopGL;
                 else
-                    throw new InvalidOperationException("");
+                    throw new InvalidOperationException("Profile");
 
                 var processorContext = new ProcessorContext(logger, targetPlatform, options.OutputFile, options.Config);
                 var output = processor.Process(content, processorContext);

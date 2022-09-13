@@ -23,8 +23,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // in the first place.
                 //shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.NoPreshader;
 
-                if (shaderResult.Profile == ShaderProfile.DirectX_11)
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11)
+                {
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility;
+                }
 
                 if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
                 {

@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     using (var writer = new BinaryWriter(stream))
                     {
-                        Write(effect, writer, profile);
+                        Write(effect, writer, profile.ProfileType);
                         result = new CompiledEffectContent(stream.ToArray());
                     }
                 }
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <summary>
         /// Writes the effect for loading later.
         /// </summary>
-        private void Write(EffectObject effect, BinaryWriter writer, ShaderProfile profile)
+        private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
             writer.Write(MGFXHeader.ToCharArray());
@@ -183,11 +183,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write an simple identifier for DX11 vs GLSL
             // so we can easily detect the correct shader type.
-            writer.Write((byte)profile.FormatId);
+            writer.Write((byte)profileType);
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, profile))
+            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, profileType))
             {
                 memWriter.WriteEffect(effect);
 

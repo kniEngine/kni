@@ -4,13 +4,10 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
+
 namespace MonoGame.EffectCompiler
 {
-    public enum ShaderProfile
-    {
-        OpenGL,
-        DirectX_11,
-    }
 
     public class Options
     {
@@ -20,7 +17,7 @@ namespace MonoGame.EffectCompiler
         [CommandLineParser.Required]
         public string OutputFile = string.Empty;
 
-        public ShaderProfile Profile = ShaderProfile.OpenGL;
+        public ShaderProfileType Profile = (ShaderProfileType)(-1);
 
         [CommandLineParser.Name("Config", "\t\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
         public string Config;

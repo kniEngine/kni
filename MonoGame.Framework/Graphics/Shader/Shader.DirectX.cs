@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System.IO;
 using SharpDX.Direct3D11;
 
@@ -46,9 +48,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static int PlatformProfile()
+        private static ShaderProfileType PlatformProfile()
         {
-            return 1;
+            return ShaderProfileType.DirectX_11;
         }
 
         private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)
