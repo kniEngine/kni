@@ -60,10 +60,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            var options = new Options();
-
-            options.Profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
-            if (options.Profile == null)
+            ShaderProfile profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
+            if (profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             
 
@@ -71,9 +69,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             ShaderResult shaderResult;
             try
             {
-                string effectCode = Preprocess(input, context, options);
+                string effectCode = Preprocess(input, context, profile);
 
-                shaderResult = ShaderResult.FromString(input, context, options, DebugMode, effectCode);
+                shaderResult = ShaderResult.FromString(input, context, profile, DebugMode, effectCode);
             }
             catch (InvalidContentException)
             {
@@ -114,7 +112,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     using (var writer = new BinaryWriter(stream))
                     {
-                        Write(effect, writer, options);
+                        Write(effect, writer, profile);
                         result = new CompiledEffectContent(stream.ToArray());
                     }
                 }
@@ -130,7 +128,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         // Pre-process the file,
         // resolving all #includes and macros.
-        private string Preprocess(EffectContent input, ContentProcessorContext context, Options options)
+        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile profile)
         {
             Preprocessor pp = new Preprocessor();
 
@@ -140,7 +138,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (DebugMode == EffectProcessorDebugMode.Debug)
                 pp.AddMacro("DEBUG", "1");
 
-            foreach (var macro in options.Profile.GetMacros())
+            foreach (var macro in profile.GetMacros())
                 pp.AddMacro(macro.Key, macro.Value);
 
             if (!string.IsNullOrEmpty(Defines))
@@ -177,7 +175,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <summary>
         /// Writes the effect for loading later.
         /// </summary>
-        private void Write(EffectObject effect, BinaryWriter writer, Options options)
+        private void Write(EffectObject effect, BinaryWriter writer, ShaderProfile profile)
         {
             // Write a very simple header for identification and versioning.
             writer.Write(MGFXHeader.ToCharArray());
@@ -185,12 +183,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write an simple identifier for DX11 vs GLSL
             // so we can easily detect the correct shader type.
-            var profile = (byte)options.Profile.FormatId;
-            writer.Write(profile);
+            writer.Write((byte)profile.FormatId);
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, options))
+            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, profile))
             {
                 memWriter.WriteEffect(effect);
 

@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public EffectProcessorDebugMode Debug { get; private set; }
 
-        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, Options options, EffectProcessorDebugMode debugMode, string effectCode)
+        static internal ShaderResult FromString(EffectContent input, ContentProcessorContext context, ShaderProfile profile, EffectProcessorDebugMode debugMode, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
             var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 throw new InvalidContentException("The effect must contain at least one technique and pass!",
                     input.Identity);
 
-            result.Profile = options.Profile;
+            result.Profile = profile;
             result.Debug = debugMode;
 
             return result;

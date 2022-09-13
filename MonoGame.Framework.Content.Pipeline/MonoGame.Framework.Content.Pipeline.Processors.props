@@ -9,7 +9,6 @@
     <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
     <Compile Include="EffectCompiler\MojoShader.cs" />
-    <Compile Include="EffectCompiler\Options.cs" />
     <Compile Include="EffectCompiler\Preprocessor.cs" />
     <Compile Include="EffectCompiler\SamplerStateContent.cs" />
     <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
