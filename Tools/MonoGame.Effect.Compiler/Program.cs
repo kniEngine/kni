@@ -40,15 +40,11 @@ namespace MonoGame.EffectCompiler
 
                 var processor = new EffectProcessor();
                 processor.Defines = options.Defines;
-                TargetPlatform targetPlatform;
-                if (options.Profile == ShaderProfileType.DirectX_11)
-                    targetPlatform = TargetPlatform.Windows;
-                else if (options.Profile == ShaderProfileType.OpenGL_Mojo)
-                    targetPlatform = TargetPlatform.DesktopGL;
-                else
-                    throw new InvalidOperationException("Profile");
 
-                var processorContext = new ProcessorContext(logger, targetPlatform, options.OutputFile, options.Config);
+                if (options.Platform == (TargetPlatform)(-1))
+                    throw new InvalidOperationException("Platform");
+
+                var processorContext = new ProcessorContext(logger, options.Platform, options.OutputFile, options.Config);
                 var output = processor.Process(content, processorContext);
 
                 var effectCode = output.GetEffectCode();
