@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            ShaderProfile profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
+            ShaderProfile profile = ShaderProfile.FromPlatform(context.TargetPlatform);
             if (profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             

@@ -54,13 +54,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// </summary>
         public ShaderProfileType ProfileType { get; private set; }
 
-        internal abstract bool Supports(string platform);
+        internal abstract bool Supports(TargetPlatform platform);
         
         /// <summary>
         /// Returns the correct profile for the named platform or
         /// null if no supporting profile is found.
         /// </summary>
-        public static ShaderProfile ForPlatform(string platform)
+        public static ShaderProfile FromPlatform(TargetPlatform platform)
         {
             return _profiles.FirstOrDefault(p => p.Supports(platform));
         }

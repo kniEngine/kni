@@ -63,16 +63,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return shaderData;
         }
             
-        internal override bool Supports(string platform)
+        internal override bool Supports(TargetPlatform platform)
         {
-            if (platform == "iOS" ||
-                platform == "Android" ||
-                platform == "DesktopGL" ||
-                platform == "MacOSX" ||
-                platform == "RaspberryPi")
-                return true;
-
-            return false;
+            switch(platform)
+            {
+                case TargetPlatform.iOS:
+                case TargetPlatform.Android:
+                case TargetPlatform.DesktopGL:
+                case TargetPlatform.MacOSX:
+                case TargetPlatform.RaspberryPi:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

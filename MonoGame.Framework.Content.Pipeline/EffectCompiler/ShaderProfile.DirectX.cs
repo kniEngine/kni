@@ -59,13 +59,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return shaderData;
         }
 
-        internal override bool Supports(string platform)
+        internal override bool Supports(TargetPlatform platform)
         {
-            if (platform == "Windows" ||
-                platform == "WindowsStoreApp")
-                return true;
-
-            return false;
+            switch (platform)
+            {
+                case TargetPlatform.Windows:
+                case TargetPlatform.WindowsStoreApp:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }
