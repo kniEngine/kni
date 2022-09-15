@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             case EffectParameterType.Bool:
                             case EffectParameterType.Int32:
                                 {
-#if !OPENGL
+#if OPENGL
                                     // MojoShader stores Integers and Booleans in a float type.
                                     var buffer = new float[rowCount * columnCount];
 #else
