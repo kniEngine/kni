@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
     [DebuggerDisplay("{DebugDisplayString}")]
     public class EffectParameter
     {
+        ShaderProfileType _profile;
+
         public string Name { get; private set; }
 
         public string Semantic { get; private set; }
@@ -56,7 +58,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                     EffectAnnotationCollection annotations,
                                     EffectParameterCollection elements,
                                     EffectParameterCollection structMembers,
-                                    object data)
+                                    object data,
+                                    ShaderProfileType profile)
         {
             ParameterClass = class_;
             ParameterType = type;
@@ -72,6 +75,8 @@ namespace Microsoft.Xna.Framework.Graphics
             StructureMembers = structMembers;
 
             Data = data;
+            _profile = profile;
+
             StateKey = unchecked(NextStateKey++);
         }
 
@@ -94,6 +99,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var array = cloneSource.Data as Array;
             if (array != null)
                 Data = array.Clone();
+            _profile = cloneSource._profile;
+
             StateKey = unchecked(NextStateKey++);
         }
 
@@ -102,12 +109,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Bool)
             {
-#if OPENGL
-                // MojoShader encodes even booleans into a float.
-                return ((float[])Data)[0] != 0.0f;
-#else
-                return ((int[])Data)[0] != 0;
-#endif
+                if (_profile == ShaderProfileType.OpenGL_Mojo)
+                    return ((float[])Data)[0] != 0.0f; // MojoShader encodes booleans into a float.
+                else
+                    return ((int[])Data)[0] != 0;
             }
             else
                 throw new InvalidCastException();
@@ -117,15 +122,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Bool)
             {
-#if OPENGL
-                // MojoShader encodes even booleans into a float.
-                ((float[])Data)[0] = value ? 1 : 0;
-#else
-                ((int[])Data)[0] = value ? 1 : 0;
-#endif
+                if (_profile == ShaderProfileType.OpenGL_Mojo)
+                    ((float[])Data)[0] = value ? 1 : 0; // MojoShader encodes booleans into a float.
+                else
+                    ((int[])Data)[0] = value ? 1 : 0;
 
                 StateKey = unchecked(NextStateKey++);
-
             }
             else
                 throw new InvalidCastException();
@@ -146,12 +148,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Int32)
             {
-#if OPENGL
-                // MojoShader encodes integers into a float.
-                return (int)((float[])Data)[0];
-#else
-                return ((int[])Data)[0];
-#endif
+                if (_profile == ShaderProfileType.OpenGL_Mojo)
+                    return (int)((float[])Data)[0]; // MojoShader encodes integers into a float.
+                else
+                    return ((int[])Data)[0];
             }
             else
                 throw new InvalidCastException();
@@ -169,12 +169,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Int32)
             {
-#if OPENGL
-                // MojoShader encodes integers into a float.
-                ((float[])Data)[0] = value;
-#else
-                ((int[])Data)[0] = value;
-#endif
+                if (_profile == ShaderProfileType.OpenGL_Mojo)
+                    ((float[])Data)[0] = value; // MojoShader encodes integers into a float.
+                else
+                    ((int[])Data)[0] = value;
 
                 StateKey = unchecked(NextStateKey++);
             }

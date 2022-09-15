@@ -187,15 +187,36 @@ namespace Microsoft.Xna.Framework.Graphics
                     switch (type)
                     {
                         case EffectParameterType.Bool:
-                        case EffectParameterType.Int32:
+                            if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
                             {
-#if OPENGL
-                                // MojoShader stores Integers and Booleans in a float type.
+                                // MojoShader stores Booleans in a float type.
                                 var buffer = new float[rowCount * columnCount];
-#else
-                                // Integers and Booleans are stored in an integer type.
-					            var buffer = new int[rowCount * columnCount];
-#endif
+                                for (var j = 0; j < buffer.Length; j++)
+                                    buffer[j] = ReadInt32();
+                                data = buffer;
+                            }
+                            else
+                            {
+                                // Booleans are stored in an integer type.
+                                var buffer = new int[rowCount * columnCount];
+                                for (var j = 0; j < buffer.Length; j++)
+                                    buffer[j] = ReadInt32();
+                                data = buffer;
+                            }
+                            break;
+
+                        case EffectParameterType.Int32:
+                            if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
+                            {
+                                // MojoShader stores Integers in a float type.
+                                var buffer = new float[rowCount * columnCount];
+                                for (var j = 0; j < buffer.Length; j++)
+                                    buffer[j] = ReadInt32();
+                                data = buffer;
+                            }
+                            else
+                            {
+                                var buffer = new int[rowCount * columnCount];
                                 for (var j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
                                 data = buffer;
@@ -225,7 +246,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new EffectParameter(
                     class_, type, name, rowCount, columnCount, semantic,
-                    annotations, elements, structMembers, data);
+                    annotations, elements, structMembers, data, _header.Profile);
             }
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
