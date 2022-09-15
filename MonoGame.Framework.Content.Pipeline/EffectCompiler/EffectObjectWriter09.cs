@@ -80,17 +80,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (sampler.state != null)
                 {
                     Write(true);
-                    Write((byte)sampler.state.AddressU);
-                    Write((byte)sampler.state.AddressV);
-                    Write((byte)sampler.state.AddressW);
-                    Write(sampler.state.BorderColor.R);
-                    Write(sampler.state.BorderColor.G);
-                    Write(sampler.state.BorderColor.B);
-                    Write(sampler.state.BorderColor.A);
-                    Write((byte)sampler.state.Filter);
-                    Write(sampler.state.MaxAnisotropy);
-                    Write(sampler.state.MaxMipLevel);
-                    Write(sampler.state.MipMapLevelOfDetailBias);
+                    WriteSamplerState(sampler.state);
                 }
                 else
                     Write(false);
@@ -112,6 +102,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 Write((byte)attrib.index);
                 Write((short)attrib.location);
             }
+        }
+
+        private void WriteSamplerState(SamplerState state)
+        {
+            Write((byte)state.AddressU);
+            Write((byte)state.AddressV);
+            Write((byte)state.AddressW);
+            Write(state.BorderColor.R);
+            Write(state.BorderColor.G);
+            Write(state.BorderColor.B);
+            Write(state.BorderColor.A);
+            Write((byte)state.Filter);
+            Write(state.MaxAnisotropy);
+            Write(state.MaxMipLevel);
+            Write(state.MipMapLevelOfDetailBias);
         }
 
         private void WriteParameters(EffectObject.d3dx_parameter[] parameters, int count)

@@ -15,13 +15,13 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private class EffectReader09 : BinaryReader
         {
-            private readonly GraphicsDevice graphicsDevice;
-            private readonly MGFXHeader header;
+            private readonly GraphicsDevice _graphicsDevice;
+            private readonly MGFXHeader _header;
 
             public EffectReader09(MemoryStream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
             {
-                this.header = header;
-                this.graphicsDevice = graphicsDevice;
+                this._header = header;
+                this._graphicsDevice = graphicsDevice;
             }
 
             private int ReadPackedInt()
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal Effect ReadEffect()
             {
-                var effect = new Effect(graphicsDevice);
+                var effect = new Effect(_graphicsDevice);
 
                 effect.ConstantBuffers = ReadConstantBuffers();
                 effect._shaders = ReadShaders();
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     offsets[i] = (int)ReadUInt16();
                 }
 
-                var buffer = new ConstantBuffer(graphicsDevice,
+                var buffer = new ConstantBuffer(_graphicsDevice,
                                                 name,
                                                 parameters,
                                                 offsets,
@@ -92,13 +92,69 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private Shader ReadShader()
             {
-                return new Shader(graphicsDevice, this);
+                var isVertexShader = ReadBoolean();
+                var stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
+
+                var shaderLength = ReadInt32();
+                var shaderBytecode = ReadBytes(shaderLength);
+
+                var samplerCount = (int)ReadByte();
+                var samplers = new SamplerInfo[samplerCount];
+                for (var s = 0; s < samplerCount; s++)
+                {
+                    samplers[s].type = (SamplerType)ReadByte();
+                    samplers[s].textureSlot = ReadByte();
+                    samplers[s].samplerSlot = ReadByte();
+
+                    if (ReadBoolean())
+                        samplers[s].state = ReadSamplerState();
+
+                    samplers[s].name = ReadString();
+                    samplers[s].parameter = ReadByte();
+                }
+
+                var cbufferCount = (int)ReadByte();
+                var cBuffers = new int[cbufferCount];
+                for (var c = 0; c < cbufferCount; c++)
+                    cBuffers[c] = ReadByte();
+
+                var attributeCount = (int)ReadByte();
+                var attributes = new VertexAttribute[attributeCount];
+                for (var a = 0; a < attributeCount; a++)
+                {
+                    attributes[a].name = ReadString();
+                    attributes[a].usage = (VertexElementUsage)ReadByte();
+                    attributes[a].index = ReadByte();
+                    attributes[a].location = ReadInt16();
+                }
+
+                return new Shader(_graphicsDevice,
+                                  stage, shaderBytecode,
+                                  samplers, cBuffers, attributes);
+            }
+
+            private SamplerState ReadSamplerState()
+            {
+                var state = new SamplerState();
+                state.AddressU = (TextureAddressMode)ReadByte();
+                state.AddressV = (TextureAddressMode)ReadByte();
+                state.AddressW = (TextureAddressMode)ReadByte();
+                state.BorderColor = new Color(
+                    ReadByte(),
+                    ReadByte(),
+                    ReadByte(),
+                    ReadByte());
+                state.Filter = (TextureFilter)ReadByte();
+                state.MaxAnisotropy = ReadInt32();
+                state.MaxMipLevel = ReadInt32();
+                state.MipMapLevelOfDetailBias = ReadSingle();
+                return state;
             }
 
             private EffectParameterCollection ReadParameters()
             {
                 // fallback to version 8
-                int count = (header.Version == 8)
+                int count = (_header.Version == 8)
                           ? (int)ReadByte()
                           : Read7BitEncodedInt();
 
@@ -107,66 +163,69 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 var parameters = new EffectParameter[count];
                 for (var i = 0; i < count; i++)
-                {
-                    var class_ = (EffectParameterClass)ReadByte();
-                    var type = (EffectParameterType)ReadByte();
-                    var name = ReadString();
-                    var semantic = ReadString();
-                    var annotations = ReadAnnotations();
-                    var rowCount = (int)ReadByte();
-                    var columnCount = (int)ReadByte();
-
-                    var elements = ReadParameters();
-                    var structMembers = ReadParameters();
-
-                    object data = null;
-                    if (elements.Count == 0 && structMembers.Count == 0)
-                    {
-                        switch (type)
-                        {
-                            case EffectParameterType.Bool:
-                            case EffectParameterType.Int32:
-                                {
-#if OPENGL
-                                    // MojoShader stores Integers and Booleans in a float type.
-                                    var buffer = new float[rowCount * columnCount];
-#else
-                                    // Integers and Booleans are stored in an integer type.
-					                var buffer = new int[rowCount * columnCount];
-#endif
-                                    for (var j = 0; j < buffer.Length; j++)
-                                        buffer[j] = ReadInt32();
-                                    data = buffer;
-                                }
-                                break;
-
-                            case EffectParameterType.Single:
-                                {
-                                    var buffer = new float[rowCount * columnCount];
-                                    for (var j = 0; j < buffer.Length; j++)
-                                        buffer[j] = ReadSingle();
-                                    data = buffer;
-                                }
-                                break;
-
-                            case EffectParameterType.String:
-                                    throw new NotImplementedException();
-
-                            default:
-                                {
-                                    Debug.WriteLine("Parameter {0} of type {1} is ignored", name, type.ToString());
-                                    // throw new NotImplementedException();
-                                }
-                                break;
-                        }
-                    }
-
-                    parameters[i] = new EffectParameter(
-                        class_, type, name, rowCount, columnCount, semantic,
-                        annotations, elements, structMembers, data);
-                }
+                    parameters[i] = ReadParameter();
 
                 return new EffectParameterCollection(parameters);
+            }
+
+            private EffectParameter ReadParameter()
+            {
+                var class_ = (EffectParameterClass)ReadByte();
+                var type = (EffectParameterType)ReadByte();
+                var name = ReadString();
+                var semantic = ReadString();
+                var annotations = ReadAnnotations();
+                var rowCount = (int)ReadByte();
+                var columnCount = (int)ReadByte();
+
+                var elements = ReadParameters();
+                var structMembers = ReadParameters();
+
+                object data = null;
+                if (elements.Count == 0 && structMembers.Count == 0)
+                {
+                    switch (type)
+                    {
+                        case EffectParameterType.Bool:
+                        case EffectParameterType.Int32:
+                            {
+#if OPENGL
+                                // MojoShader stores Integers and Booleans in a float type.
+                                var buffer = new float[rowCount * columnCount];
+#else
+                                // Integers and Booleans are stored in an integer type.
+					            var buffer = new int[rowCount * columnCount];
+#endif
+                                for (var j = 0; j < buffer.Length; j++)
+                                    buffer[j] = ReadInt32();
+                                data = buffer;
+                            }
+                            break;
+
+                        case EffectParameterType.Single:
+                            {
+                                var buffer = new float[rowCount * columnCount];
+                                for (var j = 0; j < buffer.Length; j++)
+                                    buffer[j] = ReadSingle();
+                                data = buffer;
+                            }
+                            break;
+
+                        case EffectParameterType.String:
+                            throw new NotImplementedException();
+
+                        default:
+                            {
+                                Debug.WriteLine("Parameter {0} of type {1} is ignored", name, type.ToString());
+                                // throw new NotImplementedException();
+                            }
+                            break;
+                    }
+                }
+
+                return new EffectParameter(
+                    class_, type, name, rowCount, columnCount, semantic,
+                    annotations, elements, structMembers, data);
             }
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
