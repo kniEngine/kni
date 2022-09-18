@@ -1,10 +1,5 @@
-﻿#if OPENGL
+﻿#if __OPENGL__
 	#define SV_POSITION POSITION
-	#define VS_SHADERMODEL vs_2_0
-	#define PS_SHADERMODEL ps_2_0
-#else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
 matrix WorldViewProjection;
@@ -40,7 +35,7 @@ technique BasicColorDrawing
 {
 	pass P0
 	{
-		VertexShader = compile VS_SHADERMODEL MainVS();
-		PixelShader = compile PS_SHADERMODEL MainPS();
+		VertexShader = compile vs_4_0_level_9_1 MainVS();
+		PixelShader = compile ps_4_0_level_9_1 MainPS();
 	}
 };

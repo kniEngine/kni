@@ -1,4 +1,10 @@
-﻿using System;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -10,20 +16,22 @@ namespace MonoGame.EffectCompiler
     {
         ContentBuildLogger _logger;
         TargetPlatform _targetPlatform;
+        string _buildConfiguration;
         string _outputFilename;
 
-        public ProcessorContext(ContentBuildLogger logger, TargetPlatform targetPlatform, string outputFilename) : base()
+        public ProcessorContext(ContentBuildLogger logger, TargetPlatform targetPlatform, string outputFilename, string config) : base()
         {
             _logger = logger;
             _targetPlatform = targetPlatform;
             _outputFilename = outputFilename;
+            _buildConfiguration = config;
         }
 
         public override string IntermediateDirectory { get { throw new NotImplementedException(); } }
 
         public override string OutputDirectory { get { throw new NotImplementedException(); } }
 
-        public override string BuildConfiguration { get { throw new NotImplementedException(); } }
+        public override string BuildConfiguration { get { return _buildConfiguration; } }
 
         public override ContentBuildLogger Logger { get { return _logger; } }
 

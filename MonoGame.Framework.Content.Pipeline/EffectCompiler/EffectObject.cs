@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
         }
 
-		public enum D3DRENDERSTATETYPE
+		public enum RENDERSTATETYPE
         {
 		    ZENABLE                   =   7,
 		    FILLMODE                  =   8,
@@ -119,7 +125,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		    FORCE_DWORD               = 0x7fffffff
 		}
 
-		public enum D3DTEXTURESTAGESTATETYPE
+		public enum TEXTURESTAGESTATETYPE
         {
 		    COLOROP               =  1,
 		    COLORARG1             =  2,
@@ -143,7 +149,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		    FORCE_DWORD           = 0x7fffffff
 		}
 
-		public enum D3DTRANSFORMSTATETYPE
+		public enum TRANSFORMSTATETYPE
         {
 		    VIEW            =  2,
 		    PROJECTION      =  3,
@@ -159,11 +165,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		    FORCE_DWORD     = 0x7fffffff
 		}
 
-		public const int D3DX_PARAMETER_SHARED = 1;
-		public const int D3DX_PARAMETER_LITERAL = 2;
-		public const int D3DX_PARAMETER_ANNOTATION = 4;
+		public const int PARAMETER_SHARED = 1;
+		public const int PARAMETER_LITERAL = 2;
+		public const int PARAMETER_ANNOTATION = 4;
 
-		public enum D3DXPARAMETER_CLASS
+		public enum PARAMETER_CLASS
 		{
 			SCALAR,
 			VECTOR,
@@ -174,7 +180,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			FORCE_DWORD = 0x7fffffff,
 		}
 
-		public enum D3DXPARAMETER_TYPE
+		public enum PARAMETER_TYPE
 		{
 			VOID,
 			BOOL,
@@ -199,7 +205,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			FORCE_DWORD = 0x7fffffff,
 		}
 
-		enum D3DSAMPLERSTATETYPE 
+		enum SAMPLERSTATETYPE 
         {
 		    ADDRESSU       = 1,
 		    ADDRESSV       = 2,
@@ -281,13 +287,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			EXPRESSIONINDEX,
 		}
 
-		public class d3dx_parameter
+		public class EffectParameterContent
 		{
 			public string name;
 			public string semantic;
 			public object data;
-			public D3DXPARAMETER_CLASS class_;
-			public D3DXPARAMETER_TYPE  type;
+			public PARAMETER_CLASS class_;
+			public PARAMETER_TYPE  type;
 			public uint rows;
 			public uint columns;
 			public uint element_count;
@@ -299,8 +305,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             public int bufferIndex = -1;
             public int bufferOffset = -1;
 
-		    public d3dx_parameter[] annotation_handles = null;
-			public d3dx_parameter[] member_handles;
+		    public EffectParameterContent[] annotation_handles = null;
+			public EffectParameterContent[] member_handles;
 
             public override string ToString()
             {
@@ -311,21 +317,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 		}
 		
-		public class d3dx_state
+		public class EffectStateContent
 		{
 			public uint operation;
 			public uint index;
 			public STATE_TYPE type;
-			public d3dx_parameter parameter;
+			public EffectParameterContent parameter;
 		}
 
-		public class d3dx_sampler
+		public class EffectSamplerContent
 		{
 		    public uint state_count = 0;
-		    public d3dx_state[] states = null;
+		    public EffectStateContent[] states = null;
 		}
 		
-		public class d3dx_pass
+		public class EffectPassContent
 		{
 			public string name;
 			public uint state_count;
@@ -335,18 +341,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			public DepthStencilState depthStencilState;
 			public RasterizerState rasterizerState;
 
-			public d3dx_state[] states;
-		    public d3dx_parameter[] annotation_handles = null;
+			public EffectStateContent[] states;
+		    public EffectParameterContent[] annotation_handles = null;
 		}
 
-		public class d3dx_technique
+		public class EffectTechniqueContent
 		{
 			public string name;
 			public uint pass_count;
 		    public uint annotation_count = 0;
 
-		    public d3dx_parameter[] annotation_handles = null;
-			public d3dx_pass[] pass_handles;
+		    public EffectParameterContent[] annotation_handles = null;
+			public EffectPassContent[] pass_handles;
 		}
 
         public class state_info
@@ -368,127 +374,127 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// </summary>
 		public static readonly state_info[] state_table =
 		{
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ZENABLE, "ZENABLE"), /* 0x0 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FILLMODE, "FILLMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SHADEMODE, "SHADEMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ZWRITEENABLE, "ZWRITEENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ALPHATESTENABLE, "ALPHATESTENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.LASTPIXEL, "LASTPIXEL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SRCBLEND, "SRCBLEND"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DESTBLEND, "DESTBLEND"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CULLMODE, "CULLMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ZFUNC, "ZFUNC"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ALPHAREF, "ALPHAREF"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ALPHAFUNC, "ALPHAFUNC"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DITHERENABLE, "DITHERENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ALPHABLENDENABLE, "ALPHABLENDENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGENABLE, "FOGENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SPECULARENABLE, "SPECULARENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGCOLOR, "FOGCOLOR"), /* 0x10 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGTABLEMODE, "FOGTABLEMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGSTART, "FOGSTART"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGEND, "FOGEND"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGDENSITY, "FOGDENSITY"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.RANGEFOGENABLE, "RANGEFOGENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILENABLE, "STENCILENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILFAIL, "STENCILFAIL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILZFAIL, "STENCILZFAIL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILPASS, "STENCILPASS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILFUNC, "STENCILFUNC"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILREF, "STENCILREF"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILMASK, "STENCILMASK"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.STENCILWRITEMASK, "STENCILWRITEMASK"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.TEXTUREFACTOR, "TEXTUREFACTOR"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP0, "WRAP0"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP1, "WRAP1"), /* 0x20 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP2, "WRAP2"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP3, "WRAP3"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP4, "WRAP4"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP5, "WRAP5"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP6, "WRAP6"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP7, "WRAP7"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP8, "WRAP8"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP9, "WRAP9"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP10, "WRAP10"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP11, "WRAP11"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP12, "WRAP12"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP13, "WRAP13"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP14, "WRAP14"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.WRAP15, "WRAP15"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CLIPPING, "CLIPPING"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.LIGHTING, "LIGHTING"), /* 0x30 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.AMBIENT, "AMBIENT"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.FOGVERTEXMODE, "FOGVERTEXMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.COLORVERTEX, "COLORVERTEX"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.LOCALVIEWER, "LOCALVIEWER"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.NORMALIZENORMALS, "NORMALIZENORMALS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DIFFUSEMATERIALSOURCE, "DIFFUSEMATERIALSOURCE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SPECULARMATERIALSOURCE, "SPECULARMATERIALSOURCE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.AMBIENTMATERIALSOURCE, "AMBIENTMATERIALSOURCE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.EMISSIVEMATERIALSOURCE, "EMISSIVEMATERIALSOURCE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.VERTEXBLEND, "VERTEXBLEND"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CLIPPLANEENABLE, "CLIPPLANEENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSIZE, "POINTSIZE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSIZE_MIN, "POINTSIZE_MIN"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSIZE_MAX, "POINTSIZE_MAX"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSPRITEENABLE, "POINTSPRITEENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSCALEENABLE, "POINTSCALEENABLE"), /* 0x40 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSCALE_A, "POINTSCALE_A"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSCALE_B, "POINTSCALE_B"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POINTSCALE_C, "POINTSCALE_C"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.MULTISAMPLEANTIALIAS, "MULTISAMPLEANTIALIAS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.MULTISAMPLEMASK, "MULTISAMPLEMASK"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.PATCHEDGESTYLE, "PATCHEDGESTYLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DEBUGMONITORTOKEN, "DEBUGMONITORTOKEN"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.INDEXEDVERTEXBLENDENABLE, "INDEXEDVERTEXBLENDENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.COLORWRITEENABLE, "COLORWRITEENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.TWEENFACTOR, "TWEENFACTOR"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.BLENDOP, "BLENDOP"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.POSITIONDEGREE, "POSITIONDEGREE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.NORMALDEGREE, "NORMALDEGREE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SCISSORTESTENABLE, "SCISSORTESTENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SLOPESCALEDEPTHBIAS, "SLOPESCALEDEPTHBIAS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ANTIALIASEDLINEENABLE, "ANTIALIASEDLINEENABLE"), /* 0x50 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.MINTESSELLATIONLEVEL, "MINTESSELLATIONLEVEL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.MAXTESSELLATIONLEVEL, "MAXTESSELLATIONLEVEL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ADAPTIVETESS_X, "ADAPTIVETESS_X"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ADAPTIVETESS_Y, "ADAPTIVETESS_Y"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ADAPTIVETESS_Z, "ADAPTIVETESS_Z"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ADAPTIVETESS_W, "ADAPTIVETESS_W"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.ENABLEADAPTIVETESSELLATION, "ENABLEADAPTIVETESSELLATION"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.TWOSIDEDSTENCILMODE, "TWOSIDEDSTENCILMODE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CCW_STENCILFAIL, "CCW_STENCILFAIL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CCW_STENCILZFAIL, "CCW_STENCILZFAIL"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CCW_STENCILPASS, "CCW_STENCILPASS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.CCW_STENCILFUNC, "CCW_STENCILFUNC"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.COLORWRITEENABLE1, "COLORWRITEENABLE1"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.COLORWRITEENABLE2, "COLORWRITEENABLE2"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.COLORWRITEENABLE3, "COLORWRITEENABLE3"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.BLENDFACTOR, "BLENDFACTOR"), /* 0x60 */
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SRGBWRITEENABLE, "SRGBWRITEENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DEPTHBIAS, "DEPTHBIAS"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SEPARATEALPHABLENDENABLE, "SEPARATEALPHABLENDENABLE"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.SRCBLENDALPHA, "SRCBLENDALPHA"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.DESTBLENDALPHA, "DESTBLENDALPHA"),
-			new state_info(STATE_CLASS.RENDERSTATE, (uint)D3DRENDERSTATETYPE.BLENDOPALPHA, "BLENDOPALPHA"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ZENABLE, "ZENABLE"), /* 0x0 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FILLMODE, "FILLMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SHADEMODE, "SHADEMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ZWRITEENABLE, "ZWRITEENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ALPHATESTENABLE, "ALPHATESTENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.LASTPIXEL, "LASTPIXEL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SRCBLEND, "SRCBLEND"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DESTBLEND, "DESTBLEND"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CULLMODE, "CULLMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ZFUNC, "ZFUNC"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ALPHAREF, "ALPHAREF"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ALPHAFUNC, "ALPHAFUNC"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DITHERENABLE, "DITHERENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ALPHABLENDENABLE, "ALPHABLENDENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGENABLE, "FOGENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SPECULARENABLE, "SPECULARENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGCOLOR, "FOGCOLOR"), /* 0x10 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGTABLEMODE, "FOGTABLEMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGSTART, "FOGSTART"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGEND, "FOGEND"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGDENSITY, "FOGDENSITY"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.RANGEFOGENABLE, "RANGEFOGENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILENABLE, "STENCILENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILFAIL, "STENCILFAIL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILZFAIL, "STENCILZFAIL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILPASS, "STENCILPASS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILFUNC, "STENCILFUNC"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILREF, "STENCILREF"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILMASK, "STENCILMASK"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.STENCILWRITEMASK, "STENCILWRITEMASK"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.TEXTUREFACTOR, "TEXTUREFACTOR"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP0, "WRAP0"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP1, "WRAP1"), /* 0x20 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP2, "WRAP2"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP3, "WRAP3"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP4, "WRAP4"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP5, "WRAP5"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP6, "WRAP6"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP7, "WRAP7"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP8, "WRAP8"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP9, "WRAP9"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP10, "WRAP10"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP11, "WRAP11"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP12, "WRAP12"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP13, "WRAP13"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP14, "WRAP14"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.WRAP15, "WRAP15"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CLIPPING, "CLIPPING"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.LIGHTING, "LIGHTING"), /* 0x30 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.AMBIENT, "AMBIENT"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.FOGVERTEXMODE, "FOGVERTEXMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.COLORVERTEX, "COLORVERTEX"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.LOCALVIEWER, "LOCALVIEWER"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.NORMALIZENORMALS, "NORMALIZENORMALS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DIFFUSEMATERIALSOURCE, "DIFFUSEMATERIALSOURCE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SPECULARMATERIALSOURCE, "SPECULARMATERIALSOURCE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.AMBIENTMATERIALSOURCE, "AMBIENTMATERIALSOURCE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.EMISSIVEMATERIALSOURCE, "EMISSIVEMATERIALSOURCE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.VERTEXBLEND, "VERTEXBLEND"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CLIPPLANEENABLE, "CLIPPLANEENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSIZE, "POINTSIZE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSIZE_MIN, "POINTSIZE_MIN"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSIZE_MAX, "POINTSIZE_MAX"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSPRITEENABLE, "POINTSPRITEENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSCALEENABLE, "POINTSCALEENABLE"), /* 0x40 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSCALE_A, "POINTSCALE_A"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSCALE_B, "POINTSCALE_B"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POINTSCALE_C, "POINTSCALE_C"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.MULTISAMPLEANTIALIAS, "MULTISAMPLEANTIALIAS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.MULTISAMPLEMASK, "MULTISAMPLEMASK"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.PATCHEDGESTYLE, "PATCHEDGESTYLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DEBUGMONITORTOKEN, "DEBUGMONITORTOKEN"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.INDEXEDVERTEXBLENDENABLE, "INDEXEDVERTEXBLENDENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.COLORWRITEENABLE, "COLORWRITEENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.TWEENFACTOR, "TWEENFACTOR"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.BLENDOP, "BLENDOP"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.POSITIONDEGREE, "POSITIONDEGREE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.NORMALDEGREE, "NORMALDEGREE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SCISSORTESTENABLE, "SCISSORTESTENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SLOPESCALEDEPTHBIAS, "SLOPESCALEDEPTHBIAS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ANTIALIASEDLINEENABLE, "ANTIALIASEDLINEENABLE"), /* 0x50 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.MINTESSELLATIONLEVEL, "MINTESSELLATIONLEVEL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.MAXTESSELLATIONLEVEL, "MAXTESSELLATIONLEVEL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ADAPTIVETESS_X, "ADAPTIVETESS_X"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ADAPTIVETESS_Y, "ADAPTIVETESS_Y"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ADAPTIVETESS_Z, "ADAPTIVETESS_Z"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ADAPTIVETESS_W, "ADAPTIVETESS_W"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.ENABLEADAPTIVETESSELLATION, "ENABLEADAPTIVETESSELLATION"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.TWOSIDEDSTENCILMODE, "TWOSIDEDSTENCILMODE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CCW_STENCILFAIL, "CCW_STENCILFAIL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CCW_STENCILZFAIL, "CCW_STENCILZFAIL"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CCW_STENCILPASS, "CCW_STENCILPASS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.CCW_STENCILFUNC, "CCW_STENCILFUNC"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.COLORWRITEENABLE1, "COLORWRITEENABLE1"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.COLORWRITEENABLE2, "COLORWRITEENABLE2"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.COLORWRITEENABLE3, "COLORWRITEENABLE3"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.BLENDFACTOR, "BLENDFACTOR"), /* 0x60 */
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SRGBWRITEENABLE, "SRGBWRITEENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DEPTHBIAS, "DEPTHBIAS"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SEPARATEALPHABLENDENABLE, "SEPARATEALPHABLENDENABLE"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.SRCBLENDALPHA, "SRCBLENDALPHA"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.DESTBLENDALPHA, "DESTBLENDALPHA"),
+			new state_info(STATE_CLASS.RENDERSTATE, (uint)RENDERSTATETYPE.BLENDOPALPHA, "BLENDOPALPHA"),
 			/* Texture stages */
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.COLOROP, "COLOROP"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.COLORARG0, "COLORARG0"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.COLORARG1, "COLORARG1"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.COLORARG2, "COLORARG2"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.ALPHAOP, "ALPHAOP"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.ALPHAARG0, "ALPHAARG0"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.ALPHAARG1, "ALPHAARG1"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.ALPHAARG2, "ALPHAARG2"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.RESULTARG, "RESULTARG"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVMAT00, "BUMPENVMAT00"), /* 0x70 */
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVMAT01, "BUMPENVMAT01"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVMAT10, "BUMPENVMAT10"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVMAT11, "BUMPENVMAT11"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.TEXCOORDINDEX, "TEXCOORDINDEX"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVLSCALE, "BUMPENVLSCALE"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.BUMPENVLOFFSET, "BUMPENVLOFFSET"),
-			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)D3DTEXTURESTAGESTATETYPE.TEXTURETRANSFORMFLAGS, "TEXTURETRANSFORMFLAGS"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.COLOROP, "COLOROP"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.COLORARG0, "COLORARG0"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.COLORARG1, "COLORARG1"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.COLORARG2, "COLORARG2"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.ALPHAOP, "ALPHAOP"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.ALPHAARG0, "ALPHAARG0"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.ALPHAARG1, "ALPHAARG1"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.ALPHAARG2, "ALPHAARG2"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.RESULTARG, "RESULTARG"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVMAT00, "BUMPENVMAT00"), /* 0x70 */
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVMAT01, "BUMPENVMAT01"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVMAT10, "BUMPENVMAT10"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVMAT11, "BUMPENVMAT11"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.TEXCOORDINDEX, "TEXCOORDINDEX"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVLSCALE, "BUMPENVLSCALE"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.BUMPENVLOFFSET, "BUMPENVLOFFSET"),
+			new state_info(STATE_CLASS.TEXTURESTAGE, (uint)TEXTURESTAGESTATETYPE.TEXTURETRANSFORMFLAGS, "TEXTURETRANSFORMFLAGS"),
 			/* */
 			new state_info(STATE_CLASS.UNKNOWN, 0, "UNKNOWN"),
 			/* NPatchMode */
@@ -496,10 +502,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			/* */
 			new state_info(STATE_CLASS.UNKNOWN, 0, "UNKNOWN"),
 			/* Transform */
-			new state_info(STATE_CLASS.TRANSFORM, (uint)D3DTRANSFORMSTATETYPE.PROJECTION, "PROJECTION"),
-			new state_info(STATE_CLASS.TRANSFORM, (uint)D3DTRANSFORMSTATETYPE.VIEW, "VIEW"),
-			new state_info(STATE_CLASS.TRANSFORM, (uint)D3DTRANSFORMSTATETYPE.WORLD, "WORLD"),
-			new state_info(STATE_CLASS.TRANSFORM, (uint)D3DTRANSFORMSTATETYPE.TEXTURE0, "TEXTURE0"),
+			new state_info(STATE_CLASS.TRANSFORM, (uint)TRANSFORMSTATETYPE.PROJECTION, "PROJECTION"),
+			new state_info(STATE_CLASS.TRANSFORM, (uint)TRANSFORMSTATETYPE.VIEW, "VIEW"),
+			new state_info(STATE_CLASS.TRANSFORM, (uint)TRANSFORMSTATETYPE.WORLD, "WORLD"),
+			new state_info(STATE_CLASS.TRANSFORM, (uint)TRANSFORMSTATETYPE.TEXTURE0, "TEXTURE0"),
 			/* Material */
 			new state_info(STATE_CLASS.MATERIAL, (uint)MATERIAL_TYPE.DIFFUSE, "MaterialDiffuse"),
 			new state_info(STATE_CLASS.MATERIAL, (uint)MATERIAL_TYPE.AMBIENT, "MaterialAmbient"), /* 0x80 */
@@ -546,99 +552,99 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			/* Texture */
 			new state_info(STATE_CLASS.TEXTURE, 0, "Texture"),
 			/* Sampler states */
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.ADDRESSU, "AddressU"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.ADDRESSV, "AddressV"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.ADDRESSW, "AddressW"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.BORDERCOLOR, "BorderColor"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MAGFILTER, "MagFilter"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MINFILTER, "MinFilter"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MIPFILTER, "MipFilter"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MIPMAPLODBIAS, "MipMapLodBias"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MAXMIPLEVEL, "MaxMipLevel"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.MAXANISOTROPY, "MaxAnisotropy"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.SRGBTEXTURE, "SRGBTexture"),
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.ELEMENTINDEX, "ElementIndex"), /* 0xb0 */
-			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)D3DSAMPLERSTATETYPE.DMAPOFFSET, "DMAPOffset"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.ADDRESSU, "AddressU"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.ADDRESSV, "AddressV"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.ADDRESSW, "AddressW"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.BORDERCOLOR, "BorderColor"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MAGFILTER, "MagFilter"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MINFILTER, "MinFilter"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MIPFILTER, "MipFilter"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MIPMAPLODBIAS, "MipMapLodBias"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MAXMIPLEVEL, "MaxMipLevel"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.MAXANISOTROPY, "MaxAnisotropy"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.SRGBTEXTURE, "SRGBTexture"),
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.ELEMENTINDEX, "ElementIndex"), /* 0xb0 */
+			new state_info(STATE_CLASS.SAMPLERSTATE, (uint)SAMPLERSTATETYPE.DMAPOFFSET, "DMAPOffset"),
 			/* Set sampler */
 			new state_info(STATE_CLASS.SETSAMPLER, 0, "Sampler"),
 		};
 
-        static public EffectParameterClass ToXNAParameterClass( D3DXPARAMETER_CLASS class_ )
+        static public EffectParameterClass ToXNAParameterClass( PARAMETER_CLASS class_ )
         {
 			switch (class_) 
             {
-			    case D3DXPARAMETER_CLASS.SCALAR:
+			    case PARAMETER_CLASS.SCALAR:
 				    return EffectParameterClass.Scalar;
-			    case D3DXPARAMETER_CLASS.VECTOR:
+			    case PARAMETER_CLASS.VECTOR:
 				    return EffectParameterClass.Vector;
-			    case D3DXPARAMETER_CLASS.MATRIX_ROWS:
-			    case D3DXPARAMETER_CLASS.MATRIX_COLUMNS:
+			    case PARAMETER_CLASS.MATRIX_ROWS:
+			    case PARAMETER_CLASS.MATRIX_COLUMNS:
                     return EffectParameterClass.Matrix;
-			    case D3DXPARAMETER_CLASS.OBJECT:
+			    case PARAMETER_CLASS.OBJECT:
                     return EffectParameterClass.Object;
-			    case D3DXPARAMETER_CLASS.STRUCT:
+			    case PARAMETER_CLASS.STRUCT:
                     return EffectParameterClass.Struct;
 			    default:
 				    throw new NotImplementedException();
 			}
         }
 
-        static public EffectParameterTypeContent ToXNAParameterType(D3DXPARAMETER_TYPE type)
+        static public EffectParameterTypeContent ToXNAParameterType(PARAMETER_TYPE type)
         {
 			switch (type) 
             {
-			    case D3DXPARAMETER_TYPE.BOOL:
+			    case PARAMETER_TYPE.BOOL:
                     return EffectParameterTypeContent.Bool;
-			    case D3DXPARAMETER_TYPE.INT:
+			    case PARAMETER_TYPE.INT:
 				    return EffectParameterTypeContent.Int32;
-			    case D3DXPARAMETER_TYPE.FLOAT:
+			    case PARAMETER_TYPE.FLOAT:
 				    return EffectParameterTypeContent.Single;
-			    case D3DXPARAMETER_TYPE.STRING:
+			    case PARAMETER_TYPE.STRING:
 				    return EffectParameterTypeContent.String;
-			    case D3DXPARAMETER_TYPE.TEXTURE:
+			    case PARAMETER_TYPE.TEXTURE:
 				    return EffectParameterTypeContent.Texture;
-			    case D3DXPARAMETER_TYPE.TEXTURE1D:
+			    case PARAMETER_TYPE.TEXTURE1D:
 				    return EffectParameterTypeContent.Texture1D;
-			    case D3DXPARAMETER_TYPE.TEXTURE2D:
+			    case PARAMETER_TYPE.TEXTURE2D:
 				    return EffectParameterTypeContent.Texture2D;
-			    case D3DXPARAMETER_TYPE.TEXTURE3D:
+			    case PARAMETER_TYPE.TEXTURE3D:
 				    return EffectParameterTypeContent.Texture3D;
-			    case D3DXPARAMETER_TYPE.TEXTURECUBE:
+			    case PARAMETER_TYPE.TEXTURECUBE:
 				    return EffectParameterTypeContent.TextureCube;
                 default:
                     throw new NotImplementedException();
 			}
         }
 
-        static internal VertexElementUsageContent ToXNAVertexElementUsage(MojoShader.MOJOSHADER_usage usage)
+        static internal VertexElementUsageContent ToXNAVertexElementUsage(MojoShader.Usage usage)
         {
             switch (usage)
             {
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_POSITION:
+                case MojoShader.Usage.POSITION:
                     return VertexElementUsageContent.Position;
-		        case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BLENDWEIGHT:
+		        case MojoShader.Usage.BLENDWEIGHT:
                     return VertexElementUsageContent.BlendWeight;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BLENDINDICES:
+                case MojoShader.Usage.BLENDINDICES:
                     return VertexElementUsageContent.BlendIndices;
-		        case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_NORMAL:
+		        case MojoShader.Usage.NORMAL:
                     return VertexElementUsageContent.Normal;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_POINTSIZE:
+                case MojoShader.Usage.POINTSIZE:
                     return VertexElementUsageContent.PointSize;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TEXCOORD:
+                case MojoShader.Usage.TEXCOORD:
                     return VertexElementUsageContent.TextureCoordinate;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TANGENT:
+                case MojoShader.Usage.TANGENT:
                     return VertexElementUsageContent.Tangent;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_BINORMAL:
+                case MojoShader.Usage.BINORMAL:
                     return VertexElementUsageContent.Binormal;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_TESSFACTOR:
+                case MojoShader.Usage.TESSFACTOR:
                     return VertexElementUsageContent.TessellateFactor;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_COLOR:
+                case MojoShader.Usage.COLOR:
                     return VertexElementUsageContent.Color;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_FOG:
+                case MojoShader.Usage.FOG:
                     return VertexElementUsageContent.Fog;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_DEPTH:
+                case MojoShader.Usage.DEPTH:
                     return VertexElementUsageContent.Depth;
-                case MojoShader.MOJOSHADER_usage.MOJOSHADER_USAGE_SAMPLE:
+                case MojoShader.Usage.SAMPLE:
                     return VertexElementUsageContent.Sample;
 
                 default:
@@ -677,21 +683,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Go thru the techniques and that will find all the 
             // shaders and constant buffers.
             var shaderInfo = shaderResult.ShaderInfo;
-            effect.Techniques = new d3dx_technique[shaderInfo.Techniques.Count];
+            effect.Techniques = new EffectTechniqueContent[shaderInfo.Techniques.Count];
             for (var t = 0; t < shaderInfo.Techniques.Count; t++)
             {
                 var tinfo = shaderInfo.Techniques[t]; ;
 
-                var technique = new d3dx_technique();
+                var technique = new EffectTechniqueContent();
                 technique.name = tinfo.name;
                 technique.pass_count = (uint)tinfo.Passes.Count;
-                technique.pass_handles = new d3dx_pass[tinfo.Passes.Count];
+                technique.pass_handles = new EffectPassContent[tinfo.Passes.Count];
 
                 for (var p = 0; p < tinfo.Passes.Count; p++)
                 {
                     var pinfo = tinfo.Passes[p];
 
-                    var pass = new d3dx_pass();
+                    var pass = new EffectPassContent();
                     pass.name = pinfo.name ?? string.Empty;
 
                     pass.blendState = pinfo.blendState;
@@ -699,7 +705,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     pass.rasterizerState = pinfo.rasterizerState;
 
                     pass.state_count = 0;
-                    var tempstate = new d3dx_state[2];
+                    var tempstate = new EffectStateContent[2];
 
                     shaderResult.Profile.ValidateShaderModels(pinfo);
 
@@ -715,7 +721,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.vsFunction, pinfo.vsModel, true, ref errorsAndWarnings);
                     }
 
-                    pass.states = new d3dx_state[pass.state_count];
+                    pass.states = new EffectStateContent[pass.state_count];
                     for (var s = 0; s < pass.state_count; s++)
                         pass.states[s] = tempstate[s];
 
@@ -727,7 +733,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Make the list of parameters by combining all the
             // constant buffers ignoring the buffer offsets.
-            var parameters = new List<d3dx_parameter>();
+            var parameters = new List<EffectParameterContent>();
             for (var c = 0; c < effect.ConstantBuffers.Count; c++)
             {
                 var cb = effect.ConstantBuffers[c];
@@ -764,27 +770,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         // Store the index for runtime lookup.
                         shader._samplers[s].parameter = parameters.Count;
 
-                        var param = new d3dx_parameter();
-                        param.class_ = D3DXPARAMETER_CLASS.OBJECT;
+                        var param = new EffectParameterContent();
+                        param.class_ = PARAMETER_CLASS.OBJECT;
                         param.name = sampler.parameterName;
                         param.semantic = string.Empty;
 
                         switch (sampler.type)
                         {
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_1D:
-                                param.type = D3DXPARAMETER_TYPE.TEXTURE1D;
+                            case MojoShader.SamplerType.SAMPLER_1D:
+                                param.type = PARAMETER_TYPE.TEXTURE1D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_2D:
-                                param.type = D3DXPARAMETER_TYPE.TEXTURE2D;
+                            case MojoShader.SamplerType.SAMPLER_2D:
+                                param.type = PARAMETER_TYPE.TEXTURE2D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_VOLUME:
-                                param.type = D3DXPARAMETER_TYPE.TEXTURE3D;
+                            case MojoShader.SamplerType.SAMPLER_VOLUME:
+                                param.type = PARAMETER_TYPE.TEXTURE3D;
                                 break;
 
-                            case MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_CUBE:
-                                param.type = D3DXPARAMETER_TYPE.TEXTURECUBE;
+                            case MojoShader.SamplerType.SAMPLER_CUBE:
+                                param.type = PARAMETER_TYPE.TEXTURECUBE;
                                 break;
                         }
 
@@ -810,7 +816,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private d3dx_state CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             var shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
@@ -822,16 +828,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 shaderData.ShaderProfile = shaderProfile;
             }
 
-            var state = new d3dx_state();
+            var state = new EffectStateContent();
             state.index = 0;
             state.type = STATE_TYPE.CONSTANT;
             state.operation = isVertexShader ? (uint)146 : (uint)147;
 
-            state.parameter = new d3dx_parameter();
+            state.parameter = new EffectParameterContent();
             state.parameter.name = string.Empty;
             state.parameter.semantic = string.Empty;
-            state.parameter.class_ = D3DXPARAMETER_CLASS.OBJECT;
-            state.parameter.type = isVertexShader ? D3DXPARAMETER_TYPE.VERTEXSHADER : D3DXPARAMETER_TYPE.PIXELSHADER;
+            state.parameter.class_ = PARAMETER_CLASS.OBJECT;
+            state.parameter.type = isVertexShader ? PARAMETER_TYPE.VERTEXSHADER : PARAMETER_TYPE.PIXELSHADER;
             state.parameter.rows = 0;
             state.parameter.columns = 0;
             state.parameter.data = shaderData.SharedIndex;
@@ -839,7 +845,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        internal static int GetShaderIndex(STATE_CLASS type, d3dx_state[] states)
+        internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)
         {
             foreach (var state in states)
             {
@@ -856,11 +862,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return -1;
         }
 
-        public d3dx_parameter[] Objects { get; private set; }
+        public EffectParameterContent[] Objects { get; private set; }
 
-        public d3dx_parameter[] Parameters { get; private set; }
+        public EffectParameterContent[] Parameters { get; private set; }
 
-        public d3dx_technique[] Techniques { get; private set; }
+        public EffectTechniqueContent[] Techniques { get; private set; }
 
         public List<ShaderData> Shaders { get; private set; }
 

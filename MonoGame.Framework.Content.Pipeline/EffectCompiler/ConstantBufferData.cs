@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
+using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -12,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public List<int> ParameterOffset { get; private set; }
 
-        public List<EffectObject.d3dx_parameter> Parameters { get; private set; }
+        public List<EffectObject.EffectParameterContent> Parameters { get; private set; }
 
         public ConstantBufferData(string name)
         {
@@ -20,7 +26,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             ParameterIndex = new List<int>();
             ParameterOffset = new List<int>();
-            Parameters = new List<EffectObject.d3dx_parameter>();
+            Parameters = new List<EffectObject.EffectParameterContent>();
             Size = 0;
         }
 

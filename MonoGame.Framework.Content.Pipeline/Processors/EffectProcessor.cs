@@ -2,16 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-#if WINDOWS
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
-#endif
 using MonoGame.Framework.Utilities;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -35,6 +37,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// </summary>
         /// <value>A list of define assignments delimited by semicolons.</value>
         public virtual string Defines { get { return defines; } set { defines = value; } }
+        
 
         /// <summary>
         /// Initializes a new instance of EffectProcessor.
@@ -52,31 +55,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <remarks>If you get an error during processing, compilation stops immediately. The effect processor displays an error message. Once you fix the current error, it is possible you may get more errors on subsequent compilation attempts.</remarks>
         public override CompiledEffectContent Process(EffectContent input, ContentProcessorContext context)
         {
-            if (CurrentPlatform.OS != OS.Windows)
-                throw new NotImplementedException();
+            if (DebugMode == EffectProcessorDebugMode.Auto)
+            {
+                if (String.Equals(context.BuildConfiguration, "Debug", StringComparison.OrdinalIgnoreCase))
+                    DebugMode = EffectProcessorDebugMode.Debug;
+            }
 
-#if WINDOWS
-            var options = new Options();
-            var sourceFile = input.Identity.SourceFilename;
-
-            options.Profile = ShaderProfile.ForPlatform(context.TargetPlatform.ToString());
-            if (options.Profile == null)
+            ShaderProfile profile = ShaderProfile.FromPlatform(context.TargetPlatform);
+            if (profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
-
-            options.Debug = DebugMode == EffectProcessorDebugMode.Debug;
-            options.Defines = Defines;
+            
 
             // Parse the MGFX file expanding includes, macros, and returning the techniques.
             ShaderResult shaderResult;
             try
             {
-                shaderResult = ShaderResult.FromFile(sourceFile, options, 
-                    new ContentPipelineEffectCompilerOutput(context));
+                string effectCode = Preprocess(input, context, profile);
 
-                // Add the include dependencies so that if they change
-                // it will trigger a rebuild of this effect.
-                foreach (var dep in shaderResult.Dependencies)
-                    context.AddDependency(dep);
+                shaderResult = ParseTechniques(input, context, profile, effectCode);
             }
             catch (InvalidContentException)
             {
@@ -94,11 +90,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             try
             {
                 effect = EffectObject.CompileEffect(shaderResult, out shaderErrorsAndWarnings);
-
-                // If there were any additional output files we register
-                // them so that the cleanup process can manage them.
-                foreach (var outfile in shaderResult.AdditionalOutputFiles)
-                    context.AddOutputFile(outfile);
             }
             catch (ShaderCompilerException)
             {
@@ -117,7 +108,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     using (var writer = new BinaryWriter(stream))
                     {
-                        effect.Write(writer, options);
+                        Write(effect, writer, profile.ProfileType);
                         result = new CompiledEffectContent(stream.ToArray());
                     }
                 }
@@ -128,37 +119,175 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return result;
-#else
-            throw new NotImplementedException();
-#endif
         }
 
-#if WINDOWS
-        private class ContentPipelineEffectCompilerOutput : IEffectCompilerOutput
+
+        // Pre-process the file,
+        // resolving all #includes and macros.
+        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile profile)
         {
-            private readonly ContentProcessorContext _context;
+            Preprocessor pp = new Preprocessor();
 
-            public ContentPipelineEffectCompilerOutput(ContentProcessorContext context)
+            pp.AddMacro("MGFX", "1");
+
+            // If we're building shaders for debug set that flag too.
+            if (DebugMode == EffectProcessorDebugMode.Debug)
+                pp.AddMacro("DEBUG", "1");
+
+            foreach (var macro in profile.GetMacros())
+                pp.AddMacro(macro.Key, macro.Value);
+
+            if (!string.IsNullOrEmpty(Defines))
             {
-                _context = context;
+                var defines = Defines.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var define in defines)
+                {
+                    var name = define;
+                    var value = "1";
+                    if (define.Contains("="))
+                    {
+                        var parts = define.Split('=');
+
+                        if (parts.Length > 0)
+                            name = parts[0].Trim();
+
+                        if (parts.Length > 1)
+                            value = parts[1].Trim();
+                    }
+
+                    pp.AddMacro(name, value);
+                }
             }
 
-            public void WriteWarning(string file, int line, int column, string message)
+            string effectCode = pp.Preprocess(input, context);
+
+            return effectCode;
+        }
+
+
+        private ShaderResult ParseTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile profile, string effectCode)
+        {
+            // Parse the resulting file for techniques and passes.
+            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
+            var tree = new Parser(new Scanner()).Parse(effectCode, fullPath);
+            if (tree.Errors.Count > 0)
             {
-                _context.Logger.LogWarning(null, CreateContentIdentity(file, line, column), message);
+                var errors = String.Empty;
+                foreach (var error in tree.Errors)
+                {
+
+                    errors += string.Format("{0}({1},{2}) : {3}\r\n", error.File, error.Line, error.Column, error.Message);
+                }
+
+                throw new InvalidContentException(errors, input.Identity);
             }
 
-            public void WriteError(string file, int line, int column, string message)
+            // Evaluate the results of the parse tree.
+            var shaderInfo = tree.Eval() as ShaderInfo;
+
+            // Remove the samplers and techniques so that the shader compiler
+            // gets a clean file without any FX file syntax in it.
+            var cleanFile = effectCode;
+            WhitespaceNodes(TokenType.Technique_Declaration, tree.Nodes, ref cleanFile);
+            WhitespaceNodes(TokenType.Sampler_Declaration_States, tree.Nodes, ref cleanFile);
+
+
+            // Remove empty techniques.
+            for (var i = 0; i < shaderInfo.Techniques.Count; i++)
             {
-                throw new InvalidContentException(message, CreateContentIdentity(file, line, column));
+                var tech = shaderInfo.Techniques[i];
+                if (tech.Passes.Count <= 0)
+                {
+                    shaderInfo.Techniques.RemoveAt(i);
+                    i--;
+                }
             }
 
-            private static ContentIdentity CreateContentIdentity(string file, int line, int column)
+            // We must have at least one technique.
+            if (shaderInfo.Techniques.Count <= 0)
+                throw new InvalidContentException("The effect must contain at least one technique and pass!",
+                    input.Identity);
+
+            // Setup the shader info.
+            ShaderResult result = new ShaderResult(
+                shaderInfo,
+                fullPath,
+                cleanFile,
+                profile,
+                DebugMode
+                );
+
+            return result;
+        }
+
+        private static void WhitespaceNodes(TokenType type, List<ParseNode> nodes, ref string sourceFile)
+        {
+            for (var i = 0; i < nodes.Count; i++)
             {
-                return new ContentIdentity(file, null, line + "," + column);
+                var n = nodes[i];
+                if (n.Token.Type != type)
+                {
+                    WhitespaceNodes(type, n.Nodes, ref sourceFile);
+                    continue;
+                }
+
+                // Get the full content of this node.
+                var start = n.Token.StartPos;
+                var end = n.Token.EndPos;
+                var length = end - n.Token.StartPos;
+                var content = sourceFile.Substring(start, length);
+
+                // Replace the content of this node with whitespace.
+                for (var c = 0; c < length; c++)
+                {
+                    if (!char.IsWhiteSpace(content[c]))
+                        content = content.Replace(content[c], ' ');
+                }
+
+                // Add the whitespace back to the source file.
+                var newfile = sourceFile.Substring(0, start);
+                newfile += content;
+                newfile += sourceFile.Substring(end);
+                sourceFile = newfile;
             }
         }
-#endif
+
+
+        private const string MGFXHeader = "MGFX";
+        private const int Version = 10;
+
+        /// <summary>
+        /// Writes the effect for loading later.
+        /// </summary>
+        private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
+        {
+            // Write a very simple header for identification and versioning.
+            writer.Write(MGFXHeader.ToCharArray());
+            writer.Write((byte)Version);
+
+            // Write an simple identifier for DX11 vs GLSL
+            // so we can easily detect the correct shader type.
+            writer.Write((byte)profileType);
+
+            // Write the rest to a memory stream.
+            using (MemoryStream memStream = new MemoryStream())
+            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, profileType))
+            {
+                memWriter.WriteEffect(effect);
+
+                // Calculate a hash code from memory stream
+                // and write it to the header.
+                var effectKey = MonoGame.Framework.Utilities.Hash.ComputeHash(memStream);
+                writer.Write((Int32)effectKey);
+
+                //write content from memory stream to final stream.
+                memStream.WriteTo(writer.BaseStream);
+            }
+
+            // Write a tail to be used by the reader for validation.
+            if (Version >= 10)
+                writer.Write(MGFXHeader.ToCharArray());
+        }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
         {

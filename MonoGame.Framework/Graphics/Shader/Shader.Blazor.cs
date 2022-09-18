@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -20,9 +22,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
 
-        private static int PlatformProfile()
+        private static ShaderProfileType PlatformProfile()
         {
-            return 0;
+            return ShaderProfileType.OpenGL_Mojo;
         }
 
         private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)

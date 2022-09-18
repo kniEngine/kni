@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             ParameterIndex = new List<int>();
 
-            var parameters = new List<EffectObject.d3dx_parameter>();
+            var parameters = new List<EffectObject.EffectParameterContent>();
 
             // Gather all the parameters.
             for (var i = 0; i < cb.Description.VariableCount; i++)
@@ -47,9 +53,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 ParameterOffset.Add(param.bufferOffset);
         }
 
-        private static EffectObject.d3dx_parameter GetParameterFromType(SharpDX.D3DCompiler.ShaderReflectionType type)
+        private static EffectObject.EffectParameterContent GetParameterFromType(SharpDX.D3DCompiler.ShaderReflectionType type)
         {
-            var param = new EffectObject.d3dx_parameter();
+            var param = new EffectObject.EffectParameterContent();
             param.rows = (uint)type.Description.RowCount;
             param.columns = (uint)type.Description.ColumnCount;
             param.name = type.Description.Name ?? string.Empty;
@@ -59,15 +65,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             switch (type.Description.Class)
             {
                 case SharpDX.D3DCompiler.ShaderVariableClass.Scalar:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.SCALAR;
+                    param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
                     break;
 
                 case SharpDX.D3DCompiler.ShaderVariableClass.Vector:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.VECTOR;
+                    param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
                     break;
 
                 case SharpDX.D3DCompiler.ShaderVariableClass.MatrixColumns:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.MATRIX_COLUMNS;
+                    param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
                     break;
 
                 default:
@@ -77,15 +83,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             switch (type.Description.Type)
             {
                 case SharpDX.D3DCompiler.ShaderVariableType.Bool:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.BOOL;
+                    param.type = EffectObject.PARAMETER_TYPE.BOOL;
                     break;
 
                 case SharpDX.D3DCompiler.ShaderVariableType.Float:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.FLOAT;
+                    param.type = EffectObject.PARAMETER_TYPE.FLOAT;
                     break;
 
                 case SharpDX.D3DCompiler.ShaderVariableType.Int:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.INT;
+                    param.type = EffectObject.PARAMETER_TYPE.INT;
                     break;
 
                 default:
@@ -97,7 +103,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             if (param.member_count > 0)
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.member_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
                 for (var i = 0; i < param.member_count; i++)
                 {
                     var mparam = GetParameterFromType(type.GetMemberType(i));
@@ -107,10 +113,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
             else
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.element_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
                 for (var i = 0; i < param.element_count; i++)
                 {
-                    var mparam = new EffectObject.d3dx_parameter();
+                    var mparam = new EffectObject.EffectParameterContent();
 
                     mparam.name = string.Empty;
                     mparam.semantic = string.Empty;

@@ -2,11 +2,19 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+
+    internal enum ShaderProfileType
+    {
+        OpenGL_Mojo = 0,
+        DirectX_11  = 1,
+    }
 
     // TODO: We should convert the types below 
     // into the start of a Shader reflection API.
@@ -44,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Returns the platform specific shader profile identifier.
         /// </summary>
-        public static int Profile { get { return PlatformProfile(); } }
+        public static ShaderProfileType Profile { get { return PlatformProfile(); } }
 
         /// <summary>
         /// A hash value which can be used to compare shaders.
@@ -59,59 +67,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public VertexAttribute[] Attributes { get; private set; }
 
-        internal Shader(GraphicsDevice device, BinaryReader reader)
+        internal Shader(GraphicsDevice graphicsDevice,
+            ShaderStage stage, byte[] shaderBytecode,
+            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
         {
-            GraphicsDevice = device;
+            GraphicsDevice = graphicsDevice;
 
-            var isVertexShader = reader.ReadBoolean();
-            Stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
-
-            var shaderLength = reader.ReadInt32();
-            var shaderBytecode = reader.ReadBytes(shaderLength);
-
-            var samplerCount = (int)reader.ReadByte();
-            Samplers = new SamplerInfo[samplerCount];
-            for (var s = 0; s < samplerCount; s++)
-            {
-                Samplers[s].type = (SamplerType)reader.ReadByte();
-                Samplers[s].textureSlot = reader.ReadByte();
-                Samplers[s].samplerSlot = reader.ReadByte();
-
-				if (reader.ReadBoolean())
-				{
-					Samplers[s].state = new SamplerState();
-					Samplers[s].state.AddressU = (TextureAddressMode)reader.ReadByte();
-					Samplers[s].state.AddressV = (TextureAddressMode)reader.ReadByte();
-					Samplers[s].state.AddressW = (TextureAddressMode)reader.ReadByte();
-                    Samplers[s].state.BorderColor = new Color(
-                        reader.ReadByte(), 
-                        reader.ReadByte(), 
-                        reader.ReadByte(), 
-                        reader.ReadByte());
-					Samplers[s].state.Filter = (TextureFilter)reader.ReadByte();
-					Samplers[s].state.MaxAnisotropy = reader.ReadInt32();
-					Samplers[s].state.MaxMipLevel = reader.ReadInt32();
-					Samplers[s].state.MipMapLevelOfDetailBias = reader.ReadSingle();
-				}
-
-                Samplers[s].name = reader.ReadString();
-                Samplers[s].parameter = reader.ReadByte();
-            }
-
-            var cbufferCount = (int)reader.ReadByte();
-            CBuffers = new int[cbufferCount];
-            for (var c = 0; c < cbufferCount; c++)
-                CBuffers[c] = reader.ReadByte();
-
-            var attributeCount = (int)reader.ReadByte();
-            Attributes = new VertexAttribute[attributeCount];
-            for (var a = 0; a < attributeCount; a++)
-            {
-                Attributes[a].name = reader.ReadString();
-                Attributes[a].usage = (VertexElementUsage)reader.ReadByte();
-                Attributes[a].index = reader.ReadByte();
-                Attributes[a].location = reader.ReadInt16();
-            }
+            this.Stage = stage;
+            this.Samplers = samplers;
+            this.CBuffers = cBuffers;
+            this.Attributes = attributes;
 
             PlatformConstruct(Stage, shaderBytecode);
         }

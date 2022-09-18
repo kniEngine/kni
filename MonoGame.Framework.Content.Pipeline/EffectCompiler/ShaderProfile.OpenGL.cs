@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -15,14 +17,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private static readonly Regex GlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
 
         public OpenGLShaderProfile()
-            : base("OpenGL", 0)
+            : base("OpenGL", ShaderProfileType.OpenGL_Mojo)
         {                
         }
 
-        internal override void AddMacros(Dictionary<string, string> macros)
+        internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
         {
-            macros.Add("GLSL", "1");
-            macros.Add("OPENGL", "1");                
+            yield return new KeyValuePair<string, string>("__OPENGL__", "1");
+            yield return new KeyValuePair<string, string>("__MOJOSHADER__", "1");
+
+            // deprecated macros. Left for backward compatibility with MonoGame.
+            yield return new KeyValuePair<string, string>("GLSL", "1");
+            yield return new KeyValuePair<string, string>("OPENGL", "1");
         }
 
         internal override void ValidateShaderModels(PassInfo pass)
@@ -57,16 +63,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return shaderData;
         }
             
-        internal override bool Supports(string platform)
+        internal override bool Supports(TargetPlatform platform)
         {
-            if (platform == "iOS" ||
-                platform == "Android" ||
-                platform == "DesktopGL" ||
-                platform == "MacOSX" ||
-                platform == "RaspberryPi")
-                return true;
-
-            return false;
+            switch(platform)
+            {
+                case TargetPlatform.iOS:
+                case TargetPlatform.Android:
+                case TargetPlatform.DesktopGL:
+                case TargetPlatform.MacOSX:
+                case TargetPlatform.RaspberryPi:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

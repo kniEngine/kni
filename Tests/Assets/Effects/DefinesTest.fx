@@ -2,7 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#include "include.fxh"
 
 float4 VS_Main(float4 position : POSITION0) : SV_Position0
 {
@@ -18,8 +17,8 @@ technique
 {
     pass
     {
-		VertexShader = compile VS_PROFILE VS_Main();
-        PixelShader = compile PS_PROFILE PS_Main();
+        VertexShader = compile vs_4_0_level_9_1 VS_Main();
+        PixelShader = compile ps_4_0_level_9_1 PS_Main();
     }
 }
 

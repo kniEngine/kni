@@ -2,13 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
+using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
+
 namespace MonoGame.EffectCompiler
 {
-    public enum ShaderProfile
-    {
-        OpenGL,
-        DirectX_11,
-    }
 
     public class Options
     {
@@ -18,10 +18,11 @@ namespace MonoGame.EffectCompiler
         [CommandLineParser.Required]
         public string OutputFile = string.Empty;
 
-        public ShaderProfile Profile = ShaderProfile.OpenGL;
+        [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform.")]
+        public TargetPlatform Platform = (TargetPlatform)(-1);
 
-        [CommandLineParser.Name("Debug", "\t\t - Include extra debug information in the compiled effect.")]
-        public bool Debug;
+        [CommandLineParser.Name("Config", "\t\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
+        public string Config;
 
         [CommandLineParser.Name("Defines", "\t - Semicolon-delimited define assignments")]
         public string Defines;

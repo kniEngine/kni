@@ -1,10 +1,5 @@
-﻿#if OPENGL
+﻿#if __OPENGL__
 	#define SV_POSITION POSITION
-	#define VS_SHADERMODEL vs_2_0
-	#define PS_SHADERMODEL ps_2_0
-#else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
 Texture2D SpriteTexture;
@@ -30,6 +25,6 @@ technique SpriteDrawing
 {
 	pass P0
 	{
-		PixelShader = compile PS_SHADERMODEL MainPS();
+		PixelShader = compile ps_4_0_level_9_1 MainPS();
 	}
 };

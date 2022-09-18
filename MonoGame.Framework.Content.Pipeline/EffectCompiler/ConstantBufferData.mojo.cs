@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 
@@ -6,19 +12,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     internal partial class ConstantBufferData
     {
         public ConstantBufferData (string name,
-                                MojoShader.MOJOSHADER_symbolRegisterSet set, 
-                                MojoShader.MOJOSHADER_symbol[] symbols)
+                                MojoShader.SymbolRegisterSet set, 
+                                MojoShader.Symbol[] symbols)
 		{
 			Name = name ?? string.Empty;
 
 			ParameterIndex = new List<int> ();
 			ParameterOffset = new List<int> ();
-			Parameters = new List<EffectObject.d3dx_parameter> ();
+			Parameters = new List<EffectObject.EffectParameterContent> ();
 
 			int minRegister = short.MaxValue;
 			int maxRegister = 0;
 
-			var registerSize = (set == MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL ? 1 : 4) * 4;
+			var registerSize = (set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
 
 			foreach (var symbol in symbols) {
 				if (symbol.register_set != set)
@@ -40,30 +46,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Size = Math.Max(maxRegister - minRegister, 0) * registerSize;
         }
 
-        private static EffectObject.d3dx_parameter GetParameterFromSymbol(MojoShader.MOJOSHADER_symbol symbol)
+        private static EffectObject.EffectParameterContent GetParameterFromSymbol(MojoShader.Symbol symbol)
         {
-            var param = new EffectObject.d3dx_parameter();
+            var param = new EffectObject.EffectParameterContent();
             param.rows = symbol.info.rows;
             param.columns = symbol.info.columns;
             param.name = symbol.name ?? string.Empty;
             param.semantic = string.Empty; // TODO: How do i do this with only MojoShader?
 
-            var registerSize = (symbol.register_set == MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL ? 1 : 4) * 4;
+            var registerSize = (symbol.register_set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
             var offset = (int)symbol.register_index * registerSize;
             param.bufferOffset = offset;
 
             switch (symbol.info.parameter_class)
             {
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_SCALAR:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.SCALAR;
+                case MojoShader.SymbolClass.SCALAR:
+                    param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_VECTOR:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.VECTOR;
+                case MojoShader.SymbolClass.VECTOR:
+                    param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolClass.MOJOSHADER_SYMCLASS_MATRIX_COLUMNS:
-                    param.class_ = EffectObject.D3DXPARAMETER_CLASS.MATRIX_COLUMNS;
+                case MojoShader.SymbolClass.MATRIX_COLUMNS:
+                    param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
                     break;
 
                 default:
@@ -72,16 +78,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             switch (symbol.info.parameter_type)
             {
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_BOOL:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.BOOL;
+                case MojoShader.SymbolType.BOOL:
+                    param.type = EffectObject.PARAMETER_TYPE.BOOL;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_FLOAT:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.FLOAT;
+                case MojoShader.SymbolType.FLOAT:
+                    param.type = EffectObject.PARAMETER_TYPE.FLOAT;
                     break;
 
-                case MojoShader.MOJOSHADER_symbolType.MOJOSHADER_SYMTYPE_INT:
-                    param.type = EffectObject.D3DXPARAMETER_TYPE.INT;
+                case MojoShader.SymbolType.INT:
+                    param.type = EffectObject.PARAMETER_TYPE.INT;
                     break;
 
                 default:
@@ -96,9 +102,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             if (param.member_count > 0)
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.member_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
 
-                var members = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_symbol>(
+                var members = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
                     symbol.info.members, (int)symbol.info.member_count);
 
                 for (var i = 0; i < param.member_count; i++)
@@ -109,10 +115,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
             else
             {
-                param.member_handles = new EffectObject.d3dx_parameter[param.element_count];
+                param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
                 for (var i = 0; i < param.element_count; i++)
                 {
-                    var mparam = new EffectObject.d3dx_parameter();
+                    var mparam = new EffectObject.EffectParameterContent();
 
                     mparam.name = string.Empty;
                     mparam.semantic = string.Empty;

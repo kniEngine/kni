@@ -41,12 +41,12 @@ float4 PS(PSInput input) : COLOR0
     return float4(input.TexCoord.xy, 0, 1);
 }
 
-#if SM4
-#define PS_PROFILE ps_4_0
-#define VS_PROFILE vs_4_0
-#else
+#if __OPENGL__
 #define PS_PROFILE ps_3_0
 #define VS_PROFILE vs_3_0
+#else
+#define PS_PROFILE ps_4_0
+#define VS_PROFILE vs_4_0
 #endif
 
 technique

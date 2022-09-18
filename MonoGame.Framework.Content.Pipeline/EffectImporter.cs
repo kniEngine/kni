@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
@@ -30,6 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             var effect = new EffectContent();
             effect.Identity = new ContentIdentity(filename);
+            effect.Name = Path.GetFileNameWithoutExtension(filename);
             using (var reader = new StreamReader(filename))
                 effect.EffectCode = reader.ReadToEnd();
             return effect;

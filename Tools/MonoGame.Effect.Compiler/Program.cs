@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace MonoGame.EffectCompiler
@@ -36,17 +39,12 @@ namespace MonoGame.EffectCompiler
                 var content = importer.Import(options.SourceFile, importerContext);
 
                 var processor = new EffectProcessor();
-                processor.DebugMode = (options.Debug) ? EffectProcessorDebugMode.Debug : EffectProcessorDebugMode.Optimize;
                 processor.Defines = options.Defines;
-                TargetPlatform targetPlatform;
-                if (options.Profile == ShaderProfile.DirectX_11)
-                    targetPlatform = TargetPlatform.Windows;
-                else if (options.Profile == ShaderProfile.OpenGL)
-                    targetPlatform = TargetPlatform.DesktopGL;
-                else
-                    throw new InvalidOperationException("");
 
-                var processorContext = new ProcessorContext(logger, targetPlatform, options.OutputFile);
+                if (options.Platform == (TargetPlatform)(-1))
+                    throw new InvalidOperationException("Platform");
+
+                var processorContext = new ProcessorContext(logger, options.Platform, options.OutputFile, options.Config);
                 var output = processor.Process(content, processorContext);
 
                 var effectCode = output.GetEffectCode();
