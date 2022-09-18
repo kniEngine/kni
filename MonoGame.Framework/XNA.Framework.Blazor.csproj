@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Monogame.Framework\Blazor\</BaseOutputPath>
 
@@ -23,10 +23,6 @@
     <Description>XNA framework for the WebAssembly.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;Blazor;webassembly</PackageTags>
     <PackageId>nkast.Xna.Framework.Blazor</PackageId>
-    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
-    <PackageIcon />
-    <RepositoryUrl>https://github.com/nkast/MonoGame/</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/nkast/MonoGame/</PackageProjectUrl>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>
