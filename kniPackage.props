@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
     <PackageIcon>Icon.png</PackageIcon>
-    <PackageProjectUrl>https://www.monogame.net/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MonoGame/MonoGame</RepositoryUrl>
-    <Authors>MonoGame Team</Authors>
+    <PackageProjectUrl>https://github.com/kniengine/kni/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kniengine/kni/</RepositoryUrl>
+    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
   </PropertyGroup>
 

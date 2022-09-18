@@ -1,4 +1,10 @@
-﻿using System;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
+using System;
 using System.Linq;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
@@ -17,10 +23,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // in the first place.
                 //shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.NoPreshader;
 
-                if (shaderResult.Profile == ShaderProfile.DirectX_11)
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11)
+                {
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility;
+                }
 
-                if (shaderResult.Debug)
+                // force D3DCompiler to generate legacy bytecode that is compatible with MojoShader.
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo)
+                {
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
+                }
+
+                if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
                 {
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.SkipOptimization;
                     shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.Debug;

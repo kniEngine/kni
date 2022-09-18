@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using SharpDX.Direct3D;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+
+// Copyright (C)2022 Nick Kastellanos
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal partial class ShaderData
     {
-        public static ShaderData CreateHLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, bool debug)
+        public static ShaderData CreateHLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
         {
             var dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
             dxshader._attributes = new Attribute[0];
@@ -15,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             var stripFlags = SharpDX.D3DCompiler.StripFlags.CompilerStripReflectionData |
                              SharpDX.D3DCompiler.StripFlags.CompilerStripTestBlobs;
 
-            if (!debug)
+            if (debugMode != EffectProcessorDebugMode.Debug)
                 stripFlags |= SharpDX.D3DCompiler.StripFlags.CompilerStripDebugInformation;
 
             using (var original = new SharpDX.D3DCompiler.ShaderBytecode(byteCode))
@@ -98,23 +101,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             {
                                 case ShaderResourceViewDimension.Texture1D:
                                 case ShaderResourceViewDimension.Texture1DArray:
-                                    sampler.type = MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_1D;
+                                    sampler.type = MojoShader.SamplerType.SAMPLER_1D;
                                     break;
 
                                 case ShaderResourceViewDimension.Texture2D:
                                 case ShaderResourceViewDimension.Texture2DArray:
                                 case ShaderResourceViewDimension.Texture2DMultisampled:
                                 case ShaderResourceViewDimension.Texture2DMultisampledArray:
-                                    sampler.type = MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_2D;
+                                    sampler.type = MojoShader.SamplerType.SAMPLER_2D;
                                     break;
 
                                 case ShaderResourceViewDimension.Texture3D:
-                                    sampler.type = MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_VOLUME;
+                                    sampler.type = MojoShader.SamplerType.SAMPLER_VOLUME;
                                     break;
 
                                 case ShaderResourceViewDimension.TextureCube:
                                 case ShaderResourceViewDimension.TextureCubeArray:
-                                    sampler.type = MojoShader.MOJOSHADER_samplerType.MOJOSHADER_SAMPLER_CUBE;
+                                    sampler.type = MojoShader.SamplerType.SAMPLER_CUBE;
                                     break;
                             }
 

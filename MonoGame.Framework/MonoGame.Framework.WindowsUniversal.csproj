@@ -1,8 +1,12 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\WindowsUniversal</BaseOutputPath>
+
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
+
   </PropertyGroup>
 
   <PropertyGroup>

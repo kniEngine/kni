@@ -64,7 +64,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // By assigning NULL data to the buffer this gives a hint
                 // to the device to discard the previous content.
-                throw new NotImplementedException();
+                    GL.BufferData(
+                        WebGLBufferType.ELEMENT_ARRAY,
+                        bufferSize,
+                        _isDynamic ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             }
 
             GL.BufferSubData(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);

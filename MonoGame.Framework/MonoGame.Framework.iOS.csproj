@@ -1,14 +1,19 @@
 <Project Sdk="MSBuild.Sdk.Extras/3.0.44">
 
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\iOS</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
+
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>xamarinios10</TargetFramework>
+    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
@@ -19,7 +24,6 @@
     <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
     <PackageId>MonoGame.Framework.iOS</PackageId>
-    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>

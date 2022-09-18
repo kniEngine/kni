@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Xna.Framework\</BaseOutputPath>
     

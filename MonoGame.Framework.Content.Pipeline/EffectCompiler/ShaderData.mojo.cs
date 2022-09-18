@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+
+// Copyright (C)2022 Nick Kastellanos
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-        public static ShaderData CreateGLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, bool debug)
+        public static ShaderData CreateGLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
             var dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
 
 			// Use MojoShader to convert the HLSL bytecode to GLSL.
 
-			var parseDataPtr = MojoShader.NativeMethods.MOJOSHADER_parse (
+			var parseDataPtr = MojoShader.NativeMethods.Parse(
 				"glsl",
 				byteCode,
 				byteCode.Length,
@@ -26,9 +29,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				IntPtr.Zero,
 				IntPtr.Zero);
 
-			var parseData = MarshalHelper.Unmarshal<MojoShader.MOJOSHADER_parseData> (parseDataPtr);
+			var parseData = MarshalHelper.Unmarshal<MojoShader.ParseData> (parseDataPtr);
 			if (parseData.error_count > 0) {
-				var errors = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_error> (
+				var errors = MarshalHelper.UnmarshalArray<MojoShader.Error> (
 					parseData.errors,
 					parseData.error_count
 				);
@@ -40,7 +43,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			// TODO: Could this be done using DX shader reflection?
 			//
 			{
-				var attributes = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_attribute> (
+				var attributes = MarshalHelper.UnmarshalArray<MojoShader.Attribute> (
 						parseData.attributes, parseData.attribute_count);
 
 				dxshader._attributes = new Attribute[attributes.Length];
@@ -51,12 +54,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				}
 			}
 
-			var symbols = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_symbol> (
+			var symbols = MarshalHelper.UnmarshalArray<MojoShader.Symbol> (
 					parseData.symbols, parseData.symbol_count);
 
 			//try to put the symbols in the order they are eventually packed into the uniform arrays
 			//this /should/ be done by pulling the info from mojoshader
-			Array.Sort (symbols, delegate(MojoShader.MOJOSHADER_symbol a, MojoShader.MOJOSHADER_symbol b) {
+			Array.Sort (symbols, delegate(MojoShader.Symbol a, MojoShader.Symbol b) {
 				uint va = a.register_index;
 				if (a.info.elements == 1)
 					va += 1024; //hax. mojoshader puts array objects first
@@ -80,17 +83,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 				for (var i = 0; i < symbols.Length; i++) {
 					switch (symbols [i].register_set) {
-					case MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL:
+					case MojoShader.SymbolRegisterSet.BOOL:
 						symbols [i].register_index = bool_index;
 						bool_index += symbols [i].register_count;
 						break;
 
-					case MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_FLOAT4:
+					case MojoShader.SymbolRegisterSet.FLOAT4:
 						symbols [i].register_index = float4_index;
 						float4_index += symbols[i].register_count;
 						break;
 
-					case MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_INT4:
+					case MojoShader.SymbolRegisterSet.INT4:
 						symbols [i].register_index = int4_index;
 						int4_index += symbols [i].register_count;
 						break;
@@ -99,14 +102,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
 
 			// Get the samplers.
-			var samplers = MarshalHelper.UnmarshalArray<MojoShader.MOJOSHADER_sampler> (
+			var samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler> (
 					parseData.samplers, parseData.sampler_count);
 			dxshader._samplers = new Sampler[samplers.Length];
 			for (var i = 0; i < samplers.Length; i++) 
             {
                 // We need the original sampler name... look for that in the symbols.
                 var originalSamplerName =
-                    symbols.First(e => e.register_set == MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_SAMPLER &&
+                    symbols.First(e => e.register_set == MojoShader.SymbolRegisterSet.SAMPLER &&
                     e.register_index == samplers[i].index
                 ).name;
 
@@ -139,9 +142,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 			// Gather all the parameters used by this shader.
 			var symbol_types = new [] { 
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_BOOL, },
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_INT4, },
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.MOJOSHADER_symbolRegisterSet.MOJOSHADER_SYMREGSET_FLOAT4, },
+				new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.SymbolRegisterSet.BOOL, },
+				new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
+				new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
 			};
 
 			var cbuffer_index = new List<int> ();

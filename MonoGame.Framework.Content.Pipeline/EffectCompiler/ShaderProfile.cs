@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,20 +15,26 @@ using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
+    public enum ShaderProfileType
+    {
+        OpenGL_Mojo = 0,
+        DirectX_11  = 1,
+    }
+
     [TypeConverter(typeof(StringConverter))]
     public abstract class ShaderProfile
     {
         private static readonly LoadedTypeCollection<ShaderProfile> _profiles = new LoadedTypeCollection<ShaderProfile>();
 
-        protected ShaderProfile(string name, byte formatId)
+        protected ShaderProfile(string name, ShaderProfileType profileType)
         {
             Name = name;
-            FormatId = formatId;
+            ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile OpenGL = FromName("OpenGL");
+        public static readonly ShaderProfile OpenGL_Mojo = FromType(ShaderProfileType.OpenGL_Mojo);
 
-        public static readonly ShaderProfile DirectX_11 = FromName("DirectX_11");
+        public static readonly ShaderProfile DirectX_11 = FromType(ShaderProfileType.DirectX_11);
 
         /// <summary>
         /// Returns all the loaded shader profiles.
@@ -44,28 +52,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// <summary>
         /// Returns the format identifier used in the MGFX file format.
         /// </summary>
-        public byte FormatId { get; private set; }
+        public ShaderProfileType ProfileType { get; private set; }
 
-        internal abstract bool Supports(string platform);
+        internal abstract bool Supports(TargetPlatform platform);
         
         /// <summary>
         /// Returns the correct profile for the named platform or
         /// null if no supporting profile is found.
         /// </summary>
-        public static ShaderProfile ForPlatform(string platform)
+        public static ShaderProfile FromPlatform(TargetPlatform platform)
         {
             return _profiles.FirstOrDefault(p => p.Supports(platform));
         }
 
         /// <summary>
-        /// Returns the profile by name or null if no match is found.
+        /// Returns the profile by type or null if no match is found.
         /// </summary>
-        public static ShaderProfile FromName(string name)
+        public static ShaderProfile FromType(ShaderProfileType profileType)
         {
-            return _profiles.FirstOrDefault(p => p.Name == name);
+            return _profiles.FirstOrDefault(p => p.ProfileType == profileType);
         }
 
-        internal abstract void AddMacros(Dictionary<string, string> macros);
+        internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
 
         internal abstract void ValidateShaderModels(PassInfo pass);
 

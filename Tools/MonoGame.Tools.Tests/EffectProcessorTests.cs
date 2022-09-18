@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using NUnit.Framework;
@@ -6,6 +12,7 @@ using System.IO;
 #if DIRECTX
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 #endif
 
 namespace MonoGame.Tests.ContentPipeline
@@ -39,19 +46,22 @@ namespace MonoGame.Tests.ContentPipeline
         [Test]
         public void TestPreprocessor()
         {
-            var effectFile = "Assets/Effects/PreprocessorTest.fx";
-            var effectCode = File.ReadAllText(effectFile);
-            var fullPath = Path.GetFullPath(effectFile);
+            var filename = "Assets/Effects/PreprocessorTest.fx";
+            var effect = new EffectContent();
+            effect.Identity = new ContentIdentity(filename);
+            effect.Name = Path.GetFileNameWithoutExtension(filename);
+            effect.EffectCode = File.ReadAllText(filename);
+
+
+            var processorContext = new TestProcessorContext(TargetPlatform.Windows, Path.ChangeExtension(filename, ".xnb"));
 
             // Preprocess.
-            var mgDependencies = new List<string>();
-            var mgPreprocessed = Preprocessor.Preprocess(effectCode, fullPath, new Dictionary<string, string>
-            {
-                { "TEST2", "1" }
-            }, mgDependencies, new TestEffectCompilerOutput());
+            Preprocessor pp = new Preprocessor();
+            pp.AddMacro("TEST2", "1");
+            var mgPreprocessed = pp.Preprocess(effect, processorContext);
 
-            Assert.That(mgDependencies, Has.Count.EqualTo(1));
-            Assert.That(Path.GetFileName(mgDependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));
+            Assert.That(processorContext._dependencies, Has.Count.EqualTo(1));
+            Assert.That(Path.GetFileName(processorContext._dependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));
 
             Assert.That(mgPreprocessed, Does.Not.Contain("Foo"));
             Assert.That(mgPreprocessed, Does.Contain("Bar"));
@@ -61,20 +71,7 @@ namespace MonoGame.Tests.ContentPipeline
             Assert.That(mgPreprocessed, Does.Not.Contain("BAR"));
 
             // Check that we can actually compile this file.
-            BuildEffect(effectFile, TargetPlatform.Windows);
-        }
-
-        private class TestEffectCompilerOutput : IEffectCompilerOutput
-        {
-            public void WriteWarning(string file, int line, int column, string message)
-            {
-                Console.WriteLine("Warning: {0}({1},{2}): {3}", file, line, column, message);
-            }
-
-            public void WriteError(string file, int line, int column, string message)
-            {
-                Console.WriteLine("Error: {0}({1},{2}): {3}", file, line, column, message);
-            }
+            BuildEffect(filename, TargetPlatform.Windows);
         }
 #endif
 

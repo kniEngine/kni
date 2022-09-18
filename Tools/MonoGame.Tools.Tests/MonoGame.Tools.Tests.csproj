@@ -909,9 +909,6 @@
     <Content Update="..\..\Tests\Assets\Effects\DirectX.mgcb">
       <Link>Assets\Effects\DirectX.mgcb</Link>
     </Content>
-    <Content Update="..\..\Tests\Assets\Effects\Include.fxh">
-      <Link>Assets\Effects\Include.fxh</Link>
-    </Content>
     <Content Update="..\..\Tests\Assets\Effects\Grayscale.fx">
       <Link>Assets\Effects\Grayscale.fx</Link>
     </Content>

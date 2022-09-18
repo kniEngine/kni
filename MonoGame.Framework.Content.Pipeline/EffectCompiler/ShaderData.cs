@@ -1,3 +1,9 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
@@ -15,7 +21,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 		public struct Sampler
 		{
-			public MojoShader.MOJOSHADER_samplerType type;
+			public MojoShader.SamplerType type;
 			public int textureSlot;
             public int samplerSlot;
 			public string samplerName;

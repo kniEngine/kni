@@ -1,39 +1,50 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2022 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CppNet;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public static class Preprocessor
+    public class Preprocessor
     {
-        public static string Preprocess(
-            string effectCode, string filePath, IDictionary<string, string> defines, List<string> dependencies,
-            IEffectCompilerOutput output)
+        public CppNet.Preprocessor _pp = new CppNet.Preprocessor();
+
+
+        internal void AddMacro(string name, string value)
         {
-            var fullPath = Path.GetFullPath(filePath);
+            _pp.addMacro(name, value);
+        }
 
-            var pp = new CppNet.Preprocessor();
-
-            pp.EmitExtraLineInfo = false;
-            pp.addFeature(Feature.LINEMARKERS);
-            pp.setListener(new MGErrorListener(output));
-            pp.setFileSystem(new MGFileSystem(dependencies));
-            pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
-
-            foreach (var define in defines)
-                pp.addMacro(define.Key, define.Value);
-
+        public string Preprocess(EffectContent input, ContentProcessorContext context)
+        {
+            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
+            var dependencies = new List<string>();            
+            
+            _pp.EmitExtraLineInfo = false;
+            _pp.addFeature(Feature.LINEMARKERS);
+            _pp.setListener(new MGErrorListener(context.Logger));
+            _pp.setFileSystem(new MGFileSystem(dependencies));
+            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
+            
+            string effectCode = input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
+            _pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
 
             var result = new StringBuilder();
 
             var endOfStream = false;
             while (!endOfStream)
             {
-                var token = pp.token();
+                var token = _pp.token();
                 switch (token.getType())
                 {
                     case CppNet.Token.EOF:
@@ -66,6 +77,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
                 }
             }
+
+            // Add the include dependencies so that if they change
+            // it will trigger a rebuild of this effect.
+            foreach (var dep in dependencies)
+                context.AddDependency(dep);
 
             return result.ToString();
         }
@@ -154,26 +170,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private class MGErrorListener : PreprocessorListener
         {
-            private readonly IEffectCompilerOutput _output;
+            private readonly ContentBuildLogger _logger;
 
-            public MGErrorListener(IEffectCompilerOutput output)
+            public MGErrorListener(ContentBuildLogger logger)
             {
-                _output = output;
+                _logger = logger;
             }
 
             public void handleWarning(Source source, int line, int column, string msg)
             {
-                _output.WriteWarning(GetPath(source), line, column, msg);
+                _logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
             }
 
             public void handleError(Source source, int line, int column, string msg)
             {
-                _output.WriteError(GetPath(source), line, column, msg);
+                throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
             }
 
-            private string GetPath(Source source)
+            private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
             {
-                return ((MGStringLexerSource) source).Path;
+                string file = ((MGStringLexerSource)source).Path;
+                return new ContentIdentity(file, null, line + "," + column);
             }
 
             public void handleSourceChange(Source source, string ev)
