@@ -1,4 +1,4 @@
 <Project>
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
 </Project>
 

@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras/3.0.44">
 
-  <Import Project="..\MonoGame.props" />
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\iOS</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
