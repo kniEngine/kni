@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MGFXC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The MonoGame Team")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MGFXC")]
-[assembly: AssemblyCopyright("Copyright (C) The MonoGame Team")]
+[assembly: AssemblyCopyright("Copyright (C)2022 The MonoGame Team, ©2022 Nick Kastellanos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

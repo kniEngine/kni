@@ -22,10 +22,6 @@
     <Description>Reference XNA framework for libraries.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
     <PackageId>nkast.Xna.Framework.Ref</PackageId>
-    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
-    <PackageIcon />
-    <RepositoryUrl>https://github.com/kniengine/kni/</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/kniengine/kni/</PackageProjectUrl>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>

@@ -4,4 +4,4 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("MonoGame for Mac OS X")]
+[assembly: AssemblyTitle("KNI for Mac OS X platform platform")]

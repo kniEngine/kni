@@ -4,6 +4,6 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-//[assembly: AssemblyTitle("MonoGame for Blazor")]
+//[assembly: AssemblyTitle("KNI for Web-Blazor platform (WebGL)")]
 
 

@@ -8,10 +8,9 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MonoGame Team")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MonoGame.Framework")]
-[assembly: AssemblyCopyright("Copyright © 2009-2016 MonoGame Team")]
-[assembly: AssemblyTrademark("MonoGame® is a registered trademark of the MonoGame Team")]
+[assembly: AssemblyCopyright("Copyright ©2009-2022 MonoGame Team, ©2022 Nick Kastellanos")]
 [assembly: AssemblyCulture("")]
 
 // Mark the assembly as CLS compliant so it can be safely used in other .NET languages
