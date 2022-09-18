@@ -395,7 +395,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetValue(Vector4 value)
         {
-            if (ParameterClass != EffectParameterClass.Vector || ParameterType != EffectParameterType.Single)
+            if (ParameterClass == EffectParameterClass.Vector && ParameterType == EffectParameterType.Single)
             {
                 var fData = (float[])Data;
                 fData[0] = value.X;
