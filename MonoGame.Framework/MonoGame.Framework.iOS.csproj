@@ -9,6 +9,7 @@
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>xamarinios10</TargetFramework>
+    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
@@ -19,7 +20,6 @@
     <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
     <PackageId>MonoGame.Framework.iOS</PackageId>
-    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
