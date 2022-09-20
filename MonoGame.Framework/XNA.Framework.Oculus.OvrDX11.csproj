@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\OculusOvrDX11</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    
+    <Version>3.8.9100.0</Version>
+    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Xna.Framework.Oculus.OvrDX11</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <DefineConstants>OVR;DIRECTX11;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Ovr Oculus library for the KNI Framework (DirectX 11).</Description>
+    <PackageTags>KNI;XNA;MonoGame</PackageTags>
+    <PackageId>nkast.Xna.Framework.Oculus.OvrDX11</PackageId>
+    <PackageOutputPath>..\NuGetPackages\Output</PackageOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Input\Oculus\LibOVR\ConcreteTouchControllerStrategy.cs" />
+    <Compile Include="Input\Oculus\HandsState.cs" />
+    <Compile Include="Input\Oculus\HeadsetState.cs" />
+    <Compile Include="Graphics\ConcreteOvrSwapChainData.DirectX.cs" />
+    <Compile Include="Graphics\OvrDevice.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="XNA.Framework.WindowsDX11.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="nkast.LibOVR" Version="1.0.0" />
+    <PackageReference Include="SharpDX"  Version="4.0.1" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
+  </ItemGroup>
+
+</Project>

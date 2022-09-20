@@ -154,6 +154,17 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
 
   SetOutPath '$INSTDIR\Assemblies\Windows\net6.0-windows'
   File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\*.*'
+  
+  ; Install Oculus Ovr DirectX Assemblies
+  SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.dll'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.xml'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.dll'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.Native.dll'
+  SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\netstandard2.0'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\netstandard2.0\Xna.Framework.Oculus.OvrDX11.dll'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\netstandard2.0\Xna.Framework.Oculus.OvrDX11.xml'
+  File '..\..\Artifacts\Monogame.Framework\OculusOvrDX11\Release\netstandard2.0\Xna.Framework.Oculus.OvrDX11.deps.json'
 
   ; Install Windows 10 UAP Assemblies
   SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'
