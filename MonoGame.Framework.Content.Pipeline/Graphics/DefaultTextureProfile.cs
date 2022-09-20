@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                             platform == TargetPlatform.DesktopGL ||
                             platform == TargetPlatform.MacOSX ||
                             platform == TargetPlatform.NativeClient ||
-                            platform == TargetPlatform.BlazorWebGL)
+                            platform == TargetPlatform.BlazorGL)
                 {
                     if (format != TextureProcessorOutputFormat.DxtCompressed)
                         throw new PlatformNotSupportedException(format + " platform only supports DXT texture compression");
