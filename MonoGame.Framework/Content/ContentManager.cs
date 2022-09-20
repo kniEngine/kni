@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content
             'O', // XboxOne
             'S', // Nintendo Switch
             'G', // Google Stadia
-            'b', // WebAssembly and Bridge.NET
+            'b', // BlazorGL
 
             // NOTE: There are additional idenfiers for consoles that 
             // are not defined in this repository.  Be sure to ask the
