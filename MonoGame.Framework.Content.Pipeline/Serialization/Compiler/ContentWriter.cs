@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             'O', // XboxOne
             'S', // Nintendo Switch
             'G', // Google Stadia
-            'b', // WebAssembly and Bridge.NET
+            'b', // BlazorGL
         };
 
         /// <summary>

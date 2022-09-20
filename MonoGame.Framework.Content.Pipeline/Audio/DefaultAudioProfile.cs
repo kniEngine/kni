@@ -22,8 +22,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                     platform == TargetPlatform.Windows ||
                     platform == TargetPlatform.WindowsStoreApp ||
                     platform == TargetPlatform.iOS ||
-                    platform == TargetPlatform.Web ||
-                    platform == TargetPlatform.Blazor;
+                    platform == TargetPlatform.BlazorGL;
         }
 
         public override ConversionQuality ConvertAudio(TargetPlatform platform, ConversionQuality quality, AudioContent content)
@@ -52,9 +51,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
 
             else if (platform == TargetPlatform.DesktopGL)
                 targetFormat = ConversionFormat.Vorbis;
-            else if (platform == TargetPlatform.Web)
-                targetFormat = ConversionFormat.Mp3;
-            else if (platform == TargetPlatform.Blazor)
+            else if (platform == TargetPlatform.BlazorGL)
                 targetFormat = ConversionFormat.Mp3;
 
             // Get the song output path with the target format extension.

@@ -94,14 +94,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         Stadia,
 
         /// <summary>
-        /// WebAssembly and Bridge.NET
+        /// Blazor/WebAssembly (WebGL)
         /// </summary>
-        Web,
-
-        /// <summary>
-        /// WebAssembly/Blazor
-        /// </summary>
-        Blazor,
+        BlazorGL,
     }
 
 
