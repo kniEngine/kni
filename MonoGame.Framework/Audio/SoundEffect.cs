@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Audio
               Sample rate must be between 8,000 Hz and 48,000 Hz
             */
 
-            _strategy = new ConcreteSoundEffect();
+            _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
             _strategy.PlatformLoadAudioStream(stream, out _duration);
         }
 
@@ -59,20 +59,20 @@ namespace Microsoft.Xna.Framework.Audio
                 var channels = BitConverter.ToInt16(header, 2);
                 var sampleRate = BitConverter.ToInt32(header, 4);
                 var bitsPerSample = BitConverter.ToInt16(header, 14);
-                _strategy = new ConcreteSoundEffect();
+                _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
                 _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                 return;
             }
 
             // Everything else is platform specific.
-            _strategy = new ConcreteSoundEffect();
+            _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
             _strategy.PlatformInitializeFormat(header, buffer, 0, bufferSize, loopStart, loopLength);
         }
 
         // Only used from XACT WaveBank.
         internal SoundEffect(MiniFormatTag codec, byte[] buffer, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            _strategy = new ConcreteSoundEffect();
+            _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
 
             switch(codec)
             {
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             _duration = AudioService.GetSampleDuration(count, sampleRate, channels);
 
-            _strategy = new ConcreteSoundEffect();
+            _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
             _strategy.PlatformInitializePcm(buffer, offset, count, 16, sampleRate, (int)channels, loopStart, loopLength);
         }
 

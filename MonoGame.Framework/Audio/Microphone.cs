@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Audio
         internal Microphone(string name)
         {
             Name = name;
-            _strategy = new ConcreteMicrophone();
+            _strategy = AudioFactory.Current.CreateMicrophoneStrategy();
         }
 
         #endregion
