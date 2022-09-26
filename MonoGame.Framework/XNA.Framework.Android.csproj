@@ -120,6 +120,7 @@
     <Compile Include="Audio\AudioListener.cs" />
     <Compile Include="Audio\AudioService.Microphones.cs" />
     <Compile Include="Audio\AudioService.InstancePool.cs" />
+    <Compile Include="Audio\AudioFactory.cs" />
     <Compile Include="Audio\AudioService.cs" />
     <Compile Include="Audio\AudioServiceStrategy.cs" />
     <Compile Include="Audio\DynamicSoundEffectInstance.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Audio\Xact\XactSound.cs" />
 
     <Compile Include="Audio\Xact\WaveBank.Default.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
     <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
     <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />

@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         private AudioService()
         {
-            _strategy = new ConcreteAudioService();
+            _strategy = AudioFactory.Current.CreateAudioServiceStrategy();
             _strategy.PlatformPopulateCaptureDevices(_microphones, ref _defaultMicrophone);
 
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += AudioService.Update;
