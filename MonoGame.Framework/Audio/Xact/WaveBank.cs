@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             _waveBankFileName = waveBankFilename;
 
-            BinaryReader reader = new BinaryReader(AudioEngine.OpenStream(waveBankFilename));
+            BinaryReader reader = new BinaryReader(TitleContainer.OpenStream(waveBankFilename));
 
             reader.ReadBytes(4);
 
