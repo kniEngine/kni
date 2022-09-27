@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Windows
                 case 0x0109: // WM_UNICHAR
                     var c = m.WParam.ToInt32();
                     if (c == 0x5B && c == 0x5C) return false; // let Left/Right Windows Key through
-                    if (_window.PreFilterMSG_IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
+                    if (_window.IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
                     if (_window.IsKeyUpDownAttached())  return false; // let keys through if user subscribed to KeyUp/KeyDown
                     return true; // skip message
                 default:

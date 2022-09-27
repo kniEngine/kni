@@ -143,8 +143,6 @@ namespace Microsoft.Xna.Framework
 		/// </remarks>
 		public event EventHandler<TextInputEventArgs> TextInput;
 
-        internal bool IsTextInputHandled { get { return TextInput != null; } }
-
         /// <summary>
         /// Buffered keyboard KeyDown event.
         /// </summary>
@@ -242,13 +240,11 @@ namespace Microsoft.Xna.Framework
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>
-	    /// <param name="sender">The game window.</param>
-	    /// <param name="e">Parameters to the <see cref="TextInput"/> event.</param>
-		internal void OnTextInput(TextInputEventArgs e)
+		internal void OnTextInput(char character, Keys key)
 		{
             var handler = TextInput;
             if (handler != null)
-                handler(this, e);
+                handler(this, new TextInputEventArgs(key, character));
 		}
         internal void OnKeyDown(Keys key)
 	    {
@@ -265,9 +261,6 @@ namespace Microsoft.Xna.Framework
 
         internal bool IsTextInputAttached() { return (TextInput != null); }
         internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
-#endif
-#if WINDOWS
-        internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
 #endif
 
         internal void OnFileDrop(FileDropEventArgs e)

@@ -396,8 +396,7 @@ namespace Microsoft.Xna.Framework
                 InputEvents.KeyChar ch;
                 while (_inputEvents.TextQueue.TryDequeue(out ch))
                 {
-                    if (IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
-                        OnTextInput(new TextInputEventArgs(ch.Character, ch.Key));
+                    OnTextInput(ch.Character, ch.Key);
                 }
             }
 

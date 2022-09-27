@@ -105,7 +105,6 @@
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="ReusableItemList.cs" />
-    <Compile Include="TextInputEventArgs.cs" />
     <Compile Include="Platform\Threading.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.Desktop.cs" />
@@ -444,6 +443,7 @@
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursor.SDL.cs" />
     <Compile Include="Input\MouseState.cs" />
+	<Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />
     <Compile Include="Input\Oculus\TouchButtons.cs" />
     <Compile Include="Input\Oculus\TouchButtonState.cs" />

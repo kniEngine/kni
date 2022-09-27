@@ -141,8 +141,7 @@ namespace Microsoft.Xna.Framework
                         char character = (char)ev.Key.Keysym.Sym;
                         _view.OnKeyDown(key);
                         if (char.IsControl(character))
-                            if (_view.IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
-                                _view.OnTextInput(new TextInputEventArgs(character, key));
+                            _view.OnTextInput(character, key);
                         break;
                     }
                     case Sdl.EventType.KeyUp:
@@ -153,7 +152,7 @@ namespace Microsoft.Xna.Framework
                         break;
                     }
                     case Sdl.EventType.TextInput:
-                        if (_view.IsTextInputHandled)
+                        if (_view.IsTextInputAttached())
                         {
                             int len = 0;
                             int utf8character = 0; // using an int to encode multibyte characters longer than 2 bytes
@@ -197,8 +196,7 @@ namespace Microsoft.Xna.Framework
 
                                         if (codepoint >= 0 && codepoint < 0xFFFF)
                                         {
-                                            if (_view.IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
-                                                _view.OnTextInput(new TextInputEventArgs((char)codepoint, KeyboardUtil.ToXna(codepoint)));
+                                            _view.OnTextInput((char)codepoint, KeyboardUtil.ToXna(codepoint));
                                             // UTF16 characters beyond 0xFFFF are not supported (and would require a surrogate encoding that is not supported by the char type)
                                         }
                                     }
