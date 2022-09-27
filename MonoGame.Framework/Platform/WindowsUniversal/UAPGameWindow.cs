@@ -225,20 +225,17 @@ namespace Microsoft.Xna.Framework
 
         private void Dispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
         {
-            if (!IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
-                return;
-
             // NOTE: Dispatcher event is used because KeyDown event doesn't handle Alt key
             var key = InputEvents.KeyTranslate(args.VirtualKey, args.KeyStatus);
             switch (args.EventType)
             {
                 case CoreAcceleratorKeyEventType.KeyDown:
                 case CoreAcceleratorKeyEventType.SystemKeyDown:
-                    OnKeyDown(new InputKeyEventArgs(key));
+                    OnKeyDown(key);
                     break;
                 case CoreAcceleratorKeyEventType.KeyUp:
                 case CoreAcceleratorKeyEventType.SystemKeyUp:
-                    OnKeyUp(new InputKeyEventArgs(key));
+                    OnKeyUp(key);
                     break;
                 default:
                     break;

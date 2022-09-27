@@ -250,27 +250,24 @@ namespace Microsoft.Xna.Framework
             if (handler != null)
                 handler(this, e);
 		}
-        internal void OnKeyDown(InputKeyEventArgs e)
+        internal void OnKeyDown(Keys key)
 	    {
             var handler = KeyDown;
             if (handler != null)
-                handler(this, e);
+                handler(this, new InputKeyEventArgs(key));
 	    }
-        internal void OnKeyUp(InputKeyEventArgs e)
+        internal void OnKeyUp(Keys key)
 	    {
             var handler = KeyUp;
             if (handler != null)
-                handler(this, e);
+                handler(this, new InputKeyEventArgs(key));
 	    }
 
-        // TNC: helper for avoiding garbage
         internal bool IsTextInputAttached() { return (TextInput != null); }
-        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
+        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
 #endif
-#if WINDOWS || DESKTOPGL
-        // TNC: helper for filtering keyboard messages
+#if WINDOWS
         internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
-        internal bool PreFilterMSG_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
 #endif
 
         internal void OnFileDrop(FileDropEventArgs e)

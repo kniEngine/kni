@@ -44,7 +44,6 @@
     <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Input\GamePad.XInput.cs" />
-    <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\Keyboard.Windows.cs" />
     <Compile Include="Platform\Input\KeysHelper.cs" />

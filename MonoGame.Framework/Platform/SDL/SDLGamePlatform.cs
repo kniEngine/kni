@@ -139,8 +139,7 @@ namespace Microsoft.Xna.Framework
                         if (!_keys.Contains(key))
                             _keys.Add(key);
                         char character = (char)ev.Key.Keysym.Sym;
-                        if (_view.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
-                            _view.OnKeyDown(new InputKeyEventArgs(key));
+                        _view.OnKeyDown(key);
                         if (char.IsControl(character))
                             if (_view.IsTextInputAttached()) // TNC: avoid generating garbage if user didn't subscribed to TextInput
                                 _view.OnTextInput(new TextInputEventArgs(character, key));
@@ -150,8 +149,7 @@ namespace Microsoft.Xna.Framework
                     {
                         var key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
                         _keys.Remove(key);
-                        if (_view.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
-                            _view.OnKeyUp(new InputKeyEventArgs(key));
+                        _view.OnKeyUp(key);
                         break;
                     }
                     case Sdl.EventType.TextInput:
