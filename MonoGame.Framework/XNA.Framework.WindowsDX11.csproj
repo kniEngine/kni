@@ -108,7 +108,6 @@
   <ItemGroup>
     <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
-    <Compile Include="EventHelpers.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="FrameworkResources.cs" />
     <Compile Include="GameComponentCollection.cs" />

@@ -392,7 +392,11 @@ namespace Microsoft.Xna.Framework.Audio
             // audio cues to stop here?
 
             if (disposing)
-                EventHelpers.Raise(this, Disposing, EventArgs.Empty);
+            {
+                var handler = Disposing;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
+            }
         }
     }
 }

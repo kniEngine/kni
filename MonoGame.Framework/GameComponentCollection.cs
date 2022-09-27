@@ -52,12 +52,16 @@ namespace Microsoft.Xna.Framework
 
         private void OnComponentAdded(GameComponentCollectionEventArgs eventArgs)
         {
-            EventHelpers.Raise(this, ComponentAdded, eventArgs);
+            var handler = ComponentAdded;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
         private void OnComponentRemoved(GameComponentCollectionEventArgs eventArgs)
         {
-            EventHelpers.Raise(this, ComponentRemoved, eventArgs);
+            var handler = ComponentRemoved;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
         protected override void RemoveItem(int index)

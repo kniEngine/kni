@@ -27,7 +27,6 @@ namespace Microsoft.Devices.Sensors
 		        currentValue = value;
 
                 var handler = CurrentValueChanged;
-
                 if (handler != null)
                 {
                     eventArgs.SensorReading = value;
@@ -44,7 +43,9 @@ namespace Microsoft.Devices.Sensors
 				if (this.timeBetweenUpdates != value)
 				{
 					this.timeBetweenUpdates = value;
-					EventHelpers.Raise(this, TimeBetweenUpdatesChanged, EventArgs.Empty);
+					var handler = TimeBetweenUpdatesChanged;
+					if (handler != null)
+					    handler(this, EventArgs.Empty);
 				}
 			}
 		}

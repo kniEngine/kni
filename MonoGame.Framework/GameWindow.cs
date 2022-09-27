@@ -202,7 +202,9 @@ namespace Microsoft.Xna.Framework
 
 		internal void OnClientSizeChanged ()
 		{
-            EventHelpers.Raise(this, ClientSizeChanged, EventArgs.Empty);
+            var handler = ClientSizeChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 	    /// <summary>
@@ -217,7 +219,9 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		protected void OnOrientationChanged ()
 		{
-            EventHelpers.Raise(this, OrientationChanged, EventArgs.Empty);
+            var handler = OrientationChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 		protected void OnPaint ()
@@ -229,7 +233,9 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		protected void OnScreenDeviceNameChanged ()
 		{
-            EventHelpers.Raise(this, ScreenDeviceNameChanged, EventArgs.Empty);
+            var handler = ScreenDeviceNameChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 #if WINDOWS || WINDOWS_UAP || DESKTOPGL || ANGLE
@@ -240,15 +246,21 @@ namespace Microsoft.Xna.Framework
 	    /// <param name="e">Parameters to the <see cref="TextInput"/> event.</param>
 		internal void OnTextInput(TextInputEventArgs e)
 		{
-            EventHelpers.Raise(this, TextInput, e);
+            var handler = TextInput;
+            if (handler != null)
+                handler(this, e);
 		}
         internal void OnKeyDown(InputKeyEventArgs e)
 	    {
-            EventHelpers.Raise(this, KeyDown, e);
+            var handler = KeyDown;
+            if (handler != null)
+                handler(this, e);
 	    }
         internal void OnKeyUp(InputKeyEventArgs e)
 	    {
-            EventHelpers.Raise(this, KeyUp, e);
+            var handler = KeyUp;
+            if (handler != null)
+                handler(this, e);
 	    }
 
         // TNC: helper for avoiding garbage
@@ -263,7 +275,9 @@ namespace Microsoft.Xna.Framework
 
         internal void OnFileDrop(FileDropEventArgs e)
         {
-            EventHelpers.Raise(this, FileDrop, e);
+            var handler = FileDrop;
+            if (handler != null)
+                handler(this, e);
         }
 
         protected internal abstract void SetSupportedOrientations (DisplayOrientation orientations);
