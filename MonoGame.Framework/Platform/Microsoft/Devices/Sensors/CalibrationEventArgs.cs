@@ -11,6 +11,8 @@ namespace Microsoft.Devices.Sensors
     /// </summary>
     public class CalibrationEventArgs : EventArgs
     {
+        public static readonly CalibrationEventArgs Empty = new CalibrationEventArgs();
+
         /// <summary>
         /// Initializes a new instance of the CalibrationEventArgs class.
         /// </summary>

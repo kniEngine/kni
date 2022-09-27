@@ -109,7 +109,7 @@ namespace Microsoft.Devices.Sensors
                     {
                         var handler = Calibrate;
                         if (handler != null)
-                            handler(this, new CalibrationEventArgs());
+                            handler(this, CalibrationEventArgs.Empty);
                     }
                     this.calibrate = true;
                 }
