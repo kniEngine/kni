@@ -98,46 +98,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="DisplayOrientation.cs" />
-    <Compile Include="DrawableGameComponent.cs" />
-    <Compile Include="FileDropEventArgs.cs" />
-    <Compile Include="FrameworkResources.cs" />
-    <Compile Include="GameComponentCollection.cs" />
-    <Compile Include="GameComponentCollectionEventArgs.cs" />
-    <Compile Include="GameComponent.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GamePlatform.cs" />
-    <Compile Include="GamePlatform.Desktop.cs" />
-    <Compile Include="GameRunBehavior.cs" />
-    <Compile Include="GameServiceContainer.cs" />
-    <Compile Include="GameWindow.cs" />
-    <Compile Include="IDrawable.cs" />
-    <Compile Include="IGameComponent.cs" />
-    <Compile Include="IGraphicsDeviceManager.cs" />
-    <Compile Include="IUpdateable.cs" />
-    <Compile Include="LaunchParameters.cs" />
-    <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
-    <Compile Include="ReusableItemList.cs" />
-    <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.WinRT.cs" />
-
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
+    <Compile Include="Audio\AudioFactory.cs" />
     <Compile Include="Audio\AudioListener.cs" />
+    <Compile Include="Audio\AudioService.cs" />
     <Compile Include="Audio\AudioService.Microphones.cs" />
     <Compile Include="Audio\AudioService.InstancePool.cs" />
-    <Compile Include="Audio\AudioFactory.cs" />
-    <Compile Include="Audio\AudioService.cs" />
     <Compile Include="Audio\AudioServiceStrategy.cs" />
     <Compile Include="Audio\DynamicSoundEffectInstance.cs" />
     <Compile Include="Audio\InstancePlayLimitException.cs" />
+    <Compile Include="Audio\Microphone.cs" />
     <Compile Include="Audio\NoAudioHardwareException.cs" />
+    <Compile Include="Audio\NoMicrophoneConnectedException.cs" />
     <Compile Include="Audio\SoundEffect.cs" />
     <Compile Include="Audio\SoundEffectInstance.cs" />
     <Compile Include="Audio\SoundState.cs" />
-    <Compile Include="Audio\Microphone.cs" />
-    <Compile Include="Audio\NoMicrophoneConnectedException.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Audio\Xact\AudioCategory.cs" />
     <Compile Include="Audio\Xact\AudioEngine.cs" />
     <Compile Include="Audio\Xact\AudioStopOptions.cs" />
@@ -161,14 +139,43 @@
     <Compile Include="Audio\Xact\XactClip.cs" />
     <Compile Include="Audio\Xact\XactHelpers.cs" />
     <Compile Include="Audio\Xact\XactSound.cs" />
-
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Audio\XAudio\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\XAudio\ConcreteAudioService.cs" />
     <Compile Include="Audio\XAudio\ConcreteDynamicSoundEffectInstance.cs" />
     <Compile Include="Audio\XAudio\ConcreteMicrophone.cs" />
     <Compile Include="Audio\XAudio\ConcreteSoundEffect.cs" />
     <Compile Include="Audio\XAudio\ConcreteSoundEffectInstance.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="DisplayOrientation.cs" />
+    <Compile Include="DrawableGameComponent.cs" />
+    <Compile Include="FileDropEventArgs.cs" />
+    <Compile Include="FrameworkResources.cs" />
+    <Compile Include="GameComponentCollection.cs" />
+    <Compile Include="GameComponentCollectionEventArgs.cs" />
+    <Compile Include="GameComponent.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GamePlatform.cs" />
+    <Compile Include="GamePlatform.Desktop.cs" />
+    <Compile Include="GameRunBehavior.cs" />
+    <Compile Include="GameServiceContainer.cs" />
+    <Compile Include="GameWindow.cs" />
+    <Compile Include="IDrawable.cs" />
+    <Compile Include="IGameComponent.cs" />
+    <Compile Include="IGraphicsDeviceManager.cs" />
+    <Compile Include="IUpdateable.cs" />
+    <Compile Include="LaunchParameters.cs" />
+    <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
+    <Compile Include="ReusableItemList.cs" />
+    <Compile Include="TitleContainer.cs" />
+    <Compile Include="TitleContainer.WinRT.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentLoadException.cs" />
     <Compile Include="Content\ContentManager.cs" />
