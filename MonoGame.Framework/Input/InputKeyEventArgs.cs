@@ -3,9 +3,8 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Framework.Input
 {
     public class InputKeyEventArgs : EventArgs
     {
@@ -18,7 +17,7 @@ namespace Microsoft.Xna.Framework
         /// Create a new keyboard input event
         /// </summary>
         /// <param name="key">The key involved in this event</param>
-        public InputKeyEventArgs(Keys key = Keys.None)
+        public InputKeyEventArgs(Keys key)
         {
             Key = key;
         }

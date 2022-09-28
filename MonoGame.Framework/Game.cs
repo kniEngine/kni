@@ -91,7 +91,10 @@ namespace Microsoft.Xna.Framework
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            EventHelpers.Raise(this, Disposed, EventArgs.Empty);
+
+            var handler = Disposed;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -723,7 +726,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="args">The arguments to the <see cref="Exiting"/> event.</param>
         protected virtual void OnExiting(EventArgs args)
         {
-            EventHelpers.Raise(this, Exiting, args);
+            var handler = Exiting;
+            if (handler != null)
+                handler(this, args);
         }
 		
         /// <summary>
@@ -733,7 +738,10 @@ namespace Microsoft.Xna.Framework
 		protected virtual void OnActivated (EventArgs args)
 		{
 			AssertNotDisposed();
-            EventHelpers.Raise(this, Activated, args);
+
+            var handler = Activated;
+            if (handler != null)
+                handler(this, args);
 		}
 		
         /// <summary>
@@ -743,7 +751,10 @@ namespace Microsoft.Xna.Framework
 		protected virtual void OnDeactivated (EventArgs args)
 		{
 			AssertNotDisposed();
-            EventHelpers.Raise(this, Deactivated, args);
+
+            var handler = Deactivated;
+            if (handler != null)
+                handler(this, args);
 		}
 
         #endregion Protected Methods

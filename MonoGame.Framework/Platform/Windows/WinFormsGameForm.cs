@@ -86,8 +86,8 @@ namespace Microsoft.Xna.Framework.Windows
                 case 0x0109: // WM_UNICHAR
                     var c = m.WParam.ToInt32();
                     if (c == 0x5B && c == 0x5C) return false; // let Left/Right Windows Key through
-                    if (_window.PreFilterMSG_IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
-                    if (_window.PreFilterMSG_IsKeyUpDownAttached())  return false; // let keys through if user subscribed to KeyUp/KwyDown
+                    if (_window.IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
+                    if (_window.IsKeyUpDownAttached())  return false; // let keys through if user subscribed to KeyUp/KeyDown
                     return true; // skip message
                 default:
                     return false;
@@ -212,9 +212,6 @@ namespace Microsoft.Xna.Framework.Windows
 
         void HandleKeyMessage(ref Message m)
         {
-            if (!_window.IsKeyUpDownAttached()) // TNC: avoid generating garbage if user didn't subscribed to KeyUp/KeyDown
-                return;
-
             long virtualKeyCode = m.WParam.ToInt64();
             bool extended = (m.LParam.ToInt64() & 0x01000000) != 0;
             long scancode = (m.LParam.ToInt64() & 0x00ff0000) >> 16;
@@ -228,11 +225,11 @@ namespace Microsoft.Xna.Framework.Windows
                 {
                     case WM_KEYDOWN:
                     case WM_SYSKEYDOWN:
-                        _window.OnKeyDown(new InputKeyEventArgs(key));
+                        _window.OnKeyDown(key);
                         break;
                     case WM_KEYUP:
                     case WM_SYSKEYUP:
-                        _window.OnKeyUp(new InputKeyEventArgs(key));
+                        _window.OnKeyUp(key);
                         break;
                     default:
                         break;

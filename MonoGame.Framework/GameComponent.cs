@@ -80,7 +80,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="args">Arguments to the <see cref="UpdateOrderChanged"/> event.</param>
         protected virtual void OnUpdateOrderChanged(EventArgs args)
         {
-            EventHelpers.Raise(this, UpdateOrderChanged, args);
+            var handler = UpdateOrderChanged;
+            if (handler != null)
+                handler(this, args);
         }
 
         /// <summary>
@@ -89,7 +91,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="args">Arguments to the <see cref="EnabledChanged"/> event.</param>
         protected virtual void OnEnabledChanged(EventArgs args)
         {
-            EventHelpers.Raise(this, EnabledChanged, args);
+            var handler = EnabledChanged;
+            if (handler != null)
+                handler(this, args);
         }
 
         /// <summary>

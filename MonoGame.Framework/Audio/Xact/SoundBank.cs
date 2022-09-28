@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio
 {
@@ -347,7 +346,10 @@ namespace Microsoft.Xna.Framework.Audio
             if (disposing)
             {
                 IsInUse = false;
-                EventHelpers.Raise(this, Disposing, EventArgs.Empty);
+
+                var handler = Disposing;
+                if (handler != null)
+                    handler (this, EventArgs.Empty);
             }
         }
     }

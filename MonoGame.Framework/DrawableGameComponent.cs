@@ -109,7 +109,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="args">Arguments to the <see cref="VisibleChanged"/> event.</param>
         protected virtual void OnVisibleChanged(EventArgs args)
         {
-            EventHelpers.Raise(this, VisibleChanged, args);
+            var handler = VisibleChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -118,7 +120,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="args">Arguments to the <see cref="DrawOrderChanged"/> event.</param>
         protected virtual void OnDrawOrderChanged(EventArgs args)
         {
-            EventHelpers.Raise(this, DrawOrderChanged, args);
+            var handler = DrawOrderChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
     }
 }

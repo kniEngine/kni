@@ -143,8 +143,6 @@ namespace Microsoft.Xna.Framework
 		/// </remarks>
 		public event EventHandler<TextInputEventArgs> TextInput;
 
-        internal bool IsTextInputHandled { get { return TextInput != null; } }
-
         /// <summary>
         /// Buffered keyboard KeyDown event.
         /// </summary>
@@ -202,7 +200,9 @@ namespace Microsoft.Xna.Framework
 
 		internal void OnClientSizeChanged ()
 		{
-            EventHelpers.Raise(this, ClientSizeChanged, EventArgs.Empty);
+            var handler = ClientSizeChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 	    /// <summary>
@@ -217,7 +217,9 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		protected void OnOrientationChanged ()
 		{
-            EventHelpers.Raise(this, OrientationChanged, EventArgs.Empty);
+            var handler = OrientationChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 		protected void OnPaint ()
@@ -229,41 +231,43 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		protected void OnScreenDeviceNameChanged ()
 		{
-            EventHelpers.Raise(this, ScreenDeviceNameChanged, EventArgs.Empty);
+            var handler = ScreenDeviceNameChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
 
 #if WINDOWS || WINDOWS_UAP || DESKTOPGL || ANGLE
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>
-	    /// <param name="sender">The game window.</param>
-	    /// <param name="e">Parameters to the <see cref="TextInput"/> event.</param>
-		internal void OnTextInput(TextInputEventArgs e)
+		internal void OnTextInput(char character, Keys key)
 		{
-            EventHelpers.Raise(this, TextInput, e);
+            var handler = TextInput;
+            if (handler != null)
+                handler(this, new TextInputEventArgs(key, character));
 		}
-        internal void OnKeyDown(InputKeyEventArgs e)
+        internal void OnKeyDown(Keys key)
 	    {
-            EventHelpers.Raise(this, KeyDown, e);
+            var handler = KeyDown;
+            if (handler != null)
+                handler(this, new InputKeyEventArgs(key));
 	    }
-        internal void OnKeyUp(InputKeyEventArgs e)
+        internal void OnKeyUp(Keys key)
 	    {
-            EventHelpers.Raise(this, KeyUp, e);
+            var handler = KeyUp;
+            if (handler != null)
+                handler(this, new InputKeyEventArgs(key));
 	    }
 
-        // TNC: helper for avoiding garbage
         internal bool IsTextInputAttached() { return (TextInput != null); }
-        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
-#endif
-#if WINDOWS || DESKTOPGL
-        // TNC: helper for filtering keyboard messages
-        internal bool PreFilterMSG_IsTextInputAttached() { return (TextInput != null); }
-        internal bool PreFilterMSG_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null);}
+        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
 #endif
 
         internal void OnFileDrop(FileDropEventArgs e)
         {
-            EventHelpers.Raise(this, FileDrop, e);
+            var handler = FileDrop;
+            if (handler != null)
+                handler(this, e);
         }
 
         protected internal abstract void SetSupportedOrientations (DisplayOrientation orientations);

@@ -135,7 +135,6 @@
   <ItemGroup>
     <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
-    <Compile Include="EventHelpers.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="FrameworkResources.cs" />
     <Compile Include="GameComponentCollection.cs" />
@@ -471,6 +470,7 @@
     <Compile Include="Input\GamePadThumbSticks.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.cs" />
     <Compile Include="Input\JoystickCapabilities.cs" />
     <Compile Include="Input\JoystickHat.cs" />
@@ -490,6 +490,7 @@
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Input\MouseState.cs" />
+	<Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />
     <Compile Include="Input\Oculus\TouchButtons.cs" />
     <Compile Include="Input\Oculus\TouchButtonState.cs" />

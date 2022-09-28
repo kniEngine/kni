@@ -293,6 +293,7 @@
     <Compile Include="Input\GamePadThumbSticks.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.cs" />
     <Compile Include="Input\JoystickCapabilities.cs" />
     <Compile Include="Input\JoystickHat.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseState.cs" />
+	<Compile Include="Input\TextInputEventArgs.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -347,7 +349,6 @@
   <ItemGroup>
     <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
-    <Compile Include="EventHelpers.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="FrameworkResources.cs" />
     <Compile Include="Game.cs" />
@@ -367,7 +368,6 @@
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="ReusableItemList.cs" />
-    <Compile Include="TextInputEventArgs.cs" />
     <Compile Include="TitleContainer.cs" />
   </ItemGroup>
 

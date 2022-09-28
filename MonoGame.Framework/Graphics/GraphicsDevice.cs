@@ -596,7 +596,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 _isDisposed = true;
-                EventHelpers.Raise(this, Disposing, EventArgs.Empty);
+
+                var handler = Disposing;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
             }
         }
 
@@ -639,13 +642,20 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             PlatformReset();
 
-            EventHelpers.Raise(this, DeviceResetting, EventArgs.Empty);
+            var deviceResettingHandler = DeviceResetting;
+            if (deviceResettingHandler != null)
+                deviceResettingHandler(this, EventArgs.Empty);
 
             // Update the back buffer.
             OnPresentationChanged();
             
-            EventHelpers.Raise(this, PresentationChanged, new PresentationEventArgs(PresentationParameters));
-            EventHelpers.Raise(this, DeviceReset, EventArgs.Empty);
+            var presentationChangedHandler = PresentationChanged;
+            if (presentationChangedHandler != null)
+                presentationChangedHandler(this, new PresentationEventArgs(PresentationParameters));
+
+            var deviceResetHandler = DeviceReset;
+            if (deviceResetHandler != null)
+                deviceResetHandler(this, EventArgs.Empty);
        }
 
         public void Reset(PresentationParameters presentationParameters)
@@ -661,9 +671,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Trigger the DeviceResetting event
         /// Currently internal to allow the various platforms to send the event at the appropriate time.
         /// </summary>
-        internal void OnDeviceResetting()
+        internal void Android_OnDeviceResetting()
         {
-            EventHelpers.Raise(this, DeviceResetting, EventArgs.Empty);
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 
             lock (_resourcesLock)
             {
@@ -683,9 +695,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Trigger the DeviceReset event to allow games to be notified of a device reset.
         /// Currently internal to allow the various platforms to send the event at the appropriate time.
         /// </summary>
-        internal void OnDeviceReset()
+        internal void Android_OnDeviceReset()
         {
-            EventHelpers.Raise(this, DeviceReset, EventArgs.Empty);
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         public DisplayMode DisplayMode

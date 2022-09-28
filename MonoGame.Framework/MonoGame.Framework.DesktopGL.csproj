@@ -61,7 +61,6 @@
     <Compile Include="Media\MediaLibrary.Default.cs" />
     <Compile Include="Media\Song.NVorbis.cs" />
     <Compile Include="Input\GamePad.SDL.cs" />
-    <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.SDL.cs" />
     <Compile Include="Input\Keyboard.SDL.cs" />
     <Compile Include="Platform\Input\KeyboardUtil.SDL.cs" />

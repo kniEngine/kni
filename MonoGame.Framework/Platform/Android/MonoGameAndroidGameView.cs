@@ -1139,7 +1139,7 @@ namespace Microsoft.Xna.Framework
                             Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                             // DeviceReset events
-                            _game.GraphicsDevice.OnDeviceReset();
+                            _game.GraphicsDevice.Android_OnDeviceReset();
 
                             IsResuming = false;
                         });
@@ -1154,7 +1154,7 @@ namespace Microsoft.Xna.Framework
         {
             OnContextLost(EventArgs.Empty);
             if (_game.GraphicsDevice != null)
-                _game.GraphicsDevice.OnDeviceResetting();
+                _game.GraphicsDevice.Android_OnDeviceResetting();
         }
 
         protected virtual void OnContextLost(EventArgs eventArgs)
