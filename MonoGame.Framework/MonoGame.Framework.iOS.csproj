@@ -31,6 +31,7 @@
   </ItemGroup>
   
   <Import Project="Xna.Framework.props" />
+	<Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 
   <ItemGroup>
