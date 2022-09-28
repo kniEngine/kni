@@ -4,7 +4,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
     <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />

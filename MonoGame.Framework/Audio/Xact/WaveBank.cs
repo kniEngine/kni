@@ -364,7 +364,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 streaming = true;
                 var stream = _streams[trackIndex];
-                return PlatformCreateStream(stream);
+                throw new NotImplementedException("XACT streaming is not implemented on this platform.");
             }
             else
             {

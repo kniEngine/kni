@@ -1,6 +1,5 @@
 <Project>
   <ItemGroup>
-    <Compile Include="Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Audio\Ref\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\Ref\ConcreteAudioService.cs" />
     <Compile Include="Audio\Ref\ConcreteDynamicSoundEffectInstance.cs" />

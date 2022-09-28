@@ -162,7 +162,6 @@
     <Compile Include="Audio\Xact\XactHelpers.cs" />
     <Compile Include="Audio\Xact\XactSound.cs" />
 
-    <Compile Include="Audio\Xact\WaveBank.Default.cs" />
     <Compile Include="Audio\XAudio\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\XAudio\ConcreteAudioService.cs" />
     <Compile Include="Audio\XAudio\ConcreteDynamicSoundEffectInstance.cs" />
