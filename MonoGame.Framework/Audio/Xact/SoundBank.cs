@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             _audioengine = audioEngine;
 
-            using (var stream = AudioEngine.OpenStream(fileName, true))
+            using (var stream = EnsureRandomAccessStream(TitleContainer.OpenStream(fileName)))
             using (var reader = new BinaryReader(stream))
             {
                 // Thanks to Liandril for "xactxtract" for some of the offsets.
@@ -213,6 +213,20 @@ namespace Microsoft.Xna.Framework.Audio
                     }
                 }
             }
+        }
+
+        private static Stream EnsureRandomAccessStream(Stream stream)
+        {
+            if (!stream.CanSeek)
+            {
+                var memStream = new MemoryStream();
+                stream.CopyTo(memStream);
+                memStream.Seek(0, SeekOrigin.Begin);
+                stream.Dispose();
+                return memStream;
+            }
+
+            return stream;
         }
 
         internal SoundEffectInstance GetSoundEffectInstance(int waveBankIndex, int trackIndex, out bool streaming)

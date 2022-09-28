@@ -57,22 +57,6 @@ namespace Microsoft.Xna.Framework.Audio
         {            
         }
 
-        internal static Stream OpenStream(string filePath, bool requireSeek = false)
-        {
-            var stream = TitleContainer.OpenStream(filePath);
-
-            if (requireSeek && !stream.CanSeek)
-            {
-                var memStream = new MemoryStream();
-                stream.CopyTo(memStream);
-                memStream.Seek(0, SeekOrigin.Begin);
-                stream.Dispose();
-                stream = memStream;
-            }
-
-            return stream;
-        }
-
         /// <param name="settingsFile">Path to a XACT settings file.</param>
         /// <param name="lookAheadTime">Determines how many milliseconds the engine will look ahead when determing when to transition to another sound.</param>
         /// <param name="rendererId">A string that specifies the audio renderer to use.</param>
@@ -84,7 +68,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             // Read the xact settings file
             // Credits to alisci01 for initial format documentation
-            using (var stream = OpenStream(settingsFile))
+            using (var stream = TitleContainer.OpenStream(settingsFile))
             using (var reader = new BinaryReader(stream)) 
             {
                 uint magic = reader.ReadUInt32 ();
