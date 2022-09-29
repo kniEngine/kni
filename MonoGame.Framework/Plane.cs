@@ -90,21 +90,6 @@ namespace Microsoft.Xna.Framework
             D = d;
         }
 
-        /// <summary>
-        /// Create a <see cref="Plane"/> that contains the specified point and has the specified <see cref="Normal"/> vector.
-        /// </summary>
-        /// <param name="pointOnPlane">A point the created <see cref="Plane"/> should contain.</param>
-        /// <param name="normal">The normal of the plane.</param>
-        public Plane(Vector3 pointOnPlane, Vector3 normal)
-        {
-            Normal = normal;
-            D = -(
-                pointOnPlane.X * normal.X +
-                pointOnPlane.Y * normal.Y +
-                pointOnPlane.Z * normal.Z
-            );
-        }
-
         #endregion Constructors
 
 
@@ -186,6 +171,20 @@ namespace Microsoft.Xna.Framework
         public void DotNormal(ref Vector3 value, out float result)
         {
             result = ((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Plane"/> that contains the specified point and has the specified <see cref="Normal"/> vector.
+        /// </summary>
+        /// <param name="normal">The normal of the plane.</param>
+        /// <param name="point">A point the created <see cref="Plane"/> should contain.</param>
+        public static Plane FromPoint(Vector3 normal, Vector3 point)
+        {
+            Plane result;
+            result.Normal = normal;
+            // project point on normal. //Opt: -Vector3.Dot(normal, point);
+            result.D = -(normal.X * point.X + normal.Y * point.Y + normal.Z * point.Z);
+            return result;
         }
 
         /// <summary>
