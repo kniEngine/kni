@@ -45,16 +45,16 @@ namespace Microsoft.Xna.Framework
         #region Public Fields
 
         /// <summary>
-        /// The distance of the <see cref="Plane"/> to the origin.
-        /// </summary>
-        [DataMember]
-        public float D;
-
-        /// <summary>
         /// The normal of the <see cref="Plane"/>.
         /// </summary>
         [DataMember]
         public Vector3 Normal;
+
+        /// <summary>
+        /// The distance of the <see cref="Plane"/> to the origin.
+        /// </summary>
+        [DataMember]
+        public float D;
 
         #endregion Public Fields
 
