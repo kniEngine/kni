@@ -40,9 +40,11 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="value">A vector holding the normal and distance to origin.</param>
         public Plane(Vector4 value)
-            : this(new Vector3(value.X, value.Y, value.Z), value.W)
         {
-
+            Normal.X = value.X;
+            Normal.Y = value.Y;
+            Normal.Z = value.Z;
+            D = value.W;
         }
 
         /// <summary>
@@ -67,8 +69,8 @@ namespace Microsoft.Xna.Framework
             Vector3 ab = b - a;
             Vector3 ac = c - a;
 
-            Vector3 cross = Vector3.Cross(ab, ac);
-            Vector3.Normalize(ref cross, out Normal);
+            Vector3.Cross(ref ab, ref ac, out Normal);
+            Normal.Normalize();
             D = -(Vector3.Dot(Normal, a));
         }
 
@@ -81,9 +83,11 @@ namespace Microsoft.Xna.Framework
         /// <param name="c">The Z component of the normal.</param>
         /// <param name="d">The distance to the origin.</param>
         public Plane(float a, float b, float c, float d)
-            : this(new Vector3(a, b, c), d)
         {
-
+            Normal.X = a;
+            Normal.Y = b;
+            Normal.Z = c;
+            D = d;
         }
 
         /// <summary>
