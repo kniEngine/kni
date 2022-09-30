@@ -9,26 +9,26 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class Texture3DReader : ContentTypeReader<Texture3D>
     {
-        protected internal override Texture3D Read(ContentReader reader, Texture3D existingInstance)
+        protected internal override Texture3D Read(ContentReader input, Texture3D existingInstance)
         {
             Texture3D texture = null;
 
-            SurfaceFormat format = (SurfaceFormat)reader.ReadInt32();
-            int width = reader.ReadInt32();
-            int height = reader.ReadInt32();
-            int depth = reader.ReadInt32();
-            int levelCount = reader.ReadInt32();
+            SurfaceFormat format = (SurfaceFormat)input.ReadInt32();
+            int width = input.ReadInt32();
+            int height = input.ReadInt32();
+            int depth = input.ReadInt32();
+            int levelCount = input.ReadInt32();
 
             if (existingInstance == null)
-                texture = new Texture3D(reader.GetGraphicsDevice(), width, height, depth, levelCount > 1, format);
+                texture = new Texture3D(input.GetGraphicsDevice(), width, height, depth, levelCount > 1, format);
             else
                 texture = existingInstance;
 
             for (int i = 0; i < levelCount; i++)
             {
-                int dataSize = reader.ReadInt32();
+                int dataSize = input.ReadInt32();
                 byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
-                reader.Read(data, 0, dataSize);
+                input.Read(data, 0, dataSize);
                 texture.SetData(i, 0, 0, width, height, 0, depth, data, 0, dataSize);
 
                 // Calculate dimensions of next mip level.

@@ -11,19 +11,19 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class Texture2DReader : ContentTypeReader<Texture2D>
     {
-        protected internal override Texture2D Read(ContentReader reader, Texture2D existingInstance)
+        protected internal override Texture2D Read(ContentReader input, Texture2D existingInstance)
 		{
 			Texture2D texture = null;
 
-            var surfaceFormat = (SurfaceFormat)reader.ReadInt32();
-            int width = reader.ReadInt32();
-            int height = reader.ReadInt32();
-            int levelCount = reader.ReadInt32();
+            var surfaceFormat = (SurfaceFormat)input.ReadInt32();
+            int width = input.ReadInt32();
+            int height = input.ReadInt32();
+            int levelCount = input.ReadInt32();
             int levelCountOutput = levelCount;
 
             // If the system does not fully support Power of Two textures,
             // skip any mip maps supplied with any non PoT textures.
-            if (levelCount > 1 && !reader.GetGraphicsDevice().GraphicsCapabilities.SupportsNonPowerOfTwo &&
+            if (levelCount > 1 && !input.GetGraphicsDevice().GraphicsCapabilities.SupportsNonPowerOfTwo &&
                 (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
             {
                 levelCountOutput = 1;
@@ -36,21 +36,21 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				case SurfaceFormat.Dxt1:
 				case SurfaceFormat.Dxt1a:
-					if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
+					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt1SRgb:
-					if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
+					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.Dxt3:
 				case SurfaceFormat.Dxt5:
-					if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt3SRgb:
 				case SurfaceFormat.Dxt5SRgb:
-					if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.NormalizedByte4:
@@ -58,13 +58,13 @@ namespace Microsoft.Xna.Framework.Content
 					break;
 			}
 			
-            texture = existingInstance ?? new Texture2D(reader.GetGraphicsDevice(), width, height, levelCountOutput > 1, convertedFormat);
+            texture = existingInstance ?? new Texture2D(input.GetGraphicsDevice(), width, height, levelCountOutput > 1, convertedFormat);
 
             for (int level = 0; level < levelCount; level++)
 			{
-				var levelDataSizeInBytes = reader.ReadInt32();
+				var levelDataSizeInBytes = input.ReadInt32();
                 var levelData = ContentManager.ScratchBufferPool.Get(levelDataSizeInBytes);
-                reader.Read(levelData, 0, levelDataSizeInBytes);
+                input.Read(levelData, 0, levelDataSizeInBytes);
                 int levelWidth = Math.Max(width >> level, 1);
                 int levelHeight = Math.Max(height >> level, 1);
 
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework.Content
 					case SurfaceFormat.Dxt1:
                     case SurfaceFormat.Dxt1SRgb:
                     case SurfaceFormat.Dxt1a:
-				        if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
+				        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
 				        {
 				            levelData = DxtUtil.DecompressDxt1(levelData, levelWidth, levelHeight);
 				            levelDataSizeInBytes = levelData.Length;
@@ -85,8 +85,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt3:
 					case SurfaceFormat.Dxt3SRgb:
-                        if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
-				            if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
+                        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+				            if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtUtil.DecompressDxt3(levelData, levelWidth, levelHeight);
@@ -95,8 +95,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt5:
 					case SurfaceFormat.Dxt5SRgb:
-                        if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
-				            if (!reader.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
+                        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+				            if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtUtil.DecompressDxt5(levelData, levelWidth, levelHeight);
@@ -164,7 +164,7 @@ namespace Microsoft.Xna.Framework.Content
                 ContentManager.ScratchBufferPool.Return(levelData);
 			}
         			
-			texture.Name = reader.AssetName;
+			texture.Name = input.AssetName;
 			return texture;
 		}
     }
