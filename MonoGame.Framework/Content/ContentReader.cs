@@ -291,12 +291,5 @@ namespace Microsoft.Xna.Framework.Content
             return result;
         }
 
-		
-		internal BoundingSphere ReadBoundingSphere()
-		{
-			var position = ReadVector3();
-            var radius = ReadSingle();
-            return new BoundingSphere(position, radius);
-		}
     }
 }
