@@ -23,10 +23,7 @@ namespace Microsoft.Xna.Framework.Content
 
         internal ContentTypeReader[] TypeReaders
         {
-            get
-            {
-                return typeReaders;
-            }
+            get { return typeReaders; }
         }
 
         internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, int xnbLength, Action<IDisposable> recordDisposableObject)
@@ -41,18 +38,12 @@ namespace Microsoft.Xna.Framework.Content
 
         public ContentManager ContentManager
         {
-            get
-            {
-                return contentManager;
-            }
+            get { return contentManager; }
         }
         
         public string AssetName
         {
-            get
-            {
-                return assetName;
-            }
+            get { return assetName; }
         }
 
         internal object ReadAsset<T>()
@@ -124,27 +115,6 @@ namespace Microsoft.Xna.Framework.Content
             return default(T);
         }
 
-        public Matrix ReadMatrix()
-        {
-            Matrix result = new Matrix();
-            result.M11 = ReadSingle();
-            result.M12 = ReadSingle();
-            result.M13 = ReadSingle();
-            result.M14 = ReadSingle(); 
-            result.M21 = ReadSingle();
-            result.M22 = ReadSingle();
-            result.M23 = ReadSingle();
-            result.M24 = ReadSingle();
-            result.M31 = ReadSingle();
-            result.M32 = ReadSingle();
-            result.M33 = ReadSingle();
-            result.M34 = ReadSingle();
-            result.M41 = ReadSingle();
-            result.M42 = ReadSingle();
-            result.M43 = ReadSingle();
-            result.M44 = ReadSingle();
-            return result;
-        }
             
         private void RecordDisposable<T>(T result)
         {
@@ -204,15 +174,6 @@ namespace Microsoft.Xna.Framework.Content
             return result;
         }
 
-        public Quaternion ReadQuaternion()
-        {
-            Quaternion result = new Quaternion();
-            result.X = ReadSingle();
-            result.Y = ReadSingle();
-            result.Z = ReadSingle();
-            result.W = ReadSingle();
-            return result;
-        }
 
         public T ReadRawObject<T>()
         {
@@ -256,9 +217,46 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
+        internal new int Read7BitEncodedInt()
+        {
+            return base.Read7BitEncodedInt();
+        }
+
+        public Matrix ReadMatrix()
+        {
+            Matrix result;
+            result.M11 = ReadSingle();
+            result.M12 = ReadSingle();
+            result.M13 = ReadSingle();
+            result.M14 = ReadSingle();
+            result.M21 = ReadSingle();
+            result.M22 = ReadSingle();
+            result.M23 = ReadSingle();
+            result.M24 = ReadSingle();
+            result.M31 = ReadSingle();
+            result.M32 = ReadSingle();
+            result.M33 = ReadSingle();
+            result.M34 = ReadSingle();
+            result.M41 = ReadSingle();
+            result.M42 = ReadSingle();
+            result.M43 = ReadSingle();
+            result.M44 = ReadSingle();
+            return result;
+        }
+
+        public Quaternion ReadQuaternion()
+        {
+            Quaternion result;
+            result.X = ReadSingle();
+            result.Y = ReadSingle();
+            result.Z = ReadSingle();
+            result.W = ReadSingle();
+            return result;
+        }
+
         public Vector2 ReadVector2()
         {
-            Vector2 result = new Vector2();
+            Vector2 result;
             result.X = ReadSingle();
             result.Y = ReadSingle();
             return result;
@@ -266,7 +264,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public Vector3 ReadVector3()
         {
-            Vector3 result = new Vector3();
+            Vector3 result;
             result.X = ReadSingle();
             result.Y = ReadSingle();
             result.Z = ReadSingle();
@@ -275,7 +273,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public Vector4 ReadVector4()
         {
-            Vector4 result = new Vector4();
+            Vector4 result;
             result.X = ReadSingle();
             result.Y = ReadSingle();
             result.Z = ReadSingle();
@@ -293,16 +291,5 @@ namespace Microsoft.Xna.Framework.Content
             return result;
         }
 
-        internal new int Read7BitEncodedInt()
-        {
-            return base.Read7BitEncodedInt();
-        }
-		
-		internal BoundingSphere ReadBoundingSphere()
-		{
-			var position = ReadVector3();
-            var radius = ReadSingle();
-            return new BoundingSphere(position, radius);
-		}
     }
 }

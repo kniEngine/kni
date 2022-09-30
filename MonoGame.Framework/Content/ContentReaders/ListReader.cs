@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Content;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
@@ -12,10 +11,6 @@ namespace Microsoft.Xna.Framework.Content
     internal class ListReader<T> : ContentTypeReader<List<T>>
     {
         ContentTypeReader elementReader;
-
-        public ListReader()
-        {
-        }
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {

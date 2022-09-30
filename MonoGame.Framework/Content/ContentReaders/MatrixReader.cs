@@ -8,23 +8,26 @@ namespace Microsoft.Xna.Framework.Content
     {
         protected internal override Matrix Read(ContentReader input, Matrix existingInstance)
         {
-            var m11 = input.ReadSingle();
-            var m12 = input.ReadSingle();
-            var m13 = input.ReadSingle();
-            var m14 = input.ReadSingle();
-            var m21 = input.ReadSingle();
-            var m22 = input.ReadSingle();
-            var m23 = input.ReadSingle();
-            var m24 = input.ReadSingle();
-            var m31 = input.ReadSingle();
-            var m32 = input.ReadSingle();
-            var m33 = input.ReadSingle();
-            var m34 = input.ReadSingle();
-            var m41 = input.ReadSingle();
-            var m42 = input.ReadSingle();
-            var m43 = input.ReadSingle();
-            var m44 = input.ReadSingle();
-            return new Matrix(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
+            //return input.ReadMatrix();
+
+            Matrix result;
+            result.M11 = input.ReadSingle();
+            result.M12 = input.ReadSingle();
+            result.M13 = input.ReadSingle();
+            result.M14 = input.ReadSingle();
+            result.M21 = input.ReadSingle();
+            result.M22 = input.ReadSingle();
+            result.M23 = input.ReadSingle();
+            result.M24 = input.ReadSingle();
+            result.M31 = input.ReadSingle();
+            result.M32 = input.ReadSingle();
+            result.M33 = input.ReadSingle();
+            result.M34 = input.ReadSingle();
+            result.M41 = input.ReadSingle();
+            result.M42 = input.ReadSingle();
+            result.M43 = input.ReadSingle();
+            result.M44 = input.ReadSingle();
+            return result;
         }
     }
 }

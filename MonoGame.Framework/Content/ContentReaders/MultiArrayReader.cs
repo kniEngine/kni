@@ -11,8 +11,6 @@ namespace Microsoft.Xna.Framework.Content
     {
         ContentTypeReader elementReader;
 
-        public MultiArrayReader() { }
-
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
             Type readerType = typeof(T);

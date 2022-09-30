@@ -55,49 +55,70 @@ namespace Microsoft.Xna.Framework.Content
             {
                 // Dummy variables required for it to work on iDevices ** DO NOT DELETE ** 
                 // This forces the classes not to be optimized out when deploying to iDevices
+
+                // System types
+                var hBooleanReader = new BooleanReader();
                 var hByteReader = new ByteReader();
-                var hSByteReader = new SByteReader();
+                var hCharReader = new CharReader();
                 var hDateTimeReader = new DateTimeReader();
                 var hDecimalReader = new DecimalReader();
-                var hBoundingSphereReader = new BoundingSphereReader();
-                var hBoundingFrustumReader = new BoundingFrustumReader();
-                var hRayReader = new RayReader();
-                var hCharListReader = new ListReader<Char>();
-                var hRectangleListReader = new ListReader<Rectangle>();
-                var hRectangleArrayReader = new ArrayReader<Rectangle>();
-                var hVector3ListReader = new ListReader<Vector3>();
-                var hStringListReader = new ListReader<StringReader>();
-                var hIntListReader = new ListReader<Int32>();
-                var hSpriteFontReader = new SpriteFontReader();
-                var hTexture2DReader = new Texture2DReader();
-                var hCharReader = new CharReader();
-                var hRectangleReader = new RectangleReader();
+                var hDoubleReader = new DoubleReader();
+                var hInt16Reader = new Int16Reader();
+                var hInt32Reader = new Int32Reader();
+                var hInt64Reader = new Int64Reader();
+                var hSByteReader = new SByteReader();
+                var hSingleReader = new SingleReader();
                 var hStringReader = new StringReader();
+                var TimeSpanReader = new TimeSpanReader();
+                var hUInt16Reader = new UInt16Reader();
+                var hUInt32Reader = new UInt32Reader();
+                var hUInt64Reader = new UInt64Reader();
+                var hCharListReader = new ListReader<Char>();
+                var hIntListReader = new ListReader<Int32>();
+                var hArrayFloatReader = new ArrayReader<Single>();
+                var hStringListReader = new ListReader<StringReader>();
+                // Famework types
+                var hBoundingBoxReader = new BoundingBoxReader();
+                var hBoundingFrustumReader = new BoundingFrustumReader();
+                var hBoundingSphereReader = new BoundingSphereReader();
+                var hColorReader = new ColorReader();
+                var hCurveReader = new CurveReader();
+                var hExternalReferenceReader = new ExternalReferenceReader();
+                var hMatrixReader = new MatrixReader();
+                var hPlaneReader = new PlaneReader();
+                var hPointReader = new PointReader();
+                var hQuaternionReader = new QuaternionReader();
+                var hRayReader = new RayReader();
+                var hRectangleReader = new RectangleReader();
                 var hVector2Reader = new Vector2Reader();
                 var hVector3Reader = new Vector3Reader();
                 var hVector4Reader = new Vector4Reader();
-                var hCurveReader = new CurveReader();
-                var hIndexBufferReader = new IndexBufferReader();
-                var hBoundingBoxReader = new BoundingBoxReader();
-                var hMatrixReader = new MatrixReader();
-                var hBasicEffectReader = new BasicEffectReader();
-                var hVertexBufferReader = new VertexBufferReader();
-                var hAlphaTestEffectReader = new AlphaTestEffectReader();
-                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
-                var hArrayFloatReader = new ArrayReader<float>();
-                var hArrayVector2Reader = new ArrayReader<Vector2>();
-                var hListVector2Reader = new ListReader<Vector2>();
                 var hArrayMatrixReader = new ArrayReader<Matrix>();
-                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+                var hRectangleArrayReader = new ArrayReader<Rectangle>();
+                var hArrayVector2Reader = new ArrayReader<Vector2>();
+                var hRectangleListReader = new ListReader<Rectangle>();
+                var hVector3ListReader = new ListReader<Vector3>();
+                var hListVector2Reader = new ListReader<Vector2>();
                 var hNullableRectReader = new NullableReader<Rectangle>();
+                // Framework.Graphics types
+                var hAlphaTestEffectReader = new AlphaTestEffectReader();
+                var hBasicEffectReader = new BasicEffectReader();
+                var hDualTextureEffectReader = new DualTextureEffectReader();
                 var hEffectMaterialReader = new EffectMaterialReader();
-                var hExternalReferenceReader = new ExternalReferenceReader();
-                var hSoundEffectReader = new SoundEffectReader();
-                var hSongReader = new SongReader();
-                var hModelReader = new ModelReader();
-                var hInt32Reader = new Int32Reader();
                 var hEffectReader = new EffectReader();
-                var hSingleReader = new SingleReader();
+                var hIndexBufferReader = new IndexBufferReader();
+                var hModelReader = new ModelReader();
+                var hSkinnedEffectReader = new SkinnedEffectReader();
+                var hSpriteFontReader = new SpriteFontReader();
+                var hTexture2DReader = new Texture2DReader();
+                var hTexture3DReader = new Texture3DReader();
+                var hTextureCubeReader = new TextureCubeReader();
+                var hVertexBufferReader = new VertexBufferReader();
+                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
+                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+                // Framework.Audio types
+                var hSongReader = new SongReader();
+                var hSoundEffectReader = new SoundEffectReader();
 
                 // At the moment the Video class doesn't exist
                 // on all platforms... Allow it to compile anyway.

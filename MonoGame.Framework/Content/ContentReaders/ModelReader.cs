@@ -4,9 +4,8 @@
 
 using System;
 using System.Diagnostics;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content
 {
@@ -17,50 +16,19 @@ namespace Microsoft.Xna.Framework.Content
 //      List<Effect> effects = new List<Effect>();
 //      List<GraphicsResource> sharedResources = new List<GraphicsResource>();
 
-		public ModelReader ()
-		{
-		}
-		
-		static int ReadBoneReference(ContentReader reader, uint boneCount)
-        {
-            uint boneId;
-
-            // Read the bone ID, which may be encoded as either an 8 or 32 bit value.
-            if (boneCount < 255)
-            {
-                boneId = reader.ReadByte();
-            }
-            else
-            {
-                boneId = reader.ReadUInt32();
-            }
-
-            // Print out the bone ID.
-            if (boneId != 0)
-            {
-                //Debug.WriteLine("bone #{0}", boneId - 1);
-                return (int)(boneId - 1);
-            }
-            else
-            {
-                //Debug.WriteLine("null");
-            }
-
-            return -1;
-        }
-		
-		protected internal override Model Read(ContentReader reader, Model existingInstance)
+		protected internal override Model Read(ContentReader input, Model existingInstance)
 		{
             // Read the bone names and transforms.
-            uint boneCount = reader.ReadUInt32();
+            uint boneCount = input.ReadUInt32();
+            bool is8BitBoneReference = (boneCount < 255);
             //Debug.WriteLine("Bone count: {0}", boneCount);
 
             List<ModelBone> bones = new List<ModelBone>((int)boneCount);
 
             for (uint i = 0; i < boneCount; i++)
             {
-                string name = reader.ReadObject<string>();
-				var matrix = reader.ReadMatrix();
+                string name = input.ReadObject<string>();
+				var matrix = input.ReadMatrix();
                 var bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
                 bones.Add(bone);
             }
@@ -74,7 +42,7 @@ namespace Microsoft.Xna.Framework.Content
 
                 // Read the parent bone reference.
                 //Debug.WriteLine("Parent: ");
-                var parentIndex = ReadBoneReference(reader, boneCount);
+                var parentIndex = ReadBoneReference(input, is8BitBoneReference);
 
                 if (parentIndex != -1)
                 {
@@ -82,7 +50,7 @@ namespace Microsoft.Xna.Framework.Content
                 }
 
                 // Read the child bone references.
-                uint childCount = reader.ReadUInt32();
+                uint childCount = input.ReadUInt32();
 
                 if (childCount != 0)
                 {
@@ -90,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content
 
                     for (uint j = 0; j < childCount; j++)
                     {
-                        var childIndex = ReadBoneReference(reader, boneCount);
+                        var childIndex = ReadBoneReference(input, is8BitBoneReference);
                         if (childIndex != -1)
                         {
                             bone.AddChild(bones[childIndex]);
@@ -102,22 +70,23 @@ namespace Microsoft.Xna.Framework.Content
             List<ModelMesh> meshes = new List<ModelMesh>();
 
             //// Read the mesh data.
-            int meshCount = reader.ReadInt32();
+            int meshCount = input.ReadInt32();
             //Debug.WriteLine("Mesh count: {0}", meshCount);
 
             for (int i = 0; i < meshCount; i++)
             {
 
                 //Debug.WriteLine("Mesh {0}", i);
-                string name = reader.ReadObject<string>();
-                var parentBoneIndex = ReadBoneReference(reader, boneCount);
-				var boundingSphere = reader.ReadBoundingSphere();
+                string name = input.ReadObject<string>();
+                var parentBoneIndex = ReadBoneReference(input, is8BitBoneReference);
+                //Opt: var boundingSphere = input.ReadRawObject<BoundingSphere>();
+                var boundingSphere = new BoundingSphere(input.ReadVector3(), input.ReadSingle());
 
                 // Tag
-                var meshTag = reader.ReadObject<object>();
+                var meshTag = input.ReadObject<object>();
 
                 // Read the mesh part data.
-                int partCount = reader.ReadInt32();
+                int partCount = input.ReadInt32();
                 //Debug.WriteLine("Mesh part count: {0}", partCount);
 
                 List<ModelMeshPart> parts = new List<ModelMeshPart>(partCount);
@@ -130,26 +99,26 @@ namespace Microsoft.Xna.Framework.Content
                     else
                         part = new ModelMeshPart();
 
-					part.VertexOffset = reader.ReadInt32();
-                    part.NumVertices = reader.ReadInt32();
-                    part.StartIndex = reader.ReadInt32();
-                    part.PrimitiveCount = reader.ReadInt32();
+					part.VertexOffset = input.ReadInt32();
+                    part.NumVertices = input.ReadInt32();
+                    part.StartIndex = input.ReadInt32();
+                    part.PrimitiveCount = input.ReadInt32();
 
                     // tag
-                    part.Tag = reader.ReadObject<object>();
+                    part.Tag = input.ReadObject<object>();
 					
 					parts.Add(part);
 					
 					int jj = (int)j;
-					reader.ReadSharedResource<VertexBuffer>(delegate (VertexBuffer v)
+					input.ReadSharedResource<VertexBuffer>(delegate (VertexBuffer v)
 					{
 						parts[jj].VertexBuffer = v;
 					});
-					reader.ReadSharedResource<IndexBuffer>(delegate (IndexBuffer v)
+					input.ReadSharedResource<IndexBuffer>(delegate (IndexBuffer v)
 					{
 						parts[jj].IndexBuffer = v;
 					});
-					reader.ReadSharedResource<Effect>(delegate (Effect v)
+					input.ReadSharedResource<Effect>(delegate (Effect v)
 					{
 						parts[jj].Effect = v;
 					});
@@ -160,7 +129,7 @@ namespace Microsoft.Xna.Framework.Content
                 if (existingInstance != null)
                     continue;
 
-				ModelMesh mesh = new ModelMesh(reader.GetGraphicsDevice(), parts);
+				ModelMesh mesh = new ModelMesh(input.GetGraphicsDevice(), parts);
 
                 // Tag reassignment
                 mesh.Tag = meshTag;
@@ -175,23 +144,41 @@ namespace Microsoft.Xna.Framework.Content
             if (existingInstance != null)
             {
                 // Read past remaining data and return existing instance
-                ReadBoneReference(reader, boneCount);
-                reader.ReadObject<object>();
+                ReadBoneReference(input, is8BitBoneReference);
+                input.ReadObject<object>();
                 return existingInstance;
             }
 
             // Read the final pieces of model data.
-            var rootBoneIndex = ReadBoneReference(reader, boneCount);
+            var rootBoneIndex = ReadBoneReference(input, is8BitBoneReference);
 
-            Model model = new Model(reader.GetGraphicsDevice(), bones, meshes);
+            Model model = new Model(input.GetGraphicsDevice(), bones, meshes);
 
             model.Root = bones[rootBoneIndex];
 
 			// Tag?
-            model.Tag = reader.ReadObject<object>();
+            model.Tag = input.ReadObject<object>();
 			
 			return model;
 		}
+
+		static int ReadBoneReference(ContentReader input, bool is8BitBoneReference)
+        {
+            // Read the bone ID, which may be encoded as either an 8 or 32 bit value.
+            uint boneId = (is8BitBoneReference)
+                        ? input.ReadByte()
+                        : input.ReadUInt32()
+                        ;
+
+            // Print out the bone ID.
+            //if (boneId == 0)
+            //    Debug.WriteLine("null");
+            //else
+            //    Debug.WriteLine("bone #{0}", boneId - 1);
+
+            return (int)(boneId - 1);
+        }
+
 	}
 }
 

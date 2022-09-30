@@ -8,10 +8,6 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class DecimalReader : ContentTypeReader<decimal>
     {
-        public DecimalReader()
-        {
-        }
-
         protected internal override decimal Read(ContentReader input, decimal existingInstance)
         {
             return input.ReadDecimal();

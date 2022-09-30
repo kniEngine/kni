@@ -9,10 +9,6 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class RayReader : ContentTypeReader<Ray>
     {
-        public RayReader()
-        {
-        }
-
         protected internal override Ray Read(ContentReader input, Ray existingInstance)
         {
             Vector3 position = input.ReadVector3();
