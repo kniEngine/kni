@@ -15,9 +15,9 @@ namespace Microsoft.Xna.Framework.Content
 			DualTextureEffect effect = new DualTextureEffect(input.GetGraphicsDevice());
 			effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;
 			effect.Texture2 = input.ReadExternalReference<Texture>() as Texture2D;
-			effect.DiffuseColor = input.ReadVector3 ();
-			effect.Alpha = input.ReadSingle ();
-			effect.VertexColorEnabled = input.ReadBoolean ();
+			effect.DiffuseColor = input.ReadVector3();
+			effect.Alpha = input.ReadSingle();
+			effect.VertexColorEnabled = input.ReadBoolean();
 			return effect;
 		}
 	}

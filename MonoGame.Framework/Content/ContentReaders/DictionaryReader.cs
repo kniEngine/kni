@@ -17,10 +17,6 @@ namespace Microsoft.Xna.Framework.Content
 		Type keyType;
 		Type valueType;
 		
-        public DictionaryReader()
-        {
-        }
-
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
 			keyType = typeof(TKey);

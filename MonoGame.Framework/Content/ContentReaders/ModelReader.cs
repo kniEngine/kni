@@ -4,9 +4,8 @@
 
 using System;
 using System.Diagnostics;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content
 {
@@ -17,38 +16,6 @@ namespace Microsoft.Xna.Framework.Content
 //      List<Effect> effects = new List<Effect>();
 //      List<GraphicsResource> sharedResources = new List<GraphicsResource>();
 
-		public ModelReader ()
-		{
-		}
-		
-		static int ReadBoneReference(ContentReader reader, uint boneCount)
-        {
-            uint boneId;
-
-            // Read the bone ID, which may be encoded as either an 8 or 32 bit value.
-            if (boneCount < 255)
-            {
-                boneId = reader.ReadByte();
-            }
-            else
-            {
-                boneId = reader.ReadUInt32();
-            }
-
-            // Print out the bone ID.
-            if (boneId != 0)
-            {
-                //Debug.WriteLine("bone #{0}", boneId - 1);
-                return (int)(boneId - 1);
-            }
-            else
-            {
-                //Debug.WriteLine("null");
-            }
-
-            return -1;
-        }
-		
 		protected internal override Model Read(ContentReader reader, Model existingInstance)
 		{
             // Read the bone names and transforms.
@@ -192,6 +159,35 @@ namespace Microsoft.Xna.Framework.Content
 			
 			return model;
 		}
+
+		static int ReadBoneReference(ContentReader reader, uint boneCount)
+        {
+            uint boneId;
+
+            // Read the bone ID, which may be encoded as either an 8 or 32 bit value.
+            if (boneCount < 255)
+            {
+                boneId = reader.ReadByte();
+            }
+            else
+            {
+                boneId = reader.ReadUInt32();
+            }
+
+            // Print out the bone ID.
+            if (boneId != 0)
+            {
+                //Debug.WriteLine("bone #{0}", boneId - 1);
+                return (int)(boneId - 1);
+            }
+            else
+            {
+                //Debug.WriteLine("null");
+            }
+
+            return -1;
+        }
+
 	}
 }
 

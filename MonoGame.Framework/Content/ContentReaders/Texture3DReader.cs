@@ -24,20 +24,20 @@ namespace Microsoft.Xna.Framework.Content
             else
                 texture = existingInstance;
 
-                for (int i = 0; i < levelCount; i++)
-                {
-                    int dataSize = reader.ReadInt32();
-                    byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
-                    reader.Read(data, 0, dataSize);
-                    texture.SetData(i, 0, 0, width, height, 0, depth, data, 0, dataSize);
+            for (int i = 0; i < levelCount; i++)
+            {
+                int dataSize = reader.ReadInt32();
+                byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
+                reader.Read(data, 0, dataSize);
+                texture.SetData(i, 0, 0, width, height, 0, depth, data, 0, dataSize);
 
-                    // Calculate dimensions of next mip level.
-                    width = Math.Max(width >> 1, 1);
-                    height = Math.Max(height >> 1, 1);
-                    depth = Math.Max(depth >> 1, 1);
+                // Calculate dimensions of next mip level.
+                width = Math.Max(width >> 1, 1);
+                height = Math.Max(height >> 1, 1);
+                depth = Math.Max(depth >> 1, 1);
 
-                    ContentManager.ScratchBufferPool.Return(data);
-                }
+                ContentManager.ScratchBufferPool.Return(data);
+            }
 
             return texture;
         }

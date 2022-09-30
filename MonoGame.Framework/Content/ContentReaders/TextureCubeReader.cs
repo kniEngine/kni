@@ -23,17 +23,17 @@ namespace Microsoft.Xna.Framework.Content
             else
                 textureCube = existingInstance;
 
-                for (int face = 0; face < 6; face++)
+            for (int face = 0; face < 6; face++)
+            {
+                for (int i = 0; i < levels; i++)
                 {
-                    for (int i = 0; i < levels; i++)
-                    {
-                        int faceSize = reader.ReadInt32();
-                        byte[] faceData = ContentManager.ScratchBufferPool.Get(faceSize);
-                        reader.Read(faceData, 0, faceSize);
-                        textureCube.SetData<byte>((CubeMapFace)face, i, null, faceData, 0, faceSize);
-                        ContentManager.ScratchBufferPool.Return(faceData);
-                    }
+                    int faceSize = reader.ReadInt32();
+                    byte[] faceData = ContentManager.ScratchBufferPool.Get(faceSize);
+                    reader.Read(faceData, 0, faceSize);
+                    textureCube.SetData<byte>((CubeMapFace)face, i, null, faceData, 0, faceSize);
+                    ContentManager.ScratchBufferPool.Return(faceData);
                 }
+            }
 
              return textureCube;
         }

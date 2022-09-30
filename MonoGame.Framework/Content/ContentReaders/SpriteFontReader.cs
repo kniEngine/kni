@@ -4,18 +4,13 @@
 
 using System;
 using System.Collections.Generic;
-
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Content
 {
     internal class SpriteFontReader : ContentTypeReader<SpriteFont>
     {
-        public SpriteFontReader()
-        {
-        }
-
         protected internal override SpriteFont Read(ContentReader input, SpriteFont existingInstance)
         {
             if (existingInstance != null)

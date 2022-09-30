@@ -3,20 +3,14 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.Xna.Framework;
 
-using Microsoft.Xna.Framework.Content;
 
 namespace Microsoft.Xna.Framework.Content
 {
 	
 	internal class RectangleReader : ContentTypeReader<Rectangle>
     {
-        public RectangleReader()
-        {
-        }
-
         protected internal override Rectangle Read(ContentReader input, Rectangle existingInstance)
         {
             int left = input.ReadInt32();

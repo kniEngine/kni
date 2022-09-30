@@ -9,10 +9,6 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class BoundingSphereReader : ContentTypeReader<BoundingSphere>
     {
-        public BoundingSphereReader()
-        {
-        }
-
         protected internal override BoundingSphere Read(ContentReader input, BoundingSphere existingInstance)
         {
             Vector3 center = input.ReadVector3();

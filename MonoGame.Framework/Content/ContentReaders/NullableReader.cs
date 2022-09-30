@@ -10,10 +10,6 @@ namespace Microsoft.Xna.Framework.Content
     {
         ContentTypeReader elementReader;
 
-        public NullableReader()
-        {
-        }
-
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {			
 			Type readerType = typeof(T);
