@@ -57,14 +57,22 @@ namespace Microsoft.Xna.Framework.Content
                 // This forces the classes not to be optimized out when deploying to iDevices
 
                 // System types
+                var hBooleanReader = new BooleanReader();
                 var hByteReader = new ByteReader();
                 var hCharReader = new CharReader();
                 var hDateTimeReader = new DateTimeReader();
                 var hDecimalReader = new DecimalReader();
+                var hDoubleReader = new DoubleReader();
+                var hInt16Reader = new Int16Reader();
                 var hInt32Reader = new Int32Reader();
+                var hInt64Reader = new Int64Reader();
                 var hSByteReader = new SByteReader();
                 var hSingleReader = new SingleReader();
                 var hStringReader = new StringReader();
+                var TimeSpanReader = new TimeSpanReader();
+                var hUInt16Reader = new UInt16Reader();
+                var hUInt32Reader = new UInt32Reader();
+                var hUInt64Reader = new UInt64Reader();
                 var hCharListReader = new ListReader<Char>();
                 var hIntListReader = new ListReader<Int32>();
                 var hArrayFloatReader = new ArrayReader<Single>();
@@ -73,9 +81,13 @@ namespace Microsoft.Xna.Framework.Content
                 var hBoundingBoxReader = new BoundingBoxReader();
                 var hBoundingFrustumReader = new BoundingFrustumReader();
                 var hBoundingSphereReader = new BoundingSphereReader();
+                var hColorReader = new ColorReader();
                 var hCurveReader = new CurveReader();
                 var hExternalReferenceReader = new ExternalReferenceReader();
                 var hMatrixReader = new MatrixReader();
+                var hPlaneReader = new PlaneReader();
+                var hPointReader = new PointReader();
+                var hQuaternionReader = new QuaternionReader();
                 var hRayReader = new RayReader();
                 var hRectangleReader = new RectangleReader();
                 var hVector2Reader = new Vector2Reader();
@@ -91,12 +103,16 @@ namespace Microsoft.Xna.Framework.Content
                 // Framework.Graphics types
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
+                var hDualTextureEffectReader = new DualTextureEffectReader();
                 var hEffectMaterialReader = new EffectMaterialReader();
                 var hEffectReader = new EffectReader();
                 var hIndexBufferReader = new IndexBufferReader();
                 var hModelReader = new ModelReader();
+                var hSkinnedEffectReader = new SkinnedEffectReader();
                 var hSpriteFontReader = new SpriteFontReader();
                 var hTexture2DReader = new Texture2DReader();
+                var hTexture3DReader = new Texture3DReader();
+                var hTextureCubeReader = new TextureCubeReader();
                 var hVertexBufferReader = new VertexBufferReader();
                 var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
                 var hEnumBlendReader = new EnumReader<Graphics.Blend>();
