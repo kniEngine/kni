@@ -8,33 +8,6 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
 {
-	internal class PlaneHelper
-    {
-        /// <summary>
-        /// Returns a value indicating what side (positive/negative) of a plane a point is
-        /// </summary>
-        /// <param name="point">The point to check with</param>
-        /// <param name="plane">The plane to check against</param>
-        /// <returns>Greater than zero if on the positive side, less than zero if on the negative size, 0 otherwise</returns>
-        public static float ClassifyPoint(ref Vector3 point, ref Plane plane)
-        {
-            return point.X * plane.Normal.X + point.Y * plane.Normal.Y + point.Z * plane.Normal.Z + plane.D;
-        }
-
-        /// <summary>
-        /// Returns the perpendicular distance from a point to a plane
-        /// </summary>
-        /// <param name="point">The point to check</param>
-        /// <param name="plane">The place to check</param>
-        /// <returns>The perpendicular distance from the point to the plane</returns>
-        public static float PerpendicularDistance(ref Vector3 point, ref Plane plane)
-        {
-            // dist = (ax + by + cz + d) / sqrt(a*a + b*b + c*c)
-            return (float)Math.Abs((plane.Normal.X * point.X + plane.Normal.Y * point.Y + plane.Normal.Z * point.Z)
-                                    / Math.Sqrt(plane.Normal.X * plane.Normal.X + plane.Normal.Y * plane.Normal.Y + plane.Normal.Z * plane.Normal.Z));
-        }
-    }
-	
     /// <summary>
     /// A plane in 3d space, represented by its normal away from the origin and its distance from the origin, D.
     /// </summary>
@@ -45,16 +18,16 @@ namespace Microsoft.Xna.Framework
         #region Public Fields
 
         /// <summary>
-        /// The distance of the <see cref="Plane"/> to the origin.
-        /// </summary>
-        [DataMember]
-        public float D;
-
-        /// <summary>
         /// The normal of the <see cref="Plane"/>.
         /// </summary>
         [DataMember]
         public Vector3 Normal;
+
+        /// <summary>
+        /// The distance of the <see cref="Plane"/> to the origin.
+        /// </summary>
+        [DataMember]
+        public float D;
 
         #endregion Public Fields
 
@@ -67,9 +40,11 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="value">A vector holding the normal and distance to origin.</param>
         public Plane(Vector4 value)
-            : this(new Vector3(value.X, value.Y, value.Z), value.W)
         {
-
+            Normal.X = value.X;
+            Normal.Y = value.Y;
+            Normal.Z = value.Z;
+            D = value.W;
         }
 
         /// <summary>
@@ -94,8 +69,8 @@ namespace Microsoft.Xna.Framework
             Vector3 ab = b - a;
             Vector3 ac = c - a;
 
-            Vector3 cross = Vector3.Cross(ab, ac);
-            Vector3.Normalize(ref cross, out Normal);
+            Vector3.Cross(ref ab, ref ac, out Normal);
+            Normal.Normalize();
             D = -(Vector3.Dot(Normal, a));
         }
 
@@ -108,24 +83,11 @@ namespace Microsoft.Xna.Framework
         /// <param name="c">The Z component of the normal.</param>
         /// <param name="d">The distance to the origin.</param>
         public Plane(float a, float b, float c, float d)
-            : this(new Vector3(a, b, c), d)
         {
-
-        }
-
-        /// <summary>
-        /// Create a <see cref="Plane"/> that contains the specified point and has the specified <see cref="Normal"/> vector.
-        /// </summary>
-        /// <param name="pointOnPlane">A point the created <see cref="Plane"/> should contain.</param>
-        /// <param name="normal">The normal of the plane.</param>
-        public Plane(Vector3 pointOnPlane, Vector3 normal)
-        {
-            Normal = normal;
-            D = -(
-                pointOnPlane.X * normal.X +
-                pointOnPlane.Y * normal.Y +
-                pointOnPlane.Z * normal.Z
-            );
+            Normal.X = a;
+            Normal.Y = b;
+            Normal.Z = c;
+            D = d;
         }
 
         #endregion Constructors
@@ -209,6 +171,20 @@ namespace Microsoft.Xna.Framework
         public void DotNormal(ref Vector3 value, out float result)
         {
             result = ((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Plane"/> that contains the specified point and has the specified <see cref="Normal"/> vector.
+        /// </summary>
+        /// <param name="normal">The normal of the plane.</param>
+        /// <param name="point">A point the created <see cref="Plane"/> should contain.</param>
+        public static Plane FromPoint(Vector3 normal, Vector3 point)
+        {
+            Plane result;
+            result.Normal = normal;
+            // project point on normal. //Opt: -Vector3.Dot(normal, point);
+            result.D = -(normal.X * point.X + normal.Y * point.Y + normal.Z * point.Z);
+            return result;
         }
 
         /// <summary>
