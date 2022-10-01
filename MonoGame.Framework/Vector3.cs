@@ -1111,17 +1111,10 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentException("Source array length is lesser than sourceIndex + length");
             if (destinationArray.Length < destinationIndex + length)
                 throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
-
-            // TODO: Are there options on some platforms to implement a vectorized version of this?
-
+            
             for (var i = 0; i < length; i++)
             {
-                var position = sourceArray[sourceIndex + i];
-                destinationArray[destinationIndex + i] =
-                    new Vector3(
-                        (position.X * matrix.M11) + (position.Y * matrix.M21) + (position.Z * matrix.M31) + matrix.M41,
-                        (position.X * matrix.M12) + (position.Y * matrix.M22) + (position.Z * matrix.M32) + matrix.M42,
-                        (position.X * matrix.M13) + (position.Y * matrix.M23) + (position.Z * matrix.M33) + matrix.M43);
+                Vector3.Transform(ref sourceArray[sourceIndex + i], ref matrix, out destinationArray[destinationIndex + i]);
             }
         }
 
@@ -1144,22 +1137,10 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentException("Source array length is lesser than sourceIndex + length");
             if (destinationArray.Length < destinationIndex + length)
                 throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
-
-            // TODO: Are there options on some platforms to implement a vectorized version of this?
-
+            
             for (var i = 0; i < length; i++)
             {
-                var position = sourceArray[sourceIndex + i];
-
-                float x = 2 * (rotation.Y * position.Z - rotation.Z * position.Y);
-                float y = 2 * (rotation.Z * position.X - rotation.X * position.Z);
-                float z = 2 * (rotation.X * position.Y - rotation.Y * position.X);
-
-                destinationArray[destinationIndex + i] =
-                    new Vector3(
-                        position.X + x * rotation.W + (rotation.Y * z - rotation.Z * y),
-                        position.Y + y * rotation.W + (rotation.Z * x - rotation.X * z),
-                        position.Z + z * rotation.W + (rotation.X * y - rotation.Y * x));
+                Vector3.Transform(ref sourceArray[sourceIndex + i], ref rotation, out destinationArray[destinationIndex + i]);
             }
         }
 
@@ -1171,24 +1152,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void Transform(Vector3[] sourceArray, ref Matrix matrix, Vector3[] destinationArray)
         {
-            if (sourceArray == null)
-                throw new ArgumentNullException("sourceArray");
-            if (destinationArray == null)
-                throw new ArgumentNullException("destinationArray");
-            if (destinationArray.Length < sourceArray.Length)
-                throw new ArgumentException("Destination array length is lesser than source array length");
-
-            // TODO: Are there options on some platforms to implement a vectorized version of this?
-
-            for (var i = 0; i < sourceArray.Length; i++)
-            {
-                var position = sourceArray[i];                
-                destinationArray[i] =
-                    new Vector3(
-                        (position.X*matrix.M11) + (position.Y*matrix.M21) + (position.Z*matrix.M31) + matrix.M41,
-                        (position.X*matrix.M12) + (position.Y*matrix.M22) + (position.Z*matrix.M32) + matrix.M42,
-                        (position.X*matrix.M13) + (position.Y*matrix.M23) + (position.Z*matrix.M33) + matrix.M43);
-            }
+            Vector3.Transform(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
         }
 
         /// <summary>
@@ -1199,29 +1163,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void Transform(Vector3[] sourceArray, ref Quaternion rotation, Vector3[] destinationArray)
         {
-            if (sourceArray == null)
-                throw new ArgumentNullException("sourceArray");
-            if (destinationArray == null)
-                throw new ArgumentNullException("destinationArray");
-            if (destinationArray.Length < sourceArray.Length)
-                throw new ArgumentException("Destination array length is lesser than source array length");
-
-            // TODO: Are there options on some platforms to implement a vectorized version of this?
-
-            for (var i = 0; i < sourceArray.Length; i++)
-            {
-                var position = sourceArray[i];
-
-                float x = 2 * (rotation.Y * position.Z - rotation.Z * position.Y);
-                float y = 2 * (rotation.Z * position.X - rotation.X * position.Z);
-                float z = 2 * (rotation.X * position.Y - rotation.Y * position.X);
-
-                destinationArray[i] =
-                    new Vector3(
-                        position.X + x * rotation.W + (rotation.Y * z - rotation.Z * y),
-                        position.Y + y * rotation.W + (rotation.Z * x - rotation.X * z),
-                        position.Z + z * rotation.W + (rotation.X * y - rotation.Y * x));
-            }
+            Vector3.Transform(sourceArray, 0, ref rotation, destinationArray, 0, sourceArray.Length);
         }
 
         #endregion
@@ -1265,12 +1207,13 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         /// <param name="destinationIndex">The starting index in the destination array, where the first <see cref="Vector3"/> should be written.</param>
         /// <param name="length">The number of normals to be transformed.</param>
-        public static void TransformNormal(Vector3[] sourceArray,
-         int sourceIndex,
-         ref Matrix matrix,
-         Vector3[] destinationArray,
-         int destinationIndex,
-         int length)
+        public static void TransformNormal
+        (
+            Vector3[] sourceArray, int sourceIndex,
+            ref Matrix matrix,
+            Vector3[] destinationArray,int destinationIndex,
+            int length
+        )
         {
             if (sourceArray == null)
                 throw new ArgumentNullException("sourceArray");
@@ -1281,15 +1224,9 @@ namespace Microsoft.Xna.Framework
             if (destinationArray.Length < destinationIndex + length)
                 throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
 
-            for (int x = 0; x < length; x++)
+            for (int i = 0; i < length; i++)
             {
-                var normal = sourceArray[sourceIndex + x];
-
-                destinationArray[destinationIndex + x] =
-                     new Vector3(
-                        (normal.X * matrix.M11) + (normal.Y * matrix.M21) + (normal.Z * matrix.M31),
-                        (normal.X * matrix.M12) + (normal.Y * matrix.M22) + (normal.Z * matrix.M32),
-                        (normal.X * matrix.M13) + (normal.Y * matrix.M23) + (normal.Z * matrix.M33));
+                Vector3.TransformNormal(ref sourceArray[sourceIndex + i], ref matrix, out destinationArray[destinationIndex + i]);
             }
         }
 
@@ -1301,23 +1238,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void TransformNormal(Vector3[] sourceArray, ref Matrix matrix, Vector3[] destinationArray)
         {
-            if(sourceArray == null)
-                throw new ArgumentNullException("sourceArray");
-            if (destinationArray == null)
-                throw new ArgumentNullException("destinationArray");
-            if (destinationArray.Length < sourceArray.Length)
-                throw new ArgumentException("Destination array length is lesser than source array length");
-
-            for (var i = 0; i < sourceArray.Length; i++)
-            {
-                var normal = sourceArray[i];
-
-                destinationArray[i] =
-                    new Vector3(
-                        (normal.X*matrix.M11) + (normal.Y*matrix.M21) + (normal.Z*matrix.M31),
-                        (normal.X*matrix.M12) + (normal.Y*matrix.M22) + (normal.Z*matrix.M32),
-                        (normal.X*matrix.M13) + (normal.Y*matrix.M23) + (normal.Z*matrix.M33));
-            }
+            Vector3.TransformNormal(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
         }
 
         #endregion
