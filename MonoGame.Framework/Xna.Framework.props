@@ -11,6 +11,7 @@
     <Compile Include="BoundingFrustum.cs" />
     <Compile Include="BoundingSphere.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="ContainmentType.cs" />
     <Compile Include="Curve.cs" />
     <Compile Include="CurveContinuity.cs" />

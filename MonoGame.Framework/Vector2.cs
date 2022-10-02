@@ -1159,9 +1159,7 @@ namespace Microsoft.Xna.Framework
 
             for (int x = 0; x < length; x++)
             {
-                Vector2.Transform(
-                    ref sourceArray[sourceIndex + x], ref complex,
-                    out destinationArray[destinationIndex + x]);
+                Vector2.Transform(ref sourceArray[sourceIndex + x], ref complex, out destinationArray[destinationIndex + x]);
             }
         }
 
@@ -1206,7 +1204,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void Transform(Vector2[] sourceArray, ref Complex complex, Vector2[] destinationArray)
         {
-            Transform(sourceArray, 0, ref complex, destinationArray, 0, sourceArray.Length);
+            Vector2.Transform(sourceArray, 0, ref complex, destinationArray, 0, sourceArray.Length);
         }
 
         /// <summary>
