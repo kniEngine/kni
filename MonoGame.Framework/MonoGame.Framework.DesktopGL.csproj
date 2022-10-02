@@ -38,9 +38,6 @@
   <Import Project="MonoGame.Framework.Common.props" />
   
   <ItemGroup>
-    <Compile Remove="Media\Video.cs" />
-    <Compile Remove="Media\VideoPlayer.cs" />
-    <Compile Remove="Content\ContentReaders\VideoReader.cs" />
     <Compile Remove="Input\MessageBox.cs" />
     <Compile Remove="Input\KeyboardInput.cs" />
   </ItemGroup>
@@ -61,6 +58,8 @@
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
     <Compile Include="Media\Song.NVorbis.cs" />
+    <Compile Include="Media\Video.SDL.cs" />
+    <Compile Include="Media\VideoPlayer.SDL.cs" />
     <Compile Include="Input\GamePad.SDL.cs" />
     <Compile Include="Input\Joystick.SDL.cs" />
     <Compile Include="Input\Keyboard.SDL.cs" />

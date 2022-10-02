@@ -862,7 +862,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidCastException();
         }
 
-#if !GLES
         public Texture3D GetValueTexture3D()
         {
             if (ParameterClass == EffectParameterClass.Object && ParameterType == EffectParameterType.Texture3D)
@@ -872,7 +871,6 @@ namespace Microsoft.Xna.Framework.Graphics
             else
                 throw new InvalidCastException();
         }
-#endif
 
         public TextureCube GetValueTextureCube()
         {
