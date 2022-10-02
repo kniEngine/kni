@@ -1177,11 +1177,9 @@ namespace Microsoft.Xna.Framework
         /// <param name="length">The number of vectors to be transformed.</param>
         public static void Transform
         (
-            Vector4[] sourceArray,
-            int sourceIndex,
+            Vector4[] sourceArray, int sourceIndex,
             ref Matrix matrix,
-            Vector4[] destinationArray,
-            int destinationIndex,
+            Vector4[] destinationArray, int destinationIndex,
             int length
         )
         {
@@ -1196,8 +1194,7 @@ namespace Microsoft.Xna.Framework
 
             for (var i = 0; i < length; i++)
             {
-                var value = sourceArray[sourceIndex + i];
-                destinationArray[destinationIndex + i] = Transform(value, matrix);
+                Vector4.Transform(ref sourceArray[sourceIndex + i], ref matrix, out destinationArray[destinationIndex + i]);
             }
         }
 
@@ -1210,14 +1207,13 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         /// <param name="destinationIndex">The starting index in the destination array, where the first <see cref="Vector4"/> should be written.</param>
         /// <param name="length">The number of vectors to be transformed.</param>
-        public static void Transform(
-            Vector4[] sourceArray,
-            int sourceIndex,
+        public static void Transform
+        (
+            Vector4[] sourceArray, int sourceIndex,
             ref Quaternion rotation,
-            Vector4[] destinationArray,
-            int destinationIndex,
+            Vector4[] destinationArray, int destinationIndex,
             int length
-            )
+        )
         {
             if (sourceArray == null)
                 throw new ArgumentNullException("sourceArray");
@@ -1230,8 +1226,7 @@ namespace Microsoft.Xna.Framework
 
             for (var i = 0; i < length; i++)
             {
-                var value = sourceArray[sourceIndex + i];
-                destinationArray[destinationIndex + i] = Transform(value, rotation);
+                Vector4.Transform(ref sourceArray[sourceIndex + i], ref rotation, out destinationArray[destinationIndex + i]);
             }
         }
 
@@ -1243,18 +1238,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void Transform(Vector4[] sourceArray, ref Matrix matrix, Vector4[] destinationArray)
         {
-            if (sourceArray == null)
-                throw new ArgumentNullException("sourceArray");
-            if (destinationArray == null)
-                throw new ArgumentNullException("destinationArray");
-            if (destinationArray.Length < sourceArray.Length)
-                throw new ArgumentException("Destination array length is lesser than source array length");
-
-            for (var i = 0; i < sourceArray.Length; i++)
-            {
-                var value = sourceArray[i];
-                destinationArray[i] = Transform(value, matrix);
-            }
+            Vector4.Transform(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
         }
 
         /// <summary>
@@ -1265,18 +1249,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="destinationArray">Destination array.</param>
         public static void Transform(Vector4[] sourceArray, ref Quaternion rotation, Vector4[] destinationArray)
         {
-            if (sourceArray == null)
-                throw new ArgumentNullException("sourceArray");
-            if (destinationArray == null)
-                throw new ArgumentNullException("destinationArray");
-            if (destinationArray.Length < sourceArray.Length)
-                throw new ArgumentException("Destination array length is lesser than source array length");
-
-            for (var i = 0; i < sourceArray.Length; i++)
-            {
-                var value = sourceArray[i];
-                destinationArray[i] = Transform(value, rotation);
-            }
+            Vector4.Transform(sourceArray, 0, ref rotation, destinationArray, 0, sourceArray.Length);
         }
 
         #endregion
