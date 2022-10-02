@@ -14,9 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-#if GLES
-            throw new NotSupportedException("OpenGL ES 2.0 doesn't support 3D textures.");
-#else
             this.glTarget = TextureTarget.Texture3D;
 
             Threading.EnsureUIThread();
@@ -35,7 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (mipMap)
                 throw new NotImplementedException("Texture3D does not yet support mipmaps.");
-#endif
         }
 
        
@@ -44,10 +40,6 @@ namespace Microsoft.Xna.Framework.Graphics
             int left, int top, int right, int bottom, int front, int back,
             T[] data, int startIndex, int elementCount, int width, int height, int depth)
         {
-#if GLES
-            throw new NotSupportedException("OpenGL ES 2.0 doesn't support 3D textures.");
-#else
-
             Threading.EnsureUIThread();
 
             {
@@ -68,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     dataHandle.Free();
                 }
             }
-#endif
+
         }
 
         private void PlatformGetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount)

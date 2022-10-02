@@ -323,6 +323,7 @@
     <Compile Include="Graphics\PresentationParameters.cs" />
     <Compile Include="Graphics\PresentInterval.cs" />
     <Compile Include="Graphics\RenderTarget2D.cs" />
+    <Compile Include="Graphics\RenderTarget3D.cs" />
     <Compile Include="Graphics\RenderTargetBinding.cs" />
     <Compile Include="Graphics\RenderTargetCube.cs" />
     <Compile Include="Graphics\RenderTargetUsage.cs" />
@@ -401,6 +402,7 @@
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Platform\Graphics\OpenGL.SDL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
+    <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
     <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
