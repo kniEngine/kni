@@ -25,6 +25,9 @@ namespace Microsoft.Xna.Platform.Audio
         GainNode _gainNode;
         AudioNode _sourceTarget;
 
+        float _pan = 1f;
+        float _volume = 1f;
+
         #region Initialization
 
         internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy, float pan)
@@ -63,6 +66,10 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource.Loop = isLooped;
             _bufferSource.Buffer = _concreteSoundEffect.GetAudioBuffer();
             _bufferSource.Connect(_sourceTarget);
+
+            _gainNode.Gain.SetTargetAtTime(_volume, 0, 0);
+            _stereoPannerNode.Pan.SetTargetAtTime(_pan, 0, 0);
+
             _bufferSource.OnEnded += _bufferSource_OnEnded;
             _bufferSource.Start();
         }
@@ -116,6 +123,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformSetPan(float pan)
         {
+            _pan = pan;
             if (_bufferSource != null)
                 _stereoPannerNode.Pan.SetTargetAtTime(pan, 0, 0.05f);
         }
@@ -126,6 +134,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformSetVolume(float volume)
         {
+            _volume = volume;
             if (_bufferSource != null)
                 _gainNode.Gain.SetTargetAtTime(volume, 0, 0.05f);
         }
