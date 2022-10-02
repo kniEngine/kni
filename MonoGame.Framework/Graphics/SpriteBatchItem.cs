@@ -55,32 +55,32 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
-        public void Set(float x, float y, float dx, float dy, float w, float h, float sin, float cos, float depth,
+        public void Set(float x, float y, float dx, float dy, float w, float h, ref Complex q, float depth,
                         Color color, Vector2 texCoordTL, Vector2 texCoordBR)
         {
-            vertexTL.Position.X = x + dx*cos-dy*sin;
-            vertexTL.Position.Y = y + dx*sin+dy*cos;
+            vertexTL.Position.X = x + dx*q.R-dy*q.i;
+            vertexTL.Position.Y = y + dx*q.i+dy*q.R;
             vertexTL.Position.Z = depth;
             vertexTL.Color = color;
             vertexTL.TextureCoordinate.X = texCoordTL.X;
             vertexTL.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexTR.Position.X = x + (dx+w)*cos-dy*sin;
-            vertexTR.Position.Y = y + (dx+w)*sin+dy*cos;
+            vertexTR.Position.X = x + (dx+w)*q.R-dy*q.i;
+            vertexTR.Position.Y = y + (dx+w)*q.i+dy*q.R;
             vertexTR.Position.Z = depth;
             vertexTR.Color = color;
             vertexTR.TextureCoordinate.X = texCoordBR.X;
             vertexTR.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexBL.Position.X = x + dx*cos-(dy+h)*sin;
-            vertexBL.Position.Y = y + dx*sin+(dy+h)*cos;
+            vertexBL.Position.X = x + dx*q.R-(dy+h)*q.i;
+            vertexBL.Position.Y = y + dx*q.i+(dy+h)*q.R;
             vertexBL.Position.Z = depth;
             vertexBL.Color = color;
             vertexBL.TextureCoordinate.X = texCoordTL.X;
             vertexBL.TextureCoordinate.Y = texCoordBR.Y;
 
-            vertexBR.Position.X = x + (dx+w)*cos-(dy+h)*sin;
-            vertexBR.Position.Y = y + (dx+w)*sin+(dy+h)*cos;
+            vertexBR.Position.X = x + (dx+w)*q.R-(dy+h)*q.i;
+            vertexBR.Position.Y = y + (dx+w)*q.i+(dy+h)*q.R;
             vertexBR.Position.Z = depth;
             vertexBR.Color = color;
             vertexBR.TextureCoordinate.X = texCoordBR.X;

@@ -188,7 +188,44 @@ namespace Microsoft.Xna.Framework.Graphics
                 SpriteEffects effects,
                 float layerDepth)
         {
-            CheckValid(texture);
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
+            Draw(texture, position, sourceRectangle, color, rotation2, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this sprite.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this sprite.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void Draw(Texture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                Complex rotation,
+                Vector2 origin,
+                Vector2 scale,
+                SpriteEffects effects,
+                float layerDepth)
+        {
+            CheckValid(texture);            
 
             var item = _batcher.CreateBatchItem();
             item.Texture = texture;
@@ -244,7 +281,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _texCoordTL.X = temp;
             }
 
-            if (rotation == 0f)
+            if (rotation.i == 0f)
             {
                 item.Set(position.X - origin.X,
                          position.Y - origin.Y,
@@ -263,8 +300,7 @@ namespace Microsoft.Xna.Framework.Graphics
                          -origin.Y,
                          w,
                          h,
-                         (float)Math.Sin(rotation),
-                         (float)Math.Cos(rotation),
+                         ref rotation,
                          layerDepth,
                          color,
                          _texCoordTL,
@@ -316,6 +352,41 @@ namespace Microsoft.Xna.Framework.Graphics
             Rectangle? sourceRectangle,
             Color color,
             float rotation,
+            Vector2 origin,
+            SpriteEffects effects,
+            float layerDepth)
+        {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
+            Draw(texture, destinationRectangle, sourceRectangle, color, rotation2, origin, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="destinationRectangle">The drawing bounds on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this sprite.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void Draw(Texture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            Complex rotation,
             Vector2 origin,
             SpriteEffects effects,
             float layerDepth)
@@ -381,7 +452,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _texCoordTL.X = temp;
             }
 
-            if (rotation == 0f)
+            if (rotation.i == 0f)
             {
                 item.Set(destinationRectangle.X - origin.X,
                          destinationRectangle.Y - origin.Y,
@@ -400,8 +471,7 @@ namespace Microsoft.Xna.Framework.Graphics
                          -origin.Y,
                          destinationRectangle.Width,
                          destinationRectangle.Height,
-                         (float)Math.Sin(rotation),
-                         (float)Math.Cos(rotation),
+                         ref rotation,
                          layerDepth,
                          color,
                          _texCoordTL,
@@ -686,6 +756,18 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             Vector2 scale2;
             scale2.X = scale;
             scale2.Y = scale;
@@ -696,7 +778,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                       rotation, origin, scale2, effects, layerDepth);
+                       ref rotation2, origin, scale2, effects, layerDepth);
         }
 
         /// <summary>
@@ -715,13 +797,50 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             CheckValid(spriteFont, text);
 
             char* pChars = stackalloc char[text.Length];
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                       rotation, origin, scale, effects, layerDepth);
+                       ref rotation2, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this string.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, string text, Vector2 position, Color color,
+            Complex rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        {
+            CheckValid(spriteFont, text);
+
+            char* pChars = stackalloc char[text.Length];
+            int* pGlyphIndices = stackalloc int[text.Length];
+            spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
+            DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
+                       ref rotation, origin, scale, effects, layerDepth);
         }
 
         /// <summary>
@@ -740,6 +859,18 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             Vector2 scale2;
             scale2.X = scale;
             scale2.Y = scale;
@@ -750,7 +881,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                       rotation, origin, scale2, effects, layerDepth);
+                       ref rotation2, origin, scale2, effects, layerDepth);
         }
 
         /// <summary>
@@ -769,18 +900,55 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             CheckValid(spriteFont, text);
 
             char* pChars = stackalloc char[text.Length];
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                       rotation, origin, scale, effects, layerDepth);
+                       ref rotation2, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this string.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
+            Complex rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        {
+            CheckValid(spriteFont, text);
+
+            char* pChars = stackalloc char[text.Length];
+            int* pGlyphIndices = stackalloc int[text.Length];
+            spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
+            DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
+                       ref rotation, origin, scale, effects, layerDepth);
         }
 
         private unsafe void DrawString(
             SpriteFont spriteFont, char* pChars, int* pGlyphIndices, int charsCount, Vector2 position, Color color,
-            float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+            ref Complex rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
             float sortKey = 0;
             // set SortKey based on SpriteSortMode.
@@ -823,8 +991,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             Matrix transformation = Matrix.Identity;
-            float cos = 0, sin = 0;
-            if (rotation == 0)
+            if (rotation.i == 0)
             {
                 transformation.M11 = (flippedHorz ? -scale.X : scale.X);
                 transformation.M22 = (flippedVert ? -scale.Y : scale.Y);
@@ -833,12 +1000,10 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                cos = (float)Math.Cos(rotation);
-                sin = (float)Math.Sin(rotation);
-                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * cos;
-                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * sin;
-                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-sin);
-                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * cos;
+                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * rotation.R;
+                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * rotation.i;
+                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-rotation.i);
+                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * rotation.R;
                 transformation.M41 = (((flipAdjustment.X - origin.X) * transformation.M11) + (flipAdjustment.Y - origin.Y) * transformation.M21) + position.X;
                 transformation.M42 = (((flipAdjustment.X - origin.X) * transformation.M12) + (flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
             }
@@ -917,7 +1082,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         _texCoordTL.X = temp;
                     }
 
-                    if (rotation == 0f)
+                    if (rotation.i == 0f)
                     {
                         item.Set(tpx,
                                  tpy,
@@ -936,8 +1101,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                  0,
                                  pCurrentGlyph->BoundsInTexture.Width * scale.X,
                                  pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                 sin,
-                                 cos,
+                                 ref rotation,
                                  layerDepth,
                                  color,
                                  _texCoordTL,
@@ -969,13 +1133,25 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             CheckValid(spriteFont, text);
 
             char* pChars = stackalloc char[text.Length];
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                       rotation, origin, scale, effects, layerDepth, rtl);
+                       ref rotation2, origin, scale, effects, layerDepth, rtl);
         }
 
         /// <summary>
@@ -995,18 +1171,56 @@ namespace Microsoft.Xna.Framework.Graphics
             SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
         {
+            Complex rotation2;
+            if (rotation == 0f)
+            {
+                rotation2.R = 1f;
+                rotation2.i = 0f;
+            }
+            else
+            {
+                rotation2.R = (float)Math.Cos(rotation);
+                rotation2.i = (float)Math.Sin(rotation);
+            }
+
             CheckValid(spriteFont, text);
 
             char* pChars = stackalloc char[text.Length];
             int* pGlyphIndices = stackalloc int[text.Length];
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
-                rotation, origin, scale, effects, layerDepth, rtl);
+                ref rotation2, origin, scale, effects, layerDepth, rtl);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this string.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        /// <param name="rtl">Text is Right to Left.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
+            Complex rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
+        {
+            CheckValid(spriteFont, text);
+
+            char* pChars = stackalloc char[text.Length];
+            int* pGlyphIndices = stackalloc int[text.Length];
+            spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
+            DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
+                ref rotation, origin, scale, effects, layerDepth, rtl);
         }
 
         private unsafe void DrawString(
             SpriteFont spriteFont, char* pChars, int* pGlyphIndices, int charsCount, Vector2 position, Color color,
-            float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
+            ref Complex rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
         {
             float sortKey = 0;
             // set SortKey based on SpriteSortMode.
@@ -1048,8 +1262,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             Matrix transformation = Matrix.Identity;
-            float cos = 0, sin = 0;
-            if (rotation == 0)
+            if (rotation.i == 0)
             {
                 transformation.M11 = (flippedHorz ? -scale.X : scale.X);
                 transformation.M22 = (flippedVert ? -scale.Y : scale.Y);
@@ -1058,12 +1271,10 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                cos = (float)Math.Cos(rotation);
-                sin = (float)Math.Sin(rotation);
-                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * cos;
-                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * sin;
-                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-sin);
-                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * cos;
+                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * rotation.R;
+                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * rotation.i;
+                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-rotation.i);
+                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * rotation.R;
                 transformation.M41 = (((flipAdjustment.X - origin.X) * transformation.M11) + (flipAdjustment.Y - origin.Y) * transformation.M21) + position.X;
                 transformation.M42 = (((flipAdjustment.X - origin.X) * transformation.M12) + (flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
             }
@@ -1142,7 +1353,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         _texCoordTL.X = temp;
                     }
 
-                    if (rotation == 0f)
+                    if (rotation.i == 0f)
                     {
                         item.Set(tpx,
                                  tpy,
@@ -1160,8 +1371,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                  0,
                                  pCurrentGlyph->BoundsInTexture.Width  * scale.X,
                                  pCurrentGlyph->BoundsInTexture.Height * scale.Y,
-                                 sin,
-                                 cos,
+                                 ref rotation,
                                  layerDepth,
                                  color,
                                  _texCoordTL,

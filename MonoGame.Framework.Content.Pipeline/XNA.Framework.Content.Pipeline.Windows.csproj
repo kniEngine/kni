@@ -221,6 +221,7 @@
     <Compile Include="Serialization\Compiler\ByteWriter.cs" />
     <Compile Include="Serialization\Compiler\CharWriter.cs" />
     <Compile Include="Serialization\Compiler\ColorWriter.cs" />
+    <Compile Include="Serialization\Compiler\ComplexWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />

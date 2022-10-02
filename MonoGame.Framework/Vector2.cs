@@ -1044,6 +1044,30 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new <see cref="Vector2"/> that contains a transformation of 2d-vector by the specified <see cref="Complex"/> number.
+        /// </summary>
+        /// <param name="value">Source <see cref="Vector2"/>.</param>
+        /// <param name="complex">The transformation <see cref="Complex"/> number which contains rotation and magnitude transformation.</param>
+        /// <returns>Transformed <see cref="Vector2"/>.</returns>
+        public static Vector2 Transform(Vector2 value, Complex complex)
+        {
+            return new Vector2(value.X * complex.R - value.Y * complex.i,
+                               value.Y * complex.R + value.X * complex.i);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Vector2"/> that contains a transformation of 2d-vector by the specified <see cref="Complex"/> number.
+        /// </summary>
+        /// <param name="value">Source <see cref="Vector2"/>.</param>
+        /// <param name="complex">The transformation <see cref="Complex"/> which contains rotation and magnitude transformation.</param>
+        /// <param name="result">Transformed <see cref="Vector2"/> as an output parameter.</param>
+        public static void Transform(ref Vector2 value, ref Complex complex, out Vector2 result)
+        {
+            result = new Vector2(value.X * complex.R - value.Y * complex.i,
+                                 value.Y * complex.R + value.X * complex.i);
+        }
+
+        /// <summary>
         /// Apply transformation on vectors within array of <see cref="Vector2"/> by the specified <see cref="Matrix"/> and places the results in an another array.
         /// </summary>
         /// <param name="sourceArray">Source array.</param>
@@ -1108,6 +1132,40 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Apply transformation on vectors within array of <see cref="Vector2"/> by the specified <see cref="Complex"/> number and places the results in an another array.
+        /// </summary>
+        /// <param name="sourceArray">Source array.</param>
+        /// <param name="sourceIndex">The starting index of transformation in the source array.</param>
+        /// <param name="complex">The transformation <see cref="Complex"/> number.</param>
+        /// <param name="destinationArray">Destination array.</param>
+        /// <param name="destinationIndex">The starting index in the destination array, where the first <see cref="Vector2"/> should be written.</param>
+        /// <param name="length">The number of vectors to be transformed.</param>
+        public static void Transform
+        (
+            Vector2[] sourceArray, int sourceIndex,
+            ref Complex complex,
+            Vector2[] destinationArray, int destinationIndex,
+            int length
+        )
+        {
+            if (sourceArray == null)
+                throw new ArgumentNullException("sourceArray");
+            if (destinationArray == null)
+                throw new ArgumentNullException("destinationArray");
+            if (sourceArray.Length < sourceIndex + length)
+                throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            if (destinationArray.Length < destinationIndex + length)
+                throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+
+            for (int x = 0; x < length; x++)
+            {
+                Vector2.Transform(
+                    ref sourceArray[sourceIndex + x], ref complex,
+                    out destinationArray[destinationIndex + x]);
+            }
+        }
+
+        /// <summary>
         /// Apply transformation on all vectors within array of <see cref="Vector2"/> by the specified <see cref="Matrix"/> and places the results in an another array.
         /// </summary>
         /// <param name="sourceArray">Source array.</param>
@@ -1138,6 +1196,17 @@ namespace Microsoft.Xna.Framework
         public static Vector2 TransformNormal(Vector2 normal, Matrix matrix)
         {
             return new Vector2((normal.X * matrix.M11) + (normal.Y * matrix.M21),(normal.X * matrix.M12) + (normal.Y * matrix.M22));
+        }
+
+        /// <summary>
+        /// Apply transformation on all vectors within array of <see cref="Vector2"/> by the specified <see cref="Complex"/> number and places the results in an another array.
+        /// </summary>
+        /// <param name="sourceArray">Source array.</param>
+        /// <param name="complex">The <see cref="Complex"/> number which contains rotation and magnitude transformation.</param>
+        /// <param name="destinationArray">Destination array.</param>
+        public static void Transform(Vector2[] sourceArray, ref Complex complex, Vector2[] destinationArray)
+        {
+            Transform(sourceArray, 0, ref complex, destinationArray, 0, sourceArray.Length);
         }
 
         /// <summary>

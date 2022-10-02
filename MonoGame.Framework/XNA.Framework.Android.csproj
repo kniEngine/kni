@@ -71,6 +71,7 @@
     <Compile Include="CurveLoopType.cs" />
     <Compile Include="CurveTangent.cs" />
     <Compile Include="FrameworkDispatcher.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="ICurveEvaluator.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Matrix.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Content\ContentReaders\ByteReader.cs" />
     <Compile Include="Content\ContentReaders\CharReader.cs" />
     <Compile Include="Content\ContentReaders\ColorReader.cs" />
+    <Compile Include="Content\ContentReaders\ComplexReader.cs" />
     <Compile Include="Content\ContentReaders\CurveReader.cs" />
     <Compile Include="Content\ContentReaders\DateTimeReader.cs" />
     <Compile Include="Content\ContentReaders\DecimalReader.cs" />
