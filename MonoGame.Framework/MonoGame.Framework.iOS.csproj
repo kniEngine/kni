@@ -19,7 +19,6 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <MGOpenGL>GLES</MGOpenGL>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
@@ -33,13 +32,6 @@
   <Import Project="Xna.Framework.props" />
 	<Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
-
-  <ItemGroup>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Graphics\OcclusionQuery.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Platform\iOS\Devices\Sensors\Accelerometer.cs" />

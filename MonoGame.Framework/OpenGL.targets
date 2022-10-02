@@ -18,7 +18,7 @@
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IGraphicsContext.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IWindowInfo.OpenGL.cs" />    
-    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" Condition="'$(MGOpenGL)' != 'GLES'"/>
+    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />

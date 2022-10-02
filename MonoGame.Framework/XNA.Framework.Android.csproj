@@ -300,6 +300,7 @@
     <Compile Include="Graphics\ModelMeshPartCollection.cs" />
     <Compile Include="Graphics\ModelMeshPart.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
+    <Compile Include="Graphics\OcclusionQuery.cs" />
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
     <Compile Include="Graphics\PackedVector\Bgra4444.cs" />
@@ -404,6 +405,7 @@
     <Compile Include="Platform\Graphics\OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
+    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />

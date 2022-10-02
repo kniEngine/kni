@@ -19,7 +19,6 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <MGOpenGL>GLES</MGOpenGL>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime for Android.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;android</PackageTags>
@@ -35,7 +34,6 @@
   <Import Project="MonoGame.Framework.Common.props" />
 
   <ItemGroup>
-    <Compile Remove="Graphics\OcclusionQuery.cs" />
     <Compile Remove="Input\Keyboard.cs" />
   </ItemGroup>
 
