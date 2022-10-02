@@ -13,6 +13,7 @@ namespace Microsoft.Xna.Framework.Content
     {
         private ContentManager contentManager;
         private Action<IDisposable> recordDisposableObject;
+        
         private ContentTypeReaderManager typeReaderManager;
         private string assetName;
         private List<KeyValuePair<int, Action<object>>> sharedResourceFixups;
@@ -241,6 +242,14 @@ namespace Microsoft.Xna.Framework.Content
             result.M42 = ReadSingle();
             result.M43 = ReadSingle();
             result.M44 = ReadSingle();
+            return result;
+        }
+
+        internal Complex ReadComplex()
+        {
+            Complex result;
+            result.R = ReadSingle();
+            result.i = ReadSingle();
             return result;
         }
 

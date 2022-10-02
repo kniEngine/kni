@@ -82,6 +82,7 @@ namespace Microsoft.Xna.Framework.Content
                 var hBoundingFrustumReader = new BoundingFrustumReader();
                 var hBoundingSphereReader = new BoundingSphereReader();
                 var hColorReader = new ColorReader();
+                var hComplexReader = new ComplexReader();
                 var hCurveReader = new CurveReader();
                 var hExternalReferenceReader = new ExternalReferenceReader();
                 var hMatrixReader = new MatrixReader();

@@ -425,6 +425,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         }
 
         /// <summary>
+        /// Writes a Complex value.
+        /// </summary>
+        /// <param name="value">Value of a color using Red, Green, Blue, and Alpha values to write.</param>
+        public void Write(Complex value)
+        {
+            Write(value.R);
+            Write(value.i);
+        }
+
+        /// <summary>
         /// Writes a Matrix value.
         /// </summary>
         /// <param name="value">Value to write.</param>
