@@ -120,12 +120,8 @@ namespace Microsoft.Xna.Framework.Content
                 // Framework.Audio types
                 var hSongReader = new SongReader();
                 var hSoundEffectReader = new SoundEffectReader();
-
-                // At the moment the Video class doesn't exist
-                // on all platforms... Allow it to compile anyway.
-#if ANDROID || IOS || MONOMAC || WINDOWS || WINDOWS_UAP
+                // Framework.Media types
                 var hVideoReader = new VideoReader();
-#endif
             }
 #pragma warning restore 0219, 0649
 

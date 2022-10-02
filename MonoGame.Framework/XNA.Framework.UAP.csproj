@@ -498,6 +498,7 @@
     <Compile Include="Media\Song.WinRT.cs" />
     <Compile Include="Media\VideoSoundtrackType.cs" />
     <Compile Include="Media\Video.cs" />
+    <Compile Include="Media\Video.WME.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayer.WME.cs" />
     <Compile Include="Utilities\Hash.cs" />

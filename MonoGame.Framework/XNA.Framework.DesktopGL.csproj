@@ -231,6 +231,7 @@
     <Compile Include="Content\ContentReaders\Vector4Reader.cs" />
     <Compile Include="Content\ContentReaders\VertexBufferReader.cs" />
     <Compile Include="Content\ContentReaders\VertexDeclarationReader.cs" />
+    <Compile Include="Content\ContentReaders\VideoReader.cs" />
     <Compile Include="Content\ContentSerializerAttribute.cs" />
     <Compile Include="Content\ContentSerializerCollectionItemNameAttribute.cs" />
     <Compile Include="Content\ContentSerializerIgnoreAttribute.cs" />
@@ -486,6 +487,10 @@
     <Compile Include="Media\Song.cs" />
     <Compile Include="Media\Song.NVorbis.cs" />
     <Compile Include="Media\VideoSoundtrackType.cs" />
+    <Compile Include="Media\Video.cs" />
+    <Compile Include="Media\Video.SDL.cs" />
+    <Compile Include="Media\VideoPlayer.cs" />
+    <Compile Include="Media\VideoPlayer.SDL.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Utilities\Hash.cs" />
