@@ -131,7 +131,12 @@ namespace MonoGame.Tests.Graphics
             }
         }
 
+#if XNA 
+		// FromStream() reads the texture unchanged.
+		// It's up to the user to apply cut-off, premultiply, etc.
+		// This is a break from the default XNA behavior.
         [TestCase]
+#endif
         public void FromStreamBlackAlpha()
         {
             // XNA will make any pixel with an alpha value
