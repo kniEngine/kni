@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Framework.Audio
         private bool _isLooped = false;
         private bool _isDisposed = false;
         internal bool _isXAct;
-        internal bool _isDynamic;
         internal SoundEffect _effect;
         private float _pan;
         private float _volume;

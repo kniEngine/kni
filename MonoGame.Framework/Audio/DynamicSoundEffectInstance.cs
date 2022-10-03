@@ -93,7 +93,6 @@ namespace Microsoft.Xna.Framework.Audio
             // This instance is added to the pool so that its volume reflects master volume changes
             // and it contributes to the playing instances limit, but the source/voice is not owned by the pool.
             DynamicPlayingInstancesNode = new LinkedListNode<DynamicSoundEffectInstance>(this);
-            base._isDynamic = true;
 
             _dynamicStrategy = _audioService._strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
             _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
