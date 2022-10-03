@@ -270,7 +270,7 @@ namespace MonoGame.Tests
 				public TargetElapsedTime ()
 					: base (g => g.TargetElapsedTime)
 				{
-					DefaultValue = TimeSpan.FromTicks (166667);
+					DefaultValue = TimeSpan.FromTicks (166666);
 
 					AddLegalValue (TimeSpan.FromSeconds (1));
 					AddLegalValue (TimeSpan.MaxValue);
