@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Audio
         
         private int _sampleRate;
         private AudioChannels _channels;
-        private SoundState _dynamicState;
+        private SoundState _dynamicState = SoundState.Stopped;
 
         internal LinkedListNode<DynamicSoundEffectInstance> DynamicPlayingInstancesNode { get; private set; }
 
@@ -89,12 +89,10 @@ namespace Microsoft.Xna.Framework.Audio
             
             _sampleRate = sampleRate;
             _channels = channels;
-            _dynamicState = SoundState.Stopped;
 
             // This instance is added to the pool so that its volume reflects master volume changes
             // and it contributes to the playing instances limit, but the source/voice is not owned by the pool.
             DynamicPlayingInstancesNode = new LinkedListNode<DynamicSoundEffectInstance>(this);
-            base._isDynamic = true;
 
             _dynamicStrategy = _audioService._strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
             _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
