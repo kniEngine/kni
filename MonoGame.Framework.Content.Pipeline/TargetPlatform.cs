@@ -89,11 +89,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         Switch,
 
         /// <summary>
-        /// Google Stadia
-        /// </summary>
-        Stadia,
-
-        /// <summary>
         /// Blazor/WebAssembly (WebGL)
         /// </summary>
         BlazorGL,

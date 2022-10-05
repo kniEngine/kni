@@ -40,7 +40,6 @@ We support a growing list of platforms across the desktop, mobile, and console s
   * PlayStation 5
   * Xbox One (both UWP and XDK)
   * Nintendo Switch
-  * Google Stadia
 
 ## Support and Contributions
 

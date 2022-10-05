@@ -57,7 +57,6 @@ namespace Microsoft.Xna.Framework.Content
             '5', // PlayStation5
             'O', // XboxOne
             'S', // Nintendo Switch
-            'G', // Google Stadia
             'b', // BlazorGL
 
             // NOTE: There are additional idenfiers for consoles that 
@@ -73,6 +72,7 @@ namespace Microsoft.Xna.Framework.Content
             'g', // Windows (OpenGL)
             'l', // Linux
             'M', // WindowsPhone8
+            'G', // Google Stadia
         };
 
 
