@@ -1,5 +1,137 @@
 ﻿# Changelog
+
+## 3.8.9100 Release - Aug 11, 2022
+
+### Fixed
+ - Fix incremental build of external assets.
+ - fix MGFXHeader.
+ - fix EffectProcessor.
+ - fix Mouse.SetCursor() resource leaks.
+ - fix memory leak on ContentManager.ReloadGraphicsAssets().
+ - Fix DrawableGameComponent.Dispose().
+ - TextureProcessor no longer override existing MipMaps (XNA API compatibility).
+ - [UAP] fix IsFullScreen. Implement IsFullScreenMode, PreferredLaunchWindowingMode.
+ - [UAP] fix GamePad race condition.
+ - fix ContentTypeReaderManager,ResolveType() when running on Core/Net6.
+ - fix game loop, Reset IsRunningSlowly after 5 frames.
+ - fix error "Could not find ContentTypeReader ReflectiveReader<MaterialContent>".
+ - fix FBX/OpenAssetImporter TextureCoordinate AddressV mode.
+ - fix FBX/OpenAssetImporter material.SpecularPower.
+ - [Android] fix GraphicsDeviceManager.SupportedOrientations and Backbuffer size handling.
+ - fix SoundEffectInstance, DynamicSoundEffectInstance states (Play/Stop/Pause/Resume).
+ - fix SoundEffectInstance resource leaks.
+ - fix DynamicSoundEffectInstance.BufferNeeded.
+ - [openAL] fix SoundEffectInstance Pan and Apply3D.
+ - GraphicsDeviceManager will not swap PreferredBackBufferWidth/PreferredBackBufferHeight.
+ - fix graphics context ApplyState.
+ - [DirectX] fix RenderTargetCube with depth for Feature level 10_0 and higher.
+ - fix mgcb output. Some errors are not caught by the mgcb editor.
+ - mgcb generates output combatible with Visual Studio. mgcb errors and warnings are visible on the Error List panel. 
+ - fix error in FontDescriptionProcessor, throw InvalidContentException instead of InvalidOperationException.
+ - fix reported shader error/warning line number when #include files are used.
+ - fix pipeline error due to missing redistributable msvcr110.dll.
+
+### Performance
+ - [DesktopDX] reduce WinForms garbage from EventArgs.
+ - optimize Intersects BoundingBox vs BoundingSphere.
+ - optimize BoundingBox.CreateFromPoints().
+ - precalculate Glyph TexCoord (SpriteBatch).
+ - optimize Viewport Project()/Unproject().
+ - [DirectX] grow internal buffers in chunks.
+ - fast IntermediateSerializer.FindType().
+ - Reduce garbage in EffectResource loading.
+ - TouchCollection with Fixed Size array. Doesn't allocate memory/generate garbage. 
+ - [DesktopDX] reduce WinForms keyboard garbage from EventArgs.
+ - [DirectX] optimized spriteBatcher. Two phase batching with buffers.
+ - [DirectX] optimized spriteBatcher. Write vertices directly to the Mapped Buffer.
+ - improved gameLoop.
+ - [DirectX] optimized Texture2D.GetData() when (rowPitch != 0).
+ - reduce garbage from GameWindow.TextInput, GameWindow.KeyUp, GameWindow.KeyDown events.
+ - [Android] reduce garbage in ContentManager.Load<>().
+ - [ANDROID] Reduce garbage from gameLoop.
+ - optimized SpriteBatch.End()/Setup(). 
+ - [Audio] Optimize and reduce memory garbage.
+ - optimize graphics context ApplyState.
+ - reduced size of TouchLocation. Split TouchLocation/TouchLocationData and other minor optimizations.
+   
+### Changed
+ - backward compatible EffectReader (v9,v8).
+ - no longer applying reordering of content items in .mgcb files.
+ - ContentManager allow rooted paths on all platforms.
+ - [UAP] ContentManager throws DirectoryNotFoundException.
+ - Matrix.CreatePerspective() no longer support infinite far planes.
+ - Game.Exit() throws InvalidOperationException on platforms that don't allow programmatically exiting the app (Android, iOS).
+ - [WindowsDX] implement Mouse.WindowHandle.
+ - Texture2D.FromStream() does no longer cut-off alpha pixels (breaks XNA API).
+ - GamePadDPad and GamePadState constructors (XNA API compatibility).
+ - [UWP] Allow BackBuffer Scaling
+ - [WindowsDX] game will not update during moving/resizing of the window. instead the window gets repainted.
+ - removed sender parameter from on-event virtual methods (breaks XNA API).
+Game.OnExiting(), Game.OnActivated(), Game.OnDeactivated(),
+GameComponent.OnUpdateOrderChanged(),  GameComponent.OnEnabledChanged() ,
+DrawableGameComponent.OnDrawOrderChanged(), DrawableGameComponent.OnVisibleChanged(). 
+ - in effect templates the GL level is now the same version as DX.
+ - some Model properties, methods and setters were made internal/private. 
+ - all ContentWriters are now backward compatible with XNA (XNA API compatibility).
+ - [UAP/Xaml] game loop runs from main thread.
+ - [DirectAudio] decode invalid MSADPCM during loading.
+ - [WindowsDX] BaseIndexInstancing is disabled.
+ - implement Graphic Profiles (Reach & HiDef) (XNA API compatibility).
+ - implement Extended Graphics profiles (FL10_0,FL10_1,FL11_0,FL11_1).
+ - The following event arguments were changed to classes inheriting EventArgs.
+FileDropEventArgs, InputKeyEventArgs, TextInputEventArgs.
+ - SpriteFont.Glyphs returns a GlyphCollection.
+ - [Android] TitleContainer now returns a random access stream.
+ - [Android] Fine tune resolution for automatic orientation (45 degrees angle).
+ - [Android] Shockproof automatic orientation (0.5sec delay).
+ - [Android] Suspend game during a Call (Requires READ_PHONE_STATE permission).
+ - [Android] Implement Game.IsActive.
+ - FrameworkDispatcher is no longer a static class (breaks XNA API).
+ - SoundEffect, SoundEffectInstance, DynamicSoundEffectInstance is now thread safe.
+ - Audio device might get initialized on demand and shutdown automatically as needed multiple times.
+ - DynamicSoundEffectInstance.BufferNeeded will not automatically stop firing.
+ - [GL] Texture2D.SetData(), Texture2D.GetData() no longer work from worker threads.
+ - GraphicsDeviceManager explicitly implements IGraphicsDeviceManager.
+ - SpriteFontContent properties, methods and setters were made internal/private.
+ - Converters under the Framework.Design namespace now convert only to/from String.
+ - Texture2D.FromStream now use native decoders when posible.
+ - Net.Framework libraries (DesktopGL, Content.Pipeline) set to target 4.0. 
+ - Net6 libraries DesktopGL & Content.Pipeline set to target netstandard2.0.
  
+### Added
+ - Mouse.IsRawInputAvailable, MouseState.RawX, MouseState.RawY.
+ - Game.IsVisible.
+ - GraphicsProfile.FL10_0, GraphicsProfile.FL10_1, GraphicsProfile.FL11_0, GraphicsProfile.FL11_1.
+ - GlyphCollection.
+ - The following Classes/Methods are now visible (XNA API compatibility).
+BoundingSphere.Intersects(BoundingFrustum frustum), Ray.Intersects(BoundingFrustum),
+EffectParameter.GetValueBooleanArray(), EffectParameter.GetValueQuaternionArray(),
+EffectParameter.SetValue(bool[]), EffectParameter.SetValue(Quaternion[]), EffectParameter.SetValue(string).
+GraphicsDevice.Present(Rectangle? , Rectangle? , IntPtr ) 
+ - MediaLibrary.SavePicture() overloads.
+ - IFrameworkDispatcher, FrameworkDispatcher.Current.
+ - GraphicsDeviceManager implements Dispose() on all platforms.
+ - StorageDevice, StorageContainer.
+ - VectorConverter (XNA API compatibility).
+ - Blazor/WebGL platform.
+ 
+### Removed
+ - System.Numerics.
+ - ContentProcessorContext.SourceIdentity.
+ - ContentStats.
+ - ContentBuildLogger.LoggerRootDirectory, ContentBuildLogger.IndentString.
+ - ContentManager.Unload().
+ - Buttons.None.
+ - TouchPanel.EnableMouseTouchPoint, TouchPanel.EnableMouseGestures.
+ - Texture2D.FromFile(), DefaultColorProcessors, Texture2D.FromStream(GraphicsDevice, Stream, Action<byte[]>).
+ - ContentTypeReaderManager.AddTypeCreator(), ContentTypeReaderManager.ClearTypeCreators().
+ - SpriteFont.Characters, SpriteFont.GetGlyphs(), Glyph.Character.
+ - MonoGameAndroidGameView.Visible, MonoGameAndroidGameView.Size. 
+ - SoundEffect.FromFile().
+ - RenderTargetCube.GetRenderTargetView(), RenderTargetCube.GetDepthStencilView() (IRenderTarget methods).
+ - GrowRule, MaxRectsBin, MaxRectsHeuristic were made internal.
+ - VectorConversion.
+  
 ## 3.8.1 HOTFIX Release - July 26, 2022
 
 ## What's Changed
