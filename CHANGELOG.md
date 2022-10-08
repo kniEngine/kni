@@ -114,6 +114,7 @@ GraphicsDevice.Present(Rectangle? , Rectangle? , IntPtr )
  - StorageDevice, StorageContainer.
  - VectorConverter (XNA API compatibility).
  - Blazor/WebGL platform.
+ - Reference platform.
  
 ### Removed
  - System.Numerics.
