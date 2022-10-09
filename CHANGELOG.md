@@ -1,5 +1,40 @@
 ﻿# Changelog
 
+## 3.8.9101 Release - [month] [date], 2022
+
+### Fixed
+ - bugfix: [DesktopGL] screen appear white washed.
+ - bugfix: [GL] TextureSlots number can be greater that implementation limitations.
+ - bugfix: [webGL] Texture.Dispose() throws Exception when garbage collected.
+ - bugfix: [WebAudio] SoundEffect.Volume is not applied to a playing instance.
+ - bugfix: [DirectX] RenderTargetCube throws Exception when created without a Depth.
+ - bugfix: Content manager should throw error when TypeVersion does not match.
+
+### Performance
+ - perf: [GL] 250% faster spriteBatcher.
+ - perf: 10% faster MeasureString().
+ - perf: Optimize Vector array Transform methods.
+  - perf: cache resolved TypeReader types
+
+### Changed
+ - [webGL] implement Discard mode in Dynamic buffers.
+ - [webGL] implement Dtx3 texture compression.
+
+### Added
+ - Oculus VR (PC library), Implemented as addon lib for WindowsDX.
+Added classes/structs: OvrDevice, HandsState, HeadsetState.
+The following classes/structs were added in Framework.Input.Oculus:
+TouchController, TouchControllerState, TouchControllerType, TouchButtons, TouchButtonState.
+ - Complex numbers.
+Added classes/structs/methods: Complex, ComplexWriter, ComplexReader,
+Vector2.Transform() overloads, 
+SpriteBatch.Draw() and SpriteBatch.DrawString() overloads.
+ - The following Classes/Methods are now visible in all platforms.
+Video, VideoPlayer, VideoReader, 
+OcclusionQuery,
+Texture3D, RenderTarget3D, Texture3DReader,
+EffectParameter.GetValueTexture3D()
+
 ## 3.8.9100 Release - Aug 11, 2022
 
 ### Fixed
