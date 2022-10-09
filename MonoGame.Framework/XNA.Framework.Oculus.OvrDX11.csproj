@@ -5,8 +5,8 @@
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\OculusOvrDX11</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
-    <Version>3.8.9100.0</Version>
-    <AssemblyVersion>3.8.9100.0</AssemblyVersion>
+    <Version>3.8.9101.0</Version>
+    <AssemblyVersion>3.8.9101.0</AssemblyVersion>
 
   </PropertyGroup>
 
