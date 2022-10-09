@@ -1,6 +1,6 @@
 ﻿# Changelog
 
-## 3.8.9101 Release - [month] [date], 2022
+## 3.8.9101 Release - October 9, 2022
 
 ### Fixed
  - bugfix: [DesktopGL] screen appear white washed.
