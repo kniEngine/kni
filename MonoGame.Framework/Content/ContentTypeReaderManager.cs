@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework.Content
     {
         private static readonly object _locker;
 
+        private static readonly Dictionary<String, Type> _contentTypeReadersCache;
         private static readonly Dictionary<Type, ContentTypeReader> _contentReadersCache;
 
         private Dictionary<Type, ContentTypeReader> _contentReaders;
@@ -25,6 +26,7 @@ namespace Microsoft.Xna.Framework.Content
         static ContentTypeReaderManager()
         {
             _locker = new object();
+            _contentTypeReadersCache = new Dictionary<string, Type>();
             _contentReadersCache = new Dictionary<Type, ContentTypeReader>(255);
             _assemblyName = ReflectionHelpers.GetAssembly(typeof(ContentTypeReaderManager)).FullName;
 
@@ -144,22 +146,19 @@ namespace Microsoft.Xna.Framework.Content
                     string readerTypeName = reader.ReadString();
                     int readerTypeVersion = reader.ReadInt32();
 
-                    string resolvedReaderTypeName;
-                    Type l_readerType = ResolveType(readerTypeName, out resolvedReaderTypeName);
-
-                    if (l_readerType == null)
+                    Type typeReaderType;
+                    if (!_contentTypeReadersCache.TryGetValue(readerTypeName, out typeReaderType))
                     {
-                        throw new ContentLoadException(
-                                "Could not find ContentTypeReader Type. Please ensure the name of the Assembly that contains the Type matches the assembly in the full type name: " +
-                                readerTypeName + " (" + resolvedReaderTypeName + ")");
+                        typeReaderType = ResolveReaderType(readerTypeName);
+                        _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
                     }
 
                     ContentTypeReader typeReader;
-                    if (!_contentReadersCache.TryGetValue(l_readerType, out typeReader))
+                    if (!_contentReadersCache.TryGetValue(typeReaderType, out typeReader))
                     {
-                        typeReader = l_readerType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
+                        typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
                         needsInitialize[i] = true;
-                        _contentReadersCache.Add(l_readerType, typeReader);
+                        _contentReadersCache.Add(typeReaderType, typeReader);
                     }
 
                     if (readerTypeVersion != typeReader.TypeVersion)
@@ -196,13 +195,9 @@ namespace Microsoft.Xna.Framework.Content
         /// <remarks>
         /// Supports multiple generic types (e.g. Dictionary&lt;TKey,TValue&gt;) and nested generic types (e.g. List&lt;List&lt;int&gt;&gt;).
         /// </remarks>
-        /// <param name="readerTypeName">
-        /// A <see cref="System.String"/>
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Type"/>
-        /// </returns>
-        internal static Type ResolveType(string readerTypeName, out string resolvedReaderTypeName)
+        /// <param name="readerTypeName">A <see cref="System.String"/></param>
+        /// <returns>A <see cref="System.Type"/></returns>
+        internal static Type ResolveReaderType(string readerTypeName)
         {
             // Handle nested types
             int count = readerTypeName.Split(new[] { "[[" }, StringSplitOptions.None).Length - 1;
@@ -215,17 +210,26 @@ namespace Microsoft.Xna.Framework.Content
             if (readerTypeName.Contains("PublicKeyToken"))
                 readerTypeName = Regex.Replace(readerTypeName, @"(.+?), Version=.+?$", "$1");
 
+            string resolvedReaderTypeName;
+            Type readerType;
+
             // map net.framework (.net4) to core.net (.net5 or later)
             if (readerTypeName.Contains(", mscorlib") && _isRunningOnNetCore)
             {
+                resolvedReaderTypeName = readerTypeName;
                 resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
-                return Type.GetType(resolvedReaderTypeName);
+                readerType = Type.GetType(resolvedReaderTypeName);
+                if (readerType != null)
+                    return readerType;
             }
             // map core.net (.net5 or later) to net.framework (.net4) 
             if (readerTypeName.Contains(", System.Private.CoreLib") && !_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
-                return Type.GetType(resolvedReaderTypeName);
+                resolvedReaderTypeName = readerTypeName;
+                resolvedReaderTypeName = resolvedReaderTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
+                readerType = Type.GetType(resolvedReaderTypeName);
+                if (readerType != null)
+                    return readerType;
             }
 
             // map XNA build-in TypeReaders
@@ -233,19 +237,21 @@ namespace Microsoft.Xna.Framework.Content
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Graphics", string.Format(", {0}", _assemblyName));
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Video", string.Format(", {0}", _assemblyName));
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", _assemblyName));
-            Type resolvedType = Type.GetType(resolvedReaderTypeName);
-            if (resolvedType != null)
-                return resolvedType;
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
 
             // map XNA & Monogame build-in TypeReaders
             resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", "Xna.Framework"));
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework"));
-            resolvedType = Type.GetType(resolvedReaderTypeName);
-            if (resolvedType != null)
-                return resolvedType;
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
 
-            return null;
+            throw new ContentLoadException(
+                    "Could not find ContentTypeReader Type. Please ensure the name of the Assembly that contains the Type matches the assembly in the full type name: " +
+                    readerTypeName + " (" + resolvedReaderTypeName + ")");
         }
 
     }
