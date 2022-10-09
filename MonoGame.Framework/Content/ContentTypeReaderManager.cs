@@ -142,8 +142,7 @@ namespace Microsoft.Xna.Framework.Content
                 {
                     // This string tells us what reader we need to decode the following data
                     string readerTypeName = reader.ReadString();
-                    // readerVersion is always zero
-                    var readerVersion = reader.ReadInt32();
+                    int readerTypeVersion = reader.ReadInt32();
 
                     string resolvedReaderTypeName;
                     Type l_readerType = ResolveType(readerTypeName, out resolvedReaderTypeName);
@@ -161,6 +160,13 @@ namespace Microsoft.Xna.Framework.Content
                         typeReader = l_readerType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
                         needsInitialize[i] = true;
                         _contentReadersCache.Add(l_readerType, typeReader);
+                    }
+
+                    if (readerTypeVersion != typeReader.TypeVersion)
+                    {
+                        throw new ContentLoadException(
+                            String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
+                                typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
                     }
 
                     contentReaders[i] = typeReader;
