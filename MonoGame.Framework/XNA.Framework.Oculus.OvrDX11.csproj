@@ -5,14 +5,14 @@
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\OculusOvrDX11</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
-    <Version>3.8.9101.0</Version>
-    <AssemblyVersion>3.8.9101.0</AssemblyVersion>
+    <Version>3.8.9101.1</Version>
+    <AssemblyVersion>3.8.9101.1</AssemblyVersion>
 
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;net6.0-windows</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <AssemblyName>Xna.Framework.Oculus.OvrDX11</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
@@ -32,18 +32,16 @@
     <Compile Include="Graphics\ConcreteOvrSwapChainData.DirectX.cs" />
     <Compile Include="Graphics\OvrDevice.cs" />
   </ItemGroup>
+  
   <ItemGroup>
-    <ProjectReference Include="XNA.Framework.WindowsDX11.csproj">
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MonoGame.Framework.WindowsDX.9000" Version="3.8.9101" />
     <PackageReference Include="nkast.LibOVR" Version="1.0.0" />
     <PackageReference Include="SharpDX"  Version="4.0.1" />
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
