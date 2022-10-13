@@ -37,6 +37,27 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
+        public bool QueryBackBufferFormat(
+             GraphicsProfile graphicsProfile,
+             SurfaceFormat format,
+             DepthFormat depthFormat,
+             int multiSampleCount,
+             out SurfaceFormat selectedFormat,
+             out DepthFormat selectedDepthFormat,
+             out int selectedMultiSampleCount
+            )
+        {
+            return Strategy.Platform_QueryBackBufferFormat(
+             graphicsProfile,
+             format,
+             depthFormat,
+             multiSampleCount,
+             out selectedFormat,
+             out selectedDepthFormat,
+             out selectedMultiSampleCount
+            );
+        }
+
         /// <summary>
         /// Queries for support of the requested render target format on the adaptor.
         /// </summary>
@@ -78,6 +99,16 @@ namespace Microsoft.Xna.Framework.Graphics
     public abstract class GraphicsAdapterStrategy
     {
         abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
+
+        abstract internal bool Platform_QueryBackBufferFormat(
+             GraphicsProfile graphicsProfile,
+             SurfaceFormat format,
+             DepthFormat depthFormat,
+             int multiSampleCount,
+             out SurfaceFormat selectedFormat,
+             out DepthFormat selectedDepthFormat,
+             out int selectedMultiSampleCount
+            );
 
         abstract internal bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,

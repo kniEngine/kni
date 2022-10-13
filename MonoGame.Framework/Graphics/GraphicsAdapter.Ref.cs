@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        public bool QueryBackBufferFormat(
+        internal override bool Platform_QueryBackBufferFormat(
              GraphicsProfile graphicsProfile,
              SurfaceFormat format,
              DepthFormat depthFormat,
