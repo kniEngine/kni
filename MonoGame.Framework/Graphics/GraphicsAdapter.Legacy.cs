@@ -98,14 +98,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
 #elif WINDOWS
-                using (var graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    var dc = graphics.GetHdc();
-                    int width = GetDeviceCaps(dc, HORZRES);
-                    int height = GetDeviceCaps(dc, VERTRES);
-                    graphics.ReleaseHdc(dc);
-                    return new DisplayMode(width, height, SurfaceFormat.Color);
-                }
 #else
                 return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
@@ -306,12 +298,6 @@ namespace Microsoft.Xna.Framework.Graphics
         */
 
 #if DIRECTX
-        private static readonly Dictionary<SharpDX.DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<SharpDX.DXGI.Format, SurfaceFormat>
-            {
-                { SharpDX.DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
-                { SharpDX.DXGI.Format.B8G8R8A8_UNorm, SurfaceFormat.Color },
-                { SharpDX.DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
-            };
 #endif
 
         public DisplayModeCollection SupportedDisplayModes
@@ -345,25 +331,6 @@ namespace Microsoft.Xna.Framework.Graphics
                             modes.Add(displayMode);
                     }
 #elif DIRECTX
-                    var dxgiFactory = new SharpDX.DXGI.Factory1();
-                    var adapter = dxgiFactory.GetAdapter(0);
-                    var output = adapter.Outputs[0];
-
-                    modes.Clear();
-                    foreach (var formatTranslation in FormatTranslations)
-                    {
-                        var displayModes = output.GetDisplayModeList(formatTranslation.Key, 0);
-                        foreach (var displayMode in displayModes)
-                        {
-                            var xnaDisplayMode = new DisplayMode(displayMode.Width, displayMode.Height, formatTranslation.Value);
-                            if (!modes.Contains(xnaDisplayMode))
-                                modes.Add(xnaDisplayMode);
-                        }
-                    }
-
-                    output.Dispose();
-                    adapter.Dispose();
-                    dxgiFactory.Dispose();
 #endif
                     modes.Sort(delegate(DisplayMode a, DisplayMode b)
                     {
@@ -452,11 +419,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if WINDOWS
-        [System.Runtime.InteropServices.DllImport("gdi32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
-
-        private const int HORZRES = 8;
-        private const int VERTRES = 10;
 #endif
     }
 }

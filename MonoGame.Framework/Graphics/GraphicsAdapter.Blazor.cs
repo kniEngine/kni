@@ -36,7 +36,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 #if DESKTOPGL
-        int _displayIndex;
 #else
         internal GraphicsAdapter()
         {
@@ -48,16 +47,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if DESKTOPGL
-        public string Description {
-            get {
-                try {
-                    return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer);
-                } catch {
-                    return string.Empty;
-                }
-            }
-            private set { }
-        }
 #else
         string _description = string.Empty;
         public string Description { get { return _description; } private set { _description = value; } }
@@ -68,15 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get
             {
 #if ANDROID
-                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
-                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
 #elif DESKTOPGL
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-
-                Sdl.Display.Mode mode;
-                Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
-
-                return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
 #else
                 return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
@@ -272,12 +253,6 @@ namespace Microsoft.Xna.Framework.Graphics
         */
 
 #if DIRECTX && !WP8
-        private static readonly Dictionary<SharpDX.DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<SharpDX.DXGI.Format, SurfaceFormat>
-            {
-                { SharpDX.DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
-                { SharpDX.DXGI.Format.B8G8R8A8_UNorm, SurfaceFormat.Color },
-                { SharpDX.DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
-            };
 #endif
 
         public DisplayModeCollection SupportedDisplayModes
@@ -329,30 +304,18 @@ namespace Microsoft.Xna.Framework.Graphics
                     return true;
                 case GraphicsProfile.HiDef:
 #if ANDROID
-                    int maxTextureSize;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize);                    
-                    if (maxTextureSize >= 4096) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_0:                    
 #if ANDROID
-                    int maxTextureSize2;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    
-                    if (maxTextureSize2 >= 8192) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_1:
 #if ANDROID
-                    int maxVertexBufferSlots;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxVertexAttribs, out maxVertexBufferSlots);
-                    if (maxVertexBufferSlots >= 32) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL11_0:
 #if ANDROID
-                    int maxTextureSize3;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize3);                    
-                    if (maxTextureSize3 >= 16384) return true;
 #endif                  
                     return false;
                 case GraphicsProfile.FL11_1:
