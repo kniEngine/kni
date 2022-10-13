@@ -14,10 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class GraphicsAdapter
     {
 
-        internal GraphicsAdapter()
-        {
-        }
-
         public string Description
         {
             get { return _description; }

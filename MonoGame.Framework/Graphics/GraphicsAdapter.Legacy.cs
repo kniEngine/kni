@@ -25,13 +25,9 @@ namespace Microsoft.Xna.Framework.Graphics
     {
 
 #if IOS || TVOS
-        internal GraphicsAdapter(UIScreen screen)
+        internal GraphicsAdapter(UIScreen screen) : base()
         {
             _screen = screen;
-        }
-#else
-        internal GraphicsAdapter()
-        {
         }
 #endif
 

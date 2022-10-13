@@ -32,6 +32,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
+        internal GraphicsAdapter()
+        {
+        }
+
         /// <summary>
         /// Queries for support of the requested render target format on the adaptor.
         /// </summary>

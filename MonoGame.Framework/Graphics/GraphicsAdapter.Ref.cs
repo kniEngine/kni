@@ -10,11 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class GraphicsAdapter
     {
 
-        internal GraphicsAdapter()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get { throw new PlatformNotSupportedException(); }
