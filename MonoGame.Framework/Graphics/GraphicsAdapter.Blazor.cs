@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    partial class GraphicsAdapter
+    partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
 
         public string Description
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
+        internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (UseReferenceDevice)
                 return true;
@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private bool Platform_QueryRenderTargetFormat(
+        internal override bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format,
             DepthFormat depthFormat,

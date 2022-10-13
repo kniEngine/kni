@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             FastSoftware
         }
 
+        GraphicsAdapterStrategy Strategy { get { return this; } }
 
         internal GraphicsAdapter()
         {
@@ -56,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             out DepthFormat selectedDepthFormat,
             out int selectedMultiSampleCount)
         {
-            return Platform_QueryRenderTargetFormat(
+            return Strategy.Platform_QueryRenderTargetFormat(
                     graphicsProfile,
                     format,
                     depthFormat,
@@ -69,8 +70,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            return Platform_IsProfileSupported(graphicsProfile);
+            return Strategy.Platform_IsProfileSupported(graphicsProfile);
         }
 
+    }
+
+    public abstract class GraphicsAdapterStrategy
+    {
+        abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
+
+        abstract internal bool Platform_QueryRenderTargetFormat(
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int multiSampleCount,
+            out SurfaceFormat selectedFormat,
+            out DepthFormat selectedDepthFormat,
+            out int selectedMultiSampleCount);
     }
 }
