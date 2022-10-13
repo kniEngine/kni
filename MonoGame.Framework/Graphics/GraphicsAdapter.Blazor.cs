@@ -35,32 +35,22 @@ namespace Microsoft.Xna.Framework.Graphics
         private DisplayModeCollection _supportedDisplayModes;
 
 
-#if DESKTOPGL
-#else
         internal GraphicsAdapter()
         {
         }
-#endif
 
         public void Dispose()
         {
         }
 
-#if DESKTOPGL
-#else
         string _description = string.Empty;
         public string Description { get { return _description; } private set { _description = value; } }
-#endif
 
         public DisplayMode CurrentDisplayMode
         {
             get
             {
-#if ANDROID
-#elif DESKTOPGL
-#else
                 return new DisplayMode(800, 600, SurfaceFormat.Color);
-#endif
             }
         }
 
@@ -252,9 +242,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         */
 
-#if DIRECTX && !WP8
-#endif
-
         public DisplayModeCollection SupportedDisplayModes
         {
             get
@@ -303,20 +290,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_0:                    
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_1:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL11_0:
-#if ANDROID
-#endif                  
                     return false;
                 case GraphicsProfile.FL11_1:
                     return false;

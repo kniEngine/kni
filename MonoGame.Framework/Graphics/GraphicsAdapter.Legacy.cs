@@ -97,7 +97,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#elif WINDOWS
 #else
                 return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
@@ -297,9 +296,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         */
 
-#if DIRECTX
-#endif
-
         public DisplayModeCollection SupportedDisplayModes
         {
             get
@@ -330,7 +326,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         if (!modes.Contains(displayMode))
                             modes.Add(displayMode);
                     }
-#elif DIRECTX
 #endif
                     modes.Sort(delegate(DisplayMode a, DisplayMode b)
                     {
@@ -418,7 +413,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if WINDOWS
-#endif
     }
 }
