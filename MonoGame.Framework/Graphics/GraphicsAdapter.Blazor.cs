@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public bool IsProfileSupported(GraphicsProfile graphicsProfile)
+        private bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (UseReferenceDevice)
                 return true;
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedDepthFormat">Set to the best format supported by the adaptor for the requested depth stencil format.</param>
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
-		public bool QueryRenderTargetFormat(
+        public bool QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format,
             DepthFormat depthFormat,

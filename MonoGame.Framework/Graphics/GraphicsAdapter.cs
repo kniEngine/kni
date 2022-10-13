@@ -32,5 +32,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
+        public bool IsProfileSupported(GraphicsProfile graphicsProfile)
+        {
+            return Platform_IsProfileSupported(graphicsProfile);
+        }
+
     }
 }

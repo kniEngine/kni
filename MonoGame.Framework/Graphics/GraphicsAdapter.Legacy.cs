@@ -254,7 +254,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public bool IsProfileSupported(GraphicsProfile graphicsProfile)
+        private bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (UseReferenceDevice)
                 return true;
