@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,14 +46,15 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         string _description = string.Empty;
-        public string Description { get { return _description; } private set { _description = value; } }
+        public string Description
+        {
+            get { return _description; }
+            private set { _description = value; }
+        }
 
         public DisplayMode CurrentDisplayMode
         {
-            get
-            {
-                return new DisplayMode(800, 600, SurfaceFormat.Color);
-            }
+            get { return new DisplayMode(800, 600, SurfaceFormat.Color); }
         }
 
         public static GraphicsAdapter DefaultAdapter
@@ -108,15 +111,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
 		public bool QueryRenderTargetFormat(
-			GraphicsProfile graphicsProfile,
-			SurfaceFormat format,
-			DepthFormat depthFormat,
-			int multiSampleCount,
-			out SurfaceFormat selectedFormat,
-			out DepthFormat selectedDepthFormat,
-			out int selectedMultiSampleCount)
-		{
-			selectedFormat = format;
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int multiSampleCount,
+            out SurfaceFormat selectedFormat,
+            out DepthFormat selectedDepthFormat,
+            out int selectedMultiSampleCount)
+        {
+            selectedFormat = format;
             selectedDepthFormat = depthFormat;
             selectedMultiSampleCount = multiSampleCount;
 
@@ -150,114 +153,74 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
-		}
+        }
 
         /*
         public string Description
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int DeviceId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public Guid DeviceIdentifier
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public string DeviceName
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public string DriverDll
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public Version DriverVersion
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public bool IsDefaultAdapter
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public bool IsWideScreen
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public IntPtr MonitorHandle
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int Revision
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int SubSystemId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
         */
 
         public DisplayModeCollection SupportedDisplayModes
         {
-            get
-            {
-                throw new NotImplementedException();
-
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /*
         public int VendorId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
         */
 
@@ -282,16 +245,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if(UseReferenceDevice)
+            if (UseReferenceDevice)
                 return true;
 
-            switch(graphicsProfile)
+            switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
                     return false;
-                case GraphicsProfile.FL10_0:                    
+                case GraphicsProfile.FL10_0:
                     return false;
                 case GraphicsProfile.FL10_1:
                     return false;

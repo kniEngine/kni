@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-/// <summary>
+        /// <summary>
         /// Used to request creation of the reference graphics device, 
         /// or the default hardware accelerated device (when set to false).
         /// </summary>
@@ -128,8 +128,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
-        
-/*
+
+        /*
         public Guid DeviceIdentifier
         {
             get { throw new PlatformNotSupportedException(); }
@@ -144,12 +144,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
-        */        
+        */
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             throw new PlatformNotSupportedException();
         }
+
         public bool QueryBackBufferFormat(
              GraphicsProfile graphicsProfile,
              SurfaceFormat format,
@@ -175,13 +176,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
 		public bool QueryRenderTargetFormat(
-			GraphicsProfile graphicsProfile,
-			SurfaceFormat format,
-			DepthFormat depthFormat,
-			int multiSampleCount,
-			out SurfaceFormat selectedFormat,
-			out DepthFormat selectedDepthFormat,
-			out int selectedMultiSampleCount)
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int multiSampleCount,
+            out SurfaceFormat selectedFormat,
+            out DepthFormat selectedDepthFormat,
+            out int selectedMultiSampleCount)
         {
             throw new PlatformNotSupportedException();
         }

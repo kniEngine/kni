@@ -2,8 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.ObjectModel;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -48,10 +51,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return _adapters[0]; }
         }
-        
-        public static ReadOnlyCollection<GraphicsAdapter> Adapters 
+
+        public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
-            get  { return _adapters; }
+            get { return _adapters; }
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public int Revision { get; private set; }
 
         public int SubSystemId { get; private set; }
-       
+
         public DisplayModeCollection SupportedDisplayModes
         {
             get { return _supportedDisplayModes; }
@@ -138,18 +141,18 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
 		public bool QueryRenderTargetFormat(
-			GraphicsProfile graphicsProfile,
-			SurfaceFormat format,
-			DepthFormat depthFormat,
-			int multiSampleCount,
-			out SurfaceFormat selectedFormat,
-			out DepthFormat selectedDepthFormat,
-			out int selectedMultiSampleCount)
-		{
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int multiSampleCount,
+            out SurfaceFormat selectedFormat,
+            out DepthFormat selectedDepthFormat,
+            out int selectedMultiSampleCount)
+        {
             selectedFormat = format;
             selectedDepthFormat = depthFormat;
             selectedMultiSampleCount = multiSampleCount;
-			
+
             // fallback for unsupported renderTarget surface formats.
             if (selectedFormat == SurfaceFormat.Alpha8 ||
                 selectedFormat == SurfaceFormat.NormalizedByte2 ||
@@ -178,9 +181,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     selectedFormat == SurfaceFormat.Vector4)
                     selectedFormat = SurfaceFormat.Color;
             }
-            
+
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
-		}
+        }
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {

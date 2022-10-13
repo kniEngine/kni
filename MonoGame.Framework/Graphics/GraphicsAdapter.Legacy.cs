@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -64,11 +66,16 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if DESKTOPGL
-        public string Description {
-            get {
-                try {
+        public string Description
+        {
+            get
+            {
+                try
+                {
                     return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer);
-                } catch {
+                }
+                catch
+                {
                     return string.Empty;
                 }
             }
@@ -162,15 +169,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
 		public bool QueryRenderTargetFormat(
-			GraphicsProfile graphicsProfile,
-			SurfaceFormat format,
-			DepthFormat depthFormat,
-			int multiSampleCount,
-			out SurfaceFormat selectedFormat,
-			out DepthFormat selectedDepthFormat,
-			out int selectedMultiSampleCount)
-		{
-			selectedFormat = format;
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int multiSampleCount,
+            out SurfaceFormat selectedFormat,
+            out DepthFormat selectedDepthFormat,
+            out int selectedMultiSampleCount)
+        {
+            selectedFormat = format;
             selectedDepthFormat = depthFormat;
             selectedMultiSampleCount = multiSampleCount;
 
@@ -204,95 +211,62 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
-		}
+        }
 
         /*
         public string Description
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int DeviceId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public Guid DeviceIdentifier
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public string DeviceName
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public string DriverDll
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public Version DriverVersion
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public bool IsDefaultAdapter
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public bool IsWideScreen
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public IntPtr MonitorHandle
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int Revision
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public int SubSystemId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
         */
 
@@ -302,7 +276,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 bool displayChanged = false;
 #if DESKTOPGL
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex (SdlGameWindow.Instance.Handle);
+                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
                 displayChanged = displayIndex != _displayIndex;
 #endif
                 if (_supportedDisplayModes == null || displayChanged)
@@ -312,10 +286,10 @@ namespace Microsoft.Xna.Framework.Graphics
 #if DESKTOPGL
                     _displayIndex = displayIndex;
                     modes.Clear();
-                    
+
                     var modeCount = Sdl.Display.GetNumDisplayModes(displayIndex);
 
-                    for (int i = 0;i < modeCount;i++)
+                    for (int i = 0; i < modeCount; i++)
                     {
                         Sdl.Display.Mode mode;
                         Sdl.Display.GetDisplayMode(displayIndex, i, out mode);
@@ -327,7 +301,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             modes.Add(displayMode);
                     }
 #endif
-                    modes.Sort(delegate(DisplayMode a, DisplayMode b)
+                    modes.Sort(delegate (DisplayMode a, DisplayMode b)
                     {
                         if (a == b) return 0;
                         if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) return -1;
@@ -343,10 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /*
         public int VendorId
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
         */
 
@@ -371,10 +342,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if(UseReferenceDevice)
+            if (UseReferenceDevice)
                 return true;
 
-            switch(graphicsProfile)
+            switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
                     return true;
@@ -385,7 +356,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (maxTextureSize >= 4096) return true;
 #endif
                     return false;
-                case GraphicsProfile.FL10_0:                    
+                case GraphicsProfile.FL10_0:
 #if ANDROID
                     int maxTextureSize2;
                     MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    

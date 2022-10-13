@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,12 +51,12 @@ namespace Microsoft.Xna.Framework.Graphics
         };
 
         private static GraphicsAdapter CreateAdapter(SharpDX.DXGI.Adapter1 device, SharpDX.DXGI.Output monitor)
-        {            
+        {
             var adapter = new GraphicsAdapter();
             adapter._adapter = device;
 
-            adapter.DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] {'\0'});
-            adapter.Description = device.Description1.Description.TrimEnd(new char[] {'\0'});
+            adapter.DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
+            adapter.Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
             adapter.DeviceId = device.Description1.DeviceId;
             adapter.Revision = device.Description1.Revision;
             adapter.VendorId = device.Description1.VendorId;
@@ -113,7 +115,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private bool PlatformIsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if(UseReferenceDevice)
+            if (UseReferenceDevice)
                 return true;
 
             FeatureLevel highestSupportedLevel;
@@ -128,7 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw;
             }
 
-            switch(graphicsProfile)
+            switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
                     return (highestSupportedLevel >= FeatureLevel.Level_9_1);
