@@ -145,18 +145,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        /// <summary>
-        /// Queries for support of the requested render target format on the adaptor.
-        /// </summary>
-        /// <param name="graphicsProfile">The graphics profile.</param>
-        /// <param name="format">The requested surface format.</param>
-        /// <param name="depthFormat">The requested depth stencil format.</param>
-        /// <param name="multiSampleCount">The requested multisample count.</param>
-        /// <param name="selectedFormat">Set to the best format supported by the adaptor for the requested surface format.</param>
-        /// <param name="selectedDepthFormat">Set to the best format supported by the adaptor for the requested depth stencil format.</param>
-        /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
-        /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
-		public bool QueryRenderTargetFormat(
+        private bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format,
             DepthFormat depthFormat,
