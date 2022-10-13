@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public sealed class GraphicsAdapter : IDisposable
+    public sealed class GraphicsAdapter
     {
         /// <summary>
         /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.
@@ -38,10 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         internal GraphicsAdapter()
-        {
-        }
-
-        public void Dispose()
         {
         }
 
