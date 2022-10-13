@@ -23,25 +23,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class GraphicsAdapter
     {
-        /// <summary>
-        /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.
-        /// </summary>
-        public enum DriverType
-        {
-            /// <summary>
-            /// Hardware device been used for rendering. Maximum speed and performance.
-            /// </summary>
-            Hardware,
-            /// <summary>
-            /// Emulates the hardware device on CPU. Slowly, only for testing.
-            /// </summary>
-            Reference,
-            /// <summary>
-            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
-            /// </summary>
-            FastSoftware
-        }
-        
 
 #if IOS || TVOS
         internal GraphicsAdapter(UIScreen screen)
