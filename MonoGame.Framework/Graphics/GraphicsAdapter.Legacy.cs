@@ -41,20 +41,13 @@ namespace Microsoft.Xna.Framework.Graphics
             /// </summary>
             FastSoftware
         }
-
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
-
-        private DisplayModeCollection _supportedDisplayModes;
-
+        
 
 #if IOS || TVOS
-		private UIScreen _screen;
         internal GraphicsAdapter(UIScreen screen)
         {
             _screen = screen;
         }
-#elif DESKTOPGL
-        int _displayIndex;
 #else
         internal GraphicsAdapter()
         {
@@ -380,5 +373,13 @@ namespace Microsoft.Xna.Framework.Graphics
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
         }
 
+
+        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+        private DisplayModeCollection _supportedDisplayModes;
+#if IOS || TVOS
+		private UIScreen _screen;       
+#elif DESKTOPGL
+        int _displayIndex;
+#endif
     }
 }

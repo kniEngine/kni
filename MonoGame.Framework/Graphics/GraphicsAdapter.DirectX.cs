@@ -13,6 +13,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class GraphicsAdapter
     {
+        private static readonly ReadOnlyCollection<GraphicsAdapter> _adapters;
+        private DisplayModeCollection _supportedDisplayModes;
+        private DisplayMode _currentDisplayMode;
         SharpDX.DXGI.Adapter1 _adapter;
 
         private static void PlatformInitializeAdapters(out ReadOnlyCollection<GraphicsAdapter> adapters)

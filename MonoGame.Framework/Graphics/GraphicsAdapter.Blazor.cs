@@ -32,16 +32,11 @@ namespace Microsoft.Xna.Framework.Graphics
             FastSoftware
         }
 
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
-
-        private DisplayModeCollection _supportedDisplayModes;
-
 
         internal GraphicsAdapter()
         {
         }
 
-        string _description = string.Empty;
         public string Description
         {
             get { return _description; }
@@ -262,6 +257,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
         }
+
+
+        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+        private DisplayModeCollection _supportedDisplayModes;
+        string _description = string.Empty;
 
     }
 }
