@@ -51,7 +51,6 @@
     <Compile Include="Input\Mouse.Windows.cs" />
     <Compile Include="Input\MouseCursor.Windows.cs" />
 
-    <Compile Include="Graphics\GraphicsAdapter.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
