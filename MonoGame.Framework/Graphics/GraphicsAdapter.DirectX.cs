@@ -119,6 +119,11 @@ namespace Microsoft.Xna.Framework.Graphics
             return adapter;
         }
 
+        public static GraphicsAdapter Platform_DefaultAdapter
+        {
+            get { return Adapters[0]; }
+        }
+
 
         
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
@@ -136,7 +141,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public static GraphicsAdapter DefaultAdapter
         {
-            get { return _adapters[0]; }
+            get { return Platform_DefaultAdapter; }
         }
 
         /// <summary>
