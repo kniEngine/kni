@@ -15,15 +15,42 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public static GraphicsAdapter DefaultAdapter
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
+        /// <summary>
+        /// Used to request creation of the reference graphics device, 
+        /// or the default hardware accelerated device (when set to false).
+        /// </summary>
+        /// <remarks>
+        /// This only works on DirectX platforms where a reference graphics
+        /// device is available and must be defined before the graphics device
+        /// is created. It defaults to false.
+        /// </remarks>
+        public static bool UseReferenceDevice
+        {
+            get { return UseDriverType == DriverType.Reference; }
+            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
+        }
+
+        /// <summary>
+        /// Used to request creation of a specific kind of driver.
+        /// </summary>
+        /// <remarks>
+        /// These values only work on DirectX platforms and must be defined before the graphics device
+        /// is created. <see cref="DriverType.Hardware"/> by default.
+        /// </remarks>
+        public static DriverType UseDriverType { get; set; }
+
+
+
         public DisplayMode CurrentDisplayMode
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public static GraphicsAdapter DefaultAdapter
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
 
         public string Description
         {
@@ -76,29 +103,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-        /// <summary>
-        /// Used to request creation of the reference graphics device, 
-        /// or the default hardware accelerated device (when set to false).
-        /// </summary>
-        /// <remarks>
-        /// This only works on DirectX platforms where a reference graphics
-        /// device is available and must be defined before the graphics device
-        /// is created. It defaults to false.
-        /// </remarks>
-        public static bool UseReferenceDevice
-        {
-            get { return UseDriverType == DriverType.Reference; }
-            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
-        }
-
-        /// <summary>
-        /// Used to request creation of a specific kind of driver.
-        /// </summary>
-        /// <remarks>
-        /// These values only work on DirectX platforms and must be defined before the graphics device
-        /// is created. <see cref="DriverType.Hardware"/> by default.
-        /// </remarks>
-        public static DriverType UseDriverType { get; set; }
 
         public int VendorId
         {

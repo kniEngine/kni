@@ -13,23 +13,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-
-        public string Description
-        {
-            get { return _description; }
-            private set { _description = value; }
-        }
-
-        public DisplayMode CurrentDisplayMode
-        {
-            get { return new DisplayMode(800, 600, SurfaceFormat.Color); }
-        }
-
-        public static GraphicsAdapter DefaultAdapter
-        {
-            get { return Adapters[0]; }
-        }
-
+        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+       
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get
@@ -41,6 +26,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return _adapters;
             }
+        }
+
+        public static GraphicsAdapter DefaultAdapter
+        {
+            get { return Adapters[0]; }
         }
 
         /// <summary>
@@ -66,6 +56,19 @@ namespace Microsoft.Xna.Framework.Graphics
         /// is created. <see cref="DriverType.Hardware"/> by default.
         /// </remarks>
         public static DriverType UseDriverType { get; set; }
+
+
+        public string Description
+        {
+            get { return _description; }
+            private set { _description = value; }
+        }
+
+        public DisplayMode CurrentDisplayMode
+        {
+            get { return new DisplayMode(800, 600, SurfaceFormat.Color); }
+        }
+
 
         /*
         public string Description
@@ -238,8 +241,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
-        private DisplayModeCollection _supportedDisplayModes;
+       private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
 
     }

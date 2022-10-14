@@ -23,6 +23,55 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
+        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+
+        public static ReadOnlyCollection<GraphicsAdapter> Adapters
+        {
+            get
+            {
+                if (_adapters == null)
+                {
+#if IOS || TVOS
+					_adapters = new ReadOnlyCollection<GraphicsAdapter>(
+						new [] {new GraphicsAdapter(UIScreen.MainScreen)});
+#else
+                    _adapters = new ReadOnlyCollection<GraphicsAdapter>(new[] { new GraphicsAdapter() });
+#endif
+                }
+
+                return _adapters;
+            }
+        }
+
+        public static GraphicsAdapter DefaultAdapter
+        {
+            get { return Adapters[0]; }
+        }
+
+        /// <summary>
+        /// Used to request creation of the reference graphics device, 
+        /// or the default hardware accelerated device (when set to false).
+        /// </summary>
+        /// <remarks>
+        /// This only works on DirectX platforms where a reference graphics
+        /// device is available and must be defined before the graphics device
+        /// is created. It defaults to false.
+        /// </remarks>
+        public static bool UseReferenceDevice
+        {
+            get { return UseDriverType == DriverType.Reference; }
+            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
+        }
+
+        /// <summary>
+        /// Used to request creation of a specific kind of driver.
+        /// </summary>
+        /// <remarks>
+        /// These values only work on DirectX platforms and must be defined before the graphics device
+        /// is created. <see cref="DriverType.Hardware"/> by default.
+        /// </remarks>
+        public static DriverType UseDriverType { get; set; }
+
 
 #if IOS || TVOS
         internal GraphicsAdapter(UIScreen screen) : base()
@@ -75,53 +124,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
             }
         }
-
-        public static GraphicsAdapter DefaultAdapter
-        {
-            get { return Adapters[0]; }
-        }
-
-        public static ReadOnlyCollection<GraphicsAdapter> Adapters
-        {
-            get
-            {
-                if (_adapters == null)
-                {
-#if IOS || TVOS
-					_adapters = new ReadOnlyCollection<GraphicsAdapter>(
-						new [] {new GraphicsAdapter(UIScreen.MainScreen)});
-#else
-                    _adapters = new ReadOnlyCollection<GraphicsAdapter>(new[] { new GraphicsAdapter() });
-#endif
-                }
-
-                return _adapters;
-            }
-        }
-
-        /// <summary>
-        /// Used to request creation of the reference graphics device, 
-        /// or the default hardware accelerated device (when set to false).
-        /// </summary>
-        /// <remarks>
-        /// This only works on DirectX platforms where a reference graphics
-        /// device is available and must be defined before the graphics device
-        /// is created. It defaults to false.
-        /// </remarks>
-        public static bool UseReferenceDevice
-        {
-            get { return UseDriverType == DriverType.Reference; }
-            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
-        }
-
-        /// <summary>
-        /// Used to request creation of a specific kind of driver.
-        /// </summary>
-        /// <remarks>
-        /// These values only work on DirectX platforms and must be defined before the graphics device
-        /// is created. <see cref="DriverType.Hardware"/> by default.
-        /// </remarks>
-        public static DriverType UseDriverType { get; set; }
 
         /*
         public string Description
@@ -352,8 +354,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
         }
 
-
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+        
         private DisplayModeCollection _supportedDisplayModes;
 #if IOS || TVOS
 		private UIScreen _screen;       
