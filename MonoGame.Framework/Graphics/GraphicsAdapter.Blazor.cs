@@ -42,33 +42,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-        private static GraphicsAdaptersProvider _currentGraphicsAdaptersProvider;
-
-        public static ReadOnlyCollection<GraphicsAdapter> Adapters
-        {
-            get
-            {
-                if (_currentGraphicsAdaptersProvider == null)
-                {
-                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
-                }
-
-                return _currentGraphicsAdaptersProvider.Platform_Adapters;
-            }
-        }
-
-        public static GraphicsAdapter DefaultAdapter
-        {
-            get
-            {
-                if (_currentGraphicsAdaptersProvider == null)
-                {
-                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
-                }
-
-                return _currentGraphicsAdaptersProvider.Platform_DefaultAdapter;
-            }
-        }
 
         /// <summary>
         /// Used to request creation of the reference graphics device, 
