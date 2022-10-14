@@ -11,17 +11,17 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class GraphicsAdaptersProvider
     {
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
-       
-        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        private ReadOnlyCollection<GraphicsAdapter> _adapters;
+
+        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
             return new ReadOnlyCollection<GraphicsAdapter>(
                 new[] { new GraphicsAdapter() });
         }
 
-        public static ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get
             {
@@ -34,27 +34,40 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static GraphicsAdapter Platform_DefaultAdapter
+        public GraphicsAdapter Platform_DefaultAdapter
         {
-            get { return Adapters[0]; }
+            get { return _adapters[0]; }
         }
+    }
+
+    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    {
+        private static GraphicsAdaptersProvider _currentGraphicsAdaptersProvider;
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get
             {
-                if (_adapters == null)
+                if (_currentGraphicsAdaptersProvider == null)
                 {
-                    _adapters = Platform_Adapters;
+                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
                 }
 
-                return _adapters;
+                return _currentGraphicsAdaptersProvider.Platform_Adapters;
             }
         }
 
         public static GraphicsAdapter DefaultAdapter
         {
-            get { return Platform_DefaultAdapter; }
+            get
+            {
+                if (_currentGraphicsAdaptersProvider == null)
+                {
+                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
+                }
+
+                return _currentGraphicsAdaptersProvider.Platform_DefaultAdapter;
+            }
         }
 
         /// <summary>

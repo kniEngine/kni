@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SharpDX.Direct3D;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class GraphicsAdaptersProvider
     {
-        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
+        private ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
             // NOTE: An adapter is a monitor+device combination, so we expect
             // at lease one adapter per connected monitor.
@@ -56,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             { SharpDX.DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
         };
 
-        private static GraphicsAdapter CreateAdapter(SharpDX.DXGI.Adapter1 device, SharpDX.DXGI.Output monitor)
+        private GraphicsAdapter CreateAdapter(SharpDX.DXGI.Adapter1 device, SharpDX.DXGI.Output monitor)
         {
             var adapter = new GraphicsAdapter();
             adapter._adapter = device;
@@ -119,7 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return adapter;
         }
 
-        public static ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get
             {
@@ -132,27 +133,40 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static GraphicsAdapter Platform_DefaultAdapter
+        public GraphicsAdapter Platform_DefaultAdapter
         {
-            get { return Adapters[0]; }
+            get { return _adapters[0]; }
         }
+    }
+
+    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    {
+        private static GraphicsAdaptersProvider _currentGraphicsAdaptersProvider;
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get
             {
-                if (_adapters == null)
+                if (_currentGraphicsAdaptersProvider == null)
                 {
-                    _adapters = Platform_Adapters;
+                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
                 }
 
-                return _adapters;
+                return _currentGraphicsAdaptersProvider.Platform_Adapters;
             }
         }
 
         public static GraphicsAdapter DefaultAdapter
         {
-            get { return Platform_DefaultAdapter; }
+            get
+            {
+                if (_currentGraphicsAdaptersProvider == null)
+                {
+                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
+                }
+
+                return _currentGraphicsAdaptersProvider.Platform_DefaultAdapter;
+            }
         }
 
         /// <summary>
@@ -187,21 +201,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 
-        public string Description { get; private set; }
+        public string Description { get; internal set; }
 
-        public int DeviceId { get; private set; }
+        public int DeviceId { get; internal set; }
 
-        public string DeviceName { get; private set; }
+        public string DeviceName { get; internal set; }
 
-        public int VendorId { get; private set; }
+        public int VendorId { get; internal set; }
 
-        public bool IsDefaultAdapter { get; private set; }
+        public bool IsDefaultAdapter { get; internal set; }
 
-        public IntPtr MonitorHandle { get; private set; }
+        public IntPtr MonitorHandle { get; internal set; }
 
-        public int Revision { get; private set; }
+        public int Revision { get; internal set; }
 
-        public int SubSystemId { get; private set; }
+        public int SubSystemId { get; internal set; }
 
         public DisplayModeCollection SupportedDisplayModes
         {
@@ -231,10 +245,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 
-        
-        private DisplayModeCollection _supportedDisplayModes;
-        private DisplayMode _currentDisplayMode;
-        SharpDX.DXGI.Adapter1 _adapter;
+
+        internal DisplayModeCollection _supportedDisplayModes;
+        internal DisplayMode _currentDisplayMode;
+        internal SharpDX.DXGI.Adapter1 _adapter;
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
