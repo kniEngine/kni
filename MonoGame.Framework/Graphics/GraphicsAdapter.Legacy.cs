@@ -36,6 +36,19 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
+        public static ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        {
+            get
+            {
+                if (_adapters == null)
+                {
+                    _adapters = Platform_InitializeAdapters();
+                }
+
+                return _adapters;
+            }
+        }
+
         public static GraphicsAdapter Platform_DefaultAdapter
         {
             get { return Adapters[0]; }
@@ -47,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_adapters == null)
                 {
-                    _adapters = Platform_InitializeAdapters();
+                    _adapters = Platform_Adapters;
                 }
 
                 return _adapters;

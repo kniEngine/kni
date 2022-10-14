@@ -15,6 +15,11 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
+        public static ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         public static GraphicsAdapter Platform_DefaultAdapter
         {
             get { throw new PlatformNotSupportedException(); }
