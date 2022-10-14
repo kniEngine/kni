@@ -13,10 +13,13 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-        private static readonly ReadOnlyCollection<GraphicsAdapter> _adapters;
+        private static ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        private static void PlatformInitializeAdapters(out ReadOnlyCollection<GraphicsAdapter> adapters)
+        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
+            // NOTE: An adapter is a monitor+device combination, so we expect
+            // at lease one adapter per connected monitor.
+
             var factory = new SharpDX.DXGI.Factory1();
 
             var adapterCount = factory.GetAdapterCount();
@@ -38,9 +41,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
+            // The first adapter is considered the default.
+            adapterList[0].IsDefaultAdapter = true;
+
             factory.Dispose();
 
-            adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
+            return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
         }
 
         private static readonly Dictionary<SharpDX.DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<SharpDX.DXGI.Format, SurfaceFormat>
@@ -113,19 +119,19 @@ namespace Microsoft.Xna.Framework.Graphics
             return adapter;
         }
 
-        static GraphicsAdapter()
-        {
-            // NOTE: An adapter is a monitor+device combination, so we expect
-            // at lease one adapter per connected monitor.
-            PlatformInitializeAdapters(out _adapters);
 
-            // The first adapter is considered the default.
-            _adapters[0].IsDefaultAdapter = true;
-        }
         
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
-            get { return _adapters; }
+            get
+            {
+                if (_adapters == null)
+                {
+                    _adapters = Platform_InitializeAdapters();
+                }
+
+                return _adapters;
+            }
         }
 
         public static GraphicsAdapter DefaultAdapter

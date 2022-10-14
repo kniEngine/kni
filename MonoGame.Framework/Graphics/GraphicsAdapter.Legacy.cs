@@ -25,18 +25,24 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private static ReadOnlyCollection<GraphicsAdapter> _adapters;
 
+        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        {
+#if IOS || TVOS
+			return new ReadOnlyCollection<GraphicsAdapter>(
+                new [] {new GraphicsAdapter(UIScreen.MainScreen)});
+#else
+            return new ReadOnlyCollection<GraphicsAdapter>(
+                new[] { new GraphicsAdapter() });
+#endif
+        }
+
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get
             {
                 if (_adapters == null)
                 {
-#if IOS || TVOS
-					_adapters = new ReadOnlyCollection<GraphicsAdapter>(
-						new [] {new GraphicsAdapter(UIScreen.MainScreen)});
-#else
-                    _adapters = new ReadOnlyCollection<GraphicsAdapter>(new[] { new GraphicsAdapter() });
-#endif
+                    _adapters = Platform_InitializeAdapters();
                 }
 
                 return _adapters;

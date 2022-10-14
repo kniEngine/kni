@@ -15,13 +15,19 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private static ReadOnlyCollection<GraphicsAdapter> _adapters;
        
+        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        {
+            return new ReadOnlyCollection<GraphicsAdapter>(
+                new[] { new GraphicsAdapter() });
+        }
+
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get
             {
                 if (_adapters == null)
                 {
-                    _adapters = new ReadOnlyCollection<GraphicsAdapter>(new[] { new GraphicsAdapter() });
+                    _adapters = Platform_InitializeAdapters();
                 }
 
                 return _adapters;

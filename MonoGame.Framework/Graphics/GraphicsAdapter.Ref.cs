@@ -10,6 +10,11 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
 
+        private static ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
             get { throw new PlatformNotSupportedException(); }
