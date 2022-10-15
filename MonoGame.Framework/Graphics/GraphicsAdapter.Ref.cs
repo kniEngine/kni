@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         override internal string Platform_DeviceName
         {

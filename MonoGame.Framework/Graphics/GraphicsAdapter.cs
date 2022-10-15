@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class GraphicsAdapter
     {
-        internal GraphicsAdapterStrategy Strategy { get { return this; } }
+        internal GraphicsAdapterStrategy Strategy { get; private set; }
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
@@ -101,6 +101,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsAdapter()
         {
+            Strategy = new ConcreteGraphicsAdapter();
         }
 
         public bool QueryBackBufferFormat(

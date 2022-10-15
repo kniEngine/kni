@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if IOS || TVOS
             var adapterList = new List<GraphicsAdapter>(1);
             var adapter = new GraphicsAdapter();
-            adapter._screen = UIScreen.MainScreen;
+            ((ConcreteGraphicsAdapter)adapter.Strategy)._screen = UIScreen.MainScreen;
             adapterList.Add(adapter);
             return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
 #else
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
                 if (_supportedDisplayModes == null || displayChanged)
                 {
-                    var modes = new List<DisplayMode>(new[] { CurrentDisplayMode, });
+                    var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
 
 #if DESKTOPGL
                     _displayIndex = displayIndex;
@@ -202,7 +202,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if (UseReferenceDevice)
+            if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
             switch (graphicsProfile)

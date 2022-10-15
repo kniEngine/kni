@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if (UseReferenceDevice)
+            if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
             switch (graphicsProfile)

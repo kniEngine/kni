@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // The first adapter is considered the default.
-            adapterList[0].Platform_IsDefaultAdapter = true;
+            adapterList[0].Strategy.Platform_IsDefaultAdapter = true;
 
             factory.Dispose();
 
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private GraphicsAdapter CreateAdapter(SharpDX.DXGI.Adapter1 device, SharpDX.DXGI.Output monitor)
         {
             var adapter = new GraphicsAdapter();
-            adapter._adapter = device;
+            ((ConcreteGraphicsAdapter)adapter.Strategy)._adapter = device;
 
             adapter.Strategy.Platform_DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
             adapter.Strategy.Platform_Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     var mode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
                     modes.Add(mode);
-                    adapter._currentDisplayMode = mode;
+                    ((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode = mode;
                     break;
                 }
 
@@ -151,18 +151,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     modes.Add(mode);
 
-                    if (adapter._currentDisplayMode == null)
+                    if (((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode == null)
                     {
                         if (mode.Width == desktopWidth && mode.Height == desktopHeight && mode.Format == SurfaceFormat.Color)
-                            adapter._currentDisplayMode = mode;
+                            ((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode = mode;
                     }
                 }
             }
 
-            adapter._supportedDisplayModes = new DisplayModeCollection(modes);
+            ((ConcreteGraphicsAdapter)adapter.Strategy)._supportedDisplayModes = new DisplayModeCollection(modes);
 
-            if (adapter._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
-                adapter._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+            if (((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
+                ((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
 
             return adapter;
         }
@@ -197,7 +197,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
     }
 
-    partial class GraphicsAdapter : GraphicsAdapterStrategy
+    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         internal SharpDX.DXGI.Adapter1 _adapter;
         internal DisplayModeCollection _supportedDisplayModes;
@@ -221,7 +221,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            if (UseReferenceDevice)
+            if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
             FeatureLevel highestSupportedLevel;
