@@ -140,10 +140,30 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal bool PlatformDX_UseDebugLayers { get; set; }
 
+        internal GraphicsAdapter.DriverType PlatformDX_UseDriverType { get; set; }
+
     }
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
+        /// <summary>
+        /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.
+        /// </summary>
+        public enum DriverType
+        {
+            /// <summary>
+            /// Hardware device been used for rendering. Maximum speed and performance.
+            /// </summary>
+            Hardware,
+            /// <summary>
+            /// Emulates the hardware device on CPU. Slowly, only for testing.
+            /// </summary>
+            Reference,
+            /// <summary>
+            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
+            /// </summary>
+            FastSoftware
+        }
 
         /// <summary>
         /// Used to request creation of the reference graphics device, 
@@ -167,7 +187,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// These values only work on DirectX platforms and must be defined before the graphics device
         /// is created. <see cref="DriverType.Hardware"/> by default.
         /// </remarks>
-        public static DriverType UseDriverType { get; set; }
+        public static DriverType UseDriverType
+        {
+            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType; }
+            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType = value; }
+        }
 
         /// <summary>
         /// Used to request the graphics device should be created with debugging

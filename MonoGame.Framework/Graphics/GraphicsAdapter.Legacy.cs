@@ -72,19 +72,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public static bool UseReferenceDevice
         {
-            get { return UseDriverType == DriverType.Reference; }
-            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
+            get;
+            set;
         }
-
-        /// <summary>
-        /// Used to request creation of a specific kind of driver.
-        /// </summary>
-        /// <remarks>
-        /// These values only work on DirectX platforms and must be defined before the graphics device
-        /// is created. <see cref="DriverType.Hardware"/> by default.
-        /// </remarks>
-        public static DriverType UseDriverType { get; set; }
-
 
 
 #if DESKTOPGL
