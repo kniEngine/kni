@@ -12,11 +12,11 @@ using SharpDX.Direct3D;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    class GraphicsAdaptersProvider
+    class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
         private ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
             // NOTE: An adapter is a monitor+device combination, so we expect
             // at lease one adapter per connected monitor.
@@ -120,7 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return adapter;
         }
 
-        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get
             {
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public GraphicsAdapter Platform_DefaultAdapter
+        internal override GraphicsAdapter Platform_DefaultAdapter
         {
             get { return _adapters[0]; }
         }

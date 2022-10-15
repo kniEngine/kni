@@ -7,20 +7,20 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    class GraphicsAdaptersProvider
+    class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
 
-        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
             throw new PlatformNotSupportedException();
         }
 
-        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public GraphicsAdapter Platform_DefaultAdapter
+        internal override GraphicsAdapter Platform_DefaultAdapter
         {
             get { throw new PlatformNotSupportedException(); }
         }

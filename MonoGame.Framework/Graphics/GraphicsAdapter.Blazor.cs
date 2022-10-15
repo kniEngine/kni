@@ -11,17 +11,17 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    class GraphicsAdaptersProvider
+    class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
         private ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
             return new ReadOnlyCollection<GraphicsAdapter>(
                 new[] { new GraphicsAdapter() });
         }
 
-        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public GraphicsAdapter Platform_DefaultAdapter
+        internal override GraphicsAdapter Platform_DefaultAdapter
         {
             get { return _adapters[0]; }
         }

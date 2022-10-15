@@ -33,28 +33,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
         GraphicsAdapterStrategy Strategy { get { return this; } }
 
-        private static GraphicsAdaptersProvider _currentGraphicsAdaptersProvider;
-
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
-            get
-            {
-                if (_currentGraphicsAdaptersProvider == null)
-                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
-
-                return _currentGraphicsAdaptersProvider.Platform_Adapters;
-            }
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_Adapters; }
         }
 
         public static GraphicsAdapter DefaultAdapter
         {
-            get
-            {
-                if (_currentGraphicsAdaptersProvider == null)
-                    _currentGraphicsAdaptersProvider = new GraphicsAdaptersProvider();
-
-                return _currentGraphicsAdaptersProvider.Platform_DefaultAdapter;
-            }
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_DefaultAdapter; }
         }
 
         internal GraphicsAdapter()
@@ -142,5 +128,28 @@ namespace Microsoft.Xna.Framework.Graphics
             out SurfaceFormat selectedFormat,
             out DepthFormat selectedDepthFormat,
             out int selectedMultiSampleCount);
+    }
+
+    public abstract class GraphicsAdaptersProviderStrategy
+    {
+        private static GraphicsAdaptersProviderStrategy _current;
+
+        internal static GraphicsAdaptersProviderStrategy Current
+        {
+            get
+            {
+                lock (typeof(GraphicsAdaptersProviderStrategy))
+                {
+                    if (_current == null)
+                        _current = new ConcreteGraphicsAdaptersProvider();
+
+                    return _current;
+                }
+            }
+        }
+
+        abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters();
+        abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
+        abstract internal GraphicsAdapter Platform_DefaultAdapter { get; }
     }
 }

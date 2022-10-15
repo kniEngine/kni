@@ -21,11 +21,11 @@ using Android.Runtime;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    class GraphicsAdaptersProvider
+    class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
         private ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
 #if IOS || TVOS
             var adapterList = new List<GraphicsAdapter>(1);
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        public ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public GraphicsAdapter Platform_DefaultAdapter
+        internal override GraphicsAdapter Platform_DefaultAdapter
         {
             get { return _adapters[0]; }
         }
