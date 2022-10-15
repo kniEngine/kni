@@ -61,6 +61,11 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
 
+        override internal string Platform_DeviceName
+        {
+            get { throw new NotImplementedException(); }
+        }
+
 #if DESKTOPGL
         override internal string Platform_Description
         {
@@ -116,10 +121,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException(); }
         }
 
-        public string DeviceName
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         public string DriverDll
         {

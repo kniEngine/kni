@@ -39,6 +39,11 @@ namespace Microsoft.Xna.Framework.Graphics
             set { GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice = value; }
         }
 
+        public string DeviceName
+        {
+            get { return Strategy.Platform_DeviceName; }
+        }
+
         public string Description
         {
             get { return Strategy.Platform_Description; }
@@ -109,6 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
     public abstract class GraphicsAdapterStrategy
     {
+        virtual internal string Platform_DeviceName { get; set; }
         virtual internal string Platform_Description { get; set; }
 
         abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);

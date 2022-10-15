@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var adapter = new GraphicsAdapter();
             adapter._adapter = device;
 
-            adapter.DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
+            adapter.Strategy.Platform_DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
             adapter.Strategy.Platform_Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
             adapter.DeviceId = device.Description1.DeviceId;
             adapter.Revision = device.Description1.Revision;
@@ -197,8 +197,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public int DeviceId { get; internal set; }
-
-        public string DeviceName { get; internal set; }
 
         public int VendorId { get; internal set; }
 

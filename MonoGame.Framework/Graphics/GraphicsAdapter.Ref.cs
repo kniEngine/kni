@@ -28,6 +28,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
+        override internal string Platform_DeviceName
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         override internal string Platform_Description
         {
             get { throw new PlatformNotSupportedException(); }
@@ -43,10 +48,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public string DeviceName
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
 
         public bool IsDefaultAdapter
         {

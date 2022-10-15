@@ -44,6 +44,11 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         string _description = string.Empty;
 
+        override internal string Platform_DeviceName
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         override internal string Platform_Description
         {
             get { return _description; }
@@ -67,10 +72,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException(); }
         }
 
-        public string DeviceName
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         public string DriverDll
         {
