@@ -70,7 +70,7 @@
     <Compile Include="Platform\Graphics\GraphicsContext.SDL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.SDL.cs" />
     <Compile Include="Platform\Graphics\WindowInfo.SDL.cs" />
-    <Compile Include="Graphics\GraphicsAdapter.Legacy.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
     <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />

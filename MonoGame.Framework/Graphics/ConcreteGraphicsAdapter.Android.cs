@@ -15,9 +15,6 @@ using Android.Views;
 using Android.Runtime;
 #endif
 
-// NOTE: This is the legacy graphics adapter implementation
-// which should no longer be updated.  All new development
-// should go into the new one.
 
 namespace Microsoft.Xna.Framework.Graphics
 {

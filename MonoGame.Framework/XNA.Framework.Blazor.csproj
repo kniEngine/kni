@@ -47,7 +47,7 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Blazor.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Graphics\GraphicsAdapter.Blazor.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdapter.Blazor.cs" />
     <Compile Include="GamePlatform.Blazor.cs" />
     <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.Blazor.cs" />

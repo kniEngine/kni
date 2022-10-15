@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
