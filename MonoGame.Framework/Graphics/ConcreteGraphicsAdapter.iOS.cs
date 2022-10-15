@@ -11,8 +11,6 @@ using System.Collections.ObjectModel;
 #if IOS || TVOS
 using UIKit;
 #elif ANDROID
-using Android.Views;
-using Android.Runtime;
 #endif
 
 
@@ -31,8 +29,6 @@ namespace Microsoft.Xna.Framework.Graphics
             adapterList.Add(adapter);
             return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
 #else
-            return new ReadOnlyCollection<GraphicsAdapter>(
-                new[] { new GraphicsAdapter() });
 #endif
         }
 
@@ -64,7 +60,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #if IOS || TVOS
 		internal UIScreen _screen;
 #elif DESKTOPGL
-        int _displayIndex;
 #endif
 
 
@@ -74,15 +69,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if DESKTOPGL
-        override internal string Platform_Description
-        {
-            get
-            {
-                try { return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer); }
-                catch { return string.Empty; }
-            }
-            set { }
-        }
 #else
         override internal string Platform_Description
         {
@@ -127,30 +113,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 bool displayChanged = false;
 #if DESKTOPGL
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-                displayChanged = displayIndex != _displayIndex;
 #endif
                 if (_supportedDisplayModes == null || displayChanged)
                 {
                     var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
 
 #if DESKTOPGL
-                    _displayIndex = displayIndex;
-                    modes.Clear();
-
-                    var modeCount = Sdl.Display.GetNumDisplayModes(displayIndex);
-
-                    for (int i = 0; i < modeCount; i++)
-                    {
-                        Sdl.Display.Mode mode;
-                        Sdl.Display.GetDisplayMode(displayIndex, i, out mode);
-
-                        // We are only using one format, Color
-                        // mode.Format gets the Color format from SDL
-                        var displayMode = new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-                        if (!modes.Contains(displayMode))
-                            modes.Add(displayMode);
-                    }
 #endif
                     modes.Sort(delegate (DisplayMode a, DisplayMode b)
                     {
@@ -174,17 +142,8 @@ namespace Microsoft.Xna.Framework.Graphics
                        (int)(_screen.Bounds.Height * _screen.Scale),
                        SurfaceFormat.Color);
 #elif ANDROID
-                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
-                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
 #elif DESKTOPGL
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-
-                Sdl.Display.Mode mode;
-                Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
-
-                return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
 #else
-                return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
             }
         }
@@ -208,30 +167,18 @@ namespace Microsoft.Xna.Framework.Graphics
                     return true;
                 case GraphicsProfile.HiDef:
 #if ANDROID
-                    int maxTextureSize;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize);                    
-                    if (maxTextureSize >= 4096) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_0:
 #if ANDROID
-                    int maxTextureSize2;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    
-                    if (maxTextureSize2 >= 8192) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_1:
 #if ANDROID
-                    int maxVertexBufferSlots;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxVertexAttribs, out maxVertexBufferSlots);
-                    if (maxVertexBufferSlots >= 32) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL11_0:
 #if ANDROID
-                    int maxTextureSize3;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize3);                    
-                    if (maxTextureSize3 >= 16384) return true;
 #endif                  
                     return false;
                 case GraphicsProfile.FL11_1:

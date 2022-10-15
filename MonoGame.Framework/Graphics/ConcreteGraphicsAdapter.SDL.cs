@@ -9,10 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 #if IOS || TVOS
-using UIKit;
 #elif ANDROID
-using Android.Views;
-using Android.Runtime;
 #endif
 
 
@@ -25,11 +22,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
 #if IOS || TVOS
-            var adapterList = new List<GraphicsAdapter>(1);
-            var adapter = new GraphicsAdapter();
-            ((ConcreteGraphicsAdapter)adapter.Strategy)._screen = UIScreen.MainScreen;
-            adapterList.Add(adapter);
-            return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
 #else
             return new ReadOnlyCollection<GraphicsAdapter>(
                 new[] { new GraphicsAdapter() });
@@ -62,7 +54,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 #if IOS || TVOS
-		internal UIScreen _screen;
 #elif DESKTOPGL
         int _displayIndex;
 #endif
@@ -84,11 +75,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { }
         }
 #else
-        override internal string Platform_Description
-        {
-            get { return _description; }
-            set { _description = value; }
-       }
 #endif
 
         override internal int Platform_DeviceId
@@ -170,12 +156,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get
             {
 #if IOS || TVOS
-                return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
-                       (int)(_screen.Bounds.Height * _screen.Scale),
-                       SurfaceFormat.Color);
 #elif ANDROID
-                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
-                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
 #elif DESKTOPGL
                 var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
@@ -184,7 +165,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
 #else
-                return new DisplayMode(800, 600, SurfaceFormat.Color);
 #endif
             }
         }
@@ -208,30 +188,18 @@ namespace Microsoft.Xna.Framework.Graphics
                     return true;
                 case GraphicsProfile.HiDef:
 #if ANDROID
-                    int maxTextureSize;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize);                    
-                    if (maxTextureSize >= 4096) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_0:
 #if ANDROID
-                    int maxTextureSize2;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    
-                    if (maxTextureSize2 >= 8192) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL10_1:
 #if ANDROID
-                    int maxVertexBufferSlots;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxVertexAttribs, out maxVertexBufferSlots);
-                    if (maxVertexBufferSlots >= 32) return true;
 #endif
                     return false;
                 case GraphicsProfile.FL11_0:
 #if ANDROID
-                    int maxTextureSize3;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize3);                    
-                    if (maxTextureSize3 >= 16384) return true;
 #endif                  
                     return false;
                 case GraphicsProfile.FL11_1:
