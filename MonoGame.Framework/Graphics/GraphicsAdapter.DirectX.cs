@@ -12,6 +12,53 @@ using SharpDX.Direct3D;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+    partial class GraphicsAdapter
+    {
+        /// <summary>
+        /// Defines the driver type for graphics adapter.
+        /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
+        public enum DriverType
+        {
+            /// <summary>
+            /// Hardware device been used for rendering. Maximum speed and performance.
+            /// </summary>
+            Hardware,
+            /// <summary>
+            /// Emulates the hardware device on CPU. Slowly, only for testing.
+            /// </summary>
+            Reference,
+            /// <summary>
+            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
+            /// </summary>
+            FastSoftware
+        }
+
+        /// <summary>
+        /// Used to request creation of a specific kind of driver.
+        /// </summary>
+        /// <remarks>
+        /// These values only work on DirectX platforms and must be defined before the graphics device
+        /// is created. <see cref="DriverType.Hardware"/> by default.
+        /// </remarks>
+        public static DriverType UseDriverType
+        {
+            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType; }
+            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType = value; }
+        }
+
+        /// <summary>
+        /// Used to request the graphics device should be created with debugging
+        /// features enabled.
+        /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
+        public static bool UseDebugLayers
+        {
+            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }
+            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
+        }
+    }
+
     class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
         private ReadOnlyCollection<GraphicsAdapter> _adapters;
@@ -152,50 +199,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-        /// <summary>
-        /// Defines the driver type for graphics adapter.
-        /// </summary>
-        /// <remarks>Usable only on DirectX platforms.</remarks>
-        public enum DriverType
-        {
-            /// <summary>
-            /// Hardware device been used for rendering. Maximum speed and performance.
-            /// </summary>
-            Hardware,
-            /// <summary>
-            /// Emulates the hardware device on CPU. Slowly, only for testing.
-            /// </summary>
-            Reference,
-            /// <summary>
-            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
-            /// </summary>
-            FastSoftware
-        }
-
-        /// <summary>
-        /// Used to request creation of a specific kind of driver.
-        /// </summary>
-        /// <remarks>
-        /// These values only work on DirectX platforms and must be defined before the graphics device
-        /// is created. <see cref="DriverType.Hardware"/> by default.
-        /// </remarks>
-        public static DriverType UseDriverType
-        {
-            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType; }
-            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType = value; }
-        }
-
-        /// <summary>
-        /// Used to request the graphics device should be created with debugging
-        /// features enabled.
-        /// </summary>
-        /// <remarks>Usable only on DirectX platforms.</remarks>
-        public static bool UseDebugLayers
-        {
-            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }
-            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
-        }
-
         internal SharpDX.DXGI.Adapter1 _adapter;
         internal DisplayModeCollection _supportedDisplayModes;
         internal DisplayMode _currentDisplayMode;
