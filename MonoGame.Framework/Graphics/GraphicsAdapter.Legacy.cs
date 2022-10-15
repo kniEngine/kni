@@ -28,8 +28,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
 #if IOS || TVOS
-			return new ReadOnlyCollection<GraphicsAdapter>(
-                new [] {new GraphicsAdapter(UIScreen.MainScreen)});
+            var adapterList = new List<GraphicsAdapter>(1);
+            var adapter = new GraphicsAdapter();
+            adapter._screen = UIScreen.MainScreen;
+            adapterList.Add(adapter);
+            return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
 #else
             return new ReadOnlyCollection<GraphicsAdapter>(
                 new[] { new GraphicsAdapter() });
@@ -83,12 +86,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public static DriverType UseDriverType { get; set; }
 
 
-#if IOS || TVOS
-        internal GraphicsAdapter(UIScreen screen) : base()
-        {
-            _screen = screen;
-        }
-#endif
 
 #if DESKTOPGL
         public string Description
@@ -367,7 +364,7 @@ namespace Microsoft.Xna.Framework.Graphics
         
         private DisplayModeCollection _supportedDisplayModes;
 #if IOS || TVOS
-		private UIScreen _screen;       
+		internal UIScreen _screen;
 #elif DESKTOPGL
         int _displayIndex;
 #endif
