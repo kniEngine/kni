@@ -55,22 +55,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool QueryBackBufferFormat(
              GraphicsProfile graphicsProfile,
-             SurfaceFormat format,
-             DepthFormat depthFormat,
-             int multiSampleCount,
-             out SurfaceFormat selectedFormat,
-             out DepthFormat selectedDepthFormat,
-             out int selectedMultiSampleCount
-            )
+             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
             return Strategy.Platform_QueryBackBufferFormat(
-             graphicsProfile,
-             format,
-             depthFormat,
-             multiSampleCount,
-             out selectedFormat,
-             out selectedDepthFormat,
-             out selectedMultiSampleCount
+                graphicsProfile,
+                format, depthFormat, multiSampleCount,
+                out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
             );
         }
 
@@ -87,22 +78,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
         public bool QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
-            SurfaceFormat format,
-            DepthFormat depthFormat,
-            int multiSampleCount,
-            out SurfaceFormat selectedFormat,
-            out DepthFormat selectedDepthFormat,
-            out int selectedMultiSampleCount)
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
             return Strategy.Platform_QueryRenderTargetFormat(
-                    graphicsProfile,
-                    format,
-                    depthFormat,
-                    multiSampleCount,
-                    out selectedFormat,
-                    out selectedDepthFormat,
-                    out selectedMultiSampleCount
-                );
+                graphicsProfile,
+                format, depthFormat, multiSampleCount,
+                out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
+            );
         }
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -120,23 +103,14 @@ namespace Microsoft.Xna.Framework.Graphics
         abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 
         abstract internal bool Platform_QueryBackBufferFormat(
-             GraphicsProfile graphicsProfile,
-             SurfaceFormat format,
-             DepthFormat depthFormat,
-             int multiSampleCount,
-             out SurfaceFormat selectedFormat,
-             out DepthFormat selectedDepthFormat,
-             out int selectedMultiSampleCount
-            );
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
 
         abstract internal bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
-            SurfaceFormat format,
-            DepthFormat depthFormat,
-            int multiSampleCount,
-            out SurfaceFormat selectedFormat,
-            out DepthFormat selectedDepthFormat,
-            out int selectedMultiSampleCount);
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
     }
 
     public abstract class GraphicsAdaptersProviderStrategy

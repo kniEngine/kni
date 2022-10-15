@@ -273,26 +273,17 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         internal override bool Platform_QueryBackBufferFormat(
-             GraphicsProfile graphicsProfile,
-             SurfaceFormat format,
-             DepthFormat depthFormat,
-             int multiSampleCount,
-             out SurfaceFormat selectedFormat,
-             out DepthFormat selectedDepthFormat,
-             out int selectedMultiSampleCount
-            )
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
             throw new NotImplementedException();
         }
         
         internal override bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
-            SurfaceFormat format,
-            DepthFormat depthFormat,
-            int multiSampleCount,
-            out SurfaceFormat selectedFormat,
-            out DepthFormat selectedDepthFormat,
-            out int selectedMultiSampleCount)
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
             selectedFormat = format;
             selectedDepthFormat = depthFormat;
