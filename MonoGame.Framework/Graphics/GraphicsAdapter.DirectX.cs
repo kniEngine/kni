@@ -137,6 +137,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return _adapters[0]; }
         }
+
+        internal bool PlatformDX_UseDebugLayers { get; set; }
+
     }
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
@@ -170,8 +173,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Used to request the graphics device should be created with debugging
         /// features enabled.
         /// </summary>
-        public static bool UseDebugLayers { get; set; }
-
+        public static bool UseDebugLayers
+        {
+            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }
+            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
+        }
 
 
         public string Description { get; internal set; }
