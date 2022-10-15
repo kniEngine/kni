@@ -24,6 +24,21 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return GraphicsAdaptersProviderStrategy.Current.Platform_DefaultAdapter; }
         }
 
+        /// <summary>
+        /// Used to request creation of the reference graphics device, 
+        /// or the default hardware accelerated device (when set to false).
+        /// </summary>
+        /// <remarks>
+        /// This only works on DirectX platforms where a reference graphics
+        /// device is available and must be defined before the graphics device
+        /// is created. It defaults to false.
+        /// </remarks>
+        public static bool UseReferenceDevice
+        {
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice; }
+            set { GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice = value; }
+        }
+
         internal GraphicsAdapter()
         {
         }
@@ -132,5 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
         abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters();
         abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
         abstract internal GraphicsAdapter Platform_DefaultAdapter { get; }
+        virtual internal bool Platform_UseReferenceDevice { get; set; }
     }
 }

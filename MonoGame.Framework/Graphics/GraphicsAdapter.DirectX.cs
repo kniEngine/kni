@@ -138,6 +138,12 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _adapters[0]; }
         }
 
+        internal override bool Platform_UseReferenceDevice
+        {
+            get { return PlatformDX_UseDriverType == GraphicsAdapter.DriverType.Reference; }
+            set { PlatformDX_UseDriverType = value ? GraphicsAdapter.DriverType.Reference : GraphicsAdapter.DriverType.Hardware; }
+        }
+
         internal bool PlatformDX_UseDebugLayers { get; set; }
 
         internal GraphicsAdapter.DriverType PlatformDX_UseDriverType { get; set; }
@@ -147,8 +153,9 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
         /// <summary>
-        /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.
+        /// Defines the driver type for graphics adapter.
         /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
         public enum DriverType
         {
             /// <summary>
@@ -163,21 +170,6 @@ namespace Microsoft.Xna.Framework.Graphics
             /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
             /// </summary>
             FastSoftware
-        }
-
-        /// <summary>
-        /// Used to request creation of the reference graphics device, 
-        /// or the default hardware accelerated device (when set to false).
-        /// </summary>
-        /// <remarks>
-        /// This only works on DirectX platforms where a reference graphics
-        /// device is available and must be defined before the graphics device
-        /// is created. It defaults to false.
-        /// </remarks>
-        public static bool UseReferenceDevice
-        {
-            get { return UseDriverType == DriverType.Reference; }
-            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
         }
 
         /// <summary>
@@ -197,6 +189,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Used to request the graphics device should be created with debugging
         /// features enabled.
         /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
         public static bool UseDebugLayers
         {
             get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }

@@ -28,22 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-
-        /// <summary>
-        /// Used to request creation of the reference graphics device, 
-        /// or the default hardware accelerated device (when set to false).
-        /// </summary>
-        /// <remarks>
-        /// This only works on DirectX platforms where a reference graphics
-        /// device is available and must be defined before the graphics device
-        /// is created. It defaults to false.
-        /// </remarks>
-        public static bool UseReferenceDevice
-        {
-            get;
-            set;
-        }
-
         public DisplayMode CurrentDisplayMode
         {
             get { throw new PlatformNotSupportedException(); }
