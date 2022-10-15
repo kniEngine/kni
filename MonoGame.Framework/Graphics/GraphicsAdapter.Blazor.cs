@@ -42,6 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
+        private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
 
         override internal string Platform_DeviceName
@@ -55,89 +56,52 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _description = value; }
         }
 
-        public DisplayMode CurrentDisplayMode
+        override internal int Platform_DeviceId
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal int Platform_Revision
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal int Platform_VendorId
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal int Platform_SubSystemId
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal IntPtr Platform_MonitorHandle
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal bool Platform_IsDefaultAdapter
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal DisplayModeCollection Platform_SupportedDisplayModes
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        override internal DisplayMode Platform_CurrentDisplayMode
         {
             get { return new DisplayMode(800, 600, SurfaceFormat.Color); }
         }
 
-
-        /*
-        public int DeviceId
+        override internal bool Platform_IsWideScreen
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Guid DeviceIdentifier
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-
-        public string DriverDll
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Version DriverVersion
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool IsDefaultAdapter
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool IsWideScreen
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IntPtr MonitorHandle
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int Revision
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int SubSystemId
-        {
-            get { throw new NotImplementedException(); }
-        }
-        */
-
-        public DisplayModeCollection SupportedDisplayModes
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /*
-        public int VendorId
-        {
-            get { throw new NotImplementedException(); }
-        }
-        */
-
-        /// <summary>
-        /// Gets a <see cref="System.Boolean"/> indicating whether
-        /// <see cref="GraphicsAdapter.CurrentDisplayMode"/> has a
-        /// Width:Height ratio corresponding to a widescreen <see cref="DisplayMode"/>.
-        /// Common widescreen modes include 16:9, 16:10 and 2:1.
-        /// </summary>
-        public bool IsWideScreen
-        {
-            get
-            {
-                // Common non-widescreen modes: 4:3, 5:4, 1:1
-                // Common widescreen modes: 16:9, 16:10, 2:1
-                // XNA does not appear to account for rotated displays on the desktop
-                const float limit = 4.0f / 3.0f;
-                var aspect = CurrentDisplayMode.AspectRatio;
-                return aspect > limit;
-            }
+            // Common non-widescreen modes: 4:3, 5:4, 1:1
+            // Common widescreen modes: 16:9, 16:10, 2:1
+            // XNA does not appear to account for rotated displays on the desktop
+            get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -212,9 +176,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
         }
-
-
-       private DisplayModeCollection _supportedDisplayModes;
 
     }
 }

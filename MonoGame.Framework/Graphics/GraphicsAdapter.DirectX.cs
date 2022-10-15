@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // The first adapter is considered the default.
-            adapterList[0].IsDefaultAdapter = true;
+            adapterList[0].Platform_IsDefaultAdapter = true;
 
             factory.Dispose();
 
@@ -64,11 +64,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             adapter.Strategy.Platform_DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
             adapter.Strategy.Platform_Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
-            adapter.DeviceId = device.Description1.DeviceId;
-            adapter.Revision = device.Description1.Revision;
-            adapter.VendorId = device.Description1.VendorId;
-            adapter.SubSystemId = device.Description1.SubsystemId;
-            adapter.MonitorHandle = monitor.Description.MonitorHandle;
+            adapter.Strategy.Platform_DeviceId = device.Description1.DeviceId;
+            adapter.Strategy.Platform_Revision = device.Description1.Revision;
+            adapter.Strategy.Platform_VendorId = device.Description1.VendorId;
+            adapter.Strategy.Platform_SubSystemId = device.Description1.SubsystemId;
+            adapter.Strategy.Platform_MonitorHandle = monitor.Description.MonitorHandle;
 
             var desktopWidth = monitor.Description.DesktopBounds.Right - monitor.Description.DesktopBounds.Left;
             var desktopHeight = monitor.Description.DesktopBounds.Bottom - monitor.Description.DesktopBounds.Top;
@@ -196,50 +196,25 @@ namespace Microsoft.Xna.Framework.Graphics
             set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
         }
 
-        public int DeviceId { get; internal set; }
+        internal SharpDX.DXGI.Adapter1 _adapter;
+        internal DisplayModeCollection _supportedDisplayModes;
+        internal DisplayMode _currentDisplayMode;
 
-        public int VendorId { get; internal set; }
-
-        public bool IsDefaultAdapter { get; internal set; }
-
-        public IntPtr MonitorHandle { get; internal set; }
-
-        public int Revision { get; internal set; }
-
-        public int SubSystemId { get; internal set; }
-
-        public DisplayModeCollection SupportedDisplayModes
+        override internal DisplayModeCollection Platform_SupportedDisplayModes
         {
             get { return _supportedDisplayModes; }
         }
 
-        public DisplayMode CurrentDisplayMode
+        override internal DisplayMode Platform_CurrentDisplayMode
         {
             get { return _currentDisplayMode; }
         }
 
-        /// <summary>
-        /// Returns true if the <see cref="GraphicsAdapter.CurrentDisplayMode"/> is widescreen.
-        /// </summary>
-        /// <remarks>
-        /// Common widescreen modes include 16:9, 16:10 and 2:1.
-        /// </remarks>
-        public bool IsWideScreen
+        override internal bool Platform_IsWideScreen
         {
-            get
-            {
-                // Seems like XNA treats aspect ratios above 16:10 as wide screen.
-                const float minWideScreenAspect = 16.0f / 10.0f;
-                return CurrentDisplayMode.AspectRatio >= minWideScreenAspect;
-            }
+            // Seems like XNA treats aspect ratios above 16:10 as wide screen.
+            get { return Platform_CurrentDisplayMode.AspectRatio >= (16.0f / 10.0f); }
         }
-
-
-
-
-        internal DisplayModeCollection _supportedDisplayModes;
-        internal DisplayMode _currentDisplayMode;
-        internal SharpDX.DXGI.Adapter1 _adapter;
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {

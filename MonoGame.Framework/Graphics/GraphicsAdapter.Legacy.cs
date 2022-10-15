@@ -60,6 +60,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
+        private DisplayModeCollection _supportedDisplayModes;
+        string _description = string.Empty;
+
+
+#if IOS || TVOS
+		internal UIScreen _screen;
+#elif DESKTOPGL
+        int _displayIndex;
+#endif
+
 
         override internal string Platform_DeviceName
         {
@@ -77,7 +87,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { }
         }
 #else
-        string _description = string.Empty;
         override internal string Platform_Description
         {
             get { return _description; }
@@ -85,80 +94,37 @@ namespace Microsoft.Xna.Framework.Graphics
        }
 #endif
 
-        public DisplayMode CurrentDisplayMode
-        {
-            get
-            {
-#if IOS || TVOS
-                return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
-                       (int)(_screen.Bounds.Height * _screen.Scale),
-                       SurfaceFormat.Color);
-#elif ANDROID
-                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
-                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
-#elif DESKTOPGL
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-
-                Sdl.Display.Mode mode;
-                Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
-
-                return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#else
-                return new DisplayMode(800, 600, SurfaceFormat.Color);
-#endif
-            }
-        }
-
-        /*
-
-        public int DeviceId
+        override internal int Platform_DeviceId
         {
             get { throw new NotImplementedException(); }
         }
 
-        public Guid DeviceIdentifier
+        override internal int Platform_Revision
         {
             get { throw new NotImplementedException(); }
         }
 
-
-        public string DriverDll
+        override internal int Platform_VendorId
         {
             get { throw new NotImplementedException(); }
         }
 
-        public Version DriverVersion
+        override internal int Platform_SubSystemId
         {
             get { throw new NotImplementedException(); }
         }
 
-        public bool IsDefaultAdapter
+        override internal IntPtr Platform_MonitorHandle
         {
             get { throw new NotImplementedException(); }
         }
 
-        public bool IsWideScreen
+        override internal bool Platform_IsDefaultAdapter
         {
             get { throw new NotImplementedException(); }
         }
 
-        public IntPtr MonitorHandle
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int Revision
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int SubSystemId
-        {
-            get { throw new NotImplementedException(); }
-        }
-        */
-
-        public DisplayModeCollection SupportedDisplayModes
+        override internal DisplayModeCollection Platform_SupportedDisplayModes
         {
             get
             {
@@ -202,30 +168,36 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /*
-        public int VendorId
-        {
-            get { throw new NotImplementedException(); }
-        }
-        */
-
-        /// <summary>
-        /// Gets a <see cref="System.Boolean"/> indicating whether
-        /// <see cref="GraphicsAdapter.CurrentDisplayMode"/> has a
-        /// Width:Height ratio corresponding to a widescreen <see cref="DisplayMode"/>.
-        /// Common widescreen modes include 16:9, 16:10 and 2:1.
-        /// </summary>
-        public bool IsWideScreen
+        override internal DisplayMode Platform_CurrentDisplayMode
         {
             get
             {
-                // Common non-widescreen modes: 4:3, 5:4, 1:1
-                // Common widescreen modes: 16:9, 16:10, 2:1
-                // XNA does not appear to account for rotated displays on the desktop
-                const float limit = 4.0f / 3.0f;
-                var aspect = CurrentDisplayMode.AspectRatio;
-                return aspect > limit;
+#if IOS || TVOS
+                return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
+                       (int)(_screen.Bounds.Height * _screen.Scale),
+                       SurfaceFormat.Color);
+#elif ANDROID
+                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
+                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
+#elif DESKTOPGL
+                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
+
+                Sdl.Display.Mode mode;
+                Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
+
+                return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+#else
+                return new DisplayMode(800, 600, SurfaceFormat.Color);
+#endif
             }
+        }
+
+        override internal bool Platform_IsWideScreen
+        {
+            // Common non-widescreen modes: 4:3, 5:4, 1:1
+            // Common widescreen modes: 16:9, 16:10, 2:1
+            // XNA does not appear to account for rotated displays on the desktop
+            get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -321,12 +293,5 @@ namespace Microsoft.Xna.Framework.Graphics
             return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
         }
 
-        
-        private DisplayModeCollection _supportedDisplayModes;
-#if IOS || TVOS
-		internal UIScreen _screen;
-#elif DESKTOPGL
-        int _displayIndex;
-#endif
     }
 }

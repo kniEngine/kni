@@ -49,6 +49,56 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return Strategy.Platform_Description; }
         }
 
+        public int DeviceId
+        {
+            get { return Strategy.Platform_DeviceId; }
+        }
+        
+        public int Revision
+        {
+            get { return Strategy.Platform_Revision; }
+        }
+
+        public int VendorId
+        {
+            get { return Strategy.Platform_VendorId; }
+        }
+        
+        public int SubSystemId
+        {
+            get { return Strategy.Platform_SubSystemId; }
+        }
+        public IntPtr MonitorHandle
+        {
+            get { return Strategy.Platform_MonitorHandle; }
+        }
+
+        public bool IsDefaultAdapter
+        {
+            get { return Strategy.Platform_IsDefaultAdapter; }
+        }
+
+        public DisplayModeCollection SupportedDisplayModes
+        {
+            get { return Strategy.Platform_SupportedDisplayModes; }
+        }
+
+        public DisplayMode CurrentDisplayMode
+        {
+            get { return Strategy.Platform_CurrentDisplayMode; }
+        }
+
+        /// <summary>
+        /// Returns true if the <see cref="GraphicsAdapter.CurrentDisplayMode"/> is widescreen.
+        /// </summary>
+        /// <remarks>
+        /// Common widescreen modes include 16:9, 16:10 and 2:1.
+        /// </remarks>
+        public bool IsWideScreen
+        {
+            get { return Strategy.Platform_IsWideScreen; }
+        }
+
         internal GraphicsAdapter()
         {
         }
@@ -99,6 +149,16 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         virtual internal string Platform_DeviceName { get; set; }
         virtual internal string Platform_Description { get; set; }
+        virtual internal int Platform_DeviceId { get; set; }
+        virtual internal int Platform_Revision { get; set; }
+        virtual internal int Platform_VendorId { get; set; }
+        virtual internal int Platform_SubSystemId { get; set; }
+        virtual internal IntPtr Platform_MonitorHandle { get; set; }
+        virtual internal bool Platform_IsDefaultAdapter { get; set; }
+
+        abstract internal DisplayModeCollection Platform_SupportedDisplayModes { get; }
+        abstract internal DisplayMode Platform_CurrentDisplayMode { get; }
+        abstract internal bool Platform_IsWideScreen { get; }
 
         abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 

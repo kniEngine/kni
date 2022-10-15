@@ -38,75 +38,50 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public DisplayMode CurrentDisplayMode
+        override internal int Platform_DeviceId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public int DeviceId
+        override internal int Platform_Revision
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-
-        public bool IsDefaultAdapter
+        override internal int Platform_VendorId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        /// <summary>
-        /// Gets a <see cref="System.Boolean"/> indicating whether
-        /// <see cref="GraphicsAdapter.CurrentDisplayMode"/> has a
-        /// Width:Height ratio corresponding to a widescreen <see cref="DisplayMode"/>.
-        /// Common widescreen modes include 16:9, 16:10 and 2:1.
-        /// </summary>
-        public bool IsWideScreen
+        override internal int Platform_SubSystemId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public IntPtr MonitorHandle
+        override internal IntPtr Platform_MonitorHandle
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public int Revision
+        override internal bool Platform_IsDefaultAdapter
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public int SubSystemId
+        override internal DisplayModeCollection Platform_SupportedDisplayModes
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public DisplayModeCollection SupportedDisplayModes
+        override internal DisplayMode Platform_CurrentDisplayMode
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-
-        public int VendorId
+        override internal bool Platform_IsWideScreen
         {
             get { throw new PlatformNotSupportedException(); }
         }
-
-        /*
-        public Guid DeviceIdentifier
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public string DriverDll
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public Version DriverVersion
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-        */
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
