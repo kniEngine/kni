@@ -8,9 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#if IOS || TVOS
-#elif ANDROID
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -21,11 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
-#if IOS || TVOS
-#else
             return new ReadOnlyCollection<GraphicsAdapter>(
                 new[] { new GraphicsAdapter() });
-#endif
         }
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
@@ -52,11 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
 
-
-#if IOS || TVOS
-#elif DESKTOPGL
         int _displayIndex;
-#endif
 
 
         override internal string Platform_DeviceName
@@ -64,7 +54,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException(); }
         }
 
-#if DESKTOPGL
         override internal string Platform_Description
         {
             get
@@ -74,8 +63,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             set { }
         }
-#else
-#endif
 
         override internal int Platform_DeviceId
         {
@@ -112,15 +99,12 @@ namespace Microsoft.Xna.Framework.Graphics
             get
             {
                 bool displayChanged = false;
-#if DESKTOPGL
                 var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
                 displayChanged = displayIndex != _displayIndex;
-#endif
                 if (_supportedDisplayModes == null || displayChanged)
                 {
                     var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
-
-#if DESKTOPGL
+                    
                     _displayIndex = displayIndex;
                     modes.Clear();
 
@@ -137,7 +121,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         if (!modes.Contains(displayMode))
                             modes.Add(displayMode);
                     }
-#endif
                     modes.Sort(delegate (DisplayMode a, DisplayMode b)
                     {
                         if (a == b) return 0;
@@ -155,17 +138,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-#if IOS || TVOS
-#elif ANDROID
-#elif DESKTOPGL
                 var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
                 Sdl.Display.Mode mode;
                 Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-#else
-#endif
             }
         }
 
@@ -187,20 +165,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_0:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_1:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL11_0:
-#if ANDROID
-#endif                  
                     return false;
                 case GraphicsProfile.FL11_1:
                     return false;

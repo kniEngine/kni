@@ -8,10 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#if IOS || TVOS
 using UIKit;
-#elif ANDROID
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -22,14 +19,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
         {
-#if IOS || TVOS
             var adapterList = new List<GraphicsAdapter>(1);
             var adapter = new GraphicsAdapter();
             ((ConcreteGraphicsAdapter)adapter.Strategy)._screen = UIScreen.MainScreen;
             adapterList.Add(adapter);
             return new ReadOnlyCollection<GraphicsAdapter>(adapterList);
-#else
-#endif
         }
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
@@ -57,10 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
         string _description = string.Empty;
 
 
-#if IOS || TVOS
 		internal UIScreen _screen;
-#elif DESKTOPGL
-#endif
 
 
         override internal string Platform_DeviceName
@@ -68,14 +59,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException(); }
         }
 
-#if DESKTOPGL
-#else
         override internal string Platform_Description
         {
             get { return _description; }
             set { _description = value; }
        }
-#endif
 
         override internal int Platform_DeviceId
         {
@@ -112,14 +100,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get
             {
                 bool displayChanged = false;
-#if DESKTOPGL
-#endif
                 if (_supportedDisplayModes == null || displayChanged)
                 {
                     var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
 
-#if DESKTOPGL
-#endif
                     modes.Sort(delegate (DisplayMode a, DisplayMode b)
                     {
                         if (a == b) return 0;
@@ -137,14 +121,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-#if IOS || TVOS
                 return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
                        (int)(_screen.Bounds.Height * _screen.Scale),
                        SurfaceFormat.Color);
-#elif ANDROID
-#elif DESKTOPGL
-#else
-#endif
             }
         }
 
@@ -166,20 +145,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_0:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL10_1:
-#if ANDROID
-#endif
                     return false;
                 case GraphicsProfile.FL11_0:
-#if ANDROID
-#endif                  
                     return false;
                 case GraphicsProfile.FL11_1:
                     return false;
