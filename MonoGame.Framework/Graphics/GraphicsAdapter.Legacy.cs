@@ -62,24 +62,22 @@ namespace Microsoft.Xna.Framework.Graphics
     {
 
 #if DESKTOPGL
-        public string Description
+        override internal string Platform_Description
         {
             get
             {
-                try
-                {
-                    return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer);
-                }
-                catch
-                {
-                    return string.Empty;
-                }
+                try { return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer); }
+                catch { return string.Empty; }
             }
-            private set { }
+            set { }
         }
 #else
         string _description = string.Empty;
-        public string Description { get { return _description; } private set { _description = value; } }
+        override internal string Platform_Description
+        {
+            get { return _description; }
+            set { _description = value; }
+       }
 #endif
 
         public DisplayMode CurrentDisplayMode
@@ -107,10 +105,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /*
-        public string Description
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         public int DeviceId
         {

@@ -28,13 +28,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-        public DisplayMode CurrentDisplayMode
+        override internal string Platform_Description
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-
-        public string Description
+        public DisplayMode CurrentDisplayMode
         {
             get { throw new PlatformNotSupportedException(); }
         }

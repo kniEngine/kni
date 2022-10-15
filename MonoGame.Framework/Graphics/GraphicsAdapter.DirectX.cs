@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
             adapter._adapter = device;
 
             adapter.DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
-            adapter.Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
+            adapter.Strategy.Platform_Description = device.Description1.Description.TrimEnd(new char[] { '\0' });
             adapter.DeviceId = device.Description1.DeviceId;
             adapter.Revision = device.Description1.Revision;
             adapter.VendorId = device.Description1.VendorId;
@@ -195,9 +195,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }
             set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
         }
-
-
-        public string Description { get; internal set; }
 
         public int DeviceId { get; internal set; }
 

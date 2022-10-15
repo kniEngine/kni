@@ -42,10 +42,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
     partial class GraphicsAdapter : GraphicsAdapterStrategy
     {
-        public string Description
+        string _description = string.Empty;
+
+        override internal string Platform_Description
         {
             get { return _description; }
-            private set { _description = value; }
+            set { _description = value; }
         }
 
         public DisplayMode CurrentDisplayMode
@@ -55,11 +57,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         /*
-        public string Description
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public int DeviceId
         {
             get { throw new NotImplementedException(); }
@@ -226,7 +223,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
        private DisplayModeCollection _supportedDisplayModes;
-        string _description = string.Empty;
 
     }
 }

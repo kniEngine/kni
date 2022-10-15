@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class GraphicsAdapter
     {
-        GraphicsAdapterStrategy Strategy { get { return this; } }
+        internal GraphicsAdapterStrategy Strategy { get { return this; } }
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
@@ -37,6 +37,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice; }
             set { GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice = value; }
+        }
+
+        public string Description
+        {
+            get { return Strategy.Platform_Description; }
         }
 
         internal GraphicsAdapter()
@@ -104,6 +109,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
     public abstract class GraphicsAdapterStrategy
     {
+        virtual internal string Platform_Description { get; set; }
+
         abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 
         abstract internal bool Platform_QueryBackBufferFormat(
