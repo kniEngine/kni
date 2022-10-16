@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+    using Microsoft.Xna.Platform.Graphics;
+
     partial class GraphicsAdapter
     {
         /// <summary>

@@ -10,6 +10,8 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+    using Microsoft.Xna.Platform.Graphics;
+
     public sealed partial class GraphicsAdapter
     {
         internal GraphicsAdapterStrategy Strategy { get; private set; }
@@ -145,6 +147,11 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
     }
+}
+
+namespace Microsoft.Xna.Platform.Graphics
+{
+    using Microsoft.Xna.Framework.Graphics;
 
     public abstract class GraphicsAdapterStrategy
     {
