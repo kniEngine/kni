@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using Android.Views;
 using Android.Runtime;
 
@@ -18,23 +17,21 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private ReadOnlyCollection<GraphicsAdapter> _adapters;
 
-        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        public ConcreteGraphicsAdaptersProvider()
         {
-            return new ReadOnlyCollection<GraphicsAdapter>(
-                new[] { new GraphicsAdapter() });
+            var adapterList = new List<GraphicsAdapter>(1);
+            var strategy = new ConcreteGraphicsAdapter();
+            var adapter = new GraphicsAdapter(strategy);
+
+            adapterList.Add(adapter);
+
+            _adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
+            return;
         }
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
-            get
-            {
-                if (_adapters == null)
-                {
-                    _adapters = Platform_InitializeAdapters();
-                }
-
-                return _adapters;
-            }
+            get { return _adapters; }
         }
 
         internal override GraphicsAdapter Platform_DefaultAdapter

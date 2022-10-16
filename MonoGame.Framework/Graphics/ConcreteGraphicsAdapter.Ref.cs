@@ -10,9 +10,10 @@ namespace Microsoft.Xna.Framework.Graphics
     class ConcreteGraphicsAdaptersProvider : GraphicsAdaptersProviderStrategy
     {
 
-        internal override ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters()
+        public ConcreteGraphicsAdaptersProvider()
         {
             throw new PlatformNotSupportedException();
+            return;
         }
 
         internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters

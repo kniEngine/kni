@@ -99,9 +99,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return Strategy.Platform_IsWideScreen; }
         }
 
-        internal GraphicsAdapter()
+        internal GraphicsAdapter(GraphicsAdapterStrategy strategy)
         {
-            Strategy = new ConcreteGraphicsAdapter();
+            Strategy = strategy;
         }
 
         public bool QueryBackBufferFormat(
@@ -192,7 +192,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_InitializeAdapters();
         abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
         abstract internal GraphicsAdapter Platform_DefaultAdapter { get; }
         virtual internal bool Platform_UseReferenceDevice { get; set; }
