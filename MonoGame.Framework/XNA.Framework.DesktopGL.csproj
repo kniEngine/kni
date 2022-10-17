@@ -391,6 +391,7 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Platform\Graphics\GraphicsContext.SDL.cs" />
     <Compile Include="Graphics\GraphicsDebug.Default.cs" />

@@ -42,6 +42,7 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Ref.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.Ref.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Ref.cs" />
     <Compile Include="GamePlatform.Ref.cs" />
     <Compile Include="Input\GamePad.Ref.cs" />
     <Compile Include="Input\Joystick.Ref.cs" />

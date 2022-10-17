@@ -449,6 +449,7 @@
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Platform\Graphics\OpenGL.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.iOS.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.iOS.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />

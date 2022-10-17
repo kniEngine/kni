@@ -53,6 +53,7 @@
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
     <Compile Include="GamePlatform.Mobile.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.Android.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
