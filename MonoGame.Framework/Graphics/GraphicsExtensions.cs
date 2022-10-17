@@ -36,6 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.RgbPvrtc2Bpp:
                 case SurfaceFormat.RgbPvrtc4Bpp:
                     return true;
+
                 default:
                     return false;
             }
@@ -95,6 +96,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 8;
                 case SurfaceFormat.Vector4:
                     return 16;
+
                 default:
                     throw new ArgumentException();
             }
@@ -106,37 +108,26 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 case VertexElementFormat.Single:
                     return 4;
-
                 case VertexElementFormat.Vector2:
                     return 8;
-
                 case VertexElementFormat.Vector3:
                     return 12;
-
                 case VertexElementFormat.Vector4:
                     return 16;
-
                 case VertexElementFormat.Color:
                     return 4;
-
                 case VertexElementFormat.Byte4:
                     return 4;
-
                 case VertexElementFormat.Short2:
                     return 4;
-
                 case VertexElementFormat.Short4:
                     return 8;
-
                 case VertexElementFormat.NormalizedShort2:
                     return 4;
-
                 case VertexElementFormat.NormalizedShort4:
                     return 8;
-
                 case VertexElementFormat.HalfVector2:
                     return 4;
-
                 case VertexElementFormat.HalfVector4:
                     return 8;
 
@@ -175,6 +166,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     width = 4;
                     height = 4;
                     break;
+
                 default:
                     width = 1;
                     height = 1;
@@ -183,5 +175,4 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
     }
-
 }

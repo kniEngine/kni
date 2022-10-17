@@ -67,6 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new NotImplementedException();
                 case TextureFilter.MinPointMagLinearMipPoint:
                     throw new NotImplementedException();
+
                 default:
                     throw new NotSupportedException();
             }
@@ -103,6 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLTexParam.MIRRORED_REPEAT;
                 case TextureAddressMode.Border:
                     throw new NotImplementedException();
+
                 default:
                     throw new ArgumentException("No support for " + textureAddressMode);
             }

@@ -188,10 +188,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     return (int)TextureWrapMode.Repeat;
                 case TextureAddressMode.Mirror:
                     return (int)TextureWrapMode.MirroredRepeat;
+
 #if !GLES
                 case TextureAddressMode.Border:
                     return (int)TextureWrapMode.ClampToBorder;
 #endif
+
                 default:
                     throw new ArgumentException("No support for " + textureAddressMode);
             }

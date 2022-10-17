@@ -125,6 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLDepthComparisonFunc.NEVER;
                 case CompareFunction.NotEqual:
                     return WebGLDepthComparisonFunc.NOTEQUAL;
+
                 default:
                     throw new ArgumentOutOfRangeException("compare");
             }
@@ -150,6 +151,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLStencilOpFunc.REPLACE;
                 case StencilOperation.Zero:
                     return WebGLStencilOpFunc.ZERO;
+
                 default:
                     throw new ArgumentOutOfRangeException("operation");
             }

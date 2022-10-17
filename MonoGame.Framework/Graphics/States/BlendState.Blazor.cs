@@ -93,6 +93,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLEquationFunc.REVERSE_SUBTRACT;
                 case BlendFunction.Subtract:
                     return WebGLEquationFunc.SUBTRACT;
+
                 default:
                     throw new ArgumentException();
             }
@@ -128,6 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLBlendFunc.SRC_ALPHA_SATURATE;
                 case Blend.SourceColor:
                     return WebGLBlendFunc.SRC_COLOR;
+
                 default:
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }

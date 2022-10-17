@@ -101,6 +101,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 2;
                 case VertexElementFormat.HalfVector4:
                     return 4;
+
                 default:
                     throw new ArgumentException();
             }
@@ -112,31 +113,22 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 case VertexElementFormat.Single:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector2:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector3:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector4:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Color:
                     return WebGLDataType.UBYTE;
-
                 case VertexElementFormat.Byte4:
                     return WebGLDataType.UBYTE;
-
                 case VertexElementFormat.Short2:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.Short4:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.NormalizedShort2:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.NormalizedShort4:
                     return WebGLDataType.SHORT;
 

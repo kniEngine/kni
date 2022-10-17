@@ -184,6 +184,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return GLStencilFunction.Never;
                 case CompareFunction.NotEqual:
                     return GLStencilFunction.Notequal;
+
                 default:
                     return GLStencilFunction.Always;
             }
@@ -209,6 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return StencilOp.Replace;
                 case StencilOperation.Zero:
                     return StencilOp.Zero;
+
                 default:
                     return StencilOp.Keep;
             }
