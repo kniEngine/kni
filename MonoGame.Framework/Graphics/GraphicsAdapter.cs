@@ -6,12 +6,11 @@
 
 using System;
 using System.Collections.ObjectModel;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    using Microsoft.Xna.Platform.Graphics;
-
     public sealed partial class GraphicsAdapter
     {
         internal GraphicsAdapterStrategy Strategy { get; private set; }
@@ -146,61 +145,5 @@ namespace Microsoft.Xna.Framework.Graphics
             return Strategy.Platform_IsProfileSupported(graphicsProfile);
         }
 
-    }
-}
-
-namespace Microsoft.Xna.Platform.Graphics
-{
-    using Microsoft.Xna.Framework.Graphics;
-
-    public abstract class GraphicsAdapterStrategy
-    {
-        virtual internal string Platform_DeviceName { get; set; }
-        virtual internal string Platform_Description { get; set; }
-        virtual internal int Platform_DeviceId { get; set; }
-        virtual internal int Platform_Revision { get; set; }
-        virtual internal int Platform_VendorId { get; set; }
-        virtual internal int Platform_SubSystemId { get; set; }
-        virtual internal IntPtr Platform_MonitorHandle { get; set; }
-        virtual internal bool Platform_IsDefaultAdapter { get; set; }
-
-        abstract internal DisplayModeCollection Platform_SupportedDisplayModes { get; }
-        abstract internal DisplayMode Platform_CurrentDisplayMode { get; }
-        abstract internal bool Platform_IsWideScreen { get; }
-
-        abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
-
-        abstract internal bool Platform_QueryBackBufferFormat(
-            GraphicsProfile graphicsProfile,
-            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
-            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
-
-        abstract internal bool Platform_QueryRenderTargetFormat(
-            GraphicsProfile graphicsProfile,
-            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
-            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
-    }
-
-    public abstract class GraphicsAdaptersProviderStrategy
-    {
-        private static GraphicsAdaptersProviderStrategy _current;
-
-        internal static GraphicsAdaptersProviderStrategy Current
-        {
-            get
-            {
-                lock (typeof(GraphicsAdaptersProviderStrategy))
-                {
-                    if (_current == null)
-                        _current = new ConcreteGraphicsAdaptersProvider();
-
-                    return _current;
-                }
-            }
-        }
-
-        abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
-        abstract internal GraphicsAdapter Platform_DefaultAdapter { get; }
-        virtual internal bool Platform_UseReferenceDevice { get; set; }
     }
 }
