@@ -17,7 +17,7 @@ using OpenTK.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    static class GraphicsExtensions
+    static partial class GraphicsExtensions
     {
 #if OPENGL
         public static int OpenGLNumberOfElements(this VertexElementFormat elementFormat)
@@ -961,20 +961,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     break;
             }
         }
-
-#if BLAZOR
-        internal static nkast.Wasm.Canvas.WebGL.IWebGLRenderingContext GL;
-        [Conditional("DEBUG")]
-        internal static void CheckGLError()
-        {
-            nkast.Wasm.Canvas.WebGL.WebGLErrorCode error = GL.GetError();
-            if (error != nkast.Wasm.Canvas.WebGL.WebGLErrorCode.NO_ERROR)
-            {
-                Console.WriteLine(error);
-                throw new InvalidOperationException("GL.GetError() returned " + error.ToString());
-            }
-        }
-#endif
 
 #if OPENGL
 
