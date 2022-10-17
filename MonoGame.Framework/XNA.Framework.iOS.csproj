@@ -439,6 +439,7 @@
     <Compile Include="Graphics\GraphicsDebug.Default.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.FramebufferHelper.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
+    <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IGraphicsContext.OpenGL.cs" />
     <Compile Include="Platform\Graphics\IWindowInfo.OpenGL.cs" />
