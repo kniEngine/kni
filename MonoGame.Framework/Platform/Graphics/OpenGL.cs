@@ -1573,11 +1573,6 @@ namespace MonoGame.OpenGL
 
         static partial void LoadPlatformEntryPoints();
 
-        internal static IGraphicsContext CreateContext(IWindowInfo info)
-        {
-            return PlatformCreateContext(info);
-        }
-
         /* Helper Functions */
 
         internal static void DepthRange(float min, float max)

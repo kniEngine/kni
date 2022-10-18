@@ -3,10 +3,10 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using MonoGame.Framework.Utilities;
 using ObjCRuntime;
 using System.Security;
 using OpenGLES;
-using MonoGame.Framework.Utilities;
 
 namespace MonoGame.OpenGL
 {
@@ -24,15 +24,13 @@ namespace MonoGame.OpenGL
             return FuncLoader.LoadFunction<T>(Library, function, throwIfNotFound);
         }
 
-        private static IGraphicsContext PlatformCreateContext (IWindowInfo info)
-        {
-            return new GraphicsContext ();
-        }
 	}
 
-    public class GraphicsContext : IGraphicsContext
+    public class GLGraphicsContext : IDisposable
     {
-        public GraphicsContext ()
+        internal EAGLContext Context { get; private set; }
+
+        public GLGraphicsContext()
         {
             try
             {
@@ -45,51 +43,32 @@ namespace MonoGame.OpenGL
             }
         }
 
-        public bool IsCurrent {
-            get {
-                return EAGLContext.CurrentContext == this.Context;
-            }
-        }
+        public bool IsCurrent { get { return EAGLContext.CurrentContext == this.Context; } }
 
-        public bool IsDisposed {
-            get {
-                return this.Context == null;
-            }
-        }
-
-        public int SwapInterval {
-            get {
-                throw new NotImplementedException ();
-            }
-
-            set {
-                throw new NotImplementedException ();
-            }
-        }
-
-        public void Dispose ()
+        public void Dispose()
         {
-            if (this.Context != null) {
-                this.Context.Dispose ();
-            }
+            if (this.Context != null)
+                this.Context.Dispose();
+
             this.Context = null;
         }
 
-        public void MakeCurrent (IWindowInfo info)
+        public void MakeCurrent()
         {
-            if (!EAGLContext.SetCurrentContext (this.Context)) {
-                throw new InvalidOperationException ("Unable to change current EAGLContext.");
+            if (!EAGLContext.SetCurrentContext(this.Context))
+            {
+                throw new InvalidOperationException("Unable to change current EAGLContext.");
             }
         }
 
-        public void SwapBuffers ()
+        public void SwapBuffers()
         {
-            if (!this.Context.PresentRenderBuffer (36161u)) {
-                throw new InvalidOperationException ("EAGLContext.PresentRenderbuffer failed.");
+            if (!this.Context.PresentRenderBuffer(36161u))
+            {
+                throw new InvalidOperationException("EAGLContext.PresentRenderbuffer failed.");
             }
         }
 
-        internal EAGLContext Context { get; private set; }
     }
 }
 

@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework
 #endif
 
 #if ANDROID
-            //if (!Game.Instance.Window.GraphicsContext.IsCurrent)
+            //if (!Game.Instance.Window.GLGraphicsContext.IsCurrent)
                 ((AndroidGameWindow)Game.Instance.Window).GameView.MakeCurrent();
 #endif
 

@@ -395,14 +395,11 @@
     <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\GraphicsContext.SDL.cs" />
     <Compile Include="Graphics\GraphicsDebug.Default.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.FramebufferHelper.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\IGraphicsContext.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\IWindowInfo.OpenGL.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
@@ -428,7 +425,6 @@
     <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\WindowInfo.SDL.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
