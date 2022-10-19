@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        public static int GetSyncInterval(this PresentInterval interval)
+        public static int ToDXSwapInterval(this PresentInterval interval)
         {
             switch (interval)
             {
@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public SharpDX.DXGI.SwapEffect ToSwapEffect(PresentInterval presentInterval)
+        static public SharpDX.DXGI.SwapEffect ToDXSwapEffect(PresentInterval presentInterval)
         {
             SharpDX.DXGI.SwapEffect effect;
 
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return effect;
         }
 
-        static public SharpDX.DXGI.Format ToFormat(DepthFormat format)
+        static public SharpDX.DXGI.Format ToDXFormat(DepthFormat format)
         {
             switch (format)
             {
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public SharpDX.DXGI.Format ToFormat(SurfaceFormat format)
+        static public SharpDX.DXGI.Format ToDXFormat(SurfaceFormat format)
         {
             switch (format)
             {
@@ -154,27 +154,27 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public RawVector2 ToVector2(this Vector2 vec)
+        static public RawVector2 ToDXVector2(this Vector2 vec)
         {
             return new RawVector2(vec.X, vec.Y);
         }
 
-        static public RawVector3 ToVector3(this Vector3 vec)
+        static public RawVector3 ToDXVector3(this Vector3 vec)
         {
             return new RawVector3(vec.X, vec.Y, vec.Z);
         }
 
-        static public RawVector4 ToVector4(this Vector4 vec)
+        static public RawVector4 ToDXVector4(this Vector4 vec)
         {
             return new RawVector4(vec.X, vec.Y, vec.Z, vec.W);
         }
 
-        static public RawColor4 ToColor4(this Color color)
+        static public RawColor4 ToDXColor4(this Color color)
         {
             return new RawColor4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
 
-        static public SharpDX.Direct3D11.Comparison ToComparison(this CompareFunction compare)
+        static public SharpDX.Direct3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
             {

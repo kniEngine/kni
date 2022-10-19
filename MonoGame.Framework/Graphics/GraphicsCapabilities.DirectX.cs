@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private int GetMaxMultiSampleCount(GraphicsDevice device)
         {
-            var format = GraphicsExtensions.ToFormat(device.PresentationParameters.BackBufferFormat);
+            var format = GraphicsExtensions.ToDXFormat(device.PresentationParameters.BackBufferFormat);
             // Find the maximum supported level starting with the game's requested multisampling level
             // and halving each time until reaching 0 (meaning no multisample support).
             var qualityLevels = 0;

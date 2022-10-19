@@ -271,7 +271,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             Context.MakeCurrent(windowInfo);
-            Context.SwapInterval = PresentationParameters.PresentationInterval.GetSwapInterval();
+            Context.SwapInterval = PresentationParameters.PresentationInterval.ToGLSwapInterval();
 
             Context.MakeCurrent(windowInfo);
 #endif
@@ -1334,7 +1334,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
 #if DESKTOPGL || ANGLE
             Context.MakeCurrent(new WindowInfo(SdlGameWindow.Instance.Handle));
-            Context.SwapInterval = PresentationParameters.PresentationInterval.GetSwapInterval();
+            Context.SwapInterval = PresentationParameters.PresentationInterval.ToGLSwapInterval();
 #endif
 
             ApplyRenderTargets(null);

@@ -24,9 +24,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Build the description.
                 var desc = new SharpDX.Direct3D11.SamplerStateDescription();
 
-                desc.AddressU = GetAddressMode(AddressU);
-                desc.AddressV = GetAddressMode(AddressV);
-                desc.AddressW = GetAddressMode(AddressW);
+                desc.AddressU = ToDXTextureAddressMode(AddressU);
+                desc.AddressV = ToDXTextureAddressMode(AddressV);
+                desc.AddressW = ToDXTextureAddressMode(AddressW);
 
 #if WINDOWS_UAP
 				desc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
@@ -35,12 +35,12 @@ namespace Microsoft.Xna.Framework.Graphics
 					BorderColor.B / 255.0f,
 					BorderColor.A / 255.0f);
 #else
-				desc.BorderColor = BorderColor.ToColor4();
+				desc.BorderColor = BorderColor.ToDXColor4();
 #endif
-				desc.Filter = GetFilter(Filter, FilterMode);
+				desc.Filter = ToDXTextureFilter(Filter, FilterMode);
                 desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, device.GraphicsCapabilities.MaxTextureAnisotropy);
                 desc.MipLodBias = MipMapLevelOfDetailBias;
-                desc.ComparisonFunction = ComparisonFunction.ToComparison();
+                desc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 
                 // TODO: How do i do this?
                 desc.MinimumLod = 0.0f;
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return _state;
         }
 
-        private static SharpDX.Direct3D11.Filter GetFilter(TextureFilter filter, TextureFilterMode mode)
+        private static SharpDX.Direct3D11.Filter ToDXTextureFilter(TextureFilter filter, TextureFilterMode mode)
         {
             switch (mode)
             {
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static SharpDX.Direct3D11.TextureAddressMode GetAddressMode(TextureAddressMode mode)
+        private static SharpDX.Direct3D11.TextureAddressMode ToDXTextureAddressMode(TextureAddressMode mode)
         {
             switch (mode)
             {

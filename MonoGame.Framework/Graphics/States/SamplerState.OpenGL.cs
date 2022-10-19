@@ -132,9 +132,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Set up texture addressing.
-            GL.TexParameter(target, TextureParameterName.TextureWrapS, (int)GetWrapMode(AddressU));
+            GL.TexParameter(target, TextureParameterName.TextureWrapS, (int)ToGLTextureAddressMode(AddressU));
             GraphicsExtensions.CheckGLError();
-            GL.TexParameter(target, TextureParameterName.TextureWrapT, (int)GetWrapMode(AddressV));
+            GL.TexParameter(target, TextureParameterName.TextureWrapT, (int)ToGLTextureAddressMode(AddressV));
             GraphicsExtensions.CheckGLError();
 #if !GLES
             // Border color is not supported by glTexParameter in OpenGL ES 2.0
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case TextureFilterMode.Comparison:
                     GL.TexParameter(target, TextureParameterName.TextureCompareMode, (int)TextureCompareMode.CompareRefToTexture);
                     GraphicsExtensions.CheckGLError();
-                    GL.TexParameter(target, TextureParameterName.TextureCompareFunc, (int)ComparisonFunction.GetDepthFunction());
+                    GL.TexParameter(target, TextureParameterName.TextureCompareFunc, (int)ComparisonFunction.ToGLComparisonFunction());
                     GraphicsExtensions.CheckGLError();
                     break;
                 case TextureFilterMode.Default:
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private int GetWrapMode(TextureAddressMode textureAddressMode)
+        private int ToGLTextureAddressMode(TextureAddressMode textureAddressMode)
         {
             switch (textureAddressMode)
             {

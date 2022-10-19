@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        internal static void GetGLFormat(SurfaceFormat format,
+        internal static void ToGLSurfaceFormat(SurfaceFormat format,
                 GraphicsDevice graphicsDevice,
                 out WebGLInternalFormat glInternalFormat,
                 out WebGLFormat glFormat,

@@ -73,9 +73,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Set up texture addressing.
-            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, GetWrapMode(AddressU));
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, ToGLTextureAddressMode(AddressU));
             GraphicsExtensions.CheckGLError();
-            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, GetWrapMode(AddressV));
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, ToGLTextureAddressMode(AddressV));
             GraphicsExtensions.CheckGLError();
 
             if (GraphicsDevice.GraphicsCapabilities.SupportsTextureMaxLevel)
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private WebGLTexParam GetWrapMode(TextureAddressMode textureAddressMode)
+        private WebGLTexParam ToGLTextureAddressMode(TextureAddressMode textureAddressMode)
         {
             switch (textureAddressMode)
             {

@@ -33,9 +33,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
                     AttributeLocation = attributeLocation,
-                    NumberOfElements = OpenGLNumberOfElements(ve.VertexElementFormat),
-                    VertexAttribPointerType = OpenGLVertexAttribPointerType(ve.VertexElementFormat),
-                    Normalized = OpenGLVertexAttribNormalized(ve),
+                    NumberOfElements = ToGLNumberOfElements(ve.VertexElementFormat),
+                    VertexAttribPointerType = ToGLVertexAttribPointerType(ve.VertexElementFormat),
+                    Normalized = ToGLVertexAttribNormalized(ve),
                     Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    GraphicsDevice._attribsDirty = true;
 		}
 
-        private static int OpenGLNumberOfElements(VertexElementFormat elementFormat)
+        private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static WebGLDataType OpenGLVertexAttribPointerType(VertexElementFormat elementFormat)
+        private static WebGLDataType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static bool OpenGLVertexAttribNormalized(VertexElement element)
+        private static bool ToGLVertexAttribNormalized(VertexElement element)
         {
             // TODO: This may or may not be the right behavor.  
             //

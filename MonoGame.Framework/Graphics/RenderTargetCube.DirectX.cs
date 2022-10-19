@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var renderTargetViewDesc = new RenderTargetViewDescription();
                 renderTargetViewDesc.Dimension = RenderTargetViewDimension.Texture2DArray;
-                renderTargetViewDesc.Format = GraphicsExtensions.ToFormat(this.Format);
+                renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
                 renderTargetViewDesc.Texture2DArray.ArraySize = 1;
                 renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
                 renderTargetViewDesc.Texture2DArray.MipSlice = 0;
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             var depthStencilDesc = new Texture2DDescription();
-            depthStencilDesc.Format = GraphicsExtensions.ToFormat(preferredDepthFormat);
+            depthStencilDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
             depthStencilDesc.ArraySize = 1;
             depthStencilDesc.MipLevels = 1;
             depthStencilDesc.Width = size;
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 for (int i = 0; i < _renderTargetViews.Length; i++)
                 {
                     var depthStencilViewDesc = new DepthStencilViewDescription();
-                    depthStencilViewDesc.Format = GraphicsExtensions.ToFormat(preferredDepthFormat);
+                    depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
                     depthStencilViewDesc.Dimension = DepthStencilViewDimension.Texture2DArray;
                     depthStencilViewDesc.Texture2DArray.ArraySize = 1;
                     depthStencilViewDesc.Texture2DArray.FirstArraySlice = i;
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     _depthTarget = new SharpDX.Direct3D11.Texture2D(graphicsDevice._d3dDevice, depthStencilDesc);
 
                     var depthStencilViewDesc = new DepthStencilViewDescription();
-                    depthStencilViewDesc.Format = GraphicsExtensions.ToFormat(preferredDepthFormat);
+                    depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
                     depthStencilViewDesc.Dimension = DepthStencilViewDimension.Texture2D;
                     _depthStencilViews[i] = new DepthStencilView(graphicsDevice._d3dDevice, _depthTarget, depthStencilViewDesc);
                 }
