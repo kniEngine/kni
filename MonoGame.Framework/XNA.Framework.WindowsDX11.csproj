@@ -384,6 +384,7 @@
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
+    <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\IRenderTarget.DirectX.cs" />
     <Compile Include="Graphics\OcclusionQuery.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
@@ -518,7 +519,6 @@
     <Compile Include="Utilities\Png\PngReader.cs" />
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Platform\Windows\SharpDXHelper.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include="Platform\Windows\WinFormsGamePlatform.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />

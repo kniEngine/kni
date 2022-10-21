@@ -10,20 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        public static int GetSyncInterval(this PresentInterval interval)
-        {
-            switch (interval)
-            {
-                case PresentInterval.Immediate:
-                    return 0;
-
-                case PresentInterval.Two:
-                    return 2;
-
-                default:
-                    return 1;
-            }
-        }
 
         public static bool IsCompressedFormat(this SurfaceFormat format)
         {

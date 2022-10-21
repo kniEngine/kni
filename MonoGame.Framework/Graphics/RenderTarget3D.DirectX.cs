@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create a DepthStencil view on this surface to use on bind.
             using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(graphicsDevice._d3dDevice, new Texture2DDescription
             {
-                Format = SharpDXHelper.ToFormat(preferredDepthFormat),
+                Format = GraphicsExtensions.ToFormat(preferredDepthFormat),
                 ArraySize = 1,
                 MipLevels = 1,
                 Width = width,
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Create the view for binding to the device.
                 _depthStencilView = new DepthStencilView(graphicsDevice._d3dDevice, depthBuffer, new DepthStencilViewDescription()
                 {
-                    Format = SharpDXHelper.ToFormat(preferredDepthFormat),
+                    Format = GraphicsExtensions.ToFormat(preferredDepthFormat),
                     Dimension = DepthStencilViewDimension.Texture2D
                 });
             }
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	            var desc = new RenderTargetViewDescription
 	            {
-	                Format = SharpDXHelper.ToFormat(_format),
+	                Format = GraphicsExtensions.ToFormat(_format),
 	                Dimension = RenderTargetViewDimension.Texture3D,
 	                Texture3D =
 	                    {

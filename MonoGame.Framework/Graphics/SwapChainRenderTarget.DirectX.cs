@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var dxgiFormat = surfaceFormat == SurfaceFormat.Color
                              ? SharpDX.DXGI.Format.B8G8R8A8_UNorm
-                             : SharpDXHelper.ToFormat(surfaceFormat);
+                             : GraphicsExtensions.ToFormat(surfaceFormat);
 
             var multisampleDesc = GraphicsDevice.GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
             _windowHandle = windowHandle;
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 SampleDescription = multisampleDesc,
                 Usage = Usage.RenderTargetOutput,
                 BufferCount = 2,
-                SwapEffect = SharpDXHelper.ToSwapEffect(PresentInterval),
+                SwapEffect = GraphicsExtensions.ToSwapEffect(PresentInterval),
                 IsWindowed = true,
             };
             
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create the depth buffer if we need it.
             if (depthFormat != DepthFormat.None)
             {
-                dxgiFormat = SharpDXHelper.ToFormat(depthFormat);
+                dxgiFormat = GraphicsExtensions.ToFormat(depthFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
                 var textureDescription = new Texture2DDescription()

@@ -2,14 +2,30 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-namespace Microsoft.Xna.Framework
-{
-    using System;
-    using Graphics;
-    using SharpDX.Mathematics.Interop;
+using System;
+using System.Diagnostics;
+using SharpDX.Mathematics.Interop;
 
-    static internal class SharpDXHelper
+
+namespace Microsoft.Xna.Framework.Graphics
+{
+    static partial class GraphicsExtensions
     {
+        public static int GetSyncInterval(this PresentInterval interval)
+        {
+            switch (interval)
+            {
+                case PresentInterval.Immediate:
+                    return 0;
+
+                case PresentInterval.Two:
+                    return 2;
+
+                default:
+                    return 1;
+            }
+        }
+
         static public SharpDX.DXGI.SwapEffect ToSwapEffect(PresentInterval presentInterval)
         {
             SharpDX.DXGI.SwapEffect effect;
@@ -132,7 +148,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-		static public RawVector2 ToVector2(this Vector2 vec)
+        static public RawVector2 ToVector2(this Vector2 vec)
         {
             return new RawVector2(vec.X, vec.Y);
         }

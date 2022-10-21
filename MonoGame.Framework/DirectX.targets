@@ -10,6 +10,7 @@
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
+    <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\IRenderTarget.DirectX.cs" />
     <Compile Include="Graphics\OcclusionQuery.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
@@ -34,7 +35,6 @@
     <Compile Include="Graphics\Vertices\VertexBufferBindings.DirectX.cs" />
     <Compile Include="Graphics\Vertices\VertexElement.DirectX.cs" />
     <Compile Include="Graphics\Vertices\VertexInputLayout.DirectX.cs" />
-    <Compile Include="Platform\Windows\SharpDXHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
