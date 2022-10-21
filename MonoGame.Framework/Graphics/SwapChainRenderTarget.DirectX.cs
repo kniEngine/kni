@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 try
                 {
-                    _swapChain.Present(PresentInterval.ToDXSwapInterval(), PresentFlags.None);
+                    _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(PresentInterval), PresentFlags.None);
                 }
                 catch (SharpDX.SharpDXException)
                 {

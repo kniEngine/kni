@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (force || this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
             {
-                GL.DepthFunc(DepthBufferFunction.ToGLComparisonFunction());
+                GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }

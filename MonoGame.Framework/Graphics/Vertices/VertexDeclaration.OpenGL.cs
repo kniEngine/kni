@@ -31,9 +31,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
                     AttributeLocation = attributeLocation,
-                    NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements(),
-                    VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType(),
-                    Normalized = ve.ToGLVertexAttribNormalized(),
+                    NumberOfElements = GraphicsExtensions.ToGLNumberOfElements(ve.VertexElementFormat),
+                    VertexAttribPointerType = GraphicsExtensions.ToGLVertexAttribPointerType(ve.VertexElementFormat),
+                    Normalized = GraphicsExtensions.ToGLVertexAttribNormalized(ve),
                     Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;

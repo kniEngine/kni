@@ -1075,7 +1075,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                var syncInterval = PresentationParameters.PresentationInterval.ToDXSwapInterval();
+                var syncInterval = GraphicsExtensions.ToDXSwapInterval(PresentationParameters.PresentationInterval);
 
                 // The first argument instructs DXGI to block n VSyncs before presenting.
                 lock (_d3dContext)

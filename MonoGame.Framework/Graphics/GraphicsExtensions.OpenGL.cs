@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        public static int ToGLNumberOfElements(this VertexElementFormat elementFormat)
+        public static int ToGLNumberOfElements(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static VertexPointerType ToGLVertexPointerType(this VertexElementFormat elementFormat)
+        public static VertexPointerType ToGLVertexPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static VertexAttribPointerType ToGLVertexAttribPointerType(this VertexElementFormat elementFormat)
+        public static VertexAttribPointerType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static bool ToGLVertexAttribNormalized(this VertexElement element)
+        public static bool ToGLVertexAttribNormalized(VertexElement element)
         {
             // TODO: This may or may not be the right behavor.  
             //
@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static ColorPointerType ToGLColorPointerType(this VertexElementFormat elementFormat)
+        public static ColorPointerType ToGLColorPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static NormalPointerType ToGLNormalPointerType(this VertexElementFormat elementFormat)
+        public static NormalPointerType ToGLNormalPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static TexCoordPointerType ToGLTexCoordPointerType(this VertexElementFormat elementFormat)
+        public static TexCoordPointerType ToGLTexCoordPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        public static BlendEquationMode ToGLBlendEquationMode(this BlendFunction function)
+        public static BlendEquationMode ToGLBlendEquationMode(BlendFunction function)
         {
             switch (function)
             {
@@ -291,7 +291,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public static BlendingFactorSrc ToGLBlendFuncSrc(this Blend blend)
+        public static BlendingFactorSrc ToGLBlendFuncSrc(Blend blend)
         {
             switch (blend)
             {
@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
-        public static BlendingFactorDest ToGLBlendFuncDest(this Blend blend)
+        public static BlendingFactorDest ToGLBlendFuncDest(Blend blend)
         {
             switch (blend)
             {
@@ -365,7 +365,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
-        public static DepthFunction ToGLComparisonFunction(this CompareFunction compare)
+        public static DepthFunction ToGLComparisonFunction(CompareFunction compare)
         {
             switch (compare)
             {
@@ -398,7 +398,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <returns>A GL ColorFormat instance.</returns>
         /// <param name="format">The <see cref="SurfaceFormat"/> to convert.</param>
-        internal static ColorFormat ToGLColorFormat(this SurfaceFormat format)
+        internal static ColorFormat ToGLColorFormat(SurfaceFormat format)
         {
             switch (format)
             {
@@ -432,7 +432,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <returns>A value according to EXT_swap_control</returns>
         /// <param name="interval">The <see cref="PresentInterval"/> to convert.</param>
-        internal static int ToGLSwapInterval(this PresentInterval interval)
+        internal static int ToGLSwapInterval(PresentInterval interval)
         {
             // See http://www.opengl.org/registry/specs/EXT/swap_control.txt
             // and https://www.opengl.org/registry/specs/EXT/glx_swap_control_tear.txt
@@ -457,7 +457,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
         const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;
-        internal static void ToGLSurfaceFormat(this SurfaceFormat format,
+        internal static void ToGLSurfaceFormat(SurfaceFormat format,
             GraphicsDevice graphicsDevice,
             out PixelInternalFormat glInternalFormat,
             out PixelFormat glFormat,

@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        public static int ToDXSwapInterval(this PresentInterval interval)
+        public static int ToDXSwapInterval(PresentInterval interval)
         {
             switch (interval)
             {

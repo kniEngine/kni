@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindTexture(glTarget, glTexture);
                 GraphicsExtensions.CheckGLError();
 
-                format.ToGLSurfaceFormat(GraphicsDevice, out glInternalFormat, out glFormat, out glType);
+                GraphicsExtensions.ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
 
                 GL.TexImage3D(glTarget, 0, glInternalFormat, width, height, depth, 0, glFormat, glType, IntPtr.Zero);
                 GraphicsExtensions.CheckGLError();
