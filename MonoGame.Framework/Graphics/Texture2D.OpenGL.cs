@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             this.glTarget = TextureTarget.Texture2D;
-            GraphicsExtensions.ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
+            ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
 
             Threading.EnsureUIThread();
             {
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var startBytes = startIndex * elementSizeInByte;
                 var dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 // Store the current bound texture.
-                var prevTexture = GraphicsExtensions.GetBoundTexture2D();
+                var prevTexture = GetBoundTexture2D();
 
                 if (prevTexture != glTexture)
                 {
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 // Store the current bound texture.
-                var prevTexture = GraphicsExtensions.GetBoundTexture2D();
+                var prevTexture = GetBoundTexture2D();
                 if (prevTexture != glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, glTexture);
@@ -395,7 +395,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // to reload their textures after the GL context is lost.
         private void PlatformReload(Stream textureStream)
         {
-            var prev = GraphicsExtensions.GetBoundTexture2D();
+            var prev = GetBoundTexture2D();
 
             GenerateGLTextureIfRequired();
             FillTextureFromStream(textureStream);
@@ -453,6 +453,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
             }
+        }
+
+        private static int GetBoundTexture2D()
+        {
+            var prevTexture = 0;
+            GL.GetInteger(GetPName.TextureBinding2D, out prevTexture);
+            GraphicsExtensions.LogGLError("GraphicsExtensions.GetBoundTexture2D() GL.GetInteger");
+            return prevTexture;
         }
 
     }

@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
                 GraphicsExtensions.CheckGLError();
 
-                GraphicsExtensions.ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
+                ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
 
                 for (var i = 0; i < 6; i++)
                 {

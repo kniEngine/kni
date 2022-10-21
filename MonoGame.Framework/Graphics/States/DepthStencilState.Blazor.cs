@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (force || this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
             {
-                GL.DepthFunc(ToGLComparisonFunction(DepthBufferFunction));
+                GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != device._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != device._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFunc(ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
+                    GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     device._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
@@ -102,32 +102,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.StencilMask(this.StencilWriteMask);
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.StencilWriteMask = this.StencilWriteMask;
-            }
-        }
-
-        private static WebGLDepthComparisonFunc ToGLComparisonFunction(CompareFunction compare)
-        {
-            switch (compare)
-            {
-                case CompareFunction.Always:
-                    return WebGLDepthComparisonFunc.ALWAYS;
-                case CompareFunction.Equal:
-                    return WebGLDepthComparisonFunc.EQUAL;
-                case CompareFunction.Greater:
-                    return WebGLDepthComparisonFunc.GREATER;
-                case CompareFunction.GreaterEqual:
-                    return WebGLDepthComparisonFunc.GEQUAL;
-                case CompareFunction.Less:
-                    return WebGLDepthComparisonFunc.LESS;
-                case CompareFunction.LessEqual:
-                    return WebGLDepthComparisonFunc.LEQUAL;
-                case CompareFunction.Never:
-                    return WebGLDepthComparisonFunc.NEVER;
-                case CompareFunction.NotEqual:
-                    return WebGLDepthComparisonFunc.NOTEQUAL;
-
-                default:
-                    throw new ArgumentOutOfRangeException("compare");
             }
         }
 
