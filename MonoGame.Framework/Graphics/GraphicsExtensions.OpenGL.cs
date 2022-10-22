@@ -11,55 +11,29 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        public static DepthFunction ToGLComparisonFunction(CompareFunction compare)
+        public static ComparisonFunc ToGLComparisonFunction(CompareFunction compare)
         {
             switch (compare)
             {
                 case CompareFunction.Always:
-                    return DepthFunction.Always;
+                    return ComparisonFunc.Always;
                 case CompareFunction.Equal:
-                    return DepthFunction.Equal;
+                    return ComparisonFunc.Equal;
                 case CompareFunction.Greater:
-                    return DepthFunction.Greater;
+                    return ComparisonFunc.Greater;
                 case CompareFunction.GreaterEqual:
-                    return DepthFunction.Gequal;
+                    return ComparisonFunc.Gequal;
                 case CompareFunction.Less:
-                    return DepthFunction.Less;
+                    return ComparisonFunc.Less;
                 case CompareFunction.LessEqual:
-                    return DepthFunction.Lequal;
+                    return ComparisonFunc.Lequal;
                 case CompareFunction.Never:
-                    return DepthFunction.Never;
+                    return ComparisonFunc.Never;
                 case CompareFunction.NotEqual:
-                    return DepthFunction.Notequal;
+                    return ComparisonFunc.Notequal;
                     
                 default:
-                    return DepthFunction.Always;
-            }
-        }
-
-        public static GLStencilFunction ToGLStencilComparisonFunc(CompareFunction function)
-        {
-            switch (function)
-            {
-                case CompareFunction.Always:
-                    return GLStencilFunction.Always;
-                case CompareFunction.Equal:
-                    return GLStencilFunction.Equal;
-                case CompareFunction.Greater:
-                    return GLStencilFunction.Greater;
-                case CompareFunction.GreaterEqual:
-                    return GLStencilFunction.Gequal;
-                case CompareFunction.Less:
-                    return GLStencilFunction.Less;
-                case CompareFunction.LessEqual:
-                    return GLStencilFunction.Lequal;
-                case CompareFunction.Never:
-                    return GLStencilFunction.Never;
-                case CompareFunction.NotEqual:
-                    return GLStencilFunction.Notequal;
-
-                default:
-                    return GLStencilFunction.Always;
+                    return ComparisonFunc.Always;
             }
         }
 

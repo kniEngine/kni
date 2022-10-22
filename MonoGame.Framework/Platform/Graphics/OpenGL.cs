@@ -190,17 +190,13 @@ namespace MonoGame.OpenGL
         DebugOutput = 0x92E0,
     }
 
-    internal enum VertexPointerType
-    {
-        Float = 0x1406,
-        Short = 0x1402,
-    }
-
     internal enum VertexAttribPointerType
     {
-        Float = 0x1406,
-        Short = 0x1402,
+        Byte = 0x1400,
         UnsignedByte = 0x1401,
+        Short = 0x1402,
+        UnsignedShort = 0x1403,
+        Float = 0x1406,
         HalfFloat = 0x140B,
     }
 
@@ -227,35 +223,6 @@ namespace MonoGame.OpenGL
         Line = 0x1B01,
     }
 
-    internal enum ColorPointerType
-    {
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
-    }
-
-    internal enum NormalPointerType
-    {
-        Byte = 0x1400,
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
-    }
-
-    internal enum TexCoordPointerType
-    {
-        Byte = 0x1400,
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
-    }
-
     internal enum BlendEquationMode
     {
         FuncAdd = 0x8006,
@@ -265,7 +232,7 @@ namespace MonoGame.OpenGL
         FuncSubtract = 0x800A,
     }
 
-    internal enum BlendingFactorSrc
+    internal enum BlendingFunc
     {
         Zero = 0,
         SrcColor = 0x0300,
@@ -284,26 +251,7 @@ namespace MonoGame.OpenGL
         One = 1,
     }
 
-    internal enum BlendingFactorDest
-    {
-        Zero = 0,
-        SrcColor = 0x0300,
-        OneMinusSrcColor = 0x0301,
-        SrcAlpha = 0x0302,
-        OneMinusSrcAlpha = 0x0303,
-        DstAlpha = 0x0304,
-        OneMinusDstAlpha = 0x0305,
-        DstColor = 0X0306,
-        OneMinusDstColor = 0x0307,
-        SrcAlphaSaturate = 0x0308,
-        ConstantColor = 0x8001,
-        OneMinusConstantColor = 0x8002,
-        ConstantAlpha = 0x8003,
-        OneMinusConstantAlpha = 0x8004,
-        One = 1,
-    }
-
-    internal enum DepthFunction
+    internal enum ComparisonFunc
     {
         Always = 0x0207,
         Equal = 0x0202,
@@ -461,18 +409,6 @@ namespace MonoGame.OpenGL
     {
         UnpackAlignment = 0x0CF5,
         PackAlignment = 0x0D05,
-    }
-
-    internal enum GLStencilFunction
-    {
-        Always = 0x0207,
-        Equal = 0x0202,
-        Greater = 0x0204,
-        Gequal = 0x0206,
-        Less = 0x0201,
-        Lequal = 0x0203,
-        Never = 0x0200,
-        Notequal = 0x0205,
     }
 
     internal enum StencilOp
@@ -1093,15 +1029,15 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void BlendFuncSeparateDelegate(BlendingFactorSrc colorSrc, BlendingFactorDest colorDst,
-            BlendingFactorSrc alphaSrc, BlendingFactorDest alphaDst);
+        internal delegate void BlendFuncSeparateDelegate(BlendingFunc colorSrc, BlendingFunc colorDst,
+            BlendingFunc alphaSrc, BlendingFunc alphaDst);
         internal static BlendFuncSeparateDelegate BlendFuncSeparate;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void BlendFuncSeparateiDelegate(int buffer, BlendingFactorSrc colorSrc, BlendingFactorDest colorDst,
-            BlendingFactorSrc alphaSrc, BlendingFactorDest alphaDst);
+        internal delegate void BlendFuncSeparateiDelegate(int buffer, BlendingFunc colorSrc, BlendingFunc colorDst,
+            BlendingFunc alphaSrc, BlendingFunc alphaDst);
         internal static BlendFuncSeparateiDelegate BlendFuncSeparatei;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
@@ -1113,7 +1049,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DepthFuncDelegate(DepthFunction function);
+        internal delegate void DepthFuncDelegate(ComparisonFunc function);
         internal static DepthFuncDelegate DepthFunc;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
@@ -1125,7 +1061,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void StencilFuncSeparateDelegate(StencilFace face, GLStencilFunction function, int referenceStencil, int mask);
+        internal delegate void StencilFuncSeparateDelegate(StencilFace face, ComparisonFunc function, int referenceStencil, int mask);
         internal static StencilFuncSeparateDelegate StencilFuncSeparate;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
@@ -1137,7 +1073,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void StencilFuncDelegate(GLStencilFunction function, int referenceStencil, int mask);
+        internal delegate void StencilFuncDelegate(ComparisonFunc function, int referenceStencil, int mask);
         internal static StencilFuncDelegate StencilFunc;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
