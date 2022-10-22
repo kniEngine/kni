@@ -540,8 +540,13 @@ namespace MonoGame.OpenGL
         ClampToBorder = 0x812D,
     }
 
-    internal partial class ColorFormat
+    internal struct ColorFormat
     {
+        internal readonly int R;
+        internal readonly int G;
+        internal readonly int B;
+        internal readonly int A;
+
         internal ColorFormat (int r, int g, int b, int a)
         {
             R = r;
@@ -549,11 +554,6 @@ namespace MonoGame.OpenGL
             B = b;
             A = a;
         }
-
-        internal int R { get; private set; }
-        internal int G { get; private set; }
-        internal int B { get; private set; }
-        internal int A { get; private set; }
     }
 
     internal partial class GL
