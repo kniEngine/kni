@@ -54,10 +54,7 @@ namespace MonoGame.Tests.Graphics
             gdm.PreparingDeviceSettings += (s, a) => preparingCount++;
             gdm.DeviceCreated += (s, a) => createdCount++;
             gdm.DeviceDisposing += (s, a) => devDispCount++;
-            // TODO remove MonoMac
-#if !MONOMAC
             gdm.Disposed += (s, a) => dispCount++;
-#endif
 
             game.InitializeOnly();
 

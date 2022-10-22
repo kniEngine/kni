@@ -15,9 +15,7 @@ namespace Microsoft.Xna.Framework.Media
 
         internal override void PlatformInitialize(string fileName)
         {
-
-#if MONOMAC || DESKTOPGL
-
+#if DESKTOPGL
             using (var s = File.OpenRead(_name))
             {
                 var soundEffect = SoundEffect.FromStream(s);
