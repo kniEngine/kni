@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using ColorFormat = MonoGame.OpenGL.ColorFormat;
 
 namespace Microsoft.Xna.Platform
 {
@@ -135,7 +136,7 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformInitialize(PresentationParameters presentationParameters)
         {
-            var surfaceFormat = base.Game.graphicsDeviceManager.PreferredBackBufferFormat.GetColorFormat();
+            var surfaceFormat = ToGLColorFormat(base.Game.graphicsDeviceManager.PreferredBackBufferFormat);
             var depthStencilFormat = base.Game.graphicsDeviceManager.PreferredDepthStencilFormat;
 
             // TODO Need to get this data from the Presentation Parameters
@@ -175,6 +176,41 @@ namespace Microsoft.Xna.Platform
             }
 
             ((SdlGameWindow)SdlGameWindow.Instance).CreateWindow();
+        }
+
+        /// <summary>
+        /// Convert a <see cref="SurfaceFormat"/> to an GL ColorFormat.
+        /// This is used for setting up the backbuffer format of the OpenGL context.
+        /// </summary>
+        /// <returns>A GL ColorFormat instance.</returns>
+        /// <param name="format">The <see cref="SurfaceFormat"/> to convert.</param>
+        private static ColorFormat ToGLColorFormat(SurfaceFormat format)
+        {
+            switch (format)
+            {
+                case SurfaceFormat.Alpha8:
+                    return new ColorFormat(0, 0, 0, 8);
+                case SurfaceFormat.Bgr565:
+                    return new ColorFormat(5, 6, 5, 0);
+                case SurfaceFormat.Bgra4444:
+                    return new ColorFormat(4, 4, 4, 4);
+                case SurfaceFormat.Bgra5551:
+                    return new ColorFormat(5, 5, 5, 1);
+                case SurfaceFormat.Bgr32:
+                    return new ColorFormat(8, 8, 8, 0);
+                case SurfaceFormat.Bgra32:
+                case SurfaceFormat.Color:
+                case SurfaceFormat.ColorSRgb:
+                    return new ColorFormat(8, 8, 8, 8);
+                case SurfaceFormat.Rgba1010102:
+                    return new ColorFormat(10, 10, 10, 2);
+
+                default:
+                    // Floating point backbuffers formats could be implemented
+                    // but they are not typically used on the backbuffer. In
+                    // those cases it is better to create a render target instead.
+                    throw new NotSupportedException();
+            }
         }
 
         public override void CreateDevice()

@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Height = levelHeight;
                 desc.MipLevels = 1;
                 desc.ArraySize = 1;
-                desc.Format = SharpDXHelper.ToFormat(_format);
+                desc.Format = GraphicsExtensions.ToDXFormat(_format);
                 desc.BindFlags = BindFlags.None;
                 desc.CpuAccessFlags = CpuAccessFlags.Read;
                 desc.SampleDescription = SampleDescription;
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.Height = height;
             desc.MipLevels = _levelCount;
             desc.ArraySize = ArraySize;
-            desc.Format = SharpDXHelper.ToFormat(_format);
+            desc.Format = GraphicsExtensions.ToDXFormat(_format);
             desc.BindFlags = BindFlags.ShaderResource;
             desc.CpuAccessFlags = CpuAccessFlags.None;
             desc.SampleDescription = SampleDescription;

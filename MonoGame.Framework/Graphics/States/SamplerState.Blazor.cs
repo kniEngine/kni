@@ -67,14 +67,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new NotImplementedException();
                 case TextureFilter.MinPointMagLinearMipPoint:
                     throw new NotImplementedException();
+
                 default:
                     throw new NotSupportedException();
             }
 
             // Set up texture addressing.
-            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, GetWrapMode(AddressU));
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, ToGLTextureAddressMode(AddressU));
             GraphicsExtensions.CheckGLError();
-            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, GetWrapMode(AddressV));
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, ToGLTextureAddressMode(AddressV));
             GraphicsExtensions.CheckGLError();
 
             if (GraphicsDevice.GraphicsCapabilities.SupportsTextureMaxLevel)
@@ -91,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private WebGLTexParam GetWrapMode(TextureAddressMode textureAddressMode)
+        private WebGLTexParam ToGLTextureAddressMode(TextureAddressMode textureAddressMode)
         {
             switch (textureAddressMode)
             {
@@ -103,6 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLTexParam.MIRRORED_REPEAT;
                 case TextureAddressMode.Border:
                     throw new NotImplementedException();
+
                 default:
                     throw new ArgumentException("No support for " + textureAddressMode);
             }

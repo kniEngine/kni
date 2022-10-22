@@ -31,9 +31,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
                     AttributeLocation = attributeLocation,
-                    NumberOfElements = ve.VertexElementFormat.OpenGLNumberOfElements(),
-                    VertexAttribPointerType = ve.VertexElementFormat.OpenGLVertexAttribPointerType(),
-                    Normalized = ve.OpenGLVertexAttribNormalized(),
+                    NumberOfElements = ToGLNumberOfElements(ve.VertexElementFormat),
+                    VertexAttribPointerType = ToGLVertexAttribPointerType(ve.VertexElementFormat),
+                    Normalized = ToGLVertexAttribNormalized(ve),
                     Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
@@ -71,6 +71,255 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsDevice.SetVertexAttributeArray(attrInfo.EnabledAttributes);
 		    GraphicsDevice._attribsDirty = true;
 		}
+
+        private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return 1;
+                case VertexElementFormat.Vector2:
+                    return 2;
+                case VertexElementFormat.Vector3:
+                    return 3;
+                case VertexElementFormat.Vector4:
+                    return 4;
+                case VertexElementFormat.Color:
+                    return 4;
+                case VertexElementFormat.Byte4:
+                    return 4;
+                case VertexElementFormat.Short2:
+                    return 2;
+                case VertexElementFormat.Short4:
+                    return 4;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return 2;
+                case VertexElementFormat.NormalizedShort4:
+                    return 4;
+
+                case VertexElementFormat.HalfVector2:
+                    return 2;
+                case VertexElementFormat.HalfVector4:
+                    return 4;
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+        
+        private static VertexAttribPointerType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return VertexAttribPointerType.Float;
+                case VertexElementFormat.Vector2:
+                    return VertexAttribPointerType.Float;
+                case VertexElementFormat.Vector3:
+                    return VertexAttribPointerType.Float;
+                case VertexElementFormat.Vector4:
+                    return VertexAttribPointerType.Float;
+                case VertexElementFormat.Color:
+                    return VertexAttribPointerType.UnsignedByte;
+                case VertexElementFormat.Byte4:
+                    return VertexAttribPointerType.UnsignedByte;
+                case VertexElementFormat.Short2:
+                    return VertexAttribPointerType.Short;
+                case VertexElementFormat.Short4:
+                    return VertexAttribPointerType.Short;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return VertexAttribPointerType.Short;
+                case VertexElementFormat.NormalizedShort4:
+                    return VertexAttribPointerType.Short;
+
+#if DESKTOPGL
+                case VertexElementFormat.HalfVector2:
+                    return VertexAttribPointerType.HalfFloat;
+                case VertexElementFormat.HalfVector4:
+                    return VertexAttribPointerType.HalfFloat;
+#endif
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static bool ToGLVertexAttribNormalized(VertexElement element)
+        {
+            // TODO: This may or may not be the right behavor.  
+            //
+            // For instance the VertexElementFormat.Byte4 format is not supposed
+            // to be normalized, but this line makes it so.
+            //
+            // The question is in MS XNA are types normalized based on usage or
+            // normalized based to their format?
+            //
+            if (element.VertexElementUsage == VertexElementUsage.Color)
+                return true;
+
+            switch (element.VertexElementFormat)
+            {
+                case VertexElementFormat.NormalizedShort2:
+                case VertexElementFormat.NormalizedShort4:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+        
+        private static VertexPointerType ToGLVertexPointerType(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return VertexPointerType.Float;
+                case VertexElementFormat.Vector2:
+                    return VertexPointerType.Float;
+                case VertexElementFormat.Vector3:
+                    return VertexPointerType.Float;
+                case VertexElementFormat.Vector4:
+                    return VertexPointerType.Float;
+                case VertexElementFormat.Color:
+                    return VertexPointerType.Short;
+                case VertexElementFormat.Byte4:
+                    return VertexPointerType.Short;
+                case VertexElementFormat.Short2:
+                    return VertexPointerType.Short;
+                case VertexElementFormat.Short4:
+                    return VertexPointerType.Short;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return VertexPointerType.Short;
+                case VertexElementFormat.NormalizedShort4:
+                    return VertexPointerType.Short;
+
+                case VertexElementFormat.HalfVector2:
+                    return VertexPointerType.Float;
+                case VertexElementFormat.HalfVector4:
+                    return VertexPointerType.Float;
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static ColorPointerType ToGLColorPointerType(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return ColorPointerType.Float;
+                case VertexElementFormat.Vector2:
+                    return ColorPointerType.Float;
+                case VertexElementFormat.Vector3:
+                    return ColorPointerType.Float;
+                case VertexElementFormat.Vector4:
+                    return ColorPointerType.Float;
+                case VertexElementFormat.Color:
+                    return ColorPointerType.UnsignedByte;
+                case VertexElementFormat.Byte4:
+                    return ColorPointerType.UnsignedByte;
+                case VertexElementFormat.Short2:
+                    return ColorPointerType.Short;
+                case VertexElementFormat.Short4:
+                    return ColorPointerType.Short;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return ColorPointerType.UnsignedShort;
+                case VertexElementFormat.NormalizedShort4:
+                    return ColorPointerType.UnsignedShort;
+
+#if MONOMAC
+                case VertexElementFormat.HalfVector2:
+                    return ColorPointerType.HalfFloat;
+                case VertexElementFormat.HalfVector4:
+                    return ColorPointerType.HalfFloat;
+#endif
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static NormalPointerType ToGLNormalPointerType(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return NormalPointerType.Float;
+                case VertexElementFormat.Vector2:
+                    return NormalPointerType.Float;
+                case VertexElementFormat.Vector3:
+                    return NormalPointerType.Float;
+                case VertexElementFormat.Vector4:
+                    return NormalPointerType.Float;
+                case VertexElementFormat.Color:
+                    return NormalPointerType.Byte;
+                case VertexElementFormat.Byte4:
+                    return NormalPointerType.Byte;
+                case VertexElementFormat.Short2:
+                    return NormalPointerType.Short;
+                case VertexElementFormat.Short4:
+                    return NormalPointerType.Short;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return NormalPointerType.Short;
+                case VertexElementFormat.NormalizedShort4:
+                    return NormalPointerType.Short;
+
+#if MONOMAC
+                case VertexElementFormat.HalfVector2:
+                    return NormalPointerType.HalfFloat;
+                case VertexElementFormat.HalfVector4:
+                    return NormalPointerType.HalfFloat;
+#endif
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static TexCoordPointerType ToGLTexCoordPointerType(VertexElementFormat elementFormat)
+        {
+            switch (elementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Vector2:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Vector3:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Vector4:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Color:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Byte4:
+                    return TexCoordPointerType.Float;
+                case VertexElementFormat.Short2:
+                    return TexCoordPointerType.Short;
+                case VertexElementFormat.Short4:
+                    return TexCoordPointerType.Short;
+
+                case VertexElementFormat.NormalizedShort2:
+                    return TexCoordPointerType.Short;
+                case VertexElementFormat.NormalizedShort4:
+                    return TexCoordPointerType.Short;
+
+#if MONOMAC
+                case VertexElementFormat.HalfVector2:
+                    return TexCoordPointerType.HalfFloat;
+                case VertexElementFormat.HalfVector4:
+                    return TexCoordPointerType.HalfFloat;
+#endif
+
+                default:
+                    throw new ArgumentException();
+            }
+
+        }
 
         /// <summary>
         /// Vertex attribute information for a particular shader/vertex declaration combination.

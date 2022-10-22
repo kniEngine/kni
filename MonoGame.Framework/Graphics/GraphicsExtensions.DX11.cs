@@ -2,15 +2,30 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-namespace Microsoft.Xna.Framework
-{
-    using System;
-    using Graphics;
-    using SharpDX.Mathematics.Interop;
+using System;
+using System.Diagnostics;
+using SharpDX.Mathematics.Interop;
 
-    static internal class SharpDXHelper
+
+namespace Microsoft.Xna.Framework.Graphics
+{
+    static partial class GraphicsExtensions
     {
-        static public SharpDX.DXGI.SwapEffect ToSwapEffect(PresentInterval presentInterval)
+        public static int ToDXSwapInterval(PresentInterval interval)
+        {
+            switch (interval)
+            {
+                case PresentInterval.Immediate:
+                    return 0;
+                case PresentInterval.Two:
+                    return 2;
+
+                default:
+                    return 1;
+            }
+        }
+
+        static public SharpDX.DXGI.SwapEffect ToDXSwapEffect(PresentInterval presentInterval)
         {
             SharpDX.DXGI.SwapEffect effect;
 
@@ -18,7 +33,6 @@ namespace Microsoft.Xna.Framework
             {
                 case PresentInterval.One:
                 case PresentInterval.Two:
-                default:
 #if WINDOWS_UAP
                     effect = SharpDX.DXGI.SwapEffect.FlipSequential;
 #else
@@ -33,6 +47,16 @@ namespace Microsoft.Xna.Framework
                     effect = SharpDX.DXGI.SwapEffect.Sequential;
 #endif
                     break;
+
+
+                default:
+#if WINDOWS_UAP
+                    effect = SharpDX.DXGI.SwapEffect.FlipSequential;
+#else
+                    effect = SharpDX.DXGI.SwapEffect.Discard;
+#endif
+                    break;
+
             }
 
             //if (present.RenderTargetUsage != RenderTargetUsage.PreserveContents && present.MultiSampleCount == 0)
@@ -41,31 +65,29 @@ namespace Microsoft.Xna.Framework
             return effect;
         }
 
-        static public SharpDX.DXGI.Format ToFormat(DepthFormat format)
+        static public SharpDX.DXGI.Format ToDXFormat(DepthFormat format)
         {
             switch (format)
             {
-                default:
                 case DepthFormat.None:
                     return SharpDX.DXGI.Format.Unknown;
-
                 case DepthFormat.Depth16:
                     return SharpDX.DXGI.Format.D16_UNorm;
-
                 case DepthFormat.Depth24:
                 case DepthFormat.Depth24Stencil8:
                     return SharpDX.DXGI.Format.D24_UNorm_S8_UInt;
+                    
+                default:
+                    return SharpDX.DXGI.Format.Unknown;
             }
         }
 
-        static public SharpDX.DXGI.Format ToFormat(SurfaceFormat format)
+        static public SharpDX.DXGI.Format ToDXFormat(SurfaceFormat format)
         {
             switch (format)
             {
                 case SurfaceFormat.Color:
-                default:
                     return SharpDX.DXGI.Format.R8G8B8A8_UNorm;
-
                 case SurfaceFormat.Bgr565:
                     return SharpDX.DXGI.Format.B5G6R5_UNorm;
                 case SurfaceFormat.Bgra5551:
@@ -106,17 +128,14 @@ namespace Microsoft.Xna.Framework
                     return SharpDX.DXGI.Format.R32G32B32A32_Float;
                 case SurfaceFormat.HalfVector4:
                     return SharpDX.DXGI.Format.R16G16B16A16_Float;
-
                 case SurfaceFormat.HdrBlendable:
                     // TODO: This needs to check the graphics device and 
                     // return the best hdr blendable format for the device.
                     return SharpDX.DXGI.Format.R16G16B16A16_Float;
-
                 case SurfaceFormat.Bgr32:
                     return SharpDX.DXGI.Format.B8G8R8X8_UNorm;
                 case SurfaceFormat.Bgra32:
                     return SharpDX.DXGI.Format.B8G8R8A8_UNorm;
-
                 case SurfaceFormat.ColorSRgb:
                     return SharpDX.DXGI.Format.R8G8B8A8_UNorm_SRgb;
                 case SurfaceFormat.Bgr32SRgb:
@@ -129,54 +148,50 @@ namespace Microsoft.Xna.Framework
                     return SharpDX.DXGI.Format.BC2_UNorm_SRgb;
                 case SurfaceFormat.Dxt5SRgb:
                     return SharpDX.DXGI.Format.BC3_UNorm_SRgb;
+                    
+                default:
+                    return SharpDX.DXGI.Format.R8G8B8A8_UNorm;
             }
         }
 
-		static public RawVector2 ToVector2(this Vector2 vec)
+        static public RawVector2 ToDXVector2(this Vector2 vec)
         {
             return new RawVector2(vec.X, vec.Y);
         }
 
-        static public RawVector3 ToVector3(this Vector3 vec)
+        static public RawVector3 ToDXVector3(this Vector3 vec)
         {
             return new RawVector3(vec.X, vec.Y, vec.Z);
         }
 
-        static public RawVector4 ToVector4(this Vector4 vec)
+        static public RawVector4 ToDXVector4(this Vector4 vec)
         {
             return new RawVector4(vec.X, vec.Y, vec.Z, vec.W);
         }
 
-        static public RawColor4 ToColor4(this Color color)
+        static public RawColor4 ToDXColor4(this Color color)
         {
             return new RawColor4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
 
-        static public SharpDX.Direct3D11.Comparison ToComparison(this CompareFunction compare)
+        static public SharpDX.Direct3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
             {
                 case CompareFunction.Always:
                     return SharpDX.Direct3D11.Comparison.Always;
-
                 case CompareFunction.Equal:
                     return SharpDX.Direct3D11.Comparison.Equal;
-
                 case CompareFunction.Greater:
                     return SharpDX.Direct3D11.Comparison.Greater;
-
                 case CompareFunction.GreaterEqual:
                     return SharpDX.Direct3D11.Comparison.GreaterEqual;
-
                 case CompareFunction.Less:
                     return SharpDX.Direct3D11.Comparison.Less;
-
                 case CompareFunction.LessEqual:
                     return SharpDX.Direct3D11.Comparison.LessEqual;
-
                 case CompareFunction.Never:
                     return SharpDX.Direct3D11.Comparison.Never;
-
                 case CompareFunction.NotEqual:
                     return SharpDX.Direct3D11.Comparison.NotEqual;
 

@@ -271,7 +271,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             Context.MakeCurrent(windowInfo);
-            Context.SwapInterval = PresentationParameters.PresentationInterval.GetSwapInterval();
+            Context.SwapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
 
             Context.MakeCurrent(windowInfo);
 #endif
@@ -1334,7 +1334,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
 #if DESKTOPGL || ANGLE
             Context.MakeCurrent(new WindowInfo(SdlGameWindow.Instance.Handle));
-            Context.SwapInterval = PresentationParameters.PresentationInterval.GetSwapInterval();
+            Context.SwapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
 #endif
 
             ApplyRenderTargets(null);
@@ -1356,6 +1356,37 @@ namespace Microsoft.Xna.Framework.Graphics
                 Vbo = vbo;
             }
         }
+
+
+#if DESKTOPGL || ANGLE
+        /// <summary>
+        /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
+        /// </summary>
+        /// <returns>A value according to EXT_swap_control</returns>
+        /// <param name="interval">The <see cref="PresentInterval"/> to convert.</param>
+        private static int ToGLSwapInterval(PresentInterval interval)
+        {
+            // See http://www.opengl.org/registry/specs/EXT/swap_control.txt
+            // and https://www.opengl.org/registry/specs/EXT/glx_swap_control_tear.txt
+            // OpenTK checks for EXT_swap_control_tear:
+            // if supported, a swap interval of -1 enables adaptive vsync;
+            // otherwise -1 is converted to 1 (vsync enabled.)
+
+            switch (interval)
+            {
+                case PresentInterval.Immediate:
+                    return 0;
+                case PresentInterval.One:
+                    return 1;
+                case PresentInterval.Two:
+                    return 2;
+                case PresentInterval.Default:
+
+                default:
+                    return -1;
+            }
+        }
+#endif
 
 #if DESKTOPGL
         private void GetModeSwitchedSize(out int width, out int height)

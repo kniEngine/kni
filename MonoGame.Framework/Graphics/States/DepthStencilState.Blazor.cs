@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (force || this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
             {
-                GL.DepthFunc(GetDepthComparisonFunc(DepthBufferFunction));
+                GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != device._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != device._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFunc(GetDepthComparisonFunc(this.StencilFunction), ReferenceStencil, StencilMask);
+                    GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     device._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
@@ -85,9 +85,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.StencilDepthBufferFail != device._lastDepthStencilState.StencilDepthBufferFail ||
                     this.StencilPass != device._lastDepthStencilState.StencilPass)
                 {
-                    GL.StencilOp(GetStencilOpFunc(StencilFail),
-                                 GetStencilOpFunc(StencilDepthBufferFail),
-                                 GetStencilOpFunc(StencilPass));
+                    GL.StencilOp(ToGLStencilOp(StencilFail),
+                                 ToGLStencilOp(StencilDepthBufferFail),
+                                 ToGLStencilOp(StencilPass));
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.StencilFail = this.StencilFail;
                     device._lastDepthStencilState.StencilDepthBufferFail = this.StencilDepthBufferFail;
@@ -105,32 +105,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static WebGLDepthComparisonFunc GetDepthComparisonFunc(CompareFunction compare)
-        {
-            switch (compare)
-            {
-                case CompareFunction.Always:
-                    return WebGLDepthComparisonFunc.ALWAYS;
-                case CompareFunction.Equal:
-                    return WebGLDepthComparisonFunc.EQUAL;
-                case CompareFunction.Greater:
-                    return WebGLDepthComparisonFunc.GREATER;
-                case CompareFunction.GreaterEqual:
-                    return WebGLDepthComparisonFunc.GEQUAL;
-                case CompareFunction.Less:
-                    return WebGLDepthComparisonFunc.LESS;
-                case CompareFunction.LessEqual:
-                    return WebGLDepthComparisonFunc.LEQUAL;
-                case CompareFunction.Never:
-                    return WebGLDepthComparisonFunc.NEVER;
-                case CompareFunction.NotEqual:
-                    return WebGLDepthComparisonFunc.NOTEQUAL;
-                default:
-                    throw new ArgumentOutOfRangeException("compare");
-            }
-        }
-
-        private static WebGLStencilOpFunc GetStencilOpFunc(StencilOperation operation)
+        private static WebGLStencilOpFunc ToGLStencilOp(StencilOperation operation)
         {
             switch (operation)
             {
@@ -150,6 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLStencilOpFunc.REPLACE;
                 case StencilOperation.Zero:
                     return WebGLStencilOpFunc.ZERO;
+
                 default:
                     throw new ArgumentOutOfRangeException("operation");
             }

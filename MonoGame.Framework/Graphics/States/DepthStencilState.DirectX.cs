@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var desc = new SharpDX.Direct3D11.DepthStencilStateDescription();
 
                 desc.IsDepthEnabled = DepthBufferEnable;
-                desc.DepthComparison = DepthBufferFunction.ToComparison();
+                desc.DepthComparison = DepthBufferFunction.ToDXComparisonFunction();
 
                 if (DepthBufferWriteEnable)
                     desc.DepthWriteMask = SharpDX.Direct3D11.DepthWriteMask.All;
@@ -38,23 +38,23 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (TwoSidedStencilMode)
                 {
-                    desc.BackFace.Comparison = CounterClockwiseStencilFunction.ToComparison();
-                    desc.BackFace.DepthFailOperation = GetStencilOp(CounterClockwiseStencilDepthBufferFail);
-                    desc.BackFace.FailOperation = GetStencilOp(CounterClockwiseStencilFail);
-                    desc.BackFace.PassOperation = GetStencilOp(CounterClockwiseStencilPass);
+                    desc.BackFace.Comparison = CounterClockwiseStencilFunction.ToDXComparisonFunction();
+                    desc.BackFace.DepthFailOperation = ToDXStencilOp(CounterClockwiseStencilDepthBufferFail);
+                    desc.BackFace.FailOperation = ToDXStencilOp(CounterClockwiseStencilFail);
+                    desc.BackFace.PassOperation = ToDXStencilOp(CounterClockwiseStencilPass);
                 }
                 else
                 {   //use same settings as frontFace 
-                    desc.BackFace.Comparison = StencilFunction.ToComparison();
-                    desc.BackFace.DepthFailOperation = GetStencilOp(StencilDepthBufferFail);
-                    desc.BackFace.FailOperation = GetStencilOp(StencilFail);
-                    desc.BackFace.PassOperation = GetStencilOp(StencilPass);
+                    desc.BackFace.Comparison = StencilFunction.ToDXComparisonFunction();
+                    desc.BackFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
+                    desc.BackFace.FailOperation = ToDXStencilOp(StencilFail);
+                    desc.BackFace.PassOperation = ToDXStencilOp(StencilPass);
                 }
 
-                desc.FrontFace.Comparison = StencilFunction.ToComparison();
-                desc.FrontFace.DepthFailOperation = GetStencilOp(StencilDepthBufferFail);
-                desc.FrontFace.FailOperation = GetStencilOp(StencilFail);
-                desc.FrontFace.PassOperation = GetStencilOp(StencilPass);
+                desc.FrontFace.Comparison = StencilFunction.ToDXComparisonFunction();
+                desc.FrontFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
+                desc.FrontFace.FailOperation = ToDXStencilOp(StencilFail);
+                desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
                 _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice._d3dDevice, desc);
@@ -69,31 +69,24 @@ namespace Microsoft.Xna.Framework.Graphics
             device._d3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
         }
 
-        static private SharpDX.Direct3D11.StencilOperation GetStencilOp(StencilOperation op)
+        static private SharpDX.Direct3D11.StencilOperation ToDXStencilOp(StencilOperation operation)
         {
-            switch (op)
+            switch (operation)
             {
                 case StencilOperation.Decrement:
                     return SharpDX.Direct3D11.StencilOperation.Decrement;
-
                 case StencilOperation.DecrementSaturation:
                     return SharpDX.Direct3D11.StencilOperation.DecrementAndClamp;
-
                 case StencilOperation.Increment:
                     return SharpDX.Direct3D11.StencilOperation.Increment;
-
                 case StencilOperation.IncrementSaturation:
                     return SharpDX.Direct3D11.StencilOperation.IncrementAndClamp;
-
                 case StencilOperation.Invert:
                     return SharpDX.Direct3D11.StencilOperation.Invert;
-
                 case StencilOperation.Keep:
                     return SharpDX.Direct3D11.StencilOperation.Keep;
-
                 case StencilOperation.Replace:
                     return SharpDX.Direct3D11.StencilOperation.Replace;
-
                 case StencilOperation.Zero:
                     return SharpDX.Direct3D11.StencilOperation.Zero;
 

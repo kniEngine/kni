@@ -38,8 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.AlphaBlendFunction != device._lastBlendState.AlphaBlendFunction)
                 {
                     GL.BlendEquationSeparate(
-                        GetBlendEquationMode(this.ColorBlendFunction),
-                        GetBlendEquationMode(this.AlphaBlendFunction));
+                        ToGLBlendEquationMode(this.ColorBlendFunction),
+                        ToGLBlendEquationMode(this.AlphaBlendFunction));
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
@@ -55,10 +55,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.AlphaDestinationBlend != device._lastBlendState.AlphaDestinationBlend)
                 {
                     GL.BlendFuncSeparate(
-                        GetBlendFunc(this.ColorSourceBlend),
-                        GetBlendFunc(this.ColorDestinationBlend),
-                        GetBlendFunc(this.AlphaSourceBlend),
-                        GetBlendFunc(this.AlphaDestinationBlend));
+                        ToGLBlendFunc(this.ColorSourceBlend),
+                        ToGLBlendFunc(this.ColorDestinationBlend),
+                        ToGLBlendFunc(this.AlphaSourceBlend),
+                        ToGLBlendFunc(this.AlphaDestinationBlend));
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        private static WebGLEquationFunc GetBlendEquationMode(BlendFunction function)
+        private static WebGLEquationFunc ToGLBlendEquationMode(BlendFunction function)
         {
             switch (function)
             {
@@ -93,12 +93,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLEquationFunc.REVERSE_SUBTRACT;
                 case BlendFunction.Subtract:
                     return WebGLEquationFunc.SUBTRACT;
+
                 default:
                     throw new ArgumentException();
             }
         }
 
-        private static WebGLBlendFunc GetBlendFunc(Blend blend)
+        private static WebGLBlendFunc ToGLBlendFunc(Blend blend)
         {
             switch (blend)
             {
@@ -128,6 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return WebGLBlendFunc.SRC_ALPHA_SATURATE;
                 case Blend.SourceColor:
                     return WebGLBlendFunc.SRC_COLOR;
+
                 default:
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }

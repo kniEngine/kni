@@ -306,7 +306,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            var format = SharpDXHelper.ToFormat(PresentationParameters.BackBufferFormat);
+            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
             var multisampleDesc = GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
@@ -344,7 +344,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     SampleDescription = multisampleDesc,
                     Usage = SharpDX.DXGI.Usage.RenderTargetOutput,
                     BufferCount = 2,
-                    SwapEffect = SharpDXHelper.ToSwapEffect(PresentationParameters.PresentationInterval),
+                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
 
                     // By default we scale the backbuffer to the window 
                     // rectangle to function more like a WP7 game.
@@ -432,7 +432,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create the depth buffer if we need it.
             if (PresentationParameters.DepthStencilFormat != DepthFormat.None)
             {
-                var depthFormat = SharpDXHelper.ToFormat(PresentationParameters.DepthStencilFormat);
+                var depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
                 using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(_d3dDevice, new SharpDX.Direct3D11.Texture2DDescription()
@@ -645,7 +645,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ResizeTargets()
         {
-            var format = SharpDXHelper.ToFormat(PresentationParameters.BackBufferFormat);
+            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
             var descr = new ModeDescription
             {
                 Format = format,
@@ -676,7 +676,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 catch (SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
-            var format = SharpDXHelper.ToFormat(PresentationParameters.BackBufferFormat);
+            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
             var target = new ModeDescription
             {
                 Format = format,
@@ -747,7 +747,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
             }
 
-            var format = SharpDXHelper.ToFormat(PresentationParameters.BackBufferFormat);
+            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
             var multisampleDesc = GetSupportedSampleDescription(
                 format, 
                 PresentationParameters.MultiSampleCount);
@@ -797,7 +797,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     SampleDescription = multisampleDesc,
                     Usage = SharpDX.DXGI.Usage.RenderTargetOutput,
                     BufferCount = 2,
-                    SwapEffect = SharpDXHelper.ToSwapEffect(PresentationParameters.PresentationInterval),
+                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
                     IsWindowed = true,
                     Flags = SwapChainFlags.AllowModeSwitch
                 };
@@ -838,7 +838,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create the depth buffer if we need it.
             if (PresentationParameters.DepthStencilFormat != DepthFormat.None)
             {
-                var depthFormat = SharpDXHelper.ToFormat(PresentationParameters.DepthStencilFormat);
+                var depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
                 using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(_d3dDevice, new SharpDX.Direct3D11.Texture2DDescription()
@@ -1075,7 +1075,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                var syncInterval = PresentationParameters.PresentationInterval.GetSyncInterval();
+                var syncInterval = GraphicsExtensions.ToDXSwapInterval(PresentationParameters.PresentationInterval);
 
                 // The first argument instructs DXGI to block n VSyncs before presenting.
                 lock (_d3dContext)

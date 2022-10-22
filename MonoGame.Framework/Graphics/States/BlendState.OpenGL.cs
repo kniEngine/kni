@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -32,8 +33,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         _targetBlendState[i].AlphaBlendFunction != device._lastBlendState[i].AlphaBlendFunction)
                     {
                         GL.BlendEquationSeparatei(i,
-                            _targetBlendState[i].ColorBlendFunction.GetBlendEquationMode(),
-                            _targetBlendState[i].AlphaBlendFunction.GetBlendEquationMode());
+                            ToGLBlendEquationMode(_targetBlendState[i].ColorBlendFunction),
+                            ToGLBlendEquationMode(_targetBlendState[i].AlphaBlendFunction));
                         GraphicsExtensions.CheckGLError();
                         device._lastBlendState[i].ColorBlendFunction = this._targetBlendState[i].ColorBlendFunction;
                         device._lastBlendState[i].AlphaBlendFunction = this._targetBlendState[i].AlphaBlendFunction;
@@ -46,10 +47,10 @@ namespace Microsoft.Xna.Framework.Graphics
                         _targetBlendState[i].AlphaDestinationBlend != device._lastBlendState[i].AlphaDestinationBlend)
                     {
                         GL.BlendFuncSeparatei(i,
-                            _targetBlendState[i].ColorSourceBlend.GetBlendFactorSrc(),
-                            _targetBlendState[i].ColorDestinationBlend.GetBlendFactorDest(),
-                            _targetBlendState[i].AlphaSourceBlend.GetBlendFactorSrc(),
-                            _targetBlendState[i].AlphaDestinationBlend.GetBlendFactorDest());
+                            ToGLBlendFuncSrc(_targetBlendState[i].ColorSourceBlend),
+                            ToGLBlendFuncDest(_targetBlendState[i].ColorDestinationBlend),
+                            ToGLBlendFuncSrc(_targetBlendState[i].AlphaSourceBlend),
+                            ToGLBlendFuncDest(_targetBlendState[i].AlphaDestinationBlend));
                         GraphicsExtensions.CheckGLError();
                         device._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
                         device._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
@@ -65,8 +66,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.AlphaBlendFunction != device._lastBlendState.AlphaBlendFunction)
                 {
                     GL.BlendEquationSeparate(
-                        this.ColorBlendFunction.GetBlendEquationMode(),
-                        this.AlphaBlendFunction.GetBlendEquationMode());
+                        ToGLBlendEquationMode(this.ColorBlendFunction),
+                        ToGLBlendEquationMode(this.AlphaBlendFunction));
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
@@ -82,10 +83,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.AlphaDestinationBlend != device._lastBlendState.AlphaDestinationBlend)
                 {
                     GL.BlendFuncSeparate(
-                        this.ColorSourceBlend.GetBlendFactorSrc(),
-                        this.ColorDestinationBlend.GetBlendFactorDest(),
-                        this.AlphaSourceBlend.GetBlendFactorSrc(),
-                        this.AlphaDestinationBlend.GetBlendFactorDest());
+                        ToGLBlendFuncSrc(this.ColorSourceBlend),
+                        ToGLBlendFuncDest(this.ColorDestinationBlend),
+                        ToGLBlendFuncSrc(this.AlphaSourceBlend),
+                        ToGLBlendFuncDest(this.AlphaDestinationBlend));
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
@@ -108,6 +109,104 @@ namespace Microsoft.Xna.Framework.Graphics
                 device._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
             }
         }
+        
+
+        private static BlendEquationMode ToGLBlendEquationMode(BlendFunction function)
+        {
+            switch (function)
+            {
+                case BlendFunction.Add:
+                    return BlendEquationMode.FuncAdd;
+
+#if DESKTOPGL || IOS || TVOS
+                case BlendFunction.Max:
+                    return BlendEquationMode.Max;
+                case BlendFunction.Min:
+                    return BlendEquationMode.Min;
+#endif
+
+                case BlendFunction.ReverseSubtract:
+                    return BlendEquationMode.FuncReverseSubtract;
+                case BlendFunction.Subtract:
+                    return BlendEquationMode.FuncSubtract;
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static BlendingFactorSrc ToGLBlendFuncSrc(Blend blend)
+        {
+            switch (blend)
+            {
+                case Blend.BlendFactor:
+                    return BlendingFactorSrc.ConstantColor;
+                case Blend.DestinationAlpha:
+                    return BlendingFactorSrc.DstAlpha;
+                case Blend.DestinationColor:
+                    return BlendingFactorSrc.DstColor;
+                case Blend.InverseBlendFactor:
+                    return BlendingFactorSrc.OneMinusConstantColor;
+                case Blend.InverseDestinationAlpha:
+                    return BlendingFactorSrc.OneMinusDstAlpha;
+                case Blend.InverseDestinationColor:
+                    return BlendingFactorSrc.OneMinusDstColor;
+                case Blend.InverseSourceAlpha:
+                    return BlendingFactorSrc.OneMinusSrcAlpha;
+                case Blend.InverseSourceColor:
+                    return BlendingFactorSrc.OneMinusSrcColor;
+                case Blend.One:
+                    return BlendingFactorSrc.One;
+                case Blend.SourceAlpha:
+                    return BlendingFactorSrc.SrcAlpha;
+                case Blend.SourceAlphaSaturation:
+                    return BlendingFactorSrc.SrcAlphaSaturate;
+                case Blend.SourceColor:
+                    return BlendingFactorSrc.SrcColor;
+                case Blend.Zero:
+                    return BlendingFactorSrc.Zero;
+
+                default:
+                    throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
+            }
+        }
+
+        private static BlendingFactorDest ToGLBlendFuncDest(Blend blend)
+        {
+            switch (blend)
+            {
+                case Blend.BlendFactor:
+                    return BlendingFactorDest.ConstantColor;
+                case Blend.DestinationAlpha:
+                    return BlendingFactorDest.DstAlpha;
+                case Blend.DestinationColor:
+                    return BlendingFactorDest.DstColor;
+                case Blend.InverseBlendFactor:
+                    return BlendingFactorDest.OneMinusConstantColor;
+                case Blend.InverseDestinationAlpha:
+                    return BlendingFactorDest.OneMinusDstAlpha;
+                case Blend.InverseDestinationColor:
+                    return BlendingFactorDest.OneMinusDstColor;
+                case Blend.InverseSourceAlpha:
+                    return BlendingFactorDest.OneMinusSrcAlpha;
+                case Blend.InverseSourceColor:
+                    return BlendingFactorDest.OneMinusSrcColor;
+                case Blend.One:
+                    return BlendingFactorDest.One;
+                case Blend.SourceAlpha:
+                    return BlendingFactorDest.SrcAlpha;
+                case Blend.SourceAlphaSaturation:
+                    return BlendingFactorDest.SrcAlphaSaturate;
+                case Blend.SourceColor:
+                    return BlendingFactorDest.SrcColor;
+                case Blend.Zero:
+                    return BlendingFactorDest.Zero;
+
+                default:
+                    throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
+            }
+        }
+
     }
 }
 

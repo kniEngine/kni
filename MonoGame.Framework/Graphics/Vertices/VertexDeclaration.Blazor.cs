@@ -33,9 +33,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
                 {
                     AttributeLocation = attributeLocation,
-                    NumberOfElements = OpenGLNumberOfElements(ve.VertexElementFormat),
-                    VertexAttribPointerType = OpenGLVertexAttribPointerType(ve.VertexElementFormat),
-                    Normalized = OpenGLVertexAttribNormalized(ve),
+                    NumberOfElements = ToGLNumberOfElements(ve.VertexElementFormat),
+                    VertexAttribPointerType = ToGLVertexAttribPointerType(ve.VertexElementFormat),
+                    Normalized = ToGLVertexAttribNormalized(ve),
                     Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    GraphicsDevice._attribsDirty = true;
 		}
 
-        private static int OpenGLNumberOfElements(VertexElementFormat elementFormat)
+        private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
@@ -101,42 +101,34 @@ namespace Microsoft.Xna.Framework.Graphics
                     return 2;
                 case VertexElementFormat.HalfVector4:
                     return 4;
+
                 default:
                     throw new ArgumentException();
             }
         }
 
-        private static WebGLDataType OpenGLVertexAttribPointerType(VertexElementFormat elementFormat)
+        private static WebGLDataType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
             {
                 case VertexElementFormat.Single:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector2:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector3:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Vector4:
                     return WebGLDataType.FLOAT;
-
                 case VertexElementFormat.Color:
                     return WebGLDataType.UBYTE;
-
                 case VertexElementFormat.Byte4:
                     return WebGLDataType.UBYTE;
-
                 case VertexElementFormat.Short2:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.Short4:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.NormalizedShort2:
                     return WebGLDataType.SHORT;
-
                 case VertexElementFormat.NormalizedShort4:
                     return WebGLDataType.SHORT;
 
@@ -145,7 +137,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static bool OpenGLVertexAttribNormalized(VertexElement element)
+        private static bool ToGLVertexAttribNormalized(VertexElement element)
         {
             // TODO: This may or may not be the right behavor.  
             //
