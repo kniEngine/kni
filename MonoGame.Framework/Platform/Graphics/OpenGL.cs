@@ -284,7 +284,7 @@ namespace MonoGame.OpenGL
         One = 1,
     }
 
-    internal enum DepthFunction
+    internal enum ComparisonFunc
     {
         Always = 0x0207,
         Equal = 0x0202,
@@ -442,18 +442,6 @@ namespace MonoGame.OpenGL
     {
         UnpackAlignment = 0x0CF5,
         PackAlignment = 0x0D05,
-    }
-
-    internal enum GLStencilFunction
-    {
-        Always = 0x0207,
-        Equal = 0x0202,
-        Greater = 0x0204,
-        Gequal = 0x0206,
-        Less = 0x0201,
-        Lequal = 0x0203,
-        Never = 0x0200,
-        Notequal = 0x0205,
     }
 
     internal enum StencilOp
@@ -1094,7 +1082,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DepthFuncDelegate(DepthFunction function);
+        internal delegate void DepthFuncDelegate(ComparisonFunc function);
         internal static DepthFuncDelegate DepthFunc;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
@@ -1106,7 +1094,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void StencilFuncSeparateDelegate(StencilFace face, GLStencilFunction function, int referenceStencil, int mask);
+        internal delegate void StencilFuncSeparateDelegate(StencilFace face, ComparisonFunc function, int referenceStencil, int mask);
         internal static StencilFuncSeparateDelegate StencilFuncSeparate;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
@@ -1118,7 +1106,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void StencilFuncDelegate(GLStencilFunction function, int referenceStencil, int mask);
+        internal delegate void StencilFuncDelegate(ComparisonFunc function, int referenceStencil, int mask);
         internal static StencilFuncDelegate StencilFunc;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]

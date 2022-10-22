@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != device._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != device._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFuncSeparate(cullFaceModeFront, ToGLStencilComparisonFunc(this.StencilFunction),
+                    GL.StencilFuncSeparate(cullFaceModeFront, GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction),
                                            this.ReferenceStencil, this.StencilMask);
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.StencilFunction = this.StencilFunction;
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.ReferenceStencil != device._lastDepthStencilState.ReferenceStencil ||
                     this.StencilMask != device._lastDepthStencilState.StencilMask)
 			    {
-                    GL.StencilFuncSeparate(cullFaceModeBack, ToGLStencilComparisonFunc(this.CounterClockwiseStencilFunction),
+                    GL.StencilFuncSeparate(cullFaceModeBack, GraphicsExtensions.ToGLComparisonFunction(this.CounterClockwiseStencilFunction),
                                            this.ReferenceStencil, this.StencilMask);
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.CounterClockwiseStencilFunction = this.CounterClockwiseStencilFunction;
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != device._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != device._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFunc(ToGLStencilComparisonFunc(this.StencilFunction), ReferenceStencil, StencilMask);
+                    GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
                     GraphicsExtensions.CheckGLError();
                     device._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     device._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
@@ -161,32 +161,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.StencilMask(this.StencilWriteMask);
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.StencilWriteMask = this.StencilWriteMask;
-            }
-        }
-
-        private static GLStencilFunction ToGLStencilComparisonFunc(CompareFunction function)
-        {
-            switch (function)
-            {
-                case CompareFunction.Always: 
-                    return GLStencilFunction.Always;
-                case CompareFunction.Equal:
-                    return GLStencilFunction.Equal;
-                case CompareFunction.Greater:
-                    return GLStencilFunction.Greater;
-                case CompareFunction.GreaterEqual:
-                    return GLStencilFunction.Gequal;
-                case CompareFunction.Less:
-                    return GLStencilFunction.Less;
-                case CompareFunction.LessEqual:
-                    return GLStencilFunction.Lequal;
-                case CompareFunction.Never:
-                    return GLStencilFunction.Never;
-                case CompareFunction.NotEqual:
-                    return GLStencilFunction.Notequal;
-
-                default:
-                    return GLStencilFunction.Always;
             }
         }
 
