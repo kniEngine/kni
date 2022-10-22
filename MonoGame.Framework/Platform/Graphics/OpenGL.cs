@@ -190,17 +190,13 @@ namespace MonoGame.OpenGL
         DebugOutput = 0x92E0,
     }
 
-    internal enum VertexPointerType
-    {
-        Float = 0x1406,
-        Short = 0x1402,
-    }
-
     internal enum VertexAttribPointerType
     {
-        Float = 0x1406,
-        Short = 0x1402,
+        Byte = 0x1400,
         UnsignedByte = 0x1401,
+        Short = 0x1402,
+        UnsignedShort = 0x1403,
+        Float = 0x1406,
         HalfFloat = 0x140B,
     }
 
@@ -225,35 +221,6 @@ namespace MonoGame.OpenGL
     {
         Fill = 0x1B02,
         Line = 0x1B01,
-    }
-
-    internal enum ColorPointerType
-    {
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
-    }
-
-    internal enum NormalPointerType
-    {
-        Byte = 0x1400,
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
-    }
-
-    internal enum TexCoordPointerType
-    {
-        Byte = 0x1400,
-        Float = 0x1406,
-        Short = 0x1402,
-        UnsignedShort = 0x1403,
-        UnsignedByte = 0x1401,
-        HalfFloat = 0x140B,
     }
 
     internal enum BlendEquationMode
