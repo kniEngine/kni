@@ -10,18 +10,13 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
-
-#if ANGLE
-using OpenTK.Graphics;
-#else
 using MonoGame.OpenGL;
-#endif
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
         internal GLGraphicsContext _glContext { get; private set; }
 #endif
 
@@ -262,7 +257,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetup()
         {
             _programCache = new ShaderProgramCache(this);
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
             var glSdlWindowHandle = SdlGameWindow.Instance.Handle;
 
             if (_glContext == null)
@@ -462,7 +457,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Free all the cached shader programs.
             _programCache.Dispose();
 
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
             _glContext.Dispose();
             _glContext = null;
 #endif
@@ -534,7 +529,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
         static internal void DisposeContext(IntPtr resource)
         {
             lock (_disposeContextsLock)
@@ -557,7 +552,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformPresent()
         {
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
             _glContext.SwapBuffers();
 #endif
             GraphicsExtensions.CheckGLError();
@@ -1338,7 +1333,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void OnPresentationChanged()
         {
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
             var glSdlWindowHandle = SdlGameWindow.Instance.Handle;
             _glContext.MakeCurrent(glSdlWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
@@ -1366,7 +1361,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
         /// <summary>
         /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
         /// </summary>
@@ -1394,9 +1389,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return -1;
             }
         }
-#endif
 
-#if DESKTOPGL
         private void GetModeSwitchedSize(out int width, out int height)
         {
             var mode = new Sdl.Display.Mode

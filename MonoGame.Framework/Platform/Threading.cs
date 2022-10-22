@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
+
 #if IOS || TVOS
+using MonoGame.OpenGL;
 using Foundation;
 using OpenGLES;
 #endif
-#if DESKTOPGL || ANGLE || GLES
-using MonoGame.OpenGL;
-#endif
+
 
 namespace Microsoft.Xna.Framework
 {

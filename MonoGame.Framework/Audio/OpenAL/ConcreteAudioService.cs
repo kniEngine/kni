@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override int PlatformGetMaxPlayingInstances()
         {
-#if DESKTOPGL || ANGLE
+#if DESKTOPGL
             // MacOS & Linux shares a limit of 256.
             return 256;
 #elif IOS || TVOS

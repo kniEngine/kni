@@ -4,12 +4,7 @@
 
 using System;
 using System.Diagnostics;
-
-#if DESKTOPGL || GLES
 using MonoGame.OpenGL;
-#elif ANGLE
-using OpenTK.Graphics;
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
