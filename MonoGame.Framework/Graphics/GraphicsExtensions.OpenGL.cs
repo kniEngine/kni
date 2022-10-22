@@ -4,10 +4,7 @@
 
 using System;
 using System.Diagnostics;
-
-#if DESKTOPGL || GLES
 using MonoGame.OpenGL;
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
