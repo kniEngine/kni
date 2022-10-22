@@ -47,10 +47,10 @@ namespace Microsoft.Xna.Framework.Graphics
                         _targetBlendState[i].AlphaDestinationBlend != device._lastBlendState[i].AlphaDestinationBlend)
                     {
                         GL.BlendFuncSeparatei(i,
-                            ToGLBlendFuncSrc(_targetBlendState[i].ColorSourceBlend),
-                            ToGLBlendFuncDest(_targetBlendState[i].ColorDestinationBlend),
-                            ToGLBlendFuncSrc(_targetBlendState[i].AlphaSourceBlend),
-                            ToGLBlendFuncDest(_targetBlendState[i].AlphaDestinationBlend));
+                            ToGLBlendFunc(_targetBlendState[i].ColorSourceBlend),
+                            ToGLBlendFunc(_targetBlendState[i].ColorDestinationBlend),
+                            ToGLBlendFunc(_targetBlendState[i].AlphaSourceBlend),
+                            ToGLBlendFunc(_targetBlendState[i].AlphaDestinationBlend));
                         GraphicsExtensions.CheckGLError();
                         device._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
                         device._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
@@ -83,10 +83,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.AlphaDestinationBlend != device._lastBlendState.AlphaDestinationBlend)
                 {
                     GL.BlendFuncSeparate(
-                        ToGLBlendFuncSrc(this.ColorSourceBlend),
-                        ToGLBlendFuncDest(this.ColorDestinationBlend),
-                        ToGLBlendFuncSrc(this.AlphaSourceBlend),
-                        ToGLBlendFuncDest(this.AlphaDestinationBlend));
+                        ToGLBlendFunc(this.ColorSourceBlend),
+                        ToGLBlendFunc(this.ColorDestinationBlend),
+                        ToGLBlendFunc(this.AlphaSourceBlend),
+                        ToGLBlendFunc(this.AlphaDestinationBlend));
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
@@ -135,72 +135,36 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static BlendingFactorSrc ToGLBlendFuncSrc(Blend blend)
+        private static BlendingFunc ToGLBlendFunc(Blend blend)
         {
             switch (blend)
             {
                 case Blend.BlendFactor:
-                    return BlendingFactorSrc.ConstantColor;
+                    return BlendingFunc.ConstantColor;
                 case Blend.DestinationAlpha:
-                    return BlendingFactorSrc.DstAlpha;
+                    return BlendingFunc.DstAlpha;
                 case Blend.DestinationColor:
-                    return BlendingFactorSrc.DstColor;
+                    return BlendingFunc.DstColor;
                 case Blend.InverseBlendFactor:
-                    return BlendingFactorSrc.OneMinusConstantColor;
+                    return BlendingFunc.OneMinusConstantColor;
                 case Blend.InverseDestinationAlpha:
-                    return BlendingFactorSrc.OneMinusDstAlpha;
+                    return BlendingFunc.OneMinusDstAlpha;
                 case Blend.InverseDestinationColor:
-                    return BlendingFactorSrc.OneMinusDstColor;
+                    return BlendingFunc.OneMinusDstColor;
                 case Blend.InverseSourceAlpha:
-                    return BlendingFactorSrc.OneMinusSrcAlpha;
+                    return BlendingFunc.OneMinusSrcAlpha;
                 case Blend.InverseSourceColor:
-                    return BlendingFactorSrc.OneMinusSrcColor;
+                    return BlendingFunc.OneMinusSrcColor;
                 case Blend.One:
-                    return BlendingFactorSrc.One;
+                    return BlendingFunc.One;
                 case Blend.SourceAlpha:
-                    return BlendingFactorSrc.SrcAlpha;
+                    return BlendingFunc.SrcAlpha;
                 case Blend.SourceAlphaSaturation:
-                    return BlendingFactorSrc.SrcAlphaSaturate;
+                    return BlendingFunc.SrcAlphaSaturate;
                 case Blend.SourceColor:
-                    return BlendingFactorSrc.SrcColor;
+                    return BlendingFunc.SrcColor;
                 case Blend.Zero:
-                    return BlendingFactorSrc.Zero;
-
-                default:
-                    throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
-            }
-        }
-
-        private static BlendingFactorDest ToGLBlendFuncDest(Blend blend)
-        {
-            switch (blend)
-            {
-                case Blend.BlendFactor:
-                    return BlendingFactorDest.ConstantColor;
-                case Blend.DestinationAlpha:
-                    return BlendingFactorDest.DstAlpha;
-                case Blend.DestinationColor:
-                    return BlendingFactorDest.DstColor;
-                case Blend.InverseBlendFactor:
-                    return BlendingFactorDest.OneMinusConstantColor;
-                case Blend.InverseDestinationAlpha:
-                    return BlendingFactorDest.OneMinusDstAlpha;
-                case Blend.InverseDestinationColor:
-                    return BlendingFactorDest.OneMinusDstColor;
-                case Blend.InverseSourceAlpha:
-                    return BlendingFactorDest.OneMinusSrcAlpha;
-                case Blend.InverseSourceColor:
-                    return BlendingFactorDest.OneMinusSrcColor;
-                case Blend.One:
-                    return BlendingFactorDest.One;
-                case Blend.SourceAlpha:
-                    return BlendingFactorDest.SrcAlpha;
-                case Blend.SourceAlphaSaturation:
-                    return BlendingFactorDest.SrcAlphaSaturate;
-                case Blend.SourceColor:
-                    return BlendingFactorDest.SrcColor;
-                case Blend.Zero:
-                    return BlendingFactorDest.Zero;
+                    return BlendingFunc.Zero;
 
                 default:
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");

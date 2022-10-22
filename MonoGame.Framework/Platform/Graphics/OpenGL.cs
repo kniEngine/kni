@@ -265,7 +265,7 @@ namespace MonoGame.OpenGL
         FuncSubtract = 0x800A,
     }
 
-    internal enum BlendingFactorSrc
+    internal enum BlendingFunc
     {
         Zero = 0,
         SrcColor = 0x0300,
@@ -275,25 +275,6 @@ namespace MonoGame.OpenGL
         DstAlpha = 0x0304,
         OneMinusDstAlpha = 0x0305,
         DstColor = 0x0306,
-        OneMinusDstColor = 0x0307,
-        SrcAlphaSaturate = 0x0308,
-        ConstantColor = 0x8001,
-        OneMinusConstantColor = 0x8002,
-        ConstantAlpha = 0x8003,
-        OneMinusConstantAlpha = 0x8004,
-        One = 1,
-    }
-
-    internal enum BlendingFactorDest
-    {
-        Zero = 0,
-        SrcColor = 0x0300,
-        OneMinusSrcColor = 0x0301,
-        SrcAlpha = 0x0302,
-        OneMinusSrcAlpha = 0x0303,
-        DstAlpha = 0x0304,
-        OneMinusDstAlpha = 0x0305,
-        DstColor = 0X0306,
         OneMinusDstColor = 0x0307,
         SrcAlphaSaturate = 0x0308,
         ConstantColor = 0x8001,
@@ -1093,15 +1074,15 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void BlendFuncSeparateDelegate(BlendingFactorSrc colorSrc, BlendingFactorDest colorDst,
-            BlendingFactorSrc alphaSrc, BlendingFactorDest alphaDst);
+        internal delegate void BlendFuncSeparateDelegate(BlendingFunc colorSrc, BlendingFunc colorDst,
+            BlendingFunc alphaSrc, BlendingFunc alphaDst);
         internal static BlendFuncSeparateDelegate BlendFuncSeparate;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void BlendFuncSeparateiDelegate(int buffer, BlendingFactorSrc colorSrc, BlendingFactorDest colorDst,
-            BlendingFactorSrc alphaSrc, BlendingFactorDest alphaDst);
+        internal delegate void BlendFuncSeparateiDelegate(int buffer, BlendingFunc colorSrc, BlendingFunc colorDst,
+            BlendingFunc alphaSrc, BlendingFunc alphaDst);
         internal static BlendFuncSeparateiDelegate BlendFuncSeparatei;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
