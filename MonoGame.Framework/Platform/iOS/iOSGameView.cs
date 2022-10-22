@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework {
 		protected override void Dispose (bool disposing)
 		{
 			if (disposing) {
-				if (__renderbuffergraphicsContext != null)
+				if (_glContext != null)
 					DestroyContext();
 			}
 
@@ -148,12 +148,12 @@ namespace Microsoft.Xna.Framework {
 		}
 
 		// FIXME: Someday, hopefully it will be possible to move
-		//        GraphicsContext into an iOS-specific GraphicsDevice.
+		//        GLGraphicsContext into an iOS-specific GraphicsDevice.
 		//        Some level of cooperation with the UIView/Layer will
 		//        probably always be necessary, unfortunately.
-		private IGraphicsContext __renderbuffergraphicsContext;
+        private GLGraphicsContext _glContext;
 		private IOpenGLApi _glapi;
-		private void CreateContext ()
+		private void CreateGLContext()
 		{
 			AssertNotDisposed ();
 
@@ -177,7 +177,7 @@ namespace Microsoft.Xna.Framework {
 			//var version = Version.Parse (strVersion);
 
 			try {
-                __renderbuffergraphicsContext = GL.CreateContext (null);
+                _glContext = new GLGraphicsContext();
                 //new GraphicsContext (null, null, 2, 0, GraphicsContextFlags.Embedded)
             } catch (Exception ex) {
                 throw new Exception ("Device not Supported. GLES 2.0 or above is required!");
@@ -192,8 +192,8 @@ namespace Microsoft.Xna.Framework {
 			AssertNotDisposed ();
 			AssertValidContext ();
 
-			__renderbuffergraphicsContext.Dispose ();
-			__renderbuffergraphicsContext = null;
+            _glContext.Dispose();
+            _glContext = null;
 			_glapi = null;
 		}
 
@@ -243,13 +243,11 @@ namespace Microsoft.Xna.Framework {
 			_glapi.GenRenderbuffers(1, ref _colorbuffer);
             _glapi.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _colorbuffer);
 
-			var ctx = __renderbuffergraphicsContext as GraphicsContext;
-
 			// TODO: EAGLContext.RenderBufferStorage returns false
 			//       on all but the first call.  Nevertheless, it
 			//       works.  Still, it would be nice to know why it
 			//       claims to have failed.
-            ctx.Context.RenderBufferStorage ((uint) RenderbufferTarget.Renderbuffer, Layer);
+            _glContext.Context.RenderBufferStorage ((uint) RenderbufferTarget.Renderbuffer, Layer);
 			
             _glapi.FramebufferRenderbuffer (FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
 			
@@ -299,7 +297,7 @@ namespace Microsoft.Xna.Framework {
 			}
 
             if (Threading.BackgroundContext == null)
-                Threading.BackgroundContext = new OpenGLES.EAGLContext(ctx.Context.API, ctx.Context.ShareGroup);
+                Threading.BackgroundContext = new OpenGLES.EAGLContext(_glContext.Context.API, _glContext.Context.ShareGroup);
 		}
 
 		private void DestroyFramebuffer ()
@@ -307,7 +305,7 @@ namespace Microsoft.Xna.Framework {
 			AssertNotDisposed ();
 			AssertValidContext ();
 
-			__renderbuffergraphicsContext.MakeCurrent (null);
+            _glContext.MakeCurrent();
 
 			_glapi.DeleteFramebuffers (1, ref _framebuffer);
 			_framebuffer = 0;
@@ -337,7 +335,7 @@ namespace Microsoft.Xna.Framework {
             this.MakeCurrent();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, this._colorbuffer);
             GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 2, attachements);
-            __renderbuffergraphicsContext.SwapBuffers();
+            _glContext.SwapBuffers();
 		}
 
 		// FIXME: This functionality belongs in GraphicsDevice.
@@ -346,9 +344,9 @@ namespace Microsoft.Xna.Framework {
 			AssertNotDisposed ();
 			AssertValidContext ();
 
-            if (!__renderbuffergraphicsContext.IsCurrent)
+            if (!_glContext.IsCurrent)
             {
-			    __renderbuffergraphicsContext.MakeCurrent (null);
+                _glContext.MakeCurrent();
             }
 		}
 
@@ -364,8 +362,8 @@ namespace Microsoft.Xna.Framework {
 
 			if (_framebuffer != 0)
 				DestroyFramebuffer ();
-			if (__renderbuffergraphicsContext == null)
-				CreateContext();
+			if (_glContext == null)
+                CreateGLContext();
 			CreateFramebuffer ();
 		}
 
@@ -377,8 +375,8 @@ namespace Microsoft.Xna.Framework {
 
             if (Window != null) {
                 
-                if (__renderbuffergraphicsContext == null)
-                    CreateContext ();
+                if (_glContext == null)
+                    CreateGLContext();
                 if (_framebuffer == 0)
                     CreateFramebuffer ();
             }
@@ -394,9 +392,9 @@ namespace Microsoft.Xna.Framework {
 
 		private void AssertValidContext ()
 		{
-			if (__renderbuffergraphicsContext == null)
+			if (_glContext == null)
 				throw new InvalidOperationException (
-					"GraphicsContext must be created for this operation to succeed.");
+                     "GLGraphicsContext must be created for this operation to succeed.");
 		}
 	}
 }

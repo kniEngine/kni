@@ -543,7 +543,7 @@ internal static class Sdl
         private delegate IntPtr d_sdl_gl_createcontext(IntPtr window);
         private static d_sdl_gl_createcontext SDL_GL_CreateContext = FuncLoader.LoadFunction<d_sdl_gl_createcontext>(NativeLibrary, "SDL_GL_CreateContext");
 
-        public static IntPtr CreateContext(IntPtr window)
+        public static IntPtr CreateGLContext(IntPtr window)
         {
             return GetError(SDL_GL_CreateContext(window));
         }

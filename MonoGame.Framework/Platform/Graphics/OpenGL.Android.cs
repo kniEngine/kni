@@ -58,11 +58,6 @@ namespace MonoGame.OpenGL
         {
             return FuncLoader.LoadFunction<T>(Library, function, throwIfNotFound);
         }
-
-        private static IGraphicsContext PlatformCreateContext (IWindowInfo info)
-        {
-            return null;//new GraphicsContext(info);
-        }
     }
 
     struct GLESVersion
