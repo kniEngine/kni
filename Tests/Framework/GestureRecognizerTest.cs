@@ -5,10 +5,6 @@ using NUnit.Framework;
 
 namespace MonoGame.Tests.Framework
 {
-// TODO: Mac implements its own GameWindow class that cannot 
-// be overloaded in MockWindow...  if you hate this hack, go fix it.
-#if !MONOMAC
-
     /// <summary>
     /// Tests the gesture recognition of the TouchPanelState class. (This will be split out in to another class in the future)
     /// </summary>
@@ -795,5 +791,4 @@ namespace MonoGame.Tests.Framework
             Assert.False(_tps.IsGestureAvailable);
         }
     }
-#endif // !MONOMAC
 }

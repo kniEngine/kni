@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (IntPtr)(offset.ToInt64() + element.Offset));
                 GraphicsExtensions.CheckGLError();
 
-#if !(GLES || MONOMAC)
+#if !GLES
                 if (GraphicsDevice.GraphicsCapabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.NormalizedShort4:
                     return ColorPointerType.UnsignedShort;
 
-#if MONOMAC
+#if DESKTOPGL
                 case VertexElementFormat.HalfVector2:
                     return ColorPointerType.HalfFloat;
                 case VertexElementFormat.HalfVector4:
@@ -270,7 +270,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.NormalizedShort4:
                     return NormalPointerType.Short;
 
-#if MONOMAC
+#if DESKTOPGL
                 case VertexElementFormat.HalfVector2:
                     return NormalPointerType.HalfFloat;
                 case VertexElementFormat.HalfVector4:
@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.NormalizedShort4:
                     return TexCoordPointerType.Short;
 
-#if MONOMAC
+#if DESKTOPGL
                 case VertexElementFormat.HalfVector2:
                     return TexCoordPointerType.HalfFloat;
                 case VertexElementFormat.HalfVector4:

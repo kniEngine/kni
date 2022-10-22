@@ -7,8 +7,6 @@ using System.IO;
 #if IOS || TVOS
 using Foundation;
 using UIKit;
-#elif MONOMAC
-using Foundation;
 #endif
 
 namespace Microsoft.Xna.Framework

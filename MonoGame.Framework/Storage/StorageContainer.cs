@@ -49,9 +49,6 @@ namespace Microsoft.Xna.Framework.Storage
 			// From the examples the root is based on MyDocuments folder
 #if WINDOWS_UAP
             var saved = "";
-#elif MONOMAC
-            // We already have a SaveData folder on Mac/Linux.
-            var saved = StorageDevice.StorageRoot;
 #elif DESKTOPGL
             string saved = "";
             if(CurrentPlatform.OS == OS.Linux || CurrentPlatform.OS == OS.MacOSX)

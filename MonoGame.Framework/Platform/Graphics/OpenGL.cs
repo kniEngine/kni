@@ -14,7 +14,7 @@ using Vector3 = Microsoft.Xna.Framework.Vector3;
 using Vector4 = Microsoft.Xna.Framework.Vector4;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 
-#if __IOS__ || __TVOS__ || MONOMAC
+#if __IOS__ || __TVOS__
 using ObjCRuntime;
 #endif
 

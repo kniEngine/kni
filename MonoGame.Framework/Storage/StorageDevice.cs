@@ -558,14 +558,6 @@ namespace Microsoft.Xna.Framework.Storage
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 else
                     throw new Exception("Unexpected platform!");
-#elif MONOMAC
-                string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                if (String.IsNullOrEmpty(osConfigDir))
-                {
-                    return "."; // Oh well.
-                }
-                osConfigDir += "/Library/Application Support";
-                return osConfigDir;
 #else
                 return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 #endif
