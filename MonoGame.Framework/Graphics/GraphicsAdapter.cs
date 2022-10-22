@@ -2,56 +2,27 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.ObjectModel;
+using Microsoft.Xna.Platform.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public sealed partial class GraphicsAdapter : IDisposable
+    public sealed partial class GraphicsAdapter
     {
-        /// <summary>
-        /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.
-        /// </summary>
-        public enum DriverType
+        internal GraphicsAdapterStrategy Strategy { get; private set; }
+
+        public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
-            /// <summary>
-            /// Hardware device been used for rendering. Maximum speed and performance.
-            /// </summary>
-            Hardware,
-            /// <summary>
-            /// Emulates the hardware device on CPU. Slowly, only for testing.
-            /// </summary>
-            Reference,
-            /// <summary>
-            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
-            /// </summary>
-            FastSoftware
-        }
-
-        private static readonly ReadOnlyCollection<GraphicsAdapter> _adapters;
-
-        private DisplayModeCollection _supportedDisplayModes;
-
-        private DisplayMode _currentDisplayMode;
-
-        static GraphicsAdapter()
-        {
-            // NOTE: An adapter is a monitor+device combination, so we expect
-            // at lease one adapter per connected monitor.
-            PlatformInitializeAdapters(out _adapters);
-
-            // The first adapter is considered the default.
-            _adapters[0].IsDefaultAdapter = true;
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_Adapters; }
         }
 
         public static GraphicsAdapter DefaultAdapter
         {
-            get { return _adapters[0]; }
-        }
-        
-        public static ReadOnlyCollection<GraphicsAdapter> Adapters 
-        {
-            get  { return _adapters; }
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_DefaultAdapter; }
         }
 
         /// <summary>
@@ -65,49 +36,57 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public static bool UseReferenceDevice
         {
-            get { return UseDriverType == DriverType.Reference; }
-            set { UseDriverType = value ? DriverType.Reference : DriverType.Hardware; }
+            get { return GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice; }
+            set { GraphicsAdaptersProviderStrategy.Current.Platform_UseReferenceDevice = value; }
         }
 
-        /// <summary>
-        /// Used to request creation of a specific kind of driver.
-        /// </summary>
-        /// <remarks>
-        /// These values only work on DirectX platforms and must be defined before the graphics device
-        /// is created. <see cref="DriverType.Hardware"/> by default.
-        /// </remarks>
-        public static DriverType UseDriverType { get; set; }
+        public string DeviceName
+        {
+            get { return Strategy.Platform_DeviceName; }
+        }
 
-        /// <summary>
-        /// Used to request the graphics device should be created with debugging
-        /// features enabled.
-        /// </summary>
-        public static bool UseDebugLayers { get; set; }
+        public string Description
+        {
+            get { return Strategy.Platform_Description; }
+        }
 
-        public string Description { get; private set; }
+        public int DeviceId
+        {
+            get { return Strategy.Platform_DeviceId; }
+        }
+        
+        public int Revision
+        {
+            get { return Strategy.Platform_Revision; }
+        }
 
-        public int DeviceId { get; private set; }
+        public int VendorId
+        {
+            get { return Strategy.Platform_VendorId; }
+        }
+        
+        public int SubSystemId
+        {
+            get { return Strategy.Platform_SubSystemId; }
+        }
+        public IntPtr MonitorHandle
+        {
+            get { return Strategy.Platform_MonitorHandle; }
+        }
 
-        public string DeviceName { get; private set; }
+        public bool IsDefaultAdapter
+        {
+            get { return Strategy.Platform_IsDefaultAdapter; }
+        }
 
-        public int VendorId { get; private set; }
-
-        public bool IsDefaultAdapter { get; private set; }
-
-        public IntPtr MonitorHandle { get; private set; }
-
-        public int Revision { get; private set; }
-
-        public int SubSystemId { get; private set; }
-       
         public DisplayModeCollection SupportedDisplayModes
         {
-            get { return _supportedDisplayModes; }
+            get { return Strategy.Platform_SupportedDisplayModes; }
         }
 
         public DisplayMode CurrentDisplayMode
         {
-            get { return _currentDisplayMode; }
+            get { return Strategy.Platform_CurrentDisplayMode; }
         }
 
         /// <summary>
@@ -118,12 +97,24 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public bool IsWideScreen
         {
-            get
-            {
-                // Seems like XNA treats aspect ratios above 16:10 as wide screen.
-                const float minWideScreenAspect = 16.0f / 10.0f;
-                return CurrentDisplayMode.AspectRatio >= minWideScreenAspect;
-            }
+            get { return Strategy.Platform_IsWideScreen; }
+        }
+
+        internal GraphicsAdapter(GraphicsAdapterStrategy strategy)
+        {
+            Strategy = strategy;
+        }
+
+        public bool QueryBackBufferFormat(
+             GraphicsProfile graphicsProfile,
+             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
+        {
+            return Strategy.Platform_QueryBackBufferFormat(
+                graphicsProfile,
+                format, depthFormat, multiSampleCount,
+                out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
+            );
         }
 
         /// <summary>
@@ -137,60 +128,22 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="selectedDepthFormat">Set to the best format supported by the adaptor for the requested depth stencil format.</param>
         /// <param name="selectedMultiSampleCount">Set to the best count supported by the adaptor for the requested multisample count.</param>
         /// <returns>True if the requested format is supported by the adaptor. False if one or more of the values was changed.</returns>
-		public bool QueryRenderTargetFormat(
-			GraphicsProfile graphicsProfile,
-			SurfaceFormat format,
-			DepthFormat depthFormat,
-			int multiSampleCount,
-			out SurfaceFormat selectedFormat,
-			out DepthFormat selectedDepthFormat,
-			out int selectedMultiSampleCount)
-		{
-            selectedFormat = format;
-            selectedDepthFormat = depthFormat;
-            selectedMultiSampleCount = multiSampleCount;
-			
-            // fallback for unsupported renderTarget surface formats.
-            if (selectedFormat == SurfaceFormat.Alpha8 ||
-                selectedFormat == SurfaceFormat.NormalizedByte2 ||
-                selectedFormat == SurfaceFormat.NormalizedByte4 ||
-                selectedFormat == SurfaceFormat.Dxt1 ||
-                selectedFormat == SurfaceFormat.Dxt3 ||
-                selectedFormat == SurfaceFormat.Dxt5 ||
-                selectedFormat == SurfaceFormat.Dxt1a ||
-                selectedFormat == SurfaceFormat.Dxt1SRgb ||
-                selectedFormat == SurfaceFormat.Dxt3SRgb ||
-                selectedFormat == SurfaceFormat.Dxt5SRgb)
-                selectedFormat = SurfaceFormat.Color;
-
-            // fallback for unsupported renderTarget surface formats on Reach profile.
-            if (graphicsProfile == GraphicsProfile.Reach)
-            {
-                if (selectedFormat == SurfaceFormat.HalfSingle ||
-                    selectedFormat == SurfaceFormat.HalfVector2 ||
-                    selectedFormat == SurfaceFormat.HalfVector4 ||
-                    selectedFormat == SurfaceFormat.HdrBlendable ||
-                    selectedFormat == SurfaceFormat.Rg32 ||
-                    selectedFormat == SurfaceFormat.Rgba1010102 ||
-                    selectedFormat == SurfaceFormat.Rgba64 ||
-                    selectedFormat == SurfaceFormat.Single ||
-                    selectedFormat == SurfaceFormat.Vector2 ||
-                    selectedFormat == SurfaceFormat.Vector4)
-                    selectedFormat = SurfaceFormat.Color;
-            }
-            
-            return (format == selectedFormat) && (depthFormat == selectedDepthFormat) && (multiSampleCount == selectedMultiSampleCount);
-		}
+        public bool QueryRenderTargetFormat(
+            GraphicsProfile graphicsProfile,
+            SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
+            out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
+        {
+            return Strategy.Platform_QueryRenderTargetFormat(
+                graphicsProfile,
+                format, depthFormat, multiSampleCount,
+                out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
+            );
+        }
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            return PlatformIsProfileSupported(graphicsProfile);
+            return Strategy.Platform_IsProfileSupported(graphicsProfile);
         }
 
-        public void Dispose()
-        {
-            // We don't keep any resources, so we have
-            // nothing to do... just here for XNA compatibility.
-        }
     }
 }
