@@ -7,8 +7,6 @@ using System.Diagnostics;
 
 #if DESKTOPGL || GLES
 using MonoGame.OpenGL;
-#elif ANGLE
-using OpenTK.Graphics;
 #endif
 
 

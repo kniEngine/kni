@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
-#if WINDOWS || WINDOWS_UAP || DESKTOPGL|| ANGLE
+#if WINDOWS || WINDOWS_UAP || DESKTOPGL
 
         /// <summary>
 		/// Use this event to user text input.
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
 		}
 
-#if WINDOWS || WINDOWS_UAP || DESKTOPGL || ANGLE
+#if WINDOWS || WINDOWS_UAP || DESKTOPGL
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>

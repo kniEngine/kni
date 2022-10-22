@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Foundation;
 using OpenGLES;
 #endif
-#if DESKTOPGL || ANGLE || GLES
+#if DESKTOPGL || GLES
 using MonoGame.OpenGL;
 #endif
 
