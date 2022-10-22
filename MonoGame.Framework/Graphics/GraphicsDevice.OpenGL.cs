@@ -1389,9 +1389,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return -1;
             }
         }
-#endif
 
-#if DESKTOPGL
         private void GetModeSwitchedSize(out int width, out int height)
         {
             var mode = new Sdl.Display.Mode
