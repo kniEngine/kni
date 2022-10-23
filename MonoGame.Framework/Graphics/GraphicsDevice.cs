@@ -32,6 +32,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private bool _isDisposed;
 
+        private GraphicsContext _mainContext;
+
         // On Intel Integrated graphics, there is a fast hw unit for doing
         // clears to colors where all components are either 0 or 255.
         // Despite XNA4 using Purple here, we use black (in Release) to avoid
@@ -82,6 +84,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         private int _currentRenderTargetCount;
         private readonly RenderTargetBinding[] _tempRenderTargetBinding = new RenderTargetBinding[1];
+        
+        internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
         internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
 
@@ -593,6 +597,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     _rasterizerStateCullNone.Dispose();
 
                     PlatformDispose();
+
+                    if (_mainContext != null)
+                    {
+                        _mainContext.Dispose();
+                        _mainContext = null;
+                    }
                 }
 
                 _isDisposed = true;
