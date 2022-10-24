@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Apply the state!
-            device._d3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
+            device.CurentD3DContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
         }
 
         static private SharpDX.Direct3D11.StencilOperation ToDXStencilOp(StencilOperation operation)

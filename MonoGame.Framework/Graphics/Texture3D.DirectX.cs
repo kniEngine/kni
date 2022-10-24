@@ -78,9 +78,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 var region = new ResourceRegion(left, top, front, right, bottom, back);
 
-                var d3dContext = GraphicsDevice._d3dContext;
-                lock (d3dContext)
-                    d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                lock (GraphicsDevice.CurentD3DContext)
+                    GraphicsDevice.CurentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
             }
             finally
             {
@@ -110,19 +109,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            var d3dContext = GraphicsDevice._d3dContext;
             using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice._d3dDevice, desc))
             {
-                lock (d3dContext)
+                lock (GraphicsDevice.CurentD3DContext)
                 {
                     // Copy the data from the GPU to the staging texture.
-                    d3dContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
+                    GraphicsDevice.CurentD3DContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 
                     // Copy the data to the array.
                     DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
+                        var databox = GraphicsDevice.CurentD3DContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
 
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.

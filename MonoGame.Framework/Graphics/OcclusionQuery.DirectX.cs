@@ -25,26 +25,23 @@ namespace Microsoft.Xna.Framework.Graphics
         
         private void PlatformBegin()
         {
-            var d3dContext = GraphicsDevice._d3dContext;
-            lock(d3dContext)
-                d3dContext.Begin(_query);
+            lock(GraphicsDevice.CurentD3DContext)
+                GraphicsDevice.CurentD3DContext.Begin(_query);
         }
 
         private void PlatformEnd()
         {
-            var d3dContext = GraphicsDevice._d3dContext;
-            lock (d3dContext)
-                d3dContext.End(_query);
+            lock (GraphicsDevice.CurentD3DContext)
+                GraphicsDevice.CurentD3DContext.End(_query);
         }
 
         private bool PlatformGetResult(out int pixelCount)
         {
-            var d3dContext = GraphicsDevice._d3dContext;
             ulong count;
             bool isComplete;
 
-            lock (d3dContext)
-                isComplete = d3dContext.GetData(_query, out count);
+            lock (GraphicsDevice.CurentD3DContext)
+                isComplete = GraphicsDevice.CurentD3DContext.GetData(_query, out count);
 
             pixelCount = (int)count;
             return isComplete;
