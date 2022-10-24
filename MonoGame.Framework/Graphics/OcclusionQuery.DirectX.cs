@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstruct()
         {
-            //if (graphicsDevice._d3dDevice.FeatureLevel == SharpDX.Direct3D.FeatureLevel.Level_9_1)
+            //if (graphicsDevice.D3DDevice.FeatureLevel == SharpDX.Direct3D.FeatureLevel.Level_9_1)
             //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
 
             var queryDescription = new QueryDescription
@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Flags = QueryFlags.None,
                 Type = QueryType.Occlusion
             };
-            _query = new Query(GraphicsDevice._d3dDevice, queryDescription);
+            _query = new Query(GraphicsDevice.D3DDevice, queryDescription);
         }
         
         private void PlatformBegin()

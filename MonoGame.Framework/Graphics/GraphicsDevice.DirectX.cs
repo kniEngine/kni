@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
         // Core Direct3D Objects
-        internal SharpDX.Direct3D11.Device _d3dDevice;
+        private SharpDX.Direct3D11.Device _d3dDevice;
         private SharpDX.Direct3D11.DeviceContext _d3dContext;
         internal SharpDX.Direct3D11.RenderTargetView _renderTargetView;
         internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
@@ -37,6 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
 
+        internal SharpDX.Direct3D11.Device D3DDevice { get { return _d3dDevice; } }
         internal SharpDX.Direct3D11.DeviceContext CurentD3DContext { get { return _d3dContext; } }
 
 #if WINDOWS_UAP
@@ -395,7 +396,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
                 // Creates the swap chain 
-                using (var dxgiDevice = _d3dDevice.QueryInterface<SharpDX.DXGI.Device1>())
+                using (var dxgiDevice = D3DDevice.QueryInterface<SharpDX.DXGI.Device1>())
                 using (var dxgiAdapter = dxgiDevice.Adapter)
                 using (var dxgiFactory = dxgiAdapter.GetParent<SharpDX.DXGI.Factory1>())
                 {
@@ -490,7 +491,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
                 // Creates the swap chain 
-                using (var dxgiDevice2 = _d3dDevice.QueryInterface<SharpDX.DXGI.Device2>())
+                using (var dxgiDevice2 = D3DDevice.QueryInterface<SharpDX.DXGI.Device2>())
                 using (var dxgiAdapter = dxgiDevice2.Adapter)
                 using (var dxgiFactory2 = dxgiAdapter.GetParent<SharpDX.DXGI.Factory2>())
                 {
@@ -551,13 +552,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 });
             }
 #endif
-            
+
             // Obtain the backbuffer for this window which will be the final 3D rendertarget.
             Point targetSize;
             using (var backBuffer = SharpDX.Direct3D11.Texture2D.FromSwapChain<SharpDX.Direct3D11.Texture2D>(_swapChain, 0))
             {
                 // Create a view interface on the rendertarget to use on bind.
-                _renderTargetView = new SharpDX.Direct3D11.RenderTargetView(_d3dDevice, backBuffer);
+                _renderTargetView = new SharpDX.Direct3D11.RenderTargetView(D3DDevice, backBuffer);
 
                 // Get the rendertarget dimensions for later.
                 var backBufferDesc = backBuffer.Description;
@@ -570,7 +571,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
-                using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(_d3dDevice, new SharpDX.Direct3D11.Texture2DDescription()
+                using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(D3DDevice, new SharpDX.Direct3D11.Texture2DDescription()
                     {
                         Format = depthFormat,
                         ArraySize = 1,
@@ -583,7 +584,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }))
                 {
                     // Create a DepthStencil view on this surface to use on bind.
-                    _depthStencilView = new SharpDX.Direct3D11.DepthStencilView(_d3dDevice, depthBuffer);
+                    _depthStencilView = new SharpDX.Direct3D11.DepthStencilView(D3DDevice, depthBuffer);
                 }
 
             }
@@ -698,7 +699,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 ModeDescription closest;
-                output.GetClosestMatchingMode(_d3dDevice, target, out closest);
+                output.GetClosestMatchingMode(D3DDevice, target, out closest);
                 width = closest.Width;
                 height = closest.Height;
                 output.Dispose();
@@ -791,7 +792,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // The valid range is between zero and one less than the level returned by CheckMultisampleQualityLevels
             // https://msdn.microsoft.com/en-us/library/windows/desktop/bb173072(v=vs.85).aspx
-            var quality = _d3dDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
+            var quality = D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
             // NOTE: should we always return highest quality?
             return Math.Max(quality, 0); // clamp minimum to 0 
         }
@@ -1492,7 +1493,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Usage = ResourceUsage.Staging;
                 desc.OptionFlags = ResourceOptionFlags.None;
 
-                using (var stagingTex = new SharpDX.Direct3D11.Texture2D(_d3dDevice, desc))
+                using (var stagingTex = new SharpDX.Direct3D11.Texture2D(D3DDevice, desc))
                 {
                     lock (CurentD3DContext)
                     {
@@ -1502,7 +1503,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             desc.Usage = ResourceUsage.Default;
                             desc.CpuAccessFlags = CpuAccessFlags.None;
-                            using (var noMsTex = new SharpDX.Direct3D11.Texture2D(_d3dDevice, desc))
+                            using (var noMsTex = new SharpDX.Direct3D11.Texture2D(D3DDevice, desc))
                             {
                                 CurentD3DContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, desc.Format);
                                 if (rect.HasValue)
@@ -1595,7 +1596,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Trim()
         {
-            using (var dxgiDevice3 = _d3dDevice.QueryInterface<SharpDX.DXGI.Device3>())
+            using (var dxgiDevice3 = D3DDevice.QueryInterface<SharpDX.DXGI.Device3>())
                 dxgiDevice3.Trim();
         }
 

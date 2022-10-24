@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var inputElements = vertexInputLayout.GetInputElements();
             try
             {
-                inputLayout = new InputLayout(_graphicsDevice._d3dDevice, _shaderByteCode, inputElements);
+                inputLayout = new InputLayout(_graphicsDevice.D3DDevice, _shaderByteCode, inputElements);
             }
             catch (SharpDXException ex)
             {
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    inputLayout = new InputLayout(_graphicsDevice._d3dDevice, _shaderByteCode, inputElements);
+                    inputLayout = new InputLayout(_graphicsDevice.D3DDevice, _shaderByteCode, inputElements);
 
                     // Workaround succeeded? This means that there is a vertex shader that needs
                     // to be updated.

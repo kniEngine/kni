@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var maxLevel = MultiSampleCountLimit;
             while (maxLevel > 0)
             {
-                qualityLevels = device._d3dDevice.CheckMultisampleQualityLevels(format, maxLevel);
+                qualityLevels = device.D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
                 if (qualityLevels > 0)
                     break;
                 maxLevel /= 2;

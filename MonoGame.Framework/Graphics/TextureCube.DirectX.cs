@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     description.OptionFlags |= ResourceOptionFlags.GenerateMipMaps;
             }
 
-            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, description);
+            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, description);
         }
 
         private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, desc))
+            using (var stagingTex = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, desc))
             {
                 lock (GraphicsDevice.CurentD3DContext)
                 {

@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
             desc.SizeInBytes = Buffer.Length;
             lock (GraphicsDevice.CurentD3DContext)
-                return new SharpDX.Direct3D11.Buffer(GraphicsDevice._d3dDevice, desc);
+                return new SharpDX.Direct3D11.Buffer(GraphicsDevice.D3DDevice, desc);
         }
 
         internal override void PlatformClear()

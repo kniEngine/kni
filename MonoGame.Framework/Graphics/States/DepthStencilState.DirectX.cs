@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice._d3dDevice, desc);
+                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice.D3DDevice, desc);
             }
 
             Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");

@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice._d3dDevice, description);
+            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice.D3DDevice, description);
         }
 
 	    private void PlatformSetData<T>(int level,
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice._d3dDevice, desc))
+            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice.D3DDevice, desc))
             {
                 lock (GraphicsDevice.CurentD3DContext)
                 {
