@@ -206,7 +206,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _device.SetVertexBuffer(_vertexBuffer);
                 _device.Indices = _indexBuffer;
 
-                lock (_device.CurentD3DContext)
+                lock (_device.CurrentD3DContext)
                 {
                     //map vertexBaffer
                     var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
@@ -215,7 +215,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         mode = SharpDX.Direct3D11.MapMode.WriteDiscard;
                         _baseQuad = 0;
                     }
-                    var dataBox = _device.CurentD3DContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
+                    var dataBox = _device.CurrentD3DContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
                     var vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch
@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         *(vertexArrayPtr + 3) = item.vertexBR;
                     }
                     // unmap and set vertexbuffer
-                    _device.CurentD3DContext.UnmapSubresource(_vertexBuffer.Buffer, 0);
+                    _device.CurrentD3DContext.UnmapSubresource(_vertexBuffer.Buffer, 0);
                 }
 
                 // draw batch

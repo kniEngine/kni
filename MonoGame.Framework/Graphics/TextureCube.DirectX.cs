@@ -79,20 +79,20 @@ namespace Microsoft.Xna.Framework.Graphics
 
             using (var stagingTex = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, desc))
             {
-                lock (GraphicsDevice.CurentD3DContext)
+                lock (GraphicsDevice.CurrentD3DContext)
                 {
                     // Copy the data from the GPU to the staging texture.
                     var subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
                     var elementsInRow = rect.Width;
                     var rows = rect.Height;
                     var region = new ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
-                    GraphicsDevice.CurentD3DContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
+                    GraphicsDevice.CurrentD3DContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
 
                     // Copy the data to the array.
                     DataStream stream = null;
                     try
                     {
-                        var databox = GraphicsDevice.CurentD3DContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
+                        var databox = GraphicsDevice.CurrentD3DContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
 
                         var elementSize = _format.GetSize();
                         if (_format.IsCompressedFormat())
@@ -155,8 +155,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     Right = rect.Right
                 };
 
-                lock (GraphicsDevice.CurentD3DContext)
-                    GraphicsDevice.CurentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                lock (GraphicsDevice.CurrentD3DContext)
+                    GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
             }
             finally
             {

@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.BindFlags = SharpDX.Direct3D11.BindFlags.ConstantBuffer;
             desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
             desc.SizeInBytes = Buffer.Length;
-            lock (GraphicsDevice.CurentD3DContext)
+            lock (GraphicsDevice.CurrentD3DContext)
                 return new SharpDX.Direct3D11.Buffer(GraphicsDevice.D3DDevice, desc);
         }
 
@@ -57,20 +57,20 @@ namespace Microsoft.Xna.Framework.Graphics
                 _cbuffer = CreateD3D11Buffer();
 
             // NOTE: We make the assumption here that the caller has
-            // locked the CurentD3DContext for us to use.
+            // locked the CurrentD3DContext for us to use.
 
             // Update the hardware buffer.
             if (Dirty)
             {
-                GraphicsDevice.CurentD3DContext.UpdateSubresource(Buffer, _cbuffer);
+                GraphicsDevice.CurrentD3DContext.UpdateSubresource(Buffer, _cbuffer);
                 Dirty = false;
             }
 
             // Set the buffer to the right stage.
             switch (stage)
             {
-                case ShaderStage.Pixel: GraphicsDevice.CurentD3DContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
-                case ShaderStage.Vertex: GraphicsDevice.CurentD3DContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Pixel: GraphicsDevice.CurrentD3DContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Vertex: GraphicsDevice.CurrentD3DContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
                 default: throw new System.ArgumentException();
             }
         }

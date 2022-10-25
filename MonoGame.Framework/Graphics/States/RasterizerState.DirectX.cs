@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Apply the state!
-            device.CurentD3DContext.Rasterizer.State = _state;
+            device.CurrentD3DContext.Rasterizer.State = _state;
         }
 
         partial void PlatformDispose()

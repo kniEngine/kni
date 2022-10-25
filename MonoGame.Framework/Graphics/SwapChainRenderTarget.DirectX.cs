@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Present()
         {
-            lock (GraphicsDevice.CurentD3DContext)
+            lock (GraphicsDevice.CurrentD3DContext)
             {
                 try
                 {
