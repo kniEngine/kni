@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     description.OptionFlags |= ResourceOptionFlags.GenerateMipMaps;
             }
 
-            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, description);
+            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, description);
         }
 
         private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
@@ -77,23 +77,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            var d3dContext = GraphicsDevice._d3dContext;
-            using (var stagingTex = new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, desc))
+            using (var stagingTex = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, desc))
             {
-                lock (d3dContext)
+                lock (GraphicsDevice.CurentD3DContext)
                 {
                     // Copy the data from the GPU to the staging texture.
                     var subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
                     var elementsInRow = rect.Width;
                     var rows = rect.Height;
                     var region = new ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
-                    d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
+                    GraphicsDevice.CurentD3DContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
 
                     // Copy the data to the array.
                     DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
+                        var databox = GraphicsDevice.CurentD3DContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
 
                         var elementSize = _format.GetSize();
                         if (_format.IsCompressedFormat())
@@ -156,9 +155,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     Right = rect.Right
                 };
 
-                var d3dContext = GraphicsDevice._d3dContext;
-                lock (d3dContext)
-                    d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                lock (GraphicsDevice.CurentD3DContext)
+                    GraphicsDevice.CurentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
             }
             finally
             {

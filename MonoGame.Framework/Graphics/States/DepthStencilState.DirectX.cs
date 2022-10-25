@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice._d3dDevice, desc);
+                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice.D3DDevice, desc);
             }
 
             Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Apply the state!
-            device._d3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
+            device.CurentD3DContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
         }
 
         static private SharpDX.Direct3D11.StencilOperation ToDXStencilOp(StencilOperation operation)

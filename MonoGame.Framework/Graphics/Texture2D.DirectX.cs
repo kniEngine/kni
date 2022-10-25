@@ -67,9 +67,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(0, level);
-                var d3dContext = GraphicsDevice._d3dContext;
-                lock (d3dContext)
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
+                lock (GraphicsDevice.CurentD3DContext)
+                    GraphicsDevice.CurentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
             }
             finally
             {
@@ -97,9 +96,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
-                var d3dContext = GraphicsDevice._d3dContext;
-                lock (d3dContext)
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
+                lock (GraphicsDevice.CurentD3DContext)
+                    GraphicsDevice.CurentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
             }
             finally
             {
@@ -132,12 +130,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Usage = ResourceUsage.Staging;
                 desc.OptionFlags = ResourceOptionFlags.None;
 
-                stagingTexture = new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, desc);
+                stagingTexture = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, desc);
             }
 
-            var d3dContext = GraphicsDevice._d3dContext;
-
-            lock (d3dContext)
+            lock (GraphicsDevice.CurentD3DContext)
             {
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
 
@@ -145,13 +141,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 var elementsInRow = rect.Width;
                 var rows = rect.Height;
                 var region = new ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
-                d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
+                GraphicsDevice.CurentD3DContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                 // Copy the data to the array.
                 DataStream stream = null;
                 try
                 {
-                    var databox = d3dContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
+                    var databox = GraphicsDevice.CurentD3DContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
 
                     var elementSize = _format.GetSize();
                     if (_format.IsCompressedFormat())
@@ -207,7 +203,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Utilities.Dispose( ref stream);
 
-                    d3dContext.UnmapSubresource(stagingTexture, 0);                    
+                    GraphicsDevice.CurentD3DContext.UnmapSubresource(stagingTexture, 0);                    
                     SharpDX.Utilities.Dispose(ref stagingTexture);
                 }
             }
@@ -250,7 +246,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // TODO: Move this to SetData() if we want to make Immutable textures!
             var desc = GetTexture2DDescription();
-            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice._d3dDevice, desc);
+            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.D3DDevice, desc);
         }
 
         private void PlatformReload(Stream textureStream)

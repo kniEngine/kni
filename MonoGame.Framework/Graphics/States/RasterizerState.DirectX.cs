@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.DepthBiasClamp = 0.0f;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice._d3dDevice, desc);
+                _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice.D3DDevice, desc);
             }
 
             Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Apply the state!
-            device._d3dContext.Rasterizer.State = _state;
+            device.CurentD3DContext.Rasterizer.State = _state;
         }
 
         partial void PlatformDispose()
