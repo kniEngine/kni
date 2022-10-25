@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // Core Direct3D Objects
         private SharpDX.Direct3D11.Device _d3dDevice;
         private SharpDX.Direct3D11.DeviceContext _d3dContext;
-        internal SharpDX.Direct3D11.RenderTargetView _renderTargetView;
+        private SharpDX.Direct3D11.RenderTargetView _renderTargetView;
         internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
         private int _vertexBufferSlotsUsed;
 
