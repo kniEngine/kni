@@ -70,6 +70,8 @@
     <Compile Include="Platform\Graphics\OpenGL.SDL.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
     <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />

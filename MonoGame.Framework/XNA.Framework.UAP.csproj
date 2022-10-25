@@ -292,6 +292,8 @@
     <Compile Include="Graphics\GraphicsAdaptersProviderStrategy.cs" />
     <Compile Include="Graphics\GraphicsAdapterStrategy.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.cs" />
+    <Compile Include="Graphics\GraphicsContext.cs" />
+    <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
@@ -402,6 +404,7 @@
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
