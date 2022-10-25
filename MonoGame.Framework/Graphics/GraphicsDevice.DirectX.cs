@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private SharpDX.Direct3D11.Device _d3dDevice;
         private SharpDX.Direct3D11.DeviceContext _d3dContext;
         private SharpDX.Direct3D11.RenderTargetView _renderTargetView;
-        internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
+        private SharpDX.Direct3D11.DepthStencilView _depthStencilView;
         private int _vertexBufferSlotsUsed;
 
         private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
