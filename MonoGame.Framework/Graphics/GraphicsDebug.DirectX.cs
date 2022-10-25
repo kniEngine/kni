@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public GraphicsDebug(GraphicsDevice device)
         {
             _device = device;
-            _infoQueue = _device.CurentD3DContext.QueryInterfaceOrNull<InfoQueue>();
+            _infoQueue = _device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();
 
             if (_infoQueue != null)

@@ -41,9 +41,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     // locked the d3dContext for us to use.
                     SharpDX.Direct3D11.CommonShaderStage shaderStage;
                     if (!_applyToVertexStage)
-                        shaderStage = device.CurentD3DContext.PixelShader;
+                        shaderStage = device.CurrentD3DContext.PixelShader;
                     else
-                        shaderStage = device.CurentD3DContext.VertexShader;
+                        shaderStage = device.CurrentD3DContext.VertexShader;
 
                     var sampler = _actualSamplers[i];
                     SharpDX.Direct3D11.SamplerState state = null;

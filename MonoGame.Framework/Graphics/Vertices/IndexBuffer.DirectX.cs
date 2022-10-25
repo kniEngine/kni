@@ -79,8 +79,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 stagingDesc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
                 using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.D3DDevice, stagingDesc))
                 {
-                    lock (GraphicsDevice.CurentD3DContext)
-                        GraphicsDevice.CurentD3DContext.CopyResource(_buffer, stagingBuffer);
+                    lock (GraphicsDevice.CurrentD3DContext)
+                        GraphicsDevice.CurrentD3DContext.CopyResource(_buffer, stagingBuffer);
 
                     int TsizeInBytes = SharpDX.Utilities.SizeOf<T>();
                     var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -90,15 +90,15 @@ namespace Microsoft.Xna.Framework.Graphics
                         var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                         SharpDX.DataPointer DataPointer = new SharpDX.DataPointer(dataPtr, elementCount * TsizeInBytes);
 
-                        lock (GraphicsDevice.CurentD3DContext)
+                        lock (GraphicsDevice.CurrentD3DContext)
                         {
                             // Map the staging resource to a CPU accessible memory
-                            var box = GraphicsDevice.CurentD3DContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
+                            var box = GraphicsDevice.CurrentD3DContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
 
                             SharpDX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, elementCount * TsizeInBytes);
 
                             // Make sure that we unmap the resource in case of an exception
-                            GraphicsDevice.CurentD3DContext.UnmapSubresource(stagingBuffer, 0);
+                            GraphicsDevice.CurrentD3DContext.UnmapSubresource(stagingBuffer, 0);
                         }
                     }
                     finally
@@ -120,12 +120,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
                     mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
 
-                lock (GraphicsDevice.CurentD3DContext)
+                lock (GraphicsDevice.CurrentD3DContext)
                 {
-                    var dataBox = GraphicsDevice.CurentD3DContext.MapSubresource(_buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
+                    var dataBox = GraphicsDevice.CurrentD3DContext.MapSubresource(_buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
                     SharpDX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
                                             elementCount);
-                    GraphicsDevice.CurentD3DContext.UnmapSubresource(_buffer, 0);
+                    GraphicsDevice.CurrentD3DContext.UnmapSubresource(_buffer, 0);
                 }
             }
             else
@@ -147,8 +147,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     region.Left = offsetInBytes;
                     region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
-                    lock (GraphicsDevice.CurentD3DContext)
-                        GraphicsDevice.CurentD3DContext.UpdateSubresource(box, _buffer, 0, region);
+                    lock (GraphicsDevice.CurrentD3DContext)
+                        GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, _buffer, 0, region);
                 }
                 finally
                 {

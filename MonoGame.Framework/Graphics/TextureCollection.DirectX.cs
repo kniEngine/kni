@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!_applyToVertexStage)
             {
-                ClearTargets(targets, device.CurentD3DContext.PixelShader);
+                ClearTargets(targets, device.CurrentD3DContext.PixelShader);
             }
             else
             {
                 if (device.GraphicsCapabilities.SupportsVertexTextures)
-                    ClearTargets(targets, device.CurentD3DContext.VertexShader);
+                    ClearTargets(targets, device.CurrentD3DContext.VertexShader);
             }
         }
 
@@ -65,9 +65,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // locked the d3dContext for us to use.
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 if (!_applyToVertexStage)
-                    shaderStage = device.CurentD3DContext.PixelShader;
+                    shaderStage = device.CurrentD3DContext.PixelShader;
                 else
-                    shaderStage = device.CurentD3DContext.VertexShader;
+                    shaderStage = device.CurrentD3DContext.VertexShader;
 
                 var tex = _textures[i];
 
