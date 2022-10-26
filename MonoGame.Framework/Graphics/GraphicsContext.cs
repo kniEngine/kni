@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private GraphicsContextStrategy _strategy;
         private bool _isDisposed = false;
 
-        private GraphicsContextStrategy Strategy { get { return _strategy; } }
+        internal GraphicsContextStrategy Strategy { get { return _strategy; } }
 
         internal GraphicsContext(GraphicsDevice device, GraphicsContextStrategy strategy)
         {
