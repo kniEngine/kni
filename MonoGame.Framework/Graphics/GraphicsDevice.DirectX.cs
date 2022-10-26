@@ -30,7 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         // Core Direct3D Objects
         private SharpDX.Direct3D11.Device _d3dDevice;
-        private SharpDX.Direct3D11.DeviceContext _d3dContext;
         private SharpDX.Direct3D11.RenderTargetView _renderTargetView;
         private SharpDX.Direct3D11.DepthStencilView _depthStencilView;
         private int _vertexBufferSlotsUsed;
@@ -38,7 +37,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
 
         internal SharpDX.Direct3D11.Device D3DDevice { get { return _d3dDevice; } }
-        internal SharpDX.Direct3D11.DeviceContext CurrentD3DContext { get { return _d3dContext; } }
+        internal SharpDX.Direct3D11.DeviceContext CurrentD3DContext
+        {
+            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext; }
+        }
 
 #if WINDOWS_UAP
 
@@ -150,8 +152,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // Dispose previous references.
             if (_d3dDevice != null)
                 _d3dDevice.Dispose();
-            if (_d3dContext != null)
-                _d3dContext.Dispose();
+            if (_mainContext != null)
+                _mainContext.Dispose();
+            _mainContext = null;
 
 
 #if WINDOWS_UAP
@@ -260,7 +263,8 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS_UAP
             var d3dContext = _d3dDevice.ImmediateContext.QueryInterface<SharpDX.Direct3D11.DeviceContext1>();
 #endif
-            _d3dContext = d3dContext;
+            var contextStrategy = new ConcreteGraphicsContext(d3dContext);
+            _mainContext = new GraphicsContext(this, contextStrategy);
 
 
 #if WINDOWS
@@ -905,7 +909,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #endif
 
-            SharpDX.Utilities.Dispose(ref _d3dContext);
+            if (_mainContext != null)
+                _mainContext.Dispose();
+            _mainContext = null;
             SharpDX.Utilities.Dispose(ref _d3dDevice);
         }
 
@@ -961,7 +967,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetViewport(ref Viewport value)
         {
-            if (CurrentD3DContext != null)
+            if (CurrentContext != null)
             {
 				var viewport = new RawViewportF
 				{
@@ -980,7 +986,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS_UAP
         internal void ResetRenderTargets()
         {
-            if (CurrentD3DContext != null)
+            if (CurrentContext != null)
             {
                 lock (CurrentD3DContext)
                 {
