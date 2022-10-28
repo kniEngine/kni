@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework
             return true;
         }
 
-        public virtual void SwapBuffers()
+        public void SwapBuffers()
         {
             if (!egl.EglSwapBuffers(eglDisplay, eglSurface))
             {
@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        public virtual void MakeCurrent()
+        public void MakeCurrent()
         {
             if (!egl.EglMakeCurrent(eglDisplay, eglSurface,
                     eglSurface, eglContext))
@@ -161,7 +161,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        public virtual void ClearCurrent()
+        public void ClearCurrent()
         {
             if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface,
                 EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework
 
         public bool RenderOnUIThread { get; set; }
 
-        public virtual void Run()
+        public void Run()
         {
             cts = new CancellationTokenSource();
 
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        public virtual void Pause()
+        public void Pause()
         {
             // if triggered in quick succession and blocked by graphics device creation, 
             // pause can be triggered twice, without resume in between on some phones.
@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public virtual void Resume()
+        public void Resume()
         {
             lock (_lockObject)
             {
