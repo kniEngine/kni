@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -37,7 +39,6 @@ namespace Microsoft.Xna.Framework
             ForceRecreateSurface, // also used to create the surface the 1st time or when screen orientation changes
         }
 
-        bool disposed = false;
         ISurfaceHolder mHolder;
 
         ManualResetEvent _waitForPausedStateProcessed = new ManualResetEvent(false);
@@ -140,7 +141,6 @@ namespace Microsoft.Xna.Framework
 
         public virtual void SwapBuffers()
         {
-            EnsureUndisposed();
             if (!egl.EglSwapBuffers(eglDisplay, eglSurface))
             {
                 if (egl.EglGetError() == 0)
@@ -155,7 +155,6 @@ namespace Microsoft.Xna.Framework
 
         public virtual void MakeCurrent()
         {
-            EnsureUndisposed();
             if (!egl.EglMakeCurrent(eglDisplay, eglSurface,
                     eglSurface, eglContext))
             {
@@ -166,7 +165,6 @@ namespace Microsoft.Xna.Framework
 
         public virtual void ClearCurrent()
         {
-            EnsureUndisposed();
             if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface,
                 EGL10.EglNoSurface, EGL10.EglNoContext))
             {
@@ -265,8 +263,6 @@ namespace Microsoft.Xna.Framework
 
         public virtual void Pause()
         {
-            EnsureUndisposed();
-
             // if triggered in quick succession and blocked by graphics device creation, 
             // pause can be triggered twice, without resume in between on some phones.
             if (_internalState != InternalState.Running_GameThread)
@@ -311,8 +307,6 @@ namespace Microsoft.Xna.Framework
 
         public virtual void Resume()
         {
-            EnsureUndisposed();
-
             lock (_lockObject)
             {
                 _waitForResumedStateProcessed.Reset();
@@ -342,7 +336,6 @@ namespace Microsoft.Xna.Framework
 
         public void Stop()
         {
-            EnsureUndisposed();
             if (cts != null)
             {
                 lock (_lockObject)
@@ -780,12 +773,6 @@ namespace Microsoft.Xna.Framework
                 frames = 0;
                 prev = cur;
             }
-        }
-
-        protected void EnsureUndisposed()
-        {
-            if (disposed)
-                throw new ObjectDisposedException("");
         }
 
         protected void DestroyGLContext()
