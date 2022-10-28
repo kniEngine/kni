@@ -306,28 +306,23 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                Stop();
+                if (cts != null)
+                {
+                    lock (_lockObject)
+                    {
+                        _internalState = InternalState.Exiting;
+                    }
+
+                    cts.Cancel();
+
+                    if (RenderOnUIThread == false)
+                    {
+                        _waitForExitedStateProcessed.Reset();
+                    }
+
+                }
             }
             base.Dispose(disposing);
-        }
-
-        public void Stop()
-        {
-            if (cts != null)
-            {
-                lock (_lockObject)
-                {
-                    _internalState = InternalState.Exiting;
-                }
-
-                cts.Cancel();
-
-                if (RenderOnUIThread == false)
-                {
-                    _waitForExitedStateProcessed.Reset();
-                }
-
-            }
         }
 
         FrameEventArgs renderEventArgs = new FrameEventArgs();
