@@ -30,18 +30,18 @@ namespace Microsoft.Xna.Framework
         // This acts as a replacement for the all-out monitor wait approach which caused code to be quite fragile.
         enum InternalState
         {
-            Pausing_UIThread,  // set by android UI thread and the game thread process it and transitions into 'Paused' state
-            Resuming_UIThread, // set by android UI thread and the game thread process it and transitions into 'Running' state
-            Exiting,           // set either by game or android UI thread and the game thread process it and transitions into 'Exited' state          
+            Pausing,  // set by android UI thread and the game thread process it and transitions into 'Paused' state
+            Resuming, // set by android UI thread and the game thread process it and transitions into 'Running' state
+            Exiting,  // set either by game or android UI thread and the game thread process it and transitions into 'Exited' state          
 
-            Paused_GameThread,  // set by game thread after processing 'Pausing' state
-            Running_GameThread, // set by game thread after processing 'Resuming' state
-            Exited_GameThread,  // set by game thread after processing 'Exiting' state
+            Paused,  // set by game thread after processing 'Pausing' state
+            Running, // set by game thread after processing 'Resuming' state
+            Exited,  // set by game thread after processing 'Exiting' state
 
             ForceRecreateSurface, // also used to create the surface the 1st time or when screen orientation changes
         }
 
-        ISurfaceHolder mHolder;
+        ISurfaceHolder _surfaceHolder;
 
         ManualResetEvent _waitForPausedStateProcessed = new ManualResetEvent(false);
         ManualResetEvent _waitForResumedStateProcessed = new ManualResetEvent(false);
@@ -51,17 +51,17 @@ namespace Microsoft.Xna.Framework
 
         object _lockObject = new object();
 
-        volatile InternalState _internalState = InternalState.Exited_GameThread;
+        volatile InternalState _internalState = InternalState.Exited;
 
-        bool androidSurfaceAvailable = false;
+        bool _androidSurfaceAvailable = false;
 
-        bool glSurfaceAvailable;
-        bool glContextAvailable;
-        bool lostglContext;
-        System.Diagnostics.Stopwatch stopWatch;
+        bool _glSurfaceAvailable;
+        bool _glContextAvailable;
+        bool _lostglContext;
+        System.Diagnostics.Stopwatch _stopWatch;
 
-        Task renderTask;
-        CancellationTokenSource cts = null;
+        Task _renderTask;
+        CancellationTokenSource _cts = null;
         private readonly AndroidTouchEventManager _touchManager;
         private readonly AndroidGameWindow _gameWindow;
         private readonly Game _game;
@@ -94,10 +94,10 @@ namespace Microsoft.Xna.Framework
         private void Init()
         {
             // default
-            mHolder = Holder;
+            _surfaceHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
-            mHolder.AddCallback((ISurfaceHolderCallback)this);
-            mHolder.SetType(SurfaceType.Gpu);
+            _surfaceHolder.AddCallback((ISurfaceHolderCallback)this);
+            _surfaceHolder.SetType(SurfaceType.Gpu);
         }
 
         void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework
             lock (_lockObject)
             {
                 // can only be triggered when main loop is running, is unsafe to overwrite other states
-                if (_internalState == InternalState.Running_GameThread)
+                if (_internalState == InternalState.Running)
                 {
                     _internalState = InternalState.ForceRecreateSurface;
                 }
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework
         {
             lock (_lockObject)
             {
-                androidSurfaceAvailable = true;
+                _androidSurfaceAvailable = true;
             }
         }
 
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework
         {
             lock (_lockObject)
             {
-                androidSurfaceAvailable = false;
+                _androidSurfaceAvailable = false;
             }
         }
 
@@ -139,13 +139,13 @@ namespace Microsoft.Xna.Framework
 
         internal void SwapBuffers()
         {
-            if (!egl.EglSwapBuffers(eglDisplay, eglSurface))
+            if (!_egl.EglSwapBuffers(_eglDisplay, _eglSurface))
             {
-                if (egl.EglGetError() == 0)
+                if (_egl.EglGetError() == 0)
                 {
-                    if (lostglContext)
+                    if (_lostglContext)
                         System.Diagnostics.Debug.WriteLine("Lost EGL context" + GetErrorAsString());
-                    lostglContext = true;
+                    _lostglContext = true;
                 }
             }
 
@@ -153,8 +153,8 @@ namespace Microsoft.Xna.Framework
 
         internal void MakeCurrent()
         {
-            if (!egl.EglMakeCurrent(eglDisplay, eglSurface,
-                    eglSurface, eglContext))
+            if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface,
+                    _eglSurface, _eglContext))
             {
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
             }
@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework
 
         internal void ClearCurrent()
         {
-            if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface,
+            if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface,
                 EGL10.EglNoSurface, EGL10.EglNoContext))
             {
                 System.Diagnostics.Debug.WriteLine("Error Clearing Current" + GetErrorAsString());
@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework
 
         internal void Run()
         {
-            cts = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
 
             //var syncContext = new SynchronizationContext ();
             var syncContext = SynchronizationContext.Current;
@@ -183,56 +183,56 @@ namespace Microsoft.Xna.Framework
             {
                 // prepare gameLoop
                 Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
-                stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                prevUpdateTime = DateTime.Now;
+                _stopWatch = System.Diagnostics.Stopwatch.StartNew();
+                _prevUpdateTime = DateTime.Now;
                 var looper = Android.OS.Looper.MainLooper;
-                handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
+                _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
                 // request first tick.
-                handler.Post((Java.Lang.IRunnable)this);
+                _handler.Post((Java.Lang.IRunnable)this);
             }
             else
             {
-                renderTask = Task.Factory.StartNew(() =>
+                _renderTask = Task.Factory.StartNew(() =>
                 {
                     WorkerThreadFrameDispatcher(syncContext);
-                }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                }, _cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
 
-        Android.OS.Handler handler;
+        Android.OS.Handler _handler;
         void Java.Lang.IRunnable.Run()
         {
-            if (!cts.IsCancellationRequested)
+            if (!_cts.IsCancellationRequested)
             {
                 bool pauseThread = false;
                 try
                 {
                     // tick
-                    pauseThread = RunIteration(cts.Token);
+                    pauseThread = RunIteration(_cts.Token);
                 }
                 finally
                 {
                     // request next tick
-                    handler.Post((Java.Lang.IRunnable)this);
+                    _handler.Post((Java.Lang.IRunnable)this);
                 }
             }
             else
             {    
-                bool c = cts.IsCancellationRequested;
+                bool c = _cts.IsCancellationRequested;
 
-                cts = null;
+                _cts = null;
 
-                if (glSurfaceAvailable)
+                if (_glSurfaceAvailable)
                     DestroyGLSurface();
 
-                if (glContextAvailable)
+                if (_glContextAvailable)
                 {
                     DestroyGLContext();
                     ContextLostInternal();
                 }
                 
-                _internalState = InternalState.Exited_GameThread;
+                _internalState = InternalState.Exited;
             }
             
             return;
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Framework
         {
             // if triggered in quick succession and blocked by graphics device creation, 
             // pause can be triggered twice, without resume in between on some phones.
-            if (_internalState != InternalState.Running_GameThread)
+            if (_internalState != InternalState.Running)
             {
                 return;
             }
@@ -259,20 +259,20 @@ namespace Microsoft.Xna.Framework
             bool isAndroidSurfaceAvalible = false; // use local because the wait below must be outside lock
             lock (_lockObject)
             {
-                isAndroidSurfaceAvalible = androidSurfaceAvailable;
+                isAndroidSurfaceAvalible = _androidSurfaceAvailable;
                 if (!isAndroidSurfaceAvalible)
                 {
-                    _internalState = InternalState.Paused_GameThread; // prepare for next game loop iteration
+                    _internalState = InternalState.Paused; // prepare for next game loop iteration
                 }
             }
 
             lock (_lockObject)
             {
                 // processing the pausing state only if the surface was created already
-                if (androidSurfaceAvailable)
+                if (_androidSurfaceAvailable)
                 {
                     _waitForPausedStateProcessed.Reset();
-                    _internalState = InternalState.Pausing_UIThread;
+                    _internalState = InternalState.Pausing;
                 }
             }
 
@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Framework
             lock (_lockObject)
             {
                 _waitForResumedStateProcessed.Reset();
-                _internalState = InternalState.Resuming_UIThread;
+                _internalState = InternalState.Resuming;
             }
 
             _waitForMainGameLoop.Set();
@@ -306,14 +306,14 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                if (cts != null)
+                if (_cts != null)
                 {
                     lock (_lockObject)
                     {
                         _internalState = InternalState.Exiting;
                     }
 
-                    cts.Cancel();
+                    _cts.Cancel();
 
                     if (RenderOnUIThread == false)
                     {
@@ -325,21 +325,21 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
         }
 
-        FrameEventArgs renderEventArgs = new FrameEventArgs();
+        FrameEventArgs _renderEventArgs = new FrameEventArgs();
 
         protected void WorkerThreadFrameDispatcher(SynchronizationContext uiThreadSyncContext)
         {
             Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
             try
             {
-                stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                prevUpdateTime = DateTime.Now;
+                _stopWatch = System.Diagnostics.Stopwatch.StartNew();
+                _prevUpdateTime = DateTime.Now;
 
-                while (!cts.IsCancellationRequested)
+                while (!_cts.IsCancellationRequested)
                 {
                     // use this worker thread to render one frame
                     bool pauseThread = false;
-                    pauseThread = RunIteration(cts.Token);
+                    pauseThread = RunIteration(_cts.Token);
 
 
                     if (pauseThread)
@@ -355,14 +355,14 @@ namespace Microsoft.Xna.Framework
             }
             finally
             {
-                bool c = cts.IsCancellationRequested;
+                bool c = _cts.IsCancellationRequested;
 
-                cts = null;
+                _cts = null;
 
-                if (glSurfaceAvailable)
+                if (_glSurfaceAvailable)
                     DestroyGLSurface();
 
-                if (glContextAvailable)
+                if (_glContextAvailable)
                 {
                     DestroyGLContext();
                     ContextLostInternal();
@@ -370,17 +370,17 @@ namespace Microsoft.Xna.Framework
 
                 lock (_lockObject)
                 {
-                    _internalState = InternalState.Exited_GameThread;
+                    _internalState = InternalState.Exited;
                 }
             }
 
         }
 
-        DateTime prevUpdateTime;
-        DateTime prevRenderTime;
-        DateTime curUpdateTime;
-        DateTime curRenderTime;
-        FrameEventArgs updateEventArgs = new FrameEventArgs();
+        DateTime _prevUpdateTime;
+        DateTime _prevRenderTime;
+        DateTime _currUpdateTime;
+        DateTime _currRenderTime;
+        FrameEventArgs _updateEventArgs = new FrameEventArgs();
 
         void processStateDefault()
         {
@@ -388,7 +388,7 @@ namespace Microsoft.Xna.Framework
 
             lock (_lockObject)
             {
-                _internalState = InternalState.Exited_GameThread;
+                _internalState = InternalState.Exited;
             }
         }
 
@@ -397,7 +397,7 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not avalible
             lock (_lockObject)
             {
-                if (!androidSurfaceAvailable)
+                if (!_androidSurfaceAvailable)
                 {
                     return;
                 }
@@ -428,7 +428,7 @@ namespace Microsoft.Xna.Framework
 
         void processStatePausing()
         {
-            if (glSurfaceAvailable)
+            if (_glSurfaceAvailable)
             {
                 // Surface we are using needs to go away
                 DestroyGLSurface();
@@ -442,7 +442,7 @@ namespace Microsoft.Xna.Framework
             // go to next state
             lock (_lockObject)
             {
-                _internalState = InternalState.Paused_GameThread;
+                _internalState = InternalState.Paused;
             }
         }
 
@@ -451,7 +451,7 @@ namespace Microsoft.Xna.Framework
             bool isSurfaceAvalible = false;
             lock (_lockObject)
             {
-                isSurfaceAvalible = androidSurfaceAvailable;
+                isSurfaceAvalible = _androidSurfaceAvailable;
             }
 
             // must sleep outside lock!
@@ -465,11 +465,11 @@ namespace Microsoft.Xna.Framework
             // in this case we skip the resume process and pause sets a new state.   
             lock (_lockObject)
             {
-                if (!androidSurfaceAvailable)
+                if (!_androidSurfaceAvailable)
                     return;
 
                 // create surface if context is avalible
-                if (glContextAvailable && !lostglContext)
+                if (_glContextAvailable && !_lostglContext)
                 {
                     try
                     {
@@ -483,11 +483,11 @@ namespace Microsoft.Xna.Framework
                 }
 
                 // create context if not avalible
-                if ((!glContextAvailable || lostglContext))
+                if ((!_glContextAvailable || _lostglContext))
                 {
                     // Start or Restart due to context loss
                     bool contextLost = false;
-                    if (lostglContext || glContextAvailable)
+                    if (_lostglContext || _glContextAvailable)
                     {
                         // we actually lost the context
                         // so we need to free up our existing 
@@ -501,7 +501,7 @@ namespace Microsoft.Xna.Framework
                     CreateGLContext();
                     CreateGLSurface();
 
-                    if (contextLost && glContextAvailable)
+                    if (contextLost && _glContextAvailable)
                     {
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
@@ -509,7 +509,7 @@ namespace Microsoft.Xna.Framework
                     }
 
                 }
-                else if (glSurfaceAvailable) // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
+                else if (_glSurfaceAvailable) // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
                 {
                     // trigger callbacks, must resume openAL device here
                     var d = OnResumeGameThread;
@@ -517,7 +517,7 @@ namespace Microsoft.Xna.Framework
                         d(this, EventArgs.Empty);
 
                     // go to next state
-                    _internalState = InternalState.Running_GameThread;
+                    _internalState = InternalState.Running;
                 }
             }
         }
@@ -527,7 +527,7 @@ namespace Microsoft.Xna.Framework
             // go to next state
             lock (_lockObject)
             {
-                _internalState = InternalState.Exited_GameThread;
+                _internalState = InternalState.Exited;
             }
         }
 
@@ -536,7 +536,7 @@ namespace Microsoft.Xna.Framework
             // needed at app start
             lock (_lockObject)
             {
-                if (!androidSurfaceAvailable || !glContextAvailable)
+                if (!_androidSurfaceAvailable || !_glContextAvailable)
                 {
                     return;
                 }
@@ -548,7 +548,7 @@ namespace Microsoft.Xna.Framework
             // go to next state
             lock (_lockObject)
             {
-                _internalState = InternalState.Running_GameThread;
+                _internalState = InternalState.Running;
             }
         }
 
@@ -558,7 +558,7 @@ namespace Microsoft.Xna.Framework
             // set main game thread global ID
             Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
 
-            InternalState currentState = InternalState.Exited_GameThread;
+            InternalState currentState = InternalState.Exited;
 
             lock (_lockObject)
             {
@@ -572,26 +572,26 @@ namespace Microsoft.Xna.Framework
                     processStateExiting();
                     break;
 
-                case InternalState.Exited_GameThread: // when game thread processed exiting event
+                case InternalState.Exited: // when game thread processed exiting event
                     lock (_lockObject)
                     {
                         _waitForExitedStateProcessed.Set();
-                        cts.Cancel();
+                        _cts.Cancel();
                     }
                     break;
 
                 // pause states
-                case InternalState.Pausing_UIThread: // when ui thread wants to pause              
+                case InternalState.Pausing: // when ui thread wants to pause              
                     processStatePausing();
                     break;
 
-                case InternalState.Paused_GameThread: // when game thread processed pausing event
+                case InternalState.Paused: // when game thread processed pausing event
 
                     // this must be processed outside of this loop, in the new task thread!
                     return true; // trigger pause of worker thread
 
                 // other states
-                case InternalState.Resuming_UIThread: // when ui thread wants to resume
+                case InternalState.Resuming: // when ui thread wants to resume
                     processStateResuming();
 
                     // pause must wait for resume in case pause/resume is called in very quick succession
@@ -601,7 +601,7 @@ namespace Microsoft.Xna.Framework
                     }
                     break;
 
-                case InternalState.Running_GameThread: // when we are running game 
+                case InternalState.Running: // when we are running game 
                     processStateRunning(token);
 
                     break;
@@ -613,7 +613,7 @@ namespace Microsoft.Xna.Framework
                 // default case, error
                 default:
                     processStateDefault();
-                    cts.Cancel();
+                    _cts.Cancel();
                     break;
             }
 
@@ -632,19 +632,19 @@ namespace Microsoft.Xna.Framework
         // this method is called on the main thread
         void UpdateAndRenderFrame()
         {
-            curUpdateTime = DateTime.Now;
-            if (prevUpdateTime.Ticks != 0)
+            _currUpdateTime = DateTime.Now;
+            if (_prevUpdateTime.Ticks != 0)
             {
-                var t = (curUpdateTime - prevUpdateTime).TotalMilliseconds;
-                updateEventArgs.Time = t < 0 ? 0 : t;
+                var t = (_currUpdateTime - _prevUpdateTime).TotalMilliseconds;
+                _updateEventArgs.Time = t < 0 ? 0 : t;
             }
 
-            try { Game.Activity._orientationListener.Update(updateEventArgs); }
+            try { Game.Activity._orientationListener.Update(_updateEventArgs); }
             catch(Exception) { }
             
             try
             {
-                UpdateFrameInternal(updateEventArgs);
+                UpdateFrameInternal(_updateEventArgs);
             }
             catch (Content.ContentLoadException ex)
             {
@@ -659,18 +659,18 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            prevUpdateTime = curUpdateTime;
+            _prevUpdateTime = _currUpdateTime;
 
-            curRenderTime = DateTime.Now;
-            if (prevRenderTime.Ticks == 0)
+            _currRenderTime = DateTime.Now;
+            if (_prevRenderTime.Ticks == 0)
             {
-                var t = (curRenderTime - prevRenderTime).TotalMilliseconds;
-                renderEventArgs.Time = t < 0 ? 0 : t;
+                var t = (_currRenderTime - _prevRenderTime).TotalMilliseconds;
+                _renderEventArgs.Time = t < 0 ? 0 : t;
             }
 
-            RenderFrameInternal(renderEventArgs);
+            RenderFrameInternal(_renderEventArgs);
 
-            prevRenderTime = curRenderTime;
+            _prevRenderTime = _currRenderTime;
         }
 
         void RenderFrameInternal(FrameEventArgs e)
@@ -681,39 +681,39 @@ namespace Microsoft.Xna.Framework
         
         protected void DestroyGLContext()
         {
-            if (eglContext != null)
+            if (_eglContext != null)
             {
-                if (!egl.EglDestroyContext(eglDisplay, eglContext))
+                if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
                     throw new Exception("Could not destroy EGL context" + GetErrorAsString());
-                eglContext = null;
+                _eglContext = null;
             }
-            if (eglDisplay != null)
+            if (_eglDisplay != null)
             {
-                if (!egl.EglTerminate(eglDisplay))
+                if (!_egl.EglTerminate(_eglDisplay))
                     throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
-                eglDisplay = null;
+                _eglDisplay = null;
             }
 
-            glContextAvailable = false;
+            _glContextAvailable = false;
         }
 
         protected void DestroyGLSurface()
         {
-            if (!(eglSurface == null || eglSurface == EGL10.EglNoSurface))
+            if (!(_eglSurface == null || _eglSurface == EGL10.EglNoSurface))
             {
-                if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface,
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface,
                         EGL10.EglNoSurface, EGL10.EglNoContext))
                 {
                     Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
                 }
 
-                if (!egl.EglDestroySurface(eglDisplay, eglSurface))
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                 {
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 }
             }
-            eglSurface = null;
-            glSurfaceAvailable = false;
+            _eglSurface = null;
+            _glSurfaceAvailable = false;
 
         }
 
@@ -808,16 +808,16 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
-            lostglContext = false;
+            _lostglContext = false;
 
-            egl = EGLContext.EGL.JavaCast<IEGL10>();
+            _egl = EGLContext.EGL.JavaCast<IEGL10>();
 
-            eglDisplay = egl.EglGetDisplay(EGL10.EglDefaultDisplay);
-            if (eglDisplay == EGL10.EglNoDisplay)
+            _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+            if (_eglDisplay == EGL10.EglNoDisplay)
                 throw new Exception("Could not get EGL display" + GetErrorAsString());
 
             int[] version = new int[2];
-            if (!egl.EglInitialize(eglDisplay, version))
+            if (!_egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + GetErrorAsString());
 
             int depth = 0;
@@ -872,15 +872,15 @@ namespace Microsoft.Xna.Framework
             int[] numConfigs = new int[1];
             EGLConfig[] results = new EGLConfig[1];
 
-            if (!egl.EglGetConfigs(eglDisplay, null, 0, numConfigs)) {
+            if (!_egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs)) {
                 throw new Exception("Could not get config count. " + GetErrorAsString());
             }
 
             EGLConfig[] cfgs = new EGLConfig[numConfigs[0]];
-            egl.EglGetConfigs(eglDisplay, cfgs, numConfigs[0], numConfigs);
+            _egl.EglGetConfigs(_eglDisplay, cfgs, numConfigs[0], numConfigs);
             Log.Verbose("AndroidGameView", "Device Supports");
             foreach (var c in cfgs) {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(c, egl, eglDisplay)));
+                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(c, _egl, _eglDisplay)));
             }
 
             bool found = false;
@@ -888,7 +888,7 @@ namespace Microsoft.Xna.Framework
             foreach (var config in configs)
             {
                 Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", config));
-                found = egl.EglChooseConfig(eglDisplay, config.ToConfigAttribs(), results, 1, numConfigs);
+                found = _egl.EglChooseConfig(_eglDisplay, config.ToConfigAttribs(), results, 1, numConfigs);
                 Log.Verbose("AndroidGameView", "EglChooseConfig returned {0} and {1}", found, numConfigs[0]);
                 if (!found || numConfigs[0] <= 0)
                 {
@@ -904,29 +904,29 @@ namespace Microsoft.Xna.Framework
             var createdVersion = new MonoGame.OpenGL.GLESVersion();
             foreach (var v in MonoGame.OpenGL.GLESVersion.GetSupportedGLESVersions ()) {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
-                eglContext = egl.EglCreateContext(eglDisplay, results[0], EGL10.EglNoContext, v.GetAttributes());
-                if (eglContext == null || eglContext == EGL10.EglNoContext)
+                _eglContext = _egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, v.GetAttributes());
+                if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
                     Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", v, GetErrorAsString()));
-                    eglContext = EGL10.EglNoContext;
+                    _eglContext = EGL10.EglNoContext;
                     continue;
                 }
                 createdVersion = v;
                 break;
             }
-            if (eglContext == null || eglContext == EGL10.EglNoContext)
+            if (_eglContext == null || _eglContext == EGL10.EglNoContext)
             {
-                eglContext = null;
+                _eglContext = null;
                 throw new Exception("Could not create EGL context" + GetErrorAsString());
             }
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", createdVersion);
-            eglConfig = results[0];
-            glContextAvailable = true;
+            _eglConfig = results[0];
+            _glContextAvailable = true;
         }
 
         private string GetErrorAsString()
         {
-            switch (egl.EglGetError())
+            switch (_egl.EglGetError())
             {
                 case EGL10.EglSuccess:
                     return "Success";
@@ -966,21 +966,21 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLSurface()
         {
-            if (!glSurfaceAvailable)
+            if (!_glSurfaceAvailable)
             {
                 try
                 {
                     // If there is an existing surface, destroy the old one
                     DestroyGLSurface();
 
-                    eglSurface = egl.EglCreateWindowSurface(eglDisplay, eglConfig, (Java.Lang.Object)this.Holder, null);
-                    if (eglSurface == null || eglSurface == EGL10.EglNoSurface)
+                    _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                    if (_eglSurface == null || _eglSurface == EGL10.EglNoSurface)
                         throw new Exception("Could not create EGL window surface" + GetErrorAsString());
 
-                    if (!egl.EglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext))
+                    if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                         throw new Exception("Could not make EGL current" + GetErrorAsString());
 
-                    glSurfaceAvailable = true;
+                    _glSurfaceAvailable = true;
 
                     // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                     // the surface is created after the correct viewport is already applied so we must do it again.
@@ -993,7 +993,7 @@ namespace Microsoft.Xna.Framework
                 catch (Exception ex)
                 {
                     Log.Error("AndroidGameView", ex.ToString());
-                    glSurfaceAvailable = false;
+                    _glSurfaceAvailable = false;
                 }
             }
         }
@@ -1001,7 +1001,7 @@ namespace Microsoft.Xna.Framework
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
             IEGL10 egl = EGLContext.EGL.JavaCast<IEGL10>();
-            EGLSurface result = egl.EglCreatePbufferSurface(eglDisplay, config, attribList);
+            EGLSurface result = egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
             if (result == null || result == EGL10.EglNoSurface)
                 throw new Exception("EglCreatePBufferSurface");
             return result;
@@ -1009,7 +1009,7 @@ namespace Microsoft.Xna.Framework
 
         protected void ContextSetInternal()
         {
-            if (lostglContext)
+            if (_lostglContext)
             {
                 if (_game.GraphicsDevice != null)
                 {
@@ -1101,11 +1101,11 @@ namespace Microsoft.Xna.Framework
 
         #region Properties
 
-        private IEGL10 egl;
-        private EGLDisplay eglDisplay;
-        private EGLConfig eglConfig;
-        private EGLContext eglContext;
-        private EGLSurface eglSurface;
+        private IEGL10 _egl;
+        private EGLDisplay _eglDisplay;
+        private EGLConfig  _eglConfig;
+        private EGLContext _eglContext;
+        private EGLSurface _eglSurface;
 
         #endregion
 
@@ -1116,7 +1116,7 @@ namespace Microsoft.Xna.Framework
 
         public class FrameEventArgs : EventArgs
         {
-            double elapsed;
+            double _elapsedTime;
 
             /// <summary>
             /// Constructs a new FrameEventArgs instance.
@@ -1139,12 +1139,12 @@ namespace Microsoft.Xna.Framework
             /// </summary>
             public double Time
             {
-                get { return elapsed; }
+                get { return _elapsedTime; }
                 internal set
                 {
                     if (value < 0)
                         throw new ArgumentOutOfRangeException();
-                    elapsed = value;
+                    _elapsedTime = value;
                 }
             }
         }
