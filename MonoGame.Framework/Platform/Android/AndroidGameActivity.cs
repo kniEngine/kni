@@ -8,6 +8,7 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 
+
 namespace Microsoft.Xna.Framework
 {
 	[CLSCompliant(false)]
@@ -27,7 +28,7 @@ namespace Microsoft.Xna.Framework
 		/// <param name='savedInstanceState'>
 		/// Saved instance state.
 		/// </param>
-		protected override void OnCreate (Bundle savedInstanceState)
+		protected override void OnCreate(Bundle savedInstanceState)
 		{
             // Detection of NaturalOrientation. This must happend as soon as possible at start up.
             AndroidCompatibility.Initialize(this);
@@ -51,10 +52,10 @@ namespace Microsoft.Xna.Framework
 
         public static event EventHandler Paused;
 
-		public override void OnConfigurationChanged (Android.Content.Res.Configuration newConfig)
+		public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
 		{
 			// we need to refresh the viewport here.
-			base.OnConfigurationChanged (newConfig);
+			base.OnConfigurationChanged(newConfig);
 		}
 
         protected override void OnPause()
@@ -96,7 +97,7 @@ namespace Microsoft.Xna.Framework
             ((AndroidGamePlatform)Game.Platform).OnWindowFocusChanged(hasFocus);
         }
 
-		protected override void OnDestroy ()
+		protected override void OnDestroy()
 		{
             UnregisterReceiver(screenReceiver);
             ScreenReceiver.ScreenLocked = false;
@@ -104,7 +105,7 @@ namespace Microsoft.Xna.Framework
             if (Game != null)
                 Game.Dispose();
             Game = null;
-			base.OnDestroy ();
+			base.OnDestroy();
 		}
     }
 

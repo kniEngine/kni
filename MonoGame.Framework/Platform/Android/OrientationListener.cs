@@ -9,6 +9,7 @@ using Android.Hardware;
 using Android.Views;
 using Android.Provider;
 
+
 namespace Microsoft.Xna.Framework
 {
     internal class OrientationListener : OrientationEventListener
