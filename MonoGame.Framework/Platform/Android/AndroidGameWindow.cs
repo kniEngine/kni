@@ -61,8 +61,7 @@ namespace Microsoft.Xna.Framework
             
             GameView = new MonoGameAndroidGameView(context, this, _game);
             GameView.RenderOnUIThread = Game.Activity.RenderOnUIThread;
-            GameView.RenderFrame += OnRenderFrame;
-            GameView.UpdateFrame += OnUpdateFrame;
+            GameView.Tick += OnTick;
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
@@ -70,14 +69,7 @@ namespace Microsoft.Xna.Framework
 
         #region AndroidGameView Methods
 
-        private void OnRenderFrame(object sender, EventArgs args)
-        {
-            GameView.MakeCurrent();
-
-            Threading.Run();
-        }
-
-        private void OnUpdateFrame(object sender, EventArgs args)
+        private void OnTick(object sender, EventArgs args)
         {
             GameView.MakeCurrent();
 
@@ -99,6 +91,10 @@ namespace Microsoft.Xna.Framework
                     _game.Platform.Present();
                 }
             }
+
+            GameView.MakeCurrent();
+
+            Threading.Run();
         }
 
         #endregion

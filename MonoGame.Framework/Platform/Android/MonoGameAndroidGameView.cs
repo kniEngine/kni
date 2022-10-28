@@ -70,6 +70,8 @@ namespace Microsoft.Xna.Framework
         internal static event EventHandler OnPauseGameThread;
         internal static event EventHandler OnResumeGameThread;
 
+        internal event EventHandler Tick;
+
         internal bool TouchEnabled
         {
             get { return _touchManager.Enabled; }
@@ -184,7 +186,7 @@ namespace Microsoft.Xna.Framework
                 // prepare gameLoop
                 Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
                 _stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                _prevUpdateTime = DateTime.Now;
+                _prevTickTime = DateTime.Now;
                 var looper = Android.OS.Looper.MainLooper;
                 _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
@@ -331,7 +333,7 @@ namespace Microsoft.Xna.Framework
             try
             {
                 _stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                _prevUpdateTime = DateTime.Now;
+                _prevTickTime = DateTime.Now;
 
                 while (!_cts.IsCancellationRequested)
                 {
@@ -374,7 +376,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        DateTime _prevUpdateTime;
+        DateTime _prevTickTime;
 
         void processStateDefault()
         {
@@ -614,34 +616,27 @@ namespace Microsoft.Xna.Framework
             return false;
         }
 
-        void UpdateFrameInternal(EventArgs e)
-        {
-            if (UpdateFrame != null)
-            {
-                UpdateFrame(this, e);
-            }
-
-        }
-
         // this method is called on the main thread
         void UpdateAndRenderFrame()
         {
-            var currUpdateTime = DateTime.Now;
+            var currTickTime = DateTime.Now;
             TimeSpan dt = TimeSpan.Zero;
-            if (_prevUpdateTime.Ticks != 0)
+            if (_prevTickTime.Ticks != 0)
             {
-                dt = (currUpdateTime - _prevUpdateTime);
+                dt = (currTickTime - _prevTickTime);
                 if (dt.TotalMilliseconds < 0)
                     dt = TimeSpan.Zero;
             }
-            _prevUpdateTime = currUpdateTime;
+            _prevTickTime = currTickTime;
 
             try { Game.Activity._orientationListener.Update(dt); }
             catch(Exception) { }
             
             try
             {
-                UpdateFrameInternal(EventArgs.Empty);
+                var handler = Tick;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
             }
             catch (Content.ContentLoadException ex)
             {
@@ -655,15 +650,8 @@ namespace Microsoft.Xna.Framework
                     });
                 }
             }
-
-            RenderFrameInternal(EventArgs.Empty);
         }
 
-        void RenderFrameInternal(EventArgs e)
-        {
-            if (RenderFrame != null)
-                RenderFrame(this, e);
-        }
         
         protected void DestroyGLContext()
         {
