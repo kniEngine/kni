@@ -46,7 +46,6 @@ namespace Microsoft.Xna.Framework
         ManualResetEvent _waitForExitedStateProcessed = new ManualResetEvent(false);
 
         AutoResetEvent _waitForMainGameLoop = new AutoResetEvent(false);
-        AutoResetEvent _workerThreadUIRenderingWait = new AutoResetEvent(false);
 
         object _lockObject = new object();
 
@@ -187,7 +186,6 @@ namespace Microsoft.Xna.Framework
             cts = new CancellationTokenSource();
             if (LogFPS)
             {
-                targetFps = currentFps = 0;
                 avgFps = 1;
             }
             updates = 1000 / updatesPerSecond;
@@ -749,8 +747,6 @@ namespace Microsoft.Xna.Framework
         int frames = 0;
         double prev = 0;
         double avgFps = 0;
-        double currentFps = 0;
-        double targetFps = 0;
 
         void Mark()
         {
