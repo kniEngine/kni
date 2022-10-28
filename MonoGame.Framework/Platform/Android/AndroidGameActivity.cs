@@ -19,7 +19,6 @@ namespace Microsoft.Xna.Framework
         internal OrientationListener _orientationListener;
 
         public bool AutoPauseAndResumeMediaPlayer = true;
-        public bool RenderOnUIThread = true; 
 
 		/// <summary>
 		/// OnCreate called when the activity is launched from cold or after the app
