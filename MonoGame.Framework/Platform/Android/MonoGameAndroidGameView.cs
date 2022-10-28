@@ -67,10 +67,10 @@ namespace Microsoft.Xna.Framework
         private readonly Game _game;
 
         // Events that are triggered on the game thread
-        public static event EventHandler OnPauseGameThread;
-        public static event EventHandler OnResumeGameThread;
+        internal static event EventHandler OnPauseGameThread;
+        internal static event EventHandler OnResumeGameThread;
 
-        public bool TouchEnabled
+        internal bool TouchEnabled
         {
             get { return _touchManager.Enabled; }
             set
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public bool IsResuming { get; private set; }
+        internal bool IsResuming { get; private set; }
 
         public MonoGameAndroidGameView(Context context, AndroidGameWindow gameWindow, Game game)
             : base(context)
@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework
             return true;
         }
 
-        public void SwapBuffers()
+        internal void SwapBuffers()
         {
             if (!egl.EglSwapBuffers(eglDisplay, eglSurface))
             {
@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        public void MakeCurrent()
+        internal void MakeCurrent()
         {
             if (!egl.EglMakeCurrent(eglDisplay, eglSurface,
                     eglSurface, eglContext))
@@ -161,7 +161,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        public void ClearCurrent()
+        internal void ClearCurrent()
         {
             if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface,
                 EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -170,9 +170,9 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public bool RenderOnUIThread { get; set; }
+        internal bool RenderOnUIThread { get; set; }
 
-        public void Run()
+        internal void Run()
         {
             cts = new CancellationTokenSource();
 
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        public void Pause()
+        internal void Pause()
         {
             // if triggered in quick succession and blocked by graphics device creation, 
             // pause can be triggered twice, without resume in between on some phones.
@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public void Resume()
+        internal void Resume()
         {
             lock (_lockObject)
             {
