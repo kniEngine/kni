@@ -36,14 +36,13 @@ namespace Microsoft.Xna.Framework
             Paused,  // set by game thread after processing 'Pausing' state
             Running, // set by game thread after processing 'Resuming' state
             Exited,  // set by game thread after processing 'Exiting' state
-
-            ForceRecreateSurface, // also used to create the surface the 1st time or when screen orientation changes
         }
 
         ISurfaceHolder _surfaceHolder;
 
         volatile InternalState _internalState = InternalState.Exited;
 
+        volatile bool _forceRecreateSurface = false;
         bool _androidSurfaceAvailable = false;
 
         bool _glSurfaceAvailable;
@@ -100,7 +99,7 @@ namespace Microsoft.Xna.Framework
             // can only be triggered when main loop is running, is unsafe to overwrite other states
             if (_internalState == InternalState.Running)
             {
-                _internalState = InternalState.ForceRecreateSurface;
+                _forceRecreateSurface = true;
             }
         }
 
@@ -206,7 +205,8 @@ namespace Microsoft.Xna.Framework
             // pause can be triggered twice, without resume in between on some phones.
             if (_internalState != InternalState.Running)
             {
-                return;
+                if (_forceRecreateSurface == false)
+                    return;
             }
 
             if (!_androidSurfaceAvailable)
@@ -338,9 +338,14 @@ namespace Microsoft.Xna.Framework
 
                 if (contextLost && _glContextAvailable)
                 {
-                    // we lost the gl context, we need to let the programmer
-                    // know so they can re-create textures etc.
-                    ContextSetInternal();
+                    // trigger callbacks, must resume openAL device here
+                    var handler = OnResumeGameThread;
+                    if (handler != null)
+                        handler(this, EventArgs.Empty);
+
+                    // go to next state
+                    _internalState = InternalState.Running;
+                    _forceRecreateSurface = false;
                 }
 
             }
@@ -356,7 +361,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        void processStateForceSurfaceRecreation()
+        void ForceSurfaceRecreation()
         {
             // needed at app start
             if (!_androidSurfaceAvailable || !_glContextAvailable)
@@ -368,7 +373,7 @@ namespace Microsoft.Xna.Framework
             CreateGLSurface();
 
             // go to next state
-            _internalState = InternalState.Running;
+            _forceRecreateSurface = false;
         }
 
         void RunIteration()
@@ -404,11 +409,10 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case InternalState.Running: // when we are running game 
-                    processStateRunning();
-                    break;
-
-                case InternalState.ForceRecreateSurface:
-                    processStateForceSurfaceRecreation();
+                    if (_forceRecreateSurface == true)
+                        ForceSurfaceRecreation();
+                    else
+                        processStateRunning();
                     break;
 
                 // default case, error
