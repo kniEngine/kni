@@ -170,16 +170,11 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public bool LogFPS { get; set; }
         public bool RenderOnUIThread { get; set; }
 
         public virtual void Run()
         {
             cts = new CancellationTokenSource();
-            if (LogFPS)
-            {
-                avgFps = 1;
-            }
 
             //var syncContext = new SynchronizationContext ();
             var syncContext = SynchronizationContext.Current;
@@ -703,11 +698,6 @@ namespace Microsoft.Xna.Framework
 
         void RenderFrameInternal(FrameEventArgs e)
         {
-            if (LogFPS)
-            {
-                Mark();
-            }
-
             OnRenderFrame(e);
 
             if (RenderFrame != null)
@@ -719,33 +709,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        int frames = 0;
-        double prev = 0;
-        double avgFps = 0;
-
-        void Mark()
-        {
-            double cur = stopWatch.Elapsed.TotalMilliseconds;
-            if (cur < 2000)
-            {
-                return;
-            }
-            frames++;
-
-            if (cur - prev >= 995)
-            {
-                avgFps = 0.8 * avgFps + 0.2 * frames;
-
-                Log.Verbose("AndroidGameView", "frames {0} elapsed {1}ms {2:F2} fps",
-                    frames,
-                    cur - prev,
-                    avgFps);
-
-                frames = 0;
-                prev = cur;
-            }
-        }
-
+        
         protected void DestroyGLContext()
         {
             if (eglContext != null)
