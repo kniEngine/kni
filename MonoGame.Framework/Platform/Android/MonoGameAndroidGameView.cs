@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Framework
         {
             Pausing,  // set by android UI thread process it and transitions into 'Paused' state
             Resuming, // set by android UI thread process it and transitions into 'Running' state
-            Exiting,  // set either by game or android UI thread process it and transitions into 'Exited' state          
 
             Paused,  // set by game thread after processing 'Pausing' state
             Running, // set by game thread after processing 'Resuming' state
@@ -242,7 +241,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (_isCancellationRequested != null)
                 {
-                    _internalState = InternalState.Exiting;
+                    _internalState = InternalState.Exited;
                     _isCancellationRequested = true;
                 }
             }
@@ -264,7 +263,7 @@ namespace Microsoft.Xna.Framework
             if (_isCancellationRequested.Value == true)
             {
                 // change state to exit and skip game loop
-                _internalState = InternalState.Exiting;
+                _internalState = InternalState.Exited;
                 return;
             }
 
@@ -385,12 +384,7 @@ namespace Microsoft.Xna.Framework
             switch (currentState)
             {
                 // exit states
-                case InternalState.Exiting: // when ui thread wants to exit
-                    // go to next state
-                    _internalState = InternalState.Exited;
-                    break;
-
-                case InternalState.Exited: // when game thread processed exiting event
+                case InternalState.Exited:
                     _isCancellationRequested = true;
                     break;
 
