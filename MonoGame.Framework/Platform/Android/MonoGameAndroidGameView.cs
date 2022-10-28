@@ -21,7 +21,9 @@ using Microsoft.Xna.Framework.Input.Touch;
 namespace Microsoft.Xna.Framework
 {
     [CLSCompliant(false)]
-    public class MonoGameAndroidGameView : SurfaceView, ISurfaceHolderCallback, View.IOnTouchListener
+    public class MonoGameAndroidGameView : SurfaceView
+        , ISurfaceHolderCallback
+        , View.IOnTouchListener
         , Java.Lang.IRunnable
     {
         // What is the state of the app, for tracking surface recreation inside this class.
@@ -94,11 +96,11 @@ namespace Microsoft.Xna.Framework
             // default
             mHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
-            mHolder.AddCallback(this);
+            mHolder.AddCallback((ISurfaceHolderCallback)this);
             mHolder.SetType(SurfaceType.Gpu);
         }
 
-        public void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
+        void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
             // Set flag to recreate gl surface or rendering can be bad on orienation change or if app 
             // is closed in one orientation and re-opened in another.
@@ -113,7 +115,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public void SurfaceCreated(ISurfaceHolder holder)
+        void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
         {
             lock (_lockObject)
             {
@@ -121,7 +123,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public void SurfaceDestroyed(ISurfaceHolder holder)
+        void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
         {
             lock (_lockObject)
             {
@@ -129,7 +131,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public bool OnTouch(View v, MotionEvent e)
+        bool View.IOnTouchListener.OnTouch(View v, MotionEvent e)
         {
             _touchManager.OnTouchEvent(e);
             return true;
@@ -187,7 +189,7 @@ namespace Microsoft.Xna.Framework
                 handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
                 // request first tick.
-                handler.Post(this as Java.Lang.IRunnable);
+                handler.Post((Java.Lang.IRunnable)this);
             }
             else
             {
@@ -212,7 +214,7 @@ namespace Microsoft.Xna.Framework
                 finally
                 {
                     // request next tick
-                    handler.Post(this as Java.Lang.IRunnable);
+                    handler.Post((Java.Lang.IRunnable)this);
                 }
             }
             else
