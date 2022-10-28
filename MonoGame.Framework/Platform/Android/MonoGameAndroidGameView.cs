@@ -190,7 +190,8 @@ namespace Microsoft.Xna.Framework
                 if (_glContextAvailable)
                 {
                     DestroyGLContext();
-                    ContextLostInternal();
+                    if (_game.GraphicsDevice != null)
+                        _game.GraphicsDevice.Android_OnDeviceResetting();
                 }
                 
                 _internalState = InternalState.Exited;
@@ -250,13 +251,6 @@ namespace Microsoft.Xna.Framework
         }
 
         DateTime _prevTickTime;
-
-        void processStateDefault()
-        {
-            Log.Error("AndroidGameView", "Default case for switch on InternalState in main game loop, exiting");
-
-            _internalState = InternalState.Exited;
-        }
 
         void processStateRunning()
         {
@@ -335,7 +329,8 @@ namespace Microsoft.Xna.Framework
                     DestroyGLContext();
                     contextLost = true;
 
-                    ContextLostInternal();
+                    if (_game.GraphicsDevice != null)
+                        _game.GraphicsDevice.Android_OnDeviceResetting();
                 }
 
                 CreateGLContext();
@@ -359,12 +354,6 @@ namespace Microsoft.Xna.Framework
                 // go to next state
                 _internalState = InternalState.Running;
             }
-        }
-
-        void processStateExiting()
-        {
-            // go to next state
-            _internalState = InternalState.Exited;
         }
 
         void processStateForceSurfaceRecreation()
@@ -392,7 +381,8 @@ namespace Microsoft.Xna.Framework
             {
                 // exit states
                 case InternalState.Exiting: // when ui thread wants to exit
-                    processStateExiting();
+                    // go to next state
+                    _internalState = InternalState.Exited;
                     break;
 
                 case InternalState.Exited: // when game thread processed exiting event
@@ -423,7 +413,8 @@ namespace Microsoft.Xna.Framework
 
                 // default case, error
                 default:
-                    processStateDefault();
+                    Log.Error("AndroidGameView", "Default case for switch on InternalState in main game loop, exiting");
+                    _internalState = InternalState.Exited;
                     _isCancellationRequested = true;
                     break;
             }
@@ -821,12 +812,6 @@ namespace Microsoft.Xna.Framework
                     bgThread.Start();
                 }
             }
-        }
-
-        protected void ContextLostInternal()
-        {
-            if (_game.GraphicsDevice != null)
-                _game.GraphicsDevice.Android_OnDeviceResetting();
         }
 
         #region Key and Motion
