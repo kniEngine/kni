@@ -87,7 +87,10 @@ namespace Microsoft.Xna.Framework
             _surfaceHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
             _surfaceHolder.AddCallback((ISurfaceHolderCallback)this);
-            _surfaceHolder.SetType(SurfaceType.Gpu);
+
+            // Holder.SetType is deprecated. The SurfaceType value is ignored.
+            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
+                _surfaceHolder.SetType(SurfaceType.Gpu);
         }
 
         void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
