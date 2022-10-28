@@ -70,14 +70,14 @@ namespace Microsoft.Xna.Framework
 
         #region AndroidGameView Methods
 
-        private void OnRenderFrame(object sender, MonoGameAndroidGameView.FrameEventArgs frameEventArgs)
+        private void OnRenderFrame(object sender, EventArgs args)
         {
             GameView.MakeCurrent();
 
             Threading.Run();
         }
 
-        private void OnUpdateFrame(object sender, MonoGameAndroidGameView.FrameEventArgs frameEventArgs)
+        private void OnUpdateFrame(object sender, EventArgs args)
         {
             GameView.MakeCurrent();
 

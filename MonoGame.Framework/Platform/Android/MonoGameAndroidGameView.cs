@@ -325,8 +325,6 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
         }
 
-        FrameEventArgs _renderEventArgs = new FrameEventArgs();
-
         protected void WorkerThreadFrameDispatcher(SynchronizationContext uiThreadSyncContext)
         {
             Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
@@ -377,10 +375,6 @@ namespace Microsoft.Xna.Framework
         }
 
         DateTime _prevUpdateTime;
-        DateTime _prevRenderTime;
-        DateTime _currUpdateTime;
-        DateTime _currRenderTime;
-        FrameEventArgs _updateEventArgs = new FrameEventArgs();
 
         void processStateDefault()
         {
@@ -620,7 +614,7 @@ namespace Microsoft.Xna.Framework
             return false;
         }
 
-        void UpdateFrameInternal(FrameEventArgs e)
+        void UpdateFrameInternal(EventArgs e)
         {
             if (UpdateFrame != null)
             {
@@ -632,19 +626,22 @@ namespace Microsoft.Xna.Framework
         // this method is called on the main thread
         void UpdateAndRenderFrame()
         {
-            _currUpdateTime = DateTime.Now;
+            var currUpdateTime = DateTime.Now;
+            TimeSpan dt = TimeSpan.Zero;
             if (_prevUpdateTime.Ticks != 0)
             {
-                var t = (_currUpdateTime - _prevUpdateTime).TotalMilliseconds;
-                _updateEventArgs.Time = t < 0 ? 0 : t;
+                dt = (currUpdateTime - _prevUpdateTime);
+                if (dt.TotalMilliseconds < 0)
+                    dt = TimeSpan.Zero;
             }
+            _prevUpdateTime = currUpdateTime;
 
-            try { Game.Activity._orientationListener.Update(_updateEventArgs); }
+            try { Game.Activity._orientationListener.Update(dt); }
             catch(Exception) { }
             
             try
             {
-                UpdateFrameInternal(_updateEventArgs);
+                UpdateFrameInternal(EventArgs.Empty);
             }
             catch (Content.ContentLoadException ex)
             {
@@ -659,21 +656,10 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            _prevUpdateTime = _currUpdateTime;
-
-            _currRenderTime = DateTime.Now;
-            if (_prevRenderTime.Ticks == 0)
-            {
-                var t = (_currRenderTime - _prevRenderTime).TotalMilliseconds;
-                _renderEventArgs.Time = t < 0 ? 0 : t;
-            }
-
-            RenderFrameInternal(_renderEventArgs);
-
-            _prevRenderTime = _currRenderTime;
+            RenderFrameInternal(EventArgs.Empty);
         }
 
-        void RenderFrameInternal(FrameEventArgs e)
+        void RenderFrameInternal(EventArgs e)
         {
             if (RenderFrame != null)
                 RenderFrame(this, e);
@@ -1109,45 +1095,8 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        public event FrameEvent RenderFrame;
-        public event FrameEvent UpdateFrame;
-
-        public delegate void FrameEvent(object sender, FrameEventArgs e);
-
-        public class FrameEventArgs : EventArgs
-        {
-            double _elapsedTime;
-
-            /// <summary>
-            /// Constructs a new FrameEventArgs instance.
-            /// </summary>
-            public FrameEventArgs()
-            {
-            }
-
-            /// <summary>
-            /// Constructs a new FrameEventArgs instance.
-            /// </summary>
-            /// <param name="elapsed">The amount of time that has elapsed since the previous event, in seconds.</param>
-            public FrameEventArgs(double elapsed)
-            {
-                Time = elapsed;
-            }
-
-            /// <summary>
-            /// Gets a <see cref="System.Double"/> that indicates how many seconds of time elapsed since the previous event.
-            /// </summary>
-            public double Time
-            {
-                get { return _elapsedTime; }
-                internal set
-                {
-                    if (value < 0)
-                        throw new ArgumentOutOfRangeException();
-                    _elapsedTime = value;
-                }
-            }
-        }
+        public event EventHandler RenderFrame;
+        public event EventHandler UpdateFrame;        
 
     }
 }
