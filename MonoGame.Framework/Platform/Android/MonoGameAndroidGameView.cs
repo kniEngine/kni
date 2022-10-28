@@ -58,8 +58,6 @@ namespace Microsoft.Xna.Framework
         bool lostglContext;
         System.Diagnostics.Stopwatch stopWatch;
 
-        bool loaded = false;
-
         Task renderTask;
         CancellationTokenSource cts = null;
         private readonly AndroidTouchEventManager _touchManager;
@@ -196,11 +194,7 @@ namespace Microsoft.Xna.Framework
                 renderTask = Task.Factory.StartNew(() =>
                 {
                     WorkerThreadFrameDispatcher(syncContext);
-                }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
-                .ContinueWith((t) =>
-                {
-                    OnStopped(EventArgs.Empty);
-                });
+                }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
 
@@ -237,8 +231,6 @@ namespace Microsoft.Xna.Framework
                 }
                 
                 _internalState = InternalState.Exited_GameThread;
-
-                OnStopped(EventArgs.Empty);
             }
             
             return;
@@ -443,9 +435,6 @@ namespace Microsoft.Xna.Framework
             {
                 // Surface we are using needs to go away
                 DestroyGLSurface();
-
-                if (loaded)
-                    OnUnload(EventArgs.Empty);
             }
 
             // trigger callbacks, must pause openAL device here
@@ -514,9 +503,6 @@ namespace Microsoft.Xna.Framework
 
                     CreateGLContext();
                     CreateGLSurface();
-
-                    if (!loaded && glContextAvailable)
-                        OnLoad(EventArgs.Empty);
 
                     if (contextLost && glContextAvailable)
                     {
@@ -639,16 +625,10 @@ namespace Microsoft.Xna.Framework
 
         void UpdateFrameInternal(FrameEventArgs e)
         {
-            OnUpdateFrame(e);
             if (UpdateFrame != null)
             {
                 UpdateFrame(this, e);
             }
-
-        }
-
-        protected virtual void OnUpdateFrame(FrameEventArgs e)
-        {
 
         }
 
@@ -698,17 +678,9 @@ namespace Microsoft.Xna.Framework
 
         void RenderFrameInternal(FrameEventArgs e)
         {
-            OnRenderFrame(e);
-
             if (RenderFrame != null)
                 RenderFrame(this, e);
         }
-
-        protected virtual void OnRenderFrame(FrameEventArgs e)
-        {
-
-        }
-
         
         protected void DestroyGLContext()
         {
@@ -1069,39 +1041,12 @@ namespace Microsoft.Xna.Framework
                     bgThread.Start();
                 }
             }
-            OnContextSet(EventArgs.Empty);
         }
 
         protected void ContextLostInternal()
         {
-            OnContextLost(EventArgs.Empty);
             if (_game.GraphicsDevice != null)
                 _game.GraphicsDevice.Android_OnDeviceResetting();
-        }
-
-        protected virtual void OnContextLost(EventArgs eventArgs)
-        {
-
-        }
-
-        protected virtual void OnContextSet(EventArgs eventArgs)
-        {
-
-        }
-
-        protected virtual void OnUnload(EventArgs eventArgs)
-        {
-
-        }
-
-        protected virtual void OnLoad(EventArgs eventArgs)
-        {
-
-        }
-
-        protected virtual void OnStopped(EventArgs eventArgs)
-        {
-
         }
 
         #region Key and Motion
