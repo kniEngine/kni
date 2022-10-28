@@ -57,7 +57,6 @@ namespace Microsoft.Xna.Framework
         bool glContextAvailable;
         bool lostglContext;
         System.Diagnostics.Stopwatch stopWatch;
-        double tick = 0;
 
         bool loaded = false;
 
@@ -171,24 +170,16 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        double updates;
-
         public bool LogFPS { get; set; }
         public bool RenderOnUIThread { get; set; }
 
         public virtual void Run()
-        {
-            Run(0.0);
-        }
-
-        public virtual void Run(double updatesPerSecond)
         {
             cts = new CancellationTokenSource();
             if (LogFPS)
             {
                 avgFps = 1;
             }
-            updates = 1000 / updatesPerSecond;
 
             //var syncContext = new SynchronizationContext ();
             var syncContext = SynchronizationContext.Current;
@@ -198,7 +189,6 @@ namespace Microsoft.Xna.Framework
                 // prepare gameLoop
                 Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
                 stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                tick = 0;
                 prevUpdateTime = DateTime.Now;
                 var looper = Android.OS.Looper.MainLooper;
                 handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
@@ -359,7 +349,6 @@ namespace Microsoft.Xna.Framework
             try
             {
                 stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                tick = 0;
                 prevUpdateTime = DateTime.Now;
 
                 while (!cts.IsCancellationRequested)
@@ -451,20 +440,6 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Error("AndroidGameView", "GL Exception occured during RunIteration {0}", ex.Message);
             }
-
-            if (updates > 0)
-            {
-                var t = updates - (stopWatch.Elapsed.TotalMilliseconds - tick);
-                if (t > 0)
-                {
-                    if (LogFPS)
-                    {
-                        Log.Verbose("AndroidGameView", "took {0:F2}ms, should take {1:F2}ms, sleeping for {2:F2}", stopWatch.Elapsed.TotalMilliseconds - tick, updates, t);
-                    }
-
-                }
-            }
-
         }
 
         void processStatePausing()
