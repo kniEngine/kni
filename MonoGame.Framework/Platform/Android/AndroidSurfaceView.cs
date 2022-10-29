@@ -52,6 +52,8 @@ namespace Microsoft.Xna.Framework
         DateTime _prevTickTime;
 
         bool? _isCancellationRequested = null;
+        private int _frameRequests = 0;
+
         private readonly AndroidTouchEventManager _touchManager;
         private readonly AndroidGameWindow _gameWindow;
         private readonly Game _game;
@@ -166,12 +168,18 @@ namespace Microsoft.Xna.Framework
 
         private void RequestFrame()
         {
-            _handler.Post((Java.Lang.IRunnable)this);
+            if (_frameRequests == 0)
+            {
+                _handler.Post((Java.Lang.IRunnable)this);
+                _frameRequests++;
+            }
         }
 
         Android.OS.Handler _handler;
         void Java.Lang.IRunnable.Run()
         {
+            _frameRequests--;
+
             if (_isCancellationRequested.Value == false)
             {
                 try
@@ -182,7 +190,10 @@ namespace Microsoft.Xna.Framework
                 finally
                 {
                     // request next tick
-                    RequestFrame();
+                    if (_appState == AppState.Resuming
+                    ||  _appState == AppState.Running
+                    ||  _appState == AppState.Pausing)
+                        RequestFrame();
                 }
             }
             else
@@ -427,6 +438,7 @@ namespace Microsoft.Xna.Framework
         internal void Resume()
         {
             _appState = AppState.Resuming;
+            RequestFrame();
 
             try
             {
