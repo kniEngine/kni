@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework
         , Java.Lang.IRunnable
     {
         // What is the state of the app, for tracking surface recreation inside this class.
-        enum InternalState
+        enum AppState
         {
             Pausing,  // set by android UI thread process it and transitions into 'Paused' state
             Resuming, // set by android UI thread process it and transitions into 'Running' state
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework
 
         ISurfaceHolder _surfaceHolder;
 
-        volatile InternalState _internalState = InternalState.Exited;
+        volatile AppState _appState = AppState.Exited;
 
         volatile bool _forceRecreateSurface = false;
         bool _androidSurfaceAvailable = false;
@@ -47,7 +47,9 @@ namespace Microsoft.Xna.Framework
         bool _glSurfaceAvailable;
         bool _glContextAvailable;
         bool _lostglContext;
+
         System.Diagnostics.Stopwatch _stopWatch;
+        DateTime _prevTickTime;
 
         bool? _isCancellationRequested = null;
         private readonly AndroidTouchEventManager _touchManager;
@@ -99,10 +101,8 @@ namespace Microsoft.Xna.Framework
             // is closed in one orientation and re-opened in another.
 
             // can only be triggered when main loop is running, is unsafe to overwrite other states
-            if (_internalState == InternalState.Running)
-            {
+            if (_appState == AppState.Running)
                 _forceRecreateSurface = true;
-            }
         }
 
         void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
@@ -137,9 +137,7 @@ namespace Microsoft.Xna.Framework
         internal void MakeCurrentContext()
         {
             if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
-            {
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
-            }
         }
 
         internal void ClearCurrentContext()
@@ -151,7 +149,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void Run()
+        internal void BeforeRun()
         {
             _isCancellationRequested = false;
 
@@ -163,6 +161,11 @@ namespace Microsoft.Xna.Framework
             _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
             // request first tick.
+            RequestFrame();
+        }
+
+        private void RequestFrame()
+        {
             _handler.Post((Java.Lang.IRunnable)this);
         }
 
@@ -174,12 +177,12 @@ namespace Microsoft.Xna.Framework
                 try
                 {
                     // tick
-                    RunIteration();
+                    RunStep();
                 }
                 finally
                 {
                     // request next tick
-                    _handler.Post((Java.Lang.IRunnable)this);
+                    RequestFrame();
                 }
             }
             else
@@ -212,112 +215,48 @@ namespace Microsoft.Xna.Framework
                         _game.GraphicsDevice.Android_OnDeviceResetting();
                 }
                 
-                _internalState = InternalState.Exited;
+                _appState = AppState.Exited;
             }
             
             return;
         }
 
-        internal void Pause()
+        void RunStep()
         {
-            // if triggered in quick succession and blocked by graphics device creation, 
-            // pause can be triggered twice, without resume in between on some phones.
-            if (_internalState != InternalState.Running)
-            {
-                if (_forceRecreateSurface == false)
-                    return;
-            }
+            // set main game thread global ID
+            Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
 
-            if (!_androidSurfaceAvailable)
+            switch (_appState)
             {
-                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
-                _internalState = InternalState.Paused; // prepare for next game loop iteration
-            }
-            else
-            {
-                // processing the pausing state only if the surface was created already
-                _internalState = InternalState.Pausing;
-            }
-        }
+                case AppState.Resuming: // when ui thread wants to resume
+                    processStateResuming();
+                    break;
 
-        internal void Resume()
-        {
-            _internalState = InternalState.Resuming;
+                case AppState.Running: // when we are running game 
+                    if (_forceRecreateSurface == true)
+                        ForceSurfaceRecreation();
+                    else
+                        processStateRunning();
+                    break;
 
-            try
-            {
-                if (!IsFocused)
-                    RequestFocus();
-            }
-            catch(Exception ex)
-            {
-                Log.Verbose("RequestFocus()", ex.ToString());
-            }
-        }
+                case AppState.Pausing: // when ui thread wants to pause              
+                    processStatePausing();
+                    break;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_isCancellationRequested != null)
-                {
-                    _internalState = InternalState.Exited;
+                case AppState.Paused: // when game thread processed pausing event
+                    // this must be processed outside of this loop, in the new task thread!
+                    break;
+
+                case AppState.Exited:
                     _isCancellationRequested = true;
-                }
+                    break;
+                
+                default:
+                    throw new InvalidOperationException("currentState");
+                    break;
             }
 
-            base.Dispose(disposing);
-        }
-
-        DateTime _prevTickTime;
-
-        void processStateRunning()
-        {
-            // do not run game if surface is not available
-            if (!_androidSurfaceAvailable)
-            {
-                return;
-            }
-
-            // check if app wants to exit
-            if (_isCancellationRequested.Value == true)
-            {
-                // change state to exit and skip game loop
-                _internalState = InternalState.Exited;
-                return;
-            }
-
-            try
-            {
-                UpdateAndRenderFrame();
-            }
-            catch (MonoGameGLException ex)
-            {
-                Log.Error("AndroidGameView", "GL Exception occured during RunIteration {0}", ex.Message);
-            }
-        }
-
-        void processStatePausing()
-        {
-            if (_glSurfaceAvailable)
-            {
-                // Surface we are using needs to go away
-                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
-                {
-                    ClearCurrentContext();
-                    DestroyGLSurface();
-                }
-                _eglSurface = null;
-                _glSurfaceAvailable = false;
-            }
-
-            // trigger callbacks, must pause openAL device here
-            var handler = OnPauseGameThread;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-
-            // go to next state
-            _internalState = InternalState.Paused;
+            return;
         }
 
         void processStateResuming()
@@ -391,7 +330,7 @@ namespace Microsoft.Xna.Framework
                     handler(this, EventArgs.Empty);
 
                 // go to next state
-                _internalState = InternalState.Running;
+                _appState = AppState.Running;
                 _forceRecreateSurface = false;
             }
         }
@@ -400,9 +339,7 @@ namespace Microsoft.Xna.Framework
         {
             // needed at app start
             if (!_androidSurfaceAvailable || !_glContextAvailable)
-            {
                 return;
-            }
 
             if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
             {
@@ -418,73 +355,124 @@ namespace Microsoft.Xna.Framework
             _forceRecreateSurface = false;
         }
 
-        void RunIteration()
+        void processStateRunning()
         {
-            // set main game thread global ID
-            Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
+            // do not run game if surface is not available
+            if (!_androidSurfaceAvailable)
+                return;
 
-            InternalState currentState = _internalState;
-            switch (currentState)
+            // check if app wants to exit
+            if (_isCancellationRequested.Value == true)
             {
-                // exit states
-                case InternalState.Exited:
-                    _isCancellationRequested = true;
-                    break;
-
-                // pause states
-                case InternalState.Pausing: // when ui thread wants to pause              
-                    processStatePausing();
-                    break;
-
-                case InternalState.Paused: // when game thread processed pausing event
-                    // this must be processed outside of this loop, in the new task thread!
-                    break; // trigger pause of worker thread
-
-                // other states
-                case InternalState.Resuming: // when ui thread wants to resume
-                    processStateResuming();
-                    break;
-
-                case InternalState.Running: // when we are running game 
-                    if (_forceRecreateSurface == true)
-                        ForceSurfaceRecreation();
-                    else
-                        processStateRunning();
-                    break;
-                
-                default:
-                    throw new InvalidOperationException("currentState");
-                    break;
+                // change state to exit and skip game loop
+                _appState = AppState.Exited;
+                return;
             }
 
-            return;
-        }
-
-        void UpdateAndRenderFrame()
-        {
-            var currTickTime = DateTime.Now;
-            TimeSpan dt = TimeSpan.Zero;
-            if (_prevTickTime.Ticks != 0)
-            {
-                dt = (currTickTime - _prevTickTime);
-                if (dt.TotalMilliseconds < 0)
-                    dt = TimeSpan.Zero;
-            }
-            _prevTickTime = currTickTime;
-
-            try { Game.Activity._orientationListener.Update(dt); }
-            catch(Exception) { }
-            
             try
             {
-                var handler = Tick;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
+                var currTickTime = DateTime.Now;
+                TimeSpan dt = TimeSpan.Zero;
+                if (_prevTickTime.Ticks != 0)
+                {
+                    dt = (currTickTime - _prevTickTime);
+                    if (dt.TotalMilliseconds < 0)
+                        dt = TimeSpan.Zero;
+                }
+                _prevTickTime = currTickTime;
+
+                try { Game.Activity._orientationListener.Update(dt); }
+                catch (Exception) { }
+
+                try
+                {
+                    var handler = Tick;
+                    if (handler != null)
+                        handler(this, EventArgs.Empty);
+                }
+                catch (Content.ContentLoadException ex)
+                {
+                    throw ex;
+                }
             }
-            catch (Content.ContentLoadException ex)
+            catch (MonoGameGLException ex)
             {
-                throw ex;
+                Log.Error("AndroidGameView", "GL Exception occured during RunIteration {0}", ex.Message);
             }
+        }
+
+        void processStatePausing()
+        {
+            if (_glSurfaceAvailable)
+            {
+                // Surface we are using needs to go away
+                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                {
+                    ClearCurrentContext();
+                    DestroyGLSurface();
+                }
+                _eglSurface = null;
+                _glSurfaceAvailable = false;
+            }
+
+            // trigger callbacks, must pause openAL device here
+            var handler = OnPauseGameThread;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+
+            // go to next state
+            _appState = AppState.Paused;
+        }
+
+        internal void Resume()
+        {
+            _appState = AppState.Resuming;
+
+            try
+            {
+                if (!IsFocused)
+                    RequestFocus();
+            }
+            catch(Exception ex)
+            {
+                Log.Verbose("RequestFocus()", ex.ToString());
+            }
+        }
+
+        internal void Pause()
+        {
+            // if triggered in quick succession and blocked by graphics device creation, 
+            // pause can be triggered twice, without resume in between on some phones.
+            if (_appState != AppState.Running)
+            {
+                if (_forceRecreateSurface == false)
+                    return;
+            }
+
+            if (!_androidSurfaceAvailable)
+            {
+                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
+                _appState = AppState.Paused; // prepare for next game loop iteration
+            }
+            else
+            {
+                // processing the pausing state only if the surface was created already
+                _appState = AppState.Pausing;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_isCancellationRequested != null)
+                {
+                    _appState = AppState.Exited;
+                    _isCancellationRequested = true;
+                }
+            }
+
+            base.Dispose(disposing);
         }
 
         protected void DestroyGLContext()
@@ -508,9 +496,7 @@ namespace Microsoft.Xna.Framework
             System.Diagnostics.Debug.Assert(_eglSurface != null && _eglSurface != EGL10.EglNoSurface);
 
             if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-            {
                 Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
-            }
         }
 
         internal struct SurfaceConfig
