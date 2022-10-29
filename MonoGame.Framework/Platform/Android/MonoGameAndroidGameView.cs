@@ -1152,46 +1152,5 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public BackgroundContext CreateBackgroundContext()
-        {
-            return new BackgroundContext(this);
-        }
-
-        public class BackgroundContext
-        {
-
-            EGLContext eglContext;
-            MonoGameAndroidGameView view;
-            EGLSurface surface;
-
-            public BackgroundContext(MonoGameAndroidGameView view)
-            {
-                this.view = view;
-                foreach (var v in MonoGame.OpenGL.GLESVersion.GetSupportedGLESVersions())
-                {
-                    eglContext = view.egl.EglCreateContext(view.eglDisplay, view.eglConfig, EGL10.EglNoContext, v.GetAttributes());
-                    if (eglContext == null || eglContext == EGL10.EglNoContext)
-                    {
-                        continue;
-                    }
-                    break;
-                }
-                if (eglContext == null || eglContext == EGL10.EglNoContext)
-                {
-                    eglContext = null;
-                    throw new Exception("Could not create EGL context" + view.GetErrorAsString());
-                }
-                int[] pbufferAttribList = new int[] { EGL10.EglWidth, 64, EGL10.EglHeight, 64, EGL10.EglNone };
-                surface = view.CreatePBufferSurface(view.eglConfig, pbufferAttribList);
-                if (surface == EGL10.EglNoSurface)
-                    throw new Exception("Could not create Pbuffer Surface" + view.GetErrorAsString());
-            }
-
-            public void MakeCurrent()
-            {
-                view.ClearCurrent();
-                view.egl.EglMakeCurrent(view.eglDisplay, surface, surface, eglContext);
-            }
-        }
     }
 }
