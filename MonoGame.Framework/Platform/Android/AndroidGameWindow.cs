@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
-        internal MonoGameAndroidGameView GameView { get; private set; }
+        internal AndroidSurfaceView GameView { get; private set; }
         internal IResumeManager Resumer;
 
         private readonly Game _game;
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework
         {
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
-            GameView = new MonoGameAndroidGameView(context, this, _game);
+            GameView = new AndroidSurfaceView(context, this, _game);
             GameView.Tick += OnTick;
 
             GameView.RequestFocus();

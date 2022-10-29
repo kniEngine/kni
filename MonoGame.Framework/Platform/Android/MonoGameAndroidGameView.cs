@@ -21,7 +21,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 namespace Microsoft.Xna.Framework
 {
     [CLSCompliant(false)]
-    public class MonoGameAndroidGameView : SurfaceView
+    public class AndroidSurfaceView : SurfaceView
         , ISurfaceHolderCallback
         , View.IOnTouchListener
         , Java.Lang.IRunnable
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework
 
         internal bool IsResuming { get; private set; }
 
-        public MonoGameAndroidGameView(Context context, AndroidGameWindow gameWindow, Game game)
+        public AndroidSurfaceView(Context context, AndroidGameWindow gameWindow, Game game)
             : base(context)
         {
             _gameWindow = gameWindow;
