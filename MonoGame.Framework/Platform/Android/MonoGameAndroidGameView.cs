@@ -451,12 +451,9 @@ namespace Microsoft.Xna.Framework
                     else
                         processStateRunning();
                     break;
-
-                // default case, error
+                
                 default:
-                    Log.Error("AndroidGameView", "Default case for switch on InternalState in main game loop, exiting");
-                    _internalState = InternalState.Exited;
-                    _isCancellationRequested = true;
+                    throw new InvalidOperationException("currentState");
                     break;
             }
 
