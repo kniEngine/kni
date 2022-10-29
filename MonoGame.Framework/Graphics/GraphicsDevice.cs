@@ -597,12 +597,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     _rasterizerStateCullNone.Dispose();
 
                     PlatformDispose();
-
-                    if (_mainContext != null)
-                    {
-                        _mainContext.Dispose();
-                        _mainContext = null;
-                    }
                 }
 
                 _isDisposed = true;

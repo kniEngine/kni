@@ -17,7 +17,15 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 #if DESKTOPGL
-        internal GLGraphicsContext _glContext { get; private set; }
+        private IntPtr _currentWindowHandle;
+        internal IntPtr CurrentGlContext
+        {
+            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).GlContext; }
+        }
+        internal ConcreteGraphicsContext CurrentConcreteContext
+        {
+            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy); }
+        }
 #endif
 
 #if !GLES
@@ -258,23 +266,24 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _programCache = new ShaderProgramCache(this);
 #if DESKTOPGL
-            var glSdlWindowHandle = SdlGameWindow.Instance.Handle;
+            _currentWindowHandle = SdlGameWindow.Instance.Handle;
 
-            if (_glContext == null)
+            if (_mainContext == null)
             {
 #if DEBUG
                 // create debug context, so we get better error messages (glDebugMessageCallback)
                 Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-                _glContext = new GLGraphicsContext(glSdlWindowHandle);
+                var contextStrategy = new ConcreteGraphicsContext(_currentWindowHandle);
+                _mainContext = new GraphicsContext(this, contextStrategy);
             }
 
-            _glContext.MakeCurrent(glSdlWindowHandle);
+            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 
-            _glContext.MakeCurrent(glSdlWindowHandle);
+            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
 #endif
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out MaxTextureSlots);
             GraphicsExtensions.CheckGLError();
@@ -458,8 +467,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.Dispose();
 
 #if DESKTOPGL
-            _glContext.Dispose();
-            _glContext = null;
+            _mainContext.Dispose();
+            _mainContext = null;
+            _currentWindowHandle = IntPtr.Zero;
 #endif
         }
 
@@ -553,7 +563,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformPresent()
         {
 #if DESKTOPGL
-            _glContext.SwapBuffers();
+            Sdl.GL.SwapWindow(_currentWindowHandle);
 #endif
             GraphicsExtensions.CheckGLError();
 
@@ -1334,8 +1344,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            var glSdlWindowHandle = SdlGameWindow.Instance.Handle;
-            _glContext.MakeCurrent(glSdlWindowHandle);
+            _currentWindowHandle = SdlGameWindow.Instance.Handle;
+
+            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
