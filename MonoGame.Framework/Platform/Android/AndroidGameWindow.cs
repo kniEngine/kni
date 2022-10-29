@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework
 
         private void OnTick(object sender, EventArgs args)
         {
-            GameView.MakeCurrent();
+            GameView.MakeCurrentContext();
 
             Threading.Run();
 
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            GameView.MakeCurrent();
+            GameView.MakeCurrentContext();
 
             Threading.Run();
         }
