@@ -2,18 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using Android.App;
 using Android.Content;
 using Android.Hardware;
 using Android.Views;
 using Android.Provider;
 
+
 namespace Microsoft.Xna.Framework
 {
     internal class OrientationListener : OrientationEventListener
     {
         internal DisplayOrientation targetOrientation = DisplayOrientation.Unknown;
-        double elapsed = 0;
+        TimeSpan elapsed = TimeSpan.Zero;
 
         /// <summary>
         /// Constructor. SensorDelay.Ui is passed to the base class as this orientation listener 
@@ -29,7 +31,7 @@ namespace Microsoft.Xna.Framework
             if (orientation == OrientationEventListener.OrientationUnknown)
             {                
                 targetOrientation = DisplayOrientation.Unknown;
-                elapsed = 0;
+                elapsed = TimeSpan.Zero;
                 return;
             }
 
@@ -45,7 +47,7 @@ namespace Microsoft.Xna.Framework
                 disporientation == DisplayOrientation.Unknown)
             {
                 targetOrientation = DisplayOrientation.Unknown;
-                elapsed = 0;
+                elapsed = TimeSpan.Zero;
                 return;
             }
 
@@ -53,24 +55,24 @@ namespace Microsoft.Xna.Framework
             if (targetOrientation != disporientation)
             {
                 targetOrientation = disporientation;
-                elapsed = 0;
+                elapsed = TimeSpan.Zero;
             }
 
             return;
         }
         
-        internal void Update(MonoGameAndroidGameView.FrameEventArgs updateEventArgs)
+        internal void Update(TimeSpan elapsedTime)
         {            
             if (targetOrientation != DisplayOrientation.Unknown)
             {
-                elapsed += updateEventArgs.Time;
+                elapsed += elapsedTime;
                 // orientation must be stable for 0.5 seconds before changing.
-                if (elapsed > (1000 * 0.5))
+                if (elapsed.TotalSeconds > 0.5)
                 {
                     AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Instance.Window;
                     gameWindow.SetOrientation(targetOrientation, true);
                     targetOrientation = DisplayOrientation.Unknown;
-                    elapsed = 0;
+                    elapsed = TimeSpan.Zero;
                 }
             }
         }

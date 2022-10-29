@@ -3,6 +3,7 @@ using Android.Content;
 using Microsoft.Xna.Framework.Media;
 using Android.App;
 
+
 namespace Microsoft.Xna.Framework
 {
 	internal class ScreenReceiver : BroadcastReceiver

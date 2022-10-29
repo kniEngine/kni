@@ -7,6 +7,7 @@ using Android.Views;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 
+
 namespace Microsoft.Xna.Framework
 {
     class AndroidGamePlatform : GamePlatform
@@ -91,10 +92,12 @@ namespace Microsoft.Xna.Framework
 
         public override bool BeforeRun()
         {
+            // User called Game.Run().
+            // Signal the game loop to initialize the game loop.
+            _gameWindow.GameView.BeforeRun();
 
-            // Run it as fast as we can to allow for more response on threaded GPU resource creation
-            _gameWindow.GameView.Run();
-
+            // Prevent the default run loop from starting.
+            // We will run the loop from the view's IRunnable.Run().
             return false;
         }
 
@@ -126,6 +129,8 @@ namespace Microsoft.Xna.Framework
             IsActive = _isActivityActive && _hasWindowFocus;
         }
         
+        MediaState _mediaPlayer_PrevState = MediaState.Stopped;
+
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
@@ -134,14 +139,13 @@ namespace Microsoft.Xna.Framework
                 _isActivityActive = true;
                 IsActive = _isActivityActive && _hasWindowFocus;
                 _gameWindow.GameView.Resume();
-                if (_MediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
+                if (_mediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
                     MediaPlayer.Resume();
                 if (!_gameWindow.GameView.IsFocused)
                     _gameWindow.GameView.RequestFocus();
             }
         }
 
-        MediaState _MediaPlayer_PrevState = MediaState.Stopped;
         // EnterBackground
         void Activity_Paused(object sender, EventArgs e)
         {
@@ -149,7 +153,7 @@ namespace Microsoft.Xna.Framework
             {
                 _isActivityActive = false;
                 IsActive = _isActivityActive && _hasWindowFocus;
-                _MediaPlayer_PrevState = MediaPlayer.State;
+                _mediaPlayer_PrevState = MediaPlayer.State;
                 _gameWindow.GameView.Pause();
                 _gameWindow.GameView.ClearFocus();
                 if (Game.Activity.AutoPauseAndResumeMediaPlayer)
@@ -175,7 +179,9 @@ namespace Microsoft.Xna.Framework
             {
                 var device = Game.GraphicsDevice;
                 if (device != null)
+                {
                     device.Present();
+                }
 
                 _gameWindow.GameView.SwapBuffers();
             }

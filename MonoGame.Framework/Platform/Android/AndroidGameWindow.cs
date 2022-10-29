@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
-        internal MonoGameAndroidGameView GameView { get; private set; }
+        internal AndroidSurfaceView GameView { get; private set; }
         internal IResumeManager Resumer;
 
         private readonly Game _game;
@@ -59,10 +59,8 @@ namespace Microsoft.Xna.Framework
         {
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
-            GameView = new MonoGameAndroidGameView(context, this, _game);
-            GameView.RenderOnUIThread = Game.Activity.RenderOnUIThread;
-            GameView.RenderFrame += OnRenderFrame;
-            GameView.UpdateFrame += OnUpdateFrame;
+            GameView = new AndroidSurfaceView(context, this, _game);
+            GameView.Tick += OnTick;
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
@@ -70,16 +68,9 @@ namespace Microsoft.Xna.Framework
 
         #region AndroidGameView Methods
 
-        private void OnRenderFrame(object sender, MonoGameAndroidGameView.FrameEventArgs frameEventArgs)
+        private void OnTick(object sender, EventArgs args)
         {
-            GameView.MakeCurrent();
-
-            Threading.Run();
-        }
-
-        private void OnUpdateFrame(object sender, MonoGameAndroidGameView.FrameEventArgs frameEventArgs)
-        {
-            GameView.MakeCurrent();
+            GameView.MakeCurrentContext();
 
             Threading.Run();
 
@@ -99,6 +90,10 @@ namespace Microsoft.Xna.Framework
                     _game.Platform.Present();
                 }
             }
+
+            GameView.MakeCurrentContext();
+
+            Threading.Run();
         }
 
         #endregion
