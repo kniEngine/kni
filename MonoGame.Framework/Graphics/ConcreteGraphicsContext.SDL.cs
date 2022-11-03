@@ -15,7 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal IntPtr GlContext { get { return _glContext; } }
 
-        internal ConcreteGraphicsContext(IntPtr sdlWindowHandle) : base()
+        internal ConcreteGraphicsContext(GraphicsDevice device, IntPtr sdlWindowHandle)
+            : base(device)
         {
             _glContext = Sdl.GL.CreateGLContext(sdlWindowHandle);
 

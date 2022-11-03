@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS_UAP
             var d3dContext = _d3dDevice.ImmediateContext.QueryInterface<SharpDX.Direct3D11.DeviceContext1>();
 #endif
-            var contextStrategy = new ConcreteGraphicsContext(d3dContext);
+            var contextStrategy = new ConcreteGraphicsContext(this, d3dContext);
             _mainContext = new GraphicsContext(this, contextStrategy);
 
 

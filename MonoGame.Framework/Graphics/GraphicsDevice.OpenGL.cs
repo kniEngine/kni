@@ -275,7 +275,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-                var contextStrategy = new ConcreteGraphicsContext(_currentWindowHandle);
+                var contextStrategy = new ConcreteGraphicsContext(this, _currentWindowHandle);
                 _mainContext = new GraphicsContext(this, contextStrategy);
             }
 

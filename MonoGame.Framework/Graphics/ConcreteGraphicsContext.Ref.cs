@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -9,7 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : GraphicsContextStrategy
     {
 
-        internal ConcreteGraphicsContext() : base()
+        internal ConcreteGraphicsContext(GraphicsDevice device)
+            : base(device)
         {
 
         }
