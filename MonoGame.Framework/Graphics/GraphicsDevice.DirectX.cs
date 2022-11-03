@@ -1242,7 +1242,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
                 CurrentD3DContext.InputAssembler.InputLayout = _vertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
-                _vertexShaderDirty = _vertexBuffersDirty = false;
+                _vertexShaderDirty = false;
+                _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)

@@ -6,6 +6,7 @@ using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
 
+
 namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsContext : ConcreteGraphicsContextGL

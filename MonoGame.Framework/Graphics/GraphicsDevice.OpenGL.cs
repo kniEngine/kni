@@ -780,7 +780,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformResolveRenderTargets()
         {
-            if (this._currentRenderTargetCount == 0)
+            if (!this.IsRenderTargetBound)
                 return;
 
             var renderTargetBinding = this._currentRenderTargetBindings[0];
@@ -1086,7 +1086,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     unchecked { _graphicsMetrics._pixelShaderCount++; }
                 }
 
-                _vertexShaderDirty = _pixelShaderDirty = false;
+                _vertexShaderDirty = false;
+                _pixelShaderDirty = false;
             }
 
             _vertexConstantBuffers.SetConstantBuffers();
@@ -1268,6 +1269,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!GraphicsCapabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
+
             PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();

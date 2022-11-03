@@ -36,12 +36,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
-        private Color _blendFactor = Color.White;
-        private bool _blendFactorDirty;
-
         private BlendState _blendState;
         private BlendState _actualBlendState;
         private bool _blendStateDirty;
+
+        private Color _blendFactor = Color.White;
+        private bool _blendFactorDirty;
 
         private BlendState _blendStateAdditive;
         private BlendState _blendStateAlphaBlend;
@@ -103,20 +103,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         private Shader _vertexShader;
         private bool _vertexShaderDirty;
-        private bool VertexShaderDirty
-        {
-            get { return _vertexShaderDirty; }
-        }
 
         /// <summary>
         /// The active pixel shader.
         /// </summary>
         private Shader _pixelShader;
         private bool _pixelShaderDirty;
-        private bool PixelShaderDirty
-        {
-            get { return _pixelShaderDirty; }
-        }
 
         private readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
         private readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
@@ -166,10 +158,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal bool IsRenderTargetBound
         {
-            get
-            {
-                return _currentRenderTargetCount > 0;
-            }
+            get { return _currentRenderTargetCount > 0; }
         }
 
         internal DepthFormat ActiveDepthFormat
@@ -355,7 +344,9 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformInitialize();
 
             // Force set the default render states.
-            _blendStateDirty = _depthStencilStateDirty = _rasterizerStateDirty = true;
+            _blendStateDirty = true;
+            _depthStencilStateDirty = true;
+            _rasterizerStateDirty = true;
             BlendState = BlendState.Opaque;
             DepthStencilState = DepthStencilState.Default;
             RasterizerState = RasterizerState.CullCounterClockwise;
@@ -386,61 +377,26 @@ namespace Microsoft.Xna.Framework.Graphics
             ApplyRenderTargets(null);
         }
 
-        public RasterizerState RasterizerState
+        public Rectangle ScissorRectangle
         {
-            get
-            {
-                return _rasterizerState;
-            }
-
+            get { return _scissorRectangle; }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                // Don't set the same state twice!
-                if (_rasterizerState == value)
+                if (_scissorRectangle == value)
                     return;
 
-                if (!value.DepthClipEnable && !GraphicsCapabilities.SupportsDepthClamp)
-                    throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
-
-                _rasterizerState = value;
-
-                // Static state properties never actually get bound;
-                // instead we use our GraphicsDevice-specific version of them.
-                var newRasterizerState = _rasterizerState;
-                if (ReferenceEquals(_rasterizerState, RasterizerState.CullClockwise))
-                    newRasterizerState = _rasterizerStateCullClockwise;
-                else if (ReferenceEquals(_rasterizerState, RasterizerState.CullCounterClockwise))
-                    newRasterizerState = _rasterizerStateCullCounterClockwise;
-                else if (ReferenceEquals(_rasterizerState, RasterizerState.CullNone))
-                    newRasterizerState = _rasterizerStateCullNone;
-
-                newRasterizerState.BindToGraphicsDevice(this);
-
-                _actualRasterizerState = newRasterizerState;
-
-                _rasterizerStateDirty = true;
+                _scissorRectangle = value;
+                _scissorRectangleDirty = true;
             }
         }
 
-        /// <summary>
-        /// The color used as blend factor when alpha blending.
-        /// </summary>
-        /// <remarks>
-        /// When only changing BlendFactor, use this rather than <see cref="Graphics.BlendState.BlendFactor"/> to
-        /// only update BlendFactor so the whole BlendState does not have to be updated.
-        /// </remarks>
-        public Color BlendFactor
+        public Viewport Viewport
         {
-            get { return _blendFactor; }
+            get { return _viewport; }
             set
             {
-                if (_blendFactor == value)
-                    return;
-                _blendFactor = value;
-                _blendFactorDirty = true;
+                _viewport = value;
+                PlatformApplyViewport();
             }
         }
 
@@ -485,6 +441,25 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 		}
 
+        /// <summary>
+        /// The color used as blend factor when alpha blending.
+        /// </summary>
+        /// <remarks>
+        /// When only changing BlendFactor, use this rather than <see cref="Graphics.BlendState.BlendFactor"/> to
+        /// only update BlendFactor so the whole BlendState does not have to be updated.
+        /// </remarks>
+        public Color BlendFactor
+        {
+            get { return _blendFactor; }
+            set
+            {
+                if (_blendFactor == value)
+                    return;
+                _blendFactor = value;
+                _blendFactorDirty = true;
+            }
+        }
+
         public DepthStencilState DepthStencilState
         {
             get { return _depthStencilState; }
@@ -514,6 +489,41 @@ namespace Microsoft.Xna.Framework.Graphics
                 _actualDepthStencilState = newDepthStencilState;
 
                 _depthStencilStateDirty = true;
+            }
+        }
+
+        public RasterizerState RasterizerState
+        {
+            get { return _rasterizerState; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                // Don't set the same state twice!
+                if (_rasterizerState == value)
+                    return;
+
+                if (!value.DepthClipEnable && !GraphicsCapabilities.SupportsDepthClamp)
+                    throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
+
+                _rasterizerState = value;
+
+                // Static state properties never actually get bound;
+                // instead we use our GraphicsDevice-specific version of them.
+                var newRasterizerState = _rasterizerState;
+                if (ReferenceEquals(_rasterizerState, RasterizerState.CullClockwise))
+                    newRasterizerState = _rasterizerStateCullClockwise;
+                else if (ReferenceEquals(_rasterizerState, RasterizerState.CullCounterClockwise))
+                    newRasterizerState = _rasterizerStateCullCounterClockwise;
+                else if (ReferenceEquals(_rasterizerState, RasterizerState.CullNone))
+                    newRasterizerState = _rasterizerStateCullNone;
+
+                newRasterizerState.BindToGraphicsDevice(this);
+
+                _actualRasterizerState = newRasterizerState;
+
+                _rasterizerStateDirty = true;
             }
         }
 
@@ -617,7 +627,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present()
         {
             // We cannot present with a RT set on the device.
-            if (_currentRenderTargetCount != 0)
+            if (IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
             // reset _graphicsMetrics
@@ -725,39 +735,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _graphicsProfile; }
         }
 
-        public Rectangle ScissorRectangle
-        {
-            get
-            {
-                return _scissorRectangle;
-            }
-
-            set
-            {
-                if (_scissorRectangle == value)
-                    return;
-
-                _scissorRectangle = value;
-                _scissorRectangleDirty = true;
-            }
-        }
-
-        public Viewport Viewport
-        {
-            get { return _viewport; }
-            set
-            {
-                _viewport = value;
-                PlatformApplyViewport();
-            }
-        }
-
         public int RenderTargetCount
         {
-            get
-            {
-                return _currentRenderTargetCount;
-            }
+            get { return _currentRenderTargetCount; }
         }
 
 		public void SetRenderTarget(RenderTarget2D renderTarget)
