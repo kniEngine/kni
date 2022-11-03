@@ -173,6 +173,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // create context.
             _glContext = canvas.GetContext<IWebGLRenderingContext>();
+            var contextStrategy = new ConcreteGraphicsContext(this);
+            _mainContext = new GraphicsContext(this, contextStrategy);
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 

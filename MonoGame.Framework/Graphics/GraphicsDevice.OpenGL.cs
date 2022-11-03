@@ -285,6 +285,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
             CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
 #endif
+
+#if ANDROID
+            var contextStrategy = new ConcreteGraphicsContext(this);
+            _mainContext = new GraphicsContext(this, contextStrategy);
+#endif
+
+#if IOS || TVOS
+            var contextStrategy = new ConcreteGraphicsContext(this);
+            _mainContext = new GraphicsContext(this, contextStrategy);
+#endif
+
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out MaxTextureSlots);
             GraphicsExtensions.CheckGLError();
             MaxTextureSlots = Math.Min(MaxTextureSlots, 16);
