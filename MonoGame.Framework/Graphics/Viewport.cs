@@ -15,8 +15,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
 		private int x;
 		private int y;
-		private int width;
-		private int height;
+		private int w;
+		private int h;
 		private float minDepth;
 		private float maxDepth;
 
@@ -28,12 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Height
         {
-			get {
-				return this.height;
-			}
-			set {
-				height = value;
-			}
+			get { return this.h; }
+			set { h = value; }
 		}
 
         /// <summary>
@@ -42,12 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public float MaxDepth
         {
-			get {
-				return this.maxDepth;
-			}
-			set {
-				maxDepth = value;
-			}
+			get { return this.maxDepth; }
+			set { maxDepth = value; }
 		}
 
         /// <summary>
@@ -56,12 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public float MinDepth
         {
-			get {
-				return this.minDepth;
-			}
-			set {
-				minDepth = value;
-			}
+			get { return this.minDepth; }
+			set { minDepth = value; }
 		}
 
         /// <summary>
@@ -70,12 +58,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Width
         {
-			get {
-				return this.width;
-			}
-			set {
-				width = value;
-			}
+			get { return this.w; }
+			set { w = value; }
 		}
 
         /// <summary>
@@ -84,13 +68,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Y
         {
-			get {
-				return this.y;
-
-			}
-			set {
-				y = value;
-			}
+			get { return this.y; }
+			set { y = value; }
 		}
 
         /// <summary>
@@ -112,9 +91,9 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				if ((height != 0) && (width != 0))
+				if ((h != 0) && (w != 0))
 				{
-					return (((float) width)/((float)height));
+					return (((float) w)/((float)h));
 				}
 				return 0f;
 			}
@@ -125,17 +104,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		public Rectangle Bounds 
 		{
-            get
-            {
-                return new Rectangle(x, y, width, height);
-            }
-				
+            get { return new Rectangle(x, y, w, h); }
 			set
-			{				
+			{
 				x = value.X;
 				y = value.Y;
-				width = value.Width;
-				height = value.Height;
+				w = value.Width;
+				h = value.Height;
 			}
 		}
 
@@ -144,25 +119,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		public Rectangle TitleSafeArea 
 		{
-			get { return GraphicsDevice.GetTitleSafeArea(x, y, width, height); }
+			get { return GraphicsDevice.GetTitleSafeArea(x, y, w, h); }
 		}
 
-        /// <summary>
-        /// Constructs a viewport from the given values. The <see cref="MinDepth"/> will be 0.0 and <see cref="MaxDepth"/> will be 1.0.
-        /// </summary>
-        /// <param name="x">The x coordinate of the upper-left corner of the view bounds in pixels.</param>
-        /// <param name="y">The y coordinate of the upper-left corner of the view bounds in pixels.</param>
-        /// <param name="width">The width of the view bounds in pixels.</param>
-        /// <param name="height">The height of the view bounds in pixels.</param>
-        public Viewport(int x, int y, int width, int height)
-		{
-			this.x = x;
-		    this.y = y;
-		    this.width = width;
-		    this.height = height;
-		    this.minDepth = 0.0f;
-		    this.maxDepth = 1.0f;
-		}
 
         /// <summary>
         /// Constructs a viewport from the given values.
@@ -177,11 +136,22 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             this.x = x;
             this.y = y;
-            this.width = width;
-            this.height = height;
+            this.w = width;
+            this.h = height;
             this.minDepth = minDepth;
             this.maxDepth = maxDepth;
         }
+
+        /// <summary>
+        /// Constructs a viewport from the given values. The <see cref="MinDepth"/> will be 0.0 and <see cref="MaxDepth"/> will be 1.0.
+        /// </summary>
+        /// <param name="x">The x coordinate of the upper-left corner of the view bounds in pixels.</param>
+        /// <param name="y">The y coordinate of the upper-left corner of the view bounds in pixels.</param>
+        /// <param name="width">The width of the view bounds in pixels.</param>
+        /// <param name="height">The height of the view bounds in pixels.</param>
+        public Viewport(int x, int y, int width, int height) : this(x, y, width, height, 0.0f,  1.0f)
+		{
+		}
 
         /// <summary>
         /// Creates a new instance of <see cref="Viewport"/> struct.
@@ -208,15 +178,14 @@ namespace Microsoft.Xna.Framework.Graphics
             Matrix.Multiply(ref view, ref projection, out projection);
             float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
-		    //if (!WithinEpsilon(w, 1f))
-		    {
-                var invW = 1 / w;
-                source.X = source.X * invW;
-                source.Y = source.Y * invW;
-                source.Z = source.Z * invW;
-		    }
-            source.X = (((source.X + 1f) * 0.5f) * this.width) + this.x;
-            source.Y = (((-source.Y + 1f) * 0.5f) * this.height) + this.y;
+
+            var invW = 1 / w;
+            source.X = source.X * invW;
+            source.Y = source.Y * invW;
+            source.Z = source.Z * invW;
+
+            source.X = (((source.X + 1f) * 0.5f) * this.w) + this.x;
+            source.Y = (((-source.Y + 1f) * 0.5f) * this.h) + this.y;
             source.Z = (source.Z * (this.maxDepth - this.minDepth)) + this.minDepth;
             return source;
         }
@@ -238,26 +207,19 @@ namespace Microsoft.Xna.Framework.Graphics
             Matrix.Multiply(ref world, ref view, out view);
             Matrix.Multiply(ref view, ref projection, out projection);
             Matrix.Invert(ref projection, out projection);
-		    source.X = (((source.X - this.x) / ((float) this.width)) * 2f) - 1f;
-		    source.Y = -((((source.Y - this.y) / ((float) this.height)) * 2f) - 1f);
+		    source.X = (((source.X - this.x) / ((float) this.w)) * 2f) - 1f;
+		    source.Y = -((((source.Y - this.y) / ((float) this.h)) * 2f) - 1f);
 		    source.Z = (source.Z - this.minDepth) / (this.maxDepth - this.minDepth);
             float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
-		    //if (!WithinEpsilon(a, 1f))
-		    {
-                var invW = 1 / w;
-                source.X = source.X * invW;
-                source.Y = source.Y * invW;
-                source.Z = source.Z * invW;
-		    }
+		    
+            var invW = 1 / w;
+            source.X = source.X * invW;
+            source.Y = source.Y * invW;
+            source.Z = source.Z * invW;
+
             return source;
-        }
-		
-		private static bool WithinEpsilon(float a, float b)
-		{
-		    float num = a - b;
-		    return ((-1.401298E-45f <= num) && (num <= float.Epsilon));
-		}
+        }		
 
         /// <summary>
         /// Returns a <see cref="String"/> representation of this <see cref="Viewport"/> in the format:
@@ -266,7 +228,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>A <see cref="String"/> representation of this <see cref="Viewport"/>.</returns>
         public override string ToString ()
 	    {
-	        return "{X:" + x + " Y:" + y + " Width:" + width + " Height:" + height + " MinDepth:" + minDepth + " MaxDepth:" + maxDepth + "}";
+	        return "{X:" + x + ", Y:" + y + ", Width:" + w + ", Height:" + h + ", MinDepth:" + minDepth + ", MaxDepth:" + maxDepth + "}";
 	    }
     }
 }

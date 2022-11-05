@@ -297,9 +297,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Initialize the main viewport
-            _viewport = new Viewport (0, 0,
-			                         DisplayMode.Width, DisplayMode.Height);
-			_viewport.MaxDepth = 1.0f;
+            _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
             PlatformSetup();
 
@@ -728,20 +726,6 @@ namespace Microsoft.Xna.Framework.Graphics
             private set;
         }
 
-        public Viewport Viewport
-        {
-            get
-            {
-                return _viewport;
-            }
-
-            set
-            {
-                _viewport = value;
-                PlatformSetViewport(ref value);
-            }
-        }
-
         private readonly GraphicsProfile _graphicsProfile;
         public GraphicsProfile GraphicsProfile
         {
@@ -762,6 +746,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 _scissorRectangle = value;
                 _scissorRectangleDirty = true;
+            }
+        }
+
+        public Viewport Viewport
+        {
+            get { return _viewport; }
+            set
+            {
+                _viewport = value;
+                PlatformApplyViewport();
             }
         }
 

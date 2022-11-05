@@ -34,11 +34,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformSetViewport(ref Viewport value)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformApplyDefaultRenderTarget()
         {
             throw new PlatformNotSupportedException();
@@ -50,6 +45,11 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private IRenderTarget PlatformApplyRenderTargets()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private void PlatformApplyViewport()
         {
             throw new PlatformNotSupportedException();
         }
