@@ -34,15 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private GraphicsContext _mainContext;
 
-        // On Intel Integrated graphics, there is a fast hw unit for doing
-        // clears to colors where all components are either 0 or 255.
-        // Despite XNA4 using Purple here, we use black (in Release) to avoid
-        // performance warnings on Intel/Mesa
-#if DEBUG
-        private static Color _discardColor = new Color(68, 34, 136, 255);
-#else
-        private static Color _discardColor = new Color(0, 0, 0, 255);
-#endif
+        private Color _discardColor = new Color(68, 34, 136, 255);
 
         private Color _blendFactor = Color.White;
         private bool _blendFactorDirty;
@@ -100,7 +92,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
         /// </summary>
-        public static Color DiscardColor {
+        public Color DiscardColor
+        {
 			get { return _discardColor; }
 			set { _discardColor = value; }
 		}
@@ -885,9 +878,6 @@ namespace Microsoft.Xna.Framework.Graphics
             // Set the scissor rectangle to the size of the first render target.
             ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
 
-            // In XNA 4, because of hardware limitations on Xbox, when
-            // a render target doesn't have PreserveContents as its usage
-            // it is cleared before being rendered to.
             if (clearTarget)
                 Clear(DiscardColor);
         }
