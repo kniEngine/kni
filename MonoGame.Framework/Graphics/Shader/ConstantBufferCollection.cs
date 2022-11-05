@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-        internal void SetConstantBuffers()
+        internal void Apply()
         {
             var validMask = _valid;
 

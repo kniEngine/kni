@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
 	{
-        private readonly GraphicsDevice _graphicsDevice;
+        private readonly GraphicsDevice _device;
 
         private readonly SamplerState _samplerStateAnisotropicClamp;
         private readonly SamplerState _samplerStateAnisotropicWrap;
@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, bool applyToVertexStage)
 		{
-		    _graphicsDevice = device;
+		    _device = device;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
             _samplerStateAnisotropicWrap = SamplerState.AnisotropicWrap.Clone();
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 else if (ReferenceEquals(value, SamplerState.PointWrap))
                     newSamplerState = _samplerStatePointWrap;
 
-                newSamplerState.BindToGraphicsDevice(_graphicsDevice);
+                newSamplerState.BindToGraphicsDevice(_device);
 
                 _actualSamplers[index] = newSamplerState;
 
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _samplers[i] = SamplerState.LinearWrap;
 
-                _samplerStateLinearWrap.BindToGraphicsDevice(_graphicsDevice);
+                _samplerStateLinearWrap.BindToGraphicsDevice(_device);
                 _actualSamplers[i] = _samplerStateLinearWrap;
             }
 

@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        void PlatformSetTextures(GraphicsDevice device)
+        void PlatformApply()
         {
             throw new PlatformNotSupportedException();
         }
