@@ -878,41 +878,55 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
-            _vertexBuffersDirty |= (vertexBuffer == null)
-                                   ? _vertexBuffers.Clear()
-                                   : _vertexBuffers.Set(vertexBuffer, 0);
+            if (vertexBuffer != null)
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, 0);
+            }
+            else
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Clear();
+            }
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
-            // Validate vertexOffset.
-            if (vertexOffset < 0
-                || vertexBuffer == null && vertexOffset != 0
-                || vertexBuffer != null && vertexOffset >= vertexBuffer.VertexCount)
+            if (vertexBuffer != null)
             {
-                throw new ArgumentOutOfRangeException("vertexOffset");
+                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, vertexOffset);
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
             }
-
-            _vertexBuffersDirty |= (vertexBuffer == null)
-                                   ? _vertexBuffers.Clear()
-                                   : _vertexBuffers.Set(vertexBuffer, vertexOffset);
+            else
+            {
+                if (vertexOffset == 0)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Clear();
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
+            }
         }
 
         public void SetVertexBuffers(params VertexBufferBinding[] vertexBuffers)
         {
-            if (vertexBuffers == null || vertexBuffers.Length == 0)
+            if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                _vertexBuffersDirty |= _vertexBuffers.Clear();
-            }
-            else
-            {
-                if (vertexBuffers.Length > _maxVertexBufferSlots)
+                if (vertexBuffers.Length <= _maxVertexBufferSlots)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
+                }
+                else
                 {
                     var message = string.Format(CultureInfo.InvariantCulture, "Max number of vertex buffers is {0}.", _maxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
-
-                _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
+            }
+            else
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Clear();
             }
         }
 
