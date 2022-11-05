@@ -11,10 +11,13 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class GraphicsContextStrategy : IDisposable
     {
+        protected GraphicsDevice Device { get; private set; }
+
         private bool _isDisposed = false;
 
-        protected GraphicsContextStrategy()
+        protected GraphicsContextStrategy(GraphicsDevice device)
         {
+            Device = device;
             
         }
 

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -15,7 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.DeviceContext D3dContext { get { return _d3dContext; } }
 
 
-        internal ConcreteGraphicsContext(D3D11.DeviceContext d3dContext) : base()
+        internal ConcreteGraphicsContext(GraphicsDevice device, D3D11.DeviceContext d3dContext)
+            : base(device)
         {
             _d3dContext = d3dContext;
 
@@ -34,5 +36,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 base.Dispose();
             }
         }
+
     }
 }

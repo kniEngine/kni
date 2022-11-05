@@ -275,7 +275,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-                var contextStrategy = new ConcreteGraphicsContext(_currentWindowHandle);
+                var contextStrategy = new ConcreteGraphicsContext(this, _currentWindowHandle);
                 _mainContext = new GraphicsContext(this, contextStrategy);
             }
 
@@ -285,6 +285,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
             CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
 #endif
+
+#if ANDROID
+            var contextStrategy = new ConcreteGraphicsContext(this);
+            _mainContext = new GraphicsContext(this, contextStrategy);
+#endif
+
+#if IOS || TVOS
+            var contextStrategy = new ConcreteGraphicsContext(this);
+            _mainContext = new GraphicsContext(this, contextStrategy);
+#endif
+
             GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out MaxTextureSlots);
             GraphicsExtensions.CheckGLError();
             MaxTextureSlots = Math.Min(MaxTextureSlots, 16);
@@ -780,7 +791,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformResolveRenderTargets()
         {
-            if (this._currentRenderTargetCount == 0)
+            if (!this.IsRenderTargetBound)
                 return;
 
             var renderTargetBinding = this._currentRenderTargetBindings[0];
@@ -1086,7 +1097,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     unchecked { _graphicsMetrics._pixelShaderCount++; }
                 }
 
-                _vertexShaderDirty = _pixelShaderDirty = false;
+                _vertexShaderDirty = false;
+                _pixelShaderDirty = false;
             }
 
             _vertexConstantBuffers.SetConstantBuffers();
@@ -1268,6 +1280,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!GraphicsCapabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
+
             PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();

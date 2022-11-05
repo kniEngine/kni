@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -9,7 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal abstract class ConcreteGraphicsContextGL : GraphicsContextStrategy
     {
 
-        protected ConcreteGraphicsContextGL() : base()
+        internal ConcreteGraphicsContextGL(GraphicsDevice device)
+            : base(device)
         {
 
         }
@@ -23,5 +25,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 base.Dispose();
             }
         }
+
     }
 }
