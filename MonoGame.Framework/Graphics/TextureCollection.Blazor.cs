@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection
     {
-        private IWebGLRenderingContext GL { get { return _graphicsDevice._glContext; } }
+        private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
         private WebGLTextureTarget[] _targets;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _targets[i] = 0;
         }
 
-        void PlatformSetTextures(GraphicsDevice device)
+        void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindTexture(tex.glTarget, tex.glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    unchecked { _graphicsDevice._graphicsMetrics._textureCount++; }
+                    unchecked { _device._graphicsMetrics._textureCount++; }
                 }
 
                 // clear texture bit

@@ -27,9 +27,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 _d3dDirty |= (1 << i);
         }
 
-        internal void PlatformSetSamplers(GraphicsDevice device)
+        internal void PlatformApply()
         {
-            if (!_applyToVertexStage || device.GraphicsCapabilities.SupportsVertexTextures)
+            if (!_applyToVertexStage || _device.GraphicsCapabilities.SupportsVertexTextures)
             {
                 for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
                 {
@@ -41,14 +41,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     // locked the d3dContext for us to use.
                     SharpDX.Direct3D11.CommonShaderStage shaderStage;
                     if (!_applyToVertexStage)
-                        shaderStage = device.CurrentD3DContext.PixelShader;
+                        shaderStage = _device.CurrentD3DContext.PixelShader;
                     else
-                        shaderStage = device.CurrentD3DContext.VertexShader;
+                        shaderStage = _device.CurrentD3DContext.VertexShader;
 
                     var sampler = _actualSamplers[i];
                     SharpDX.Direct3D11.SamplerState state = null;
                     if (sampler != null)
-                        state = sampler.GetState(device);
+                        state = sampler.GetState(_device);
 
                     shaderStage.SetSampler(i, state);
 

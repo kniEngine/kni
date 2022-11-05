@@ -1254,13 +1254,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 unchecked { _graphicsMetrics._pixelShaderCount++; }
             }
 
-            _vertexConstantBuffers.SetConstantBuffers();
-            _pixelConstantBuffers.SetConstantBuffers();
+            _vertexConstantBuffers.Apply();
+            _pixelConstantBuffers.Apply();
 
-            VertexTextures.SetTextures(this);
-            VertexSamplerStates.PlatformSetSamplers(this);
-            Textures.SetTextures(this);
-            SamplerStates.PlatformSetSamplers(this);
+            VertexTextures.Apply();
+            VertexSamplerStates.PlatformApply();
+            Textures.Apply();
+            SamplerStates.PlatformApply();
         }
 
         private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)

@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        void PlatformSetTextures(GraphicsDevice device)
+        void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -65,9 +65,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // locked the d3dContext for us to use.
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 if (!_applyToVertexStage)
-                    shaderStage = device.CurrentD3DContext.PixelShader;
+                    shaderStage = _device.CurrentD3DContext.PixelShader;
                 else
-                    shaderStage = device.CurrentD3DContext.VertexShader;
+                    shaderStage = _device.CurrentD3DContext.VertexShader;
 
                 var tex = _textures[i];
 
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
-                    unchecked { _graphicsDevice._graphicsMetrics._textureCount++; }
+                    unchecked { _device._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);

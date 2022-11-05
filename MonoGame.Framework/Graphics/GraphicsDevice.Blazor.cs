@@ -729,11 +729,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 _pixelShaderDirty = false;
             }
 
-            _vertexConstantBuffers.SetConstantBuffers();
-            _pixelConstantBuffers.SetConstantBuffers();
+            _vertexConstantBuffers.Apply();
+            _pixelConstantBuffers.Apply();
 
-            Textures.SetTextures(this);
-            SamplerStates.PlatformSetSamplers(this);
+            Textures.Apply();
+            SamplerStates.PlatformApply();
         }
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)

@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal void PlatformSetSamplers(GraphicsDevice device)
+        internal void PlatformApply()
         {
             throw new PlatformNotSupportedException();
         }
