@@ -965,43 +965,15 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetViewport(ref Viewport value)
-        {
-            if (CurrentContext != null)
-            {
-				var viewport = new RawViewportF
-				{
-					X = _viewport.X,
-					Y = _viewport.Y,
-					Width = (float)_viewport.Width,
-					Height = (float)_viewport.Height,
-					MinDepth = _viewport.MinDepth,
-					MaxDepth = _viewport.MaxDepth
-				};
-                lock (CurrentD3DContext)
-                    CurrentD3DContext.Rasterizer.SetViewport(viewport);
-            }
-        }
-
 #if WINDOWS_UAP
         internal void ResetRenderTargets()
         {
+            PlatformApplyViewport();
+
             if (CurrentContext != null)
             {
                 lock (CurrentD3DContext)
-                {
-					var viewport = new RawViewportF
-					{
-						X = _viewport.X,
-						Y = _viewport.Y,
-						Width = _viewport.Width,
-						Height = _viewport.Height,
-						MinDepth = _viewport.MinDepth,
-						MaxDepth = _viewport.MaxDepth
-					};
-                    CurrentD3DContext.Rasterizer.SetViewport(viewport);
                     CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
-                }
             }
 
             Textures.Dirty();
@@ -1182,6 +1154,26 @@ namespace Microsoft.Xna.Framework.Graphics
                 _scissorRectangle.Right,
                 _scissorRectangle.Bottom);
             _scissorRectangleDirty = false;
+        }
+
+        private void PlatformApplyViewport()
+        {
+            lock (CurrentD3DContext)
+            {
+                if (CurrentContext != null)
+                {
+                    var viewport = new RawViewportF
+                    {
+                        X = _viewport.X,
+                        Y = _viewport.Y,
+                        Width = _viewport.Width,
+                        Height = _viewport.Height,
+                        MinDepth = _viewport.MinDepth,
+                        MaxDepth = _viewport.MaxDepth
+                    };
+                    CurrentD3DContext.Rasterizer.SetViewport(viewport);
+                }
+            }
         }
 
         private void PlatformApplyIndexBuffer()

@@ -283,23 +283,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        private void PlatformSetViewport(ref Viewport value)
-        {
-            if (IsRenderTargetBound)
-                GL.Viewport(value.X, value.Y, value.Width, value.Height);
-            else
-                GL.Viewport(value.X, PresentationParameters.BackBufferHeight - value.Y - value.Height, value.Width, value.Height);
-            GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
-
-            GL.DepthRange(value.MinDepth, value.MaxDepth);
-            //GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
-                
-            // In OpenGL we have to re-apply the special "posFixup"
-            // vertex shader uniform if the viewport changes.
-            _vertexShaderDirty = true;
-
-        }
-
         private void PlatformApplyDefaultRenderTarget()
         {
             this.framebufferHelper.BindFramebuffer(null);
@@ -684,6 +667,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
             GraphicsExtensions.CheckGLError();
+        }
+
+        private void PlatformApplyViewport()
+        {
+            if (IsRenderTargetBound)
+                GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
+            else
+                GL.Viewport(_viewport.X, PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+            GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+
+            GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
+            //GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
+                
+            // In OpenGL we have to re-apply the special "posFixup"
+            // vertex shader uniform if the viewport changes.
+            _vertexShaderDirty = true;
         }
 
         private void PlatformApplyIndexBuffer()
