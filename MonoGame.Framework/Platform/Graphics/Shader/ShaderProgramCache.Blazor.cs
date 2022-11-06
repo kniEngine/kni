@@ -23,10 +23,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public WebGLUniformLocation GetUniformLocation(string name)
         {
-            if (_uniformLocations.ContainsKey(name))
-                return _uniformLocations[name];
+            WebGLUniformLocation location;
+            if (_uniformLocations.TryGetValue(name, out location))
+                return location;
 
-            WebGLUniformLocation location = GL.GetUniformLocation(Program, name);
+            location = GL.GetUniformLocation(Program, name);
             GraphicsExtensions.CheckGLError();
             _uniformLocations[name] = location;
             return location;
@@ -75,13 +76,15 @@ namespace Microsoft.Xna.Framework.Graphics
             // setting uniforms to only when a constant buffer changes.
 
             var key = vertexShader.HashKey | pixelShader.HashKey;
-            if (!_programCache.ContainsKey(key))
-            {
-                // the key does not exist so we need to link the programs
-                _programCache.Add(key, Link(vertexShader, pixelShader));
-            }
 
-            return _programCache[key];
+            ShaderProgram program;
+            if(_programCache.TryGetValue(key, out program))
+                return program;
+
+            // the key does not exist so we need to link the programs
+            program = Link(vertexShader, pixelShader);
+            _programCache.Add(key, program);
+            return program;
         }
 
         private ShaderProgram Link(Shader vertexShader, Shader pixelShader)
