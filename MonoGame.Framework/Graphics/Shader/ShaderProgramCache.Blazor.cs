@@ -1,29 +1,33 @@
-#if OPENGL
 
 using System;
 using System.Collections.Generic;
-using MonoGame.OpenGL;
+using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
 
     internal class ShaderProgram
     {
-        public readonly int Program;
+        GraphicsDevice _device;
+        public readonly WebGLProgram Program;
 
-        private readonly Dictionary<string, int> _uniformLocations = new Dictionary<string, int>();
+        private readonly Dictionary<string, WebGLUniformLocation> _uniformLocations = new Dictionary<string, WebGLUniformLocation>();
 
-        public ShaderProgram(int program)
+        private IWebGLRenderingContext GL { get { return _device._glContext; } }
+
+        public ShaderProgram(WebGLProgram program, GraphicsDevice device)
         {
+            _device = device;
             Program = program;
         }
 
-        public int GetUniformLocation(string name)
+        public WebGLUniformLocation GetUniformLocation(string name)
         {
-            if (_uniformLocations.ContainsKey(name))
-                return _uniformLocations[name];
+            WebGLUniformLocation location;
+            if (_uniformLocations.TryGetValue(name, out location))
+                return location;
 
-            var location = GL.GetUniformLocation(Program, name);
+            location = GL.GetUniformLocation(Program, name);
             GraphicsExtensions.CheckGLError();
             _uniformLocations[name] = location;
             return location;
@@ -37,53 +41,49 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     internal class ShaderProgramCache : IDisposable
     {
+        GraphicsDevice _device;
+
         private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
-        GraphicsDevice _graphicsDevice;
-        bool disposed;
+        bool _isDisposed;
 
-        public ShaderProgramCache(GraphicsDevice graphicsDevice)
+        private IWebGLRenderingContext GL { get { return _device._glContext; } }
+
+        public ShaderProgramCache(GraphicsDevice device)
         {
-            _graphicsDevice = graphicsDevice;
+            _device = device;
         }
 
-        ~ShaderProgramCache()
-        {
-            Dispose(false);
-        }
 
         /// <summary>
         /// Clear the program cache releasing all shader programs.
         /// </summary>
-        public void Clear()
+        public void DisposePrograms()
         {
-            foreach (var pair in _programCache)
+            foreach (var value in _programCache.Values)
             {
-                _graphicsDevice.DisposeProgram(pair.Value.Program);
+                value.Program.Dispose();
             }
             _programCache.Clear();
         }
 
-        public ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader)
+        public ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
         {
-            // TODO: We should be hashing in the mix of constant 
+            // TODO: We should be hashing in the mix of constant
             // buffers here as well.  This would allow us to optimize
             // setting uniforms to only when a constant buffer changes.
 
-            var key = vertexShader.HashKey | pixelShader.HashKey;
-            if (!_programCache.ContainsKey(key))
-            {
-                // the key does not exist so we need to link the programs
-                _programCache.Add(key, Link(vertexShader, pixelShader));
-            }
+            ShaderProgram program;
+            if(_programCache.TryGetValue(shaderProgramHash, out program))
+                return program;
 
-            return _programCache[key];
+            // the key does not exist so we need to link the programs
+            program = CreateProgram(vertexShader, pixelShader);
+            _programCache.Add(shaderProgramHash, program);
+            return program;
         }
 
-        private ShaderProgram Link(Shader vertexShader, Shader pixelShader)
+        private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
-            // NOTE: No need to worry about background threads here
-            // as this is only called at draw time when we're in the
-            // main drawing thread.
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 
@@ -105,23 +105,27 @@ namespace Microsoft.Xna.Framework.Graphics
 
             pixelShader.ApplySamplerTextureUnits(program);
 
-            var linked = 0;
+            bool linkStatus;
+            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
 
-            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linked);
-            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
-            if (linked == (int)Bool.False)
+            if (linkStatus == true)
             {
+                return new ShaderProgram(program, _device);
+            }
+            else
+            { 
                 var log = GL.GetProgramInfoLog(program);
-                Console.WriteLine(log);
-                GL.DetachShader(program, vertexShader.GetShaderHandle());
-                GL.DetachShader(program, pixelShader.GetShaderHandle());
-                _graphicsDevice.DisposeProgram(program);
+                vertexShader.Dispose();
+                pixelShader.Dispose();
+                program.Dispose();
                 throw new InvalidOperationException("Unable to link effect program");
             }
-
-            return new ShaderProgram(program);
         }
 
+        ~ShaderProgramCache()
+        {
+            Dispose(false);
+        }
 
         public void Dispose()
         {
@@ -131,14 +135,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
-                    Clear();
-                disposed = true;
+                {
+                    DisposePrograms();
+                    _device = null;
+                }
+
+                _isDisposed = true;
             }
         }
+
     }
 }
-
-#endif // OPENGL
