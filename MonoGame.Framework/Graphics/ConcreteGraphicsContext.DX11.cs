@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _d3dContext.Dispose();
                 _d3dContext = null;
 
-                base.Dispose();
+                base.Dispose(disposing);
             }
         }
 
