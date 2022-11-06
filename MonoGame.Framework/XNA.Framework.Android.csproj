@@ -419,7 +419,7 @@
     <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\Shader\ShaderProgramCache.cs" />
+    <Compile Include="Graphics\Shader\ShaderProgramCache.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
