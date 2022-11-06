@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private ShaderProgramCache _programCache;
         private ShaderProgram _shaderProgram = null;
 
-        static readonly float[] _posFixup = new float[4];
+        Vector4 _posFixup;
 
         private static BufferBindingInfo[] _bufferBindingInfos;
         private static int _activeBufferBindingInfosCount;
@@ -552,6 +552,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var shaderProgram = _programCache.GetProgram(VertexShader, PixelShader);
             if (shaderProgram.Program == null)
                 return;
+
             // Set the new program if it has changed.
             if (_shaderProgram != shaderProgram)
             {
@@ -590,28 +591,28 @@ namespace Microsoft.Xna.Framework.Graphics
             // 1.0 or -1.0 to turn the rendering upside down for offscreen rendering. PosFixup.x
             // contains 1.0 to allow a mad.
 
-            _posFixup[0] = 1.0f;
-            _posFixup[1] = 1.0f;
-            if (UseHalfPixelOffset)
+            _posFixup.X = 1.0f;
+            _posFixup.Y = 1.0f;
+            if (!UseHalfPixelOffset)
             {
-                _posFixup[2] = (63.0f/64.0f)/Viewport.Width;
-                _posFixup[3] = -(63.0f/64.0f)/Viewport.Height;
+                _posFixup.Z = 0f;
+                _posFixup.W = 0f;
             }
             else
             {
-                _posFixup[2] = 0f;
-                _posFixup[3] = 0f;
+                _posFixup.Z =  (63.0f/64.0f)/Viewport.Width;
+                _posFixup.W = -(63.0f/64.0f)/Viewport.Height;
             }
 
             //If we have a render target bound (rendering offscreen)
             if (IsRenderTargetBound)
             {
                 //flip vertically
-                _posFixup[1] *= -1.0f;
-                _posFixup[3] *= -1.0f;
+                _posFixup.Y = -_posFixup.Y;
+                _posFixup.W = -_posFixup.W;
             }
-
-            GL.Uniform4f(posFixupLoc, _posFixup[0], _posFixup[1], _posFixup[2], _posFixup[3]);
+            
+            GL.Uniform4f(posFixupLoc, _posFixup.X, _posFixup.Y, _posFixup.Z, _posFixup.W);
             GraphicsExtensions.CheckGLError();
         }
 
