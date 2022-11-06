@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 ThrowIfDisposed();
 
-                base.Dispose();
+                base.Dispose(disposing);
             }
         }
 

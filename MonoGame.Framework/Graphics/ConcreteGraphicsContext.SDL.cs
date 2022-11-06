@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GraphicsDevice.DisposeContext(_glContext);
                 _glContext = IntPtr.Zero;
 
-                base.Dispose();
+                base.Dispose(disposing);
             }
         }
 
