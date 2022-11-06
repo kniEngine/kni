@@ -41,53 +41,48 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     internal class ShaderProgramCache : IDisposable
     {
+        GraphicsDevice _device;
+
         private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
-        GraphicsDevice _graphicsDevice;
-        bool disposed;
+        bool _isDisposed;
 
-        private IWebGLRenderingContext GL { get { return _graphicsDevice._glContext; } }
+        private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
-        public ShaderProgramCache(GraphicsDevice graphicsDevice)
+        public ShaderProgramCache(GraphicsDevice device)
         {
-            _graphicsDevice = graphicsDevice;
+            _device = device;
         }
 
-        ~ShaderProgramCache()
-        {
-            Dispose(false);
-        }
 
         /// <summary>
         /// Clear the program cache releasing all shader programs.
         /// </summary>
-        public void Clear()
+        public void DisposePrograms()
         {
-            foreach (var pair in _programCache)
+            foreach (var value in _programCache.Values)
             {
-                pair.Value.Program.Dispose();
+                value.Program.Dispose();
             }
             _programCache.Clear();
         }
 
-        public ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader)
+        public ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
         {
-            // TODO: We should be hashing in the mix of constant 
+            // TODO: We should be hashing in the mix of constant
             // buffers here as well.  This would allow us to optimize
             // setting uniforms to only when a constant buffer changes.
 
-            var key = vertexShader.HashKey | pixelShader.HashKey;
-
             ShaderProgram program;
-            if(_programCache.TryGetValue(key, out program))
+            if(_programCache.TryGetValue(shaderProgramHash, out program))
                 return program;
 
             // the key does not exist so we need to link the programs
-            program = Link(vertexShader, pixelShader);
-            _programCache.Add(key, program);
+            program = CreateProgram(vertexShader, pixelShader);
+            _programCache.Add(shaderProgramHash, program);
             return program;
         }
 
-        private ShaderProgram Link(Shader vertexShader, Shader pixelShader)
+        private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
@@ -110,22 +105,27 @@ namespace Microsoft.Xna.Framework.Graphics
 
             pixelShader.ApplySamplerTextureUnits(program);
 
-            bool linked = false;
+            bool linkStatus;
+            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
 
-            linked = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
-            
-            if (linked != true)
+            if (linkStatus == true)
             {
+                return new ShaderProgram(program, _device);
+            }
+            else
+            { 
                 var log = GL.GetProgramInfoLog(program);
                 vertexShader.Dispose();
                 pixelShader.Dispose();
                 program.Dispose();
                 throw new InvalidOperationException("Unable to link effect program");
             }
-
-            return new ShaderProgram(program, _graphicsDevice);
         }
 
+        ~ShaderProgramCache()
+        {
+            Dispose(false);
+        }
 
         public void Dispose()
         {
@@ -135,13 +135,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
-                    Clear();
-                disposed = true;
+                {
+                    DisposePrograms();
+                    _device = null;
+                }
+
+                _isDisposed = true;
             }
         }
+
     }
 }
-

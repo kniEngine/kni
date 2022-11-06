@@ -63,6 +63,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        private int ShaderProgramHash2
+        {
+            get { return _vertexShader.HashKey ^ _pixelShader.HashKey; }
+        }
+
         internal void SetVertexAttributeArray(bool[] attrs)
         {
             for (var x = 0; x < attrs.Length; x++)
@@ -204,7 +209,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs. 
-            _programCache.Clear();
+            _programCache.DisposePrograms();
             _shaderProgram = null;
 
             framebufferHelper = FramebufferHelper.Create(this);
@@ -549,9 +554,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            var shaderProgram = _programCache.GetProgram(VertexShader, PixelShader);
+            var shaderProgram = _programCache.GetProgram(VertexShader, PixelShader, ShaderProgramHash2);
             if (shaderProgram.Program == null)
                 return;
+
             // Set the new program if it has changed.
             if (_shaderProgram != shaderProgram)
             {
