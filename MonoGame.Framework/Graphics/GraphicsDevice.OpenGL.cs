@@ -1420,6 +1420,42 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
+        /// <summary>
+        /// Trigger the DeviceResetting event
+        /// Currently internal to allow the various platforms to send the event at the appropriate time.
+        /// </summary>
+        internal void Android_OnDeviceResetting()
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+
+            lock (_resourcesLock)
+            {
+                foreach (var resource in _resources)
+                {
+                    var target = resource.Target as GraphicsResource;
+                    if (target != null)
+                        target.GraphicsDeviceResetting();
+                }
+
+                // Remove references to resources that have been garbage collected.
+                _resources.RemoveAll(wr => !wr.IsAlive);
+            }
+        }
+
+        /// <summary>
+        /// Trigger the DeviceReset event to allow games to be notified of a device reset.
+        /// Currently internal to allow the various platforms to send the event at the appropriate time.
+        /// </summary>
+        internal void Android_OnDeviceReset()
+        {
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+
 #if DESKTOPGL
         /// <summary>
         /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
