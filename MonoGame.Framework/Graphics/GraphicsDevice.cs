@@ -339,7 +339,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else return 0;
         }
 
-        internal void Initialize()
+        private void Initialize()
         {
             PlatformInitialize();
 

@@ -1455,6 +1455,43 @@ namespace Microsoft.Xna.Framework.Graphics
                 handler(this, EventArgs.Empty);
         }
 
+        internal void Android_ReInitializeContext()
+        {
+            PlatformInitialize();
+
+            // Force set the default render states.
+            _blendStateDirty = true;
+            _depthStencilStateDirty = true;
+            _rasterizerStateDirty = true;
+            BlendState = BlendState.Opaque;
+            DepthStencilState = DepthStencilState.Default;
+            RasterizerState = RasterizerState.CullCounterClockwise;
+
+            // Clear the texture and sampler collections forcing
+            // the state to be reapplied.
+            VertexTextures.Clear();
+            VertexSamplerStates.Clear();
+            Textures.Clear();
+            SamplerStates.Clear();
+
+            // Clear constant buffers
+            _vertexConstantBuffers.Clear();
+            _pixelConstantBuffers.Clear();
+
+            // Force set the buffers and shaders on next ApplyState() call
+            _vertexBuffers = new VertexBufferBindings(_maxVertexBufferSlots);
+            _vertexBuffersDirty = true;
+            _indexBufferDirty = true;
+            _vertexShaderDirty = true;
+            _pixelShaderDirty = true;
+
+            // Set the default scissor rect.
+            _scissorRectangleDirty = true;
+            ScissorRectangle = _viewport.Bounds;
+
+            // Set the default render target.
+            ApplyRenderTargets(null);
+        }
 
 #if DESKTOPGL
         /// <summary>
