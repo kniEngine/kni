@@ -113,9 +113,10 @@ namespace Microsoft.Xna.Framework.Graphics
         List<ResourceHandle> _disposeThisFrame = new List<ResourceHandle>();
         List<ResourceHandle> _disposeNextFrame = new List<ResourceHandle>();
         object _disposeActionsLock = new object();
-
+#if DESKTOPGL
         static List<IntPtr> _disposeContexts = new List<IntPtr>();
         static object _disposeContextsLock = new object();
+#endif
 
         private ShaderProgramCache _programCache;
         private ShaderProgram _shaderProgram = null;
@@ -598,8 +599,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (_disposeContextsLock)
             {
-                int count = _disposeContexts.Count;
-                for (int i = 0; i < count; ++i)
+                for (int i = 0; i < _disposeContexts.Count; i++)
                     Sdl.GL.DeleteContext(_disposeContexts[i]);
                 _disposeContexts.Clear();
             }
