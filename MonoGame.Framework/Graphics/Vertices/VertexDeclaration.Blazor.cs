@@ -46,32 +46,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-		internal void Apply(Shader shader, int offset, int programHash)
-		{
-            var attrInfo = GetAttributeInfo(shader, programHash);
-
-            // Apply the vertex attribute info
-            for (int i=0; i< attrInfo.Elements.Count; i++)
-            {
-                var element = attrInfo.Elements[i];
-                GL.VertexAttribPointer(element.AttributeLocation,
-                    element.NumberOfElements,
-                    element.VertexAttribPointerType,
-                    element.Normalized,
-                    VertexStride,
-                    (offset + element.Offset));
-                GraphicsExtensions.CheckGLError();
-
-                if (GraphicsDevice.GraphicsCapabilities.SupportsInstancing)
-                {
-                    throw new NotImplementedException();
-                    //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
-                    //GraphicsExtensions.CheckGLError();
-                }
-            }
-            GraphicsDevice.SetVertexAttributeArray(attrInfo.EnabledAttributes);
-		    GraphicsDevice._attribsDirty = true;
-		}
 
         private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
         {
