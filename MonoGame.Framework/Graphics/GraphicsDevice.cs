@@ -200,9 +200,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             PresentationParameters = new PresentationParameters();
             PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
+
             Initialize();
         }
 
@@ -223,12 +221,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
+
             Adapter = adapter;
             PresentationParameters = presentationParameters;
             _graphicsProfile = graphicsProfile;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
 
             Initialize();
         }
@@ -251,64 +247,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
+
 #if DIRECTX
             // TODO we need to figure out how to inject the half pixel offset into DX shaders
             preferHalfPixelOffset = false;
 #endif
+
             Adapter = adapter;
             _graphicsProfile = graphicsProfile;
             UseHalfPixelOffset = preferHalfPixelOffset;
             PresentationParameters = presentationParameters;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
 
             Initialize();
-        }
-
-        private void Setup()
-        {
-#if DEBUG
-            if (DisplayMode == null)
-            {
-                throw new Exception(
-                    "Unable to determine the current display mode.  This can indicate that the " +
-                    "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
-                    "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
-            }
-#endif
-
-            // Initialize the main viewport
-            _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
-
-            PlatformSetup();
-
-            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, true);
-            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, true);
-
-            Textures = new TextureCollection(this, MaxTextureSlots, false);
-            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, false);
-
-            _blendStateAdditive = BlendState.Additive.Clone();
-            _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
-            _blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
-            _blendStateOpaque = BlendState.Opaque.Clone();
-
-            BlendState = BlendState.Opaque;
-
-            _depthStencilStateDefault = DepthStencilState.Default.Clone();
-            _depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
-            _depthStencilStateNone = DepthStencilState.None.Clone();
-
-            DepthStencilState = DepthStencilState.Default;
-
-            _rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
-            _rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
-            _rasterizerStateCullNone = RasterizerState.CullNone.Clone();
-
-            RasterizerState = RasterizerState.CullCounterClockwise;
-
-            EffectCache = new Dictionary<int, Effect>();
         }
 
         ~GraphicsDevice()
@@ -341,6 +291,55 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void Initialize()
         {
+            // Setup
+
+#if DEBUG
+            if (DisplayMode == null)
+            {
+                throw new Exception(
+                    "Unable to determine the current display mode.  This can indicate that the " +
+                    "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
+                    "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
+            }
+#endif
+
+            EffectCache = new Dictionary<int, Effect>();
+
+            // Initialize the main viewport
+            _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
+
+            PlatformSetup();
+
+            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, true);
+            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, true);
+
+            Textures = new TextureCollection(this, MaxTextureSlots, false);
+            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, false);
+
+            _blendStateAdditive = BlendState.Additive.Clone();
+            _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
+            _blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
+            _blendStateOpaque = BlendState.Opaque.Clone();
+
+            BlendState = BlendState.Opaque;
+
+            _depthStencilStateDefault = DepthStencilState.Default.Clone();
+            _depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
+            _depthStencilStateNone = DepthStencilState.None.Clone();
+
+            DepthStencilState = DepthStencilState.Default;
+
+            _rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
+            _rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
+            _rasterizerStateCullNone = RasterizerState.CullNone.Clone();
+
+            RasterizerState = RasterizerState.CullCounterClockwise;
+
+            // Setup end
+
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.Initialize(this);
+
             PlatformInitialize();
 
             // Force set the default render states.
