@@ -200,9 +200,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             PresentationParameters = new PresentationParameters();
             PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
+
             Initialize();
         }
 
@@ -223,12 +221,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
+
             Adapter = adapter;
             PresentationParameters = presentationParameters;
             _graphicsProfile = graphicsProfile;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
 
             Initialize();
         }
@@ -251,23 +247,52 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
+
 #if DIRECTX
             // TODO we need to figure out how to inject the half pixel offset into DX shaders
             preferHalfPixelOffset = false;
 #endif
+
             Adapter = adapter;
             _graphicsProfile = graphicsProfile;
             UseHalfPixelOffset = preferHalfPixelOffset;
             PresentationParameters = presentationParameters;
-            Setup();
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
 
             Initialize();
         }
 
-        private void Setup()
+        ~GraphicsDevice()
         {
+            Dispose(false);
+        }
+
+        internal int GetClampedMultisampleCount(int multiSampleCount)
+        {
+            if (multiSampleCount > 1)
+            {
+                // Round down MultiSampleCount to the nearest power of two
+                // hack from http://stackoverflow.com/a/2681094
+                // Note: this will return an incorrect, but large value
+                // for very large numbers. That doesn't matter because
+                // the number will get clamped below anyway in this case.
+                var msc = multiSampleCount;
+                msc = msc | (msc >> 1);
+                msc = msc | (msc >> 2);
+                msc = msc | (msc >> 4);
+                msc -= (msc >> 1);
+                // and clamp it to what the device can handle
+                if (msc > GraphicsCapabilities.MaxMultiSampleCount)
+                    msc = GraphicsCapabilities.MaxMultiSampleCount;
+
+                return msc;
+            }
+            else return 0;
+        }
+
+        private void Initialize()
+        {
+            // Setup
+
 #if DEBUG
             if (DisplayMode == null)
             {
@@ -277,6 +302,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
             }
 #endif
+
+            EffectCache = new Dictionary<int, Effect>();
 
             // Initialize the main viewport
             _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
@@ -308,39 +335,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             RasterizerState = RasterizerState.CullCounterClockwise;
 
-            EffectCache = new Dictionary<int, Effect>();
-        }
+            // Setup end
 
-        ~GraphicsDevice()
-        {
-            Dispose(false);
-        }
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.Initialize(this);
 
-        internal int GetClampedMultisampleCount(int multiSampleCount)
-        {
-            if (multiSampleCount > 1)
-            {
-                // Round down MultiSampleCount to the nearest power of two
-                // hack from http://stackoverflow.com/a/2681094
-                // Note: this will return an incorrect, but large value
-                // for very large numbers. That doesn't matter because
-                // the number will get clamped below anyway in this case.
-                var msc = multiSampleCount;
-                msc = msc | (msc >> 1);
-                msc = msc | (msc >> 2);
-                msc = msc | (msc >> 4);
-                msc -= (msc >> 1);
-                // and clamp it to what the device can handle
-                if (msc > GraphicsCapabilities.MaxMultiSampleCount)
-                    msc = GraphicsCapabilities.MaxMultiSampleCount;
-
-                return msc;
-            }
-            else return 0;
-        }
-
-        internal void Initialize()
-        {
             PlatformInitialize();
 
             // Force set the default render states.
@@ -670,41 +669,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PresentationParameters = presentationParameters;
             Reset();
-        }
-
-        /// <summary>
-        /// Trigger the DeviceResetting event
-        /// Currently internal to allow the various platforms to send the event at the appropriate time.
-        /// </summary>
-        internal void Android_OnDeviceResetting()
-        {
-            var handler = DeviceResetting;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-
-            lock (_resourcesLock)
-            {
-                foreach (var resource in _resources)
-                {
-                    var target = resource.Target as GraphicsResource;
-                    if (target != null)
-                        target.GraphicsDeviceResetting();
-                }
-
-                // Remove references to resources that have been garbage collected.
-                _resources.RemoveAll(wr => !wr.IsAlive);
-            }
-        }
-
-        /// <summary>
-        /// Trigger the DeviceReset event to allow games to be notified of a device reset.
-        /// Currently internal to allow the various platforms to send the event at the appropriate time.
-        /// </summary>
-        internal void Android_OnDeviceReset()
-        {
-            var handler = DeviceReset;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
         }
 
         public DisplayMode DisplayMode

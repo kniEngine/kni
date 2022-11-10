@@ -1420,6 +1420,79 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
+        /// <summary>
+        /// Trigger the DeviceResetting event
+        /// Currently internal to allow the various platforms to send the event at the appropriate time.
+        /// </summary>
+        internal void Android_OnDeviceResetting()
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+
+            lock (_resourcesLock)
+            {
+                foreach (var resource in _resources)
+                {
+                    var target = resource.Target as GraphicsResource;
+                    if (target != null)
+                        target.GraphicsDeviceResetting();
+                }
+
+                // Remove references to resources that have been garbage collected.
+                _resources.RemoveAll(wr => !wr.IsAlive);
+            }
+        }
+
+        /// <summary>
+        /// Trigger the DeviceReset event to allow games to be notified of a device reset.
+        /// Currently internal to allow the various platforms to send the event at the appropriate time.
+        /// </summary>
+        internal void Android_OnDeviceReset()
+        {
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+        internal void Android_ReInitializeContext()
+        {
+            PlatformInitialize();
+
+            // Force set the default render states.
+            _blendStateDirty = true;
+            _depthStencilStateDirty = true;
+            _rasterizerStateDirty = true;
+            BlendState = BlendState.Opaque;
+            DepthStencilState = DepthStencilState.Default;
+            RasterizerState = RasterizerState.CullCounterClockwise;
+
+            // Clear the texture and sampler collections forcing
+            // the state to be reapplied.
+            VertexTextures.Clear();
+            VertexSamplerStates.Clear();
+            Textures.Clear();
+            SamplerStates.Clear();
+
+            // Clear constant buffers
+            _vertexConstantBuffers.Clear();
+            _pixelConstantBuffers.Clear();
+
+            // Force set the buffers and shaders on next ApplyState() call
+            _vertexBuffers = new VertexBufferBindings(_maxVertexBufferSlots);
+            _vertexBuffersDirty = true;
+            _indexBufferDirty = true;
+            _vertexShaderDirty = true;
+            _pixelShaderDirty = true;
+
+            // Set the default scissor rect.
+            _scissorRectangleDirty = true;
+            ScissorRectangle = _viewport.Bounds;
+
+            // Set the default render target.
+            ApplyRenderTargets(null);
+        }
+
 #if DESKTOPGL
         /// <summary>
         /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
