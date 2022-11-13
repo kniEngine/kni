@@ -36,8 +36,8 @@ namespace Microsoft.Xna.Framework.Graphics
                             ToGLBlendEquationMode(_targetBlendState[i].ColorBlendFunction),
                             ToGLBlendEquationMode(_targetBlendState[i].AlphaBlendFunction));
                         GraphicsExtensions.CheckGLError();
-                        device._lastBlendState[i].ColorBlendFunction = this._targetBlendState[i].ColorBlendFunction;
-                        device._lastBlendState[i].AlphaBlendFunction = this._targetBlendState[i].AlphaBlendFunction;
+                        device._lastBlendState[i].ColorBlendFunction = _targetBlendState[i].ColorBlendFunction;
+                        device._lastBlendState[i].AlphaBlendFunction = _targetBlendState[i].AlphaBlendFunction;
                     }
 
                     if (force ||

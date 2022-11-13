@@ -293,7 +293,7 @@ namespace Microsoft.Xna.Framework {
 				
 				// FIXME: These static methods on GraphicsDevice need
 				//        to go away someday.
-				gds.GraphicsDevice.glFramebuffer = _framebuffer;
+				gds.GraphicsDevice._glFramebuffer = _framebuffer;
 			}
 
             if (Threading.BackgroundContext == null)

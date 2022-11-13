@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetVertexAttributeLocations(WebGLProgram program)
         {
-            for (int i = 0; i < Attributes.Length; ++i)
+            for (int i = 0; i < Attributes.Length; i++)
             {
                 Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
                 GraphicsExtensions.CheckGLError();
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal int GetAttribLocation(VertexElementUsage usage, int index)
         {
-            for (int i = 0; i < Attributes.Length; ++i)
+            for (int i = 0; i < Attributes.Length; i++)
             {
                 if ((Attributes[i].usage == usage) && (Attributes[i].index == index))
                     return Attributes[i].location;

@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed)
             {
-                for (int i = 0; i < _targetBlendState.Length; ++i)
+                for (int i = 0; i < _targetBlendState.Length; i++)
                     _targetBlendState[i] = null;
 
                 PlatformDispose();

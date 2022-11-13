@@ -4,8 +4,8 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
-using Microsoft.Xna.Platform.Graphics;
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics

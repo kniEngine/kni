@@ -45,8 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return attrInfo;
         }
 
-
-
         private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
         {
             switch (elementFormat)

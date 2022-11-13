@@ -680,7 +680,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             fixed (SpriteFont.Glyph* pGlyphs = spriteFont.InternalGlyphs)
             {
-                for (var i = 0; i < charsCount; ++i)
+                for (var i = 0; i < charsCount; i++)
                 {
                     var c = pChars[i];
 
@@ -1013,7 +1013,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             fixed (SpriteFont.Glyph* pGlyphs = spriteFont.InternalGlyphs)
             {
-                for (var i = 0; i < charsCount; ++i)
+                for (var i = 0; i < charsCount; i++)
                 {
                     var c = pChars[i];
 
@@ -1284,7 +1284,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             fixed (SpriteFont.Glyph* pGlyphs = spriteFont.InternalGlyphs)
             {
-                for (var i = 0; i < charsCount; ++i)
+                for (var i = 0; i < charsCount; i++)
                 {
                     var c = pChars[i];
 

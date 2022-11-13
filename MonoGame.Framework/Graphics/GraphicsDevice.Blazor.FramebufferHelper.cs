@@ -4,12 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using nkast.Wasm.Canvas.WebGL;
 
-using System.Security;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -19,17 +16,17 @@ namespace Microsoft.Xna.Framework.Graphics
         internal class FramebufferHelper
         {
             private static FramebufferHelper _instance;
-            private GraphicsDevice _graphicsDevice;
+            private GraphicsDevice _device;
 
-            private IWebGLRenderingContext GL { get { return _graphicsDevice._glContext; } }
+            private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
-            public static FramebufferHelper Create(GraphicsDevice gd)
+            public static FramebufferHelper Create(GraphicsDevice device)
             {
-                //if (gd.GraphicsCapabilities.SupportsFramebufferObjectARB || gd.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+                //if (devic.GraphicsCapabilities.SupportsFramebufferObjectARB || devic.GraphicsCapabilities.SupportsFramebufferObjectEXT)
                 // TODO: check for FramebufferObjectARB
                 if (true)
                 {
-                    _instance = new FramebufferHelper(gd);
+                    _instance = new FramebufferHelper(device);
                 }
                 else
                 {
@@ -54,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal FramebufferHelper(GraphicsDevice graphicsDevice)
             {
-                this._graphicsDevice = graphicsDevice;
+                this._device = graphicsDevice;
 
                 this.SupportsBlitFramebuffer = false;
                 this.SupportsInvalidateFramebuffer = false;
@@ -153,7 +150,7 @@ namespace Microsoft.Xna.Framework.Graphics
             internal virtual void CheckFramebufferStatus()
             {
                 var status = GL.CheckFramebufferStatus(WebGLFramebufferType.FRAMEBUFFER);
-                switch(status)
+                switch (status)
                 {
                     case WebGLFramebufferStatus.FRAMEBUFFER_COMPLETE:
                         return;
@@ -165,11 +162,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
                     case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
                         throw new InvalidOperationException("Not all attached images have the same dimensions.");
+
                     default:
                         throw new InvalidOperationException("Framebuffer Incomplete.");
                 }
             }
         }
     }
-
 }

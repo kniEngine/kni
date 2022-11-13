@@ -4,12 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using MonoGame.OpenGL;
 
-using System.Security;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -20,11 +17,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             private static FramebufferHelper _instance;
 
-            public static FramebufferHelper Create(GraphicsDevice gd)
+            public static FramebufferHelper Create(GraphicsDevice device)
             {
-                if (gd.GraphicsCapabilities.SupportsFramebufferObjectARB || gd.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+                if (device.GraphicsCapabilities.SupportsFramebufferObjectARB || device.GraphicsCapabilities.SupportsFramebufferObjectEXT)
                 {
-                    _instance = new FramebufferHelper(gd);
+                    _instance = new FramebufferHelper(device);
                 }
                 else
                 {
@@ -98,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            static readonly FramebufferAttachment [] FramebufferAttachements = {
+            static readonly FramebufferAttachment[] FramebufferAttachements = {
                 FramebufferAttachment.ColorAttachment0,
                 FramebufferAttachment.DepthAttachment,
                 FramebufferAttachment.StencilAttachment,
@@ -107,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
             internal virtual void InvalidateDrawFramebuffer()
             {
                 Debug.Assert(this.SupportsInvalidateFramebuffer);
-                GL.InvalidateFramebuffer (FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
+                GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
             }
 
             internal virtual void InvalidateReadFramebuffer()
@@ -138,12 +135,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 GL.GenerateMipmap((GenerateMipmapTarget)target);
                 GraphicsExtensions.CheckGLError();
-
             }
 
             internal virtual void BlitFramebuffer(int iColorAttachment, int width, int height)
             {
-
                 GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + iColorAttachment);
                 GraphicsExtensions.CheckGLError();
                 GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + iColorAttachment);
@@ -156,18 +151,21 @@ namespace Microsoft.Xna.Framework.Graphics
             internal virtual void CheckFramebufferStatus()
             {
                 var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-                if (status != FramebufferErrorCode.FramebufferComplete)
+                switch (status)
                 {
-                    string message = "Framebuffer Incomplete.";
-                    switch (status)
-                    {
-                        case FramebufferErrorCode.FramebufferIncompleteAttachment: message = "Not all framebuffer attachment points are framebuffer attachment complete."; break;
-                        case FramebufferErrorCode.FramebufferIncompleteMissingAttachment: message = "No images are attached to the framebuffer."; break;
-                        case FramebufferErrorCode.FramebufferUnsupported: message = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions."; break;
-                        case FramebufferErrorCode.FramebufferIncompleteMultisample: message = "Not all attached images have the same number of samples."; break;
-                        default:
-                            throw new InvalidOperationException(message);
-                    }
+                    case FramebufferErrorCode.FramebufferComplete:
+                        return;
+                    case FramebufferErrorCode.FramebufferIncompleteAttachment:
+                        throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
+                    case FramebufferErrorCode.FramebufferIncompleteMissingAttachment:
+                        throw new InvalidOperationException("No images are attached to the framebuffer.");
+                    case FramebufferErrorCode.FramebufferUnsupported:
+                        throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
+                    case FramebufferErrorCode.FramebufferIncompleteMultisample:
+                        throw new InvalidOperationException("Not all attached images have the same number of samples.");
+
+                    default:
+                        throw new InvalidOperationException("Framebuffer Incomplete.");
                 }
             }
         }

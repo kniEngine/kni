@@ -64,21 +64,24 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Set/get the correct shader handle/cleanups.
 
-            var current = _effect.CurrentTechnique;
+            var currentTechnique = _effect.CurrentTechnique;
             _effect.OnApply();
-            if (_effect.CurrentTechnique != current)
+            if (_effect.CurrentTechnique != currentTechnique)
             {
                 _effect.CurrentTechnique.Passes[0].Apply();
                 return;
             }
 
-            var device = _effect.GraphicsDevice;
+            Apply(_effect.GraphicsDevice);
+        }
 
+        private void Apply(GraphicsDevice device)
+        {
             if (_vertexShader != null)
             {
                 device.VertexShader = _vertexShader;
 
-				// Update the texture parameters.
+                // Update the texture parameters.
                 SetShaderSamplers(_vertexShader, device.VertexTextures, device.VertexSamplerStates);
 
                 // Update the constant buffers.
@@ -96,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // Update the texture parameters.
                 SetShaderSamplers(_pixelShader, device.Textures, device.SamplerStates);
-                
+
                 // Update the constant buffers.
                 for (var c = 0; c < _pixelShader.CBuffers.Length; c++)
                 {

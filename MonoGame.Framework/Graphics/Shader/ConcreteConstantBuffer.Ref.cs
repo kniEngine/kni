@@ -36,6 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -79,8 +79,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     // from the docs it seems this works the same as for Direct3D
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
+                    DepthFormat activeDepthFormat = device.IsRenderTargetBound
+                    ? device._currentRenderTargetBindings[0].DepthFormat
+                    : device.PresentationParameters.DepthStencilFormat;
                     int depthMul;
-                    switch (device.ActiveDepthFormat)
+                    switch (activeDepthFormat)
                     {
                         case DepthFormat.None:
                             depthMul = 0;
@@ -92,6 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         case DepthFormat.Depth24Stencil8:
                             depthMul = 1 << 24 - 1;
                             break;
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
