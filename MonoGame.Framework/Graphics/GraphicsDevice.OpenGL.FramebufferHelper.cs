@@ -119,21 +119,21 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferTexture2D(int attachement, int target, int texture, int level = 0, int samples = 0)
+            internal virtual void FramebufferTexture2D(FramebufferAttachment attachement, TextureTarget target, int texture, int level = 0, int samples = 0)
             {
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachement, (TextureTarget)target, texture, level);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, texture, level);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferRenderbuffer(int attachement, int renderbuffer, int level = 0)
+            internal virtual void FramebufferRenderbuffer(FramebufferAttachment attachement, int renderbuffer, int level = 0)
             {
-                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
+                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenerateMipmap(int target)
+            internal virtual void GenerateMipmap(TextureTarget target)
             {
-                GL.GenerateMipmap((GenerateMipmapTarget)target);
+                GL.GenerateMipmap(target);
                 GraphicsExtensions.CheckGLError();
             }
 

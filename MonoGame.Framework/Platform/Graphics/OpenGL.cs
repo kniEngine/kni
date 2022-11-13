@@ -79,18 +79,6 @@ namespace MonoGame.OpenGL
         QueryResult = 0x8866,
     }
 
-    internal enum GenerateMipmapTarget
-    {
-        Texture1D = 0x0DE0,
-        Texture2D = 0x0DE1,
-        Texture3D = 0x806F,
-        TextureCubeMap = 0x8513,
-        Texture1DArray = 0x8C18,
-        Texture2DArray = 0x8C1A,
-        Texture2DMultisample = 0x9100,
-        Texture2DMultisampleArray = 0x9102,
-    }
-
     internal enum BlitFramebufferFilter
     {
         Nearest = 0x2600,
@@ -324,14 +312,20 @@ namespace MonoGame.OpenGL
 
     internal enum TextureTarget
     {
+        Texture1D = 0x0DE0,
         Texture2D = 0x0DE1,
         Texture3D = 0x806F,
         TextureCubeMap = 0x8513,
+        Texture1DArray = 0x8C18,
+        Texture2DArray = 0x8C1A,
+        Texture2DMultisample = 0x9100,
+        Texture2DMultisampleArray = 0x9102,
+
         TextureCubeMapPositiveX = 0x8515,
-        TextureCubeMapPositiveY = 0x8517,
-        TextureCubeMapPositiveZ = 0x8519,
         TextureCubeMapNegativeX = 0x8516,
+        TextureCubeMapPositiveY = 0x8517,
         TextureCubeMapNegativeY = 0x8518,
+        TextureCubeMapPositiveZ = 0x8519,
         TextureCubeMapNegativeZ = 0x851A,
     }
 
@@ -816,7 +810,7 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void GenerateMipmapDelegate(GenerateMipmapTarget target);
+        internal delegate void GenerateMipmapDelegate(TextureTarget target);
         internal static GenerateMipmapDelegate GenerateMipmap;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
