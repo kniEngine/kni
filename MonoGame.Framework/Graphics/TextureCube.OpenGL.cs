@@ -90,14 +90,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (mipMap)
                 {
+                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == glTarget);
 #if IOS || TVOS || ANDROID
-                    GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
+                    GL.GenerateMipmap(TextureTarget.TextureCubeMap);
+                    GraphicsExtensions.CheckGLError();
 #else
-                    GraphicsDevice.FramebufferHelper.Get().GenerateMipmap(glTarget);
+                    GraphicsDevice.FramebufferHelper.Get().GenerateMipmap(glTarget);                
+                    GraphicsExtensions.CheckGLError();
                     // This updates the mipmaps after a change in the base texture
                     GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
 #endif
-                    GraphicsExtensions.CheckGLError();
                 }
             }
         }
