@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         #endregion IOS || TVOS
 
- 
+
         #region ANDROID
 #if ANDROID
         private unsafe static Texture2D PlatformFromStream_ANDROID(GraphicsDevice graphicsDevice, Stream stream)
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private static void ConvertToABGR_ANDROID(int pixelHeight, int pixelWidth, int[] pixels)
         {
             int pixelCount = pixelWidth * pixelHeight;
-            for (int i = 0; i < pixelCount; ++i)
+            for (int i = 0; i < pixelCount; i++)
             {
                 uint pixel = (uint)pixels[i];
                 pixels[i] = (int)((pixel & 0xFF00FF00) | ((pixel & 0x00FF0000) >> 16) | ((pixel & 0x000000FF) << 16));
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         #endregion ANDROID
 
-        
+
         #region DESKTOPGL 
 #if DESKTOPGL && (NET40 || NET40_OR_GREATER)
         private unsafe static Texture2D PlatformFromStream_DESKTOPGL(GraphicsDevice graphicsDevice, Stream stream)
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int pixelCount = pixelWidth * pixelHeight;
             fixed (byte* pdata = data)
             {
-                for (int i = 0; i < pixelCount; ++i)
+                for (int i = 0; i < pixelCount; i++)
                 {
                     var t = pdata[i * 4 + 0];
                     pdata[i * 4 + 0] = pdata[i * 4 + 2];

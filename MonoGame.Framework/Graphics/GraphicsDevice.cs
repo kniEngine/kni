@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using MonoGame.Framework.Utilities;
 
 
@@ -73,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private IndexBuffer _indexBuffer;
         private bool _indexBufferDirty;
 
-        private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
+        internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         private int _currentRenderTargetCount;
         private readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
         
@@ -140,12 +139,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int MaxTextureSlots;
         internal int MaxVertexTextureSlots;
 
-        public bool IsDisposed
-        {
-            get
-            {
-                return _isDisposed;
-            }
+        public bool IsDisposed 
+        { 
+            get { return _isDisposed; } 
         }
 
 		public bool IsContentLost {
@@ -159,16 +155,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal bool IsRenderTargetBound
         {
             get { return _currentRenderTargetCount > 0; }
-        }
-
-        internal DepthFormat ActiveDepthFormat
-        {
-            get
-            {
-                return IsRenderTargetBound
-                    ? _currentRenderTargetBindings[0].DepthFormat
-                    : PresentationParameters.DepthStencilFormat;
-            }
         }
 
         public GraphicsAdapter Adapter
@@ -544,7 +530,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 		public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
-		{
+        {
             PlatformClear(options, color, depth, stencil);
 
             unchecked { _graphicsMetrics._clearCount++; }
@@ -673,18 +659,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public DisplayMode DisplayMode
         {
-            get
-            {
-                return Adapter.CurrentDisplayMode;
-            }
+            get { return Adapter.CurrentDisplayMode; }
         }
 
         public GraphicsDeviceStatus GraphicsDeviceStatus
         {
-            get
-            {
-                return GraphicsDeviceStatus.Normal;
-            }
+            get { return GraphicsDeviceStatus.Normal; }
         }
 
         public PresentationParameters PresentationParameters
@@ -865,10 +845,10 @@ namespace Microsoft.Xna.Framework.Graphics
             return bindings;
 		}
 
-        public void GetRenderTargets(RenderTargetBinding[] outTargets)
+        public void GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            Debug.Assert(outTargets.Length == _currentRenderTargetCount, "Invalid outTargets array length!");
-            Array.Copy(_currentRenderTargetBindings, outTargets, _currentRenderTargetCount);
+            Debug.Assert(bindings.Length == _currentRenderTargetCount, "Invalid outTargets array length!");
+            Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
@@ -915,7 +895,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    var message = string.Format(CultureInfo.InvariantCulture, "Max number of vertex buffers is {0}.", _maxVertexBufferSlots);
+                    var message = string.Format("Max number of vertex buffers is {0}.", _maxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }
@@ -1049,7 +1029,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// from an instance of <typeparamref name="T"/> and cached for subsequent calls.</remarks>
         public void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount) where T : struct, IVertexType
         {
-            DrawUserPrimitives(primitiveType, vertexData, vertexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
+            DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
         }
 
         /// <summary>

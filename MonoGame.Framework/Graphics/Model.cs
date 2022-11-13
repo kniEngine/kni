@@ -119,17 +119,17 @@ namespace Microsoft.Xna.Framework.Graphics
             if (destinationBoneTransforms.Length < this.Bones.Count)
 				throw new ArgumentOutOfRangeException("destinationBoneTransforms");
             int count = this.Bones.Count;
-			for (int index1 = 0; index1 < count; ++index1)
+			for (int i = 0; i < count; i++)
 			{
-                ModelBone modelBone = (this.Bones)[index1];
+                ModelBone modelBone = (this.Bones)[i];
 				if (modelBone.Parent == null)
 				{
-					destinationBoneTransforms[index1] = modelBone.transform;
+					destinationBoneTransforms[i] = modelBone.transform;
 				}
 				else
 				{
-					int index2 = modelBone.Parent.Index;
-					Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index2], out destinationBoneTransforms[index1]);
+					int index = modelBone.Parent.Index;
+					Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
 				}
 			}
 		}

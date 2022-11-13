@@ -1,7 +1,8 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
-using Microsoft.Xna.Framework.Graphics;
 using System;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -69,6 +70,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
 
         protected virtual void Dispose(bool disposing)
         {

@@ -86,10 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public object Handle
         {
-            get
-            {
-                return _d3dDevice;
-            }
+            get { return _d3dDevice; }
         }
 
         private void PlatformSetup()
@@ -966,7 +963,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if WINDOWS_UAP
-        internal void ResetRenderTargets()
+        internal void UAP_ResetRenderTargets()
         {
             PlatformApplyViewport();
 

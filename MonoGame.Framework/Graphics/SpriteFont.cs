@@ -206,7 +206,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var firstGlyphOfLine = true;
 
             fixed (Glyph* pGlyphs = InternalGlyphs)
-            for (var i = 0; i < charsCount; ++i)
+            for (var i = 0; i < charsCount; i++)
             {
                 var c = pChars[i];
 
@@ -487,8 +487,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 public CharGlyphPairEnumerator(GlyphCollection collection, ReadOnlyCollection<char> keys)
                 {
-                    this._collection = collection;
-                    this._keys = keys;
+                    _collection = collection;
+                    _keys = keys;
                     i = -1;
                 }
 

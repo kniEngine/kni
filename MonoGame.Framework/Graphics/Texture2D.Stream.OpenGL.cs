@@ -98,8 +98,8 @@ namespace Microsoft.Xna.Framework.Graphics
             pngWriter.Write(this, stream);
 #endif
         }
-        
-        
+
+
 #if DESKTOPGL
         internal unsafe void SaveAsImage(Stream stream, int width, int height, ImageWriterFormat format)
         {
@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GetData(data);
             
             // internal structure is BGR while bitmap expects RGB
-            for (int i = 0; i < data.Length; ++i)
+            for (int i = 0; i < data.Length; i++)
             {
                 uint pixel = (uint)data[i];
                 data[i] = (int)((pixel & 0xFF00FF00) | ((pixel & 0x00FF0000) >> 16) | ((pixel & 0x000000FF) << 16));

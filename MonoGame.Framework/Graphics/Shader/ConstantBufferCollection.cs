@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly ConstantBuffer[] _buffers;
 
         private ShaderStage _stage;
-        private ShaderStage Stage { get { return this._stage; } }
+        private ShaderStage Stage { get { return _stage; } }
 
         private int _valid;
 

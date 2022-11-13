@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Framework
 				// render target before every draw.  
 				// 
 				// I guess the OS changes it and doesn't restore it?
-				device.ResetRenderTargets();
+				device.UAP_ResetRenderTargets();
             }
 
             return true;
