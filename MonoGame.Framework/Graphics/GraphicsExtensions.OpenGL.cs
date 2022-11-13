@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return ComparisonFunc.Never;
                 case CompareFunction.NotEqual:
                     return ComparisonFunc.Notequal;
-                    
+
                 default:
                     return ComparisonFunc.Always;
             }
@@ -62,6 +62,28 @@ namespace Microsoft.Xna.Framework.Graphics
 #else
                 Debug.WriteLine("MonoGameGLException at " + location + " - " + ex.Message);
 #endif
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public static void CheckFramebufferStatus()
+        {
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            switch (status)
+            {
+                case FramebufferErrorCode.FramebufferComplete:
+                    return;
+                case FramebufferErrorCode.FramebufferIncompleteAttachment:
+                    throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
+                case FramebufferErrorCode.FramebufferIncompleteMissingAttachment:
+                    throw new InvalidOperationException("No images are attached to the framebuffer.");
+                case FramebufferErrorCode.FramebufferUnsupported:
+                    throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
+                case FramebufferErrorCode.FramebufferIncompleteMultisample:
+                    throw new InvalidOperationException("Not all attached images have the same number of samples.");
+
+                default:
+                    throw new InvalidOperationException("Framebuffer Incomplete.");
             }
         }
 
