@@ -68,12 +68,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void RenderbufferStorageMultisample(int samples, int internalFormat, int width, int height)
+            internal virtual void RenderbufferStorageMultisample(int samples, RenderbufferStorage internalFormat, int width, int height)
             {
                 if (samples > 0 && GL.RenderbufferStorageMultisample != null)
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, samples, (RenderbufferStorage)internalFormat, width, height);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, samples, internalFormat, width, height);
                 else
-                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferStorage)internalFormat, width, height);
+                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, internalFormat, width, height);
                 GraphicsExtensions.CheckGLError();
             }
 

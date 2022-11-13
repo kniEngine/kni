@@ -700,7 +700,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _framebufferHelper.GenRenderbuffer(out color);
                 _framebufferHelper.BindRenderbuffer(color);
-                _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, (int)RenderbufferStorage.Rgba8, width, height);
+                _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
             }
 
             if (preferredDepthFormat != DepthFormat.None)
@@ -750,7 +750,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _framebufferHelper.GenRenderbuffer(out depth);
                     _framebufferHelper.BindRenderbuffer(depth);
-                    _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, (int)depthInternalFormat, width, height);
+                    _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, depthInternalFormat, width, height);
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         stencil = depth;
@@ -758,7 +758,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             _framebufferHelper.GenRenderbuffer(out stencil);
                             _framebufferHelper.BindRenderbuffer(stencil);
-                            _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, (int)stencilInternalFormat, width, height);
+                            _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, stencilInternalFormat, width, height);
                         }
                     }
                 }
