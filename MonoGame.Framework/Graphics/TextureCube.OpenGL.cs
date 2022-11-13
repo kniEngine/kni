@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if IOS || TVOS || ANDROID
                     GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
 #else
-                    GraphicsDevice.FramebufferHelper.Get().GenerateMipmap((int)glTarget);
+                    GraphicsDevice.FramebufferHelper.Get().GenerateMipmap(glTarget);
                     // This updates the mipmaps after a change in the base texture
                     GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
 #endif

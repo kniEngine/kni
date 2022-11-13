@@ -131,9 +131,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenerateMipmap(int target)
+            internal virtual void GenerateMipmap(TextureTarget target)
             {
-                GL.GenerateMipmap((GenerateMipmapTarget)target);
+                GL.GenerateMipmap(target);
                 GraphicsExtensions.CheckGLError();
             }
 
