@@ -49,22 +49,13 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private readonly Texture _renderTarget;
         private readonly int _arraySlice;
-        private DepthFormat _depthFormat;
+        private readonly DepthFormat _depthFormat;
 
-		public Texture RenderTarget 
-        {
-			get { return _renderTarget; }
-		}
+		public Texture RenderTarget { get { return _renderTarget; } }
+        public int ArraySlice { get { return _arraySlice; } }
 
-        public int ArraySlice
-        {
-            get { return _arraySlice; }
-        }
+        internal DepthFormat DepthFormat { get { return _depthFormat; } }
 
-        internal DepthFormat DepthFormat
-        {
-            get { return _depthFormat; }
-        }
 
 		public RenderTargetBinding(RenderTarget2D renderTarget)
 		{
@@ -88,8 +79,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _depthFormat = renderTarget.DepthStencilFormat;
         }
 
-#if DIRECTX
-
         public RenderTargetBinding(RenderTarget2D renderTarget, int arraySlice)
         {
             if (renderTarget == null)
@@ -104,16 +93,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _depthFormat = renderTarget.DepthStencilFormat;
         }
 
-        public RenderTargetBinding(RenderTarget3D renderTarget)
-        {
-            if (renderTarget == null)
-                throw new ArgumentNullException("renderTarget");
-
-            _renderTarget = renderTarget;
-            _arraySlice = 0;
-            _depthFormat = renderTarget.DepthStencilFormat;
-        }
-
         public RenderTargetBinding(RenderTarget3D renderTarget, int arraySlice)
         {
             if (renderTarget == null)
@@ -123,6 +102,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _renderTarget = renderTarget;
             _arraySlice = arraySlice;
+            _depthFormat = renderTarget.DepthStencilFormat;
+        }
+
+#if DIRECTX
+
+        public RenderTargetBinding(RenderTarget3D renderTarget)
+        {
+            if (renderTarget == null)
+                throw new ArgumentNullException("renderTarget");
+
+            _renderTarget = renderTarget;
+            _arraySlice = 0;
             _depthFormat = renderTarget.DepthStencilFormat;
         }
 

@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- TODO we should either implement or provide a Null implementation (stubs) to include RT3D in the API -->
-    <Compile Remove="Graphics\RenderTarget3D.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsDebug.Default.cs" />
@@ -20,6 +15,7 @@
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
+    <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
     <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />

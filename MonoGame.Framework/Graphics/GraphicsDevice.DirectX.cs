@@ -989,33 +989,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-        // Only implemented for DirectX right now, so not in GraphicsDevice.cs
-        public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
-        {
-            if (!GraphicsCapabilities.SupportsTextureArrays)
-                throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
-
-            if (renderTarget == null)
-                SetRenderTarget(null);
-            else
-            {
-                _tempRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_tempRenderTargetBinding);
-            }
-        }
-
-        // Only implemented for DirectX right now, so not in GraphicsDevice.cs
-        public void SetRenderTarget(RenderTarget3D renderTarget, int arraySlice)
-        {
-            if (renderTarget == null)
-                SetRenderTarget(null);
-            else
-            {
-                _tempRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_tempRenderTargetBinding);
-            }
-        }
-
         private void PlatformApplyDefaultRenderTarget()
         {
             // Set the default swap chain.

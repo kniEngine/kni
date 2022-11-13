@@ -19,6 +19,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         WebGLTextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
         {
+            if (arraySlice != 0)
+                throw new NotImplementedException("arraySlice is not implemented for Texture2D");
+
             return glTarget;
         }
 

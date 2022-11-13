@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         private int _currentRenderTargetCount;
-        private readonly RenderTargetBinding[] _tempRenderTargetBinding = new RenderTargetBinding[1];
+        private readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
         
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
@@ -712,8 +712,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		    }
 			else
 			{
-				_tempRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-				SetRenderTargets(_tempRenderTargetBinding);
+				_singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+				SetRenderTargets(_singleRenderTargetBinding);
 			}
 		}
 
@@ -725,8 +725,39 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _tempRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
-                SetRenderTargets(_tempRenderTargetBinding);
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
+                SetRenderTargets(_singleRenderTargetBinding);
+            }
+        }
+
+        /// <remarks>Only implemented for DirectX </remarks>
+        public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
+        {
+            if (!GraphicsCapabilities.SupportsTextureArrays)
+                throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
+
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_singleRenderTargetBinding);
+            }
+        }
+
+        /// <remarks>Only implemented for DirectX </remarks>
+        public void SetRenderTarget(RenderTarget3D renderTarget, int arraySlice)
+        {
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_singleRenderTargetBinding);
             }
         }
 
