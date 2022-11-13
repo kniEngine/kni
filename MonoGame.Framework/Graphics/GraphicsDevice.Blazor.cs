@@ -533,9 +533,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         _framebufferHelper.FramebufferTexture2D(attachement, renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
                 }
 
-//#if DEBUG
-                _framebufferHelper.CheckFramebufferStatus();
-//#endif
+                GraphicsExtensions.CheckFramebufferStatus();
+
                 _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
             }
             else
