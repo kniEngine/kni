@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading texture files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".bmp", // Bitmap Image File
+    [ContentImporter(   ".bmp", // Bitmap Image File
                         ".cut", // Dr Halo CUT
                         ".dds", // Direct Draw Surface
                         ".g3", // Raw Fax G3

@@ -26,9 +26,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             base.OnAddedToContentWriter(output);
 
             _genericTypes = new List<ContentTypeWriter>();
+
             var arguments = TargetType.GetGenericArguments();
             foreach (var arg in arguments)
+            {
                 _genericTypes.Add(output.GetTypeWriter(arg));
+            }
         }
 
         /// <summary>

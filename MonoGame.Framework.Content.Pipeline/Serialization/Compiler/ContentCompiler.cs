@@ -73,9 +73,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             Type typeWriterType;
 
             if (type == typeof(Array))
+            {
                 result = new ArrayWriter<Array>();
+            }
             else if (typeWriterMap.TryGetValue(contentTypeWriterType, out typeWriterType))
+            {
                 result = (ContentTypeWriter)Activator.CreateInstance(typeWriterType);
+            }
             else if (type.IsArray)
             {
                 var writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
@@ -118,7 +122,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 try
                 {
                     if (chosen == null)
+                    {
                         result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
+                    }
                     else
                     {
                         var concreteType = type.GetGenericArguments();

@@ -106,14 +106,14 @@ namespace MonoGame.Content.Builder.Pipeline
             RegisterCustomConverters();
         }
 
-        public void AssignTypeConverter<TType, TTypeConverter> ()
+        public void AssignTypeConverter<TType, TTypeConverter>()
         {
-            TypeDescriptor.AddAttributes (typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
+            TypeDescriptor.AddAttributes(typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
         }
 
-        private void RegisterCustomConverters ()
+        private void RegisterCustomConverters()
         {
-            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter> ();
+            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter>();
         }
 
         public void AddAssembly(string assemblyFilePath)
