@@ -154,7 +154,7 @@ namespace MonoGame.Content.Builder.Pipeline
                     if (string.IsNullOrEmpty(assemblyPath))  
                     {                                          
                         // Get the build-in Importers
-                        a = typeof(Microsoft.Xna.Framework.Content.Pipeline.TextureImporter).Assembly;
+                        a = typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly;
                     }
                     else                    
                     {
