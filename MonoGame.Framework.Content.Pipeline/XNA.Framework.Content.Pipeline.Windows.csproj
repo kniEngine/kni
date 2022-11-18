@@ -217,7 +217,7 @@
     <Compile Include="Serialization\Compiler\BoundingBoxWriter.cs" />
     <Compile Include="Serialization\Compiler\BoundingFrustumWriter.cs" />
     <Compile Include="Serialization\Compiler\BoundingSphereWriter.cs" />
-    <Compile Include="Serialization\Compiler\BuiltInContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
     <Compile Include="Serialization\Compiler\ByteWriter.cs" />
     <Compile Include="Serialization\Compiler\CharWriter.cs" />
     <Compile Include="Serialization\Compiler\ColorWriter.cs" />
