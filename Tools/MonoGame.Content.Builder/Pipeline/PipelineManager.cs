@@ -227,6 +227,11 @@ namespace MonoGame.Content.Builder.Pipeline
                             type = type,
                             assemblyTimestamp = assemblyTimestamp
                         };
+                        if (_importers.Contains(importerInfo))
+                        {
+                            Logger.LogWarning(null, null, "Duplicate Type '{0}': {1}", type.Name);
+                            continue;
+                        }
                         _importers.Add(importerInfo);
                     }
                 }
@@ -242,6 +247,11 @@ namespace MonoGame.Content.Builder.Pipeline
                             type = type,
                             assemblyTimestamp = assemblyTimestamp
                         };
+                        if (_processors.Contains(processorInfo))
+                        {
+                            Logger.LogWarning(null, null, "Duplicate Type '{0}': {1}", type.Name);
+                            continue;
+                        }
                         _processors.Add(processorInfo);
                     }
                 }
