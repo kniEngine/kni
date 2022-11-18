@@ -95,19 +95,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// content types is already in compressed form.</remarks>
         protected internal virtual bool ShouldCompressContent(TargetPlatform targetPlatform, object value)
         {
-            // For now, only support uncompressed
-            return false;
-
-            //switch (targetPlatform)
-            //{
-            //    case TargetPlatform.Windows:
-            //    case TargetPlatform.Linux:
-            //    case TargetPlatform.MacOSX:
-            //    case TargetPlatform.WindowsStoreApp:
-            //        return true;
-            //    default:
-            //        return false;
-            //}
+            return true;
         }
 
         /// <summary>
