@@ -179,6 +179,18 @@ namespace MonoGame.Content.Builder.Pipeline
                 exportedTypes = asm.GetTypes();
                 assemblyTimestamp = File.GetLastWriteTime(asm.Location);
             }
+            catch (ReflectionTypeLoadException e)
+            {
+                string missingTypes = String.Empty;
+                foreach (var le in e.LoaderExceptions)
+                    missingTypes += le.Message;
+
+                Logger.LogWarning(null, null, missingTypes +
+                    " '{0}': {1}", asm.Location, e.Message);
+                // The assembly failed to load... nothing
+                // we can do but ignore it.
+                return;
+            }
             catch (Exception e)
             {
                 Logger.LogWarning(null, null, "Failed to load assembly '{0}': {1}", asm.Location, e.Message);
