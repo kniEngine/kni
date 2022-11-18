@@ -11,9 +11,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the list to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ListWriter<T> : ContentTypeWriterBase<List<T>>
+    class ListWriter<T> : ContentTypeWriterBaseGeneric<List<T>>
     {
         ContentTypeWriter _elementWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)

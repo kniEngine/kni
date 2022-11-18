@@ -8,9 +8,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the external reference to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ExternalReferenceWriter<T> : ContentTypeWriterBase<ExternalReference<T>>
+    class ExternalReferenceWriter<T> : ContentTypeWriterBaseGeneric<ExternalReference<T>>
     {
         private ContentTypeWriter _targetWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)

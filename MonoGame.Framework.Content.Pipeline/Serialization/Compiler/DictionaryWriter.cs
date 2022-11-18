@@ -11,10 +11,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the dictionary to the output.
     /// </summary>
     [ContentTypeWriter]
-    class DictionaryWriter<K,V> : ContentTypeWriterBase<Dictionary<K,V>>
+    class DictionaryWriter<K,V> : ContentTypeWriterBaseGeneric<Dictionary<K,V>>
     {
         ContentTypeWriter _keyWriter;
         ContentTypeWriter _valueWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)

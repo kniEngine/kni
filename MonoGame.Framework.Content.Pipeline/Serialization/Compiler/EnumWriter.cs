@@ -11,10 +11,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// </summary>
     /// <typeparam name="T">The enum type to write.</typeparam>
     [ContentTypeWriter]
-    class EnumWriter<T> : ContentTypeWriterBase<T>
+    class EnumWriter<T> : ContentTypeWriterBaseGeneric<T>
     {
         Type _underlyingType;
         ContentTypeWriter _underlyingTypeWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)

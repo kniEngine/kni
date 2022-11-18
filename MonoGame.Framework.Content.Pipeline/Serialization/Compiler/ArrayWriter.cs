@@ -10,9 +10,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the array value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ArrayWriter<T> : ContentTypeWriterBase<T[]>
+    class ArrayWriter<T> : ContentTypeWriterBaseGeneric<T[]>
     {
         ContentTypeWriter _elementWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)

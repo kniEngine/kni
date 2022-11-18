@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Serialization\Compiler\ArrayWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBaseGeneric.cs" />
     <Compile Include="Serialization\Compiler\DictionaryWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />

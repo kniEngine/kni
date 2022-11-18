@@ -258,19 +258,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         internal ContentTypeWriter GetTypeWriter(Type type)
         {
             ContentTypeWriter typeWriter = null;
-            if (!typeMap.TryGetValue(type, out typeWriter))
-            {
-                int index = typeWriters.Count;
-                typeWriter = compiler.GetTypeWriter(type);
+            if (typeMap.TryGetValue(type, out typeWriter))
+                return typeWriter;
 
-                typeWriters.Add(typeWriter);
-                if (!typeWriterMap.ContainsKey(typeWriter.GetType()))
-                    typeWriterMap.Add(typeWriter.GetType(), index);
+            int index = typeWriters.Count;
+            typeWriter = compiler.GetTypeWriter(type);
 
-                typeMap.Add(type, typeWriter);
+            typeWriters.Add(typeWriter);
+            if (!typeWriterMap.ContainsKey(typeWriter.GetType()))
+                typeWriterMap.Add(typeWriter.GetType(), index);
 
-                typeWriter.OnAddedToContentWriter(this);
-            }
+            typeMap.Add(type, typeWriter);
+
+            typeWriter.OnAddedToContentWriter(this);
+
             return typeWriter;
         }
 

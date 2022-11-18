@@ -11,8 +11,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Base class for the built-in content type writers where the content type is the same as the runtime type.
     /// </summary>
     /// <typeparam name="T">The content type being written.</typeparam>
-    internal abstract class ContentTypeWriterBase<T> : ContentTypeWriter<T>
+    internal abstract class ContentTypeWriterBaseGeneric<T> : ContentTypeWriter<T>
     {
+        private List<ContentTypeWriter> _genericTypes;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
+
+        /// <inheritdoc/>
+        internal override void OnAddedToContentWriter(ContentWriter output)
+        {
+            base.OnAddedToContentWriter(output);
+
+            _genericTypes = new List<ContentTypeWriter>();
+            var arguments = TargetType.GetGenericArguments();
+            foreach (var arg in arguments)
+                _genericTypes.Add(output.GetTypeWriter(arg));
+        }
+
         /// <summary>
         /// Gets the assembly qualified name of the runtime loader for this type.
         /// </summary>
@@ -22,6 +40,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             // Change "Writer" in this class name to "Reader" and use the runtime type namespace and assembly
             var readerClassName = this.GetType().Name.Replace("Writer", "Reader");
+
+            // Add generic arguments
+            readerClassName += "[";
+            foreach (var argWriter in _genericTypes)
+            {
+                readerClassName += "[";
+                readerClassName += argWriter.GetRuntimeType(targetPlatform);
+                readerClassName += "]";
+                // Important: Do not add a space char after the comma because 
+                // this will not work with Type.GetType in Xamarin.Android!
+                readerClassName += ",";
+            }
+            readerClassName = readerClassName.TrimEnd(',', ' ');
+            readerClassName += "]";
 
             // From looking at XNA-produced XNBs, it appears built-in
             // type readers don't need assembly qualification.
