@@ -653,25 +653,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static internal TextureAddressMode ToXNATextureAddressMode(TextureAddressModeContent textureAddressMode)
-        {
-            switch (textureAddressMode)
-            {
-                case TextureAddressModeContent.Clamp:
-                    return TextureAddressMode.Clamp;
-                case TextureAddressModeContent.Wrap:
-                    return TextureAddressMode.Wrap;
-                case TextureAddressModeContent.Mirror:
-                    return TextureAddressMode.Mirror;
-                case TextureAddressModeContent.Border:
-                    return TextureAddressMode.Border;
-
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-
         static public EffectObject CompileEffect(ShaderResult shaderResult, out string errorsAndWarnings)
         {
             var effect = new EffectObject();
