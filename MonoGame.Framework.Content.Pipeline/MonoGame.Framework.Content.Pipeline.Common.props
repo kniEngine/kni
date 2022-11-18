@@ -12,7 +12,6 @@
     <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />
-    <Compile Include="Serialization\Compiler\ContentTypeWriterGeneric.cs" />
     <Compile Include="Serialization\Compiler\ContentWriter.cs" />
     <Compile Include="Serialization\Compiler\EnumWriter.cs" />
     <Compile Include="Serialization\Compiler\ExternalReferenceWriter.cs" />
