@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             get { return TargetType.IsClass; }
         }
 
-        protected override void Initialize(ContentCompiler compiler)
+        protected internal override void Initialize(ContentCompiler compiler)
         {
             _compiler = compiler;
             var type = ReflectionHelpers.GetBaseType(TargetType);                

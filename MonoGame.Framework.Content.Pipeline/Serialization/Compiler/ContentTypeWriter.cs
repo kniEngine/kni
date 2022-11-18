@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// Retrieves and caches nested type writers and allows for reflection over the target data type. Called by the framework at creation time.
         /// </summary>
         /// <param name="compiler">The content compiler.</param>
-        protected virtual void Initialize(ContentCompiler compiler)
+        protected internal virtual void Initialize(ContentCompiler compiler)
         {
 
         }

@@ -140,9 +140,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 typeWriterMap.Add(contentTypeWriterType, result.GetType());
             }
 
-
-            var initMethod = result.GetType().GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
-            initMethod.Invoke(result, new object[] { this });
+            result.Initialize(this);
 
             return result;
         }
