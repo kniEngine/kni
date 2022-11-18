@@ -58,8 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             // From looking at XNA-produced XNBs, it appears built-in
             // type readers don't need assembly qualification.
-            var readerNamespace = typeof(ContentTypeReader).Namespace;
-            return readerNamespace + "." + readerClassName;
+            return "Microsoft.Xna.Framework.Content." + readerClassName;
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
