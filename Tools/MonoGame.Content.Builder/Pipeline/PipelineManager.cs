@@ -197,21 +197,21 @@ namespace MonoGame.Content.Builder.Pipeline
                 return;
             }
 
-            foreach (var t in exportedTypes)
+            foreach (Type type in exportedTypes)
             {
-                if (t.IsAbstract)
+                if (type.IsAbstract)
                     continue;
 
-                if (t.GetInterface(@"IContentImporter") != null)
+                if (type.GetInterface(@"IContentImporter") != null)
                 {
-                    var attributes = t.GetCustomAttributes(typeof(ContentImporterAttribute), false);
+                    var attributes = type.GetCustomAttributes(typeof(ContentImporterAttribute), false);
                     if (attributes.Length != 0)
                     {
                         var importerAttribute = attributes[0] as ContentImporterAttribute;
                         _importers.Add(new ImporterInfo
                         {
                             attribute = importerAttribute,
-                            type = t,
+                            type = type,
                             assemblyTimestamp = assemblyTimestamp
                         });
                     }
@@ -220,33 +220,35 @@ namespace MonoGame.Content.Builder.Pipeline
                         // If no attribute specify default one
                         var importerAttribute = new ContentImporterAttribute(".*");
                         importerAttribute.DefaultProcessor = "";
-                        importerAttribute.DisplayName = t.Name;
-                        _importers.Add(new ImporterInfo
+                        importerAttribute.DisplayName = type.Name;
+                        var importerInfo = new ImporterInfo
                         {
                             attribute = importerAttribute,
-                            type = t,
+                            type = type,
                             assemblyTimestamp = assemblyTimestamp
-                        });
+                        };
+                        _importers.Add(importerInfo);
                     }
                 }
-                else if (t.GetInterface(@"IContentProcessor") != null)
+                else if (type.GetInterface(@"IContentProcessor") != null)
                 {
-                    var attributes = t.GetCustomAttributes(typeof(ContentProcessorAttribute), false);
+                    var attributes = type.GetCustomAttributes(typeof(ContentProcessorAttribute), false);
                     if (attributes.Length != 0)
                     {
                         var processorAttribute = attributes[0] as ContentProcessorAttribute;
-                        _processors.Add(new ProcessorInfo
+                        var processorInfo = new ProcessorInfo
                         {
                             attribute = processorAttribute,
-                            type = t,
+                            type = type,
                             assemblyTimestamp = assemblyTimestamp
-                        });
+                        };
+                        _processors.Add(processorInfo);
                     }
                 }
-                else if (t.GetInterface(@"ContentTypeWriter") != null)
+                else if (type.GetInterface(@"ContentTypeWriter") != null)
                 {
                     // TODO: This doesn't work... how do i find these?
-                    _writers.Add(t);
+                    _writers.Add(type);
                 }
             }
         }

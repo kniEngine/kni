@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// <typeparam name="T">The content type being written.</typeparam>
     internal abstract class ContentTypeWriterBaseGeneric<T> : ContentTypeWriter<T>
     {
-        private List<ContentTypeWriter> _genericTypes;
+        private List<ContentTypeWriter> _genericArgWriters;
 
         protected internal override void Initialize(ContentCompiler compiler)
         {
@@ -25,12 +25,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             base.OnAddedToContentWriter(output);
 
-            _genericTypes = new List<ContentTypeWriter>();
+            _genericArgWriters = new List<ContentTypeWriter>();
 
             var arguments = TargetType.GetGenericArguments();
-            foreach (var arg in arguments)
+            foreach (Type argType in arguments)
             {
-                _genericTypes.Add(output.GetTypeWriter(arg));
+                var argWriter = output.GetTypeWriter(argType);
+                _genericArgWriters.Add(argWriter);
             }
         }
 
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             // Add generic arguments
             readerClassName += "[";
-            foreach (var argWriter in _genericTypes)
+            foreach (var argWriter in _genericArgWriters)
             {
                 readerClassName += "[";
                 readerClassName += argWriter.GetRuntimeType(targetPlatform);

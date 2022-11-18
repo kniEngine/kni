@@ -25,8 +25,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (_all == null)
             {
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var ass in assemblies)
-                    ScanAssembly(ass);
+                foreach (var asm in assemblies)
+                    ScanAssembly(asm);
             }
 
             // Hook into assembly loading events to gather any new
@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             AppDomain.CurrentDomain.AssemblyLoad += (sender, args) => ScanAssembly(args.LoadedAssembly);            
         }
 
-        private static void ScanAssembly(Assembly ass)
+        private static void ScanAssembly(Assembly asm)
         {
             // Initialize the list on first use.
             if (_all == null)
@@ -44,11 +44,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             // If the assembly doesn't reference our assembly then it
             // cannot contain this type... so skip scanning it.
-            var refAss = ass.GetReferencedAssemblies();
-            if (thisAss.FullName != ass.FullName && refAss.All(r => r.FullName != thisAss.FullName))
+            var refAss = asm.GetReferencedAssemblies();
+            if (thisAss.FullName != asm.FullName && refAss.All(r => r.FullName != thisAss.FullName))
                 return;
 
-            var definedTypes = ass.GetTypes();
+            var definedTypes = asm.GetTypes();
 
             foreach (var type in definedTypes)
             {
