@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the TimeSpan value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class TimeSpanWriter : BuiltInContentWriter<TOutput>
+    class TimeSpanWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

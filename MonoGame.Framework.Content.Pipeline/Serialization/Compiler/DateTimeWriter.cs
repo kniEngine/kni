@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the DateTime value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class DateTimeWriter : BuiltInContentWriter<TOutput>
+    class DateTimeWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

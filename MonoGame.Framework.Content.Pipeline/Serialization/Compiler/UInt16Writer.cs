@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the unsigned short value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class UInt16Writer : BuiltInContentWriter<TOutput>
+    class UInt16Writer : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

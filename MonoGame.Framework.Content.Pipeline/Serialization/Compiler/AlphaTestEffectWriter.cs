@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class AlphaTestEffectWriter : BuiltInContentWriter<AlphaTestMaterialContent>
+    class AlphaTestEffectWriter : ContentTypeWriterBase<AlphaTestMaterialContent>
     {
         protected internal override void Write(ContentWriter output, AlphaTestMaterialContent value)
         {

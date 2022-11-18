@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Complex value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ComplexWriter : BuiltInContentWriter<TOutput>
+    class ComplexWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

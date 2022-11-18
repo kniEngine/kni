@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Color value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ColorWriter : BuiltInContentWriter<TOutput>
+    class ColorWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

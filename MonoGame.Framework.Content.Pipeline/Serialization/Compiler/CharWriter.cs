@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the character value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class CharWriter : BuiltInContentWriter<TOutput>
+    class CharWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

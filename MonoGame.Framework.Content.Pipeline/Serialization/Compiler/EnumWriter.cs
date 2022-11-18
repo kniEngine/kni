@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// </summary>
     /// <typeparam name="T">The enum type to write.</typeparam>
     [ContentTypeWriter]
-    class EnumWriter<T> : BuiltInContentWriter<T>
+    class EnumWriter<T> : ContentTypeWriterBase<T>
     {
         Type _underlyingType;
         ContentTypeWriter _underlyingTypeWriter;

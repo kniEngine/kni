@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the list to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ListWriter<T> : BuiltInContentWriter<List<T>>
+    class ListWriter<T> : ContentTypeWriterBase<List<T>>
     {
         ContentTypeWriter _elementWriter;
 

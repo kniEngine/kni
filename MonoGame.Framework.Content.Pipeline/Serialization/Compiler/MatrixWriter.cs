@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Matrix value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class MatrixWriter : BuiltInContentWriter<TOutput>
+    class MatrixWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

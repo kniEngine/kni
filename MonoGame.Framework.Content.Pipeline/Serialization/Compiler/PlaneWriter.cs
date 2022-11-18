@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Plane value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class PlaneWriter : BuiltInContentWriter<TOutput>
+    class PlaneWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

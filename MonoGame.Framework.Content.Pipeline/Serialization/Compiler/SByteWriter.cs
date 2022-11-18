@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the signed byte value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class SByteWriter : BuiltInContentWriter<TOutput>
+    class SByteWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

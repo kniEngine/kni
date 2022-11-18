@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class SoundEffectWriter : BuiltInContentWriter<SoundEffectContent>
+    class SoundEffectWriter : ContentTypeWriterBase<SoundEffectContent>
     {
         /// <summary>
         /// Writes the value to the output.

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class VertexBufferWriter : BuiltInContentWriter<VertexBufferContent>
+    class VertexBufferWriter : ContentTypeWriterBase<VertexBufferContent>
     {
         protected internal override void Write(ContentWriter output, VertexBufferContent value)
         {

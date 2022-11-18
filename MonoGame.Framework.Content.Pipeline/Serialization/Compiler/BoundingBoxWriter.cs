@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the BoundingBox value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class BoundingBoxWriter : BuiltInContentWriter<TOutput>
+    class BoundingBoxWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Curve value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class CurveWriter : BuiltInContentWriter<TOutput>
+    class CurveWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

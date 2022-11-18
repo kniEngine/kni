@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the double precision floating point value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class DoubleWriter : BuiltInContentWriter<TOutput>
+    class DoubleWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

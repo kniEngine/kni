@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the array value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class MultiArrayWriter<T> : BuiltInContentWriter<Array>
+    class MultiArrayWriter<T> : ContentTypeWriterBase<Array>
     {
         ContentTypeWriter _elementWriter;
 

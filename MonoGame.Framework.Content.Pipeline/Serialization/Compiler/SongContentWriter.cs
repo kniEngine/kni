@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class SongWriter : BuiltInContentWriter<SongContent>
+    class SongWriter : ContentTypeWriterBase<SongContent>
     {
         /// <summary>
         /// Writes the value to the output.

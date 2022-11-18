@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class BasicEffectWriter : BuiltInContentWriter<BasicMaterialContent>
+    class BasicEffectWriter : ContentTypeWriterBase<BasicMaterialContent>
     {
         protected internal override void Write(ContentWriter output, BasicMaterialContent value)
         {

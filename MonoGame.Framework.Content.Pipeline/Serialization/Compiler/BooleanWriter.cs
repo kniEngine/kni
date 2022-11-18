@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the boolean value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class BooleanWriter : BuiltInContentWriter<TOutput>
+    class BooleanWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

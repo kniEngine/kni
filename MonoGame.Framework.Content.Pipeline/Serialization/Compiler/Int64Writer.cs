@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the signed long value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class Int64Writer : BuiltInContentWriter<TOutput>
+    class Int64Writer : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

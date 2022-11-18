@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the external reference to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ExternalReferenceWriter<T> : BuiltInContentWriter<ExternalReference<T>>
+    class ExternalReferenceWriter<T> : ContentTypeWriterBase<ExternalReference<T>>
     {
         private ContentTypeWriter _targetWriter;
 

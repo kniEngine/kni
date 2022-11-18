@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the single precision floating point value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class SingleWriter : BuiltInContentWriter<TOutput>
+    class SingleWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

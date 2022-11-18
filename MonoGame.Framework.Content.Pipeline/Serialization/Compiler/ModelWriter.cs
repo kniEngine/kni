@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class ModelWriter : BuiltInContentWriter<ModelContent>
+    class ModelWriter : ContentTypeWriterBase<ModelContent>
     {
         protected internal override void Write(ContentWriter output, ModelContent value)
         {

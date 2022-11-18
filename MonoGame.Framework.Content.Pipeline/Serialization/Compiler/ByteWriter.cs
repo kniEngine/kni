@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the unsigned byte value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ByteWriter : BuiltInContentWriter<TOutput>
+    class ByteWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

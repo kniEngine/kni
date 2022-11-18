@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class CompiledEffectContentWriter : BuiltInContentWriter<CompiledEffectContent>
+    class CompiledEffectContentWriter : ContentTypeWriterBase<CompiledEffectContent>
     {
         protected internal override void Write(ContentWriter output, CompiledEffectContent value)
         {

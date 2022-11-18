@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class SkinnedEffectWriter : BuiltInContentWriter<SkinnedMaterialContent>
+    class SkinnedEffectWriter : ContentTypeWriterBase<SkinnedMaterialContent>
     {
         protected internal override void Write(ContentWriter output, SkinnedMaterialContent value)
         {

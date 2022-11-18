@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    internal class TextureWriter : BuiltInContentWriter<TextureContent>
+    internal class TextureWriter : ContentTypeWriterBase<TextureContent>
     {
         protected internal override void Write(ContentWriter output, TextureContent value)
         {

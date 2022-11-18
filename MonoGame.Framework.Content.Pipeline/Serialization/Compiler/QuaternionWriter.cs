@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Quaternion value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class QuaternionWriter : BuiltInContentWriter<TOutput>
+    class QuaternionWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Vector3 value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class Vector3Writer : BuiltInContentWriter<TOutput>
+    class Vector3Writer : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

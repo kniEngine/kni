@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Point value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class PointWriter : BuiltInContentWriter<TOutput>
+    class PointWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

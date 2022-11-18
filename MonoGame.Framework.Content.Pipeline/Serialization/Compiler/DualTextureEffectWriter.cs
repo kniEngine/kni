@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class DualTextureEffectWriter : BuiltInContentWriter<DualTextureMaterialContent>
+    class DualTextureEffectWriter : ContentTypeWriterBase<DualTextureMaterialContent>
     {
         protected internal override void Write(ContentWriter output, DualTextureMaterialContent value)
         {

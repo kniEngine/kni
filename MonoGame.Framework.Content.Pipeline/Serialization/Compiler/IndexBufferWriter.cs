@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class IndexBufferWriter : BuiltInContentWriter<IndexCollection>
+    class IndexBufferWriter : ContentTypeWriterBase<IndexCollection>
     {
         protected internal override void Write(ContentWriter output, IndexCollection value)
         {

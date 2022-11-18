@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class Texture2DWriter : BuiltInContentWriter<Texture2DContent>
+    class Texture2DWriter : ContentTypeWriterBase<Texture2DContent>
     {
         protected internal override void Write(ContentWriter output, Texture2DContent value)
         {

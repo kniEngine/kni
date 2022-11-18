@@ -5,7 +5,7 @@
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class VideoWriter : BuiltInContentWriter<VideoContent>
+    class VideoWriter : ContentTypeWriterBase<VideoContent>
     {
         protected internal override void Write(ContentWriter output, VideoContent value)
         {

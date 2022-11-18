@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Rectangle value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class RectangleWriter : BuiltInContentWriter<TOutput>
+    class RectangleWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

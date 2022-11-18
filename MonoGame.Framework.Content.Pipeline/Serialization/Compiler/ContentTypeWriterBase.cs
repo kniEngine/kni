@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Base class for the built-in content type writers where the content type is the same as the runtime type.
     /// </summary>
     /// <typeparam name="T">The content type being written.</typeparam>
-    class BuiltInContentWriter<T> : ContentTypeWriter<T>
+    internal class ContentTypeWriterBase<T> : ContentTypeWriter<T>
     {
         private List<ContentTypeWriter> _genericTypes;
 

@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the string value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class StringWriter : BuiltInContentWriter<TOutput>
+    class StringWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

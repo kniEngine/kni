@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Ray value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class RayWriter : BuiltInContentWriter<TOutput>
+    class RayWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

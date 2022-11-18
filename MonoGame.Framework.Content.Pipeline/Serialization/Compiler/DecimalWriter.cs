@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the decimal value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class DecimalWriter : BuiltInContentWriter<TOutput>
+    class DecimalWriter : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.

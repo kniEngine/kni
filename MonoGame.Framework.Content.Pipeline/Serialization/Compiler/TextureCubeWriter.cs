@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    internal class TextureCubeWriter : BuiltInContentWriter<TextureCubeContent>
+    internal class TextureCubeWriter : ContentTypeWriterBase<TextureCubeContent>
     {
         protected internal override void Write(ContentWriter output, TextureCubeContent value)
         {
