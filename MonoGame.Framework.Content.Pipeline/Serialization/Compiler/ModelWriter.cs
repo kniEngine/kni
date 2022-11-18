@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             {
                 output.WriteObject(mesh.Name);
                 WriteBoneReference(output, mesh.ParentBone, value.Bones);
-                output.Write(mesh.BoundingSphere);
+                output.WriteRawObject(mesh.BoundingSphere);
                 output.WriteObject(mesh.Tag);
 
                 output.Write((uint)mesh.MeshParts.Count);

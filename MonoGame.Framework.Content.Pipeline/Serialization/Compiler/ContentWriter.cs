@@ -503,27 +503,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             Write(value.W);
         }
 
-        /// <summary>
-        /// Writes a BoundingSphere value.
-        /// </summary>
-        /// <param name="value">Value to write.</param>
-        internal void Write(BoundingSphere value)
-        {
-            Write(value.Center);
-            Write(value.Radius);
-        }
-
-        /// <summary>
-        /// Writes a Rectangle value.
-        /// </summary>
-        /// <param name="value">Value to write.</param>
-        internal void Write(Rectangle value)
-        {
-            Write(value.X);
-            Write(value.Y);
-            Write(value.Width);
-            Write(value.Height);
-        }
 
         /// <summary>
         /// Helper for checking if a type can be deserialized into an existing object.
