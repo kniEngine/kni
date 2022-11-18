@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 var index = typeWriterMap[typeWriter.GetType()];
                 Write7BitEncodedInt(index + 1);
 
-                typeWriter.Write(this, value);                
+                typeWriter.InternalWrite(this, value);
             }
         }
 
@@ -348,7 +348,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 throw new ArgumentNullException("typeWriter");
 
             if (typeWriter.TargetType.IsValueType)
-                typeWriter.Write(this, value);
+                typeWriter.InternalWrite(this, value);
             else
                 WriteObject(value);
         }
@@ -382,7 +382,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             if (typeWriter == null)
                 throw new ArgumentNullException("typeWriter");
 
-            typeWriter.Write(this, value);
+            typeWriter.InternalWrite(this, value);
         }
 
         /// <summary>

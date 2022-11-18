@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             get { return true; }
         }
 
-        protected internal override void Write(ContentWriter output, Dictionary<K,V> value)
+        protected override void Write(ContentWriter output, Dictionary<K,V> value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

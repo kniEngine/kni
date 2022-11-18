@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     [ContentTypeWriter]
     internal class TextureWriter : ContentTypeWriterBase<TextureContent>
     {
-        protected internal override void Write(ContentWriter output, TextureContent value)
+        protected override void Write(ContentWriter output, TextureContent value)
         {
             // Do nothing.
             // The TextureWriter is not used to write anything, but it is used by

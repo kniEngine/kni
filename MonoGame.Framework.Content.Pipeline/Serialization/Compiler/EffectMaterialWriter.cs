@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     [ContentTypeWriter]
     class EffectMaterialWriter : ContentTypeWriterBase<EffectMaterialContent>
     {
-        protected internal override void Write(ContentWriter output, EffectMaterialContent value)
+        protected override void Write(ContentWriter output, EffectMaterialContent value)
         {
             output.WriteExternalReference(value.CompiledEffect);
             var dict = new Dictionary<string, object>();

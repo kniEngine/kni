@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Base class for the built-in content type writers where the content type is the same as the runtime type.
     /// </summary>
     /// <typeparam name="T">The content type being written.</typeparam>
-    internal class ContentTypeWriterBase<T> : ContentTypeWriter<T>
+    internal abstract class ContentTypeWriterBase<T> : ContentTypeWriter<T>
     {
         private List<ContentTypeWriter> _genericTypes;
 
@@ -27,15 +27,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 foreach (var arg in arguments)
                     _genericTypes.Add(output.GetTypeWriter(arg));
             }
-        }
-
-        /// <summary>
-        /// Writes the value to the output.
-        /// </summary>
-        /// <param name="output">The output writer object.</param>
-        /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, T value)
-        {
         }
 
         /// <summary>

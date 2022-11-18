@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, List<T> value)
+        protected override void Write(ContentWriter output, List<T> value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

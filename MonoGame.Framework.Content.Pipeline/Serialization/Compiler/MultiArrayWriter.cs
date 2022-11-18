@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                                     "]]");
         }
 
-        protected internal override void Write(ContentWriter output, Array value)
+        protected override void Write(ContentWriter output, Array value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

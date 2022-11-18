@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             return "Microsoft.Xna.Framework.Content.EnumReader`1[[" + GetRuntimeType(targetPlatform) + "]]";
         }
 
-        protected internal override void Write(ContentWriter output, T value)
+        protected override void Write(ContentWriter output, T value)
         {
             output.WriteRawObject(Convert.ChangeType(value, _underlyingType), _underlyingTypeWriter);
         }

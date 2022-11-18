@@ -174,12 +174,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     + "]]";
         }
 
-        protected internal override void Write(ContentWriter output, object value)
+        protected override void Write(ContentWriter output, object value)
         {
             if (_baseType != null)
             {
                 var baseTypeWriter = output.GetTypeWriter(_baseType);
-                baseTypeWriter.Write(output, value);
+                baseTypeWriter.InternalWrite(output, value);
             }
 
             foreach (var property in _properties)

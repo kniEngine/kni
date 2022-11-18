@@ -115,7 +115,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The content writer serializing the value.</param>
         /// <param name="value">The resultant object.</param>
-        protected internal abstract void Write(ContentWriter output, object value);
+        protected abstract void Write(ContentWriter output, object value);
+
+        internal void InternalWrite(ContentWriter output, object value)
+        {
+            this.Write(output, value);
+        }
     }
 
     /// <summary>
@@ -134,11 +139,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         }
 
         /// <summary>
-        /// Compiles a strongly typed object into binary format.
+        /// Compiles an object into binary format.
         /// </summary>
         /// <param name="output">The content writer serializing the value.</param>
         /// <param name="value">The value to write.</param>
-        protected internal override void Write(ContentWriter output, object value)
+        protected override void Write(ContentWriter output, object value)
         {
             Write(output, (T)value);
         }
@@ -148,6 +153,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The content writer serializing the value.</param>
         /// <param name="value">The value to write.</param>
-        protected internal abstract void Write(ContentWriter output, T value);
+        protected abstract void Write(ContentWriter output, T value);
     }
 }

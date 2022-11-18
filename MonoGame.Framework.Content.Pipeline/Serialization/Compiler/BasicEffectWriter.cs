@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     [ContentTypeWriter]
     class BasicEffectWriter : ContentTypeWriterBase<BasicMaterialContent>
     {
-        protected internal override void Write(ContentWriter output, BasicMaterialContent value)
+        protected override void Write(ContentWriter output, BasicMaterialContent value)
         {
             output.WriteExternalReference(value.Textures.ContainsKey(BasicMaterialContent.TextureKey) ? value.Texture : null);
             output.Write(value.DiffuseColor ?? new Vector3(1, 1, 1));

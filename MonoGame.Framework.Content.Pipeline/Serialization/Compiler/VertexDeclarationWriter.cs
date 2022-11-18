@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     [ContentTypeWriter]
     class VertexDeclarationWriter : ContentTypeWriterBase<VertexDeclarationContent>
     {
-        protected internal override void Write(ContentWriter output, VertexDeclarationContent value)
+        protected override void Write(ContentWriter output, VertexDeclarationContent value)
         {
             // If fpr whatever reason there isn't a vertex stride defined, it's going to
             // cause problems after reading it in, so better to fail early here.

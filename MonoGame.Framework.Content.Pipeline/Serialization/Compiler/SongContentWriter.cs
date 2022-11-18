@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, SongContent value)
+        protected override void Write(ContentWriter output, SongContent value)
         {
             output.Write(value.fileName);
             output.WriteObject((int)value.duration.TotalMilliseconds);
