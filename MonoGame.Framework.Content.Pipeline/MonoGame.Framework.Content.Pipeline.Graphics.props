@@ -1,23 +1,7 @@
 <Project>
   
-  <ItemGroup>  
-    <Compile Include="EffectCompiler\ConstantBufferData.cs" />
-    <Compile Include="EffectCompiler\ConstantBufferData.mojo.cs" />
-    <Compile Include="EffectCompiler\ConstantBufferData.sharpdx.cs" />
-    <Compile Include="EffectCompiler\EffectObject.cs" />
-    <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
-    <Compile Include="EffectCompiler\MarshalHelper.cs" />
-    <Compile Include="EffectCompiler\MojoShader.cs" />
-    <Compile Include="EffectCompiler\Preprocessor.cs" />
+  <ItemGroup>
     <Compile Include="EffectCompiler\SamplerStateContent.cs" />
-    <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
-    <Compile Include="EffectCompiler\ShaderData.cs" />
-    <Compile Include="EffectCompiler\ShaderData.mojo.cs" />
-    <Compile Include="EffectCompiler\ShaderData.sharpdx.cs" />
-    <Compile Include="EffectCompiler\ShaderProfile.cs" />
-    <Compile Include="EffectCompiler\ShaderProfile.DirectX.cs" />
-    <Compile Include="EffectCompiler\ShaderProfile.OpenGL.cs" />
-    <Compile Include="EffectCompiler\ShaderResult.cs" />
     <Compile Include="EffectCompiler\TPGParser\Parser.cs" />
     <Compile Include="EffectCompiler\TPGParser\ParseTree.cs" />
     <Compile Include="EffectCompiler\TPGParser\ParseTreeTools.cs" />
@@ -107,8 +91,6 @@
   
   <ItemGroup>
     <Compile Include="Processors\CompiledEffectContent.cs" />
-    <Compile Include="Processors\EffectProcessor.cs" />
-    <Compile Include="Processors\EffectProcessorDebugMode.cs" />
     <Compile Include="Processors\FontDescriptionProcessor.cs" />
     <Compile Include="Processors\FontTextureProcessor.cs" />
     <Compile Include="Processors\LocalizedFontProcessor.cs" />
@@ -127,7 +109,6 @@
     <Compile Include="Processors\TextureProcessorOutputFormat.cs" />
     <Compile Include="Processors\VertexBufferContent.cs" />
     <Compile Include="Processors\VertexDeclarationContent.cs" />
-    <Compile Include="Processors\VideoProcessor.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -146,7 +127,6 @@
     <Compile Include="Serialization\Compiler\TextureWriter.cs" />
     <Compile Include="Serialization\Compiler\VertexBufferWriter.cs" />
     <Compile Include="Serialization\Compiler\VertexDeclarationWriter.cs" />
-    <Compile Include="Serialization\Compiler\VideoWriter.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -154,25 +134,19 @@
     <Compile Include="EffectImporter.cs" />
     <Compile Include="FbxImporter.cs" />
     <Compile Include="FontDescriptionImporter.cs" />
-    <Compile Include="H264Importer.cs" />
     <Compile Include="OpenAssetImporter.cs" />
     <Compile Include="TextureImporter.cs" />
-    <Compile Include="VideoContent.cs" />
-    <Compile Include="WmvImporter.cs" />
     <Compile Include="XImporter.cs" />
     <Compile Include="XmlImporter.cs" />
+    <Compile Include="Utilities\Vector4Converter.cs" />
     <Compile Include="Utilities\FreeImageAPI.cs" />
     <Compile Include="Utilities\FreeImageAPIC.cs" />
   </ItemGroup>
   
   <ItemGroup>
     <Compile Include="ExternalTool.cs" />
-    <Compile Include="LoadedTypeCollection.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <Compile Include="Utilities\PathHelper.cs" />
-    <Compile Include="Utilities\Vector4Converter.cs" />
+    <Compile Include="LoadedTypeCollection.cs" />
   </ItemGroup>
   
 </Project>

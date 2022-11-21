@@ -23,9 +23,11 @@
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
   </ItemGroup>
 
-  <Import Project="MonoGame.Framework.Content.Pipeline.Common.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.props" />
   <Import Project="MonoGame.Framework.Content.Pipeline.Audio.props" />
-  <Import Project="MonoGame.Framework.Content.Pipeline.Processors.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.Media.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.Graphics.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.MojoProcessor.props" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
