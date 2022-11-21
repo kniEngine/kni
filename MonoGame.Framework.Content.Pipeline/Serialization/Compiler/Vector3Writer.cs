@@ -11,14 +11,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the Vector3 value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class Vector3Writer : BuiltInContentWriter<TOutput>
+    class Vector3Writer : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, TOutput value)
+        protected override void Write(ContentWriter output, TOutput value)
         {
             output.Write(value);
         }

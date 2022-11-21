@@ -4,17 +4,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
     public class SpriteFontContentWriter : ContentTypeWriter<SpriteFontContent>
     {
-        protected internal override void Write(ContentWriter output, SpriteFontContent value)
+        protected override void Write(ContentWriter output, SpriteFontContent value)
         {
             output.WriteObject(value.Texture);
             output.WriteObject(value.Glyphs);
@@ -52,20 +49,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             return readerType;
         }
 
-        /// <summary>
-        /// Indicates whether a given type of content should be compressed.
-        /// </summary>
-        /// <param name="targetPlatform">The target platform of the content build.</param>
-        /// <param name="value">The object about to be serialized, or null if a collection of objects is to be serialized.</param>
-        /// <returns>true if the content of the requested type should be compressed; false otherwise.</returns>
-        /// <remarks>This base class implementation of this method always returns true. It should be overridden
-        /// to return false if there would be little or no useful reduction in size of the content type's data
-        /// from a general-purpose lossless compression algorithm.
-        /// The implementations for Song Class and SoundEffect Class data return false because data for these
-        /// content types is already in compressed form.</remarks>
-        protected internal override bool ShouldCompressContent(TargetPlatform targetPlatform, object value)
-        {
-            return false;
-        }
     }
 }

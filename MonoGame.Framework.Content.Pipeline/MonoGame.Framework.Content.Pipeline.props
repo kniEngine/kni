@@ -7,12 +7,12 @@
   
   <ItemGroup>
     <Compile Include="Serialization\Compiler\ArrayWriter.cs" />
-    <Compile Include="Serialization\Compiler\BuiltInContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBaseGeneric.cs" />
     <Compile Include="Serialization\Compiler\DictionaryWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />
-    <Compile Include="Serialization\Compiler\ContentTypeWriterGeneric.cs" />
     <Compile Include="Serialization\Compiler\ContentWriter.cs" />
     <Compile Include="Serialization\Compiler\EnumWriter.cs" />
     <Compile Include="Serialization\Compiler\ExternalReferenceWriter.cs" />

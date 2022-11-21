@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class AlphaTestEffectWriter : BuiltInContentWriter<AlphaTestMaterialContent>
+    class AlphaTestEffectWriter : ContentTypeWriterBase<AlphaTestMaterialContent>
     {
-        protected internal override void Write(ContentWriter output, AlphaTestMaterialContent value)
+        protected override void Write(ContentWriter output, AlphaTestMaterialContent value)
         {
             output.WriteExternalReference(value.Textures.ContainsKey(AlphaTestMaterialContent.TextureKey) ? value.Texture : null);
             output.Write((int)(value.AlphaFunction.HasValue ? value.AlphaFunction.Value : CompareFunction.Greater));

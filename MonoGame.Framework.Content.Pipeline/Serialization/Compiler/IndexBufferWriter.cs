@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class IndexBufferWriter : BuiltInContentWriter<IndexCollection>
+    class IndexBufferWriter : ContentTypeWriterBase<IndexCollection>
     {
-        protected internal override void Write(ContentWriter output, IndexCollection value)
+        protected override void Write(ContentWriter output, IndexCollection value)
         {
             // Check if the buffer and can be saved as Int16.
             var shortIndices = true;

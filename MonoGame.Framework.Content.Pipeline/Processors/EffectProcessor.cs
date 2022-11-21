@@ -5,14 +5,12 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
-using MonoGame.Framework.Utilities;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors

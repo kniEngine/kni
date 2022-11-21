@@ -3,10 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
@@ -74,9 +73,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             Type typeWriterType;
 
             if (type == typeof(Array))
+            {
                 result = new ArrayWriter<Array>();
+            }
             else if (typeWriterMap.TryGetValue(contentTypeWriterType, out typeWriterType))
+            {
                 result = (ContentTypeWriter)Activator.CreateInstance(typeWriterType);
+            }
             else if (type.IsArray)
             {
                 var writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
@@ -119,7 +122,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 try
                 {
                     if (chosen == null)
+                    {
                         result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
+                    }
                     else
                     {
                         var concreteType = type.GetGenericArguments();
@@ -140,9 +145,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 typeWriterMap.Add(contentTypeWriterType, result.GetType());
             }
 
-
-            var initMethod = result.GetType().GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
-            initMethod.Invoke(result, new object[] { this });
+            result.Initialize(this);
 
             return result;
         }

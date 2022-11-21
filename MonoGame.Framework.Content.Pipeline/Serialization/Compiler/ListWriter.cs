@@ -11,9 +11,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the list to the output.
     /// </summary>
     [ContentTypeWriter]
-    class ListWriter<T> : BuiltInContentWriter<List<T>>
+    class ListWriter<T> : ContentTypeWriterBaseGeneric<List<T>>
     {
         ContentTypeWriter _elementWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)
@@ -33,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, List<T> value)
+        protected override void Write(ContentWriter output, List<T> value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

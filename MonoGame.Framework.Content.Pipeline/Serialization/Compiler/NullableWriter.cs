@@ -10,9 +10,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the nullable value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class NullableWriter<T> : BuiltInContentWriter<Nullable<T>> where T: struct
+    class NullableWriter<T> : ContentTypeWriterBaseGeneric<Nullable<T>> where T: struct
     {
         ContentTypeWriter _elementWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)
@@ -27,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, Nullable<T> value)
+        protected override void Write(ContentWriter output, Nullable<T> value)
         {
             output.Write(value.HasValue);
             if (value.HasValue)

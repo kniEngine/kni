@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    internal class TextureCubeWriter : BuiltInContentWriter<TextureCubeContent>
+    internal class TextureCubeWriter : ContentTypeWriterBase<TextureCubeContent>
     {
-        protected internal override void Write(ContentWriter output, TextureCubeContent value)
+        protected override void Write(ContentWriter output, TextureCubeContent value)
         {
             var mipmaps0 = value.Faces[0];  // Mipmap chain of face 0 (+X).
             var level0 = mipmaps0[0];       // Most detailed mipmap level of face 0.

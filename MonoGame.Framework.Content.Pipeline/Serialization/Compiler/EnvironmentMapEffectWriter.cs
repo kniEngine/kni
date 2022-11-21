@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class EnvironmentMapEffectWriter : BuiltInContentWriter<EnvironmentMapMaterialContent>
+    class EnvironmentMapEffectWriter : ContentTypeWriterBase<EnvironmentMapMaterialContent>
     {
-        protected internal override void Write(ContentWriter output, EnvironmentMapMaterialContent value)
+        protected override void Write(ContentWriter output, EnvironmentMapMaterialContent value)
         {
             output.WriteExternalReference(value.Textures.ContainsKey(EnvironmentMapMaterialContent.TextureKey) ? value.Texture : null);
             output.WriteExternalReference(value.Textures.ContainsKey(EnvironmentMapMaterialContent.EnvironmentMapKey) ? value.EnvironmentMap : null);

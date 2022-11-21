@@ -11,31 +11,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Base class for the built-in content type writers where the content type is the same as the runtime type.
     /// </summary>
     /// <typeparam name="T">The content type being written.</typeparam>
-    class BuiltInContentWriter<T> : ContentTypeWriter<T>
+    internal abstract class ContentTypeWriterBaseGeneric<T> : ContentTypeWriter<T>
     {
-        private List<ContentTypeWriter> _genericTypes;
+        private List<ContentTypeWriter> _genericArgWriters;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)
         {
             base.OnAddedToContentWriter(output);
 
-            if (TargetType.IsGenericType)
-            {
-                _genericTypes = new List<ContentTypeWriter>();
-                var arguments = TargetType.GetGenericArguments();
-                foreach (var arg in arguments)
-                    _genericTypes.Add(output.GetTypeWriter(arg));
-            }
-        }
+            _genericArgWriters = new List<ContentTypeWriter>();
 
-        /// <summary>
-        /// Writes the value to the output.
-        /// </summary>
-        /// <param name="output">The output writer object.</param>
-        /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, T value)
-        {
+            var arguments = TargetType.GetGenericArguments();
+            foreach (Type argType in arguments)
+            {
+                var argWriter = output.GetTypeWriter(argType);
+                _genericArgWriters.Add(argWriter);
+            }
         }
 
         /// <summary>
@@ -48,27 +45,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             // Change "Writer" in this class name to "Reader" and use the runtime type namespace and assembly
             var readerClassName = this.GetType().Name.Replace("Writer", "Reader");
 
-            // Add generic arguments if they exist.
-            if (_genericTypes != null)
+            // Add generic arguments
+            readerClassName += "[";
+            foreach (var argWriter in _genericArgWriters)
             {
                 readerClassName += "[";
-                foreach (var argWriter in _genericTypes)
-                {
-                    readerClassName += "[";
-                    readerClassName += argWriter.GetRuntimeType(targetPlatform);
-                    readerClassName += "]";
-                    // Important: Do not add a space char after the comma because 
-                    // this will not work with Type.GetType in Xamarin.Android!
-                    readerClassName += ",";
-                }
-                readerClassName = readerClassName.TrimEnd(',', ' ');
+                readerClassName += argWriter.GetRuntimeType(targetPlatform);
                 readerClassName += "]";
+                // Important: Do not add a space char after the comma because 
+                // this will not work with Type.GetType in Xamarin.Android!
+                readerClassName += ",";
             }
+            readerClassName = readerClassName.TrimEnd(',', ' ');
+            readerClassName += "]";
 
             // From looking at XNA-produced XNBs, it appears built-in
             // type readers don't need assembly qualification.
-            var readerNamespace = typeof(ContentTypeReader).Namespace;
-            return readerNamespace + "." + readerClassName;
+            return "Microsoft.Xna.Framework.Content." + readerClassName;
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

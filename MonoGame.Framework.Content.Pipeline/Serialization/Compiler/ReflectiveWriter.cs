@@ -13,13 +13,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     class ReflectiveWriter<T> : ContentTypeWriter
     {
+        private ContentCompiler _compiler;
+
         private PropertyInfo[] _properties;
         private FieldInfo[] _fields;
 
         private Type _baseType;
 
         private string _runtimeType;
-        private ContentCompiler _compiler;
+
         private static HashSet<MemberInfo> _sharedResources = new HashSet<MemberInfo>();
 
         public ReflectiveWriter()
@@ -32,9 +34,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             get { return TargetType.IsClass; }
         }
 
-        protected override void Initialize(ContentCompiler compiler)
+        protected internal override void Initialize(ContentCompiler compiler)
         {
             _compiler = compiler;
+
             var type = ReflectionHelpers.GetBaseType(TargetType);                
             if (type != null && type != typeof(object) && !TargetType.IsValueType)
                 _baseType = type;
@@ -174,12 +177,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     + "]]";
         }
 
-        protected internal override void Write(ContentWriter output, object value)
+        protected override void Write(ContentWriter output, object value)
         {
             if (_baseType != null)
             {
                 var baseTypeWriter = output.GetTypeWriter(_baseType);
-                baseTypeWriter.Write(output, value);
+                baseTypeWriter.InternalWrite(output, value);
             }
 
             foreach (var property in _properties)

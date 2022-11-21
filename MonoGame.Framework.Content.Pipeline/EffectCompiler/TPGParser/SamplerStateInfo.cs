@@ -148,15 +148,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
+        static TextureAddressMode ToXNATextureAddressMode(TextureAddressModeContent textureAddressMode)
+        {
+            switch (textureAddressMode)
+            {
+                case TextureAddressModeContent.Clamp:
+                    return TextureAddressMode.Clamp;
+                case TextureAddressModeContent.Wrap:
+                    return TextureAddressMode.Wrap;
+                case TextureAddressModeContent.Mirror:
+                    return TextureAddressMode.Mirror;
+                case TextureAddressModeContent.Border:
+                    return TextureAddressMode.Border;
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         private void UpdateSamplerState()
         {
             // Get the existing state or create it.
             if (_state == null)
                 _state = new SamplerState();
 
-            _state.AddressU = EffectObject.ToXNATextureAddressMode(_addressU);
-            _state.AddressV = EffectObject.ToXNATextureAddressMode(_addressV);
-            _state.AddressW = EffectObject.ToXNATextureAddressMode(_addressW);
+            _state.AddressU = ToXNATextureAddressMode(_addressU);
+            _state.AddressV = ToXNATextureAddressMode(_addressV);
+            _state.AddressW = ToXNATextureAddressMode(_addressW);
 
             _state.BorderColor = _borderColor;
 

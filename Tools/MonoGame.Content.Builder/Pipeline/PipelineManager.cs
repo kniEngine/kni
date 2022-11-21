@@ -97,7 +97,6 @@ namespace MonoGame.Content.Builder.Pipeline
             RethrowExceptions = true;
 
             Assemblies = new List<string>();
-            Assemblies.Add(null);
             Logger = new ConsoleLogger();
 
             ProjectDirectory = PathHelper.NormalizeDirectory(projectDir);
@@ -107,14 +106,14 @@ namespace MonoGame.Content.Builder.Pipeline
             RegisterCustomConverters();
         }
 
-        public void AssignTypeConverter<TType, TTypeConverter> ()
+        public void AssignTypeConverter<TType, TTypeConverter>()
         {
-            TypeDescriptor.AddAttributes (typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
+            TypeDescriptor.AddAttributes(typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
         }
 
-        private void RegisterCustomConverters ()
+        private void RegisterCustomConverters()
         {
-            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter> ();
+            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter>();
         }
 
         public void AddAssembly(string assemblyFilePath)
@@ -143,26 +142,15 @@ namespace MonoGame.Content.Builder.Pipeline
             _processors = new List<ProcessorInfo>();
             _writers = new List<Type>();
 
-            // Finally load the pipeline assemblies.
+            // import the build-in Processors
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly);
+
+            // import the referenced Processors
             foreach (var assemblyPath in Assemblies)
             {
-                Type[] exportedTypes;
-                DateTime assemblyTimestamp;
                 try
                 {
-                    Assembly a;
-                    if (string.IsNullOrEmpty(assemblyPath))  
-                    {                                          
-                        // Get the build-in Importers
-                        a = typeof(Microsoft.Xna.Framework.Content.Pipeline.TextureImporter).Assembly;
-                    }
-                    else                    
-                    {
-                        a = Assembly.LoadFrom(assemblyPath);
-                    }
-
-                    exportedTypes = a.GetTypes();
-                    assemblyTimestamp = File.GetLastWriteTime(a.Location);
+                    LoadAssembly(Assembly.LoadFrom(assemblyPath));
                 }
                 catch (BadImageFormatException e)
                 {
@@ -178,58 +166,99 @@ namespace MonoGame.Content.Builder.Pipeline
                     Logger.LogWarning(null, null, "Failed to load assembly '{0}': {1}", assemblyPath, e.Message);
                     continue;
                 }
+            }
+        }
 
-                foreach (var t in exportedTypes)
+        private void LoadAssembly(Assembly asm)
+        {
+            Type[] exportedTypes;
+            DateTime assemblyTimestamp;
+
+            try
+            {
+                exportedTypes = asm.GetTypes();
+                assemblyTimestamp = File.GetLastWriteTime(asm.Location);
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                string missingTypes = String.Empty;
+                foreach (var le in e.LoaderExceptions)
+                    missingTypes += le.Message;
+
+                Logger.LogWarning(null, null, missingTypes +
+                    " '{0}': {1}", asm.Location, e.Message);
+                // The assembly failed to load... nothing
+                // we can do but ignore it.
+                return;
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning(null, null, "Failed to load assembly '{0}': {1}", asm.Location, e.Message);
+                return;
+            }
+
+            foreach (Type type in exportedTypes)
+            {
+                if (type.IsAbstract)
+                    continue;
+
+                if (type.GetInterface(@"IContentImporter") != null)
                 {
-                    if (t.IsAbstract) 
-                        continue;
-
-                    if (t.GetInterface(@"IContentImporter") != null)
+                    var attributes = type.GetCustomAttributes(typeof(ContentImporterAttribute), false);
+                    if (attributes.Length != 0)
                     {
-                        var attributes = t.GetCustomAttributes(typeof (ContentImporterAttribute), false);
-                        if (attributes.Length != 0)
+                        var importerAttribute = attributes[0] as ContentImporterAttribute;
+                        _importers.Add(new ImporterInfo
                         {
-                            var importerAttribute = attributes[0] as ContentImporterAttribute;
-                            _importers.Add(new ImporterInfo
-                            {
-                                attribute = importerAttribute,
-                                type = t,
-                                assemblyTimestamp = assemblyTimestamp
-                            });
-                        }
-                        else
-                        {
-                            // If no attribute specify default one
-                            var importerAttribute = new ContentImporterAttribute(".*");
-                            importerAttribute.DefaultProcessor = "";
-                            importerAttribute.DisplayName = t.Name;
-                            _importers.Add(new ImporterInfo
-                            {
-                                attribute = importerAttribute,
-                                type = t,
-                                assemblyTimestamp = assemblyTimestamp
-                            });
-                        }
+                            attribute = importerAttribute,
+                            type = type,
+                            assemblyTimestamp = assemblyTimestamp
+                        });
                     }
-                    else if (t.GetInterface(@"IContentProcessor") != null)
+                    else
                     {
-                        var attributes = t.GetCustomAttributes(typeof (ContentProcessorAttribute), false);
-                        if (attributes.Length != 0)
+                        // If no attribute specify default one
+                        var importerAttribute = new ContentImporterAttribute(".*");
+                        importerAttribute.DefaultProcessor = "";
+                        importerAttribute.DisplayName = type.Name;
+                        var importerInfo = new ImporterInfo
                         {
-                            var processorAttribute = attributes[0] as ContentProcessorAttribute;
-                            _processors.Add(new ProcessorInfo
-                            {
-                                attribute = processorAttribute,
-                                type = t,
-                                assemblyTimestamp = assemblyTimestamp
-                            });
+                            attribute = importerAttribute,
+                            type = type,
+                            assemblyTimestamp = assemblyTimestamp
+                        };
+                        if (_importers.Contains(importerInfo))
+                        {
+                            Logger.LogWarning(null, null, "Duplicate Type '{0}': {1}", type.Name);
+                            continue;
                         }
+                        _importers.Add(importerInfo);
                     }
-                    else if (t.GetInterface(@"ContentTypeWriter") != null)
+                }
+                else if (type.GetInterface(@"IContentProcessor") != null)
+                {
+                    var attributes = type.GetCustomAttributes(typeof(ContentProcessorAttribute), false);
+                    if (attributes.Length != 0)
                     {
-                        // TODO: This doesn't work... how do i find these?
-                        _writers.Add(t);
+                        var processorAttribute = attributes[0] as ContentProcessorAttribute;
+                        var processorInfo = new ProcessorInfo
+                        {
+                            attribute = processorAttribute,
+                            type = type,
+                            assemblyTimestamp = assemblyTimestamp
+                        };
+                        if (_processors.Contains(processorInfo))
+                        {
+                            Logger.LogWarning(null, null, "Duplicate Type '{0}': {1}", type.Name);
+                            continue;
+                        }
+                        _processors.Add(processorInfo);
                     }
+                }
+                else if (type.GetInterface(@"ContentTypeWriter") != null)
+                {
+                    // TODO: This doesn't work... how do i find these?
+                    _writers.Add(type);
                 }
             }
         }

@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class SoundEffectWriter : BuiltInContentWriter<SoundEffectContent>
+    class SoundEffectWriter : ContentTypeWriterBase<SoundEffectContent>
     {
         /// <summary>
         /// Writes the value to the output.
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, SoundEffectContent value)
+        protected override void Write(ContentWriter output, SoundEffectContent value)
         {
             output.Write(value.format.Length);
             output.Write(value.format);

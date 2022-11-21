@@ -258,19 +258,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         internal ContentTypeWriter GetTypeWriter(Type type)
         {
             ContentTypeWriter typeWriter = null;
-            if (!typeMap.TryGetValue(type, out typeWriter))
-            {
-                int index = typeWriters.Count;
-                typeWriter = compiler.GetTypeWriter(type);
+            if (typeMap.TryGetValue(type, out typeWriter))
+                return typeWriter;
 
-                typeWriters.Add(typeWriter);
-                if (!typeWriterMap.ContainsKey(typeWriter.GetType()))
-                    typeWriterMap.Add(typeWriter.GetType(), index);
+            int index = typeWriters.Count;
+            typeWriter = compiler.GetTypeWriter(type);
 
-                typeMap.Add(type, typeWriter);
+            typeWriters.Add(typeWriter);
+            if (!typeWriterMap.ContainsKey(typeWriter.GetType()))
+                typeWriterMap.Add(typeWriter.GetType(), index);
 
-                typeWriter.OnAddedToContentWriter(this);
-            }
+            typeMap.Add(type, typeWriter);
+
+            typeWriter.OnAddedToContentWriter(this);
+
             return typeWriter;
         }
 
@@ -328,7 +329,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 var index = typeWriterMap[typeWriter.GetType()];
                 Write7BitEncodedInt(index + 1);
 
-                typeWriter.Write(this, value);                
+                typeWriter.InternalWrite(this, value);
             }
         }
 
@@ -348,7 +349,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 throw new ArgumentNullException("typeWriter");
 
             if (typeWriter.TargetType.IsValueType)
-                typeWriter.Write(this, value);
+                typeWriter.InternalWrite(this, value);
             else
                 WriteObject(value);
         }
@@ -382,7 +383,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             if (typeWriter == null)
                 throw new ArgumentNullException("typeWriter");
 
-            typeWriter.Write(this, value);
+            typeWriter.InternalWrite(this, value);
         }
 
         /// <summary>
@@ -503,27 +504,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             Write(value.W);
         }
 
-        /// <summary>
-        /// Writes a BoundingSphere value.
-        /// </summary>
-        /// <param name="value">Value to write.</param>
-        internal void Write(BoundingSphere value)
-        {
-            Write(value.Center);
-            Write(value.Radius);
-        }
-
-        /// <summary>
-        /// Writes a Rectangle value.
-        /// </summary>
-        /// <param name="value">Value to write.</param>
-        internal void Write(Rectangle value)
-        {
-            Write(value.X);
-            Write(value.Y);
-            Write(value.Width);
-            Write(value.Height);
-        }
 
         /// <summary>
         /// Helper for checking if a type can be deserialized into an existing object.

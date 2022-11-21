@@ -10,9 +10,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the array value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class MultiArrayWriter<T> : BuiltInContentWriter<Array>
+    class MultiArrayWriter<T> : ContentTypeWriterBaseGeneric<Array>
     {
         ContentTypeWriter _elementWriter;
+
+        protected internal override void Initialize(ContentCompiler compiler)
+        {
+            base.Initialize(compiler);
+        }
 
         /// <inheritdoc/>
         internal override void OnAddedToContentWriter(ContentWriter output)
@@ -24,14 +29,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return string.Concat(typeof(ContentTypeReader).Namespace,
-                                    ".",
+            return string.Concat(   "Microsoft.Xna.Framework.Content.",
                                     "MultiArrayReader`1[[",
                                     _elementWriter.GetRuntimeType(targetPlatform),
                                     "]]");
         }
 
-        protected internal override void Write(ContentWriter output, Array value)
+        protected override void Write(ContentWriter output, Array value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

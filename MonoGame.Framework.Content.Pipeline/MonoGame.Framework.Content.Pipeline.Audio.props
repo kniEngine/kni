@@ -12,14 +12,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Processors\SongContent.cs" />
-    <Compile Include="Processors\SongProcessor.cs" />
     <Compile Include="Processors\SoundEffectContent.cs" />
     <Compile Include="Processors\SoundEffectProcessor.cs" />
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Serialization\Compiler\SongContentWriter.cs" />
     <Compile Include="Serialization\Compiler\SoundEffectContentWriter.cs" />
   </ItemGroup>
   

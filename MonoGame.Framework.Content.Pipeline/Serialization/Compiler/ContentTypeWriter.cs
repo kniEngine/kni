@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// Retrieves and caches nested type writers and allows for reflection over the target data type. Called by the framework at creation time.
         /// </summary>
         /// <param name="compiler">The content compiler.</param>
-        protected virtual void Initialize(ContentCompiler compiler)
+        protected internal virtual void Initialize(ContentCompiler compiler)
         {
 
         }
@@ -95,19 +95,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// content types is already in compressed form.</remarks>
         protected internal virtual bool ShouldCompressContent(TargetPlatform targetPlatform, object value)
         {
-            // For now, only support uncompressed
-            return false;
-
-            //switch (targetPlatform)
-            //{
-            //    case TargetPlatform.Windows:
-            //    case TargetPlatform.Linux:
-            //    case TargetPlatform.MacOSX:
-            //    case TargetPlatform.WindowsStoreApp:
-            //        return true;
-            //    default:
-            //        return false;
-            //}
+            return true;
         }
 
         /// <summary>
@@ -115,6 +103,44 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// </summary>
         /// <param name="output">The content writer serializing the value.</param>
         /// <param name="value">The resultant object.</param>
-        protected internal abstract void Write(ContentWriter output, object value);
+        protected abstract void Write(ContentWriter output, object value);
+
+        internal void InternalWrite(ContentWriter output, object value)
+        {
+            this.Write(output, value);
+        }
+    }
+
+    /// <summary>
+    /// Provides a generic implementation of ContentTypeWriter methods and properties for compiling a specific managed type into a binary format.
+    /// </summary>
+    /// <typeparam name="T">The type to write</typeparam>
+    /// <remarks>This is a generic implementation of ContentTypeWriter and, therefore, can handle strongly typed content data.</remarks>
+    public abstract class ContentTypeWriter<T> : ContentTypeWriter
+    {
+        /// <summary>
+        /// Initializes a new instance of the ContentTypeWriter class.
+        /// </summary>
+        protected ContentTypeWriter()
+            : base(typeof(T))
+        {
+        }
+
+        /// <summary>
+        /// Compiles an object into binary format.
+        /// </summary>
+        /// <param name="output">The content writer serializing the value.</param>
+        /// <param name="value">The value to write.</param>
+        protected override void Write(ContentWriter output, object value)
+        {
+            Write(output, (T)value);
+        }
+
+        /// <summary>
+        /// Compiles a strongly typed object into binary format.
+        /// </summary>
+        /// <param name="output">The content writer serializing the value.</param>
+        /// <param name="value">The value to write.</param>
+        protected abstract void Write(ContentWriter output, T value);
     }
 }

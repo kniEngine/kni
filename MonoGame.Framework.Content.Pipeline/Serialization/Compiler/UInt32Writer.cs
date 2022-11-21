@@ -11,14 +11,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// Writes the unsigned integer value to the output.
     /// </summary>
     [ContentTypeWriter]
-    class UInt32Writer : BuiltInContentWriter<TOutput>
+    class UInt32Writer : ContentTypeWriterBase<TOutput>
     {
         /// <summary>
         /// Writes the value to the output.
         /// </summary>
         /// <param name="output">The output writer object.</param>
         /// <param name="value">The value to write to the output.</param>
-        protected internal override void Write(ContentWriter output, TOutput value)
+        protected override void Write(ContentWriter output, TOutput value)
         {
             output.Write(value);
         }

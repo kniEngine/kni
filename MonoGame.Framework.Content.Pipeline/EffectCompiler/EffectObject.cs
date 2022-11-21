@@ -6,11 +6,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	internal partial class EffectObject
+	internal class EffectObject
 	{
         private EffectObject()
         {
@@ -652,25 +653,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static internal TextureAddressMode ToXNATextureAddressMode(TextureAddressModeContent textureAddressMode)
-        {
-            switch (textureAddressMode)
-            {
-                case TextureAddressModeContent.Clamp:
-                    return TextureAddressMode.Clamp;
-                case TextureAddressModeContent.Wrap:
-                    return TextureAddressMode.Wrap;
-                case TextureAddressModeContent.Mirror:
-                    return TextureAddressMode.Mirror;
-                case TextureAddressModeContent.Border:
-                    return TextureAddressMode.Border;
-
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-
         static public EffectObject CompileEffect(ShaderResult shaderResult, out string errorsAndWarnings)
         {
             var effect = new EffectObject();
@@ -845,6 +827,70 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
+        public static byte[] CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ref string errorsAndWarnings)
+        {
+            SharpDX.D3DCompiler.ShaderBytecode shaderByteCode;
+            try
+            {
+                SharpDX.D3DCompiler.ShaderFlags shaderFlags = 0;
+
+                // While we never allow preshaders, this flag is invalid for
+                // the DX11 shader compiler which doesn't allow preshaders
+                // in the first place.
+                //shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.NoPreshader;
+
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11)
+                {
+                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility;
+                }
+
+                // force D3DCompiler to generate legacy bytecode that is compatible with MojoShader.
+                if (shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo)
+                {
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
+                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
+                }
+
+                if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
+                {
+                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.SkipOptimization;
+                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.Debug;
+                }
+                else
+                {
+                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel3;
+                }
+
+                // Compile the shader into bytecode.                
+                var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(
+                    shaderResult.FileContent,
+                    shaderFunction,
+                    shaderProfile,
+                    shaderFlags,
+                    0,
+                    null,
+                    null,
+                    shaderResult.FilePath);
+
+                // Store all the errors and warnings to log out later.
+                errorsAndWarnings += result.Message;
+
+                if (result.Bytecode == null)
+                    throw new ShaderCompilerException();
+                
+                shaderByteCode = result.Bytecode;
+                //var source = shaderByteCode.Disassemble();
+            }
+            catch (SharpDX.CompilationException ex)
+            {
+                errorsAndWarnings += ex.Message;
+                throw new ShaderCompilerException();
+            }
+
+            // Return a copy of the shader bytecode.
+            return shaderByteCode.Data.ToArray();
+        }
+        
         internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)
         {
             foreach (var state in states)

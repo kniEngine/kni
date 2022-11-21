@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    class ModelWriter : BuiltInContentWriter<ModelContent>
+    class ModelWriter : ContentTypeWriterBase<ModelContent>
     {
-        protected internal override void Write(ContentWriter output, ModelContent value)
+        protected override void Write(ContentWriter output, ModelContent value)
         {
             WriteBones(output, value.Bones);
 
@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             {
                 output.WriteObject(mesh.Name);
                 WriteBoneReference(output, mesh.ParentBone, value.Bones);
-                output.Write(mesh.BoundingSphere);
+                output.WriteRawObject(mesh.BoundingSphere);
                 output.WriteObject(mesh.Tag);
 
                 output.Write((uint)mesh.MeshParts.Count);
