@@ -68,8 +68,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _effect.OnApply();
             if (_effect.CurrentTechnique != currentTechnique)
             {
-                _effect.OnApply();
-
                 var pass0 = _effect.CurrentTechnique.Passes[0];
                 if (this != pass0)
                 {
