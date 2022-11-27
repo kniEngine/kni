@@ -70,9 +70,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _effect.OnApply();
 
-                _effect.CurrentTechnique.Passes[0].Apply(_effect.GraphicsDevice);
-
-                return;
+                var pass0 = _effect.CurrentTechnique.Passes[0];
+                if (this != pass0)
+                {
+                    pass0.Apply(_effect.GraphicsDevice);
+                    return;
+                }
             }
 
             Apply(_effect.GraphicsDevice);
