@@ -68,15 +68,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _effect.OnApply();
             if (_effect.CurrentTechnique != currentTechnique)
             {
-                _effect.CurrentTechnique.Passes[0].Apply2();
-                return;
-            }
-
-            Apply(_effect.GraphicsDevice);
-        }
-
-        public void Apply2()
-        {
                 var currentTechnique2 = _effect.CurrentTechnique;
                 _effect.OnApply();
                 if (_effect.CurrentTechnique != currentTechnique2)
@@ -85,7 +76,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     return;
                 }
 
-                Apply(_effect.GraphicsDevice);
+                _effect.CurrentTechnique.Passes[0].Apply(_effect.GraphicsDevice);
+
+                return;
+            }
+
+            Apply(_effect.GraphicsDevice);
         }
 
         private void Apply(GraphicsDevice device)
