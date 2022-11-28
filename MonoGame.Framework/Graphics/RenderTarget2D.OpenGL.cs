@@ -10,9 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget2D : IRenderTargetGL
     {
-        private static Action<RenderTarget2D> DisposeAction =
-            (t) => t.GraphicsDevice.PlatformDeleteRenderTarget(t);
-
         int IRenderTargetGL.GLTexture { get { return glTexture; } }
         TextureTarget IRenderTargetGL.GLTarget { get { return glTarget; } }
         int IRenderTargetGL.GLColorBuffer { get; set; }
@@ -47,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (GraphicsDevice != null)
                 {
-                    Threading.BlockOnUIThread(DisposeAction, this);
+                    GraphicsDevice.PlatformDeleteRenderTarget(this);
                 }
             }
 

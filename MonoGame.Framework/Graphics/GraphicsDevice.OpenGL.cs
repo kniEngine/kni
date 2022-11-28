@@ -33,87 +33,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private DrawBuffersEnum[] _drawBuffers;
 #endif
 
-        enum ResourceType
-        {
-            Texture,
-            Buffer,
-            Shader,
-            Program,
-            Query,
-            Framebuffer
-        }
-
-        struct ResourceHandle
-        {
-            public ResourceType type;
-            public int handle;
-
-            public static ResourceHandle Texture(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Texture, handle = handle };
-            }
-
-            public static ResourceHandle Buffer(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Buffer, handle = handle };
-            }
-
-            public static ResourceHandle Shader(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Shader, handle = handle };
-            }
-
-            public static ResourceHandle Program(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Program, handle = handle };
-            }
-
-            public static ResourceHandle Query(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Query, handle = handle };
-            }
-
-            public static ResourceHandle Framebuffer(int handle)
-            {
-                return new ResourceHandle() { type = ResourceType.Framebuffer, handle = handle };
-            }
-
-            public void Free()
-            {
-                switch (type)
-                {
-                    case ResourceType.Texture:
-                        GL.DeleteTextures(1, ref handle);
-                        break;
-                    case ResourceType.Buffer:
-                        GL.DeleteBuffers(1, ref handle);
-                        break;
-                    case ResourceType.Shader:
-                        if (GL.IsShader(handle))
-                            GL.DeleteShader(handle);
-                        break;
-                    case ResourceType.Program:
-                        if (GL.IsProgram(handle))
-                        {
-                            GL.DeleteProgram(handle);
-                        }
-                        break;
-                    case ResourceType.Query:
-#if !GLES
-                        GL.DeleteQueries(1, ref handle);
-#endif
-                        break;
-                    case ResourceType.Framebuffer:
-                        GL.DeleteFramebuffers(1, ref handle);
-                        break;
-                }
-                GraphicsExtensions.CheckGLError();
-            }
-        }
-
-        List<ResourceHandle> _disposeThisFrame = new List<ResourceHandle>();
-        List<ResourceHandle> _disposeNextFrame = new List<ResourceHandle>();
-        object _disposeActionsLock = new object();
 #if DESKTOPGL
         static List<IntPtr> _disposeContexts = new List<IntPtr>();
         static object _disposeContextsLock = new object();
@@ -521,72 +440,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        internal void DisposeTexture(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Texture(handle));
-                }
-            }
-        }
-
-        internal void DisposeBuffer(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Buffer(handle));
-                }
-            }
-        }
-
-        internal void DisposeShader(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Shader(handle));
-                }
-            }
-        }
-
-        internal void DisposeProgram(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Program(handle));
-                }
-            }
-        }
-
-        internal void DisposeQuery(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Query(handle));
-                }
-            }
-        }
-
-        internal void DisposeFramebuffer(int handle)
-        {
-            if (!_isDisposed)
-            {
-                lock (_disposeActionsLock)
-                {
-                    _disposeNextFrame.Add(ResourceHandle.Framebuffer(handle));
-                }
-            }
-        }
-
 #if DESKTOPGL
         static internal void DisposeContext(IntPtr resource)
         {
@@ -611,22 +464,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
 #if DESKTOPGL
             Sdl.GL.SwapWindow(_currentWindowHandle);
-#endif
             GraphicsExtensions.CheckGLError();
-
-            // Dispose of any GL resources that were disposed in another thread
-            int count = _disposeThisFrame.Count;
-            for (int i = 0; i < count; i++)
-                _disposeThisFrame[i].Free();
-            _disposeThisFrame.Clear();
-
-            lock (_disposeActionsLock)
-            {
-                // Swap lists so resources added during this draw will be released after the next draw
-                var temp = _disposeThisFrame;
-                _disposeThisFrame = _disposeNextFrame;
-                _disposeNextFrame = temp;
-            }
+#endif
         }
 
         private void PlatformApplyDefaultRenderTarget()

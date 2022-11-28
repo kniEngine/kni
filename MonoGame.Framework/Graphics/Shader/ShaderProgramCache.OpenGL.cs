@@ -55,7 +55,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             foreach (var value in _programCache.Values)
             {
-                _device.DisposeProgram(value.Program);
+                if (!_device.IsDisposed)
+                {
+                    if (GL.IsProgram(value.Program))
+                    {
+                        GL.DeleteProgram(value.Program);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
             }
             _programCache.Clear();
         }
@@ -113,7 +120,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 Console.WriteLine(log);
                 GL.DetachShader(program, vertexShader.GetShaderHandle());
                 GL.DetachShader(program, pixelShader.GetShaderHandle());
-                _device.DisposeProgram(program);
+                if (!_device.IsDisposed)
+                {
+                    if (GL.IsProgram(program))
+                    {
+                        GL.DeleteProgram(program);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
                 throw new InvalidOperationException("Unable to link effect program");
             }
         }

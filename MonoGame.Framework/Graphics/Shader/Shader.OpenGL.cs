@@ -52,7 +52,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 var log = GL.GetShaderInfoLog(_shaderHandle);
                 Debug.WriteLine(log);
 
-                GraphicsDevice.DisposeShader(_shaderHandle);
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    if (GL.IsShader(_shaderHandle))
+                    {
+                        GL.DeleteShader(_shaderHandle);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
                 _shaderHandle = -1;
 
                 throw new InvalidOperationException("Shader Compilation Failed");
@@ -99,7 +106,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_shaderHandle != -1)
             {
-                GraphicsDevice.DisposeShader(_shaderHandle);
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    if (GL.IsShader(_shaderHandle))
+                    {
+                        GL.DeleteShader(_shaderHandle);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
                 _shaderHandle = -1;
             }
         }
@@ -108,7 +122,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed && _shaderHandle != -1)
             {
-                GraphicsDevice.DisposeShader(_shaderHandle);
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    if (GL.IsShader(_shaderHandle))
+                    {
+                        GL.DeleteShader(_shaderHandle);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
                 _shaderHandle = -1;
             }
 
