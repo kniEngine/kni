@@ -59,11 +59,8 @@ namespace Microsoft.Xna.Framework.Graphics
             colorSpace.Dispose();
 
             Texture2D texture = null;
-            Threading.BlockOnUIThread(() =>
-            {
-                texture = new Texture2D(graphicsDevice, (int)width, (int)height, false, SurfaceFormat.Color);
-                texture.SetData(data);
-            });
+            texture = new Texture2D(graphicsDevice, (int)width, (int)height, false, SurfaceFormat.Color);
+            texture.SetData(data);
 
             return texture;
         }
@@ -116,11 +113,8 @@ namespace Microsoft.Xna.Framework.Graphics
             ConvertToABGR_ANDROID(height, width, pixels);
 
             Texture2D texture = null;
-            Threading.BlockOnUIThread(() =>
-            {
-                texture = new Texture2D(graphicsDevice, width, height, false, SurfaceFormat.Color);
-                texture.SetData<int>(pixels);
-            });
+            texture = new Texture2D(graphicsDevice, width, height, false, SurfaceFormat.Color);
+            texture.SetData<int>(pixels);
 
             return texture;
         }

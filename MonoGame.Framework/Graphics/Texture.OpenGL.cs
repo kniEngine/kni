@@ -19,7 +19,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            DeleteGLTexture();
+            if (glTexture > 0)
+            {
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    GL.DeleteTextures(1, ref glTexture);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+            glTexture = -1;
+
             glLastSamplerState = null;
         }
 
@@ -27,20 +36,20 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed)
             {
-                DeleteGLTexture();
+                if (glTexture > 0)
+                {
+                    if (!GraphicsDevice.IsDisposed)
+                    {
+                        GL.DeleteTextures(1, ref glTexture);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+                glTexture = -1;
+
                 glLastSamplerState = null;
             }
 
             base.Dispose(disposing);
-        }
-
-        private void DeleteGLTexture()
-        {
-            if (glTexture > 0)
-            {
-                GraphicsDevice.DisposeTexture(glTexture);
-            }
-            glTexture = -1;
         }
 
         const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;

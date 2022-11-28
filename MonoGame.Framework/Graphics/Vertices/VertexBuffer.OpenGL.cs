@@ -180,7 +180,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!IsDisposed)
             {
                 if (GraphicsDevice != null)
-                    GraphicsDevice.DisposeBuffer(vbo);
+                {
+                    if (!GraphicsDevice.IsDisposed)
+                    {
+                        GL.DeleteBuffers(1, ref vbo);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
             }
             base.Dispose(disposing);
         }

@@ -209,7 +209,6 @@
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="ReusableItemList.cs" />
-    <Compile Include="Platform\Threading.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.MacOS.cs" />
   </ItemGroup>
@@ -476,6 +475,7 @@
     <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
+    <Compile Include="Graphics\Threading.OpenGL.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
