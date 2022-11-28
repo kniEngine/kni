@@ -613,7 +613,6 @@
     <Compile Include="Utilities\PlatformInfo.cs" />
     <Compile Include="Utilities\MonoGamePlatform.cs" />
     <Compile Include="Utilities\GraphicsBackend.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
 
   </ItemGroup>
   <ItemGroup>
