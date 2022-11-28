@@ -62,13 +62,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Apply()
         {
-            // Set/get the correct shader handle/cleanups.
-
             var currentTechnique = _effect.CurrentTechnique;
             _effect.OnApply();
-            if (_effect.CurrentTechnique != currentTechnique)
+
+            if (_effect.CurrentTechnique != currentTechnique && _effect.CurrentTechnique.Passes[0] != this)
             {
-                _effect.CurrentTechnique.Passes[0].Apply();
+                _effect.CurrentTechnique.Passes[0].Apply(_effect.GraphicsDevice);
                 return;
             }
 
