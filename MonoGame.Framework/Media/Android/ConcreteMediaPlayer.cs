@@ -29,10 +29,11 @@ namespace Microsoft.Xna.Platform.Media
 
         internal override TimeSpan PlatformGetPlayPosition()
         {
-            if (Queue.ActiveSong == null)
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
                 return TimeSpan.Zero;
 
-            return Queue.ActiveSong.Position;
+            return activeSong.Position;
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -50,13 +51,6 @@ namespace Microsoft.Xna.Platform.Media
             SetChannelVolumes();
         }
 
-        private void SetChannelVolumes()
-        {
-            var innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
-            foreach (var song in Queue.Songs)
-                song.Volume = innerVolume;
-        }
-
         internal override bool PlatformGetGameHasControl()
         {
             return true;
@@ -64,12 +58,23 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
+        private void SetChannelVolumes()
+        {
+            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                queuedSong.Volume = innerVolume;
+            }
+        }
+
         protected override void PlatformPause()
         {
-            if (Queue.ActiveSong == null)
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
                 return;
 
-            Queue.ActiveSong.Pause();
+            activeSong.Pause();
         }
 
         protected override void PlatformPlaySong(Song song)
@@ -79,26 +84,29 @@ namespace Microsoft.Xna.Platform.Media
 
             song.SetEventHandler(OnSongFinishedPlaying);
 
-            song.Volume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+
+            song.Volume = innerVolume;
             song.Play();
         }
 
         protected override void PlatformResume()
         {
-            if (Queue.ActiveSong == null)
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
                 return;
 
-            Queue.ActiveSong.Resume();
+            activeSong.Resume();
         }
 
         protected override void PlatformStop()
         {
-            foreach (var song in Queue.Songs)
-                Queue.ActiveSong.Stop();
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                var activeSong = Queue.ActiveSong;
+                activeSong.Stop();
+            }
         }
-
-
-
 
     }
 }

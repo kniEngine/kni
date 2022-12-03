@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Media
             _mediaEngineEx.Pause();
         }
 
-        protected override  void PlatformPlaySong(Song song)
+        protected override void PlatformPlaySong(Song song)
         {
             _mediaEngineEx.Source = song.FilePath;
             _mediaEngineEx.Load();
@@ -125,6 +125,7 @@ namespace Microsoft.Xna.Platform.Media
                 return;
             _mediaEngineEx.Source = null;
         }
+
     }
 }
 

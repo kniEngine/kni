@@ -66,7 +66,6 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
-
         internal override bool PlatformGetGameHasControl()
         {
             throw new PlatformNotSupportedException();

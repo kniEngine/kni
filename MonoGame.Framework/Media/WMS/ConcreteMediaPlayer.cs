@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Media
             _clock = _session.Clock.QueryInterface<PresentationClock>();
         }
 
-#region IAsyncCallback
+        #region IAsyncCallback
 
         protected override void Dispose(bool disposing)
         {
@@ -139,7 +139,9 @@ namespace Microsoft.Xna.Platform.Media
 
                 float volume = base.PlatformGetIsMuted() ? 0f : base.PlatformGetVolume();
                 for (int i = 0; i < _volumeController.ChannelCount; i++)
+                {
                     _volumeController.SetChannelVolume(i, volume);
+                }
             }
         }
 
@@ -256,11 +258,6 @@ namespace Microsoft.Xna.Platform.Media
                     StartSession(_positionBeginning);
                 _nextSong = null;
             }
-        }
-
-        private Variant PositionVariantFor(TimeSpan position)
-        {
-            return new Variant { Value = position.Ticks };
         }
     }
 }
