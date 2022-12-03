@@ -18,12 +18,12 @@ namespace Microsoft.Xna.Framework.Media
             throw new PlatformNotSupportedException();
         }
 
-		internal void Resume()
+		internal void Pause()
 		{
             throw new PlatformNotSupportedException();
         }
-		
-		internal void Pause()
+
+		internal void Resume()
 		{
             throw new PlatformNotSupportedException();
         }

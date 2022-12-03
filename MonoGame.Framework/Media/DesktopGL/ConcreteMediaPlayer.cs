@@ -68,15 +68,6 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPause()
-        {
-            Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return;
-
-            activeSong.Pause();
-        }
-
         protected override void PlatformPlaySong(Song song)
         {
             if (Queue.ActiveSong == null)
@@ -88,6 +79,15 @@ namespace Microsoft.Xna.Platform.Media
 
             song.Volume = innerVolume;
             song.Play();
+        }
+
+        protected override void PlatformPause()
+        {
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
+                return;
+
+            activeSong.Pause();
         }
 
         protected override void PlatformResume()

@@ -145,14 +145,6 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPause()
-        {
-            if (_sessionState != SessionState.Started)
-                return;
-            _sessionState = SessionState.Paused;
-            _session.Pause();
-        }
-
         protected override void PlatformPlaySong(Song song)
         {
             if (_currentSong == song)
@@ -224,6 +216,14 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             SetChannelVolumes();
+        }
+
+        protected override void PlatformPause()
+        {
+            if (_sessionState != SessionState.Started)
+                return;
+            _sessionState = SessionState.Paused;
+            _session.Pause();
         }
 
         protected override void PlatformResume()

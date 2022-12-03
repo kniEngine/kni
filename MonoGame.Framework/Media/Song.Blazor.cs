@@ -27,13 +27,12 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-		internal void Resume()
+		internal void Pause()
 		{
             throw new NotImplementedException();
         }
 
-		
-		internal void Pause()
+		internal void Resume()
 		{
             throw new NotImplementedException();
         }

@@ -60,20 +60,20 @@ namespace Microsoft.Xna.Framework.Media
             _playCount++;
         }
 
-        internal void Resume()
-        {
-            if (_stream == null)
-                return;
-
-            _stream.Resume();
-        }
-
         internal void Pause()
         {
             if (_stream == null)
                 return;
 
             _stream.Pause();
+        }
+
+        internal void Resume()
+        {
+            if (_stream == null)
+                return;
+
+            _stream.Resume();
         }
 
         internal void Stop()

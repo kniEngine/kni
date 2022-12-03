@@ -94,11 +94,11 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPause()
+        protected override void PlatformPlaySong(Song song)
         {
         }
 
-        protected override void PlatformPlaySong(Song song)
+        protected override void PlatformPause()
         {
         }
 

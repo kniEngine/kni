@@ -118,6 +118,14 @@ namespace Microsoft.Xna.Framework.Media
             
             _player.Play();
         }
+		
+		internal void Pause()
+		{			            
+            if (_player == null)
+				return;
+			
+            _player.Pause();
+        }
 
 		internal void Resume()
 		{
@@ -130,14 +138,6 @@ namespace Microsoft.Xna.Framework.Media
         private void PlatformResume()
         {
 			_player.Play();
-        }
-		
-		internal void Pause()
-		{			            
-            if (_player == null)
-				return;
-			
-            _player.Pause();
         }
 		
 		internal void Stop()

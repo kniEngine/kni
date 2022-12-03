@@ -104,14 +104,14 @@ namespace Microsoft.Xna.Framework.Media
             _playCount++;
         }
 
-        internal void Resume()
-        {
-            _androidPlayer.Start();
-        }
-
         internal void Pause()
         {
             _androidPlayer.Pause();
+        }
+
+        internal void Resume()
+        {
+            _androidPlayer.Start();
         }
 
         internal void Stop()
