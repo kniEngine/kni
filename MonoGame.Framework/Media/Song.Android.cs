@@ -55,9 +55,16 @@ namespace Microsoft.Xna.Framework.Media
             var playingSong = _playingSong;
             _playingSong = null;
 
-            if (playingSong != null && playingSong.DonePlaying != null)
-                playingSong.DonePlaying(sender, e);
+            if (playingSong != null)
+            {
+                var handler = playingSong.DonePlaying;
+                if (handler != null)
+                    handler(sender, e);
+            }
         }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
 
         /// <summary>
         /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.

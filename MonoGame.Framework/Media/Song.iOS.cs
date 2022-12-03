@@ -80,11 +80,15 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        internal void OnFinishedPlaying (object sender, NSNotificationEventArgs args)
+        private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
 		{
-			if (DonePlaying != null)
-			    DonePlaying(sender, args);
+            var handler = DonePlaying;
+            if (handler != null)
+                handler(sender, args);
 		}
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
 
 		/// <summary>
 		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.

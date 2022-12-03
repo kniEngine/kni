@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Framework.Media
 
             _duration = _stream.GetLength();
         }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
         
         internal void SetEventHandler(FinishedPlayingHandler handler)
         {
