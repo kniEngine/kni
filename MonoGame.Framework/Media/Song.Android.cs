@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -59,7 +62,7 @@ namespace Microsoft.Xna.Framework.Media
             {
                 var handler = playingSong.DonePlaying;
                 if (handler != null)
-                    handler(sender, e);
+                    handler(playingSong, EventArgs.Empty);
             }
         }
 

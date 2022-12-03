@@ -396,7 +396,10 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void OnSongFinishedPlaying(object sender, EventArgs args)
         {
-            // TODO: Check args to see if song sucessfully played
+            Song song = (Song)sender;
+            Song activeSong = Queue.ActiveSong;
+            System.Diagnostics.Debug.Assert(song == activeSong);
+
             _numSongsInQueuePlayed++;
             
             if (_numSongsInQueuePlayed >= _queue.Count)

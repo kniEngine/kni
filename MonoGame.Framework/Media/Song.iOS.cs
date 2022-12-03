@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Foundation;
@@ -9,6 +11,7 @@ using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -84,7 +87,7 @@ namespace Microsoft.Xna.Framework.Media
 		{
             var handler = DonePlaying;
             if (handler != null)
-                handler(sender, args);
+                handler(this, EventArgs.Empty);
 		}
 
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
