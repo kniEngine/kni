@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public TimeSpan Position
+        internal TimeSpan Position
         {
             get
             {
@@ -143,10 +143,6 @@ namespace Microsoft.Xna.Framework.Media
                     _position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
                 return _position;
-            }
-            set
-            {
-                _androidPlayer.SeekTo((int)value.TotalMilliseconds);   
             }
         }
 

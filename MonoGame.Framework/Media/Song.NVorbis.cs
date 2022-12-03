@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public TimeSpan Position
+        internal TimeSpan Position
         {
             get
             {
