@@ -263,11 +263,6 @@ namespace Microsoft.Xna.Platform.Media
                 handler(null, args);
         }
 
-        protected virtual void PlatformOnSongRepeat()
-        {
-
-        }
-
 
         internal void Play(Song song)
         {
@@ -412,9 +407,6 @@ namespace Microsoft.Xna.Platform.Media
                     return;
                 }
             }
-
-            if (PlatformGetIsRepeating())
-                PlatformOnSongRepeat();
 
             MoveNext();
         }
