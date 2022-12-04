@@ -25,26 +25,6 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        private void PlatformPlay()
-        {
-            throw new NotImplementedException();
-        }
-
-		internal void Pause()
-		{
-            throw new NotImplementedException();
-        }
-
-		internal void Resume()
-		{
-            throw new NotImplementedException();
-        }
-		
-		internal void Stop()
-		{
-            throw new NotImplementedException();
-        }
-
 		internal float Volume
 		{
 			get

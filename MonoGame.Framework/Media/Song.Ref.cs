@@ -13,26 +13,6 @@ namespace Microsoft.Xna.Framework.Media
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformPlay()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-		internal void Pause()
-		{
-            throw new PlatformNotSupportedException();
-        }
-
-		internal void Resume()
-		{
-            throw new PlatformNotSupportedException();
-        }
-		
-		internal void Stop()
-		{
-            throw new PlatformNotSupportedException();
-        }
-
 		internal float Volume
 		{
 			get { throw new PlatformNotSupportedException(); }

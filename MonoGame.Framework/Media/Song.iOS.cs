@@ -113,17 +113,10 @@ namespace Microsoft.Xna.Framework.Media
                     return;
             }
 
-            PlatformPlay();
+            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
+            _player.Play();
 
             _playCount++;
-        }
-
-        private void PlatformPlay()
-        {
-            
-            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
-            
-            _player.Play();
         }
 		
 		internal void Pause()
@@ -139,13 +132,8 @@ namespace Microsoft.Xna.Framework.Media
             if (_player == null)
 				return;
 
-            PlatformResume();
+            _player.Play();
 		}
-
-        private void PlatformResume()
-        {
-			_player.Play();
-        }
 		
 		internal void Stop()
 		{
