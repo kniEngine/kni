@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Media;
 
@@ -105,6 +107,18 @@ namespace Microsoft.Xna.Platform.Media
                 var activeSong = Queue.ActiveSong;
                 activeSong.Stop();
             }
+        }
+
+        protected override void PlatformClearQueue()
+        {
+            while (Queue.Count > 0)
+            {
+                Song song = Queue[0];
+                song.Stop();
+                Queue.Remove(song);
+            }
+
+            //base.ClearQueue();
         }
 
     }

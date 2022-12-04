@@ -73,18 +73,6 @@ namespace Microsoft.Xna.Framework.Media
 			
 			return songs[_activeSongIndex];
 		}
-		
-		internal void Clear()
-		{
-			for(; this.Count > 0; )
-			{
-                Song song = this[0];
-#if DESKTOPGL || ANDROID || IOS || TVOS
-                song.Stop();
-#endif
-                this.Remove(song);
-			}	
-		}
 
 	}
 }

@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -263,6 +266,15 @@ namespace Microsoft.Xna.Platform.Media
                 handler(null, args);
         }
 
+        protected virtual void PlatformClearQueue()
+        {
+            while (_queue.Count > 0)
+            {
+                Song song = _queue[0];
+                _queue.Remove(song);
+            }
+        }
+
 
         internal void Play(Song song)
         {
@@ -270,7 +282,8 @@ namespace Microsoft.Xna.Platform.Media
                 throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
 
             var previousSong = _queue.Count > 0 ? _queue[0] : null;
-            _queue.Clear();
+
+            PlatformClearQueue();
             _numSongsInQueuePlayed = 0;
             _queue.Add(song);
             _queue.ActiveSongIndex = 0;
@@ -291,7 +304,7 @@ namespace Microsoft.Xna.Platform.Media
             if (collection == null)
                 throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
 
-            _queue.Clear();
+            PlatformClearQueue();
             _numSongsInQueuePlayed = 0;
 
             foreach (var song in collection)
