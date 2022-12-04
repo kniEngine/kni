@@ -77,13 +77,6 @@ namespace Microsoft.Xna.Platform.Media
             SetChannelVolumes();
         }
 
-        private void SetChannelVolumes()
-        {
-            var innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
-            foreach (var song in Queue.Songs)
-                song.Volume = innerVolume;
-        }
-
         internal override bool PlatformGetGameHasControl()
         {
             return true;
@@ -91,11 +84,21 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        protected override void PlatformPause()
+        private void SetChannelVolumes()
         {
+            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                queuedSong.Volume = innerVolume;
+            }
         }
 
         protected override void PlatformPlaySong(Song song)
+        {
+        }
+
+        protected override void PlatformPause()
         {
         }
 
@@ -106,6 +109,7 @@ namespace Microsoft.Xna.Platform.Media
         protected override void PlatformStop()
         {
         }
+
     }
 }
 

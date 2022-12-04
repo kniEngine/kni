@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -20,27 +23,6 @@ namespace Microsoft.Xna.Framework.Media
             if (disposing)
             {
             }
-        }
-
-        private void PlatformPlay()
-        {
-            throw new NotImplementedException();
-        }
-
-		internal void Resume()
-		{
-            throw new NotImplementedException();
-        }
-
-		
-		internal void Pause()
-		{
-            throw new NotImplementedException();
-        }
-		
-		internal void Stop()
-		{
-            throw new NotImplementedException();
         }
 
 		internal float Volume

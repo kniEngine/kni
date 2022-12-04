@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Media;
 
@@ -29,10 +31,11 @@ namespace Microsoft.Xna.Platform.Media
 
         internal override TimeSpan PlatformGetPlayPosition()
         {
-            if (Queue.ActiveSong == null)
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
                 return TimeSpan.Zero;
 
-            return Queue.ActiveSong.Position;
+            return activeSong.Position;
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -50,13 +53,6 @@ namespace Microsoft.Xna.Platform.Media
             SetChannelVolumes();
         }
 
-        private void SetChannelVolumes()
-        {
-            var innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
-            foreach (var song in Queue.Songs)
-                song.Volume = innerVolume;
-        }
-
         internal override bool PlatformGetGameHasControl()
         {
             return true;
@@ -64,14 +60,15 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        protected override void PlatformPause()
+        private void SetChannelVolumes()
         {
-            if (Queue.ActiveSong == null)
-                return;
+            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-            Queue.ActiveSong.Pause();
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                queuedSong.Volume = innerVolume;
+            }
         }
-
         protected override void PlatformPlaySong(Song song)
         {
             if (Queue.ActiveSong == null)
@@ -79,26 +76,50 @@ namespace Microsoft.Xna.Platform.Media
 
             song.SetEventHandler(OnSongFinishedPlaying);
 
-            song.Volume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+
+            song.Volume = innerVolume;
             song.Play();
+        }
+
+        protected override void PlatformPause()
+        {
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
+                return;
+
+            activeSong.Pause();
         }
 
         protected override void PlatformResume()
         {
-            if (Queue.ActiveSong == null)
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong == null)
                 return;
 
-            Queue.ActiveSong.Resume();
+            activeSong.Resume();
         }
 
         protected override void PlatformStop()
         {
-            foreach (var song in Queue.Songs)
-                Queue.ActiveSong.Stop();
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                var activeSong = Queue.ActiveSong;
+                activeSong.Stop();
+            }
         }
 
+        protected override void PlatformClearQueue()
+        {
+            while (Queue.Count > 0)
+            {
+                Song song = Queue[0];
+                song.Stop();
+                Queue.Remove(song);
+            }
 
-
+            //base.ClearQueue();
+        }
 
     }
 }

@@ -2,11 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -26,6 +29,8 @@ namespace Microsoft.Xna.Framework.Media
 
             _duration = _stream.GetLength();
         }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
         
         internal void SetEventHandler(FinishedPlayingHandler handler)
         {
@@ -34,7 +39,7 @@ namespace Microsoft.Xna.Framework.Media
 
         internal void OnFinishedPlaying()
         {
-            MediaPlayer.Strategy.OnSongFinishedPlaying(null, null);
+            MediaPlayer.Strategy.OnSongFinishedPlaying(this, EventArgs.Empty);
         }
 		
         internal override void PlatformDispose(bool disposing)
@@ -60,20 +65,20 @@ namespace Microsoft.Xna.Framework.Media
             _playCount++;
         }
 
-        internal void Resume()
-        {
-            if (_stream == null)
-                return;
-
-            _stream.Resume();
-        }
-
         internal void Pause()
         {
             if (_stream == null)
                 return;
 
             _stream.Pause();
+        }
+
+        internal void Resume()
+        {
+            if (_stream == null)
+                return;
+
+            _stream.Resume();
         }
 
         internal void Stop()
@@ -101,7 +106,7 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public TimeSpan Position
+        internal TimeSpan Position
         {
             get
             {

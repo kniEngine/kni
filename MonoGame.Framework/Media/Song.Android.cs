@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -55,9 +58,16 @@ namespace Microsoft.Xna.Framework.Media
             var playingSong = _playingSong;
             _playingSong = null;
 
-            if (playingSong != null && playingSong.DonePlaying != null)
-                playingSong.DonePlaying(sender, e);
+            if (playingSong != null)
+            {
+                var handler = playingSong.DonePlaying;
+                if (handler != null)
+                    handler(playingSong, EventArgs.Empty);
+            }
         }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
 
         /// <summary>
         /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
@@ -104,14 +114,14 @@ namespace Microsoft.Xna.Framework.Media
             _playCount++;
         }
 
-        internal void Resume()
-        {
-            _androidPlayer.Start();
-        }
-
         internal void Pause()
         {
             _androidPlayer.Pause();
+        }
+
+        internal void Resume()
+        {
+            _androidPlayer.Start();
         }
 
         internal void Stop()
@@ -135,7 +145,7 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public TimeSpan Position
+        internal TimeSpan Position
         {
             get
             {
@@ -143,10 +153,6 @@ namespace Microsoft.Xna.Framework.Media
                     _position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
                 return _position;
-            }
-            set
-            {
-                _androidPlayer.SeekTo((int)value.TotalMilliseconds);   
             }
         }
 

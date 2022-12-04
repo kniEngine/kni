@@ -2,8 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -32,38 +35,33 @@ namespace Microsoft.Xna.Framework.Media
 		
 		public int ActiveSongIndex
 		{
-		    get
-		    {
-		        return _activeSongIndex;
-		    }
-		    set
-		    {
-		        _activeSongIndex = value;
-		    }
+		    get { return _activeSongIndex; }
+		    set { _activeSongIndex = value; }
 		}
 
         internal int Count
         {
-            get
-            {
-                return songs.Count;
-            }
+            get { return songs.Count; }
         }
 
         public Song this[int index]
         {
-            get
-            {
-                return songs[index];
-            }
+            get { return songs[index]; }
         }
 
         internal IEnumerable<Song> Songs
         {
-            get
-            {
-                return songs;
-            }
+            get { return songs; }
+        }
+
+        internal void Add(Song song)
+        {
+            songs.Add(song);
+        }
+
+        internal void Remove(Song song)
+        {
+            songs.Remove(song);
         }
 
 		internal Song GetNextSong(int direction, bool shuffle)
@@ -75,33 +73,7 @@ namespace Microsoft.Xna.Framework.Media
 			
 			return songs[_activeSongIndex];
 		}
-		
-		internal void Clear()
-		{
-			Song song;
-			for(; songs.Count > 0; )
-			{
-				song = songs[0];
-#if !DIRECTX
-				song.Stop();
-#endif
-				songs.Remove(song);
-			}	
-		}
 
-        internal void Add(Song song)
-        {
-            songs.Add(song);
-        }
-
-#if !DIRECTX
-        internal void Stop()
-        {
-            int count = songs.Count;
-            for (int i = 0; i < count; ++i)
-                songs[i].Stop();
-        }
-#endif
 	}
 }
 

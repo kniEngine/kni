@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.IO;
 using Foundation;
@@ -9,6 +11,7 @@ using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -80,11 +83,15 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        internal void OnFinishedPlaying (object sender, NSNotificationEventArgs args)
+        private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
 		{
-			if (DonePlaying != null)
-			    DonePlaying(sender, args);
+            var handler = DonePlaying;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 		}
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
 
 		/// <summary>
 		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
@@ -106,30 +113,10 @@ namespace Microsoft.Xna.Framework.Media
                     return;
             }
 
-            PlatformPlay();
+            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
+            _player.Play();
 
             _playCount++;
-        }
-
-        private void PlatformPlay()
-        {
-            
-            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
-            
-            _player.Play();
-        }
-
-		internal void Resume()
-		{
-            if (_player == null)
-				return;
-
-            PlatformResume();
-		}
-
-        private void PlatformResume()
-        {
-			_player.Play();
         }
 		
 		internal void Pause()
@@ -139,6 +126,14 @@ namespace Microsoft.Xna.Framework.Media
 			
             _player.Pause();
         }
+
+		internal void Resume()
+		{
+            if (_player == null)
+				return;
+
+            _player.Play();
+		}
 		
 		internal void Stop()
 		{

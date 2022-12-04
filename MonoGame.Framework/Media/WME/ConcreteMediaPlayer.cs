@@ -95,21 +95,21 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        protected override void PlatformPause()
-        {
-            if (_sessionState != SessionState.Started)
-                return;
-            _sessionState = SessionState.Paused;
-            _mediaEngineEx.Pause();
-        }
-
-        protected override  void PlatformPlaySong(Song song)
+        protected override void PlatformPlaySong(Song song)
         {
             _mediaEngineEx.Source = song.FilePath;
             _mediaEngineEx.Load();
             _sessionState = SessionState.Started;
 
             //We start playing when we get a LoadedData event in MediaEngineExOnPlaybackEvent
+        }
+
+        protected override void PlatformPause()
+        {
+            if (_sessionState != SessionState.Started)
+                return;
+            _sessionState = SessionState.Paused;
+            _mediaEngineEx.Pause();
         }
 
         protected override void PlatformResume()
@@ -125,6 +125,7 @@ namespace Microsoft.Xna.Platform.Media
                 return;
             _mediaEngineEx.Source = null;
         }
+
     }
 }
 
