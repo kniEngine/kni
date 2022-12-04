@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <Compile Include="TitleContainer.Desktop.cs" />
-    <Compile Include="Audio\OpenAL\OggStream.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
@@ -57,7 +56,7 @@
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
-    <Compile Include="Media\Song.NVorbis.cs" />
+    <Compile Include="Media\Song.SDL.cs" />
     <Compile Include="Media\Video.SDL.cs" />
     <Compile Include="Media\VideoPlayer.SDL.cs" />
     <Compile Include="Input\GamePad.SDL.cs" />
