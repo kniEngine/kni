@@ -39,8 +39,6 @@ namespace Microsoft.Xna.Platform.Audio
         private const int DEFAULT_FREQUENCY = 48000;
         private const int DEFAULT_UPDATE_SIZE = 512;
         private const int DEFAULT_UPDATE_BUFFER_COUNT = 2;
-#elif DESKTOPGL
-        private static OggStreamer _oggstreamer;
 #endif
         private Stack<int> _alSourcesPool = new Stack<int>(32);
         bool _isDisposed;
@@ -221,9 +219,6 @@ namespace Microsoft.Xna.Platform.Audio
 #endif
 
                 _context = Alc.CreateContext(_device, attribute);
-#if DESKTOPGL
-                _oggstreamer = new OggStreamer();
-#endif
 
                 AlcHelper.CheckError("Could not create OpenAL context");
 
@@ -396,11 +391,6 @@ namespace Microsoft.Xna.Platform.Audio
                 Efx.DeleteAuxiliaryEffectSlot(ReverbSlot);
                 Efx.DeleteEffect((int)ReverbEffect);
             }
-
-#if DESKTOPGL
-                if(_oggstreamer != null)
-                    _oggstreamer.Dispose();
-#endif
 
             while (_alSourcesPool.Count > 0)
             {

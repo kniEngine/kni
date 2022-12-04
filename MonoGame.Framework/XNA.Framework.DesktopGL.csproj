@@ -127,9 +127,8 @@
     <Compile Include="Audio\Xact\XactHelpers.cs" />
     <Compile Include="Audio\Xact\XactSound.cs" />
   </ItemGroup>
+	
   <ItemGroup>
-    <Compile Include="Audio\OpenAL\OggStream.cs" />
-
     <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
     <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
@@ -490,7 +489,7 @@
     <Compile Include="Media\PlaylistCollection.cs" />
     <Compile Include="Media\Playlist.cs" />
     <Compile Include="Media\Song.cs" />
-    <Compile Include="Media\Song.NVorbis.cs" />
+    <Compile Include="Media\Song.SDL.cs" />
     <Compile Include="Media\SongCollection.cs" />
     <Compile Include="Media\SongStrategy.cs" />
     <Compile Include="Media\VideoSoundtrackType.cs" />
