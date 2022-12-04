@@ -288,7 +288,12 @@ namespace Microsoft.Xna.Platform.Media
             _queue.Add(song);
             _queue.ActiveSongIndex = 0;
 
-            PlaySong(song);
+            if (song.IsDisposed)
+                throw new ObjectDisposedException("song");
+
+            PlatformPlaySong(song);
+            _state = MediaState.Playing;
+            OnPlatformMediaStateChanged(EventArgs.Empty);
 
             if (previousSong != song)
                 OnPlatformActiveSongChanged(EventArgs.Empty);
@@ -312,15 +317,11 @@ namespace Microsoft.Xna.Platform.Media
 
             _queue.ActiveSongIndex = index;
 
-            PlaySong(_queue.ActiveSong);
-        }
-        
-        internal void PlaySong(Song song)
-        {
-            if (song != null && song.IsDisposed)
-                throw new ObjectDisposedException("song");
+            Song activeSong = _queue.ActiveSong;
+            if (activeSong.IsDisposed)
+                throw new ObjectDisposedException("activeSong");
 
-            PlatformPlaySong(song);
+            PlatformPlaySong(activeSong);
             _state = MediaState.Playing;
             OnPlatformMediaStateChanged(EventArgs.Empty);
         }
@@ -395,9 +396,15 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             var nextSong = _queue.GetNextSong(direction, PlatformGetIsShuffled());
-
             if (nextSong != null)
-                PlaySong(nextSong);
+            {
+                if (nextSong.IsDisposed)
+                    throw new ObjectDisposedException("nextSong");
+
+                PlatformPlaySong(nextSong);
+                _state = MediaState.Playing;
+                OnPlatformMediaStateChanged(EventArgs.Empty);
+            }
 
             OnPlatformActiveSongChanged(EventArgs.Empty);
         }
