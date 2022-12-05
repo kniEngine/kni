@@ -342,7 +342,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Force resetting states
             this._actualBlendState.PlatformApplyState(this, true);
-            this.ApplyBlendFactor(true);
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(this, true);
 
@@ -892,12 +891,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformApplyBlend()
         {
             _actualBlendState.PlatformApplyState(this);
-            ApplyBlendFactor();
-        }
 
-        private void ApplyBlendFactor(bool force = false)
-        {
-            if (force || BlendFactor != _lastBlendState.BlendFactor)
+            if (_blendFactorDirty)
             {
                 GL.BlendColor(
                     this.BlendFactor.R/255.0f,
@@ -905,7 +900,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.BlendFactor.B/255.0f,
                     this.BlendFactor.A/255.0f);
                 GraphicsExtensions.CheckGLError();
-                _lastBlendState.BlendFactor = this.BlendFactor;
+
+                _blendFactorDirty = false;
             }
         }
 
@@ -1292,6 +1288,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Force set the default render states.
             _blendStateDirty = true;
+            _blendFactorDirty = true;
             _depthStencilStateDirty = true;
             _rasterizerStateDirty = true;
             BlendState = BlendState.Opaque;

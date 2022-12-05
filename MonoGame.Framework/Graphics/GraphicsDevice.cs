@@ -330,6 +330,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Force set the default render states.
             _blendStateDirty = true;
+            _blendFactorDirty = true;
             _depthStencilStateDirty = true;
             _rasterizerStateDirty = true;
             BlendState = BlendState.Opaque;
