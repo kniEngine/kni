@@ -242,7 +242,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _framebufferHelper = FramebufferHelper.Create(this);
 
             // Force resetting states
-            this.PlatformApplyBlend(true);
+            this._actualBlendState.PlatformApplyState(this, true);
+            this.ApplyBlendFactor(true);
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(this, true);
 
@@ -674,13 +675,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformApplyBlend(bool force = false)
+        private void PlatformApplyBlend()
         {
-            _actualBlendState.PlatformApplyState(this, force);
-            ApplyBlendFactor(force);
+            _actualBlendState.PlatformApplyState(this);
+            ApplyBlendFactor();
         }
 
-        private void ApplyBlendFactor(bool force)
+        private void ApplyBlendFactor(bool force = false)
         {
             if (force || BlendFactor != _lastBlendState.BlendFactor)
             {
