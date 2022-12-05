@@ -1072,11 +1072,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(CurrentD3DContext != null, "The d3d context is null!");
 
-            if (_blendFactorDirty || _blendStateDirty)
             {
                 PlatformApplyBlend();
-                _blendFactorDirty = false;
-                _blendStateDirty = false;
             }
 
             if (_depthStencilStateDirty)
@@ -1100,9 +1097,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyBlend()
         {
-            var state = _actualBlendState.GetDxState(this);
-            var factor = ToDXColor(BlendFactor);
-            CurrentD3DContext.OutputMerger.SetBlendState(state, factor);
+            if (_blendStateDirty || _blendFactorDirty)
+            {
+                var state = _actualBlendState.GetDxState(this);
+                var factor = ToDXColor(BlendFactor);
+                CurrentD3DContext.OutputMerger.SetBlendState(state, factor);
+
+                _blendStateDirty = false;
+                _blendFactorDirty = false;
+            }
         }
 
         private SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
