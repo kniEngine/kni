@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             SharpFontProcessor sfProcessor = new SharpFontProcessor();
 
             // Import the source font data.
-            List<Glyph> glyphs = sfProcessor.Import(options, out lineSpacing, out yOffsetMin, fontName);
+            List<Glyph> glyphs = SharpFontProcessor.ImportGlyphs(options, out lineSpacing, out yOffsetMin, fontName);
             
             // Validate.
             if (glyphs.Count == 0)

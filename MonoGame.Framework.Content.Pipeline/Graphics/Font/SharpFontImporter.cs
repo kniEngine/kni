@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
     internal class SharpFontProcessor
     {
-        public List<Glyph> Import(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
+        public static List<Glyph> ImportGlyphs(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
         {
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
