@@ -82,14 +82,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     throw new Exception(string.Format("Could not load {0}", fontFile));
                 }
 
+                var characters = new List<char>(input.Characters);
+                characters.Sort();
+
                 float lineSpacing = 0f;
                 int yOffsetMin = 0;
-                Dictionary<char, Glyph> glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
+                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, characters, out lineSpacing, out yOffsetMin, fontFile);
+
+                // Validate.
+                if (glyphs.Count == 0)
+                    throw new Exception("Font does not contain any glyphs.");
+
+                // Check that the default character is part of the glyphs
+                if (input.DefaultCharacter != null)
+                {
+                    bool defaultCharacterFound = false;
+                    foreach (var glyph in glyphs)
+                    {
+                        if (glyph.Key == input.DefaultCharacter)
+                        {
+                            defaultCharacterFound = true;
+                            break;
+                        }
+                    }
+                    if (!defaultCharacterFound)
+                    {
+                        throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
+                    }
+                }
 
                 var glyphset = new HashSet<Glyph>(glyphs.Values);
 
                 // Optimize.
-                foreach (Glyph glyph in glyphset)
+                foreach (Glyph glyph in glyphs.Values)
                 {
                     glyph.Crop();
                 }
@@ -98,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphset.ToArray(), requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values.ToArray(), requiresPot, requiresSquare);
 
                 // Adjust line and character spacing.
                 lineSpacing += input.Spacing;
@@ -233,84 +258,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return String.Empty;
         }
 
-        private static Dictionary<char, Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
+        // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
+        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int yOffsetMin, string fontName)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
-
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-
-            //			if (BitmapFileExtensions.Contains(fileExtension))
-            //			{
-            //				importer = new BitmapImporter();
-            //			}
-            //			else
-            //			{
             if (!TrueTypeFileExtensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
-            // Import the source font data.
-            Dictionary<char, Glyph> glyphs = ImportGlyphs(options, out lineSpacing, out yOffsetMin, fontName);
-            
-            // Validate.
-            if (glyphs.Count == 0)
-            {
-                throw new Exception("Font does not contain any glyphs.");
-            }
-
-            // Sort the glyphs
-            glyphs = SortGlyphs(glyphs);
-
-            // Check that the default character is part of the glyphs
-            if (options.DefaultCharacter != null)
-            {
-                bool defaultCharacterFound = false;
-                foreach (var glyph in glyphs)
-                {
-                    if (glyph.Key == options.DefaultCharacter)
-                    {
-                        defaultCharacterFound = true;
-                        break;
-                    }
-                }
-                if (!defaultCharacterFound)
-                {
-                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
-                }
-            }
-
-            return glyphs;
-        }
-
-        private static Dictionary<char, Glyph> SortGlyphs(Dictionary<char, Glyph> glyphs)
-        {
-            var chars = new List<char>(glyphs.Keys);
-            chars.Sort((left, right) => left.CompareTo(right));
-
-            Dictionary<char, Glyph> shortedGlyphs = new Dictionary<char, Glyph>();
-            foreach (var key in chars)
-                shortedGlyphs.Add(key, glyphs[key]);
-
-            return shortedGlyphs;
-        }
-
-
-        // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
-        {
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
             {
                 const uint dpi = 96;
-                int fixedSize = ((int)options.Size) << 6;
+                int fixedSize = ((int)input.Size) << 6;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
-                if (face.FamilyName == "Microsoft Sans Serif" && options.FontName != "Microsoft Sans Serif")
-                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", options.FontName));
-
-
-                // Which characters do we want to include?
-                var characters = options.Characters;
+                if (face.FamilyName == "Microsoft Sans Serif" && input.FontName != "Microsoft Sans Serif")
+                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
 
                 var glyphMaps = new Dictionary<uint, Glyph>();
                 var glyphs = new Dictionary<char,Glyph>();
