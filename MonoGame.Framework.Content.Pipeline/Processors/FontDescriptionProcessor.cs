@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var glyphset = new HashSet<Glyph>(glyphs.Values);
 
                 // Optimize.
-                foreach (Glyph glyph in glyphset)
+                foreach (Glyph glyph in glyphs.Values)
                 {
                     glyph.Crop();
                 }
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphset.ToArray(), requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values.ToArray(), requiresPot, requiresSquare);
 
                 // Adjust line and character spacing.
                 lineSpacing += input.Spacing;
