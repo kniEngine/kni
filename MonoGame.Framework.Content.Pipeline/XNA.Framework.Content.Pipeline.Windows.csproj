@@ -233,7 +233,6 @@
     <Compile Include="Graphics\AtcInterpolatedBitmapContent.cs" />
     <Compile Include="Graphics\BasicMaterialContent.cs" />
     <Compile Include="Graphics\BitmapContent.cs" />
-    <Compile Include="Graphics\Font\BitmapUtils.cs" />
     <Compile Include="Graphics\BoneContent.cs" />
     <Compile Include="Graphics\BoneWeight.cs" />
     <Compile Include="Graphics\BoneWeightCollection.cs" />

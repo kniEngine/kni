@@ -13,7 +13,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Graphics\Font\BitmapUtils.cs" />
     <Compile Include="Graphics\Font\CharacterRegion.cs" />
     <Compile Include="Graphics\Font\CharacterRegionTypeConverter.cs" />
     <Compile Include="Graphics\Font\Glyph.cs" />
