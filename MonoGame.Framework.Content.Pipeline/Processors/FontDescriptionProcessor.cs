@@ -236,16 +236,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static Dictionary<char, Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
-
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-
-            //			if (BitmapFileExtensions.Contains(fileExtension))
-            //			{
-            //				importer = new BitmapImporter();
-            //			}
-            //			else
-            //			{
             if (!TrueTypeFileExtensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
@@ -254,9 +245,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             
             // Validate.
             if (glyphs.Count == 0)
-            {
                 throw new Exception("Font does not contain any glyphs.");
-            }
 
             // Sort the glyphs
             glyphs = SortGlyphs(glyphs);
