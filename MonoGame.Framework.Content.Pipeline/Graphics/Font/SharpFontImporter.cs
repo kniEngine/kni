@@ -65,8 +65,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Attempts to instantiate the requested GDI+ font object.
         private Face CreateFontFace(Library sharpFontLib, FontDescription options, string fontName)
         {
-            try
-            {
                 const uint dpi = 96;
                 var face = sharpFontLib.NewFace(fontName, 0);
                 var fixedSize = ((int)options.Size) << 6;
@@ -79,11 +77,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 // A font substitution must have occurred.
                 //throw new Exception(string.Format("Can't find font '{0}'.", options.FontName));
-            }
-            catch
-            {
-                throw;
-            }
         }
 
         // Rasterizes a single character glyph.
