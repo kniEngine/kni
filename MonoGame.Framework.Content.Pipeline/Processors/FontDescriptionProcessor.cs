@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
+        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, out float lineSpacing, out int yOffsetMin, string fontName)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
@@ -283,15 +283,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             using (var face = sharpFontLib.NewFace(fontName, 0))
             {
                 const uint dpi = 96;
-                int fixedSize = ((int)options.Size) << 6;
+                int fixedSize = ((int)input.Size) << 6;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
-                if (face.FamilyName == "Microsoft Sans Serif" && options.FontName != "Microsoft Sans Serif")
-                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", options.FontName));
+                if (face.FamilyName == "Microsoft Sans Serif" && input.FontName != "Microsoft Sans Serif")
+                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
 
 
                 // Which characters do we want to include?
-                var characters = options.Characters;
+                var characters = input.Characters;
 
                 var glyphMaps = new Dictionary<uint, Glyph>();
                 var glyphs = new Dictionary<char,Glyph>();
