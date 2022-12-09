@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // Work out how big the output bitmap should be.
             int guessedWidth = GuessOutputWidth(sourceGlyphs);
-            var rectPacker = new MaxRectsBin(guessedWidth, 1024 * 16, GrowRule.Height);
+            var rectPacker = new MaxRectsBin(guessedWidth, 1024 * 2, GrowRule.Height);
 
             for (int i = 0; i < glyphs.Count; i++)
             {
@@ -116,8 +116,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             foreach (var glyph in sourceGlyphs)
             {
-                maxWidth = Math.Max(maxWidth, glyph.Bitmap.Width);
-                totalSize += glyph.Bitmap.Width * glyph.Bitmap.Height;
+                maxWidth = Math.Max(maxWidth, glyph.Bitmap.Width+2);
+                totalSize += (glyph.Bitmap.Width+2) * (glyph.Bitmap.Height+2);
             }
 
             int width = Math.Max((int)Math.Sqrt(totalSize), maxWidth);
