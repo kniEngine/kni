@@ -83,6 +83,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
 
                 var characters = new List<char>(input.Characters);
+                // add default character
+                if (input.DefaultCharacter != null)
+                {
+                    if (!characters.Contains(input.DefaultCharacter.Value))
+                        characters.Add(input.DefaultCharacter.Value);
+                }
                 characters.Sort();
 
                 float lineSpacing = 0f;
@@ -92,24 +98,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // Validate.
                 if (glyphs.Count == 0)
                     throw new Exception("Font does not contain any glyphs.");
-
-                // Check that the default character is part of the glyphs
-                if (input.DefaultCharacter != null)
-                {
-                    bool defaultCharacterFound = false;
-                    foreach (var glyph in glyphs)
-                    {
-                        if (glyph.Key == input.DefaultCharacter)
-                        {
-                            defaultCharacterFound = true;
-                            break;
-                        }
-                    }
-                    if (!defaultCharacterFound)
-                    {
-                        throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
-                    }
-                }
 
                 var glyphset = new HashSet<Glyph>(glyphs.Values);
 
