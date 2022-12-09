@@ -27,11 +27,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     internal class Glyph
     {
         // Constructor.
-        public Glyph(uint glyphIndex, BitmapContent bitmap, Rectangle? subrect = null)
+        public Glyph(uint glyphIndex, BitmapContent bitmap)
         {
             GlyphIndex = glyphIndex;
             Bitmap = bitmap;
-            Subrect = subrect.GetValueOrDefault(new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+            Subrect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             Width = bitmap.Width;
             Height = bitmap.Height;
         }
