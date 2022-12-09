@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private static Glyph[] ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
+        private static IEnumerable<Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            return glyphs.ToArray();
+            return glyphs;
         }
 
         private string FindFont(string name, string style)
