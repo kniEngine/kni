@@ -13,17 +13,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Graphics\Font\BitmapUtils.cs" />
     <Compile Include="Graphics\Font\CharacterRegion.cs" />
     <Compile Include="Graphics\Font\CharacterRegionTypeConverter.cs" />
     <Compile Include="Graphics\Font\Glyph.cs" />
-    <Compile Include="Graphics\Font\GlyphCropper.cs" />
     <Compile Include="Graphics\Font\GlyphPacker.cs" />
     <Compile Include="Graphics\Font\GrowRule.cs" />
-    <Compile Include="Graphics\Font\IFontImporter.cs" />
     <Compile Include="Graphics\Font\MaxRectsBin.cs" />    
     <Compile Include="Graphics\Font\MaxRectsHeuristic.cs" />
-    <Compile Include="Graphics\Font\SharpFontImporter.cs" />
   </ItemGroup>
   
   <ItemGroup>

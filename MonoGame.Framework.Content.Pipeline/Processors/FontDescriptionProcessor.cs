@@ -2,15 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using MonoGame.Framework.Utilities;
+using SharpFont;
 using Glyph = Microsoft.Xna.Framework.Content.Pipeline.Graphics.Glyph;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -32,6 +37,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public override SpriteFontContent Process(FontDescription input, ContentProcessorContext context)
         {
             var output = new SpriteFontContent(input);
+
             var fontFile = FindFont(input.FontName, input.Style.ToString());
 
             if (string.IsNullOrWhiteSpace(fontFile))
@@ -75,48 +81,46 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     throw new Exception(string.Format("Could not load {0}", fontFile));
                 }
-                var lineSpacing = 0f;
-                int yOffsetMin = 0;
-                var glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
 
-                var glyphData = new HashSet<GlyphData>(glyphs.Select(x => x.Data));
+                float lineSpacing = 0f;
+                int yOffsetMin = 0;
+                Dictionary<char, Glyph> glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
+
+                var glyphset = new HashSet<Glyph>(glyphs.Values);
 
                 // Optimize.
-                foreach (GlyphData glyph in glyphData)
+                foreach (Glyph glyph in glyphset)
                 {
-                    GlyphCropper.Crop(glyph);
+                    glyph.Crop();
                 }
 
                 // We need to know how to pack the glyphs.
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphData.ToArray(), requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(glyphset.ToArray(), requiresPot, requiresSquare);
 
                 // Adjust line and character spacing.
                 lineSpacing += input.Spacing;
                 output.VerticalLineSpacing = (int)lineSpacing;
 
-                foreach (Glyph glyph in glyphs)
+                foreach (KeyValuePair<char, Glyph> glyph in glyphs)
                 {
-                    output.CharacterMap.Add(glyph.Character);
+                    output.CharacterMap.Add(glyph.Key);
 
-                    var texRect = glyph.Data.Subrect;
+                    var texRect = glyph.Value.Subrect;
                     output.Glyphs.Add(texRect);
 
-                    var cropping = new Rectangle(0, (int)(glyph.Data.YOffset - yOffsetMin), (int)glyph.Data.XAdvance, output.VerticalLineSpacing);
+                    var cropping = new Rectangle(
+                        0, (int)(glyph.Value.YOffset - yOffsetMin),
+                        (int)glyph.Value.XAdvance, output.VerticalLineSpacing);
                     output.Cropping.Add(cropping);
 
                     // Set the optional character kerning.
                     if (input.UseKerning)
-                    {
-                        ABCFloat widths = glyph.Data.CharacterWidths;
-                        output.Kerning.Add(new Vector3(widths.A, widths.B, widths.C));
-                    }
+                        output.Kerning.Add(glyph.Value.CharacterWidths.ToVector3());
                     else
-                    {
                         output.Kerning.Add(new Vector3(0, texRect.Width, 0));
-                    }
                 }
 
                 output.Texture.Faces[0].Add(face);
@@ -167,67 +171,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
 
             return output;
-        }
-
-        private static Glyph[] ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
-        {
-            // Which importer knows how to read this source font?
-            IFontImporter importer;
-
-            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
-
-            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-
-            //			if (BitmapFileExtensions.Contains(fileExtension))
-            //			{
-            //				importer = new BitmapImporter();
-            //			}
-            //			else
-            //			{
-            if (!TrueTypeFileExtensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
-
-            importer = new SharpFontImporter();
-
-            // Import the source font data.
-            importer.Import(options, fontName);
-
-            lineSpacing = importer.LineSpacing;
-            yOffsetMin = importer.YOffsetMin;
-
-            // Get all glyphs
-            var glyphs = new List<Glyph>(importer.Glyphs);
-
-            // Validate.
-            if (glyphs.Count == 0)
-            {
-                throw new Exception("Font does not contain any glyphs.");
-            }
-
-            // Sort the glyphs
-            glyphs.Sort((left, right) => left.Character.CompareTo(right.Character));
-
-
-            // Check that the default character is part of the glyphs
-            if (options.DefaultCharacter != null)
-            {
-                bool defaultCharacterFound = false;
-                foreach (var glyph in glyphs)
-                {
-                    if (glyph.Character == options.DefaultCharacter)
-                    {
-                        defaultCharacterFound = true;
-                        break;
-                    }
-                }
-                if (!defaultCharacterFound)
-                {
-                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
-                }
-            }
-
-            return glyphs.ToArray();
         }
 
         private string FindFont(string name, string style)
@@ -289,5 +232,206 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return String.Empty;
         }
+
+        private static Dictionary<char, Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
+        {
+            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
+
+            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
+
+            //			if (BitmapFileExtensions.Contains(fileExtension))
+            //			{
+            //				importer = new BitmapImporter();
+            //			}
+            //			else
+            //			{
+            if (!TrueTypeFileExtensions.Contains(fileExtension))
+                throw new PipelineException("Unknown file extension " + fileExtension);
+
+            // Import the source font data.
+            Dictionary<char, Glyph> glyphs = ImportGlyphs(options, out lineSpacing, out yOffsetMin, fontName);
+            
+            // Validate.
+            if (glyphs.Count == 0)
+            {
+                throw new Exception("Font does not contain any glyphs.");
+            }
+
+            // Sort the glyphs
+            glyphs = SortGlyphs(glyphs);
+
+            // Check that the default character is part of the glyphs
+            if (options.DefaultCharacter != null)
+            {
+                bool defaultCharacterFound = false;
+                foreach (var glyph in glyphs)
+                {
+                    if (glyph.Key == options.DefaultCharacter)
+                    {
+                        defaultCharacterFound = true;
+                        break;
+                    }
+                }
+                if (!defaultCharacterFound)
+                {
+                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
+                }
+            }
+
+            return glyphs;
+        }
+
+        private static Dictionary<char, Glyph> SortGlyphs(Dictionary<char, Glyph> glyphs)
+        {
+            var chars = new List<char>(glyphs.Keys);
+            chars.Sort((left, right) => left.CompareTo(right));
+
+            Dictionary<char, Glyph> shortedGlyphs = new Dictionary<char, Glyph>();
+            foreach (var key in chars)
+                shortedGlyphs.Add(key, glyphs[key]);
+
+            return shortedGlyphs;
+        }
+
+
+        // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
+        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
+        {
+            using (Library sharpFontLib = new Library())
+            using (var face = sharpFontLib.NewFace(fontName, 0))
+            {
+                const uint dpi = 96;
+                int fixedSize = ((int)options.Size) << 6;
+                face.SetCharSize(0, fixedSize, dpi, dpi);
+
+                if (face.FamilyName == "Microsoft Sans Serif" && options.FontName != "Microsoft Sans Serif")
+                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", options.FontName));
+
+
+                // Which characters do we want to include?
+                var characters = options.Characters;
+
+                var glyphMaps = new Dictionary<uint, Glyph>();
+                var glyphs = new Dictionary<char,Glyph>();
+
+                // Rasterize each character in turn.
+                foreach (char character in characters)
+                {
+                    uint glyphIndex = face.GetCharIndex(character);
+                    if (!glyphMaps.TryGetValue(glyphIndex, out Glyph glyph))
+                    {
+                        glyph = ImportGlyph(glyphIndex, face);
+                        glyphMaps.Add(glyphIndex, glyph);
+                    }
+
+                    glyphs.Add(character, glyph);
+                }
+
+                // Store the font height.
+                lineSpacing = face.Size.Metrics.Height >> 6;
+
+                // The height used to calculate the Y offset for each character.
+                yOffsetMin = -face.Size.Metrics.Ascender >> 6;
+
+                return glyphs;
+            }
+        }
+
+        // Rasterizes a single character glyph.
+        private static Glyph ImportGlyph(uint glyphIndex, Face face)
+        {
+            face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+            face.Glyph.RenderGlyph(RenderMode.Normal);
+
+            // Render the character.
+            BitmapContent glyphBitmap = null;
+            if (face.Glyph.Bitmap.Width > 0 && face.Glyph.Bitmap.Rows > 0)
+            {
+                glyphBitmap = new PixelBitmapContent<byte>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                byte[] gpixelAlphas = new byte[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
+                //if the character bitmap has 1bpp we have to expand the buffer data to get the 8bpp pixel data
+                //each byte in bitmap.bufferdata contains the value of to 8 pixels in the row
+                //if bitmap is of width 10, each row has 2 bytes with 10 valid bits, and the last 6 bits of 2nd byte must be discarded
+                if (face.Glyph.Bitmap.PixelMode == PixelMode.Mono)
+                {
+                    //variables needed for the expansion, amount of written data, length of the data to write
+                    int written = 0, length = face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows;
+                    for (int i = 0; written < length; i++)
+                    {
+                        //width in pixels of each row
+                        int width = face.Glyph.Bitmap.Width;
+                        while (width > 0)
+                        {
+                            //valid data in the current byte
+                            int stride = MathHelper.Min(8, width);
+                            //copy the valid bytes to pixeldata
+                            //System.Array.Copy(ExpandByte(face.Glyph.Bitmap.BufferData[i]), 0, gpixelAlphas, written, stride);
+                            ExpandByteAndCopy(face.Glyph.Bitmap.BufferData[i], stride, gpixelAlphas, written);
+                            written += stride;
+                            width -= stride;
+                            if (width > 0)
+                                i++;
+                        }
+                    }
+                }
+                else
+                    Marshal.Copy(face.Glyph.Bitmap.Buffer, gpixelAlphas, 0, gpixelAlphas.Length);
+                glyphBitmap.SetPixelData(gpixelAlphas);
+            }
+
+            if (glyphBitmap == null)
+            {
+                var gHA = face.Glyph.Metrics.HorizontalAdvance >> 6;
+                var gVA = face.Size.Metrics.Height >> 6;
+
+                gHA = gHA > 0 ? gHA : gVA;
+                gVA = gVA > 0 ? gVA : gHA;
+
+                glyphBitmap = new PixelBitmapContent<byte>(gHA, gVA);
+            }
+
+            // not sure about this at all
+            var abc = new ABCFloat();
+            abc.A = face.Glyph.Metrics.HorizontalBearingX >> 6;
+            abc.B = face.Glyph.Metrics.Width >> 6;
+            abc.C = (face.Glyph.Metrics.HorizontalAdvance >> 6) - (abc.A + abc.B);
+            abc.A -= face.Glyph.BitmapLeft;
+            abc.B += face.Glyph.BitmapLeft;
+
+            // Construct the output Glyph object.
+            return new Glyph(glyphIndex, glyphBitmap)
+            {
+                XOffset = -(face.Glyph.Advance.X >> 6),
+                XAdvance = face.Glyph.Metrics.HorizontalAdvance >> 6,
+                YOffset = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
+                CharacterWidths = abc
+            };
+        }
+
+        /// <summary>
+        /// Reads each individual bit of a byte from left to right and expands it to a full byte, 
+        /// ones get byte.maxvalue, and zeros get byte.minvalue.
+        /// </summary>
+        /// <param name="origin">Byte to expand and copy</param>
+        /// <param name="length">Number of Bits of the Byte to copy, from 1 to 8</param>
+        /// <param name="destination">Byte array where to copy the results</param>
+        /// <param name="startIndex">Position where to begin copying the results in destination</param>
+        private static void ExpandByteAndCopy(byte origin, int length, byte[] destination, int startIndex)
+        {
+            byte tmp;
+            for (int i = 7; i > 7 - length; i--)
+            {
+                tmp = (byte)(1 << i);
+                if (origin / tmp == 1)
+                {
+                    destination[startIndex + 7 - i] = byte.MaxValue;
+                    origin -= tmp;
+                }
+                else
+                    destination[startIndex + 7 - i] = byte.MinValue;
+            }
+        }
+
     }
 }

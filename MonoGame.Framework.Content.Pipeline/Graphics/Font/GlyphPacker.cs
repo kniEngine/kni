@@ -2,15 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
     // Helper for arranging many small bitmaps onto a single larger surface.
     internal static class GlyphPacker
     {
-        public static BitmapContent ArrangeGlyphs(GlyphData[] sourceGlyphs, bool requirePOT, bool requireSquare)
+        public static BitmapContent ArrangeGlyphs(Glyph[] sourceGlyphs, bool requirePOT, bool requireSquare)
         {
             // Build up a list of all the glyphs needing to be arranged.
             var glyphs = new List<ArrangedGlyph>();
@@ -80,7 +83,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Internal helper class keeps track of a glyph while it is being arranged.
         class ArrangedGlyph
         {
-            public GlyphData Source;
+            public Glyph Source;
 
             public int X;
             public int Y;
@@ -106,7 +109,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
 
         // Heuristic guesses what might be a good output width for a list of glyphs.
-        static int GuessOutputWidth(GlyphData[] sourceGlyphs)
+        static int GuessOutputWidth(Glyph[] sourceGlyphs)
         {
             int maxWidth = 0;
             int totalSize = 0;
