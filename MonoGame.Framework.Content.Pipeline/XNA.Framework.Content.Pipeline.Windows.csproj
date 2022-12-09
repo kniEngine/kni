@@ -278,7 +278,6 @@
     <Compile Include="Graphics\PvrtcRgb4BitmapContent.cs" />
     <Compile Include="Graphics\PvrtcRgba2BitmapContent.cs" />
     <Compile Include="Graphics\PvrtcRgba4BitmapContent.cs" />
-    <Compile Include="Graphics\Font\SharpFontImporter.cs" />
     <Compile Include="Graphics\SkinnedMaterialContent.cs" />
     <Compile Include="Graphics\Texture2DContent.cs" />
     <Compile Include="Graphics\Texture3DContent.cs" />

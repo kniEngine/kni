@@ -22,7 +22,6 @@
     <Compile Include="Graphics\Font\GrowRule.cs" />
     <Compile Include="Graphics\Font\MaxRectsBin.cs" />    
     <Compile Include="Graphics\Font\MaxRectsHeuristic.cs" />
-    <Compile Include="Graphics\Font\SharpFontImporter.cs" />
   </ItemGroup>
   
   <ItemGroup>
