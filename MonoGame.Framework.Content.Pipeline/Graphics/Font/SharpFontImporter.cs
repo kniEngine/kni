@@ -25,51 +25,45 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public void Import(FontDescription options, string fontName)
         {
             using (Library sharpFontLib = new Library())
+            using (var face = sharpFontLib.NewFace(fontName, 0))
             {
-                using (var face = CreateFontFace(sharpFontLib, options, fontName))
-                {
-                    // Which characters do we want to include?
-                    var characters = options.Characters;
-
-                    var glyphList = new List<Glyph>();
-                    var glyphMaps = new Dictionary<uint, GlyphData>();
-
-                    // Rasterize each character in turn.
-                    foreach (char character in characters)
-                    {
-                        uint glyphIndex = face.GetCharIndex(character);
-                        if (!glyphMaps.TryGetValue(glyphIndex, out GlyphData glyphData))
-                        {
-                            glyphData = ImportGlyph(glyphIndex, face);
-                            glyphMaps.Add(glyphIndex, glyphData);
-                        }
-
-                        var glyph = new Glyph(character, glyphData);
-                        glyphList.Add(glyph);
-                    }
-                    Glyphs = glyphList;
-
-                    // Store the font height.
-                    LineSpacing = face.Size.Metrics.Height >> 6;
-
-                    // The height used to calculate the Y offset for each character.
-                    YOffsetMin = -face.Size.Metrics.Ascender >> 6;
-                }
-            }
-        }
-
-        private Face CreateFontFace(Library sharpFontLib, FontDescription options, string fontName)
-        {
                 const uint dpi = 96;
-                var face = sharpFontLib.NewFace(fontName, 0);
-                var fixedSize = ((int)options.Size) << 6;
+                int fixedSize = ((int)options.Size) << 6;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
                 if (face.FamilyName == "Microsoft Sans Serif" && options.FontName != "Microsoft Sans Serif")
                     throw new PipelineException(string.Format("Font {0} is not installed on this computer.", options.FontName));
 
-                return face;
+
+                // Which characters do we want to include?
+                var characters = options.Characters;
+
+                var glyphList = new List<Glyph>();
+                var glyphMaps = new Dictionary<uint, GlyphData>();
+
+                // Rasterize each character in turn.
+                foreach (char character in characters)
+                {
+                    uint glyphIndex = face.GetCharIndex(character);
+                    if (!glyphMaps.TryGetValue(glyphIndex, out GlyphData glyphData))
+                    {
+                        glyphData = ImportGlyph(glyphIndex, face);
+                        glyphMaps.Add(glyphIndex, glyphData);
+                    }
+
+                    var glyph = new Glyph(character, glyphData);
+                    glyphList.Add(glyph);
+                }
+                Glyphs = glyphList;
+
+                // Store the font height.
+                LineSpacing = face.Size.Metrics.Height >> 6;
+
+                // The height used to calculate the Y offset for each character.
+                YOffsetMin = -face.Size.Metrics.Ascender >> 6;
+            }
         }
+
 
         // Rasterizes a single character glyph.
         private GlyphData ImportGlyph(uint glyphIndex, Face face)
