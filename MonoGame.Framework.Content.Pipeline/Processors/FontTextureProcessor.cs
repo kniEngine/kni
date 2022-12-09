@@ -2,11 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -34,9 +37,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return (char)(((int)FirstCharacter) + index);
         }
 
-        private List<GlyphData> ExtractGlyphs(PixelBitmapContent<Color> bitmap)
+        private List<Glyph> ExtractGlyphs(PixelBitmapContent<Color> bitmap)
         {
-            var glyphs = new List<GlyphData>();
+            var glyphs = new List<Glyph>();
             var regions = new List<Rectangle>();
             for (int y = 0; y < bitmap.Height; y++)
             {
@@ -78,7 +81,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var rect = regions[i];
                 var newBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
                 BitmapContent.Copy(bitmap, rect, newBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
-                var glyphData = new GlyphData((uint)i, newBitmap);
+                var glyphData = new Glyph((uint)i, newBitmap);
                 glyphData.CharacterWidths.B = glyphData.Bitmap.Width;
                 glyphs.Add(glyphData);
                 //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);

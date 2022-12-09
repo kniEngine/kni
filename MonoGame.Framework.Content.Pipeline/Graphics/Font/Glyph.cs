@@ -2,7 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System.Runtime.InteropServices;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -17,23 +20,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Represents a single character within a font.
     internal class Glyph
     {
-        // Unicode codepoint.
-        public char Character;
-        // Image and layout data
-        public GlyphData Data;
-
         // Constructor.
-        public Glyph(char character, GlyphData data)
-        {
-            Character = character;
-            Data = data;
-        }
-    }
-
-    internal class GlyphData
-    {
-        // Constructor.
-        public GlyphData(uint glyphIndex, BitmapContent bitmap, Rectangle? subrect = null)
+        public Glyph(uint glyphIndex, BitmapContent bitmap, Rectangle? subrect = null)
         {
             GlyphIndex = glyphIndex;
             Bitmap = bitmap;

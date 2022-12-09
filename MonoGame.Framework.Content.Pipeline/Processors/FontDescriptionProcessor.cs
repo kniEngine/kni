@@ -86,10 +86,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 int yOffsetMin = 0;
                 Dictionary<char, Glyph> glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
 
-                var glyphData = new HashSet<GlyphData>(glyphs.Values.Select(x => x.Data));
+                var glyphset = new HashSet<Glyph>(glyphs.Values);
 
                 // Optimize.
-                foreach (GlyphData glyph in glyphData)
+                foreach (Glyph glyph in glyphset)
                 {
                     GlyphCropper.Crop(glyph);
                 }
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphData.ToArray(), requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(glyphset.ToArray(), requiresPot, requiresSquare);
 
                 // Adjust line and character spacing.
                 lineSpacing += input.Spacing;
@@ -108,16 +108,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     output.CharacterMap.Add(glyph.Key);
 
-                    var texRect = glyph.Value.Data.Subrect;
+                    var texRect = glyph.Value.Subrect;
                     output.Glyphs.Add(texRect);
 
-                    var cropping = new Rectangle(0, (int)(glyph.Value.Data.YOffset - yOffsetMin), (int)glyph.Value.Data.XAdvance, output.VerticalLineSpacing);
+                    var cropping = new Rectangle(0, (int)(glyph.Value.YOffset - yOffsetMin), (int)glyph.Value.XAdvance, output.VerticalLineSpacing);
                     output.Cropping.Add(cropping);
 
                     // Set the optional character kerning.
                     if (input.UseKerning)
                     {
-                        ABCFloat widths = glyph.Value.Data.CharacterWidths;
+                        ABCFloat widths = glyph.Value.CharacterWidths;
                         output.Kerning.Add(new Vector3(widths.A, widths.B, widths.C));
                     }
                     else
@@ -315,20 +315,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // Which characters do we want to include?
                 var characters = options.Characters;
 
-                var glyphMaps = new Dictionary<uint, GlyphData>();
+                var glyphMaps = new Dictionary<uint, Glyph>();
                 var glyphs = new Dictionary<char,Glyph>();
 
                 // Rasterize each character in turn.
                 foreach (char character in characters)
                 {
                     uint glyphIndex = face.GetCharIndex(character);
-                    if (!glyphMaps.TryGetValue(glyphIndex, out GlyphData glyphData))
+                    if (!glyphMaps.TryGetValue(glyphIndex, out Glyph glyph))
                     {
-                        glyphData = ImportGlyph(glyphIndex, face);
-                        glyphMaps.Add(glyphIndex, glyphData);
+                        glyph = ImportGlyph(glyphIndex, face);
+                        glyphMaps.Add(glyphIndex, glyph);
                     }
 
-                    glyphs.Add(character, new Glyph(character, glyphData));
+                    glyphs.Add(character, glyph);
                 }
 
                 // Store the font height.
@@ -342,7 +342,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private static GlyphData ImportGlyph(uint glyphIndex, Face face)
+        private static Glyph ImportGlyph(uint glyphIndex, Face face)
         {
             face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
             face.Glyph.RenderGlyph(RenderMode.Normal);
@@ -403,7 +403,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             abc.B += face.Glyph.BitmapLeft;
 
             // Construct the output Glyph object.
-            return new GlyphData(glyphIndex, glyphBitmap)
+            return new Glyph(glyphIndex, glyphBitmap)
             {
                 XOffset = -(face.Glyph.Advance.X >> 6),
                 XAdvance = face.Glyph.Metrics.HorizontalAdvance >> 6,
