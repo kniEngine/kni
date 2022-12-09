@@ -2,10 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using SharpFont;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -22,62 +25,50 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Size of the temp surface used for GDI+ rasterization.
         const int MaxGlyphSize = 1024;
 
-        Library lib = null;
-
         public void Import(FontDescription options, string fontName)
         {
-            lib = new Library();
-            // Create a bunch of GDI+ objects.
-            var face = CreateFontFace(options, fontName);
-            try
+            using (Library sharpFontLib = new Library())
             {
-                // Which characters do we want to include?
-                var characters = options.Characters;
-
-                var glyphList = new List<Glyph>();
-                var glyphMaps = new Dictionary<uint, GlyphData>();
-
-                // Rasterize each character in turn.
-                foreach (char character in characters)
+                // Create a bunch of GDI+ objects.
+                using (var face = CreateFontFace(sharpFontLib, options, fontName))
                 {
-                    uint glyphIndex = face.GetCharIndex(character);
-                    if (!glyphMaps.TryGetValue(glyphIndex, out GlyphData glyphData))
+                    // Which characters do we want to include?
+                    var characters = options.Characters;
+
+                    var glyphList = new List<Glyph>();
+                    var glyphMaps = new Dictionary<uint, GlyphData>();
+
+                    // Rasterize each character in turn.
+                    foreach (char character in characters)
                     {
-                        glyphData = ImportGlyph(glyphIndex, face);
-                        glyphMaps.Add(glyphIndex, glyphData);
+                        uint glyphIndex = face.GetCharIndex(character);
+                        if (!glyphMaps.TryGetValue(glyphIndex, out GlyphData glyphData))
+                        {
+                            glyphData = ImportGlyph(glyphIndex, face);
+                            glyphMaps.Add(glyphIndex, glyphData);
+                        }
+
+                        var glyph = new Glyph(character, glyphData);
+                        glyphList.Add(glyph);
                     }
+                    Glyphs = glyphList;
 
-                    var glyph = new Glyph(character, glyphData);
-                    glyphList.Add(glyph);
-                }
-                Glyphs = glyphList;
+                    // Store the font height.
+                    LineSpacing = face.Size.Metrics.Height >> 6;
 
-                // Store the font height.
-                LineSpacing = face.Size.Metrics.Height >> 6;
-
-                // The height used to calculate the Y offset for each character.
-                YOffsetMin = -face.Size.Metrics.Ascender >> 6;
-            }
-            finally
-            {
-                if (face != null)
-                    face.Dispose();
-                if (lib != null)
-                {
-                    lib.Dispose();
-                    lib = null;
+                    // The height used to calculate the Y offset for each character.
+                    YOffsetMin = -face.Size.Metrics.Ascender >> 6;
                 }
             }
         }
 
-
         // Attempts to instantiate the requested GDI+ font object.
-        private Face CreateFontFace(FontDescription options, string fontName)
+        private Face CreateFontFace(Library sharpFontLib, FontDescription options, string fontName)
         {
             try
             {
                 const uint dpi = 96;
-                var face = lib.NewFace(fontName, 0);
+                var face = sharpFontLib.NewFace(fontName, 0);
                 var fixedSize = ((int)options.Size) << 6;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
