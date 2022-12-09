@@ -73,8 +73,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 output.CharacterMap.Add(GetCharacterForIndex((int)glyph.GlyphIndex));
                 output.Glyphs.Add(new Rectangle(glyph.Subrect.X, glyph.Subrect.Y, glyph.Subrect.Width, glyph.Subrect.Height));
                 output.Cropping.Add(new Rectangle((int)glyph.XOffset, (int)glyph.YOffset, glyph.Width, glyph.Height));
-                var abc = glyph.CharacterWidths;
-                output.Kerning.Add(new Vector3(abc.A, abc.B, abc.C));
+                output.Kerning.Add(glyph.CharacterWidths.ToVector3());
             }
 
             output.Texture.Faces[0].Add(face);

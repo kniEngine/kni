@@ -116,14 +116,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     // Set the optional character kerning.
                     if (input.UseKerning)
-                    {
-                        ABCFloat widths = glyph.Value.CharacterWidths;
-                        output.Kerning.Add(new Vector3(widths.A, widths.B, widths.C));
-                    }
+                        output.Kerning.Add(glyph.Value.CharacterWidths.ToVector3());
                     else
-                    {
                         output.Kerning.Add(new Vector3(0, texRect.Width, 0));
-                    }
                 }
 
                 output.Texture.Faces[0].Add(face);

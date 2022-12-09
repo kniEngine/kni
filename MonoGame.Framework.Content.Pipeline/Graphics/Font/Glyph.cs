@@ -10,11 +10,16 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct ABCFloat
+    internal struct ABCFloat
     {
         public float A;
         public float B;
         public float C;
+
+        public Vector3 ToVector3()
+        {
+            return new Vector3(A, B, C);
+        }
     }
 
     // Represents a single character within a font.
