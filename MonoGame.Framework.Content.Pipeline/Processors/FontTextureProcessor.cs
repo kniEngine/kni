@@ -32,62 +32,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             PremultiplyAlpha = true;
         }
 
-        protected virtual char GetCharacterForIndex(int index)
-        {
-            return (char)(((int)FirstCharacter) + index);
-        }
-
-        private List<Glyph> ExtractGlyphs(PixelBitmapContent<Color> bitmap)
-        {
-            var glyphs = new List<Glyph>();
-            var regions = new List<Rectangle>();
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                for (int x = 0; x < bitmap.Width; x++)
-                {
-                    if (bitmap.GetPixel(x, y) != transparentPixel)
-                    {
-                        // if we don't have a region that has this pixel already
-                        var re = regions.Find(r =>
-                        {
-                            return r.Contains(x, y);
-                        });
-                        if (re == Rectangle.Empty)
-                        {
-                            // we have found the top, left of a image. 
-                            // we now need to scan for the 'bounds'
-                            int top = y;
-                            int bottom = y;
-                            int left = x;
-                            int right = x;
-                            while (bitmap.GetPixel(right, bottom) != transparentPixel)
-                                right++;
-                            while (bitmap.GetPixel(left, bottom) != transparentPixel)
-                                bottom++;
-                            // we got a glyph :)
-                            regions.Add(new Rectangle(left, top, right - left, bottom - top));
-                            x = right;
-                        }
-                        else
-                        {
-                            x += re.Width;
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < regions.Count; i++)
-            {
-                var rect = regions[i];
-                var newBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
-                BitmapContent.Copy(bitmap, rect, newBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
-                var glyphData = new Glyph((uint)i, newBitmap);
-                glyphData.CharacterWidths.B = glyphData.Bitmap.Width;
-                glyphs.Add(glyphData);
-                //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
-            }
-            return glyphs;
-        }
 
         public override SpriteFontContent Process(Texture2DContent input, ContentProcessorContext context)
         {
@@ -163,6 +107,64 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
 
             return output;
+        }
+
+
+        protected virtual char GetCharacterForIndex(int index)
+        {
+            return (char)(((int)FirstCharacter) + index);
+        }
+
+        private List<Glyph> ExtractGlyphs(PixelBitmapContent<Color> bitmap)
+        {
+            var glyphs = new List<Glyph>();
+            var regions = new List<Rectangle>();
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    if (bitmap.GetPixel(x, y) != transparentPixel)
+                    {
+                        // if we don't have a region that has this pixel already
+                        var re = regions.Find(r =>
+                        {
+                            return r.Contains(x, y);
+                        });
+                        if (re == Rectangle.Empty)
+                        {
+                            // we have found the top, left of a image. 
+                            // we now need to scan for the 'bounds'
+                            int top = y;
+                            int bottom = y;
+                            int left = x;
+                            int right = x;
+                            while (bitmap.GetPixel(right, bottom) != transparentPixel)
+                                right++;
+                            while (bitmap.GetPixel(left, bottom) != transparentPixel)
+                                bottom++;
+                            // we got a glyph :)
+                            regions.Add(new Rectangle(left, top, right - left, bottom - top));
+                            x = right;
+                        }
+                        else
+                        {
+                            x += re.Width;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < regions.Count; i++)
+            {
+                var rect = regions[i];
+                var newBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
+                BitmapContent.Copy(bitmap, rect, newBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
+                var glyphData = new Glyph((uint)i, newBitmap);
+                glyphData.CharacterWidths.B = glyphData.Bitmap.Width;
+                glyphs.Add(glyphData);
+                //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
+            }
+            return glyphs;
         }
     }
 }
