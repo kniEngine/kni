@@ -22,14 +22,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public int YOffsetMin { get; private set; }
 
-        // Size of the temp surface used for GDI+ rasterization.
-        const int MaxGlyphSize = 1024;
-
         public void Import(FontDescription options, string fontName)
         {
             using (Library sharpFontLib = new Library())
             {
-                // Create a bunch of GDI+ objects.
                 using (var face = CreateFontFace(sharpFontLib, options, fontName))
                 {
                     // Which characters do we want to include?
@@ -62,7 +58,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
         }
 
-        // Attempts to instantiate the requested GDI+ font object.
         private Face CreateFontFace(Library sharpFontLib, FontDescription options, string fontName)
         {
                 const uint dpi = 96;
@@ -74,9 +69,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new PipelineException(string.Format("Font {0} is not installed on this computer.", options.FontName));
 
                 return face;
-
-                // A font substitution must have occurred.
-                //throw new Exception(string.Format("Can't find font '{0}'.", options.FontName));
         }
 
         // Rasterizes a single character glyph.
