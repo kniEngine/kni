@@ -185,16 +185,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!TrueTypeFileExtensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
-            SharpFontImporter importer = new SharpFontImporter();
+            SharpFontProcessor sfProcessor = new SharpFontProcessor();
 
             // Import the source font data.
-            importer.Import(options, fontName);
+            sfProcessor.Import(options, fontName);
 
-            lineSpacing = importer.LineSpacing;
-            yOffsetMin = importer.YOffsetMin;
+            lineSpacing = sfProcessor.LineSpacing;
+            yOffsetMin = sfProcessor.YOffsetMin;
 
             // Get all glyphs
-            var glyphs = new List<Glyph>(importer.Glyphs);
+            var glyphs = new List<Glyph>(sfProcessor.Glyphs);
 
             // Validate.
             if (glyphs.Count == 0)

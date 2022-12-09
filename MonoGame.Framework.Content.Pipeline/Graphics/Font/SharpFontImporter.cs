@@ -13,7 +13,7 @@ using SharpFont;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
     // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-    internal class SharpFontImporter
+    internal class SharpFontProcessor
     {
         // Properties hold the imported font data.
         public IEnumerable<Glyph> Glyphs { get; private set; }
