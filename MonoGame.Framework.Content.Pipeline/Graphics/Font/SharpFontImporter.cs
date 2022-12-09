@@ -18,11 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Properties hold the imported font data.
         public IEnumerable<Glyph> Glyphs { get; private set; }
 
-        public float LineSpacing { get; private set; }
-
-        public int YOffsetMin { get; private set; }
-
-        public void Import(FontDescription options, string fontName)
+        public void Import(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
         {
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
@@ -57,16 +53,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 Glyphs = glyphList;
 
                 // Store the font height.
-                LineSpacing = face.Size.Metrics.Height >> 6;
+                lineSpacing = face.Size.Metrics.Height >> 6;
 
                 // The height used to calculate the Y offset for each character.
-                YOffsetMin = -face.Size.Metrics.Ascender >> 6;
+                yOffsetMin = -face.Size.Metrics.Ascender >> 6;
             }
         }
 
 
         // Rasterizes a single character glyph.
-        private GlyphData ImportGlyph(uint glyphIndex, Face face)
+        private static GlyphData ImportGlyph(uint glyphIndex, Face face)
         {
             face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
             face.Glyph.RenderGlyph(RenderMode.Normal);

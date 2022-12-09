@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +13,7 @@ using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using MonoGame.Framework.Utilities;
 using Glyph = Microsoft.Xna.Framework.Content.Pipeline.Graphics.Glyph;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -76,7 +79,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     throw new Exception(string.Format("Could not load {0}", fontFile));
                 }
-                var lineSpacing = 0f;
+
+                float lineSpacing = 0f;
                 int yOffsetMin = 0;
                 var glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
 
@@ -189,10 +193,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             SharpFontProcessor sfProcessor = new SharpFontProcessor();
 
             // Import the source font data.
-            sfProcessor.Import(options, fontName);
-
-            lineSpacing = sfProcessor.LineSpacing;
-            yOffsetMin = sfProcessor.YOffsetMin;
+            sfProcessor.Import(options, out lineSpacing, out yOffsetMin, fontName);
 
             // Get all glyphs
             var glyphs = new List<Glyph>(sfProcessor.Glyphs);
