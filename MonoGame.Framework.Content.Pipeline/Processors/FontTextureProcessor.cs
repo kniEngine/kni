@@ -56,6 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             foreach (var glyph in glyphs)
             {
                 GlyphCropper.Crop(glyph);
+
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
             }
 
@@ -71,8 +72,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             foreach (var glyph in glyphs)
             {
                 output.CharacterMap.Add(GetCharacterForIndex((int)glyph.GlyphIndex));
-                output.Glyphs.Add(new Rectangle(glyph.Subrect.X, glyph.Subrect.Y, glyph.Subrect.Width, glyph.Subrect.Height));
-                output.Cropping.Add(new Rectangle((int)glyph.XOffset, (int)glyph.YOffset, glyph.Width, glyph.Height));
+
+                var texRect = glyph.Subrect;
+                output.Glyphs.Add(texRect);
+
+                var cropping = new Rectangle(
+                    (int)glyph.XOffset, (int)glyph.YOffset,
+                    glyph.Width, glyph.Height);
+                output.Cropping.Add(cropping);
+
                 output.Kerning.Add(glyph.CharacterWidths.ToVector3());
             }
 
