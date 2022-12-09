@@ -174,58 +174,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private static IEnumerable<Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
-        {
-            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
-
-            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-
-            //			if (BitmapFileExtensions.Contains(fileExtension))
-            //			{
-            //				importer = new BitmapImporter();
-            //			}
-            //			else
-            //			{
-            if (!TrueTypeFileExtensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
-
-            SharpFontProcessor sfProcessor = new SharpFontProcessor();
-
-            // Import the source font data.
-            List<Glyph> glyphs = sfProcessor.Import(options, out lineSpacing, out yOffsetMin, fontName);
-            
-            // Validate.
-            if (glyphs.Count == 0)
-            {
-                throw new Exception("Font does not contain any glyphs.");
-            }
-
-            // Sort the glyphs
-            glyphs.Sort((left, right) => left.Character.CompareTo(right.Character));
-
-
-            // Check that the default character is part of the glyphs
-            if (options.DefaultCharacter != null)
-            {
-                bool defaultCharacterFound = false;
-                foreach (var glyph in glyphs)
-                {
-                    if (glyph.Character == options.DefaultCharacter)
-                    {
-                        defaultCharacterFound = true;
-                        break;
-                    }
-                }
-                if (!defaultCharacterFound)
-                {
-                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
-                }
-            }
-
-            return glyphs;
-        }
-
         private string FindFont(string name, string style)
         {
             if (CurrentPlatform.OS == OS.Windows)
@@ -285,5 +233,58 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return String.Empty;
         }
+
+        private static IEnumerable<Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
+        {
+            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
+
+            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
+
+            //			if (BitmapFileExtensions.Contains(fileExtension))
+            //			{
+            //				importer = new BitmapImporter();
+            //			}
+            //			else
+            //			{
+            if (!TrueTypeFileExtensions.Contains(fileExtension))
+                throw new PipelineException("Unknown file extension " + fileExtension);
+
+            SharpFontProcessor sfProcessor = new SharpFontProcessor();
+
+            // Import the source font data.
+            List<Glyph> glyphs = sfProcessor.Import(options, out lineSpacing, out yOffsetMin, fontName);
+            
+            // Validate.
+            if (glyphs.Count == 0)
+            {
+                throw new Exception("Font does not contain any glyphs.");
+            }
+
+            // Sort the glyphs
+            glyphs.Sort((left, right) => left.Character.CompareTo(right.Character));
+
+
+            // Check that the default character is part of the glyphs
+            if (options.DefaultCharacter != null)
+            {
+                bool defaultCharacterFound = false;
+                foreach (var glyph in glyphs)
+                {
+                    if (glyph.Character == options.DefaultCharacter)
+                    {
+                        defaultCharacterFound = true;
+                        break;
+                    }
+                }
+                if (!defaultCharacterFound)
+                {
+                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
+                }
+            }
+
+            return glyphs;
+        }
+
     }
 }
