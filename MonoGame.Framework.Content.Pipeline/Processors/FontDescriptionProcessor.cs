@@ -83,6 +83,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
 
                 var characters = new List<char>(input.Characters);
+                characters.Sort();
 
                 float lineSpacing = 0f;
                 int yOffsetMin = 0;
@@ -91,9 +92,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // Validate.
                 if (glyphs.Count == 0)
                     throw new Exception("Font does not contain any glyphs.");
-
-                // Sort the glyphs
-                glyphs = SortGlyphs(glyphs);
 
                 // Check that the default character is part of the glyphs
                 if (input.DefaultCharacter != null)
@@ -259,19 +257,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return String.Empty;
         }
-
-        private static Dictionary<char, Glyph> SortGlyphs(Dictionary<char, Glyph> glyphs)
-        {
-            var chars = new List<char>(glyphs.Keys);
-            chars.Sort((left, right) => left.CompareTo(right));
-
-            Dictionary<char, Glyph> shortedGlyphs = new Dictionary<char, Glyph>();
-            foreach (var key in chars)
-                shortedGlyphs.Add(key, glyphs[key]);
-
-            return shortedGlyphs;
-        }
-
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
         private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int yOffsetMin, string fontName)
