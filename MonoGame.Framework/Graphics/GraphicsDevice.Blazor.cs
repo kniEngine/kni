@@ -676,7 +676,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyBlend()
         {
-            _actualBlendState.PlatformApplyState(this);
+            if (_blendStateDirty)            
+            {
+                _actualBlendState.PlatformApplyState(this);
+                _blendStateDirty = false;
+            }
 
             if (_blendFactorDirty)
             {
