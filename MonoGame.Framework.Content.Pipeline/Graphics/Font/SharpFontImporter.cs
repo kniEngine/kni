@@ -15,10 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
     internal class SharpFontProcessor
     {
-        // Properties hold the imported font data.
-        public IEnumerable<Glyph> Glyphs { get; private set; }
-
-        public void Import(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
+        public List<Glyph> Import(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
         {
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
@@ -34,8 +31,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // Which characters do we want to include?
                 var characters = options.Characters;
 
-                var glyphList = new List<Glyph>();
                 var glyphMaps = new Dictionary<uint, GlyphData>();
+                var glyphs = new List<Glyph>();
 
                 // Rasterize each character in turn.
                 foreach (char character in characters)
@@ -48,15 +45,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     }
 
                     var glyph = new Glyph(character, glyphData);
-                    glyphList.Add(glyph);
+                    glyphs.Add(glyph);
                 }
-                Glyphs = glyphList;
 
                 // Store the font height.
                 lineSpacing = face.Size.Metrics.Height >> 6;
 
                 // The height used to calculate the Y offset for each character.
                 yOffsetMin = -face.Size.Metrics.Ascender >> 6;
+
+                return glyphs;
             }
         }
 
