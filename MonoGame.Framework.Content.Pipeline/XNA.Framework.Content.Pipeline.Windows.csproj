@@ -261,7 +261,6 @@
     <Compile Include="Graphics\Font\MaxRectsBin.cs" />
     <Compile Include="Graphics\Font\MaxRectsHeuristic.cs" />
     <Compile Include="Graphics\GraphicsUtil.cs" />
-    <Compile Include="Graphics\Font\IFontImporter.cs" />
     <Compile Include="Graphics\IndexCollection.cs" />
     <Compile Include="Graphics\IndirectPositionCollection.cs" />
     <Compile Include="Graphics\MaterialContent.cs" />

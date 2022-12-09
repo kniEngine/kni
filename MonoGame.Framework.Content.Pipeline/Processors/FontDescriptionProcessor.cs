@@ -171,9 +171,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private static Glyph[] ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
         {
-            // Which importer knows how to read this source font?
-            IFontImporter importer;
-
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             //var BitmapFileExtensions = new List<string> { ".bmp", ".png", ".gif" };
 
@@ -188,7 +185,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!TrueTypeFileExtensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
-            importer = new SharpFontImporter();
+            SharpFontImporter importer = new SharpFontImporter();
 
             // Import the source font data.
             importer.Import(options, fontName);
