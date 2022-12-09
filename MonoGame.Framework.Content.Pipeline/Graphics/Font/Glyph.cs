@@ -17,18 +17,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Represents a single character within a font.
     internal class Glyph
     {
+        // Unicode codepoint.
+        public char Character;
+        // Image and layout data
+        public GlyphData Data;
+
         // Constructor.
         public Glyph(char character, GlyphData data)
         {
             Character = character;
             Data = data;
         }
-
-        // Unicode codepoint.
-        public char Character;
-
-        // Image and layout data
-        public GlyphData Data;
     }
 
     internal class GlyphData
