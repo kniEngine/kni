@@ -2,9 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2021 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -13,13 +15,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 	/// </summary>
 	public class FontDescription : ContentItem
 	{
-        private char? defaultCharacter;
         private string fontName;
         private float size;
         private float spacing;
         private FontDescriptionStyle style;
         private bool useKerning;
 	    private ICollection<char> characters = new HashSet<char>();
+        private char? defaultCharacter;
 
 		/// <summary>
 		/// Gets or sets the name of the font, such as "Times New Roman" or "Arial". This value cannot be null or empty.
@@ -27,10 +29,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(AllowNull = false)]
 		public string FontName
 		{
-			get
-			{
-				return fontName;
-			}
+			get { return fontName; }
 			set
 			{
 				if (string.IsNullOrEmpty(value))
@@ -44,10 +43,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		/// </summary>
 		public float Size
 		{
-			get
-			{
-				return size;
-			}
+			get { return size; }
 			set
 			{
 				if (value <= 0.0f)
@@ -62,14 +58,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
 		public float Spacing
 		{
-			get
-			{
-				return spacing;
-			}
-			set
-			{
-				spacing = value;
-			}
+			get { return spacing; }
+			set { spacing = value; }
 		}
 
         /// <summary>
@@ -78,14 +68,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
         public bool UseKerning
         {
-            get
-            {
-                return useKerning;
-            }
-            set
-            {
-                useKerning = value;
-            }
+            get { return useKerning; }
+            set { useKerning = value; }
         }
 
 		/// <summary>
@@ -93,14 +77,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		/// </summary>
 		public FontDescriptionStyle Style
 		{
-			get
-			{
-				return style;
-			}
-			set
-			{
-				style = value;
-			}
+			get { return style; }
+			set { style = value; }
 		}
 
         /// <summary>
@@ -109,14 +87,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
         public Nullable<char> DefaultCharacter
         {
-            get
-            {
-                return defaultCharacter;
-            }
-            set
-            {
-                defaultCharacter = value;
-            }
+            get { return defaultCharacter; }
+            set { defaultCharacter = value; }
         }
 
         [ContentSerializer(CollectionItemName = "CharacterRegion")]
@@ -125,7 +97,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             get
             {
                 var regions = new List<CharacterRegion>();
-                var chars = Characters.ToList();
+                var chars = new List<char>(Characters);
                 chars.Sort();
 
                 var start = chars[0];
