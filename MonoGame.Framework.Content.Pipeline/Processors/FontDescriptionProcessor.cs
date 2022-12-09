@@ -32,6 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public override SpriteFontContent Process(FontDescription input, ContentProcessorContext context)
         {
             var output = new SpriteFontContent(input);
+
             var fontFile = FindFont(input.FontName, input.Style.ToString());
 
             if (string.IsNullOrWhiteSpace(fontFile))
