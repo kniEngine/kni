@@ -84,7 +84,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 float lineSpacing = 0f;
                 int yOffsetMin = 0;
-                Dictionary<char, Glyph> glyphs = ImportFont(input, out lineSpacing, out yOffsetMin, context, fontFile);
+                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, out lineSpacing, out yOffsetMin, fontFile);
+
+                // Validate.
+                if (glyphs.Count == 0)
+                    throw new Exception("Font does not contain any glyphs.");
+
+                // Sort the glyphs
+                glyphs = SortGlyphs(glyphs);
+
+                // Check that the default character is part of the glyphs
+                if (input.DefaultCharacter != null)
+                {
+                    bool defaultCharacterFound = false;
+                    foreach (var glyph in glyphs)
+                    {
+                        if (glyph.Key == input.DefaultCharacter)
+                        {
+                            defaultCharacterFound = true;
+                            break;
+                        }
+                    }
+                    if (!defaultCharacterFound)
+                    {
+                        throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
+                    }
+                }
 
                 var glyphset = new HashSet<Glyph>(glyphs.Values);
 
@@ -233,44 +258,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return String.Empty;
         }
 
-        private static Dictionary<char, Glyph> ImportFont(FontDescription options, out float lineSpacing, out int yOffsetMin, ContentProcessorContext context, string fontName)
-        {
-            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-            if (!TrueTypeFileExtensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
-
-            // Import the source font data.
-            Dictionary<char, Glyph> glyphs = ImportGlyphs(options, out lineSpacing, out yOffsetMin, fontName);
-            
-            // Validate.
-            if (glyphs.Count == 0)
-                throw new Exception("Font does not contain any glyphs.");
-
-            // Sort the glyphs
-            glyphs = SortGlyphs(glyphs);
-
-            // Check that the default character is part of the glyphs
-            if (options.DefaultCharacter != null)
-            {
-                bool defaultCharacterFound = false;
-                foreach (var glyph in glyphs)
-                {
-                    if (glyph.Key == options.DefaultCharacter)
-                    {
-                        defaultCharacterFound = true;
-                        break;
-                    }
-                }
-                if (!defaultCharacterFound)
-                {
-                    throw new InvalidContentException("The specified DefaultCharacter is not part of this font.");
-                }
-            }
-
-            return glyphs;
-        }
-
         private static Dictionary<char, Glyph> SortGlyphs(Dictionary<char, Glyph> glyphs)
         {
             var chars = new List<char>(glyphs.Keys);
@@ -287,6 +274,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
         private static Dictionary<char, Glyph> ImportGlyphs(FontDescription options, out float lineSpacing, out int yOffsetMin, string fontName)
         {
+            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
+            if (!TrueTypeFileExtensions.Contains(fileExtension))
+                throw new PipelineException("Unknown file extension " + fileExtension);
+
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
             {
