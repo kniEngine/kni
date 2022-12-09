@@ -254,7 +254,6 @@
     <Compile Include="Graphics\GeometryContent.cs" />
     <Compile Include="Graphics\GeometryContentCollection.cs" />
     <Compile Include="Graphics\Font\Glyph.cs" />
-    <Compile Include="Graphics\Font\GlyphCropper.cs" />
     <Compile Include="Graphics\Font\GlyphPacker.cs" />
     <Compile Include="Graphics\Font\GrowRule.cs" />
     <Compile Include="Graphics\Font\MaxRectsBin.cs" />

@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // Optimize.
                 foreach (Glyph glyph in glyphset)
                 {
-                    GlyphCropper.Crop(glyph);
+                    glyph.Crop();
                 }
 
                 // We need to know how to pack the glyphs.

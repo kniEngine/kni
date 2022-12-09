@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Optimize.
             foreach (var glyph in glyphs)
             {
-                GlyphCropper.Crop(glyph);
+                glyph.Crop();
 
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
             }
