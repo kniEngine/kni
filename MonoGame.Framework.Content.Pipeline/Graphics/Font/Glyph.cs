@@ -20,6 +20,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             return new Vector3(LeftBearing, AdvanceWidth, RightBearing);
         }
+
+        public override string ToString()
+        {
+            return String.Format("{{LeftBearing: {0}, AdvanceWidth: {1}, RightBearing: {2} }}",
+                LeftBearing, AdvanceWidth, RightBearing);
+        }
     }
 
     // Represents a single character within a font.
