@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     // Set the optional character kerning.
                     if (input.UseKerning)
-                        output.Kerning.Add(glyph.CharacterWidths.ToVector3());
+                        output.Kerning.Add(glyph.Kerning.ToVector3());
                     else
                         output.Kerning.Add(new Vector3(0, glyph.Width, 0));
                 }
@@ -347,13 +347,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 glyphBitmap = new PixelBitmapContent<byte>(gHA, gVA);
             }
 
-            // not sure about this at all
-            var abc = new ABCFloat();
-            abc.A = face.Glyph.Metrics.HorizontalBearingX >> 6;
-            abc.B = face.Glyph.Metrics.Width >> 6;
-            abc.C = (face.Glyph.Metrics.HorizontalAdvance >> 6) - (abc.A + abc.B);
-            abc.A -= face.Glyph.BitmapLeft;
-            abc.B += face.Glyph.BitmapLeft;
+            var kerning = new GlyphKerning();
+            kerning.LeftBearing  = (face.Glyph.Metrics.HorizontalBearingX >> 6);
+            kerning.AdvanceWidth = (face.Glyph.Metrics.Width >> 6);
+            kerning.RightBearing = (face.Glyph.Metrics.HorizontalAdvance >> 6) - (kerning.LeftBearing + kerning.AdvanceWidth);
+            kerning.LeftBearing  -= face.Glyph.BitmapLeft;
+            kerning.AdvanceWidth += face.Glyph.BitmapLeft;
 
             // Construct the output Glyph object.
             return new Glyph(glyphIndex, glyphBitmap)
@@ -361,8 +360,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 XOffset  =   face.Glyph.BitmapLeft,
                 XAdvance =  (face.Glyph.Metrics.HorizontalAdvance >> 6),
                 YOffset  = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
-                CharacterWidths = abc
-                ,
+                Kerning  = kerning,
+
                 GlyphBitmapLeft = face.Glyph.BitmapLeft,
                 GlyphMetricLeftBearing = face.Glyph.Metrics.HorizontalBearingX >> 6,
                 GlyphMetricWidth = face.Glyph.Metrics.Width >> 6,

@@ -10,16 +10,15 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct ABCFloat
+    internal struct GlyphKerning
     {
-        public float A;
-        public float B;
-        public float C;
+        public float LeftBearing;
+        public float AdvanceWidth;
+        public float RightBearing;
 
         public Vector3 ToVector3()
         {
-            return new Vector3(A, B, C);
+            return new Vector3(LeftBearing, AdvanceWidth, RightBearing);
         }
     }
 
@@ -51,7 +50,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public float XAdvance;
 
-        public ABCFloat CharacterWidths;
+        public GlyphKerning Kerning;
 
         public float GlyphMetricLeftBearing;
         public float GlyphMetricWidth;
