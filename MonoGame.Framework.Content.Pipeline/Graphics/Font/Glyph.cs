@@ -10,16 +10,21 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct ABCFloat
+    internal struct GlyphKerning
     {
-        public float A;
-        public float B;
-        public float C;
+        public float LeftBearing;
+        public float AdvanceWidth;
+        public float RightBearing;
 
         public Vector3 ToVector3()
         {
-            return new Vector3(A, B, C);
+            return new Vector3(LeftBearing, AdvanceWidth, RightBearing);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{{LeftBearing: {0}, AdvanceWidth: {1}, RightBearing: {2} }}",
+                LeftBearing, AdvanceWidth, RightBearing);
         }
     }
 
@@ -51,12 +56,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public float XAdvance;
 
-        public ABCFloat CharacterWidths;
+        public GlyphKerning Kerning;
 
+#if DEBUG
         public float GlyphMetricLeftBearing;
         public float GlyphMetricWidth;
         public float GlyphMetricXAdvance;
         public float GlyphBitmapLeft;
+#endif
 
         // Crops unused space from around the edge of a glyph bitmap.
         public void Crop()

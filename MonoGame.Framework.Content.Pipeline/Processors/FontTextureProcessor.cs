@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     glyph.Width, glyph.Height);
                 output.Cropping.Add(cropping);
 
-                output.Kerning.Add(glyph.CharacterWidths.ToVector3());
+                output.Kerning.Add(glyph.Kerning.ToVector3());
             }
 
             output.Texture.Faces[0].Add(face);
@@ -167,7 +167,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var newBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
                 BitmapContent.Copy(bitmap, rect, newBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
                 var glyphData = new Glyph((uint)i, newBitmap);
-                glyphData.CharacterWidths.B = glyphData.Bitmap.Width;
+                glyphData.Kerning.AdvanceWidth = glyphData.Bitmap.Width;
                 glyphs.Add(glyphData);
                 //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
             }
