@@ -362,10 +362,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 YOffset  = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
                 Kerning  = kerning,
 
+#if DEBUG
+                GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX >> 6),
+                GlyphMetricWidth = (face.Glyph.Metrics.Width >> 6),
+                GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
                 GlyphBitmapLeft = face.Glyph.BitmapLeft,
-                GlyphMetricLeftBearing = face.Glyph.Metrics.HorizontalBearingX >> 6,
-                GlyphMetricWidth = face.Glyph.Metrics.Width >> 6,
-                GlyphMetricXAdvance = face.Glyph.Metrics.HorizontalAdvance >> 6
+#endif
             };
         }
 

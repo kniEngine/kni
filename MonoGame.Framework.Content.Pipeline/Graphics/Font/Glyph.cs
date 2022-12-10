@@ -52,10 +52,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public GlyphKerning Kerning;
 
+#if DEBUG
         public float GlyphMetricLeftBearing;
         public float GlyphMetricWidth;
         public float GlyphMetricXAdvance;
         public float GlyphBitmapLeft;
+#endif
 
         // Crops unused space from around the edge of a glyph bitmap.
         public void Crop()
