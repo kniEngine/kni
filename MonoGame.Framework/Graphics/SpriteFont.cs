@@ -125,6 +125,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Can be used to implement custom rendering of a SpriteFont</remarks>
         public Texture2D Texture { get { return _texture; } }
 
+        /// <summary>
+        /// Gets a collection of the characters in the font.
+        /// </summary>
+        public ReadOnlyCollection<char> Characters
+        {
+            get { return (ReadOnlyCollection<char>)((IDictionary<char, Glyph>)Glyphs).Keys; }
+        }
+
 		/// <summary>
         /// The glyphs in this SpriteFont.
         /// </summary>
