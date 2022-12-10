@@ -117,21 +117,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 lineSpacing += input.Spacing;
                 output.VerticalLineSpacing = (int)lineSpacing;
 
-                foreach (KeyValuePair<char, Glyph> glyph in glyphs)
+                foreach (char ch in glyphs.Keys)
                 {
-                    output.CharacterMap.Add(glyph.Key);
+                    Glyph glyph = glyphs[ch];
 
-                    var texRect = glyph.Value.Subrect;
+                    output.CharacterMap.Add(ch);
+
+                    var texRect = glyph.Subrect;
                     output.Glyphs.Add(texRect);
 
-                    var cropping = new Rectangle(
-                        0, (int)(glyph.Value.YOffset - yOffsetMin),
-                        (int)glyph.Value.XAdvance, output.VerticalLineSpacing);
+                    Rectangle cropping;
+                    cropping.X = 0;
+                    cropping.Y = (int)(glyph.YOffset - yOffsetMin);
+                    cropping.Width  = (int)glyph.XAdvance;
+                    cropping.Height = output.VerticalLineSpacing;
                     output.Cropping.Add(cropping);
 
                     // Set the optional character kerning.
                     if (input.UseKerning)
-                        output.Kerning.Add(glyph.Value.CharacterWidths.ToVector3());
+                        output.Kerning.Add(glyph.CharacterWidths.ToVector3());
                     else
                         output.Kerning.Add(new Vector3(0, texRect.Width, 0));
                 }
@@ -354,10 +358,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Construct the output Glyph object.
             return new Glyph(glyphIndex, glyphBitmap)
             {
-                XOffset = -(face.Glyph.Advance.X >> 6),
-                XAdvance = face.Glyph.Metrics.HorizontalAdvance >> 6,
-                YOffset = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
+                XOffset  = -(face.Glyph.Advance.X >> 6),
+                XAdvance =  (face.Glyph.Metrics.HorizontalAdvance >> 6),
+                YOffset  = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
                 CharacterWidths = abc
+                ,
+                GlyphBitmapLeft = face.Glyph.BitmapLeft,
+                GlyphMetricLeftBearing = face.Glyph.Metrics.HorizontalBearingX >> 6,
+                GlyphMetricWidth = face.Glyph.Metrics.Width >> 6,
+                GlyphMetricXAdvance = face.Glyph.Metrics.HorizontalAdvance >> 6
             };
         }
 
