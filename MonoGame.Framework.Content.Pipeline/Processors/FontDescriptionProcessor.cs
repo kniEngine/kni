@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     Rectangle cropping;
                     cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset - yOffsetMin);
+                    cropping.Y = (int)(glyph.YOffset + yOffsetMin);
                     cropping.Width  = (int)glyph.XAdvance;
                     cropping.Height = output.VerticalLineSpacing;
                     output.Cropping.Add(cropping);
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 lineSpacing = face.Size.Metrics.Height >> 6;
 
                 // The height used to calculate the Y offset for each character.
-                yOffsetMin = -face.Size.Metrics.Ascender >> 6;
+                yOffsetMin =  face.Size.Metrics.Ascender >> 6;
 
                 return glyphs;
             }
