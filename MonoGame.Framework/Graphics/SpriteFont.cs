@@ -438,7 +438,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return (_keys.Contains(item.Key) && this[item.Key].Equals(item.Value));
             }
 
-            public void CopyTo(KeyValuePair<char, Glyph>[] array, int arrayIndex)
+            void ICollection<KeyValuePair<char, Glyph>>.CopyTo(KeyValuePair<char, Glyph>[] array, int arrayIndex)
             {
                 foreach (var keyValue in this)
                     array[arrayIndex++] = keyValue;
