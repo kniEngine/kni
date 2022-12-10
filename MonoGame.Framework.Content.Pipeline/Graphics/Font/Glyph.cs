@@ -53,6 +53,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public ABCFloat CharacterWidths;
 
+        public float GlyphMetricLeftBearing;
+        public float GlyphMetricWidth;
+        public float GlyphMetricXAdvance;
+        public float GlyphBitmapLeft;
+
         // Crops unused space from around the edge of a glyph bitmap.
         public void Crop()
         {
