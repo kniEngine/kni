@@ -92,8 +92,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 characters.Sort();
 
                 float lineSpacing = 0f;
-                int yOffsetMin = 0;
-                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, characters, out lineSpacing, out yOffsetMin, fontFile);
+                int minYOffset = 0;
+                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, characters, out lineSpacing, out minYOffset, fontFile);
 
                 // Validate.
                 if (glyphs.Count == 0)
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     Rectangle cropping;
                     cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset + yOffsetMin);
+                    cropping.Y = (int)(glyph.YOffset + minYOffset);
                     cropping.Width  = (int)glyph.XAdvance;
                     cropping.Height = output.VerticalLineSpacing;
                     output.Cropping.Add(cropping);
@@ -251,7 +251,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int yOffsetMin, string fontName)
+        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int minYOffset, string fontName)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 lineSpacing = face.Size.Metrics.Height >> 6;
 
                 // The height used to calculate the Y offset for each character.
-                yOffsetMin =  face.Size.Metrics.Ascender >> 6;
+                minYOffset =  face.Size.Metrics.Ascender >> 6;
 
                 return glyphs;
             }
