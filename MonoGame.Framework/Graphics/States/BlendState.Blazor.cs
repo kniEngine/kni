@@ -27,11 +27,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 device._lastBlendEnable = blendEnabled;
             }
-            if (_independentBlendEnable)
-            {
-                throw new NotImplementedException();
-            }
-            else
+
+            if (!_independentBlendEnable)
             {
                 if (force ||
                     this.ColorBlendFunction != device._lastBlendState.ColorBlendFunction ||
@@ -68,6 +65,10 @@ namespace Microsoft.Xna.Framework.Graphics
                         device._lastBlendState[i].AlphaDestinationBlend = this.AlphaDestinationBlend;
                     }
                 }
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
 
             if (force || this.ColorWriteChannels != device._lastBlendState.ColorWriteChannels)
@@ -134,6 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }
         }
+
     }
 }
 
