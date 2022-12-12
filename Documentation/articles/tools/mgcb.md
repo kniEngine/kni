@@ -77,14 +77,10 @@ Set the target platform for this build. It must be a member of the [TargetPlatfo
 * Android
 * DesktopGL
 * WindowsStoreApp
-* PlayStation4
-* PlayStation5
-* XboxOne
-* Switch
+* WebGL
+
 
 If not set, it will default to Windows.
-
-NOTE: PlayStation 4, PlayStation 5, Xbox One, and Switch support is only available to licensed console developers.
 
 ### Target Graphics Profile
 
@@ -94,8 +90,8 @@ NOTE: PlayStation 4, PlayStation 5, Xbox One, and Switch support is only availab
 
 Set the target graphics profile for this build. It must be a member of the [GraphicsProfile](xref:Microsoft.Xna.Framework.Graphics.GraphicsProfile) enum:
 
-* HiDef
 * Reach
+* HiDef
 
 If not set, it will default to HiDef.
 
