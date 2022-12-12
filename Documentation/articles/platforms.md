@@ -4,7 +4,7 @@ MonoGame supports building games for the following **systems**:
 
 | **Desktop PCs**             | **Mobiles**                | **Gaming consoles***                                                           |
 | --------------------------- | -------------------------- | ------------------------------------------------------------------------------ |
-| Windows<br/>macOS<br/>Linux | iOS<br/>iPadOS<br/>Android | Xbox<br/>PlayStation 4<br/>PlayStation 5<br/>Nintendo Switch<br/>Google Stadia |
+| Windows<br/>macOS<br/>Linux | iOS<br/>iPadOS<br/>Android | Xbox<br/>PlayStation 4<br/>PlayStation 5<br/>Nintendo Switch<br/>              |
 
 **Gaming consoles are restricted to registered developers and are not publicly available nor publicly documented. To get access to those platforms, please contact your console account manager(s). MonoGame documentation for closed platforms is available in their respective repositories.*
 
