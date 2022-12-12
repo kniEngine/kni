@@ -128,18 +128,18 @@ if(kstate.IsKeyDown(Keys.Right))
     ballPosition.X += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 }
 
-if(ballPosition.X > _graphics.PreferredBackBufferWidth - ballTexture.Width / 2)
+if(ballPosition.X > GraphicsDevice.Viewport.Width - ballTexture.Width / 2)
 {
-    ballPosition.X = _graphics.PreferredBackBufferWidth - ballTexture.Width / 2;
+    ballPosition.X = GraphicsDevice.Viewport.Width - ballTexture.Width / 2;
 }
 else if(ballPosition.X < ballTexture.Width / 2)
 {
     ballPosition.X = ballTexture.Width / 2;
 }
 
-if(ballPosition.Y > _graphics.PreferredBackBufferHeight - ballTexture.Height / 2)
+if(ballPosition.Y > GraphicsDevice.Viewport.Height - ballTexture.Height / 2)
 {
-    ballPosition.Y = _graphics.PreferredBackBufferHeight - ballTexture.Height / 2;
+    ballPosition.Y = GraphicsDevice.Viewport.Height - ballTexture.Height / 2;
 }
 else if(ballPosition.Y < ballTexture.Height / 2)
 {

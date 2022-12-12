@@ -1,4 +1,9 @@
 ﻿Microsoft Public License (Ms-PL)
+Kni - Copyright © 2014-2022 Nick Kastellanos
+
+-------------------------------------------------------------------------------
+
+Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2021 The MonoGame Team
 
 All rights reserved.

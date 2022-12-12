@@ -1,8 +1,9 @@
-﻿# MonoGame
+﻿# Kni
 
-MonoGame is a simple and powerful .NET framework for creating games for desktop PCs, video game consoles, and mobile devices using the C# programming language. It has been succesfully used to create games such as [Streets of Rage 4](https://store.steampowered.com/app/985890/Streets_of_Rage_4/), [Carrion](https://store.steampowered.com/app/953490/CARRION/), [Celeste](https://store.steampowered.com/app/504230/Celeste/), [Stardew Valley](https://store.steampowered.com/app/413150/Stardew_Valley/), and [many others](https://www.monogame.net/showcase/).
+Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices using the C# programming language. 
 
 It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://msdn.microsoft.com/en-us/library/bb200104.aspx).
+Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGame).
 
 [![Join the chat at https://discord.gg/monogame](https://img.shields.io/discord/355231098122272778?color=%237289DA&label=MonoGame&logo=discord&logoColor=white)](https://discord.gg/monogame)
 
@@ -13,41 +14,26 @@ It is an open-source re-implementation of the discontinued [Microsoft's XNA Fram
 * [Helpful Links](#helpful-links)
 * [License](#license)
 
-## Build Status
-
-We use [GitHub Actions](https://github.com/MonoGame/MonoGame/actions) to automate builds and packages distribution of the latest MonoGame changes. We also rely on a [build server](http://teamcity.monogame.net/?guest=1) to run tests in order to avoid regressions.  The table below shows the current build status for the ```develop``` branch.
-
-| Name                            | Status                                                                                                                                                                                         |
-|:------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Builds                          | [![Build](https://github.com/MonoGame/MonoGame/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/MonoGame/MonoGame/actions/workflows/main.yml)                          |
-| Windows Tests                   | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_TestWindows/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_TestWindows&guest=1) |
-| Mac Tests                       | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_TestMac/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_TestMac&guest=1)         |
-
 ## Supported Platforms
 
 We support a growing list of platforms across the desktop, mobile, and console space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
 
-* Desktop PCs
-  * Windows 8.1 and up (OpenGL & DirectX)
-  * Windows Store Apps (UWP)
-  * Linux (OpenGL)
-  * macOS 10.15 and up (OpenGL)
-* Mobile/Tablet Devices
-  * Android 6.0 and up (OpenGL)
-  * iPhone/iPad 10.0 and up (OpenGL)
-* Consoles (for registered developers)
-  * PlayStation 4
-  * PlayStation 5
-  * Xbox One (both UWP and XDK)
-  * Nintendo Switch
+ * Windows 8.1 and up (OpenGL & DirectX)
+ * Windows Store Apps (UWP)
+ * Oculus VR (OvrPC/DirectX)
+ * Linux (OpenGL)
+ * macOS 10.15 and up (OpenGL)
+ * Android 6.0 and up (OpenGL)
+ * iPhone/iPad 10.0 and up (OpenGL)
+ * Web Browsers (WebGL)
 
 ## Support and Contributions
 
-If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/MonoGame/MonoGame/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
+If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/kniengine/kni/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
 
-If you need help using MonoGame or have other questions we suggest you post on our [community forums](http://community.monogame.net).  Please do not use the GitHub issue tracker for personal support requests.
+If you need help using Kni or have other questions we suggest you post on our [community forums](http://community.monogame.net).  Please do not use the GitHub issue tracker for personal support requests.
 
-If you are interested in contributing fixes or features to MonoGame, please read our [contributors guide](CONTRIBUTING.md) first.
+If you are interested in contributing fixes or features to Kni, please read our [contributors guide](CONTRIBUTING.md) first.
 
 ### Subscription
 
@@ -55,13 +41,13 @@ If you'd like to help the project by supporting us financially, consider support
 
 Money goes towards hosting, new hardware and if enough people subscribe a dedicated developer.
 
-There are several options on our [Donation Page](http://www.monogame.net/donate/).
+There are several options on our [Donation Page](http://).
 
 ## Source Code
 
 The full source code is available here from GitHub:
 
-* Clone the source: `git clone https://github.com/MonoGame/MonoGame.git`
+* Clone the source: `git clone https://github.com/kniengine/kni.git`
 * Set up the submodules: `git submodule update --init`
 * Open the solution for your target platform to build the game framework.
 * Open the Tools solution for your development platform to build the pipeline and content tools.
@@ -81,14 +67,14 @@ A high level breakdown of the components of the framework:
 
 ## Helpful Links
 
-* The official website is [monogame.net](http://www.monogame.net).
-* Our [issue tracker](https://github.com/MonoGame/MonoGame/issues) is on GitHub.
-* Use our [community forums](http://community.monogame.net/) for support questions.
+* [monogame.net](http://www.monogame.net).
+* Our [issue tracker](https://github.com/kniengine/kni/issues) is on GitHub.
+* Use [community forums](http://community.monogame.net/) for support questions.
 * You can [join the Discord server](https://discord.gg/monogame) and chat live with the core developers and other users.
-* The [official documentation](http://www.monogame.net/documentation/) is on our website.
-* Download release and development [packages](http://www.monogame.net/downloads/).
-* Follow [@MonoGameTeam](https://twitter.com/monogameteam) on Twitter.
+* The [MonoGame documentation](http://www.monogame.net/documentation/).
+* Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
+
 
 ## License
 
-The MonoGame project is under the [Microsoft Public License](https://opensource.org/licenses/MS-PL) except for a few portions of the code.  See the [LICENSE.txt](LICENSE.txt) file for more details.  Third-party libraries used by MonoGame are under their own licenses.  Please refer to those libraries for details on the license they use.
+The Kni project is under the [Microsoft Public License](https://opensource.org/licenses/MS-PL) except for a few portions of the code.  See the [LICENSE.txt](LICENSE.txt) file for more details.  Third-party libraries used by KNI are under their own licenses.  Please refer to those libraries for details on the license they use.

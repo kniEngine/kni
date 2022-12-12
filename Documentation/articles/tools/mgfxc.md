@@ -20,7 +20,7 @@ In a terminal run `dotnet tool install -g dotnet-mgfxc` to install MGFXC.
 The command line options are:
 
 ```bat
-mgfxc <SourceFile> <OutputFile> [/Debug] [/Profile:<DirectX_11,OpenGL,PlayStation4>]
+mgfxc <SourceFile> <OutputFile> [/Debug] [/Platform:<Windows,DesktopGL,Android>]
 ```
 
 ### Source File
@@ -37,15 +37,11 @@ If the `/Debug` flag is passed the resulting compiled effect file will contain e
 
 ### Platform Profile
 
-The `/Profile` option defines the platform we're targeting with this effect file.  It can be one of the following:
+The `/Platform` option defines the platform we're targeting with this effect file.  It can be one of the following:
 
-- DirectX_11
-- OpenGL
-- PlayStation4
-- XboxOne
-- Switch
-
-NOTE: PlayStation 4, Xbox One, and Switch support is only available to licensed console developers.
+- Windows
+- DesktopGL
+-Android
 
 ### Help
 
