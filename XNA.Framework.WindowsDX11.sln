@@ -26,10 +26,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Tests.Windows.9K",
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Content.Editor.net4", "Tools\Pipeline\XNA.Content.Editor.net4.csproj", "{65706950-696C-656E-2E57-696E646F7773}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content.Pipeline.Editor", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net4.csproj", "{CF15F9CF-0DF8-4B18-B0A0-F5AA33EA3598}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -64,10 +60,6 @@ Global
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65706950-696C-656E-2E57-696E646F7773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65706950-696C-656E-2E57-696E646F7773}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65706950-696C-656E-2E57-696E646F7773}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65706950-696C-656E-2E57-696E646F7773}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF15F9CF-0DF8-4B18-B0A0-F5AA33EA3598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF15F9CF-0DF8-4B18-B0A0-F5AA33EA3598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF15F9CF-0DF8-4B18-B0A0-F5AA33EA3598}.Release|Any CPU.ActiveCfg = Release|Any CPU
