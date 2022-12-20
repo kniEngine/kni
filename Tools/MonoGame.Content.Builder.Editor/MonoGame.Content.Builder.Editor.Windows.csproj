@@ -8,19 +8,13 @@
     <RollForward>Major</RollForward>
     <Description>The MonoGame Framework Content Builder Editor (MGCB-Editor) is a graphical tool used for editing your content projects ready for processing.</Description>
     <BaseOutputPath>..\..\Artifacts\MonoGame.Content.Builder.Editor\Windows</BaseOutputPath>
-    <DefineConstants>WINDOWS;WPF</DefineConstants>
+    <DefineConstants>WINDOWS</DefineConstants>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <AssemblyName>mgcb-editor-windows</AssemblyName>
     <AssemblyTitle>MGCB Editor</AssemblyTitle>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
-
-  <Import Project="MonoGame.Content.Builder.Editor.Common.props" />
-
-  <ItemGroup>
-    <Compile Include="Platform\Windows\**\*.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Templates\*">
@@ -30,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.6.0" />
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.0" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +35,5 @@
       <AdditionalProperties>CopyContentFiles=False</AdditionalProperties>
     </ProjectReference>
   </ItemGroup>
-
-  <Import Project="MonoGame.Content.Builder.Editor.targets" />
 
 </Project>

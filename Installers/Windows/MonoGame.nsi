@@ -85,18 +85,18 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\*.dll'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\*.exe'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\*.dll'
-  File /r '..\..\Tools\Pipeline\bin\Windows\AnyCPU\Release\*.exe'
-  File /r '..\..\Tools\Pipeline\bin\Windows\AnyCPU\Release\*.dll'
-  File /r '..\..\Tools\Pipeline\bin\Windows\AnyCPU\Release\*.xml'
-  File /r '..\..\Tools\Pipeline\bin\Windows\AnyCPU\Release\Templates'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\Templates'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.exe'  
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.exe.config'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.xml'
 
   ; Associate .mgcb files open in the Pipeline tool.
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '10.0' 'mgcb' '${MSBuildInstallDir}\Tools\Pipeline.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '11.0' 'mgcb' '${MSBuildInstallDir}\Tools\Pipeline.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '12.0' 'mgcb' '${MSBuildInstallDir}\Tools\Pipeline.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '14.0' 'mgcb' '${MSBuildInstallDir}\Tools\Pipeline.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '${MSBuildInstallDir}\Tools\Pipeline.exe'
-  !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '${MSBuildInstallDir}\Tools\Pipeline.exe,0' 'Open with Pipeline' '${MSBuildInstallDir}\Tools\Pipeline.exe "%1"'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '10.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '11.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '12.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '14.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
+  !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '${MSBuildInstallDir}\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '${MSBuildInstallDir}\Tools\PipelineEditor.exe "%1"'
 
   ; Install the assemblies for all the platforms we can 
   ; target from a Windows desktop system.
@@ -269,7 +269,7 @@ Section "Start Menu Shortcuts" Menu
 	SetOutPath "$INSTDIR"
 	CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall MonoGame.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 	SetOutPath "${MSBuildInstallDir}\Tools"
-	CreateShortCut "$SMPROGRAMS\${APPNAME}\MonoGame Pipeline.lnk" "${MSBuildInstallDir}\Tools\Pipeline.exe" "" "${MSBuildInstallDir}\Tools\Pipeline.exe" 0
+	CreateShortCut "$SMPROGRAMS\${APPNAME}\Kni PipelineEditor.lnk" "${MSBuildInstallDir}\Tools\PipelineEditor.exe" "" "${MSBuildInstallDir}\Tools\PipelineEditor.exe" 0
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "URL" "http://www.monogame.net"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "IconFile" "$INSTDIR\monogame.ico"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "IconIndex" "0"

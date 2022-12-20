@@ -63,7 +63,7 @@ A high level breakdown of the components of the framework:
 * See [Tools/Tests](Tools/MonoGame.Tools.Tests) for the content pipeline and other tool tests.
 * [mgcb](Tools/MonoGame.Content.Builder) is the command line tool for content processing.
 * [mgfxc](Tools/MonoGame.Effect.Compiler) is the command line effect compiler tool.
-* The [mgcb-editor](Tools/MonoGame.Content.Builder.Editor) tool is a GUI frontend for content processing.
+* The [pipeline-editor](Tools/Content.Pipeline.Editor) tool is a GUI frontend for content processing.
 
 ## Helpful Links
 
