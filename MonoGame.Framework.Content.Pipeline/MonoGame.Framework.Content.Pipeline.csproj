@@ -27,7 +27,7 @@
   <Import Project="MonoGame.Framework.Content.Pipeline.Audio.props" />
   <Import Project="MonoGame.Framework.Content.Pipeline.Media.props" />
   <Import Project="MonoGame.Framework.Content.Pipeline.Graphics.props" />
-  <Import Project="MonoGame.Framework.Content.Pipeline.MojoProcessor.props" />
+  <Import Project="MonoGame.Framework.Content.Pipeline.Graphics.MojoProcessor.props" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
