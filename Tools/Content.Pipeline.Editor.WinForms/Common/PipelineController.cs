@@ -332,7 +332,7 @@ namespace Content.Pipeline.Editor
             var commands = string.Format("/@:\"{0}\" {1}", _project.OriginalPath, rebuild ? "/rebuild" : string.Empty);
             if (LaunchDebugger)
                 commands += " /launchdebugger";
-            BuildCommand(commands);
+            BuildCommand(_project.ContentItems, commands);
         }
 
         public void RebuildItems(IEnumerable<IProjectItem> items)
@@ -359,13 +359,13 @@ namespace Content.Pipeline.Editor
             if (LaunchDebugger)
                 commands += " /launchdebugger";
 
-            BuildCommand(commands);
+            BuildCommand(items, commands);
 
             // Cleanup the temp file once we're done.
             _buildTask.ContinueWith((e) => File.Delete(tempPath));
         }
 
-        private void BuildCommand(string commands)
+        private void BuildCommand(IEnumerable<IProjectItem> items, string commands)
         {
             Debug.Assert(_buildTask == null || _buildTask.IsCompleted, "The previous build wasn't completed!");
 
@@ -377,6 +377,7 @@ namespace Content.Pipeline.Editor
                 OnBuildStarted();
 
             View.OutputClear();
+            View.OutputPopulateAssets(_project, items);
 
             _buildTask = Task.Factory.StartNew(() => DoBuild(commands));
             if (OnBuildFinished != null)
@@ -395,6 +396,7 @@ namespace Content.Pipeline.Editor
                 OnBuildStarted();
 
             View.OutputClear();
+            View.OutputPopulateAssets(_project, _project.ContentItems);
 
             var commands = string.Format("/clean /intermediateDir:\"{0}\" /outputDir:\"{1}\"", _project.IntermediateDir, _project.OutputDir);
             if (LaunchDebugger)

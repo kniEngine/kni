@@ -52,6 +52,8 @@ namespace Content.Pipeline.Editor
 
         void OutputClear();
 
+        void OutputPopulateAssets(PipelineProject project, IEnumerable<IProjectItem> items);
+
         bool ChooseContentFile(string initialDirectory, out List<string> files);  
 
         bool ChooseContentFolder(string initialDirectory, out string folder);

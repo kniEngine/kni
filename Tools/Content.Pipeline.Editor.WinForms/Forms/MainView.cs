@@ -557,6 +557,11 @@ namespace Content.Pipeline.Editor
             _filterOutputWindow.Clear();
         }
 
+        public void OutputPopulateAssets(PipelineProject project, IEnumerable<IProjectItem> items)
+        {
+            _filterOutputWindow.PopulateAssets(project, items);
+        }
+
         public Process CreateProcess(string exe, string commands)
         {
             var _buildProcess = new Process();
