@@ -11,12 +11,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineProcessorContext : ContentProcessorContext
     {
+        ConsoleLogger _logger;
         private readonly PipelineManager _manager;
 
         private readonly PipelineBuildEvent _pipelineEvent;
 
-        public PipelineProcessorContext(PipelineManager manager, PipelineBuildEvent pipelineEvent)
+        public PipelineProcessorContext(ConsoleLogger logger, PipelineManager manager, PipelineBuildEvent pipelineEvent)
         {
+            _logger = logger;
             _manager = manager;
             _pipelineEvent = pipelineEvent;
         }
@@ -32,7 +34,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public override OpaqueDataDictionary Parameters { get { return _pipelineEvent.Parameters; } }
 
-        public override ContentBuildLogger Logger { get { return _manager.Logger; } }
+        public override ContentBuildLogger Logger { get { return _logger; } }
 
         public override void AddDependency(string filename)
         {
@@ -49,7 +51,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                             OpaqueDataDictionary processorParameters)
         {
             var processor = _manager.CreateProcessor(processorName, processorParameters);
-            var processContext = new PipelineProcessorContext(_manager, new PipelineBuildEvent { Parameters = processorParameters } );
+            var processContext = new PipelineProcessorContext(this._logger, _manager, new PipelineBuildEvent { Parameters = processorParameters } );
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.
@@ -82,7 +84,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Parameters = _manager.ValidateProcessorParameters(processorName, processorParameters),
             };
 
-            var processedObject = _manager.ProcessContent(buildEvent);
+            var processedObject = _manager.ProcessContent(this._logger, buildEvent);
 
             // Record that we processed this dependent asset.
             _pipelineEvent.Dependencies.AddUnique(sourceFilepath);
@@ -97,10 +99,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                                                 string assetName)
         {
             if (string.IsNullOrEmpty(assetName))
-                assetName = _manager.GetAssetName(sourceAsset.Filename, importerName, processorName, processorParameters);
+                assetName = _manager.GetAssetName(this._logger, sourceAsset.Filename, importerName, processorName, processorParameters);
 
             // Build the content.
-            var buildEvent = _manager.BuildContent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            var buildEvent = _manager.BuildContent(this._logger, sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
 
             // Record that we built this dependent asset.
             _pipelineEvent.BuildAsset.AddUnique(buildEvent.DestFile);

@@ -407,7 +407,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    _manager.BuildContent(item.SourceFile,
+                    _manager.BuildContent(_manager.Logger,
+                                          item.SourceFile,
                                           item.OutputFile,
                                           item.Importer,
                                           item.Processor,
