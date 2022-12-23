@@ -12,12 +12,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     {
         private int indentCount = 0;
 
-        public void Indent()
+        public virtual void Indent()
         {
             indentCount++;
         }
 
-        public void Unindent()
+        public virtual void Unindent()
         {
             indentCount--;
         }
