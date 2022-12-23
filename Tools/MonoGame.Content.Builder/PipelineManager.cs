@@ -55,6 +55,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         //   Value = processor parameters
         private readonly Dictionary<string, OpaqueDataDictionary> _processorDefaultValues;
 
+        private readonly SortedSet<string> _processingBuildEvents;
+
         public string ProjectDirectory { get; private set; }
         public string OutputDirectory { get; private set; }
         public string IntermediateDirectory { get; private set; }
@@ -95,6 +97,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
+            _processingBuildEvents = new SortedSet<string>();
             RethrowExceptions = true;
 
             Assemblies = new List<string>();
@@ -603,7 +606,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
             TrackPipelineBuildEvent(pipelineEvent);
 
+            var building = RegisterBuildEvent(pipelineEvent);
             var rebuild = pipelineEvent.NeedsRebuild(this, cachedEvent);
+            rebuild = rebuild && !building;
 
             if (rebuild)
                 logger.LogMessage("{0}", pipelineEvent.SourceFile);
@@ -613,7 +618,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             logger.Indent();
             try
             {
-                if (!rebuild)
+                if (!rebuild && cachedEvent != null)
                 {
                     // While this asset doesn't need to be rebuilt the dependent assets might.
                     foreach (var asset in cachedEvent.BuildAsset)
@@ -665,6 +670,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 logger.Unindent();
                 logger.PopFile();
             }
+        }
+
+        private bool RegisterBuildEvent(PipelineBuildEvent pipelineEvent)
+        {
+            lock (_processingBuildEvents)
+            {
+                if (!_processingBuildEvents.Contains(pipelineEvent.DestFile))
+                {
+                    _processingBuildEvents.Add(pipelineEvent.DestFile);
+                    return false;
+                }
+            }
+            return true;
         }
 
         public object ProcessContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent)
