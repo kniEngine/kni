@@ -435,7 +435,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void CopyItems(List<CopyItem> copyItems, string projectDirectory, string outputPath)
         {
-            foreach (var item in copyItems)
+            Parallel.ForEach(copyItems, (item) =>
             {
                 try
                 {
@@ -464,7 +464,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             else
                                 Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
 
-                            continue;
+                            return;
                         }
                     }
 
@@ -495,7 +495,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     WriteError(ex, item.SourceFile);
                 }
-            }
+            });
         }
         
         private void WriteError(InvalidContentException ex, string sourceFile)
