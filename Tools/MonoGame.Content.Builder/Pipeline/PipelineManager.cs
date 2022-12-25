@@ -5,18 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Graphics;
-using System.Globalization;
-using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
-using System.Diagnostics;
 
 
-namespace MonoGame.Content.Builder.Pipeline
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineManager
     {

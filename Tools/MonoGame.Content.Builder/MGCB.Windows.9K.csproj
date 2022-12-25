@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MGCB</RootNamespace>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
     <AssemblyName>MGCB</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>

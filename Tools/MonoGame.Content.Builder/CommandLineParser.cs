@@ -12,7 +12,7 @@ using System.Reflection;
 using System.ComponentModel;
 
 
-namespace MonoGame.Content.Builder
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     /// <summary>
     /// Adapted from this generic command line argument parser:

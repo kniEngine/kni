@@ -8,10 +8,9 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Content.Builder.Pipeline;
 
 
-namespace MonoGame.Content.Builder
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     class BuildContent
     {

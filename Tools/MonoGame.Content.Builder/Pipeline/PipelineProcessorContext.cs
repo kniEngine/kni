@@ -3,12 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace MonoGame.Content.Builder.Pipeline
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineProcessorContext : ContentProcessorContext
     {

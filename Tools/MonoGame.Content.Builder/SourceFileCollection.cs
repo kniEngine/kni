@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace MonoGame.Content.Builder
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     [XmlRoot(ElementName = "SourceFileCollection")]
     public sealed class SourceFileCollection

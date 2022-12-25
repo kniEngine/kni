@@ -4,11 +4,9 @@
 
 using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 
-namespace MonoGame.Content.Builder
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     class Program
     {
