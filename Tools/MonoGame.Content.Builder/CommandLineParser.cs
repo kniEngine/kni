@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.ComponentModel;
 
+
 namespace MonoGame.Content.Builder
 {
     /// <summary>
@@ -129,11 +130,11 @@ namespace MonoGame.Content.Builder
 
         public bool Parse(IEnumerable<string> args)
         {
-            args = Preprocess(args);
+            var preprocargs = Preprocess(args);
 
             var showUsage = true;
             var success = true;
-            foreach (var arg in args)
+            foreach (var arg in preprocargs)
             {
                 showUsage = false;
 

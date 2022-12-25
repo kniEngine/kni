@@ -12,6 +12,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     public class PipelineBuildEvent

@@ -77,15 +77,15 @@ namespace MonoGame.Tests.ContentPipeline
             Assert.IsAssignableFrom<PixelBitmapContent<Color>>(output.Texture.Faces[0][0]);
             var outFace = (PixelBitmapContent<Color>)output.Texture.Faces[0][0];
 
-            for (var i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; i++)
             {
                 // (2, 2, 4, 5) is the top,left and width,height of the first glyph. All test glyphs are 4x5
                 var inRect = new Rectangle(i * 8 + 2, 2, 4, 5);
                 var outRect = output.Glyphs[i];
                 Assert.AreEqual(inRect.Width, outRect.Width);
                 Assert.AreEqual(inRect.Height, outRect.Height);
-                for (var y = 0; y < inRect.Height; ++y)
-                    for (var x = 0; x < inRect.Width; ++x)
+                for (var y = 0; y < inRect.Height; y++)
+                    for (var x = 0; x < inRect.Width; x++)
                         Assert.AreEqual(pixelData[(x + inRect.Left) + (y + inRect.Top) * face.Width], outFace.GetPixel(x + outRect.Left, y + outRect.Top).PackedValue);
             }
             

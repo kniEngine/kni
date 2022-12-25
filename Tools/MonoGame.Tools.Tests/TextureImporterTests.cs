@@ -146,7 +146,7 @@ namespace MonoGame.Tests.ContentPipeline
             var content = importer.Import("Assets/Textures/SampleCube64DXT1Mips.dds", context);
             Assert.NotNull(content);
             Assert.AreEqual(content.Faces.Count, 6);
-            for (int f = 0; f < 6; ++f)
+            for (int f = 0; f < 6; f++)
             {
                 CheckDdsFace(content, f, 7, 64, 64);
             }
@@ -171,7 +171,7 @@ namespace MonoGame.Tests.ContentPipeline
             var content = importer.Import("Assets/Textures/Sunset.dds", context);
             Assert.NotNull(content);
             Assert.AreEqual(content.Faces.Count, 6);
-            for (int f = 0; f < 6; ++f)
+            for (int f = 0; f < 6; f++)
             {
                 CheckDdsFace(content, f, 1, 512, 512);
             }
@@ -331,7 +331,7 @@ namespace MonoGame.Tests.ContentPipeline
         private static void CheckDdsFace(TextureContent content, int faceIndex, int mipMapCount, int width, int height)
         {
             Assert.AreEqual(content.Faces[faceIndex].Count, mipMapCount);
-            for (int i = 0; i < mipMapCount; ++i)
+            for (int i = 0; i < mipMapCount; i++)
             {
                 Assert.AreEqual(content.Faces[faceIndex][i].Width, width >> i);
                 Assert.AreEqual(content.Faces[faceIndex][i].Height, height >> i);

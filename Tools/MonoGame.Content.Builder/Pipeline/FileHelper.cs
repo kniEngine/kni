@@ -4,6 +4,7 @@
 
 using System.IO;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     internal static class FileHelper

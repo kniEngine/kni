@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace MonoGame.Content.Builder
 {
     [XmlRoot(ElementName = "SourceFileCollection")]

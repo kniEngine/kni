@@ -95,25 +95,39 @@
     <Compile Include="Forms\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\NewContentDialog.cs" />
+    <Compile Include="Forms\NewContentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\NewContentDialog.Designer.cs">
       <DependentUpon>NewContentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MultiSelectTreeview.cs" />
-    <Compile Include="Forms\Controls\FilterOutputControl.cs" />
-    <Compile Include="Forms\Controls\TabControlEx.cs" />
+    <Compile Include="Forms\MultiSelectTreeview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\FilterOutputControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\TabControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\PipelineProjectProxy.cs" />
     <Compile Include="Forms\TreeViewExtensions.cs" />
     <Compile Include="Forms\SortedEnumTypeConverter.cs" />
-    <Compile Include="Forms\AboutDialog.cs" />
+    <Compile Include="Forms\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ReferenceDialog.cs" />
+    <Compile Include="Forms\ReferenceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ReferenceDialog.Designer.cs">
       <DependentUpon>ReferenceDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TextEditDialog.cs" />
+    <Compile Include="Forms\TextEditDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\TextEditDialog.Designer.cs">
       <DependentUpon>TextEditDialog.cs</DependentUpon>
     </Compile>

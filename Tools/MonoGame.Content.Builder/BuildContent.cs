@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Content.Builder.Pipeline;
 
+
 namespace MonoGame.Content.Builder
 {
     class BuildContent
@@ -25,6 +26,15 @@ namespace MonoGame.Content.Builder
             Flag = "q",
             Description = "Only output content build errors.")]
         public bool Quiet = false;
+        
+        [CommandLineParameter(
+            Name = "help",
+            Flag = "h",
+            Description = "Displays this help.")]
+        public void Help()
+        {
+            MGBuildParser.Instance.ShowError(null);
+        }
 
         [CommandLineParameter(
             Name = "@",
@@ -259,11 +269,11 @@ namespace MonoGame.Content.Builder
             public string Link;
         }
 
-        private readonly List<ContentItem> _content = new List<ContentItem>();
-
-        private readonly List<CopyItem> _copyItems = new List<CopyItem>();
-
         private PipelineManager _manager;
+        private readonly List<ContentItem> _content = new List<ContentItem>();
+        private readonly List<CopyItem> _copyItems = new List<CopyItem>();
+        public int SuccessCount { get; private set; }
+        public int ErrorCount { get; private set; }
 
         public bool HasWork
         {
@@ -281,7 +291,7 @@ namespace MonoGame.Content.Builder
                 .Replace("$(Profile)", this.Profile.ToString());
         }
 
-        public void Build(out int successCount, out int errorCount)
+        public void Build()
         {
             var projectDirectory = PathHelper.Normalize(Directory.GetCurrentDirectory());
 
@@ -292,7 +302,7 @@ namespace MonoGame.Content.Builder
             var intermediatePath = ReplaceSymbols(_intermediateDir);
             if (!Path.IsPathRooted(intermediatePath))
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
-            
+
             _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath);
             _manager.CompressContent = CompressContent;
 
@@ -317,28 +327,12 @@ namespace MonoGame.Content.Builder
 
             // If the target changed in any way then we need to force
             // a full rebuild even under incremental builds.
-            var targetChanged = previousContent.Config != Config ||
+            bool targetChanged = previousContent.Config != Config ||
                                 previousContent.Platform != Platform ||
                                 previousContent.Profile != Profile;
 
             // First clean previously built content.
-            for(int i = 0; i < previousContent.SourceFiles.Count; i++)
-            {
-                var sourceFile = previousContent.SourceFiles[i];
-
-                // This may be an old file (prior to MG 3.7) which doesn't have destination files:
-                string destFile = null;
-                if(i < previousContent.DestFiles.Count)
-                {
-                    destFile = previousContent.DestFiles[i];
-                }
-
-                var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
-                var cleanOldContent = !inContent && !Incremental;
-                var cleanRebuiltContent = inContent && (Rebuild || Clean);
-                if (cleanRebuiltContent || cleanOldContent || targetChanged)
-                    _manager.CleanContent(sourceFile, destFile);                
-            }
+            CleanItems(previousContent, targetChanged);
 
             // TODO: Should we be cleaning copy items?  I think maybe we should.
 
@@ -348,88 +342,19 @@ namespace MonoGame.Content.Builder
                 Platform = _manager.Platform = Platform,
                 Config = _manager.Config = Config
             };
-            errorCount = 0;
-            successCount = 0;
+            SuccessCount = 0;
+            ErrorCount = 0;
 
-            // Before building the content, register all files to be built. (Necessary to
-            // correctly resolve external references.)
-            foreach (var c in _content)
-            {
-                try
-                {
-                    _manager.RegisterContent(c.SourceFile, c.OutputFile, c.Importer, c.Processor, c.ProcessorParams);
-                }
-                catch
-                {
-                    // Ignore exception. Exception will be handled below.
-                }
-            }
+            // Before building the content, register all files to be built.
+            // (Necessary to correctly resolve external references.)
+            RegisterItems(_content);
 
-            foreach (var c in _content)
-            {
-                try
-                {
-                    _manager.BuildContent(c.SourceFile,
-                                          c.OutputFile,
-                                          c.Importer,
-                                          c.Processor,
-                                          c.ProcessorParams);
-
-                    newContent.SourceFiles.Add(c.SourceFile);
-                    newContent.DestFiles.Add(c.OutputFile);
-
-                    ++successCount;
-                }
-                catch (InvalidContentException ex)
-                {
-                    var message = string.Empty;
-                    if (ex.ContentIdentity != null && !string.IsNullOrEmpty(ex.ContentIdentity.SourceFilename))
-                    {
-                        message = ex.ContentIdentity.SourceFilename;
-                        if (!string.IsNullOrEmpty(ex.ContentIdentity.FragmentIdentifier))
-                            message += "(" + ex.ContentIdentity.FragmentIdentifier + ")";
-                        else
-                            message += " ";
-                    }
-                    else
-                    {
-                        message = c.SourceFile;
-                        message += " ";
-                    }
-                    message += ": error ";
-
-                    // extract errorCode from message
-                    var match = System.Text.RegularExpressions.Regex.Match(ex.Message, @"([A-Z]+[0-9]+):(.+)");
-                    if (match.Success || match.Groups.Count == 2)
-                        message += match.Groups[1].Value + " : " + match.Groups[2].Value;
-                    else
-                        message += ": " + ex.Message;
-                    
-                    Console.Error.WriteLine(message);
-                    ++errorCount;
-                }
-                catch (PipelineException ex)
-                {
-                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
-                    if (ex.InnerException != null)
-                        Console.Error.WriteLine(ex.InnerException.ToString());
-                    ++errorCount;
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
-                    if (ex.InnerException != null)
-                        Console.Error.WriteLine(ex.InnerException.ToString());
-                    ++errorCount;
-                }
-            }
+            BuildItems(_content, newContent);
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
             if (Incremental && !targetChanged)
-            {
                 newContent.Merge(previousContent);
-            }
 
             // Delete the old file and write the new content 
             // list if we have any to serialize.
@@ -438,7 +363,80 @@ namespace MonoGame.Content.Builder
                 newContent.Write(contentFile);
 
             // Process copy items (files that bypass the content pipeline)
-            foreach (var c in _copyItems)
+            CopyItems(_copyItems, projectDirectory, outputPath);
+        }
+
+        private void CleanItems(SourceFileCollection previousContent, bool targetChanged)
+        {
+            for (int i = 0; i < previousContent.SourceFiles.Count; i++)
+            {
+                var sourceFile = previousContent.SourceFiles[i];
+
+                // This may be an old file (prior to MG 3.7) which doesn't have destination files:
+                string destFile = null;
+                if (i < previousContent.DestFiles.Count)
+                {
+                    destFile = previousContent.DestFiles[i];
+                }
+
+                var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
+                var cleanOldContent = !inContent && !Incremental;
+                var cleanRebuiltContent = inContent && (Rebuild || Clean);
+                if (cleanRebuiltContent || cleanOldContent || targetChanged)
+                    _manager.CleanContent(sourceFile, destFile);
+            }
+        }
+
+        private void RegisterItems(List<ContentItem> contentItems)
+        {
+            foreach (var item in contentItems)
+            {
+                try
+                {
+                    _manager.RegisterContent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
+                }
+                catch
+                {
+                    // Ignore exception
+                }
+            }
+        }
+
+        private void BuildItems(List<ContentItem> contentItems, SourceFileCollection newContent)
+        {
+            foreach (var item in contentItems)
+            {
+                try
+                {
+                    _manager.BuildContent(item.SourceFile,
+                                          item.OutputFile,
+                                          item.Importer,
+                                          item.Processor,
+                                          item.ProcessorParams);
+
+                    newContent.SourceFiles.Add(item.SourceFile);
+                    newContent.DestFiles.Add(item.OutputFile);
+
+                    SuccessCount++;
+                }
+                catch (InvalidContentException ex)
+                {
+                    WriteError(ex, item.SourceFile);
+                }
+                catch (PipelineException ex)
+                {
+                    WriteError(ex, item.SourceFile);
+                }
+                catch (Exception ex)
+                {
+                    WriteError(ex, item.SourceFile);
+                }
+            }
+        }
+
+        private void CopyItems(List<CopyItem> copyItems, string projectDirectory, string outputPath)
+        {
+            foreach (var item in copyItems)
             {
                 try
                 {
@@ -446,9 +444,9 @@ namespace MonoGame.Content.Builder
                     // retaining the file extension.
                     // Note that replacing a sub-path like this requires consistent
                     // directory separator characters.
-                    var relativeName = c.Link;
+                    var relativeName = item.Link;
                     if (string.IsNullOrWhiteSpace(relativeName))
-                        relativeName = c.SourceFile.Replace(projectDirectory, string.Empty)
+                        relativeName = item.SourceFile.Replace(projectDirectory, string.Empty)
                                             .TrimStart(Path.DirectorySeparatorChar)
                                             .TrimStart(Path.AltDirectorySeparatorChar);
                     var dest = Path.Combine(outputPath, relativeName);
@@ -458,14 +456,14 @@ namespace MonoGame.Content.Builder
                     // nearly all cases this is the desired behavior.
                     if (File.Exists(dest) && !Rebuild)
                     {
-                        var srcTime = File.GetLastWriteTimeUtc(c.SourceFile);
+                        var srcTime = File.GetLastWriteTimeUtc(item.SourceFile);
                         var dstTime = File.GetLastWriteTimeUtc(dest);
                         if (srcTime <= dstTime)
                         {
-                            if (string.IsNullOrEmpty(c.Link))
-                                Console.WriteLine("Skipping {0}", c.SourceFile);
+                            if (string.IsNullOrEmpty(item.Link))
+                                Console.WriteLine("Skipping {0}", item.SourceFile);
                             else
-                                Console.WriteLine("Skipping {0} => {1}", c.SourceFile, c.Link);
+                                Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
 
                             continue;
                         }
@@ -478,7 +476,7 @@ namespace MonoGame.Content.Builder
                     if (!Directory.Exists(destPath))
                         Directory.CreateDirectory(destPath);
 
-                    File.Copy(c.SourceFile, dest, true);
+                    File.Copy(item.SourceFile, dest, true);
 
                     // Destination file should not be read-only even if original was.
                     var fileAttr = File.GetAttributes(dest);
@@ -487,31 +485,64 @@ namespace MonoGame.Content.Builder
 
                     var buildTime = DateTime.UtcNow - startTime;
 
-                    if (string.IsNullOrEmpty(c.Link))
-                        Console.WriteLine("{0}", c.SourceFile);
+                    if (string.IsNullOrEmpty(item.Link))
+                        Console.WriteLine("{0}", item.SourceFile);
                     else
-                        Console.WriteLine("{0} => {1}", c.SourceFile, c.Link);
+                        Console.WriteLine("{0} => {1}", item.SourceFile, item.Link);
 
-                    ++successCount;
+                    SuccessCount++;
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine("{0} : error : {1}", c.SourceFile, ex.Message);
-                    if (ex.InnerException != null)
-                        Console.Error.WriteLine(ex.InnerException.ToString());
-
-                    ++errorCount;
+                    WriteError(ex, item.SourceFile);
                 }
             }
         }
-
-        [CommandLineParameter(
-            Name = "help",
-            Flag = "h",
-            Description = "Displays this help.")]
-        public void Help()
+        
+        private void WriteError(InvalidContentException ex, string sourceFile)
         {
-            MGBuildParser.Instance.ShowError(null);
+            var message = string.Empty;
+            if (ex.ContentIdentity != null && !string.IsNullOrEmpty(ex.ContentIdentity.SourceFilename))
+            {
+                message = ex.ContentIdentity.SourceFilename;
+                if (!string.IsNullOrEmpty(ex.ContentIdentity.FragmentIdentifier))
+                    message += "(" + ex.ContentIdentity.FragmentIdentifier + ")";
+                else
+                    message += " ";
+            }
+            else
+            {
+                message = sourceFile;
+                message += " ";
+            }
+            message += ": error ";
+
+            // extract errorCode from message
+            var match = System.Text.RegularExpressions.Regex.Match(ex.Message, @"([A-Z]+[0-9]+):(.+)");
+            if (match.Success || match.Groups.Count == 2)
+                message += match.Groups[1].Value + " : " + match.Groups[2].Value;
+            else
+                message += ": " + ex.Message;
+
+            Console.Error.WriteLine(message);
+            ErrorCount++;
         }
+
+        private void WriteError(PipelineException ex, string sourceFile)
+        {
+            Console.Error.WriteLine("{0} : error : {1}", sourceFile, ex.Message);
+            if (ex.InnerException != null)
+                Console.Error.WriteLine(ex.InnerException.ToString());
+            ErrorCount++;
+        }
+
+        private void WriteError(Exception ex, string sourceFile)
+        {
+            Console.Error.WriteLine("{0} : error : {1}", sourceFile, ex.Message);
+            if (ex.InnerException != null)
+                Console.Error.WriteLine(ex.InnerException.ToString());
+            ErrorCount++;
+        }
+
     }
 }

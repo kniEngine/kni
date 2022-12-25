@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Xml.Serialization;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     /// <summary>

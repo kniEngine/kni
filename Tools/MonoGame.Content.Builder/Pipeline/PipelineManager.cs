@@ -15,6 +15,7 @@ using System.Globalization;
 using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using System.Diagnostics;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     internal class PipelineManager
@@ -432,6 +433,7 @@ namespace MonoGame.Content.Builder.Pipeline
                 processorName = string.Empty;
 
             OpaqueDataDictionary defaultValues;
+
             if (!_processorDefaultValues.TryGetValue(processorName, out defaultValues))
             {
                 // Create the content processor instance and read the default values.
@@ -598,12 +600,13 @@ namespace MonoGame.Content.Builder.Pipeline
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
             TrackPipelineBuildEvent(pipelineEvent);
 
-            var rebuild = pipelineEvent.NeedsRebuild(this, cachedEvent);            
+            var rebuild = pipelineEvent.NeedsRebuild(this, cachedEvent);
+
             if (rebuild)
                 Logger.LogMessage("{0}", pipelineEvent.SourceFile);
             else
                 Logger.LogMessage("Skipping {0}", pipelineEvent.SourceFile);
-            
+
             Logger.Indent();
             try
             {
@@ -829,7 +832,8 @@ namespace MonoGame.Content.Builder.Pipeline
         private void TrackPipelineBuildEvent(PipelineBuildEvent pipelineEvent)
         {
             List<PipelineBuildEvent> pipelineBuildEvents;
-            bool eventsFound = _pipelineBuildEvents.TryGetValue(pipelineEvent.SourceFile, out pipelineBuildEvents);
+
+           bool eventsFound = _pipelineBuildEvents.TryGetValue(pipelineEvent.SourceFile, out pipelineBuildEvents);
             if (!eventsFound)
             {
                 pipelineBuildEvents = new List<PipelineBuildEvent>();
@@ -857,6 +861,7 @@ namespace MonoGame.Content.Builder.Pipeline
             string relativeSourceFileName = PathHelper.GetRelativePath(ProjectDirectory, sourceFileName);
 
             List<PipelineBuildEvent> pipelineBuildEvents;
+
             if (_pipelineBuildEvents.TryGetValue(sourceFileName, out pipelineBuildEvents))
             {
                 // This source file has already been build.

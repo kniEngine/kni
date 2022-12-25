@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     internal static class PathHelper

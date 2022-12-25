@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
+
 namespace MonoGame.Content.Builder
 {
     class Program
@@ -33,37 +34,39 @@ namespace MonoGame.Content.Builder
             };
 
             if (!parser.Parse(args))
-                return -1;           
+                return -1;
             
             // Launch debugger if requested.
             if (content.LaunchDebugger)
             {
-                try {
+                try
+                {
                     System.Diagnostics.Debugger.Launch();
-                } catch (NotImplementedException) {
+                }
+                catch (NotImplementedException)
+                {
                     // not implemented under Mono
                     Console.Error.WriteLine("The debugger is not implemented under Mono and thus is not supported on your platform.");
                 }
             }
 
-            // Print a startup message.            
+            // Print a startup message.
             var buildStarted = DateTime.Now;
             if (!content.Quiet)
                 Console.WriteLine("Build started {0}\n", buildStarted);
 
             // Let the content build.
-            int successCount, errorCount;
-            content.Build(out successCount, out errorCount);
+            content.Build();
 
             // Print the finishing info.
             if (!content.Quiet)
             {
-                Console.WriteLine("\nBuild {0} succeeded, {1} failed.\n", successCount, errorCount);
+                Console.WriteLine("\nBuild {0} succeeded, {1} failed.\n", content.SuccessCount, content.ErrorCount);
                 Console.WriteLine("Time elapsed {0:hh\\:mm\\:ss\\.ff}.", DateTime.Now - buildStarted);
             }
 
             // Return the error count.
-            return errorCount;
+            return content.ErrorCount;
         }
     }
 }

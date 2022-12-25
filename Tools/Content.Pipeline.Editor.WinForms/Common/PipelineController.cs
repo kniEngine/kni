@@ -330,8 +330,10 @@ namespace Content.Pipeline.Editor
         public void Build(bool rebuild)
         {
             var commands = string.Format("/@:\"{0}\" {1}", _project.OriginalPath, rebuild ? "/rebuild" : string.Empty);
+
             if (LaunchDebugger)
                 commands += " /launchdebugger";
+
             BuildCommand(_project.ContentItems, commands);
         }
 
@@ -356,6 +358,7 @@ namespace Content.Pipeline.Editor
 
             // Run the build the command.
             var commands = string.Format("/@:\"{0}\" /rebuild /incremental", tempPath);
+
             if (LaunchDebugger)
                 commands += " /launchdebugger";
 
@@ -399,6 +402,7 @@ namespace Content.Pipeline.Editor
             View.OutputPopulateAssets(_project, _project.ContentItems);
 
             var commands = string.Format("/clean /intermediateDir:\"{0}\" /outputDir:\"{1}\"", _project.IntermediateDir, _project.OutputDir);
+
             if (LaunchDebugger)
                 commands += " /launchdebugger";
 

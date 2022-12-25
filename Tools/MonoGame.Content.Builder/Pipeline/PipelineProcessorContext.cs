@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace MonoGame.Content.Builder.Pipeline
 {
     internal class PipelineProcessorContext : ContentProcessorContext
@@ -70,6 +71,7 @@ namespace MonoGame.Content.Builder.Pipeline
             // be imported but not processed. This is, for example, necessary to merge
             // animation files as described here:
             // http://blogs.msdn.com/b/shawnhar/archive/2010/06/18/merging-animation-files.aspx.
+
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 

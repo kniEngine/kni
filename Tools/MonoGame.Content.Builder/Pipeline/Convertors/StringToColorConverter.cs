@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
+
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors
 {
 	public class StringToColorConverter : TypeConverter
