@@ -5,7 +5,8 @@
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-namespace MonoGame.Content.Builder
+
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class ConsoleLogger : ContentBuildLogger
     {

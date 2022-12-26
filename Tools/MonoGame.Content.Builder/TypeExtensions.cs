@@ -5,7 +5,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Content.Builder.Pipeline
+
+namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     static internal class TypeExtensions
     {

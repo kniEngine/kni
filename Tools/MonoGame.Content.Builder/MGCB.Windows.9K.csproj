@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MGCB</RootNamespace>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
     <AssemblyName>MGCB</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
@@ -41,28 +41,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pipeline\Convertors\StringToColorConverter.cs" />
-    <Compile Include="Pipeline\FileHelper.cs" />
-    <Compile Include="Pipeline\PathHelper.cs" />
-    <Compile Include="Pipeline\PipelineBuildEvent.cs" />
-    <Compile Include="Pipeline\PipelineImporterContext.cs" />
-    <Compile Include="Pipeline\PipelineManager.cs" />
-    <Compile Include="Pipeline\PipelineProcessorContext.cs" />
-    <Compile Include="Pipeline\TypeExtensions.cs" />
-    <Compile Include="Pipeline\XmlColor.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Convertors\StringToColorConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CommandLineParser.cs" />
     <Compile Include="BuildContent.cs" />
+    <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="FileHelper.cs" />
+    <Compile Include="PathHelper.cs" />
+    <Compile Include="PipelineBuildEvent.cs" />
+    <Compile Include="PipelineImporterContext.cs" />
+    <Compile Include="PipelineManager.cs" />
+    <Compile Include="PipelineProcessorContext.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
+    <Compile Include="TypeExtensions.cs" />
+    <Compile Include="XmlColor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

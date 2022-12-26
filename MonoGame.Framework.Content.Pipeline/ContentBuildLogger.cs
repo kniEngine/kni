@@ -14,13 +14,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// </summary>
     public abstract class ContentBuildLogger
     {
-        readonly Stack<string> filenames = new Stack<string>();
+        readonly Stack<string> _filenames = new Stack<string>();
 
 
         /// <summary>
         /// Initializes a new instance of ContentBuildLogger.
         /// </summary>
-        protected ContentBuildLogger ()
+        protected ContentBuildLogger()
         {
         }
 
@@ -49,8 +49,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if ((contentIdentity != null) && !string.IsNullOrEmpty(contentIdentity.SourceFilename))
                 filename = contentIdentity.SourceFilename;
-            else if (filenames.Count > 0)
-                filename = filenames.Peek();
+            else if (_filenames.Count > 0)
+                filename = _filenames.Peek();
 
             // This convert's filepaths to relative if they are rooted in the current directory.
             // TODO: Move this out to concrete classes.
@@ -95,21 +95,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             );
 
         /// <summary>
-        /// Outputs a message indicating that a content asset has completed processing.
-        /// </summary>
-        public void PopFile()
-        {
-            filenames.Pop();
-        }
-
-        /// <summary>
         /// Outputs a message indicating that a content asset has begun processing.
         /// All logger warnings or error exceptions from this time forward to the next PopFile call refer to this file.
         /// </summary>
         /// <param name="filename">Name of the file containing future messages.</param>
         public void PushFile(string filename)
         {
-            filenames.Push(filename);
+            _filenames.Push(filename);
+        }
+
+        /// <summary>
+        /// Outputs a message indicating that a content asset has completed processing.
+        /// </summary>
+        public void PopFile()
+        {
+            _filenames.Pop();
         }
 
     }
