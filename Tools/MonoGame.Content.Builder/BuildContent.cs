@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         [CommandLineParameter(
             Name = "processorParam",
-            Flag = "P",
+            Flag = "m",
             ValueName = "name=value",
             Description = "Defines a parameter name and value to set on a content processor.")]
         public void AddProcessorParam(string nameAndValue)
