@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var content = new BuildContent();
 
             // Parse the command line.
-            var parser = new MGBuildParser(content)
+            var parser = new CommandLineParser(content)
             {
                 Title = "KNI Content Builder\n" +
                         "Builds optimized game content for KNI projects."

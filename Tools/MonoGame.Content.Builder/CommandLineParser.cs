@@ -18,9 +18,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     /// Adapted from this generic command line argument parser:
     /// http://blogs.msdn.com/b/shawnhar/archive/2012/04/20/a-reusable-reflection-based-command-line-parser.aspx     
     /// </summary>
-    public class MGBuildParser
+    public class CommandLineParser
     {
-        public static MGBuildParser Instance;
+        public static CommandLineParser Instance;
 
         private readonly object _optionsObject;
         private readonly Queue<MemberInfo> _requiredOptions;
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public delegate void ErrorCallback(string msg, object[] args);
         public event ErrorCallback OnError;
 
-        public MGBuildParser(object optionsObject)
+        public CommandLineParser(object optionsObject)
         {
             Instance = this;
 
