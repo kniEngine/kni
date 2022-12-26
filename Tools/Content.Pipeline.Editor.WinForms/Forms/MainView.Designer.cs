@@ -70,6 +70,7 @@ namespace Content.Pipeline.Editor
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this._filterOutputMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._debuggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._singlethreadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cancelBuildSeparator = new System.Windows.Forms.ToolStripSeparator();
             this._cancelBuildMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._helpMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -355,6 +356,7 @@ namespace Content.Pipeline.Editor
             this.toolStripSeparator5,
             this._filterOutputMenuItem,
             this._debuggerMenuItem,
+            this._singlethreadMenuItem,
             this._cancelBuildSeparator,
             this._cancelBuildMenuItem});
             this._buildMenu.Name = "_buildMenu";
@@ -404,6 +406,13 @@ namespace Content.Pipeline.Editor
             this._debuggerMenuItem.Name = "_debuggerMenuItem";
             this._debuggerMenuItem.Size = new System.Drawing.Size(201, 24);
             this._debuggerMenuItem.Text = "Debug Mode";
+            // 
+            // _singlethreadMenuItem
+            // 
+            this._singlethreadMenuItem.CheckOnClick = true;
+            this._singlethreadMenuItem.Name = "_singlethreadMenuItem";
+            this._singlethreadMenuItem.Size = new System.Drawing.Size(201, 24);
+            this._singlethreadMenuItem.Text = "SingleThread";
             // 
             // _cancelBuildSeparator
             // 
@@ -913,6 +922,7 @@ namespace Content.Pipeline.Editor
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem _filterOutputMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _debuggerMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _singlethreadMenuItem;
         private System.Windows.Forms.ToolStripSeparator _treeSeparator1;
         private System.Windows.Forms.ToolStripMenuItem _treeOpenFileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _treeOpenFileLocationMenuItem;

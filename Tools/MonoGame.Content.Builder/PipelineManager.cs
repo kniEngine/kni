@@ -55,6 +55,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         //   Value = processor parameters
         private readonly Dictionary<string, OpaqueDataDictionary> _processorDefaultValues;
 
+        private readonly SortedSet<string> _processingBuildEvents;
+
         public string ProjectDirectory { get; private set; }
         public string OutputDirectory { get; private set; }
         public string IntermediateDirectory { get; private set; }
@@ -95,6 +97,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
+            _processingBuildEvents = new SortedSet<string>();
             RethrowExceptions = true;
 
             Assemblies = new List<string>();
@@ -434,27 +437,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             OpaqueDataDictionary defaultValues;
 
-            if (!_processorDefaultValues.TryGetValue(processorName, out defaultValues))
+            lock (_processorDefaultValues)
             {
-                // Create the content processor instance and read the default values.
-                defaultValues = new OpaqueDataDictionary();
-                var processorType = GetProcessorType(processorName);
-                if (processorType != null)
+                if (!_processorDefaultValues.TryGetValue(processorName, out defaultValues))
                 {
-                    try
+                    // Create the content processor instance and read the default values.
+                    defaultValues = new OpaqueDataDictionary();
+                    var processorType = GetProcessorType(processorName);
+                    if (processorType != null)
                     {
-                        var processor = (IContentProcessor)Activator.CreateInstance(processorType);
-                        var properties = processorType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
-                        foreach (var property in properties)
-                            defaultValues.Add(property.Name, property.GetValue(processor, null));
+                        try
+                        {
+                            var processor = (IContentProcessor)Activator.CreateInstance(processorType);
+                            var properties = processorType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+                            foreach (var property in properties)
+                                defaultValues.Add(property.Name, property.GetValue(processor, null));
+                        }
+                        catch
+                        {
+                            // Ignore exception. Will be handled in ProcessContent.
+                        }
                     }
-                    catch
-                    {
-                        // Ignore exception. Will be handled in ProcessContent.
-                    }
-                }
 
-                _processorDefaultValues.Add(processorName, defaultValues);
+                    _processorDefaultValues.Add(processorName, defaultValues);
+                }
             }
 
             return defaultValues;
@@ -561,7 +567,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             TrackPipelineBuildEvent(contentEvent);
         }
 
-        public PipelineBuildEvent BuildContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
+        public PipelineBuildEvent BuildContent(ConsoleLogger logger, string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
@@ -582,35 +588,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             string eventFilepath;
             var cachedEvent = LoadBuildEvent(contentEvent.DestFile, out eventFilepath);
 
-            BuildContent(contentEvent, cachedEvent, eventFilepath);
+            BuildContent(logger, contentEvent, cachedEvent, eventFilepath);
 
             return contentEvent;
         }
 
-        private void BuildContent(PipelineBuildEvent pipelineEvent, PipelineBuildEvent cachedEvent, string eventFilepath)
+        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent, PipelineBuildEvent cachedEvent, string eventFilepath)
         {
             if (!File.Exists(pipelineEvent.SourceFile))
             {
-                Logger.LogMessage("{0}", pipelineEvent.SourceFile);
+                logger.LogMessage("{0}", pipelineEvent.SourceFile);
                 throw new PipelineException("The source file '{0}' does not exist!", pipelineEvent.SourceFile);
             }
 
-            Logger.PushFile(pipelineEvent.SourceFile);
+            logger.PushFile(pipelineEvent.SourceFile);
 
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
             TrackPipelineBuildEvent(pipelineEvent);
 
+            var building = RegisterBuildEvent(pipelineEvent);
             var rebuild = pipelineEvent.NeedsRebuild(this, cachedEvent);
+            rebuild = rebuild && !building;
 
             if (rebuild)
-                Logger.LogMessage("{0}", pipelineEvent.SourceFile);
+                logger.LogMessage("{0}", pipelineEvent.SourceFile);
             else
-                Logger.LogMessage("Skipping {0}", pipelineEvent.SourceFile);
+                logger.LogMessage("Skipping {0}", pipelineEvent.SourceFile);
 
-            Logger.Indent();
+            logger.Indent();
             try
             {
-                if (!rebuild)
+                if (!rebuild && cachedEvent != null)
                 {
                     // While this asset doesn't need to be rebuilt the dependent assets might.
                     foreach (var asset in cachedEvent.BuildAsset)
@@ -636,7 +644,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         };
 
                         // Give the asset a chance to rebuild.                    
-                        BuildContent(depEvent, assetCachedEvent, assetEventFilepath);
+                        BuildContent(logger, depEvent, assetCachedEvent, assetEventFilepath);
                     }
                 }
 
@@ -644,7 +652,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    var processedObject = ProcessContent(pipelineEvent);
+                    var processedObject = ProcessContent(logger, pipelineEvent);
 
                     // Write the content to disk.
                     WriteXnb(processedObject, pipelineEvent);
@@ -659,12 +667,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
             finally
             {
-                Logger.Unindent();
-                Logger.PopFile();
+                logger.Unindent();
+                logger.PopFile();
             }
         }
 
-        public object ProcessContent(PipelineBuildEvent pipelineEvent)
+        private bool RegisterBuildEvent(PipelineBuildEvent pipelineEvent)
+        {
+            lock (_processingBuildEvents)
+            {
+                if (!_processingBuildEvents.Contains(pipelineEvent.DestFile))
+                {
+                    _processingBuildEvents.Add(pipelineEvent.DestFile);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public object ProcessContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent)
         {
             if (!File.Exists(pipelineEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", pipelineEvent.SourceFile);
@@ -684,7 +705,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    var importContext = new PipelineImporterContext(this);
+                    var importContext = new PipelineImporterContext(logger, this);
                     importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
                 }
                 catch (PipelineException)
@@ -702,7 +723,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
             else
             {
-                var importContext = new PipelineImporterContext(this);
+                var importContext = new PipelineImporterContext(logger, this);
                 importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
             }
 
@@ -732,7 +753,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    var processContext = new PipelineProcessorContext(this, pipelineEvent);
+                    var processContext = new PipelineProcessorContext(logger, this, pipelineEvent);
                     processedObject = processor.Process(importedObject, processContext);
                 }
                 catch (PipelineException)
@@ -750,7 +771,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
             else
             {
-                var processContext = new PipelineProcessorContext(this, pipelineEvent);
+                var processContext = new PipelineProcessorContext(logger, this, pipelineEvent);
                 processedObject = processor.Process(importedObject, processContext);
             }
 
@@ -803,7 +824,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Remove event file (.mgcontent file) from intermediate folder.
             FileHelper.DeleteIfExists(eventFilepath);
 
-            _pipelineBuildEvents.Remove(sourceFilepath);
+            lock (_pipelineBuildEvents)
+            {
+                _pipelineBuildEvents.Remove(sourceFilepath);
+            }
         }
 
         private void WriteXnb(object content, PipelineBuildEvent pipelineEvent)
@@ -833,15 +857,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             List<PipelineBuildEvent> pipelineBuildEvents;
 
-           bool eventsFound = _pipelineBuildEvents.TryGetValue(pipelineEvent.SourceFile, out pipelineBuildEvents);
-            if (!eventsFound)
+            lock (_pipelineBuildEvents)
             {
-                pipelineBuildEvents = new List<PipelineBuildEvent>();
-                _pipelineBuildEvents.Add(pipelineEvent.SourceFile, pipelineBuildEvents);
-            }
+                bool eventsFound = _pipelineBuildEvents.TryGetValue(pipelineEvent.SourceFile, out pipelineBuildEvents);
+                if (!eventsFound)
+                {
+                    pipelineBuildEvents = new List<PipelineBuildEvent>();
+                    _pipelineBuildEvents.Add(pipelineEvent.SourceFile, pipelineBuildEvents);
+                }
 
-            if (FindMatchingEvent(pipelineBuildEvents, pipelineEvent.DestFile, pipelineEvent.Importer, pipelineEvent.Processor, pipelineEvent.Parameters) == null)
-                pipelineBuildEvents.Add(pipelineEvent);
+                if (FindMatchingEvent(pipelineBuildEvents, pipelineEvent.DestFile, pipelineEvent.Importer, pipelineEvent.Processor, pipelineEvent.Parameters) == null)
+                    pipelineBuildEvents.Add(pipelineEvent);
+            }
         }
 
         /// <summary>
@@ -852,7 +879,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// <param name="processorName">The name of the content processor. Can be <see langword="null"/>.</param>
         /// <param name="processorParameters">The processor parameters. Can be <see langword="null"/>.</param>
         /// <returns>The asset name.</returns>
-        public string GetAssetName(string sourceFileName, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        public string GetAssetName(ContentBuildLogger logger, string sourceFileName, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
             Debug.Assert(Path.IsPathRooted(sourceFileName), "Absolute path expected.");
 
@@ -862,23 +889,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             List<PipelineBuildEvent> pipelineBuildEvents;
 
-            if (_pipelineBuildEvents.TryGetValue(sourceFileName, out pipelineBuildEvents))
+            lock (_pipelineBuildEvents)
             {
-                // This source file has already been build.
-                // --> Compare pipeline build events.
-                ResolveImporterAndProcessor(sourceFileName, ref importerName, ref processorName);
-
-                var matchingEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
-                if (matchingEvent != null)
+                if (_pipelineBuildEvents.TryGetValue(sourceFileName, out pipelineBuildEvents))
                 {
-                    // Matching pipeline build event found.
-                    string existingName = matchingEvent.DestFile;
-                    existingName = PathHelper.GetRelativePath(OutputDirectory, existingName);
-                    existingName = existingName.Substring(0, existingName.Length - 4);   // Remove ".xnb".
-                    return existingName;
-                }
+                    // This source file has already been build.
+                    // --> Compare pipeline build events.
+                    ResolveImporterAndProcessor(sourceFileName, ref importerName, ref processorName);
 
-                Logger.LogMessage(string.Format("Warning: Asset {0} built multiple times with different settings.", relativeSourceFileName));
+                    var matchingEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
+                    if (matchingEvent != null)
+                    {
+                        // Matching pipeline build event found.
+                        string existingName = matchingEvent.DestFile;
+                        existingName = PathHelper.GetRelativePath(OutputDirectory, existingName);
+                        existingName = existingName.Substring(0, existingName.Length - 4);   // Remove ".xnb".
+                        return existingName;
+                    }
+
+                    logger.LogMessage(string.Format("Warning: Asset {0} built multiple times with different settings.", relativeSourceFileName));
+                }
             }
 
             // No pipeline build event with matching settings found.

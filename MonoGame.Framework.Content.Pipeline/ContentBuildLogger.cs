@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// All logger warnings or error exceptions from this time forward to the next PopFile call refer to this file.
         /// </summary>
         /// <param name="filename">Name of the file containing future messages.</param>
-        public void PushFile(string filename)
+        public virtual void PushFile(string filename)
         {
             _filenames.Push(filename);
         }
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Outputs a message indicating that a content asset has completed processing.
         /// </summary>
-        public void PopFile()
+        public virtual void PopFile()
         {
             _filenames.Pop();
         }

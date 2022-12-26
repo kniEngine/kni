@@ -9,16 +9,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineImporterContext : ContentImporterContext
     {
+        ConsoleLogger _logger;
         private readonly PipelineManager _manager;
 
-        public PipelineImporterContext(PipelineManager manager)
+        public PipelineImporterContext(ConsoleLogger logger, PipelineManager manager)
         {
+            _logger = logger;
             _manager = manager;
         }
 
         public override string IntermediateDirectory { get { return _manager.IntermediateDirectory; } }
         public override string OutputDirectory { get { return _manager.OutputDirectory; } }
-        public override ContentBuildLogger Logger { get { return _manager.Logger; } }
+        public override ContentBuildLogger Logger { get { return _logger; } }
 
         public override void AddDependency(string filename)
         {            

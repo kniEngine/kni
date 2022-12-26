@@ -47,6 +47,8 @@ namespace Content.Pipeline.Editor
 
         public bool LaunchDebugger { get; set; }
 
+        public bool SingleThread { get; set; }
+
         public string ProjectLocation
         {
             get { return _project.Location; }
@@ -333,6 +335,8 @@ namespace Content.Pipeline.Editor
 
             if (LaunchDebugger)
                 commands += " /launchdebugger";
+            if (SingleThread)
+                commands += " /singleThread";
 
             BuildCommand(_project.ContentItems, commands);
         }
@@ -361,6 +365,8 @@ namespace Content.Pipeline.Editor
 
             if (LaunchDebugger)
                 commands += " /launchdebugger";
+            if (SingleThread)
+                commands += " /singleThread";
 
             BuildCommand(items, commands);
 
@@ -405,6 +411,8 @@ namespace Content.Pipeline.Editor
 
             if (LaunchDebugger)
                 commands += " /launchdebugger";
+            if (SingleThread)
+                commands += " /singleThread";
 
             _buildTask = Task.Factory.StartNew(() => DoBuild(commands));
             if (OnBuildFinished != null)

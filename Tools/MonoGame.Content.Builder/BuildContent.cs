@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,6 +20,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Flag = "d",
             Description = "Wait for debugger to attach before building content.")]
         public bool LaunchDebugger = false;
+
+        [CommandLineParameter(
+            Name = "singleThread",
+            Flag = "s",
+            Description = "Use single Thread.")]
+        public bool SingleThread = false;
 
         [CommandLineParameter(
             Name = "quiet",
@@ -332,7 +339,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // First clean previously built content.
             CleanItems(previousContent, targetChanged);
-
             // TODO: Should we be cleaning copy items?  I think maybe we should.
 
             var newContent = new SourceFileCollection
@@ -348,7 +354,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // (Necessary to correctly resolve external references.)
             RegisterItems(_content);
 
-            BuildItems(_content, newContent);
+            if (SingleThread)
+                BuildItemsSingleThread(_content, newContent);
+            else
+                BuildItemsMultiThread(_content, newContent);
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
@@ -401,13 +410,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void BuildItems(List<ContentItem> contentItems, SourceFileCollection newContent)
+        private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection newContent)
         {
             foreach (var item in contentItems)
             {
                 try
                 {
-                    _manager.BuildContent(item.SourceFile,
+                    _manager.BuildContent(_manager.Logger,
+                                          item.SourceFile,
                                           item.OutputFile,
                                           item.Importer,
                                           item.Processor,
@@ -433,9 +443,113 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
+        private void BuildItemsMultiThread(List<ContentItem> contentItems, SourceFileCollection newContent)
+        {
+            var buildTaskQueue = new Queue<Task<PipelineBuildEvent>>();
+            var activeBuildTasks = new List<Task<PipelineBuildEvent>>();
+            bool firstTask = true;
+
+            int ci = 0;
+            while (ci < contentItems.Count || activeBuildTasks.Count > 0 || buildTaskQueue.Count > 0)
+            {
+                // Create build tasks.
+                while (activeBuildTasks.Count < Environment.ProcessorCount && ci < contentItems.Count)
+                {
+                    BuildAsyncState buildState = new BuildAsyncState()
+                    {
+                        SourceFile = contentItems[ci].SourceFile,
+                        OutputFile = contentItems[ci].OutputFile,
+                        Importer = contentItems[ci].Importer,
+                        Processor = contentItems[ci].Processor,
+                        ProcessorParams = contentItems[ci].ProcessorParams,
+                        Logger = new ConsoleAsyncLogger(_manager.Logger),
+                    };
+                    buildState.Logger.Immediate = firstTask;
+
+                    var task = Task.Factory.StartNew<PipelineBuildEvent>((stateobj) =>
+                    {
+                        var state = stateobj as BuildAsyncState;
+                        //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
+                        var result = _manager.BuildContent(state.Logger,
+                                              state.SourceFile,
+                                              state.OutputFile,
+                                              state.Importer,
+                                              state.Processor,
+                                              state.ProcessorParams);
+                        //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
+                        return result;
+                    }, buildState, TaskCreationOptions.PreferFairness);
+                    buildTaskQueue.Enqueue(task);
+                    activeBuildTasks.Add(task);
+                    firstTask = false;
+                    ci++;
+                }
+
+                if (buildTaskQueue.Count > 0)
+                {
+                    // Get task at the top of the queue.
+                    var topTask = buildTaskQueue.Peek();
+                    var topBuildState = topTask.AsyncState as BuildAsyncState;
+                    topBuildState.Logger.Immediate = true;
+
+                    // Remove task from queue if completed.
+                    if (topTask.IsCompleted || topTask.IsCanceled || topTask.IsFaulted)
+                    {
+                        buildTaskQueue.Dequeue();
+                        //flash log
+                        topBuildState.Logger.Flush();
+
+                        if (topTask.IsFaulted)
+                        {
+                            if (topTask.Exception.InnerException is InvalidContentException)
+                            {
+                                InvalidContentException ex = topTask.Exception.InnerException as InvalidContentException;
+                                WriteError(ex, topBuildState.SourceFile);
+                            }
+                            else if (topTask.Exception.InnerException is PipelineException)
+                            {
+                                PipelineException ex = topTask.Exception.InnerException as PipelineException;
+                                WriteError(ex, topBuildState.SourceFile);
+                            }
+                            else
+                            {
+                                Exception ex = topTask.Exception.InnerException;
+                                WriteError(ex, topBuildState.SourceFile);
+                            }
+                        }
+                        else if (topTask.IsCanceled)
+                        {
+                            //
+                        }
+
+                        continue;
+                    }
+                }
+
+                Task.WaitAny(activeBuildTasks.ToArray());
+
+                // Remove completed tasks.
+                for (int i = activeBuildTasks.Count - 1; i >= 0; i--)
+                {
+                    var task = activeBuildTasks[i];
+                    if (task.IsCompleted || task.IsCanceled || task.IsFaulted)
+                    {
+                        activeBuildTasks.RemoveAt(i);
+                        if (task.IsCompleted)
+                        {
+                            var buildState = task.AsyncState as BuildAsyncState;
+                            newContent.SourceFiles.Add(buildState.SourceFile);
+                            newContent.DestFiles.Add(buildState.OutputFile);
+                            SuccessCount++;
+                        }
+                    }
+                }
+            }
+        }
+
         private void CopyItems(List<CopyItem> copyItems, string projectDirectory, string outputPath)
         {
-            foreach (var item in copyItems)
+            Parallel.ForEach(copyItems, (item) =>
             {
                 try
                 {
@@ -464,7 +578,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             else
                                 Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
 
-                            continue;
+                            return;
                         }
                     }
 
@@ -495,7 +609,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     WriteError(ex, item.SourceFile);
                 }
-            }
+            });
         }
         
         private void WriteError(InvalidContentException ex, string sourceFile)
