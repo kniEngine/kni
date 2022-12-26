@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             if (!Environment.Is64BitProcess && Environment.OSVersion.Platform != PlatformID.Unix)
             {
-                Console.Error.WriteLine("The MonoGame content tools only work on a 64bit OS.");
+                Console.Error.WriteLine("The KNI content Builder tool only work on a 64bit OS.");
                 return -1;
             }
 
@@ -27,8 +27,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Parse the command line.
             var parser = new MGBuildParser(content)
             {
-                Title = "MonoGame Content Builder\n" +
-                        "Builds optimized game content for MonoGame projects."
+                Title = "KNI Content Builder\n" +
+                        "Builds optimized game content for KNI projects."
             };
 
             if (!parser.Parse(args))
