@@ -18,9 +18,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     /// Adapted from this generic command line argument parser:
     /// http://blogs.msdn.com/b/shawnhar/archive/2012/04/20/a-reusable-reflection-based-command-line-parser.aspx     
     /// </summary>
-    public class MGBuildParser
+    public class CommandLineParser
     {
-        public static MGBuildParser Instance;
+        public static CommandLineParser Instance;
 
         private readonly object _optionsObject;
         private readonly Queue<MemberInfo> _requiredOptions;
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public delegate void ErrorCallback(string msg, object[] args);
         public event ErrorCallback OnError;
 
-        public MGBuildParser(object optionsObject)
+        public CommandLineParser(object optionsObject)
         {
             Instance = this;
 
@@ -292,27 +292,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 }
 
                 ParseArgument("/" + name + arg.Substring(2));
-                return true;
-            }
-
-            // Multiple flags
-            if (arg.Length >= 2 &&
-               ((arg[0] == '-' && arg[1] != '-') || arg[0] == '/') &&
-               !arg.Contains(":") && !arg.Contains("=") &&
-               !_optionalOptions.ContainsKey(arg.Substring(1)))
-            {
-                for (int i = 1; i < arg.Length; i++)
-                {
-                    string name;
-                    if (!_flags.TryGetValue(arg[i].ToString(), out name))
-                    {
-                        ShowError("Unknown option '{0}'", arg[i].ToString());
-                        break;
-                    }
-
-                    ParseArgument("/" + name);
-                }
-
                 return true;
             }
 

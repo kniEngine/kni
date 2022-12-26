@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Description = "Displays this help.")]
         public void Help()
         {
-            MGBuildParser.Instance.ShowError(null);
+            CommandLineParser.Instance.ShowError(null);
         }
 
         [CommandLineParameter(
