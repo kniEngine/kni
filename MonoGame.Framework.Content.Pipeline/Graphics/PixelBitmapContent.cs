@@ -26,10 +26,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             _pixelData = new T[height][];
 
-            for (int y = 0; y < Height; y++)
+            Parallel.For(0, Height, (y) =>
             {
                 _pixelData[y] = new T[Width];
-            }
+            });
 
         }
 
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             var dataSize = Width * Height * formatSize;
             var outputData = new byte[dataSize];
 
-            for (var y = 0; y < Height; y++)
+            Parallel.For(0, Height, (y) =>
             {
                 var dataHandle = GCHandle.Alloc(_pixelData[y], GCHandleType.Pinned);
                 var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64());
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 Marshal.Copy(dataPtr, outputData, (formatSize * y * Width), (Width * formatSize));
 
                 dataHandle.Free();
-            }
+            });
 
             return outputData;
         }
