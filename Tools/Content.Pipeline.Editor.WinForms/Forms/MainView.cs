@@ -707,24 +707,28 @@ namespace Content.Pipeline.Editor
         private void BuildMenuItemClick(object sender, EventArgs e)
         {
             _controller.LaunchDebugger = _debuggerMenuItem.Checked;
+            _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Build(false);
         }
 
         private void RebuildMenuItemClick(object sender, EventArgs e)
         {
             _controller.LaunchDebugger = _debuggerMenuItem.Checked;
+            _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Build(true);
         }
 
         private void RebuildItemsMenuItemClick(object sender, EventArgs e)
         {
             _controller.LaunchDebugger = _debuggerMenuItem.Checked;
+            _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.RebuildItems(_treeView.GetSelectedContentItems());
         }
 
         private void CleanMenuItemClick(object sender, EventArgs e)
         {
             _controller.LaunchDebugger = _debuggerMenuItem.Checked;
+            _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Clean();
         }
         
