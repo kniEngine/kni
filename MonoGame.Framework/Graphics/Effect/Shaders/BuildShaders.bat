@@ -7,9 +7,9 @@ SET MGFXC="..\..\..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release
 
   echo %%~nf.fx
   
-  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.dx11.mgfxo /Platform:Windows
+  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.dx11.fxo /Platform:Windows
 
-  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.ogl.mgfxo /Platform:Android
+  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.gl.fxo /Platform:Android
 
 )
 
