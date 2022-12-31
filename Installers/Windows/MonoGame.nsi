@@ -155,6 +155,7 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
 
   SetOutPath '$INSTDIR\Assemblies\Windows\net6.0-windows'
   File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\*.*'
+  File '..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\*.*'
   
   ; Install Oculus Ovr DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
