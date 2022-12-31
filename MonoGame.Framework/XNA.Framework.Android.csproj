@@ -622,12 +622,12 @@
     <Compile Include="Properties\AssemblyInfo.Android.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.gl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\armeabi-v7a\libopenal32.so">

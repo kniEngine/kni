@@ -662,12 +662,12 @@
     <Compile Include="Properties\AssemblyInfo.iOS.cs" />  
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.gl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.gl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <UsingTask TaskName="LocalTouch" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
