@@ -6,11 +6,11 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class EffectResource
     {
-        const string AlphaTestEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.AlphaTestEffect.gl.fxo";
-        const string BasicEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.gl.fxo";
-        const string DualTextureEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.DualTextureEffect.gl.fxo";
-        const string EnvironmentMapEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.EnvironmentMapEffect.gl.fxo";
-        const string SkinnedEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.gl.fxo";
-        const string SpriteEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.gl.fxo";
+        const string AlphaTestEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.AlphaTestEffect.ogl.fxo";
+        const string BasicEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ogl.fxo";
+        const string DualTextureEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.DualTextureEffect.ogl.fxo";
+        const string EnvironmentMapEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.EnvironmentMapEffect.ogl.fxo";
+        const string SkinnedEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ogl.fxo";
+        const string SpriteEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.fxo";
     }
 }
