@@ -51,7 +51,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         CompareFunction alphaFunction = CompareFunction.Greater;
         int referenceAlpha;
-        bool _isEqNotEq;
 
         EffectDirtyFlags dirtyFlags = EffectDirtyFlags.All;
 
@@ -209,8 +208,12 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return alphaFunction; }
             set
             {
-                alphaFunction = value;
-                dirtyFlags |= EffectDirtyFlags.AlphaTest;
+                if (alphaFunction != value)
+                {
+                    alphaFunction = value;
+                    dirtyFlags |= EffectDirtyFlags.AlphaTest;
+                    UpdateCurrentTechnique();
+                }
             }
         }
 
@@ -377,21 +380,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 alphaTestParam.SetValue(alphaTest);
                 dirtyFlags &= ~EffectDirtyFlags.AlphaTest;
-
-                // If we changed between less/greater vs. equal/notequal
-                // compare modes, we must also update the shader index.
-                bool isEqNotEq = (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual);
-                if (_isEqNotEq != isEqNotEq)
-                {
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
-                    _isEqNotEq = isEqNotEq;
-                }
-            }
-
-            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
-            {
-                UpdateCurrentTechnique();
-                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
             }
         }
 
@@ -405,8 +393,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexColorEnabled)
                 shaderIndex += 2;
 
-            bool isEqNotEq = (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual);
-            if (isEqNotEq)
+            if (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual)
                 shaderIndex += 4;
 
             CurrentTechnique = Techniques[shaderIndex];
