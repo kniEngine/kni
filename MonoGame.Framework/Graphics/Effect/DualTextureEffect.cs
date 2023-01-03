@@ -54,14 +54,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region Public Properties
 
-
         /// <summary>
         /// Gets or sets the world matrix.
         /// </summary>
         public Matrix World
         {
             get { return world; }
-            
             set
             {
                 world = value;
@@ -69,14 +67,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the view matrix.
         /// </summary>
         public Matrix View
         {
             get { return view; }
-            
             set
             {
                 view = value;
@@ -84,14 +80,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the projection matrix.
         /// </summary>
         public Matrix Projection
         {
             get { return projection; }
-            
             set
             {
                 projection = value;
@@ -99,14 +93,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the material diffuse color (range 0 to 1).
         /// </summary>
         public Vector3 DiffuseColor
         {
             get { return diffuseColor; }
-            
             set
             {
                 diffuseColor = value;
@@ -114,14 +106,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the material alpha.
         /// </summary>
         public float Alpha
         {
             get { return alpha; }
-            
             set
             {
                 alpha = value;
@@ -129,24 +119,22 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the fog enable flag.
         /// </summary>
         public bool FogEnabled
         {
             get { return fogEnabled; }
-            
             set
             {
                 if (fogEnabled != value)
                 {
                     fogEnabled = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex | EffectDirtyFlags.FogEnable;
+                    dirtyFlags |= EffectDirtyFlags.FogEnable;
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
-
 
         /// <summary>
         /// Gets or sets the fog start distance.
@@ -154,7 +142,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public float FogStart
         {
             get { return fogStart; }
-            
             set
             {
                 fogStart = value;
@@ -162,21 +149,18 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the fog end distance.
         /// </summary>
         public float FogEnd
         {
             get { return fogEnd; }
-            
             set
             {
                 fogEnd = value;
                 dirtyFlags |= EffectDirtyFlags.Fog;
             }
         }
-
 
         /// <summary>
         /// Gets or sets the fog color.
@@ -187,7 +171,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { fogColorParam.SetValue(value); }
         }
 
-
         /// <summary>
         /// Gets or sets the current base texture.
         /// </summary>
@@ -196,7 +179,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return textureParam.GetValueTexture2D(); }
             set { textureParam.SetValue(value); }
         }
-
 
         /// <summary>
         /// Gets or sets the current overlay texture.
@@ -207,14 +189,12 @@ namespace Microsoft.Xna.Framework.Graphics
             set { texture2Param.SetValue(value); }
         }
 
-
         /// <summary>
         /// Gets or sets whether vertex color is enabled.
         /// </summary>
         public bool VertexColorEnabled
         {
             get { return vertexColorEnabled; }
-            
             set
             {
                 if (vertexColorEnabled != value)
@@ -224,7 +204,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
         }
-
 
         #endregion
 
@@ -304,21 +283,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 dirtyFlags &= ~EffectDirtyFlags.MaterialColor;
             }
 
-            // Recompute the shader index?
             if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
             {
-                int shaderIndex = 0;
-                
-                if (fogEnabled)
-                    shaderIndex += 1;
-                
-                if (vertexColorEnabled)
-                    shaderIndex += 2;
-                
+                UpdateCurrentTechnique();
                 dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
-
-                CurrentTechnique = Techniques[shaderIndex];
             }
+        }
+
+        private void UpdateCurrentTechnique()
+        {
+            int shaderIndex = 0;
+
+            if (fogEnabled)
+                shaderIndex += 1;
+
+            if (vertexColorEnabled)
+                shaderIndex += 2;
+
+            CurrentTechnique = Techniques[shaderIndex];
         }
 
 

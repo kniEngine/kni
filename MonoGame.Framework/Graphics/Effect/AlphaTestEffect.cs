@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         CompareFunction alphaFunction = CompareFunction.Greater;
         int referenceAlpha;
-        bool isEqNe;
+        bool _isEqNotEq;
 
         EffectDirtyFlags dirtyFlags = EffectDirtyFlags.All;
 
@@ -59,14 +59,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region Public Properties
 
-
         /// <summary>
         /// Gets or sets the world matrix.
         /// </summary>
         public Matrix World
         {
             get { return world; }
-            
             set
             {
                 world = value;
@@ -74,14 +72,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the view matrix.
         /// </summary>
         public Matrix View
         {
             get { return view; }
-            
             set
             {
                 view = value;
@@ -89,14 +85,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the projection matrix.
         /// </summary>
         public Matrix Projection
         {
             get { return projection; }
-            
             set
             {
                 projection = value;
@@ -104,14 +98,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the material diffuse color (range 0 to 1).
         /// </summary>
         public Vector3 DiffuseColor
         {
             get { return diffuseColor; }
-            
             set
             {
                 diffuseColor = value;
@@ -119,14 +111,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the material alpha.
         /// </summary>
         public float Alpha
         {
             get { return alpha; }
-            
             set
             {
                 alpha = value;
@@ -134,24 +124,22 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the fog enable flag.
         /// </summary>
         public bool FogEnabled
         {
             get { return fogEnabled; }
-            
             set
             {
                 if (fogEnabled != value)
                 {
                     fogEnabled = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex | EffectDirtyFlags.FogEnable;
+                    dirtyFlags |= EffectDirtyFlags.FogEnable;
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
-
 
         /// <summary>
         /// Gets or sets the fog start distance.
@@ -159,7 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public float FogStart
         {
             get { return fogStart; }
-            
             set
             {
                 fogStart = value;
@@ -167,21 +154,18 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the fog end distance.
         /// </summary>
         public float FogEnd
         {
             get { return fogEnd; }
-            
             set
             {
                 fogEnd = value;
                 dirtyFlags |= EffectDirtyFlags.Fog;
             }
         }
-
 
         /// <summary>
         /// Gets or sets the fog color.
@@ -192,7 +176,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { fogColorParam.SetValue(value); }
         }
 
-
         /// <summary>
         /// Gets or sets the current texture.
         /// </summary>
@@ -202,14 +185,12 @@ namespace Microsoft.Xna.Framework.Graphics
             set { textureParam.SetValue(value); }
         }
 
-
         /// <summary>
         /// Gets or sets whether vertex color is enabled.
         /// </summary>
         public bool VertexColorEnabled
         {
             get { return vertexColorEnabled; }
-            
             set
             {
                 if (vertexColorEnabled != value)
@@ -220,14 +201,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the alpha compare function (default Greater).
         /// </summary>
         public CompareFunction AlphaFunction
         {
             get { return alphaFunction; }
-            
             set
             {
                 alphaFunction = value;
@@ -235,21 +214,18 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         /// <summary>
         /// Gets or sets the reference alpha value (default 0).
         /// </summary>
         public int ReferenceAlpha
         {
             get { return referenceAlpha; }
-            
             set
             {
                 referenceAlpha = value;
                 dirtyFlags |= EffectDirtyFlags.AlphaTest;
             }
         }
-
 
         #endregion
 
@@ -332,7 +308,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if ((dirtyFlags & EffectDirtyFlags.AlphaTest) != 0)
             {
                 Vector4 alphaTest = new Vector4();
-                bool eqNe = false;
                 
                 // Convert reference alpha from 8 bit integer to 0-1 float format.
                 float reference = (float)referenceAlpha / 255f;
@@ -376,7 +351,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         alphaTest.Y = threshold;
                         alphaTest.Z = 1;
                         alphaTest.W = -1;
-                        eqNe = true;
                         break;
 
                     case CompareFunction.NotEqual:
@@ -385,7 +359,6 @@ namespace Microsoft.Xna.Framework.Graphics
                         alphaTest.Y = threshold;
                         alphaTest.Z = -1;
                         alphaTest.W = 1;
-                        eqNe = true;
                         break;
 
                     case CompareFunction.Never:
@@ -401,38 +374,42 @@ namespace Microsoft.Xna.Framework.Graphics
                         alphaTest.W = 1;
                         break;
                 }
-                
-                alphaTestParam.SetValue(alphaTest);
 
+                alphaTestParam.SetValue(alphaTest);
                 dirtyFlags &= ~EffectDirtyFlags.AlphaTest;
-                
+
                 // If we changed between less/greater vs. equal/notequal
                 // compare modes, we must also update the shader index.
-                if (isEqNe != eqNe)
+                bool isEqNotEq = (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual);
+                if (_isEqNotEq != isEqNotEq)
                 {
-                    isEqNe = eqNe;
                     dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    _isEqNotEq = isEqNotEq;
                 }
             }
 
-            // Recompute the shader index?
             if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
             {
-                int shaderIndex = 0;
-                
-                if (fogEnabled)
-                    shaderIndex += 1;
-                
-                if (vertexColorEnabled)
-                    shaderIndex += 2;
-                
-                if (isEqNe)
-                    shaderIndex += 4;
-
+                UpdateCurrentTechnique();
                 dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
-
-                CurrentTechnique = Techniques[shaderIndex];
             }
+        }
+
+        private void UpdateCurrentTechnique()
+        {
+            int shaderIndex = 0;
+
+            if (fogEnabled)
+                shaderIndex += 1;
+
+            if (vertexColorEnabled)
+                shaderIndex += 2;
+
+            bool isEqNotEq = (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual);
+            if (isEqNotEq)
+                shaderIndex += 4;
+
+            CurrentTechnique = Techniques[shaderIndex];
         }
 
 

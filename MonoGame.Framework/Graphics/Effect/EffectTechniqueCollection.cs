@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         
         public EffectTechnique this[int index]
         {
-            get { return _techniques [index]; }
+            get { return _techniques[index]; }
         }
 
         public EffectTechnique this[string name]
