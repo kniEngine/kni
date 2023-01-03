@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     lightingEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.MaterialColor;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (preferPerPixelLighting != value)
                 {
                     preferPerPixelLighting = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -227,7 +227,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     fogEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.FogEnable;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (textureEnabled != value)
                 {
                     textureEnabled = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -297,7 +297,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (vertexColorEnabled != value)
                 {
                     vertexColorEnabled = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }

@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     fogEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.FogEnable;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (specularEnabled != enabled)
                 {
                     specularEnabled = enabled;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (fresnelEnabled != enabled)
                 {
                     fresnelEnabled = enabled;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -444,14 +444,8 @@ namespace Microsoft.Xna.Framework.Graphics
             bool oneLight = !light1.Enabled && !light2.Enabled;
             if (_oneLight != oneLight)
             {
-                dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 _oneLight = oneLight;
-            }
-
-            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
-            {
                 UpdateCurrentTechnique();
-                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
             }
         }
 
