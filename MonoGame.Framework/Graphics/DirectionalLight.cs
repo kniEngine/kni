@@ -19,6 +19,8 @@ namespace Microsoft.Xna.Framework.Graphics
         Vector3 _specularColor;
         bool _enabled;
 
+        internal event EventHandler EnabledChanged;
+
         public DirectionalLight(EffectParameter directionParameter, EffectParameter diffuseColorParameter, EffectParameter specularColorParameter, DirectionalLight cloneSource)
         {
             this._diffuseColorParameter = diffuseColorParameter;
@@ -104,9 +106,18 @@ namespace Microsoft.Xna.Framework.Graphics
                             this._specularColorParameter.SetValue(Vector3.Zero);
                         }
                     }
+
+                    OnEnabledChanged(EventArgs.Empty);
                 }
 
             }
+        }
+
+        private void OnEnabledChanged(EventArgs args)
+        {
+            var handler = EnabledChanged;
+            if (handler != null)
+                handler(this, args);
         }
     }
 }

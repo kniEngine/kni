@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     fogEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.FogEnable;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (vertexColorEnabled != value)
                 {
                     vertexColorEnabled = value;
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
+                    UpdateCurrentTechnique();
                 }
             }
         }
@@ -281,12 +281,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 diffuseColorParam.SetValue(new Vector4(diffuseColor * alpha, alpha));
 
                 dirtyFlags &= ~EffectDirtyFlags.MaterialColor;
-            }
-
-            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
-            {
-                UpdateCurrentTechnique();
-                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
             }
         }
 
