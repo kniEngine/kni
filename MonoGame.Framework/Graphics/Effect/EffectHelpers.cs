@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
         Fog             = 16,
         FogEnable       = 32,
         AlphaTest       = 64,
-        ShaderIndex     = 128,
         All             = -1
     }
 
