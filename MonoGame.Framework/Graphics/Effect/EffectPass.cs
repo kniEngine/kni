@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -65,11 +66,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var currentTechnique = _effect.CurrentTechnique;
             _effect.OnApply();
 
-            if (_effect.CurrentTechnique != currentTechnique && _effect.CurrentTechnique.Passes[0] != this)
-            {
-                _effect.CurrentTechnique.Passes[0].Apply(_effect.GraphicsDevice);
-                return;
-            }
+            Debug.Assert(_effect.CurrentTechnique == currentTechnique,
+                "CurrentTechnique changed during Effect.OnApply().");
 
             Apply(_effect.GraphicsDevice);
         }
