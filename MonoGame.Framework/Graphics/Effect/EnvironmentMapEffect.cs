@@ -418,8 +418,16 @@ namespace Microsoft.Xna.Framework.Graphics
                                           Parameters["DirLight2DiffuseColor"],
                                           null,
                                           (cloneSource != null) ? cloneSource.light2 : null);
+
+            light1.EnabledChanged += Light_EnabledChanged;
+            light2.EnabledChanged += Light_EnabledChanged;
         }
 
+        private void Light_EnabledChanged(object sender, EventArgs e)
+        {
+            _oneLight = !light1.Enabled && !light2.Enabled;
+            UpdateCurrentTechnique();
+        }
 
         /// <summary>
         /// Lazily computes derived parameter values immediately before applying the effect.
@@ -439,14 +447,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 dirtyFlags &= ~EffectDirtyFlags.MaterialColor;
             }
-
-            // Check if we can use the only-bother-with-the-first-light shader optimization.
-            bool oneLight = !light1.Enabled && !light2.Enabled;
-            if (_oneLight != oneLight)
-            {
-                _oneLight = oneLight;
-                UpdateCurrentTechnique();
-            }
         }
 
         private void UpdateCurrentTechnique()
@@ -462,8 +462,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (specularEnabled)
                 shaderIndex += 4;
 
-            bool oneLight = !light1.Enabled && !light2.Enabled;
-            if (oneLight)
+            if (_oneLight) // oneLight
                 shaderIndex += 8;
 
             CurrentTechnique = Techniques[shaderIndex];

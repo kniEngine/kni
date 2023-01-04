@@ -397,8 +397,16 @@ namespace Microsoft.Xna.Framework.Graphics
                                           Parameters["DirLight2DiffuseColor"],
                                           Parameters["DirLight2SpecularColor"],
                                           (cloneSource != null) ? cloneSource.light2 : null);
+
+            light1.EnabledChanged += Light_EnabledChanged;
+            light2.EnabledChanged += Light_EnabledChanged;
         }
 
+        private void Light_EnabledChanged(object sender, EventArgs e)
+        {
+            _oneLight = !light1.Enabled && !light2.Enabled;
+            UpdateCurrentTechnique();
+        }
 
         /// <summary>
         /// Lazily computes derived parameter values immediately before applying the effect.
@@ -420,20 +428,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Recompute the world inverse transpose and eye position?
                 dirtyFlags = EffectHelpers.SetLightingMatrices(dirtyFlags, ref world, ref view, worldParam, worldInverseTransposeParam, eyePositionParam);
-                
-                // Check if we can use the only-bother-with-the-first-light shader optimization.
-                bool oneLight = !light1.Enabled && !light2.Enabled;
-                if (_oneLight != oneLight)
-                {
-                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
-                    _oneLight = oneLight;
-                }
-            }
-
-            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
-            {
-                UpdateCurrentTechnique();
-                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
             }
         }
 
@@ -450,14 +444,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (textureEnabled)
                 shaderIndex += 4;
 
-            bool oneLight = !light1.Enabled && !light2.Enabled;
             if (lightingEnabled)
             {
                 if (preferPerPixelLighting)
                     shaderIndex += 24;
-                else if (oneLight)
+                else if (_oneLight) // oneLight
                     shaderIndex += 16;
-                else
+                else // three lights
                     shaderIndex += 8;
             }
 
