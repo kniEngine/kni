@@ -138,8 +138,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     }
                     else
                     {
-                        var concreteType = type.GetGenericArguments();
-                        result = (ContentTypeWriter)Activator.CreateInstance(chosen.MakeGenericType(concreteType));
+                        var args = type.GetGenericArguments();
+                        result = (ContentTypeWriter)Activator.CreateInstance(chosen.MakeGenericType(args));
                     }
 
                     // save it for next time.
