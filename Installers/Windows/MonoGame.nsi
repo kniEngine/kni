@@ -257,6 +257,8 @@ Section "VS2022 Templates" VS2022
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
     File /r '..\..\Templates\VisualStudio2022\ProjectTemplates\*.zip'
+    SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
+    File /r '..\..\Templates\VisualStudio2022\ItemTemplates\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2022 not found"
@@ -394,6 +396,7 @@ Section "Uninstall"
   RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\MonoGame"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
+  RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
   RMDir /r "${MSBuildInstallDir}"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
 

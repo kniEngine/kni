@@ -1,0 +1,23 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>DrawableGameComponent.cs</DefaultName>
+    <Name>DrawableGameComponent item (KNI)</Name>
+    <Description>DrawableGameComponent for KNI</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>40010</SortOrder>
+    <Icon>TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <!--
+    <References>
+      <Reference>
+        <Assembly>Monogame.Framework</Assembly>
+      </Reference>
+    </References>
+    -->
+    <ProjectItem
+       TargetFileName="$fileinputname$.cs"
+       ReplaceParameters="true"
+       SubType="" >DrawableGameComponent.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
