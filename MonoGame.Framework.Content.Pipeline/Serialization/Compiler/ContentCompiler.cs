@@ -80,94 +80,97 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             Type contentTypeWriterType = typeof(ContentTypeWriter<>).MakeGenericType(type);
 
-            Type typeWriterType;
-            if (typeWriterMap.TryGetValue(contentTypeWriterType, out typeWriterType))
-                return (ContentTypeWriter)Activator.CreateInstance(typeWriterType);
-
-            if (type.IsArray)
+            lock (typeWriterMap)
             {
-                Type writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
+                Type typeWriterType;
+                if (typeWriterMap.TryGetValue(contentTypeWriterType, out typeWriterType))
+                    return (ContentTypeWriter)Activator.CreateInstance(typeWriterType);
 
-                Type genericType = writerType.MakeGenericType(type.GetElementType());
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
-                Type resultType = result.GetType();
-                System.Diagnostics.Debug.Assert(genericType == resultType);
-                typeWriterMap.Add(contentTypeWriterType, resultType);
-                return result;
-            }
-
-            if (type.IsEnum)
-            {
-                Type genericType = typeof(EnumWriter<>).MakeGenericType(type);
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
-                Type resultType = result.GetType();
-                System.Diagnostics.Debug.Assert(genericType == resultType);
-                typeWriterMap.Add(contentTypeWriterType, resultType);
-                return result;
-            }
-
-            if (type.IsGenericType)
-            {
-                Type inputTypeDef = type.GetGenericTypeDefinition();
-
-                Type chosen = null;
-                foreach (var kvp in typeWriterMap)
+                if (type.IsArray)
                 {
-                    var args = kvp.Key.GetGenericArguments();
+                    Type writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
 
-                    if (args.Length == 0)
-                        continue;
-
-                    if (!kvp.Value.IsGenericTypeDefinition)
-                        continue;
-
-                    if (!args[0].IsGenericType)
-                        continue;
-
-                    // Compare generic type definition
-                    var keyTypeDef = args[0].GetGenericTypeDefinition();
-                    if (inputTypeDef == keyTypeDef)
-                    {
-                        chosen = kvp.Value;
-                        break;
-                    }
-                }
-
-                try
-                {
-                    Type genericType;
-                    ContentTypeWriter result;
-                    if (chosen == null)
-                    {
-                        genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
-                        result = (ContentTypeWriter)Activator.CreateInstance(genericType);
-                    }
-                    else
-                    {
-                        var args = type.GetGenericArguments();
-                        genericType = chosen.MakeGenericType(args);
-                        result = (ContentTypeWriter)Activator.CreateInstance(genericType);
-                    }
-
-                    // save it for next time.
+                    Type genericType = writerType.MakeGenericType(type.GetElementType());
+                    ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                     Type resultType = result.GetType();
                     System.Diagnostics.Debug.Assert(genericType == resultType);
                     typeWriterMap.Add(contentTypeWriterType, resultType);
                     return result;
                 }
-                catch (Exception)
-                {
-                    throw new InvalidContentException(String.Format("Could not find ContentTypeWriter for type '{0}'", type.Name));
-                }
-            }
 
-            {
-                Type genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
-                Type resultType = result.GetType();
-                System.Diagnostics.Debug.Assert(genericType == resultType);
-                typeWriterMap.Add(contentTypeWriterType, resultType);
-                return result;
+                if (type.IsEnum)
+                {
+                    Type genericType = typeof(EnumWriter<>).MakeGenericType(type);
+                    ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
+                    Type resultType = result.GetType();
+                    System.Diagnostics.Debug.Assert(genericType == resultType);
+                    typeWriterMap.Add(contentTypeWriterType, resultType);
+                    return result;
+                }
+
+                if (type.IsGenericType)
+                {
+                    Type inputTypeDef = type.GetGenericTypeDefinition();
+
+                    Type chosen = null;
+                    foreach (var kvp in typeWriterMap)
+                    {
+                        var args = kvp.Key.GetGenericArguments();
+
+                        if (args.Length == 0)
+                            continue;
+
+                        if (!kvp.Value.IsGenericTypeDefinition)
+                            continue;
+
+                        if (!args[0].IsGenericType)
+                            continue;
+
+                        // Compare generic type definition
+                        var keyTypeDef = args[0].GetGenericTypeDefinition();
+                        if (inputTypeDef == keyTypeDef)
+                        {
+                            chosen = kvp.Value;
+                            break;
+                        }
+                    }
+
+                    try
+                    {
+                        Type genericType;
+                        ContentTypeWriter result;
+                        if (chosen == null)
+                        {
+                            genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
+                            result = (ContentTypeWriter)Activator.CreateInstance(genericType);
+                        }
+                        else
+                        {
+                            var args = type.GetGenericArguments();
+                            genericType = chosen.MakeGenericType(args);
+                            result = (ContentTypeWriter)Activator.CreateInstance(genericType);
+                        }
+
+                        // save it for next time.
+                        Type resultType = result.GetType();
+                        System.Diagnostics.Debug.Assert(genericType == resultType);
+                        typeWriterMap.Add(contentTypeWriterType, resultType);
+                        return result;
+                    }
+                    catch (Exception)
+                    {
+                        throw new InvalidContentException(String.Format("Could not find ContentTypeWriter for type '{0}'", type.Name));
+                    }
+                }
+
+                {
+                    Type genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
+                    ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
+                    Type resultType = result.GetType();
+                    System.Diagnostics.Debug.Assert(genericType == resultType);
+                    typeWriterMap.Add(contentTypeWriterType, resultType);
+                    return result;
+                }
             }
         }
 
