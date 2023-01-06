@@ -88,7 +88,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             {
                 Type writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
 
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(writerType.MakeGenericType(type.GetElementType()));
+                Type genericType = writerType.MakeGenericType(type.GetElementType());
+                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
@@ -96,7 +97,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             if (type.IsEnum)
             {
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(typeof(EnumWriter<>).MakeGenericType(type));
+                Type genericType = typeof(EnumWriter<>).MakeGenericType(type);
+                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
@@ -131,15 +133,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
                 try
                 {
+                    Type genericType;
                     ContentTypeWriter result;
                     if (chosen == null)
                     {
-                        result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
+                        genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
+                        result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                     }
                     else
                     {
                         var args = type.GetGenericArguments();
-                        result = (ContentTypeWriter)Activator.CreateInstance(chosen.MakeGenericType(args));
+                        genericType = chosen.MakeGenericType(args);
+                        result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                     }
 
                     // save it for next time.
@@ -154,7 +159,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             }
 
             {
-                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
+                Type genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
+                ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
