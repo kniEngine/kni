@@ -91,6 +91,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 Type genericType = writerType.MakeGenericType(type.GetElementType());
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
+                System.Diagnostics.Debug.Assert(genericType == resultType);
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
@@ -100,6 +101,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 Type genericType = typeof(EnumWriter<>).MakeGenericType(type);
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
+                System.Diagnostics.Debug.Assert(genericType == resultType);
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
@@ -149,6 +151,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
                     // save it for next time.
                     Type resultType = result.GetType();
+                    System.Diagnostics.Debug.Assert(genericType == resultType);
                     typeWriterMap.Add(contentTypeWriterType, resultType);
                     return result;
                 }
@@ -162,6 +165,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 Type genericType = typeof(ReflectiveWriter<>).MakeGenericType(type);
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(genericType);
                 Type resultType = result.GetType();
+                System.Diagnostics.Debug.Assert(genericType == resultType);
                 typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
