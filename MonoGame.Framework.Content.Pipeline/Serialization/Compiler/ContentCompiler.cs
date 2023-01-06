@@ -89,14 +89,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 Type writerType = type.GetArrayRank() == 1 ? typeof(ArrayWriter<>) : typeof(MultiArrayWriter<>);
 
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(writerType.MakeGenericType(type.GetElementType()));
-                typeWriterMap.Add(contentTypeWriterType, result.GetType());
+                Type resultType = result.GetType();
+                typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
 
             if (type.IsEnum)
             {
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(typeof(EnumWriter<>).MakeGenericType(type));
-                typeWriterMap.Add(contentTypeWriterType, result.GetType());
+                Type resultType = result.GetType();
+                typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
 
@@ -141,7 +143,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     }
 
                     // save it for next time.
-                    typeWriterMap.Add(contentTypeWriterType, result.GetType());
+                    Type resultType = result.GetType();
+                    typeWriterMap.Add(contentTypeWriterType, resultType);
                     return result;
                 }
                 catch (Exception)
@@ -152,7 +155,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             {
                 ContentTypeWriter result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
-                typeWriterMap.Add(contentTypeWriterType, result.GetType());
+                Type resultType = result.GetType();
+                typeWriterMap.Add(contentTypeWriterType, resultType);
                 return result;
             }
         }
