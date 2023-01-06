@@ -68,7 +68,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <remarks>This should be called from the ContentTypeWriter.Initialize method.</remarks>
         public ContentTypeWriter GetTypeWriter(Type type)
         {
-            ContentTypeWriter result = null;
+            ContentTypeWriter result = CreateTypeWriter(type);
+            result.Initialize(this);
+            return result;
+        }
+
+        private ContentTypeWriter CreateTypeWriter(Type type)
+        {
+            ContentTypeWriter result;
             var contentTypeWriterType = typeof(ContentTypeWriter<>).MakeGenericType(type);
             Type typeWriterType;
 
@@ -144,8 +151,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 result = (ContentTypeWriter)Activator.CreateInstance(typeof(ReflectiveWriter<>).MakeGenericType(type));
                 typeWriterMap.Add(contentTypeWriterType, result.GetType());
             }
-
-            result.Initialize(this);
 
             return result;
         }
