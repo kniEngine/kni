@@ -5,8 +5,8 @@
 matrix WorldViewProj;
 
 float HeightMapSize;
-Texture2D HeightMapTexture;
 
+Texture2D HeightMapTexture;
 sampler2D HeightMapSampler = sampler_state
 {
     Texture = (HeightMapTexture);
@@ -38,16 +38,12 @@ float4 PS_Main(VSOutput input) : COLOR0
     return input.Color;
 }
 
-#if __OPENGL__
-
+#if __DIRECTX__
+#define PS_PROFILE ps_4_0_level_9_3
+#define VS_PROFILE vs_4_0_level_9_3
+#else
 #define PS_PROFILE ps_3_0
 #define VS_PROFILE vs_3_0
-
-#else
-
-#define PS_PROFILE ps_4_0
-#define VS_PROFILE vs_4_0
-
 #endif
 
 technique

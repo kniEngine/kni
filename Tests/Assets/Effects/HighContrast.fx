@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+#include "include.fxh"
 
 sampler s0;
 
@@ -21,6 +22,6 @@ technique Technique1
 {
     pass Pass1
     {
-        PixelShader = compile ps_4_0_level_9_1 PixelShaderFunction();
+        PixelShader = compile PS_PROFILE PixelShaderFunction();
     }
 }

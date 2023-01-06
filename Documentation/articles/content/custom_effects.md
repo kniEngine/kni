@@ -2,11 +2,12 @@
 
 A core element of Microsoft XNA is the effect system which is used for all rendering.
 
-For MonoGame we have the burden of supporting stock and custom effects for desktop GLSL, mobile GLSL, DirectX HLSL, and custom formats like that of the PlayStation Mobile.  There currently is no effect system or shader language that supports all the platforms we require, forcing us to build a new custom effect system.
+For KNI we are supporting stock and custom effects for DirectX HLSL, desktop GLSL, mobile GLSL.
+There currently is no effect system or shader language that supports all the platforms we require, forcing us to build a new custom effect system.
 
 ## MGFX
 
-MGFX is MonoGame's own "FX" runtime and tools which with the following core goals:
+MGFX is KNI's own "FX" runtime and tools which with the following core goals:
 
 * Support a similar technique, passes, shaders structure as Microsoft FX files.
 * Have a textual format for ease of editing.
@@ -16,24 +17,24 @@ MGFX is MonoGame's own "FX" runtime and tools which with the following core goal
 
 ## Stock Effects
 
-MonoGame has the following effects built-in and fully supported on current platforms:
+KNI has the following effects built-in and fully supported on current platforms:
 
-* SpriteEffect
 * BasicEffect
 * AlphaTestEffect
 * DualTextureEffect
 * EnvironmentMapEffect
 * SkinnedEffect
+* SpriteEffect
 
-Under the hood these effects use the same system and tools as one would for a custom Effect.  The source and pre-compiled versions of these effects can be found in the ['MonoGame.Framework\Platform\Graphics\Effect\Resources'](https://github.com/MonoGame/MonoGame/tree/develop/MonoGame.Framework/Platform/Graphics/Effect/Resources) folder.
+Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['MonoGame.Framework\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/MonoGame.Framework/Graphics/Effect/Shaders) folder.
 
 > If your game requires an extra little bit of performance you can easily hand edit the existing effects to remove unnecessary features or optimize for specific hardware and rebuild them with the MGFX tool.
 
 ## Custom Effects
 
-To use a custom effect with MonoGame you must do one of the following:
+To use a custom effect with KNI you must do one of the following:
 
-* Run the effect file through the [MonoGame Effect content processor](~/articles/tools/mgcb.md) for loading via the [`ContentManager`](xref:Microsoft.Xna.Framework.Content.ContentManager) (Recommended).
+* Run the effect file through the [content processor](~/articles/tools/mgcb.md) for loading via the [`ContentManager`](xref:Microsoft.Xna.Framework.Content.ContentManager) (Recommended).
 * Process your effect file with the [MGFXC tool](~/articles/tools/mgfxc.md) and load them yourself at runtime.
 
 ## Effect Writing Tips
@@ -57,10 +58,11 @@ These are some tips for writing or converting effects for use with MonoGame.
 ---
 |You can use preprocessor checks to add conditional code or compilation depending on defined symbols. MonoGame defines the following symbols when compiling effects:|
 |---|
-|  * `2MGFX`                        |
-|  * `__DIRECTX__` when targeting DirectX   |
+|  * `MGFX`                        |
+|  * `__DEBUG__` when building with the Debug flag |
+|  * `__DIRECTX__` when targeting DirectX |
 |  * `__OPENGL__` when targeting OpenGL |
-|  * `__MOJOSHADER__` when building with MojoShader |
+|  * `__MOJOSHADER__` when building with MojoShader, targeting OpenGL |
 ---
 
 

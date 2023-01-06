@@ -3,7 +3,6 @@
 #endif
 
 Texture2D SpriteTexture;
-
 sampler2D SpriteTextureSampler = sampler_state
 {
 	Texture = <SpriteTexture>;
