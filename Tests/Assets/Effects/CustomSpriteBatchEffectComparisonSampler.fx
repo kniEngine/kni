@@ -3,7 +3,6 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 Texture2D SourceTexture;
-
 SamplerComparisonState SourceSampler;
 
 struct VSOutput
@@ -19,12 +18,12 @@ float4 PS_Main(VSOutput input) : COLOR0
     return float4(comparisonResult, 0, 0, 1);
 }
 
-#if __OPENGL__
+#if __DIRECTX__
+#define PS_PROFILE ps_4_0_level_9_3
+#define VS_PROFILE vs_4_0_level_9_3
+#else
 #define PS_PROFILE ps_3_0
 #define VS_PROFILE vs_3_0
-#else
-#define PS_PROFILE ps_4_0
-#define VS_PROFILE vs_4_0
 #endif
 
 technique

@@ -126,11 +126,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             Preprocessor pp = new Preprocessor();
 
+            // deprecated macro. Left for backward compatibility with MonoGame.
             pp.AddMacro("MGFX", "1");
 
             // If we're building shaders for debug set that flag too.
             if (DebugMode == EffectProcessorDebugMode.Debug)
+            {
+                pp.AddMacro("__DEBUG__", "1");
+
+                // deprecated macro. Left for backward compatibility with MonoGame.
                 pp.AddMacro("DEBUG", "1");
+            }
 
             foreach (var macro in profile.GetMacros())
                 pp.AddMacro(macro.Key, macro.Value);

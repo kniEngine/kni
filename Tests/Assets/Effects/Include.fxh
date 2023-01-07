@@ -13,4 +13,3 @@
 #define VS_PROFILE vs_2_0
 
 #endif
-int a; // Something on final line
