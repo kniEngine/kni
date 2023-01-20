@@ -74,7 +74,8 @@
       <!-- Assemble final metadata. -->
       <ContentReference>
         <ContentDir>%(ContentFolder)/</ContentDir>
-        <ContentOutputDir>%(FullDir)bin/$(MonoGamePlatform)/%(OutputFolder)</ContentOutputDir>
+        <ContentOutputDir Condition="'$(MonoGamePlatform)' != 'BlazorGL'">%(FullDir)bin/$(MonoGamePlatform)/%(OutputFolder)</ContentOutputDir>
+        <ContentOutputDir Condition="'$(MonoGamePlatform)' == 'BlazorGL'">$(MSBuildProjectDirectory)/wwwroot/%(ContentFolder)/</ContentOutputDir>
         <ContentIntermediateOutputDir>%(FullDir)obj/$(MonoGamePlatform)/$(TargetFramework)/%(OutputFolder)</ContentIntermediateOutputDir>
       </ContentReference>
 
@@ -99,7 +100,7 @@
       <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'MacOSX'">$(MonoMacResourcePrefix)</PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'iOS'">$(IPhoneResourcePrefix)</PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'Android'">$(MonoAndroidAssetsPrefix)</PlatformResourcePrefix>
-      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'BlazorGL'">wwwroot/</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'BlazorGL'"></PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(PlatformResourcePrefix)' != '' And !HasTrailingSlash('$(PlatformResourcePrefix)')">$(PlatformResourcePrefix)\</PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(PlatformResourcePrefix)' == ''"></PlatformResourcePrefix>
       <MonoGameMGCBAdditionalArguments Condition="'$(MonoGameMGCBAdditionalArguments)' == ''">/quiet</MonoGameMGCBAdditionalArguments>
