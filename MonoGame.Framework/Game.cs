@@ -579,7 +579,7 @@ namespace Microsoft.Xna.Framework
                 {
                     _gameTime.TotalGameTime += TargetElapsedTime;
                     _accumulatedElapsedTime -= TargetElapsedTime;
-                    ++stepCount;
+                    stepCount++;
 
                     DoUpdate(_gameTime);
                 }
