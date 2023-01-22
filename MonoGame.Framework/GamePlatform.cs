@@ -50,10 +50,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
-        public Game Game
-        {
-            get; private set;
-        }
+        public readonly Game Game;
 
         private bool _isActive;
         public bool IsActive

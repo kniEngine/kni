@@ -21,7 +21,6 @@ namespace Microsoft.Xna.Framework
             get { return GameRunBehavior.Synchronous; }
         }
 
-        private readonly Game _game;
         private readonly List<Keys> _keys;
 
         private int _isExiting;
@@ -32,7 +31,6 @@ namespace Microsoft.Xna.Framework
         public SdlGamePlatform(Game game)
             : base(game)
         {
-            _game = game;
             _keys = new List<Keys>();
             Keyboard.SetKeys(_keys);
 
@@ -64,7 +62,7 @@ namespace Microsoft.Xna.Framework
             Sdl.DisableScreenSaver();
 
             GamePad.InitDatabase();
-            Window = _view = new SdlGameWindow(_game);
+            Window = _view = new SdlGameWindow(Game);
         }
 
         public override void BeforeInitialize()
@@ -76,7 +74,7 @@ namespace Microsoft.Xna.Framework
 
         protected override void OnIsMouseVisibleChanged()
         {
-            _view.SetCursorVisible(_game.IsMouseVisible);
+            _view.SetCursorVisible(Game.IsMouseVisible);
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
