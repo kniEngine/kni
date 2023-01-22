@@ -416,7 +416,7 @@ namespace Microsoft.Xna.Framework
             if (Platform == null)
                 return;
 
-            if (!Platform.BeforeRun())
+            if (!Platform.ANDROID_BeforeRun())
                 return;
 
             if (!_initialized)

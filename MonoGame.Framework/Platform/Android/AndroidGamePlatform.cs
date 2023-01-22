@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework
             _gameWindow.GameView.TouchEnabled = true;
         }
 
-        public override bool BeforeRun()
+        public override bool ANDROID_BeforeRun()
         {
             // User called Game.Run().
             // Signal the game loop to initialize the game loop.
@@ -170,48 +170,15 @@ namespace Microsoft.Xna.Framework
         {
             Game.Game_AssertNotDisposed();
 
-            if (!BeforeRun())
-            {
-                Game.Game_BeginRun();
-                return;
-            }
-
-            if (!Game.Initialized)
-            {
-                Game.DoInitialize();
-            }
+            // User called Game.Run().
+            // Signal the game loop to initialize the game loop.
+            _gameWindow.GameView.BeforeRun();
 
             Game.Game_BeginRun();
 
-            switch (runBehavior)
-            {
-                case GameRunBehavior.Asynchronous:
-                    AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                    StartRunLoop();
-                    break;
-                case GameRunBehavior.Synchronous:
-                    // XNA runs one Update even before showing the window
-                    Game.DoUpdate(new GameTime());
-
-                    RunLoop();
-                    Game.Game_EndRun();
-                    Game.DoExiting();
-                    break;
-
-                default:
-                    throw new ArgumentException(string.Format(
-                        "Handling for the run behavior {0} is not implemented.", runBehavior));
-            }
-        }
-
-        internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
-        {
-            Game.Game_AssertNotDisposed();
-
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
-            Game.Game_EndRun();
-            Game.DoExiting();
+            // Prevent the default run loop from starting.
+            // We will run the loop from the view's IRunnable.Run().
+            return;
         }
 
         public override void Log(string Message)

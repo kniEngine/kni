@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework
         /// the run loop from starting.
         /// </summary>
         /// <returns></returns>
-        public virtual bool BeforeRun()
+        public virtual bool ANDROID_BeforeRun()
         {
             return true;
         }

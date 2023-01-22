@@ -35,12 +35,6 @@ namespace MonoGame.Framework
         {
             Game.Game_AssertNotDisposed();
 
-            if (!BeforeRun())
-            {
-                Game.Game_BeginRun();
-                return;
-            }
-
             if (!Game.Initialized)
             {
                 Game.DoInitialize();
