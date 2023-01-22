@@ -16,14 +16,9 @@ namespace Microsoft.Xna.Framework
 {
     internal class SdlGamePlatform : GamePlatform
     {
-        public override GameRunBehavior DefaultRunBehavior
-        {
-            get { return GameRunBehavior.Synchronous; }
-        }
-
         internal override void Run()
         {
-            Run(DefaultRunBehavior);
+            Run(GameRunBehavior.Synchronous);
         }
 
         internal override void Run(GameRunBehavior runBehavior)

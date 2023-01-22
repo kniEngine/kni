@@ -122,14 +122,9 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public override GameRunBehavior DefaultRunBehavior
-        {
-            get { return GameRunBehavior.Synchronous; }
-        }
-
         internal override void Run()
         {
-            Run(DefaultRunBehavior);
+            Run(GameRunBehavior.Synchronous);
         }
 
         internal override void Run(GameRunBehavior runBehavior)

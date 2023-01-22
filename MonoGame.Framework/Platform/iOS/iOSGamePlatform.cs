@@ -143,15 +143,9 @@ namespace Microsoft.Xna.Framework
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
-
-        public override GameRunBehavior DefaultRunBehavior
-        {
-            get { return GameRunBehavior.Asynchronous; }
-        }
-
         internal override void Run()
         {
-            Run(DefaultRunBehavior);
+            Run(GameRunBehavior.Asynchronous);
         }
 
         internal override void Run(GameRunBehavior runBehavior)

@@ -41,12 +41,6 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
-        /// <summary>
-        /// When implemented in a derived class, reports the default
-        /// GameRunBehavior for this platform.
-        /// </summary>
-        public abstract GameRunBehavior DefaultRunBehavior { get; }
-
         internal abstract void Run();
 
         internal abstract void Run(GameRunBehavior runBehavior);

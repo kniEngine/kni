@@ -28,14 +28,9 @@ namespace MonoGame.Framework
             Window = _window;
         }
 
-        public override GameRunBehavior DefaultRunBehavior
-        {
-            get { return GameRunBehavior.Synchronous; }
-        }
-
         internal override void Run()
         {
-            Run(DefaultRunBehavior);
+            Run(GameRunBehavior.Synchronous);
         }
 
         internal override void Run(GameRunBehavior runBehavior)
