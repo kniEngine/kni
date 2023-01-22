@@ -127,9 +127,7 @@ namespace Microsoft.Xna.Framework
             Game.Game_AssertNotDisposed();
 
             if (!Game.Initialized)
-            {
                 Game.DoInitialize();
-            }
 
             Game.Game_BeginRun();
 
@@ -146,23 +144,16 @@ namespace Microsoft.Xna.Framework
             Game.Game_AssertNotDisposed();
 
             if (!Game.Initialized)
-            {
                 Game.DoInitialize();
-            }
 
             Game.Game_BeginRun();
 
-            switch (runBehavior)
-            {
-                case GameRunBehavior.Asynchronous:
-                    AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                    StartRunLoop();
-                    break;
-
-                default:
-                    throw new ArgumentException(string.Format(
+            if (runBehavior != GameRunBehavior.Asynchronous)
+                throw new ArgumentException(string.Format(
                         "Handling for the run behavior {0} is not implemented.", runBehavior));
-            }
+
+            AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+            StartRunLoop();
         }
 
         internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
