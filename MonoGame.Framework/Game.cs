@@ -423,7 +423,6 @@ namespace Microsoft.Xna.Framework
             {
                 DoInitialize();
                 _gameTimer = Stopwatch.StartNew();
-                _initialized = true;
             }
 
             BeginRun();
@@ -457,10 +456,9 @@ namespace Microsoft.Xna.Framework
                 return;
             }
 
-            if (!_initialized)
+            if (!Initialized)
             {
                 DoInitialize();
-                _initialized = true;
             }
 
             Game_BeginRun();
@@ -875,6 +873,8 @@ namespace Microsoft.Xna.Framework
 
             _components.ComponentAdded += Components_ComponentAdded;
             _components.ComponentRemoved += Components_ComponentRemoved;
+
+            _initialized = true;
         }
 
 		internal void DoExiting()
