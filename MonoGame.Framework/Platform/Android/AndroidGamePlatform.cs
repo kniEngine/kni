@@ -163,11 +163,6 @@ namespace Microsoft.Xna.Framework
 
         internal override void Run()
         {
-            Run(GameRunBehavior.Asynchronous);
-        }
-
-        internal override void Run(GameRunBehavior runBehavior)
-        {
             Game.Game_AssertNotDisposed();
 
             // User called Game.Run().
@@ -179,6 +174,12 @@ namespace Microsoft.Xna.Framework
             // Prevent the default run loop from starting.
             // We will run the loop from the view's IRunnable.Run().
             return;
+        }
+
+        internal override void Run(GameRunBehavior runBehavior)
+        {
+            throw new ArgumentException(string.Format(
+                "Handling for the run behavior {0} is not implemented.", runBehavior));
         }
 
         public override void Log(string Message)
