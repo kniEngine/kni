@@ -449,12 +449,11 @@ namespace Microsoft.Xna.Framework
         /// <param name="runBehavior">Indicate if the game should be run synchronously or asynchronously.</param>
         public void Run(GameRunBehavior runBehavior)
         {
-            AssertNotDisposed();
+            Game_AssertNotDisposed();
 
             if (!Platform.BeforeRun())
             {
-                BeginRun();
-                _gameTimer = Stopwatch.StartNew();
+                Game_BeginRun();
                 return;
             }
 
@@ -464,8 +463,7 @@ namespace Microsoft.Xna.Framework
                 _initialized = true;
             }
 
-            BeginRun();
-            _gameTimer = Stopwatch.StartNew();
+            Game_BeginRun();
 
             switch (runBehavior)
             {
@@ -478,14 +476,30 @@ namespace Microsoft.Xna.Framework
                     DoUpdate(new GameTime());
 
                     Platform.RunLoop();
-                    EndRun();
-				    DoExiting();
+                    Game_EndRun();
+                    DoExiting();
                     break;
 
                 default:
                     throw new ArgumentException(string.Format(
                         "Handling for the run behavior {0} is not implemented.", runBehavior));
             }
+        }
+
+        internal void Game_AssertNotDisposed()
+        {
+            AssertNotDisposed();
+        }
+
+        internal void Game_BeginRun()
+        {
+            BeginRun();
+            _gameTimer = Stopwatch.StartNew();
+        }
+
+        internal void Game_EndRun()
+        {
+            EndRun();
         }
 
         private TimeSpan _accumulatedElapsedTime;
