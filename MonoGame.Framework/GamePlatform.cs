@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Framework
         {
             if (game == null)
                 throw new ArgumentNullException("game");
+
             Game = game;
         }
 
@@ -299,7 +300,7 @@ namespace Microsoft.Xna.Framework
 		/// 
 		/// </param>
 		[System.Diagnostics.Conditional("DEBUG")]
-		public virtual void Log(string Message) {}		
+		public virtual void Log(string Message) {}
 			
 
         #endregion

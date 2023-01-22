@@ -168,8 +168,8 @@ namespace Microsoft.Xna.Framework
             {
                 if (_viewController != null)
                 {
-                    _viewController.View.RemoveFromSuperview ();
-                    _viewController.RemoveFromParentViewController ();
+                    _viewController.View.RemoveFromSuperview();
+                    _viewController.RemoveFromParentViewController();
                     _viewController.Dispose();
                     _viewController = null;
                 }
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Framework
 
         public override void BeforeInitialize()
         {
-            base.BeforeInitialize ();
+            base.BeforeInitialize();
 
             _viewController.View.LayoutSubviews();
         }
@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Framework
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
             _viewController.View.MakeCurrent();
-            Game.Tick ();
+            Game.Tick();
             Threading.Run();
 
             if (!IsPlayingVideo)
@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Framework
                     // disposing resources disposed from a non-ui thread
                     Game.GraphicsDevice.Present();
                 }
-                _viewController.View.Present ();
+                _viewController.View.Present();
             }
         }
 

@@ -419,17 +419,17 @@ namespace Microsoft.Xna.Framework
 
             if (!_initialized)
             {
-                DoInitialize ();
+                DoInitialize();
                 _gameTimer = Stopwatch.StartNew();
                 _initialized = true;
             }
 
-            BeginRun();            
+            BeginRun();
 
             //Not quite right..
-            Tick ();
+            Tick();
 
-            EndRun ();
+            EndRun();
 
         }
 
@@ -448,6 +448,7 @@ namespace Microsoft.Xna.Framework
         public void Run(GameRunBehavior runBehavior)
         {
             AssertNotDisposed();
+
             if (!Platform.BeforeRun())
             {
                 BeginRun();
@@ -455,30 +456,33 @@ namespace Microsoft.Xna.Framework
                 return;
             }
 
-            if (!_initialized) {
-                DoInitialize ();
+            if (!_initialized)
+            {
+                DoInitialize();
                 _initialized = true;
             }
 
             BeginRun();
             _gameTimer = Stopwatch.StartNew();
+
             switch (runBehavior)
             {
-            case GameRunBehavior.Asynchronous:
-                Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                Platform.StartRunLoop();
-                break;
-            case GameRunBehavior.Synchronous:
-                // XNA runs one Update even before showing the window
-                DoUpdate(new GameTime());
+                case GameRunBehavior.Asynchronous:
+                    Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+                    Platform.StartRunLoop();
+                    break;
+                case GameRunBehavior.Synchronous:
+                    // XNA runs one Update even before showing the window
+                    DoUpdate(new GameTime());
 
-                Platform.RunLoop();
-                EndRun();
-				DoExiting();
-                break;
-            default:
-                throw new ArgumentException(string.Format(
-                    "Handling for the run behavior {0} is not implemented.", runBehavior));
+                    Platform.RunLoop();
+                    EndRun();
+				    DoExiting();
+                    break;
+
+                default:
+                    throw new ArgumentException(string.Format(
+                        "Handling for the run behavior {0} is not implemented.", runBehavior));
             }
         }
 
@@ -735,7 +739,7 @@ namespace Microsoft.Xna.Framework
         /// Called when the game gains focus. Raises the <see cref="Activated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Activated"/> event.</param>
-		protected virtual void OnActivated (EventArgs args)
+		protected virtual void OnActivated(EventArgs args)
 		{
 			AssertNotDisposed();
 
@@ -748,7 +752,7 @@ namespace Microsoft.Xna.Framework
         /// Called when the game loses focus. Raises the <see cref="Deactivated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Deactivated"/> event.</param>
-		protected virtual void OnDeactivated (EventArgs args)
+		protected virtual void OnDeactivated(EventArgs args)
 		{
 			AssertNotDisposed();
 
