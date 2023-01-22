@@ -43,7 +43,10 @@ namespace Microsoft.Xna.Framework
 
         internal abstract void Run();
 
-        internal abstract void Run(GameRunBehavior runBehavior);
+        internal virtual void Run_UAP_XAML()
+        {
+            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
+        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.

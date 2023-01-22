@@ -45,12 +45,6 @@ namespace MonoGame.Framework
             Game.DoExiting();
         }
 
-        internal override void Run(GameRunBehavior runBehavior)
-        {
-            throw new ArgumentException(string.Format(
-                "Handling for the run behavior {0} is not implemented.", runBehavior));
-        }
-
         protected override void OnIsMouseVisibleChanged()
         {
             _window.MouseVisibleToggled();

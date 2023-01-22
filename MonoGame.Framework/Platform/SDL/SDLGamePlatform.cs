@@ -33,12 +33,6 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
-        internal override void Run(GameRunBehavior runBehavior)
-        {
-            throw new ArgumentException(string.Format(
-                "Handling for the run behavior {0} is not implemented.", runBehavior));
-        }
-
         private readonly List<Keys> _keys;
 
         private int _isExiting;

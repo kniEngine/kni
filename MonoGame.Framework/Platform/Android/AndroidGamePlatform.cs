@@ -176,12 +176,6 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        internal override void Run(GameRunBehavior runBehavior)
-        {
-            throw new ArgumentException(string.Format(
-                "Handling for the run behavior {0} is not implemented.", runBehavior));
-        }
-
         public override void Log(string Message)
         {
 #if LOGGING

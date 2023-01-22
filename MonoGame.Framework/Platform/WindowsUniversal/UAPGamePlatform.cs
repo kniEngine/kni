@@ -139,7 +139,8 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
-        internal override void Run(GameRunBehavior runBehavior)
+        //TODO: merge Run_UAP_XAML() with Run()
+        internal override void Run_UAP_XAML()
         {
             Game.Game_AssertNotDisposed();
 
@@ -147,10 +148,6 @@ namespace Microsoft.Xna.Framework
                 Game.DoInitialize();
 
             Game.Game_BeginRun();
-
-            if (runBehavior != GameRunBehavior.Asynchronous)
-                throw new ArgumentException(string.Format(
-                        "Handling for the run behavior {0} is not implemented.", runBehavior));
 
             AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
             StartRunLoop();

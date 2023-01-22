@@ -156,12 +156,6 @@ namespace Microsoft.Xna.Framework
             StartRunLoop();
         }
 
-        internal override void Run(GameRunBehavior runBehavior)
-        {
-            throw new ArgumentException(string.Format(
-                "Handling for the run behavior {0} is not implemented.", runBehavior));
-        }
-
         internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
         {
             Game.Game_AssertNotDisposed();

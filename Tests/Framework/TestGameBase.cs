@@ -169,7 +169,7 @@ namespace MonoGame.Tests {
 			Exception ex = null;
 			UIApplication.SharedApplication.InvokeOnMainThread(() => {
 				try {
-					base.Run (GameRunBehavior.Asynchronous);
+					base.Run();
 				} catch (Exception innerEx) {
 					ex = innerEx;
 				}

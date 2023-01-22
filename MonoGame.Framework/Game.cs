@@ -435,7 +435,7 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// Run the game using the default <see cref="GameRunBehavior"/> for the current platform.
+        /// Run the game for the current platform.
         /// </summary>
         public void Run()
         {
@@ -443,12 +443,11 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// Run the game.
+        /// Run the game. This method is valid only for the UAP/XAML template.
         /// </summary>
-        /// <param name="runBehavior">Indicate if the game should be run synchronously or asynchronously.</param>
-        public void Run(GameRunBehavior runBehavior)
+        internal void Run_UAP_XAML()
         {
-            Platform.Run(runBehavior);
+            Platform.Run_UAP_XAML();
         }
 
         internal void Game_AssertNotDisposed()

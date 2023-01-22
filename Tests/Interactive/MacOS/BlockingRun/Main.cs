@@ -18,14 +18,14 @@ namespace BlockingRun
             using (var pool = new NSAutoreleasePool())
             using (var game = new BlockingRunGame())
             {
-                game.Run(GameRunBehavior.Synchronous);
+                game.Run();
             }
 
             Console.WriteLine("Starting a second blocking game instance...");
             using (var pool = new NSAutoreleasePool())
             using (var game = new BlockingRunGame())
             {
-                game.Run(GameRunBehavior.Synchronous);
+                game.Run();
             }
 
             Console.WriteLine("Fin");
