@@ -439,7 +439,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Run()
         {
-            Run(Platform.DefaultRunBehavior);
+            Platform.Run();
         }
 
         /// <summary>
@@ -448,40 +448,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="runBehavior">Indicate if the game should be run synchronously or asynchronously.</param>
         public void Run(GameRunBehavior runBehavior)
         {
-            Game_AssertNotDisposed();
-
-            if (!Platform.BeforeRun())
-            {
-                Game_BeginRun();
-                return;
-            }
-
-            if (!Initialized)
-            {
-                DoInitialize();
-            }
-
-            Game_BeginRun();
-
-            switch (runBehavior)
-            {
-                case GameRunBehavior.Asynchronous:
-                    Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                    Platform.StartRunLoop();
-                    break;
-                case GameRunBehavior.Synchronous:
-                    // XNA runs one Update even before showing the window
-                    DoUpdate(new GameTime());
-
-                    Platform.RunLoop();
-                    Game_EndRun();
-                    DoExiting();
-                    break;
-
-                default:
-                    throw new ArgumentException(string.Format(
-                        "Handling for the run behavior {0} is not implemented.", runBehavior));
-            }
+            Platform.Run(runBehavior);
         }
 
         internal void Game_AssertNotDisposed()
@@ -799,16 +766,6 @@ namespace Microsoft.Xna.Framework
                 _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
             if (e.GameComponent is IDrawable)
                 _drawableComponents.RemoveDrawable((IDrawable)e.GameComponent);
-        }
-
-        private void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
-        {
-            AssertNotDisposed();
-
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
-            EndRun();
-			DoExiting();
         }
 
         #endregion Event Handlers

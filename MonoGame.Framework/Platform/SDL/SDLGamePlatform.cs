@@ -21,6 +21,59 @@ namespace Microsoft.Xna.Framework
             get { return GameRunBehavior.Synchronous; }
         }
 
+        internal override void Run()
+        {
+            Run(DefaultRunBehavior);
+        }
+
+        internal override void Run(GameRunBehavior runBehavior)
+        {
+            Game.Game_AssertNotDisposed();
+
+            if (!BeforeRun())
+            {
+                Game.Game_BeginRun();
+                return;
+            }
+
+            if (!Game.Initialized)
+            {
+                Game.DoInitialize();
+            }
+
+            Game.Game_BeginRun();
+
+            switch (runBehavior)
+            {
+                case GameRunBehavior.Asynchronous:
+                    AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+                    StartRunLoop();
+                    break;
+                case GameRunBehavior.Synchronous:
+                    // XNA runs one Update even before showing the window
+                    Game.DoUpdate(new GameTime());
+
+                    RunLoop();
+                    Game.Game_EndRun();
+                    Game.DoExiting();
+                    break;
+
+                default:
+                    throw new ArgumentException(string.Format(
+                        "Handling for the run behavior {0} is not implemented.", runBehavior));
+            }
+        }
+
+        internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
+        {
+            Game.Game_AssertNotDisposed();
+
+            var platform = (GamePlatform)sender;
+            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
+            Game.Game_EndRun();
+            Game.DoExiting();
+        }
+
         private readonly List<Keys> _keys;
 
         private int _isExiting;

@@ -47,6 +47,10 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public abstract GameRunBehavior DefaultRunBehavior { get; }
 
+        internal abstract void Run();
+
+        internal abstract void Run(GameRunBehavior runBehavior);
+
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
