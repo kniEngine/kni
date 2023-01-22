@@ -38,11 +38,6 @@ namespace MonoGame.Framework
             _window.MouseVisibleToggled();
         }
 
-        public override bool BeforeRun()
-        {
-            return base.BeforeRun();
-        }
-
         public override void BeforeInitialize()
         {
             base.BeforeInitialize();
