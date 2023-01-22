@@ -439,6 +439,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Run()
         {
+            AssertNotDisposed();
+
             Platform.Run();
         }
 
@@ -447,6 +449,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         internal void Run_UAP_XAML()
         {
+            AssertNotDisposed();
+
             Platform.Run_UAP_XAML();
         }
 

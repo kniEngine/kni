@@ -18,8 +18,6 @@ namespace Microsoft.Xna.Framework
     {
         internal override void Run()
         {
-            Game.Game_AssertNotDisposed();
-
             if (!Game.Initialized)
                 Game.DoInitialize();
 

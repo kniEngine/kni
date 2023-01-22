@@ -124,8 +124,6 @@ namespace Microsoft.Xna.Framework
 
         internal override void Run()
         {
-            Game.Game_AssertNotDisposed();
-
             if (!Game.Initialized)
                 Game.DoInitialize();
 
@@ -142,8 +140,6 @@ namespace Microsoft.Xna.Framework
         //TODO: merge Run_UAP_XAML() with Run()
         internal override void Run_UAP_XAML()
         {
-            Game.Game_AssertNotDisposed();
-
             if (!Game.Initialized)
                 Game.DoInitialize();
 

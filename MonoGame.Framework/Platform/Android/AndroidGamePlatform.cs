@@ -163,8 +163,6 @@ namespace Microsoft.Xna.Framework
 
         internal override void Run()
         {
-            Game.Game_AssertNotDisposed();
-
             // User called Game.Run().
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
