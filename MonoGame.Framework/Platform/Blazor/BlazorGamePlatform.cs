@@ -28,11 +28,6 @@ namespace MonoGame.Framework
 
         internal override void Run()
         {
-            Run(GameRunBehavior.Synchronous);
-        }
-
-        internal override void Run(GameRunBehavior runBehavior)
-        {
             Game.Game_AssertNotDisposed();
 
             if (!Game.Initialized)
@@ -42,35 +37,18 @@ namespace MonoGame.Framework
 
             Game.Game_BeginRun();
 
-            switch (runBehavior)
-            {
-                case GameRunBehavior.Asynchronous:
-                    AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                    StartRunLoop();
-                    break;
-                case GameRunBehavior.Synchronous:
-                    // XNA runs one Update even before showing the window
-                    Game.DoUpdate(new GameTime());
+            // XNA runs one Update even before showing the window
+            Game.DoUpdate(new GameTime());
+            RunLoop();
 
-                    RunLoop();
-                    Game.Game_EndRun();
-                    Game.DoExiting();
-                    break;
-
-                default:
-                    throw new ArgumentException(string.Format(
-                        "Handling for the run behavior {0} is not implemented.", runBehavior));
-            }
-        }
-
-        internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
-        {
-            Game.Game_AssertNotDisposed();
-
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
             Game.Game_EndRun();
             Game.DoExiting();
+        }
+
+        internal override void Run(GameRunBehavior runBehavior)
+        {
+            throw new ArgumentException(string.Format(
+                        "Handling for the run behavior {0} is not implemented.", runBehavior));
         }
 
         protected override void OnIsMouseVisibleChanged()

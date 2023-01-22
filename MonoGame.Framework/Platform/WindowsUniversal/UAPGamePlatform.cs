@@ -124,7 +124,21 @@ namespace Microsoft.Xna.Framework
 
         internal override void Run()
         {
-            Run(GameRunBehavior.Synchronous);
+            Game.Game_AssertNotDisposed();
+
+            if (!Game.Initialized)
+            {
+                Game.DoInitialize();
+            }
+
+            Game.Game_BeginRun();
+
+            // XNA runs one Update even before showing the window
+            Game.DoUpdate(new GameTime());
+            RunLoop();
+
+            Game.Game_EndRun();
+            Game.DoExiting();
         }
 
         internal override void Run(GameRunBehavior runBehavior)
@@ -143,14 +157,6 @@ namespace Microsoft.Xna.Framework
                 case GameRunBehavior.Asynchronous:
                     AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
                     StartRunLoop();
-                    break;
-                case GameRunBehavior.Synchronous:
-                    // XNA runs one Update even before showing the window
-                    Game.DoUpdate(new GameTime());
-
-                    RunLoop();
-                    Game.Game_EndRun();
-                    Game.DoExiting();
                     break;
 
                 default:

@@ -136,7 +136,7 @@ namespace MonoGame.Tests {
 #elif IOS || TVOS || ANDROID
 			RunOnMainThreadAndWait();
 #else
-			base.Run (GameRunBehavior.Synchronous);
+			base.Run();
 #endif
 		}
 
