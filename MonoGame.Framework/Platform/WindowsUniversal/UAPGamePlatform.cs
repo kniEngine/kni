@@ -4,22 +4,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
-
-//using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.System.Threading;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+//using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
@@ -125,19 +122,38 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public override GameRunBehavior DefaultRunBehavior
+        internal override void Run()
         {
-            get { return GameRunBehavior.Synchronous; }
+            if (!Game.Initialized)
+                Game.DoInitialize();
+
+            Game.Game_BeginRun();
+            // XNA runs one Update even before showing the window
+            Game.DoUpdate(new GameTime());
+
+            UAPGameWindow.Instance.RunLoop();
+
+            Game.Game_EndRun();
+            Game.DoExiting();
         }
 
-        public override void RunLoop()
+        //TODO: merge Run_UAP_XAML() with Run()
+        internal override void Run_UAP_XAML()
         {
-            UAPGameWindow.Instance.RunLoop();
+            if (!Game.Initialized)
+                Game.DoInitialize();
+
+            Game.Game_BeginRun();
+
+            StartRunLoop();
+
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         bool _runInMainThread = true;
         bool _enableRunLoop = false;
-        public override void StartRunLoop()
+        private void StartRunLoop()
         {
             if (UAPGameWindow.Instance.CoreWindow.CustomProperties.ContainsKey("RunInMainThread"))
                 _runInMainThread = (bool)UAPGameWindow.Instance.CoreWindow.CustomProperties["RunInMainThread"];

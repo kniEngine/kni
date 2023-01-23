@@ -5,10 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 #if WINDOWS_UAP
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 #endif
+
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -414,72 +416,58 @@ namespace Microsoft.Xna.Framework
             if (Platform == null)
                 return;
 
-            if (!Platform.BeforeRun())
+            if (!Platform.ANDROID_BeforeRun())
                 return;
 
             if (!_initialized)
             {
-                DoInitialize ();
+                DoInitialize();
                 _gameTimer = Stopwatch.StartNew();
-                _initialized = true;
-            }
-
-            BeginRun();            
-
-            //Not quite right..
-            Tick ();
-
-            EndRun ();
-
-        }
-
-        /// <summary>
-        /// Run the game using the default <see cref="GameRunBehavior"/> for the current platform.
-        /// </summary>
-        public void Run()
-        {
-            Run(Platform.DefaultRunBehavior);
-        }
-
-        /// <summary>
-        /// Run the game.
-        /// </summary>
-        /// <param name="runBehavior">Indicate if the game should be run synchronously or asynchronously.</param>
-        public void Run(GameRunBehavior runBehavior)
-        {
-            AssertNotDisposed();
-            if (!Platform.BeforeRun())
-            {
-                BeginRun();
-                _gameTimer = Stopwatch.StartNew();
-                return;
-            }
-
-            if (!_initialized) {
-                DoInitialize ();
-                _initialized = true;
             }
 
             BeginRun();
-            _gameTimer = Stopwatch.StartNew();
-            switch (runBehavior)
-            {
-            case GameRunBehavior.Asynchronous:
-                Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
-                Platform.StartRunLoop();
-                break;
-            case GameRunBehavior.Synchronous:
-                // XNA runs one Update even before showing the window
-                DoUpdate(new GameTime());
 
-                Platform.RunLoop();
-                EndRun();
-				DoExiting();
-                break;
-            default:
-                throw new ArgumentException(string.Format(
-                    "Handling for the run behavior {0} is not implemented.", runBehavior));
-            }
+            //Not quite right..
+            Tick();
+
+            EndRun();
+
+        }
+
+        /// <summary>
+        /// Run the game for the current platform.
+        /// </summary>
+        public void Run()
+        {
+            AssertNotDisposed();
+
+            Platform.Run();
+        }
+
+        /// <summary>
+        /// Run the game. This method is valid only for the UAP/XAML template.
+        /// </summary>
+        internal void Run_UAP_XAML()
+        {
+            AssertNotDisposed();
+
+            Platform.Run_UAP_XAML();
+        }
+
+        internal void Game_AssertNotDisposed()
+        {
+            AssertNotDisposed();
+        }
+
+        internal void Game_BeginRun()
+        {
+            BeginRun();
+            _gameTimer = Stopwatch.StartNew();
+        }
+
+        internal void Game_EndRun()
+        {
+            EndRun();
         }
 
         private TimeSpan _accumulatedElapsedTime;
@@ -559,7 +547,7 @@ namespace Microsoft.Xna.Framework
                 {
                     _gameTime.TotalGameTime += TargetElapsedTime;
                     _accumulatedElapsedTime -= TargetElapsedTime;
-                    ++stepCount;
+                    stepCount++;
 
                     DoUpdate(_gameTime);
                 }
@@ -735,7 +723,7 @@ namespace Microsoft.Xna.Framework
         /// Called when the game gains focus. Raises the <see cref="Activated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Activated"/> event.</param>
-		protected virtual void OnActivated (EventArgs args)
+		protected virtual void OnActivated(EventArgs args)
 		{
 			AssertNotDisposed();
 
@@ -748,7 +736,7 @@ namespace Microsoft.Xna.Framework
         /// Called when the game loses focus. Raises the <see cref="Deactivated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Deactivated"/> event.</param>
-		protected virtual void OnDeactivated (EventArgs args)
+		protected virtual void OnDeactivated(EventArgs args)
 		{
 			AssertNotDisposed();
 
@@ -781,16 +769,6 @@ namespace Microsoft.Xna.Framework
                 _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
             if (e.GameComponent is IDrawable)
                 _drawableComponents.RemoveDrawable((IDrawable)e.GameComponent);
-        }
-
-        private void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
-        {
-            AssertNotDisposed();
-
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
-            EndRun();
-			DoExiting();
         }
 
         #endregion Event Handlers
@@ -855,6 +833,8 @@ namespace Microsoft.Xna.Framework
 
             _components.ComponentAdded += Components_ComponentAdded;
             _components.ComponentRemoved += Components_ComponentRemoved;
+
+            _initialized = true;
         }
 
 		internal void DoExiting()

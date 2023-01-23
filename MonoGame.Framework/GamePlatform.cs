@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Framework
         {
             if (game == null)
                 throw new ArgumentNullException("game");
+
             Game = game;
         }
 
@@ -40,19 +41,17 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
-        /// <summary>
-        /// When implemented in a derived class, reports the default
-        /// GameRunBehavior for this platform.
-        /// </summary>
-        public abstract GameRunBehavior DefaultRunBehavior { get; }
+        internal abstract void Run();
+
+        internal virtual void Run_UAP_XAML()
+        {
+            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
+        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
-        public Game Game
-        {
-            get; private set;
-        }
+        public readonly Game Game;
 
         private bool _isActive;
         public bool IsActive
@@ -114,21 +113,8 @@ namespace Microsoft.Xna.Framework
 
         #region Events
 
-        public event EventHandler<EventArgs> AsyncRunLoopEnded;
         public event EventHandler<EventArgs> Activated;
         public event EventHandler<EventArgs> Deactivated;
-
-        /// <summary>
-        /// Raises the AsyncRunLoopEnded event.  This method must be called by
-        /// derived classes when the asynchronous run loop they start has
-        /// stopped running.
-        /// </summary>
-        protected void RaiseAsyncRunLoopEnded()
-        {
-            var handler = AsyncRunLoopEnded;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
 
         #endregion Events
 
@@ -151,7 +137,7 @@ namespace Microsoft.Xna.Framework
         /// the run loop from starting.
         /// </summary>
         /// <returns></returns>
-        public virtual bool BeforeRun()
+        public virtual bool ANDROID_BeforeRun()
         {
             return true;
         }
@@ -160,18 +146,6 @@ namespace Microsoft.Xna.Framework
         /// When implemented in a derived, ends the active run loop.
         /// </summary>
         public abstract void Exit();
-
-        /// <summary>
-        /// When implemented in a derived, starts the run loop and blocks
-        /// until it has ended.
-        /// </summary>
-        public abstract void RunLoop();
-
-        /// <summary>
-        /// When implemented in a derived, starts the run loop and returns
-        /// immediately.
-        /// </summary>
-        public abstract void StartRunLoop();
 
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Update
@@ -299,7 +273,7 @@ namespace Microsoft.Xna.Framework
 		/// 
 		/// </param>
 		[System.Diagnostics.Conditional("DEBUG")]
-		public virtual void Log(string Message) {}		
+		public virtual void Log(string Message) {}
 			
 
         #endregion

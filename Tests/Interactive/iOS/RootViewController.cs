@@ -144,7 +144,7 @@ namespace MonoGame.InteractiveTests.iOS {
 
 			_activeGame = test.Create ();
 			_activeGame.Exiting += ActiveGame_Exiting;
-			_activeGame.Run (GameRunBehavior.Asynchronous);
+			_activeGame.Run();
 
 			View.Window.Hidden = true;
 		}

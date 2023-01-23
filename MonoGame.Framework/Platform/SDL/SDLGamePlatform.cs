@@ -5,23 +5,32 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.Utilities;
-using System.Text;
 
 namespace Microsoft.Xna.Framework
 {
     internal class SdlGamePlatform : GamePlatform
     {
-        public override GameRunBehavior DefaultRunBehavior
+        internal override void Run()
         {
-            get { return GameRunBehavior.Synchronous; }
+            if (!Game.Initialized)
+                Game.DoInitialize();
+
+            Game.Game_BeginRun();
+            // XNA runs one Update even before showing the window
+            Game.DoUpdate(new GameTime());
+
+            RunLoop();
+
+            Game.Game_EndRun();
+            Game.DoExiting();
         }
 
-        private readonly Game _game;
         private readonly List<Keys> _keys;
 
         private int _isExiting;
@@ -32,7 +41,6 @@ namespace Microsoft.Xna.Framework
         public SdlGamePlatform(Game game)
             : base(game)
         {
-            _game = game;
             _keys = new List<Keys>();
             Keyboard.SetKeys(_keys);
 
@@ -64,7 +72,7 @@ namespace Microsoft.Xna.Framework
             Sdl.DisableScreenSaver();
 
             GamePad.InitDatabase();
-            Window = _view = new SdlGameWindow(_game);
+            Window = _view = new SdlGameWindow(Game);
         }
 
         public override void BeforeInitialize()
@@ -76,7 +84,7 @@ namespace Microsoft.Xna.Framework
 
         protected override void OnIsMouseVisibleChanged()
         {
-            _view.SetCursorVisible(_game.IsMouseVisible);
+            _view.SetCursorVisible(Game.IsMouseVisible);
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
@@ -87,7 +95,7 @@ namespace Microsoft.Xna.Framework
             EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight);
         }
 
-        public override void RunLoop()
+        private void RunLoop()
         {
             Sdl.Window.Show(Window.Handle);
 
@@ -280,11 +288,6 @@ namespace Microsoft.Xna.Framework
                 return (byte1 % 0x8) * 0x40 * 0x40 * 0x40 + (byte2 % 0x40) * 0x40 * 0x40 + (byte3 % 0x40) * 0x40 + (byte4 % 0x40);
             else
                 return -1;
-        }
-
-        public override void StartRunLoop()
-        {
-            throw new NotSupportedException("The desktop platform does not support asynchronous run loops");
         }
 
         public override void Exit()

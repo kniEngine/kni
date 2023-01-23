@@ -143,10 +143,17 @@ namespace Microsoft.Xna.Framework
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
-
-        public override GameRunBehavior DefaultRunBehavior
+        internal override void Run()
         {
-            get { return GameRunBehavior.Asynchronous; }
+            if (!Game.Initialized)
+                Game.DoInitialize();
+
+            Game.Game_BeginRun();
+
+            StartRunLoop();
+            
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         [Obsolete(
@@ -168,8 +175,8 @@ namespace Microsoft.Xna.Framework
             {
                 if (_viewController != null)
                 {
-                    _viewController.View.RemoveFromSuperview ();
-                    _viewController.RemoveFromParentViewController ();
+                    _viewController.View.RemoveFromSuperview();
+                    _viewController.RemoveFromParentViewController();
                     _viewController.Dispose();
                     _viewController = null;
                 }
@@ -184,17 +191,12 @@ namespace Microsoft.Xna.Framework
 
         public override void BeforeInitialize()
         {
-            base.BeforeInitialize ();
+            base.BeforeInitialize();
 
             _viewController.View.LayoutSubviews();
         }
 
-        public override void RunLoop()
-        {
-            throw new NotSupportedException("The iOS platform does not support synchronous run loops");
-        }
-
-        public override void StartRunLoop()
+        private void StartRunLoop()
         {
             // Show the window
             _mainWindow.MakeKeyAndVisible();
@@ -224,7 +226,7 @@ namespace Microsoft.Xna.Framework
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
             _viewController.View.MakeCurrent();
-            Game.Tick ();
+            Game.Tick();
             Threading.Run();
 
             if (!IsPlayingVideo)
@@ -235,7 +237,7 @@ namespace Microsoft.Xna.Framework
                     // disposing resources disposed from a non-ui thread
                     Game.GraphicsDevice.Present();
                 }
-                _viewController.View.Present ();
+                _viewController.View.Present();
             }
         }
 

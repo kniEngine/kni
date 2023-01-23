@@ -46,16 +46,6 @@ namespace Microsoft.Xna.Framework
             throw new NotImplementedException();
         }
 
-        public override void RunLoop()
-        {
-            throw new NotSupportedException("The Android platform does not support synchronous run loops");
-        }
-
-        public override void StartRunLoop()
-        {
-            _gameWindow.GameView.Resume();
-        }
-
         public override bool BeforeUpdate(GameTime gameTime)
         {
             if (!_initialized)
@@ -90,7 +80,7 @@ namespace Microsoft.Xna.Framework
             _gameWindow.GameView.TouchEnabled = true;
         }
 
-        public override bool BeforeRun()
+        public override bool ANDROID_BeforeRun()
         {
             // User called Game.Run().
             // Signal the game loop to initialize the game loop.
@@ -161,9 +151,23 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public override GameRunBehavior DefaultRunBehavior
+        internal override void Run()
         {
-            get { return GameRunBehavior.Asynchronous; }
+            // User called Game.Run().
+            // Signal the game loop to initialize the game loop.
+            _gameWindow.GameView.BeforeRun();
+
+            Game.Game_BeginRun();
+
+            // Prevent the default run loop from starting.
+            // We will run the loop from the view's IRunnable.Run().
+            return;
+            
+            // StartRunLoop
+            //_gameWindow.GameView.Resume();
+
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         public override void Log(string Message)

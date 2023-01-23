@@ -198,7 +198,6 @@
     <Compile Include="Game.cs" />
     <Compile Include="GamePlatform.cs" />
     <Compile Include="GamePlatform.Mobile.cs" />
-    <Compile Include="GameRunBehavior.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="IDrawable.cs" />

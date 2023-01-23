@@ -7,8 +7,8 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using Microsoft.Xna.Framework;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -28,19 +28,24 @@ namespace MonoGame.Framework
             Window = _window;
         }
 
-        public override GameRunBehavior DefaultRunBehavior
+        internal override void Run()
         {
-            get { return GameRunBehavior.Synchronous; }
+            if (!Game.Initialized)
+                Game.DoInitialize();
+
+            Game.Game_BeginRun();
+            // XNA runs one Update even before showing the window
+            Game.DoUpdate(new GameTime());
+
+            _window.RunLoop();
+
+            Game.Game_EndRun();
+            Game.DoExiting();
         }
 
         protected override void OnIsMouseVisibleChanged()
         {
             _window.MouseVisibleToggled();
-        }
-
-        public override bool BeforeRun()
-        {
-            return base.BeforeRun();
         }
 
         public override void BeforeInitialize()
@@ -57,16 +62,6 @@ namespace MonoGame.Framework
                 var pp = Game.GraphicsDevice.PresentationParameters;
                 _window.Initialize(pp);
             }
-        }
-
-        public override void RunLoop()
-        {
-            _window.RunLoop();
-        }
-
-        public override void StartRunLoop()
-        {
-            throw new NotSupportedException("The Windows platform does not support asynchronous run loops");
         }
         
         public override void Exit()

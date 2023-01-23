@@ -323,7 +323,6 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GamePlatform.cs" />
     <Compile Include="GameServiceContainer.cs" />    
-    <Compile Include="GameRunBehavior.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="GraphicsDeviceInformation.cs" />
     <Compile Include="IDrawable.cs" />

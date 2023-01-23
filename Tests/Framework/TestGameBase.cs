@@ -136,7 +136,7 @@ namespace MonoGame.Tests {
 #elif IOS || TVOS || ANDROID
 			RunOnMainThreadAndWait();
 #else
-			base.Run (GameRunBehavior.Synchronous);
+			base.Run();
 #endif
 		}
 
@@ -169,7 +169,7 @@ namespace MonoGame.Tests {
 			Exception ex = null;
 			UIApplication.SharedApplication.InvokeOnMainThread(() => {
 				try {
-					base.Run (GameRunBehavior.Asynchronous);
+					base.Run();
 				} catch (Exception innerEx) {
 					ex = innerEx;
 				}
