@@ -229,7 +229,7 @@ Section "VS2017 Templates" VS2017
 
   IfFileExists `$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\MonoGame"
+    SetOutPath "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\KNI"
     File /r '..\..\Templates\VisualStudio2017\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
@@ -242,7 +242,7 @@ Section "VS2019 Templates" VS2019
 
   IfFileExists `$DOCUMENTS\Visual Studio 2019\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\MonoGame"
+    SetOutPath "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\KNI"
     File /r '..\..\Templates\VisualStudio2019\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
@@ -255,7 +255,7 @@ Section "VS2022 Templates" VS2022
 
   IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
+    SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
     File /r '..\..\Templates\VisualStudio2022\ProjectTemplates\*.zip'
     SetOutPath "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
     File /r '..\..\Templates\VisualStudio2022\ItemTemplates\*.zip'
@@ -390,12 +390,12 @@ Section "Uninstall"
   RMDir /r "$0\AddIns\MonoDevelop.MonoGame"
   ${EndIf}
   
-  RMDir /r "$DOCUMENTS\Visual Studio 2010\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\MonoGame"
-  RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\MonoGame"
+  RMDir /r "$DOCUMENTS\Visual Studio 2010\Templates\ProjectTemplates\Visual C#\KNI"
+  RMDir /r "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\KNI"
+  RMDir /r "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\KNI"
+  RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\KNI"
+  RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\KNI"
+  RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
   RMDir /r "${MSBuildInstallDir}"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
