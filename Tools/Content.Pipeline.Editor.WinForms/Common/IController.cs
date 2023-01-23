@@ -41,7 +41,7 @@ namespace Content.Pipeline.Editor
         /// </summary>
         bool LaunchDebugger { get; set; }
 
-        public bool SingleThread { get; set; }
+        bool SingleThread { get; set; }
 
         /// <summary>
         /// The view this controller is attached to.
