@@ -22,9 +22,9 @@ namespace Microsoft.Xna.Framework
                 Game.DoInitialize();
 
             Game.Game_BeginRun();
-
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
+
             RunLoop();
 
             Game.Game_EndRun();
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework
             EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight);
         }
 
-        public override void RunLoop()
+        private void RunLoop()
         {
             Sdl.Window.Show(Window.Handle);
 
@@ -288,11 +288,6 @@ namespace Microsoft.Xna.Framework
                 return (byte1 % 0x8) * 0x40 * 0x40 * 0x40 + (byte2 % 0x40) * 0x40 * 0x40 + (byte3 % 0x40) * 0x40 + (byte4 % 0x40);
             else
                 return -1;
-        }
-
-        public override void StartRunLoop()
-        {
-            throw new NotSupportedException("The desktop platform does not support asynchronous run loops");
         }
 
         public override void Exit()

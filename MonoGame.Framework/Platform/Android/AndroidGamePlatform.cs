@@ -46,16 +46,6 @@ namespace Microsoft.Xna.Framework
             throw new NotImplementedException();
         }
 
-        public override void RunLoop()
-        {
-            throw new NotSupportedException("The Android platform does not support synchronous run loops");
-        }
-
-        public override void StartRunLoop()
-        {
-            _gameWindow.GameView.Resume();
-        }
-
         public override bool BeforeUpdate(GameTime gameTime)
         {
             if (!_initialized)
@@ -173,6 +163,9 @@ namespace Microsoft.Xna.Framework
             // We will run the loop from the view's IRunnable.Run().
             return;
             
+            // StartRunLoop
+            //_gameWindow.GameView.Resume();
+
             //Game.Game_EndRun();
             //Game.DoExiting();
         }

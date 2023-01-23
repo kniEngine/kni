@@ -34,10 +34,10 @@ namespace MonoGame.Framework
                 Game.DoInitialize();
 
             Game.Game_BeginRun();
-
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
-            RunLoop();
+
+            _window.RunLoop();
 
             Game.Game_EndRun();
             Game.DoExiting();
@@ -62,16 +62,6 @@ namespace MonoGame.Framework
                 var pp = Game.GraphicsDevice.PresentationParameters;
                 _window.Initialize(pp);
             }
-        }
-
-        public override void RunLoop()
-        {
-            _window.RunLoop();
-        }
-
-        public override void StartRunLoop()
-        {
-            throw new NotSupportedException("The Windows platform does not support asynchronous run loops");
         }
         
         public override void Exit()

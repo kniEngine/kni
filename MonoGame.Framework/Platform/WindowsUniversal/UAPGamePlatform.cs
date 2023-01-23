@@ -128,10 +128,10 @@ namespace Microsoft.Xna.Framework
                 Game.DoInitialize();
 
             Game.Game_BeginRun();
-
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
-            RunLoop();
+
+            UAPGameWindow.Instance.RunLoop();
 
             Game.Game_EndRun();
             Game.DoExiting();
@@ -151,14 +151,9 @@ namespace Microsoft.Xna.Framework
             //Game.DoExiting();
         }
 
-        public override void RunLoop()
-        {
-            UAPGameWindow.Instance.RunLoop();
-        }
-
         bool _runInMainThread = true;
         bool _enableRunLoop = false;
-        public override void StartRunLoop()
+        private void StartRunLoop()
         {
             if (UAPGameWindow.Instance.CoreWindow.CustomProperties.ContainsKey("RunInMainThread"))
                 _runInMainThread = (bool)UAPGameWindow.Instance.CoreWindow.CustomProperties["RunInMainThread"];

@@ -148,18 +148,6 @@ namespace Microsoft.Xna.Framework
         public abstract void Exit();
 
         /// <summary>
-        /// When implemented in a derived, starts the run loop and blocks
-        /// until it has ended.
-        /// </summary>
-        public abstract void RunLoop();
-
-        /// <summary>
-        /// When implemented in a derived, starts the run loop and returns
-        /// immediately.
-        /// </summary>
-        public abstract void StartRunLoop();
-
-        /// <summary>
         /// Gives derived classes an opportunity to do work just before Update
         /// is called for all IUpdatable components.  Returning false from this
         /// method will result in this round of Update calls being skipped.

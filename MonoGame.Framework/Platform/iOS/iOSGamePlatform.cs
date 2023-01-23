@@ -196,12 +196,7 @@ namespace Microsoft.Xna.Framework
             _viewController.View.LayoutSubviews();
         }
 
-        public override void RunLoop()
-        {
-            throw new NotSupportedException("The iOS platform does not support synchronous run loops");
-        }
-
-        public override void StartRunLoop()
+        private void StartRunLoop()
         {
             // Show the window
             _mainWindow.MakeKeyAndVisible();
