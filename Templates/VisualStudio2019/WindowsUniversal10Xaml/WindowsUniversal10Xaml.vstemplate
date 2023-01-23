@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>MonoGame Windows 10 Universal (XAML) Project</Name>
-    <Description>A MonoGame game project for Windows 10 UWP using XAML controls.</Description>
+    <Name>KNI Windows 10 Universal (XAML) Project</Name>
+    <Description>A KNI game project for Windows 10 UWP using XAML controls.</Description>
     <Icon>__TemplateIcon.png</Icon>
     <PreviewImage>__PreviewImage.png</PreviewImage>
     <TemplateID>MonoGame.CS.WinRT.UAPGame</TemplateID>
     <TemplateGroupID>WinRT-Native-UAP</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>MonoGame</ProjectSubType>
+    <ProjectSubType>KNI</ProjectSubType>
     <LanguageTag>C#</LanguageTag>
     <PlatformTag>Windows</PlatformTag>
     <ProjectTypeTag>Games</ProjectTypeTag>
-    <ProjectTypeTag>MonoGame</ProjectTypeTag>
+    <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>UWP</ProjectTypeTag>
     <SortOrder>43160</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>

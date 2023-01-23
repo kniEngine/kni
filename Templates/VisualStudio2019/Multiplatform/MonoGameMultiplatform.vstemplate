@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
 	<TemplateData>
-		<Name>MonoGame Multiplatform Project</Name>
-    <Description>A MonoGame project for multiple platforms with shared content.</Description>
-		<TemplateID>MonoGame.Multiplatform</TemplateID>
+    <Name>KNI Multiplatform Project</Name>
+    <Description>A KNI project for multiple platforms with shared content.</Description>
+	<TemplateID>MonoGame.Multiplatform</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>MonoGame</ProjectSubType>
+    <ProjectSubType>KNI</ProjectSubType>
     <LanguageTag>C#</LanguageTag>
     <PlatformTag>Android</PlatformTag>
     <PlatformTag>Windows</PlatformTag>
     <PlatformTag>Linux</PlatformTag>
     <PlatformTag>macOS</PlatformTag>
     <ProjectTypeTag>Games</ProjectTypeTag>
-    <ProjectTypeTag>MonoGame</ProjectTypeTag>
+    <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>Desktop</ProjectTypeTag>
     <ProjectTypeTag>Mobile</ProjectTypeTag>
     <ProjectTypeTag>UWP</ProjectTypeTag>
