@@ -37,8 +37,8 @@ namespace MonoGame.Framework
 
             _window.RunLoop();
 
-            Game.Game_EndRun();
-            Game.DoExiting();
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         protected override void OnIsMouseVisibleChanged()
