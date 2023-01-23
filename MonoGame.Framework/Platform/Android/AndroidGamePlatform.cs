@@ -172,6 +172,9 @@ namespace Microsoft.Xna.Framework
             // Prevent the default run loop from starting.
             // We will run the loop from the view's IRunnable.Run().
             return;
+            
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         public override void Log(string Message)

@@ -145,18 +145,10 @@ namespace Microsoft.Xna.Framework
 
             Game.Game_BeginRun();
 
-            AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
             StartRunLoop();
-        }
 
-        internal void Platform_AsyncRunLoopEnded(object sender, EventArgs e)
-        {
-            Game.Game_AssertNotDisposed();
-
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
-            Game.Game_EndRun();
-            Game.DoExiting();
+            //Game.Game_EndRun();
+            //Game.DoExiting();
         }
 
         public override void RunLoop()

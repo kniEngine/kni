@@ -113,21 +113,8 @@ namespace Microsoft.Xna.Framework
 
         #region Events
 
-        public event EventHandler<EventArgs> AsyncRunLoopEnded;
         public event EventHandler<EventArgs> Activated;
         public event EventHandler<EventArgs> Deactivated;
-
-        /// <summary>
-        /// Raises the AsyncRunLoopEnded event.  This method must be called by
-        /// derived classes when the asynchronous run loop they start has
-        /// stopped running.
-        /// </summary>
-        protected void RaiseAsyncRunLoopEnded()
-        {
-            var handler = AsyncRunLoopEnded;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
 
         #endregion Events
 
