@@ -1,13 +1,13 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>MonoGame Windows Project (.NET Framework)</Name>
-    <Description>A MonoGame game project for the Windows desktop using DirectX.</Description>
+    <Name>KNI Windows Project (.NET Framework)</Name>
+    <Description>A KNI game project for the Windows desktop using DirectX.</Description>
     <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>MonoGame</ProjectSubType>
+    <ProjectSubType>KNI</ProjectSubType>
     <LanguageTag>csharp</LanguageTag>
     <PlatformTag>windows</PlatformTag>
     <ProjectTypeTag>games</ProjectTypeTag>
-    <ProjectTypeTag>MonoGame</ProjectTypeTag>
+    <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>desktop</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <SortOrder>43100</SortOrder>
@@ -20,7 +20,7 @@
     <PreviewImage>__PreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="MonoGameWindowsApplication.csproj" File="MonoGameWindowsApplication.csproj" ReplaceParameters="true">
+    <Project TargetFileName="KniWindowsApplication.csproj" File="MonoGameWindowsApplication.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game1.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.ico">Icon.ico</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
