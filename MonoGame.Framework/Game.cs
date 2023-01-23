@@ -5,10 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 #if WINDOWS_UAP
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 #endif
+
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
