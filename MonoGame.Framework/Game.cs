@@ -389,14 +389,8 @@ namespace Microsoft.Xna.Framework
         public void ResetElapsedTime()
         {
             Platform.ResetElapsedTime();
-            if (_gameTimer != null)
-            {
-                _gameTimer.Reset();
-                _gameTimer.Start();
-            }
 
             _accumulatedElapsedTime = TimeSpan.Zero;
-            _gameTime.ElapsedGameTime = TimeSpan.Zero;
             _previousElapsedTime = TimeSpan.Zero;
         }
 
@@ -422,7 +416,7 @@ namespace Microsoft.Xna.Framework
             if (!Initialized)
             {
                 DoInitialize();
-                _gameTimer = Stopwatch.StartNew();
+                Platform.Timer = Stopwatch.StartNew();
             }
 
             BeginRun();
@@ -457,7 +451,7 @@ namespace Microsoft.Xna.Framework
         internal void DoBeginRun()
         {
             BeginRun();
-            _gameTimer = Stopwatch.StartNew();
+            Platform.Timer = Stopwatch.StartNew();
         }
 
         internal void DoEndRun()
@@ -467,8 +461,6 @@ namespace Microsoft.Xna.Framework
 
         private TimeSpan _accumulatedElapsedTime;
         private TimeSpan _previousElapsedTime;
-        private readonly GameTime _gameTime = new GameTime();
-        private Stopwatch _gameTimer;
         private int _updateFrameLag;
 #if WINDOWS_UAP
         private readonly object _locker = new object();
@@ -504,7 +496,7 @@ namespace Microsoft.Xna.Framework
         RetryTick:
 
             // Advance the accumulated elapsed time.
-            TimeSpan elapsedTime = _gameTimer.Elapsed;
+            TimeSpan elapsedTime = Platform.Timer.Elapsed;
             TimeSpan elapsedTimeDiff = TimeSpan.FromTicks(elapsedTime.Ticks - _previousElapsedTime.Ticks);
             _previousElapsedTime = elapsedTime;
 
@@ -536,17 +528,17 @@ namespace Microsoft.Xna.Framework
 
             if (IsFixedTimeStep)
             {
-                _gameTime.ElapsedGameTime = TargetElapsedTime;
+                Platform.Time.ElapsedGameTime = TargetElapsedTime;
                 int stepCount = 0;
 
                 // Perform as many full fixed length time steps as we can.
                 while (_accumulatedElapsedTime >= TargetElapsedTime && !_shouldExit)
                 {
-                    _gameTime.TotalGameTime += TargetElapsedTime;
+                    Platform.Time.TotalGameTime += TargetElapsedTime;
                     _accumulatedElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
-                    DoUpdate(_gameTime);
+                    DoUpdate(Platform.Time);
                 }
 
                 //Every update after the first accumulates lag
@@ -554,15 +546,15 @@ namespace Microsoft.Xna.Framework
                 _updateFrameLag = Math.Min(_updateFrameLag, 5);
 
                 //If we think we are running slowly, wait until the lag clears before resetting it
-                if (_gameTime.IsRunningSlowly)
+                if (Platform.Time.IsRunningSlowly)
                 {
                     if (_updateFrameLag == 0)
-                        _gameTime.IsRunningSlowly = false;
+                        Platform.Time.IsRunningSlowly = false;
                 }
                 else if (_updateFrameLag >= 5)
                 {
                     //If we lag more than 5 frames, start thinking we are running slowly
-                    _gameTime.IsRunningSlowly = true;
+                    Platform.Time.IsRunningSlowly = true;
                 }
 
                 //Every time we just do one update and one draw, then we are not running slowly, so decrease the lag
@@ -571,16 +563,16 @@ namespace Microsoft.Xna.Framework
 
                 // Draw needs to know the total elapsed time
                 // that occured for the fixed length updates.
-                _gameTime.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
+                Platform.Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
             }
             else
             {
                 // Perform a single variable length update.
-                _gameTime.ElapsedGameTime = _accumulatedElapsedTime;
-                _gameTime.TotalGameTime += _accumulatedElapsedTime;
+                Platform.Time.ElapsedGameTime = _accumulatedElapsedTime;
+                Platform.Time.TotalGameTime += _accumulatedElapsedTime;
                 _accumulatedElapsedTime = TimeSpan.Zero;
 
-                DoUpdate(_gameTime);
+                DoUpdate(Platform.Time);
             }
 
             // Draw unless the update suppressed it.
@@ -588,7 +580,7 @@ namespace Microsoft.Xna.Framework
                 _suppressDraw = false;
             else
             {
-                DoDraw(_gameTime);
+                DoDraw(Platform.Time);
             }
 
             if (_shouldExit)
