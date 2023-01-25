@@ -349,9 +349,9 @@ namespace MonoGame.Framework
 
         internal void RunLoop()
         {
-            Application.Idle += TickOnIdle;
+            Application.Idle += Application_Idle;
             Application.Run(Form);
-            Application.Idle -= TickOnIdle;
+            Application.Idle -= Application_Idle;
 
             // We need to remove the WM_QUIT message in the message 
             // pump as it will keep us from restarting on this 
@@ -372,14 +372,19 @@ namespace MonoGame.Framework
         }
 
         // Run game loop when the app becomes Idle.
-        private void TickOnIdle(object sender, EventArgs e)
+        private void Application_Idle(object sender, EventArgs e)
         {
-            var nativeMsg = new NativeMessage();
-            do
+            NativeMessage nativeMsg = default(NativeMessage);
+            while (true)
             {
                 Game.Tick();
+                
+                if (PeekMessage(out nativeMsg, IntPtr.Zero, 0, 0, 0))
+                    break;
+
+                if (Form == null || Form.IsDisposed)
+                    break;
             }
-            while (!PeekMessage(out nativeMsg, IntPtr.Zero, 0, 0, 0) && Form != null && Form.IsDisposed == false);
         }
 
         private const uint WM_QUIT = 0x12;
