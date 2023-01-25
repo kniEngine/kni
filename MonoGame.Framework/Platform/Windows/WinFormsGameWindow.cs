@@ -42,9 +42,6 @@ namespace MonoGame.Framework
         // true if window position was moved either through code or by dragging/resizing the form
         private bool _wasMoved;
 
-        private bool _isResizeTickEnabled;
-        private readonly System.Timers.Timer _resizeTickTimer;
-
         #region Internal Properties
 
         internal Game Game { get; private set; }
@@ -156,13 +153,10 @@ namespace MonoGame.Framework
             Form.MouseEnter += OnMouseEnter;
             Form.MouseLeave += OnMouseLeave;            
 
-            _resizeTickTimer = new System.Timers.Timer(1) { SynchronizingObject = Form, AutoReset = false };
-            _resizeTickTimer.Elapsed += OnResizeTick;
-
             Form.Activated += OnActivated;
             Form.Deactivate += OnDeactivate;
-            Form.Resize += OnResize;
             Form.ResizeBegin += OnResizeBegin;
+            Form.Resize += OnResize;
             Form.ResizeEnd += OnResizeEnd;
 
             Form.KeyPress += OnKeyPress;
@@ -272,6 +266,10 @@ namespace MonoGame.Framework
 
         private FormWindowState _lastFormState;
 
+        private void OnResizeBegin(object sender, EventArgs e)
+        {
+        }
+
         private void OnResize(object sender, EventArgs eventArgs)
         {
             if (_switchingFullScreen || Form.IsResizing)
@@ -307,28 +305,8 @@ namespace MonoGame.Framework
             OnClientSizeChanged();
         }
 
-        private void OnResizeBegin(object sender, EventArgs e)
-        {
-            // TNC: Revert MG PR 6594
-            // TNC: Issue #1) No proper sync. Update()/Draw() might be called simultaneusly from the main thread when resize ends while it still runs from OnResizeTick().
-            // TNC: Issue #2) Update()/Draw() will be called from different thread. This can cause issues with some libraries, e.g. [ThreadStatic]
-            //_isResizeTickEnabled = true;
-            //_resizeTickTimer.Enabled = true;
-        }
-
-        private void OnResizeTick(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (!_isResizeTickEnabled)
-                return;
-            Game.Tick();
-            _resizeTickTimer.Enabled = true;
-        }
-
         private void OnResizeEnd(object sender, EventArgs eventArgs)
         {
-            _isResizeTickEnabled = false;
-            _resizeTickTimer.Enabled = false;
-
             _wasMoved = true;
             if (Game.Window == this)
             {
