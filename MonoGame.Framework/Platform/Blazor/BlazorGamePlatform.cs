@@ -29,15 +29,17 @@ namespace MonoGame.Framework
         internal override void Run()
         {
             if (!Game.Initialized)
+            {
                 Game.DoInitialize();
+            }
 
-            Game.Game_BeginRun();
+            Game.DoBeginRun();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
             _window.RunLoop();
 
-            //Game.Game_EndRun();
+            //Game.DoEndRun();
             //Game.DoExiting();
         }
 

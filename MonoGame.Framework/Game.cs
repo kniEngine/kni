@@ -397,7 +397,7 @@ namespace Microsoft.Xna.Framework
 
             _accumulatedElapsedTime = TimeSpan.Zero;
             _gameTime.ElapsedGameTime = TimeSpan.Zero;
-            _previousTicks = 0L;
+            _previousElapsedTime = TimeSpan.Zero;
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace Microsoft.Xna.Framework
             if (!Platform.ANDROID_BeforeRun())
                 return;
 
-            if (!_initialized)
+            if (!Initialized)
             {
                 DoInitialize();
                 _gameTimer = Stopwatch.StartNew();
@@ -454,26 +454,21 @@ namespace Microsoft.Xna.Framework
             Platform.Run_UAP_XAML();
         }
 
-        internal void Game_AssertNotDisposed()
-        {
-            AssertNotDisposed();
-        }
-
-        internal void Game_BeginRun()
+        internal void DoBeginRun()
         {
             BeginRun();
             _gameTimer = Stopwatch.StartNew();
         }
 
-        internal void Game_EndRun()
+        internal void DoEndRun()
         {
             EndRun();
         }
 
         private TimeSpan _accumulatedElapsedTime;
+        private TimeSpan _previousElapsedTime;
         private readonly GameTime _gameTime = new GameTime();
         private Stopwatch _gameTimer;
-        private long _previousTicks = 0;
         private int _updateFrameLag;
 #if WINDOWS_UAP
         private readonly object _locker = new object();
@@ -509,9 +504,11 @@ namespace Microsoft.Xna.Framework
         RetryTick:
 
             // Advance the accumulated elapsed time.
-            var currentTicks = _gameTimer.Elapsed.Ticks;
-            _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
-            _previousTicks = currentTicks;
+            TimeSpan elapsedTime = _gameTimer.Elapsed;
+            TimeSpan elapsedTimeDiff = TimeSpan.FromTicks(elapsedTime.Ticks - _previousElapsedTime.Ticks);
+            _previousElapsedTime = elapsedTime;
+
+            _accumulatedElapsedTime += elapsedTimeDiff;
 
             if (IsFixedTimeStep && _accumulatedElapsedTime < TargetElapsedTime)
             {
@@ -540,7 +537,7 @@ namespace Microsoft.Xna.Framework
             if (IsFixedTimeStep)
             {
                 _gameTime.ElapsedGameTime = TargetElapsedTime;
-                var stepCount = 0;
+                int stepCount = 0;
 
                 // Perform as many full fixed length time steps as we can.
                 while (_accumulatedElapsedTime >= TargetElapsedTime && !_shouldExit)
@@ -782,6 +779,7 @@ namespace Microsoft.Xna.Framework
         internal void DoUpdate(GameTime gameTime)
         {
             AssertNotDisposed();
+
             if (Platform.BeforeUpdate(gameTime))
             {
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
@@ -796,6 +794,7 @@ namespace Microsoft.Xna.Framework
         internal void DoDraw(GameTime gameTime)
         {
             AssertNotDisposed();
+
             // Draw and EndDraw should not be called if BeginDraw returns false.
             // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
             // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
@@ -809,6 +808,7 @@ namespace Microsoft.Xna.Framework
         internal void DoInitialize()
         {
             AssertNotDisposed();
+
             if (GraphicsDevice == null && graphicsDeviceManager != null)
                 ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
 

@@ -157,16 +157,16 @@ namespace Microsoft.Xna.Framework
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
 
-            Game.Game_BeginRun();
+            Game.DoBeginRun();
 
             // Prevent the default run loop from starting.
             // We will run the loop from the view's IRunnable.Run().
             return;
-            
+
             // StartRunLoop
             //_gameWindow.GameView.Resume();
 
-            //Game.Game_EndRun();
+            //Game.DoEndRun();
             //Game.DoExiting();
         }
 

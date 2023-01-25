@@ -146,13 +146,15 @@ namespace Microsoft.Xna.Framework
         internal override void Run()
         {
             if (!Game.Initialized)
+            {
                 Game.DoInitialize();
+            }
 
-            Game.Game_BeginRun();
+            Game.DoBeginRun();
 
             StartRunLoop();
-            
-            //Game.Game_EndRun();
+
+            //Game.DoEndRun();
             //Game.DoExiting();
         }
 

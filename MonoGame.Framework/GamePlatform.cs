@@ -41,12 +41,6 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
-        internal abstract void Run();
-
-        internal virtual void Run_UAP_XAML()
-        {
-            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
-        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
@@ -95,8 +89,6 @@ namespace Microsoft.Xna.Framework
         public GameWindow Window
         {
             get { return _window; }
-
-
             protected set
             {
                 if (_window == null)
@@ -119,6 +111,13 @@ namespace Microsoft.Xna.Framework
         #endregion Events
 
         #region Methods
+
+        internal abstract void Run();
+
+        internal virtual void Run_UAP_XAML()
+        {
+            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
+        }
 
         /// <summary>
         /// Gives derived classes an opportunity to do work before any

@@ -125,15 +125,17 @@ namespace Microsoft.Xna.Framework
         internal override void Run()
         {
             if (!Game.Initialized)
+            {
                 Game.DoInitialize();
+            }
 
-            Game.Game_BeginRun();
+            Game.DoBeginRun();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
             UAPGameWindow.Instance.RunLoop();
 
-            Game.Game_EndRun();
+            Game.DoEndRun();
             Game.DoExiting();
         }
 
@@ -141,13 +143,15 @@ namespace Microsoft.Xna.Framework
         internal override void Run_UAP_XAML()
         {
             if (!Game.Initialized)
+            {
                 Game.DoInitialize();
+            }
 
-            Game.Game_BeginRun();
+            Game.DoBeginRun();
 
             StartRunLoop();
 
-            //Game.Game_EndRun();
+            //Game.DoEndRun();
             //Game.DoExiting();
         }
 
