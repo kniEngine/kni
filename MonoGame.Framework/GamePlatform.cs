@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -41,17 +42,14 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
-        internal abstract void Run();
-
-        internal virtual void Run_UAP_XAML()
-        {
-            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
-        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
         public readonly Game Game;
+
+        public readonly GameTime Time = new GameTime();
+        public Stopwatch Timer;
 
         private bool _isActive;
         public bool IsActive
@@ -95,8 +93,6 @@ namespace Microsoft.Xna.Framework
         public GameWindow Window
         {
             get { return _window; }
-
-
             protected set
             {
                 if (_window == null)
@@ -119,6 +115,13 @@ namespace Microsoft.Xna.Framework
         #endregion Events
 
         #region Methods
+
+        internal abstract void Run();
+
+        internal virtual void Run_UAP_XAML()
+        {
+            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
+        }
 
         /// <summary>
         /// Gives derived classes an opportunity to do work before any
@@ -226,7 +229,16 @@ namespace Microsoft.Xna.Framework
         /// Frame timing is generally handled by the Game class, but some platforms still handle it elsewhere. Once all platforms
         /// rely on the Game class's functionality, this method and any overrides should be removed.
         /// </summary>
-        public virtual void ResetElapsedTime() {}
+        public virtual void ResetElapsedTime()
+        {
+            if (Timer != null)
+            {
+                Timer.Reset();
+                Timer.Start();
+            }
+
+            Time.ElapsedGameTime = TimeSpan.Zero;
+        }
 
         public virtual void Present() { }
 
