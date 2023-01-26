@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Framework
                     {
                         Resumer.Draw();
                     }
-                    _game.Platform.Present();
+                    _game.Platform.EndDraw();
                 }
             }
 

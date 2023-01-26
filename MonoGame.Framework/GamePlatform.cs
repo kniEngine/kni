@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Framework
             _suppressDraw = true;
         }
 
-        public virtual void Present() { }
+        public virtual void EndDraw() { }
 
         /// <summary>
         /// Called by the GraphicsDeviceManager to notify the platform

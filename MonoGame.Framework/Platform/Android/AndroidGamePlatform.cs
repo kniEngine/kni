@@ -187,15 +187,13 @@ namespace Microsoft.Xna.Framework
 #endif
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
             try
             {
                 var device = Game.GraphicsDevice;
                 if (device != null)
-                {
                     device.Present();
-                }
 
                 _gameWindow.GameView.SwapBuffers();
             }

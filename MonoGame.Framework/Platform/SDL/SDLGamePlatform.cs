@@ -343,10 +343,11 @@ namespace Microsoft.Xna.Framework
             Console.WriteLine(message);
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
-            if (Game.GraphicsDevice != null)
-                Game.GraphicsDevice.Present();
+            var device = Game.GraphicsDevice;
+            if (device != null)
+                device.Present();
         }
 
         protected override void Dispose(bool disposing)

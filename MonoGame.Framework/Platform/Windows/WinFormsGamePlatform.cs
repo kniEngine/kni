@@ -124,10 +124,10 @@ namespace MonoGame.Framework
             Debug.WriteLine(message);
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
             var device = Game.GraphicsDevice;
-            if ( device != null )
+            if (device != null)
                 device.Present();
         }
 		

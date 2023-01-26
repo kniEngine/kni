@@ -441,7 +441,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected virtual void EndDraw()
         {
-            Platform.Present();
+            Platform.EndDraw();
         }
 
         /// <summary>
