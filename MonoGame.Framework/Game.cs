@@ -345,8 +345,8 @@ namespace Microsoft.Xna.Framework
         {
             Platform.ResetElapsedTime();
 
-            _accumulatedElapsedTime = TimeSpan.Zero;
-            _previousElapsedTime = TimeSpan.Zero;
+            _currElapsedTime = TimeSpan.Zero;
+            _prevElapsedTime = TimeSpan.Zero;
         }
 
         /// <summary>
@@ -414,8 +414,8 @@ namespace Microsoft.Xna.Framework
             EndRun();
         }
 
-        private TimeSpan _accumulatedElapsedTime;
-        private TimeSpan _previousElapsedTime;
+        private TimeSpan _currElapsedTime;
+        private TimeSpan _prevElapsedTime;
         private int _updateFrameLag;
 #if WINDOWS_UAP
         private readonly object _locker = new object();
@@ -447,12 +447,11 @@ namespace Microsoft.Xna.Framework
 
             // Advance the accumulated elapsed time.
             TimeSpan elapsedTime = Platform.Timer.Elapsed;
-            TimeSpan elapsedTimeDiff = TimeSpan.FromTicks(elapsedTime.Ticks - _previousElapsedTime.Ticks);
-            _previousElapsedTime = elapsedTime;
+            TimeSpan dt = elapsedTime - _prevElapsedTime;
+            _currElapsedTime += dt;
+            _prevElapsedTime = elapsedTime;
 
-            _accumulatedElapsedTime += elapsedTimeDiff;
-
-            if (IsFixedTimeStep && _accumulatedElapsedTime < TargetElapsedTime)
+            if (IsFixedTimeStep && _currElapsedTime < TargetElapsedTime)
             {
                 // When game IsActive use CPU Spin.
                 /*
@@ -473,8 +472,8 @@ namespace Microsoft.Xna.Framework
 
             // Do not allow any update to take longer than our maximum.
             var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
-            if (_accumulatedElapsedTime > maxElapsedTime)
-                _accumulatedElapsedTime = maxElapsedTime;
+            if (_currElapsedTime > maxElapsedTime)
+                _currElapsedTime = maxElapsedTime;
 
             if (IsFixedTimeStep)
             {
@@ -482,10 +481,10 @@ namespace Microsoft.Xna.Framework
                 int stepCount = 0;
 
                 // Perform as many full fixed length time steps as we can.
-                while (_accumulatedElapsedTime >= TargetElapsedTime && !Platform.ShouldExit)
+                while (_currElapsedTime >= TargetElapsedTime && !Platform.ShouldExit)
                 {
                     Platform.Time.TotalGameTime += TargetElapsedTime;
-                    _accumulatedElapsedTime -= TargetElapsedTime;
+                    _currElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
                     DoUpdate(Platform.Time);
@@ -518,9 +517,9 @@ namespace Microsoft.Xna.Framework
             else
             {
                 // Perform a single variable length update.
-                Platform.Time.ElapsedGameTime = _accumulatedElapsedTime;
-                Platform.Time.TotalGameTime += _accumulatedElapsedTime;
-                _accumulatedElapsedTime = TimeSpan.Zero;
+                Platform.Time.ElapsedGameTime = _currElapsedTime;
+                Platform.Time.TotalGameTime += _currElapsedTime;
+                _currElapsedTime = TimeSpan.Zero;
 
                 DoUpdate(Platform.Time);
             }
