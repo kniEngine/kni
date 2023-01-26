@@ -18,6 +18,9 @@ namespace Microsoft.Xna.Framework
         protected TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
         protected bool _needsToResetElapsedTime = false;
 
+        private bool _shouldExit;
+        internal bool _suppressDraw;
+
         bool _isDisposed;
 
         protected bool InFullScreenMode = false;
@@ -100,6 +103,9 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+
+        public bool ShouldExit { get { return _shouldExit; } }
+
         #endregion
 
         #region Events
@@ -143,7 +149,11 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// When implemented in a derived, ends the active run loop.
         /// </summary>
-        public abstract void Exit();
+        public virtual void Exit()
+        {
+            _shouldExit = true;
+            _suppressDraw = true;
+        }
 
         public abstract void TickExiting();
 
@@ -235,6 +245,14 @@ namespace Microsoft.Xna.Framework
             }
 
             Time.ElapsedGameTime = TimeSpan.Zero;
+        }
+        
+        /// <summary>
+        /// Supress calling <see cref="Draw"/> in the game loop.
+        /// </summary>
+        public void SuppressDraw()
+        {
+            _suppressDraw = true;
         }
 
         public virtual void Present() { }

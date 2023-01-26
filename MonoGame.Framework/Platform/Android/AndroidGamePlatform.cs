@@ -40,6 +40,11 @@ namespace Microsoft.Xna.Framework
         public static bool IsPlayingVdeo { get; set; }
         private AndroidGameWindow _gameWindow;
 
+        public override void Exit()
+        {
+            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+        }
+
         public override void TickExiting()
         {
             // Do Nothing: Android games do not "exit" or shut down.

@@ -45,9 +45,6 @@ namespace Microsoft.Xna.Framework
 
         private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
 
-        private bool _shouldExit;
-        private bool _suppressDraw;
-
         partial void PlatformConstruct();
 
         /// <summary>
@@ -376,11 +373,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Exit()
         {
-#if ANDROID || IOS || TVOS
-            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
-#endif
-            _shouldExit = true;
-            _suppressDraw = true;
+            Platform.Exit();
         }
 
         /// <summary>
@@ -399,7 +392,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void SuppressDraw()
         {
-            _suppressDraw = true;
+            Platform.SuppressDraw();
         }
         
         /// <summary>
@@ -532,7 +525,7 @@ namespace Microsoft.Xna.Framework
                 int stepCount = 0;
 
                 // Perform as many full fixed length time steps as we can.
-                while (_accumulatedElapsedTime >= TargetElapsedTime && !_shouldExit)
+                while (_accumulatedElapsedTime >= TargetElapsedTime && !Platform.ShouldExit)
                 {
                     Platform.Time.TotalGameTime += TargetElapsedTime;
                     _accumulatedElapsedTime -= TargetElapsedTime;
@@ -576,14 +569,11 @@ namespace Microsoft.Xna.Framework
             }
 
             // Draw unless the update suppressed it.
-            if (_suppressDraw)
-                _suppressDraw = false;
-            else
-            {
+            if (!Platform._suppressDraw)
                 DoDraw(Platform.Time);
-            }
+            Platform._suppressDraw = false;
 
-            if (_shouldExit)
+            if (Platform.ShouldExit)
                 Platform.TickExiting();
         }
 

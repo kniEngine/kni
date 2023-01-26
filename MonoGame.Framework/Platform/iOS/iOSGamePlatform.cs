@@ -269,6 +269,11 @@ namespace Microsoft.Xna.Framework
             // Do nothing: iOS games are always full screen
         }
 
+        public override void Exit()
+        {
+            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+        }
+
         public override void TickExiting()
         {
             // Do Nothing: iOS games do not "exit" or shut down.
