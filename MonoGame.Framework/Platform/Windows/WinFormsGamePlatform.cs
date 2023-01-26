@@ -66,10 +66,11 @@ namespace MonoGame.Framework
             }
         }
         
-        public override void Exit()
+        public override void TickExiting()
         {
             if (_window != null)
                 _window.Dispose();
+
             _window = null;
             Window = null;
         }

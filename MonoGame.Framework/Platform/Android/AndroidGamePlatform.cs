@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework
         public static bool IsPlayingVdeo { get; set; }
         private AndroidGameWindow _gameWindow;
 
-        public override void Exit()
+        public override void TickExiting()
         {
             // Do Nothing: Android games do not "exit" or shut down.
             throw new NotImplementedException();

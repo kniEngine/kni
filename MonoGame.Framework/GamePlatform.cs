@@ -152,6 +152,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public abstract void Exit();
 
+        public abstract void TickExiting();
+
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Update
         /// is called for all IUpdatable components.  Returning false from this

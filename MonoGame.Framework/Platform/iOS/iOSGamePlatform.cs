@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Framework
             // Do nothing: iOS games are always full screen
         }
 
-        public override void Exit()
+        public override void TickExiting()
         {
             // Do Nothing: iOS games do not "exit" or shut down.
             throw new NotImplementedException();

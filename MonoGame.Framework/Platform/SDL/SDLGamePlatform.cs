@@ -292,7 +292,7 @@ namespace Microsoft.Xna.Framework
                 return -1;
         }
 
-        public override void Exit()
+        public override void TickExiting()
         {
             Interlocked.Increment(ref _isExiting);
         }

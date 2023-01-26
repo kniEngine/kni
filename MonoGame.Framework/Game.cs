@@ -584,7 +584,7 @@ namespace Microsoft.Xna.Framework
             }
 
             if (_shouldExit)
-                Platform.Exit();
+                Platform.TickExiting();
         }
 
         #endregion

@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework
         private void Window_Closed(CoreWindow sender, CoreWindowEventArgs args)
         {
             Game.SuppressDraw();
-            Game.Platform.Exit();
+            Game.Platform.TickExiting();
         }
 
         private void SetViewBounds(double width, double height)
