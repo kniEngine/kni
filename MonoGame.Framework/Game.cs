@@ -45,8 +45,6 @@ namespace Microsoft.Xna.Framework
 
         private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
 
-        partial void PlatformConstruct();
-
         /// <summary>
         /// Create a <see cref="Game"/>.
         /// </summary>
@@ -63,9 +61,6 @@ namespace Microsoft.Xna.Framework
             Platform.Activated += Platform_Activated;
             Platform.Deactivated += Platform_Deactivated;
             _services.AddService(typeof(GamePlatform), Platform);
-
-            // Allow some optional per-platform construction to occur too.
-            PlatformConstruct();
 
         }
 
@@ -238,13 +233,8 @@ namespace Microsoft.Xna.Framework
             get { return _targetElapsedTime; }
             set
             {
-                // Give GamePlatform implementations an opportunity to override
-                // the new value.
-                value = Platform.TargetElapsedTimeChanging(value);
-
                 if (value <= TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException(
-                        "TargetElapsedTime must be positive and non-zero.");
+                    throw new ArgumentOutOfRangeException("TargetElapsedTime must be positive and non-zero.");
 
                 if (value != _targetElapsedTime)
                 {
@@ -469,11 +459,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Tick()
         {
-            // NOTE: This code is very sensitive and can break very badly
-            // with even what looks like a safe change.  Be sure to test 
-            // any change fully in both the fixed and variable timestep 
-            // modes across multiple devices and platforms.
-
             // implement InactiveSleepTime to save battery life 
             // and/or release CPU time to other threads and processes.
             if (!IsActive)
@@ -753,10 +738,6 @@ namespace Microsoft.Xna.Framework
         #endregion Event Handlers
 
         #region Internal Methods
-
-        // FIXME: We should work toward eliminating internal methods.  They
-        //        break entirely the possibility that additional platforms could
-        //        be added by third parties without changing MonoGame itself.
 
         internal void DoUpdate(GameTime gameTime)
         {

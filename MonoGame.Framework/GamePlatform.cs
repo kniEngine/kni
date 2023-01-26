@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Framework
     {
         #region Fields
 
-        protected TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
-        protected bool _needsToResetElapsedTime = false;
 
         private bool _shouldExit;
         internal bool _suppressDraw;
@@ -188,24 +186,12 @@ namespace Microsoft.Xna.Framework
         public abstract void ExitFullScreen();
 
         /// <summary>
-        /// Gives derived classes an opportunity to modify
-        /// Game.TargetElapsedTime before it is set.
-        /// </summary>
-        /// <param name="value">The proposed new value of TargetElapsedTime.</param>
-        /// <returns>The new value of TargetElapsedTime that will be set.</returns>
-        public virtual TimeSpan TargetElapsedTimeChanging(TimeSpan value)
-        {
-            return value;
-        }
-        /// <summary>
         /// Starts a device transition (windowed to full screen or vice versa).
         /// </summary>
         /// <param name='willBeFullScreen'>
         /// Specifies whether the device will be in full-screen mode upon completion of the change.
         /// </param>
-        public abstract void BeginScreenDeviceChange (
-                 bool willBeFullScreen
-        );
+        public abstract void BeginScreenDeviceChange(bool willBeFullScreen);
 
         /// <summary>
         /// Completes a device transition.
@@ -219,7 +205,7 @@ namespace Microsoft.Xna.Framework
         /// <param name='clientHeight'>
         /// The new height of the game's client window.
         /// </param>
-        public abstract void EndScreenDeviceChange (
+        public abstract void EndScreenDeviceChange(
                  string screenDeviceName,
                  int clientWidth,
                  int clientHeight
@@ -229,7 +215,7 @@ namespace Microsoft.Xna.Framework
         /// Gives derived classes an opportunity to take action after
         /// Game.TargetElapsedTime has been set.
         /// </summary>
-        public virtual void TargetElapsedTimeChanged() {}
+        public virtual void TargetElapsedTimeChanged() { }
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
