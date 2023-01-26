@@ -284,9 +284,18 @@ namespace Microsoft.Xna.Framework
                 device.Present();
         }
 
-        protected override void OnIsMouseVisibleChanged() 
+        public override bool IsMouseVisible
         {
-			UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+                }
+                else base.IsMouseVisible = value;
+            }
         }
 		
         protected override void Dispose(bool disposing)

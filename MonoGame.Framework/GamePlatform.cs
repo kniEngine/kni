@@ -78,17 +78,10 @@ namespace Microsoft.Xna.Framework
         }
         
         private bool _isMouseVisible;
-        public bool IsMouseVisible
+        public virtual bool IsMouseVisible
         {
             get { return _isMouseVisible; }
-            set
-            {
-                if (_isMouseVisible != value)
-                {
-                    _isMouseVisible = value;
-                    OnIsMouseVisibleChanged();
-                }
-            }
+            set { _isMouseVisible = value; }
         }
 
         private GameWindow _window;
@@ -245,8 +238,6 @@ namespace Microsoft.Xna.Framework
         }
 
         public virtual void Present() { }
-
-        protected virtual void OnIsMouseVisibleChanged() {}
 
         /// <summary>
         /// Called by the GraphicsDeviceManager to notify the platform

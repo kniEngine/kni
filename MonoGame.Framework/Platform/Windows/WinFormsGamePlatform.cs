@@ -45,9 +45,17 @@ namespace MonoGame.Framework
             Game.DoExiting();
         }
 
-        protected override void OnIsMouseVisibleChanged()
+        public override bool IsMouseVisible
         {
-            _window.MouseVisibleToggled();
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    _window.MouseVisibleToggled();
+                }
+            }
         }
 
         public override void BeforeInitialize()

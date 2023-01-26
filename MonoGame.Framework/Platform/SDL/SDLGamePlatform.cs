@@ -84,9 +84,17 @@ namespace Microsoft.Xna.Framework
             base.BeforeInitialize();
         }
 
-        protected override void OnIsMouseVisibleChanged()
+        public override bool IsMouseVisible
         {
-            _view.SetCursorVisible(Game.IsMouseVisible);
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    _view.SetCursorVisible(Game.IsMouseVisible);
+                }
+            }
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
