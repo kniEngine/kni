@@ -123,9 +123,17 @@ namespace Microsoft.Xna.Framework
             //Guide.Initialise(game);
         }
 
-        public override void TargetElapsedTimeChanged ()
+        public override TimeSpan TargetElapsedTime
         {
-            CreateDisplayLink();
+            get { return base.TargetElapsedTime; }
+            set
+            {
+                if (base.TargetElapsedTime != value)
+                {
+                    base.TargetElapsedTime = value;
+                    CreateDisplayLink();
+                }
+            }
         }
 
         private void CreateDisplayLink()

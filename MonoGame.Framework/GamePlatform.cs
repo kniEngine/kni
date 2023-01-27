@@ -15,6 +15,12 @@ namespace Microsoft.Xna.Framework
     {
         #region Fields
 
+        private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
+        private TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
+
+        private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
+        
+        private bool _isFixedTimeStep = true;
 
         private bool _shouldExit;
         internal bool _suppressDraw;
@@ -101,6 +107,61 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        public TimeSpan InactiveSleepTime
+        {
+            get { return _inactiveSleepTime; }
+            set
+            {
+                if (value < TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException("InactiveSleepTime must be positive.");
+
+                _inactiveSleepTime = value;
+            }
+        }
+
+        /// <summary>
+        /// The maximum amount of time we will frameskip over and only perform Update calls with no Draw calls.
+        /// MonoGame extension.
+        /// </summary>
+        public TimeSpan MaxElapsedTime
+        {
+            get { return _maxElapsedTime; }
+            set
+            {
+                if (value < TimeSpan.FromMilliseconds(500))
+                    throw new ArgumentOutOfRangeException("MaxElapsedTime must be at least 0.5s");
+
+                _maxElapsedTime = value;
+            }
+        }
+
+        /// <summary>
+        /// The time between frames when running with a fixed time step. <seealso cref="IsFixedTimeStep"/>
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Target elapsed time must be strictly larger than zero.</exception>
+        public virtual TimeSpan TargetElapsedTime
+        {
+            get { return _targetElapsedTime; }
+            set
+            {            
+                if (value <= TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException("TargetElapsedTime must be positive and non-zero.");
+
+                _targetElapsedTime = value;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if this game is running with a fixed time between frames.
+        /// 
+        /// When set to <code>true</code> the target time between frames is
+        /// given by <see cref="TargetElapsedTime"/>.
+        /// </summary>
+        public bool IsFixedTimeStep
+        {
+            get { return _isFixedTimeStep; }
+            set { _isFixedTimeStep = value; }
+        }
 
         public bool ShouldExit { get { return _shouldExit; } }
 
@@ -210,12 +271,6 @@ namespace Microsoft.Xna.Framework
                  int clientWidth,
                  int clientHeight
         );
-
-        /// <summary>
-        /// Gives derived classes an opportunity to take action after
-        /// Game.TargetElapsedTime has been set.
-        /// </summary>
-        public virtual void TargetElapsedTimeChanged() { }
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.

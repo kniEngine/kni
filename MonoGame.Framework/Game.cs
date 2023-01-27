@@ -38,12 +38,6 @@ namespace Microsoft.Xna.Framework
         private IGraphicsDeviceService _graphicsDeviceService;
 
         private bool _initialized = false;
-        private bool _isFixedTimeStep = true;
-
-        private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
-        private TimeSpan _inactiveSleepTime = TimeSpan.FromSeconds(0.02);
-
-        private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
 
         /// <summary>
         /// Create a <see cref="Game"/>.
@@ -175,14 +169,8 @@ namespace Microsoft.Xna.Framework
 
         public TimeSpan InactiveSleepTime
         {
-            get { return _inactiveSleepTime; }
-            set
-            {
-                if (value < TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException("InactiveSleepTime must be positive.");
-
-                _inactiveSleepTime = value;
-            }
+            get { return Platform.InactiveSleepTime; }
+            set { Platform.InactiveSleepTime = value; }
         }
 
         /// <summary>
@@ -191,14 +179,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public TimeSpan MaxElapsedTime
         {
-            get { return _maxElapsedTime; }
-            set
-            {
-                if (value < TimeSpan.FromMilliseconds(500))
-                    throw new ArgumentOutOfRangeException("MaxElapsedTime must be at least 0.5s");
-
-                _maxElapsedTime = value;
-            }
+            get { return Platform.MaxElapsedTime; }
+            set { Platform.MaxElapsedTime = value; }
         }
 
         /// <summary>
@@ -230,18 +212,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentOutOfRangeException">Target elapsed time must be strictly larger than zero.</exception>
         public TimeSpan TargetElapsedTime
         {
-            get { return _targetElapsedTime; }
-            set
-            {
-                if (value <= TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException("TargetElapsedTime must be positive and non-zero.");
-
-                if (value != _targetElapsedTime)
-                {
-                    _targetElapsedTime = value;
-                    Platform.TargetElapsedTimeChanged();
-                }
-            }
+            get { return Platform.TargetElapsedTime; }
+            set { Platform.TargetElapsedTime = value; }
         }
 
 
@@ -253,8 +225,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsFixedTimeStep
         {
-            get { return _isFixedTimeStep; }
-            set { _isFixedTimeStep = value; }
+            get { return Platform.IsFixedTimeStep; }
+            set { Platform.IsFixedTimeStep = value; }
         }
 
         /// <summary>
@@ -500,7 +472,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // Do not allow any update to take longer than our maximum.
-            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(_maxElapsedTime.Ticks, _targetElapsedTime.Ticks));
+            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
             if (_accumulatedElapsedTime > maxElapsedTime)
                 _accumulatedElapsedTime = maxElapsedTime;
 
