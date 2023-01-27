@@ -51,7 +51,6 @@
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
-    <Compile Include="GamePlatform.Mobile.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.Android.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Android.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.Android.cs" />

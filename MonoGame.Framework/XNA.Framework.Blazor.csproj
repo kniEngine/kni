@@ -50,7 +50,6 @@
     <Compile Include="Graphics\ConcreteGraphicsAdapter.Blazor.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Blazor.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.Blazor.cs" />
-    <Compile Include="GamePlatform.Blazor.cs" />
     <Compile Include="Graphics\Shader\ShaderProgramCache.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.Blazor.cs" />
     <Compile Include="Input\GamePad.Blazor.cs" />

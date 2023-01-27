@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework
 
             LaunchParameters = new LaunchParameters();
 
-            Strategy = GameStrategy.PlatformCreate(this);
+            Strategy = new ConcreteGame(this);
 
             Strategy.Activated += Platform_Activated;
             Strategy.Deactivated += Platform_Deactivated;

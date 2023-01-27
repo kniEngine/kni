@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    abstract partial class GameStrategy : IDisposable
+    abstract class GameStrategy : IDisposable
     {
         #region Fields
 

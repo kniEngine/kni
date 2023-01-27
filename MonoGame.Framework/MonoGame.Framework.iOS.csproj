@@ -44,7 +44,6 @@
     <Compile Include="Platform\iOS\iOSGameWindow.cs" />
     <Compile Include="Platform\iOS\OrientationConverter.cs" />
 
-    <Compile Include="GamePlatform.Mobile.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.iOS.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.iOS.cs" />

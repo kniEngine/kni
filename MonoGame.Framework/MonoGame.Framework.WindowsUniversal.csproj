@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
