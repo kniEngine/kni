@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform
 {
-    class ConcreteGame : GameStrategy
+    sealed class ConcreteGame : GameStrategy
     {
         public ConcreteGame(Game game)
             : base(game)

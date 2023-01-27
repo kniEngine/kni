@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
-    class ConcreteGame : GameStrategy
+    sealed class ConcreteGame : GameStrategy
     {
         public ConcreteGame(Game game) : base(game)
         {

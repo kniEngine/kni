@@ -24,7 +24,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    class ConcreteGame : GameStrategy
+    sealed class ConcreteGame : GameStrategy
     {
         internal static string LaunchParameters;
 

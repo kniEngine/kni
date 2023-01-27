@@ -18,7 +18,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGame : GameStrategy
+    sealed class ConcreteGame : GameStrategy
     {
         internal override void Run()
         {
