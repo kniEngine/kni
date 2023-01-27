@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -14,6 +15,10 @@ namespace Microsoft.Xna.Framework
     abstract partial class GamePlatform : IDisposable
     {
         #region Fields
+
+        private GameServiceContainer _services;
+        internal GameComponentCollection _components;
+        internal ContentManager _content;
 
         private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
         private TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
@@ -40,6 +45,10 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentNullException("game");
 
             Game = game;
+
+            _services = new GameServiceContainer();
+            _components = new GameComponentCollection();
+            _content = new ContentManager(_services);
         }
 
         ~GamePlatform()
@@ -51,6 +60,31 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
+        /// <summary>
+        /// Get a container holding service providers attached to this <see cref="Game"/>.
+        /// </summary>
+        public GameServiceContainer Services { get { return _services; } }
+
+        /// <summary>
+        /// A collection of game components attached to this <see cref="Game"/>.
+        /// </summary>
+        public GameComponentCollection Components { get { return _components; } }
+
+        /// <summary>
+        /// The <see cref="ContentManager"/> of this <see cref="Game"/>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">If Content is set to <code>null</code>.</exception>
+        public ContentManager Content
+        {
+            get { return _content; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+
+                _content = value;
+            }
+        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.

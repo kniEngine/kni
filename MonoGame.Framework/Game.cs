@@ -21,9 +21,6 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     public partial class Game : IDisposable
     {
-        private GameComponentCollection _components;
-        private GameServiceContainer _services;
-        private ContentManager _content;
         internal GamePlatform Platform;
 
         private DrawableComponents _drawableComponents = new DrawableComponents();
@@ -42,14 +39,12 @@ namespace Microsoft.Xna.Framework
             _instance = this;
 
             LaunchParameters = new LaunchParameters();
-            _services = new GameServiceContainer();
-            _components = new GameComponentCollection();
-            _content = new ContentManager(_services);
 
             Platform = GamePlatform.PlatformCreate(this);
+
             Platform.Activated += Platform_Activated;
             Platform.Deactivated += Platform_Deactivated;
-            _services.AddService(typeof(GamePlatform), Platform);
+            Services.AddService(typeof(GamePlatform), Platform);
 
         }
 
@@ -87,18 +82,18 @@ namespace Microsoft.Xna.Framework
                 if (disposing)
                 {
                     // Dispose loaded game components
-                    for (int i = 0; i < _components.Count; i++)
+                    for (int i = 0; i < Platform._components.Count; i++)
                     {
-                        var disposable = _components[i] as IDisposable;
+                        var disposable = Platform._components[i] as IDisposable;
                         if (disposable != null)
                             disposable.Dispose();
                     }
-                    _components = null;
+                    Platform._components = null;
 
-                    if (_content != null)
+                    if (Platform._content != null)
                     {
-                        _content.Dispose();
-                        _content = null;
+                        Platform._content.Dispose();
+                        Platform._content = null;
                     }
 
                     if (_graphicsDeviceManager != null)
@@ -111,7 +106,7 @@ namespace Microsoft.Xna.Framework
                     {
                         Platform.Activated -= Platform_Activated;
                         Platform.Deactivated -= Platform_Deactivated;
-                        _services.RemoveService(typeof(GamePlatform));
+                        Services.RemoveService(typeof(GamePlatform));
 
                         Platform.Dispose();
                         Platform = null;
@@ -157,10 +152,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// A collection of game components attached to this <see cref="Game"/>.
         /// </summary>
-        public GameComponentCollection Components
-        {
-            get { return _components; }
-        }
+        public GameComponentCollection Components { get { return Platform.Components; } }
 
         public TimeSpan InactiveSleepTime
         {
@@ -227,9 +219,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Get a container holding service providers attached to this <see cref="Game"/>.
         /// </summary>
-        public GameServiceContainer Services {
-            get { return _services; }
-        }
+        public GameServiceContainer Services { get { return Platform.Services; } }
 
 
         /// <summary>
@@ -238,14 +228,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentNullException">If Content is set to <code>null</code>.</exception>
         public ContentManager Content
         {
-            get { return _content; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException();
-
-                _content = value;
-            }
+            get { return Platform.Content; }
+            set { Platform.Content = value; }
         }
 
         /// <summary>
@@ -573,8 +557,7 @@ namespace Microsoft.Xna.Framework
 
         #region Event Handlers
 
-        private void Components_ComponentAdded(
-            object sender, GameComponentCollectionEventArgs e)
+        private void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
         {
             // Since we only subscribe to ComponentAdded after the graphics
             // devices are set up, it is safe to just blindly call Initialize.
@@ -586,8 +569,7 @@ namespace Microsoft.Xna.Framework
                 _drawableComponents.AddDrawable((IDrawable)e.GameComponent);
         }
 
-        private void Components_ComponentRemoved(
-            object sender, GameComponentCollectionEventArgs e)
+        private void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
         {
             if (e.GameComponent is IUpdateable)
                 _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
@@ -654,8 +636,8 @@ namespace Microsoft.Xna.Framework
                     _drawableComponents.AddDrawable((IDrawable)Components[i]);
             }
 
-            _components.ComponentAdded += Components_ComponentAdded;
-            _components.ComponentRemoved += Components_ComponentRemoved;
+            Components.ComponentAdded += Components_ComponentAdded;
+            Components.ComponentRemoved += Components_ComponentRemoved;
 
             _initialized = true;
         }
