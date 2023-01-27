@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Platform
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
         {
-            base.Game.Platform.OnPresentationChanged(args.PresentationParameters);
+            base.Game.Strategy.OnPresentationChanged(args.PresentationParameters);
         }
 
     }

@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null)
             {
-                if (!GameView.IsResuming && ((ConcreteGame)_game.Platform).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
+                if (!GameView.IsResuming && ((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
                 {
                     _game.Tick();
                 }
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework
                     {
                         Resumer.Draw();
                     }
-                    _game.Platform.EndDraw();
+                    _game.Strategy.EndDraw();
                 }
             }
 

@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     public partial class Game : IDisposable
     {
-        internal GameStrategy Platform;
+        internal GameStrategy Strategy { get; private set; }
 
         private DrawableComponents _drawableComponents = new DrawableComponents();
         private UpdateableComponents _updateableComponents = new UpdateableComponents();
@@ -42,11 +42,11 @@ namespace Microsoft.Xna.Framework
 
             LaunchParameters = new LaunchParameters();
 
-            Platform = GameStrategy.PlatformCreate(this);
+            Strategy = GameStrategy.PlatformCreate(this);
 
-            Platform.Activated += Platform_Activated;
-            Platform.Deactivated += Platform_Deactivated;
-            Services.AddService(typeof(GameStrategy), Platform);
+            Strategy.Activated += Platform_Activated;
+            Strategy.Deactivated += Platform_Deactivated;
+            Services.AddService(typeof(GameStrategy), Strategy);
 
         }
 
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework
 		[System.Diagnostics.Conditional("DEBUG")]
 		internal void Log(string Message)
 		{
-			if (Platform != null) Platform.Log(Message);
+			if (Strategy != null) Strategy.Log(Message);
 		}
 
         void Platform_Activated(object sender, EventArgs e) { OnActivated(e); }
@@ -84,18 +84,18 @@ namespace Microsoft.Xna.Framework
                 if (disposing)
                 {
                     // Dispose loaded game components
-                    for (int i = 0; i < Platform._components.Count; i++)
+                    for (int i = 0; i < Strategy._components.Count; i++)
                     {
-                        var disposable = Platform._components[i] as IDisposable;
+                        var disposable = Strategy._components[i] as IDisposable;
                         if (disposable != null)
                             disposable.Dispose();
                     }
-                    Platform._components = null;
+                    Strategy._components = null;
 
-                    if (Platform._content != null)
+                    if (Strategy._content != null)
                     {
-                        Platform._content.Dispose();
-                        Platform._content = null;
+                        Strategy._content.Dispose();
+                        Strategy._content = null;
                     }
 
                     if (_graphicsDeviceManager != null)
@@ -104,14 +104,14 @@ namespace Microsoft.Xna.Framework
                         _graphicsDeviceManager = null;
                     }
 
-                    if (Platform != null)
+                    if (Strategy != null)
                     {
-                        Platform.Activated -= Platform_Activated;
-                        Platform.Deactivated -= Platform_Deactivated;
+                        Strategy.Activated -= Platform_Activated;
+                        Strategy.Deactivated -= Platform_Deactivated;
                         Services.RemoveService(typeof(GameStrategy));
 
-                        Platform.Dispose();
-                        Platform = null;
+                        Strategy.Dispose();
+                        Strategy = null;
                     }
 
                     AudioService.Shutdown();
@@ -154,12 +154,12 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// A collection of game components attached to this <see cref="Game"/>.
         /// </summary>
-        public GameComponentCollection Components { get { return Platform.Components; } }
+        public GameComponentCollection Components { get { return Strategy.Components; } }
 
         public TimeSpan InactiveSleepTime
         {
-            get { return Platform.InactiveSleepTime; }
-            set { Platform.InactiveSleepTime = value; }
+            get { return Strategy.InactiveSleepTime; }
+            set { Strategy.InactiveSleepTime = value; }
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public TimeSpan MaxElapsedTime
         {
-            get { return Platform.MaxElapsedTime; }
-            set { Platform.MaxElapsedTime = value; }
+            get { return Strategy.MaxElapsedTime; }
+            set { Strategy.MaxElapsedTime = value; }
         }
 
         /// <summary>
@@ -177,13 +177,13 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsActive
         {
-            get { return Platform.IsActive; }
+            get { return Strategy.IsActive; }
         }
 
 
         public bool IsVisible
         {
-            get { return Platform.IsVisible; }
+            get { return Strategy.IsVisible; }
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsMouseVisible
         {
-            get { return Platform.IsMouseVisible; }
-            set { Platform.IsMouseVisible = value; }
+            get { return Strategy.IsMouseVisible; }
+            set { Strategy.IsMouseVisible = value; }
         }
 
         /// <summary>
@@ -201,8 +201,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentOutOfRangeException">Target elapsed time must be strictly larger than zero.</exception>
         public TimeSpan TargetElapsedTime
         {
-            get { return Platform.TargetElapsedTime; }
-            set { Platform.TargetElapsedTime = value; }
+            get { return Strategy.TargetElapsedTime; }
+            set { Strategy.TargetElapsedTime = value; }
         }
 
 
@@ -214,14 +214,14 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsFixedTimeStep
         {
-            get { return Platform.IsFixedTimeStep; }
-            set { Platform.IsFixedTimeStep = value; }
+            get { return Strategy.IsFixedTimeStep; }
+            set { Strategy.IsFixedTimeStep = value; }
         }
 
         /// <summary>
         /// Get a container holding service providers attached to this <see cref="Game"/>.
         /// </summary>
-        public GameServiceContainer Services { get { return Platform.Services; } }
+        public GameServiceContainer Services { get { return Strategy.Services; } }
 
 
         /// <summary>
@@ -230,8 +230,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentNullException">If Content is set to <code>null</code>.</exception>
         public ContentManager Content
         {
-            get { return Platform.Content; }
-            set { Platform.Content = value; }
+            get { return Strategy.Content; }
+            set { Strategy.Content = value; }
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public GameWindow Window
         {
-            get { return Platform.Window; }
+            get { return Strategy.Window; }
         }
 
         #endregion Properties
@@ -316,7 +316,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Exit()
         {
-            Platform.Exit();
+            Strategy.Exit();
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void ResetElapsedTime()
         {
-            Platform.ResetElapsedTime();
+            Strategy.ResetElapsedTime();
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void SuppressDraw()
         {
-            Platform.SuppressDraw();
+            Strategy.SuppressDraw();
         }
         
         /// <summary>
@@ -340,16 +340,16 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void RunOneFrame()
         {
-            if (Platform == null)
+            if (Strategy == null)
                 return;
 
-            if (!Platform.ANDROID_BeforeRun())
+            if (!Strategy.ANDROID_BeforeRun())
                 return;
 
             if (!Initialized)
             {
                 DoInitialize();
-                Platform.Timer = Stopwatch.StartNew();
+                Strategy.Timer = Stopwatch.StartNew();
             }
 
             BeginRun();
@@ -368,7 +368,7 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            Platform.Run();
+            Strategy.Run();
         }
 
         /// <summary>
@@ -378,13 +378,13 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            Platform.Run_UAP_XAML();
+            Strategy.Run_UAP_XAML();
         }
 
         internal void DoBeginRun()
         {
             BeginRun();
-            Platform.Timer = Stopwatch.StartNew();
+            Strategy.Timer = Stopwatch.StartNew();
         }
 
         internal void DoEndRun()
@@ -402,10 +402,10 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Tick()
         {
-            Platform.Tick();
+            Strategy.Tick();
 
-            if (Platform.ShouldExit)
-                Platform.TickExiting();
+            if (Strategy.ShouldExit)
+                Strategy.TickExiting();
         }
 
         #endregion
@@ -427,7 +427,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected virtual void EndDraw()
         {
-            Platform.EndDraw();
+            Strategy.EndDraw();
         }
 
         /// <summary>
@@ -461,18 +461,18 @@ namespace Microsoft.Xna.Framework
 #if ANDROID || IOS || TVOS
             // applyChanges
             {
-                Platform.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
+                Strategy.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
 
                 if (GraphicsDevice.PresentationParameters.IsFullScreen)
-                    Platform.EnterFullScreen();
+                    Strategy.EnterFullScreen();
                 else
-                    Platform.ExitFullScreen();
+                    Strategy.ExitFullScreen();
                 var viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
 
                 GraphicsDevice.Viewport = viewport;
-                Platform.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
+                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
             }
 #endif
 
@@ -587,7 +587,7 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            if (Platform.BeforeUpdate(gameTime))
+            if (Strategy.BeforeUpdate(gameTime))
             {
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 				
@@ -605,7 +605,7 @@ namespace Microsoft.Xna.Framework
             // Draw and EndDraw should not be called if BeginDraw returns false.
             // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
             // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
-            if (Platform.BeforeDraw(gameTime) && BeginDraw())
+            if (Strategy.BeforeDraw(gameTime) && BeginDraw())
             {
                 Draw(gameTime);
                 EndDraw();
@@ -619,7 +619,7 @@ namespace Microsoft.Xna.Framework
             if (GraphicsDevice == null && graphicsDeviceManager != null)
                 ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
 
-            Platform.BeforeInitialize();
+            Strategy.BeforeInitialize();
             Initialize();
 
             // We need to do this after virtual Initialize(...) is called.
