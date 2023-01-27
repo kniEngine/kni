@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework
     /// This class is the entry point for most games. Handles setting up
     /// a window and graphics and runs a game loop that calls <see cref="Update"/> and <see cref="Draw"/>.
     /// </summary>
-    public partial class Game : IDisposable
+    public class Game : IDisposable
     {
         internal GameStrategy Strategy { get; private set; }
 
