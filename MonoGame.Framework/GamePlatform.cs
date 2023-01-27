@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework
         private bool _isFixedTimeStep = true;
 
         private bool _shouldExit;
-        internal bool _suppressDraw;
+        private bool _suppressDraw;
 
         bool _isDisposed;
 
@@ -57,8 +57,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public readonly Game Game;
 
-        public readonly GameTime Time = new GameTime();
-        public Stopwatch Timer;
+        private readonly GameTime Time = new GameTime();
+        internal Stopwatch Timer;
 
         private bool _isActive;
         public bool IsActive
@@ -286,6 +286,9 @@ namespace Microsoft.Xna.Framework
             }
 
             Time.ElapsedGameTime = TimeSpan.Zero;
+
+            _currElapsedTime = TimeSpan.Zero;
+            _prevElapsedTime = TimeSpan.Zero;
         }
         
         /// <summary>
@@ -305,6 +308,123 @@ namespace Microsoft.Xna.Framework
         /// <param name="pp">The new presentation parameters.</param>
         internal virtual void OnPresentationChanged(PresentationParameters pp)
         {
+        }
+
+#if WINDOWS_UAP
+        private readonly object _locker = new object();
+#endif
+
+        private TimeSpan _currElapsedTime;
+        private TimeSpan _prevElapsedTime;
+        private int _updateFrameLag;
+
+        /// <summary>
+        /// Run one iteration of the game loop.
+        ///
+        /// Makes at least one call to <see cref="Update"/>
+        /// and exactly one call to <see cref="Draw"/> if drawing is not supressed.
+        /// When <see cref="IsFixedTimeStep"/> is set to <code>false</code> this will
+        /// make exactly one call to <see cref="Update"/>.
+        /// </summary>
+        public virtual void Tick()
+        {
+            // implement InactiveSleepTime to save battery life 
+            // and/or release CPU time to other threads and processes.
+            if (!IsActive)
+            {
+#if WINDOWS_UAP
+                lock (_locker)
+                    System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
+#else
+                System.Threading.Thread.Sleep((int)InactiveSleepTime.TotalMilliseconds);
+#endif
+            }
+
+        RetryTick:
+
+            // Advance the accumulated elapsed time.
+            TimeSpan elapsedTime = Timer.Elapsed;
+            TimeSpan dt = elapsedTime - _prevElapsedTime;
+            _currElapsedTime += dt;
+            _prevElapsedTime = elapsedTime;
+
+            if (IsFixedTimeStep && _currElapsedTime < TargetElapsedTime)
+            {
+                // When game IsActive use CPU Spin.
+                /*
+                if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
+                {
+#if WINDOWS || DESKTOPGL || ANDROID || IOS || TVOS
+                    System.Threading.Thread.Sleep(0);
+#elif WINDOWS_UAP
+                    lock (_locker)
+                        System.Threading.Monitor.Wait(_locker, 0);
+#endif
+                }
+                */
+
+                // Keep looping until it's time to perform the next update
+                goto RetryTick;
+            }
+
+            // Do not allow any update to take longer than our maximum.
+            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
+            if (_currElapsedTime > maxElapsedTime)
+                _currElapsedTime = maxElapsedTime;
+
+            if (IsFixedTimeStep)
+            {
+                Time.ElapsedGameTime = TargetElapsedTime;
+                int stepCount = 0;
+
+                // Perform as many full fixed length time steps as we can.
+                while (_currElapsedTime >= TargetElapsedTime && !_shouldExit)
+                {
+                    Time.TotalGameTime += TargetElapsedTime;
+                    _currElapsedTime -= TargetElapsedTime;
+                    stepCount++;
+
+                    Game.DoUpdate(Time);
+                }
+
+                //Every update after the first accumulates lag
+                _updateFrameLag += Math.Max(0, stepCount - 1);
+                _updateFrameLag = Math.Min(_updateFrameLag, 5);
+
+                //If we think we are running slowly, wait until the lag clears before resetting it
+                if (Time.IsRunningSlowly)
+                {
+                    if (_updateFrameLag == 0)
+                        Time.IsRunningSlowly = false;
+                }
+                else if (_updateFrameLag >= 5)
+                {
+                    //If we lag more than 5 frames, start thinking we are running slowly
+                    Time.IsRunningSlowly = true;
+                }
+
+                //Every time we just do one update and one draw, then we are not running slowly, so decrease the lag
+                if (stepCount == 1 && _updateFrameLag > 0)
+                    _updateFrameLag--;
+
+                // Draw needs to know the total elapsed time
+                // that occured for the fixed length updates.
+                Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
+            }
+            else
+            {
+                // Perform a single variable length update.
+                Time.ElapsedGameTime = _currElapsedTime;
+                Time.TotalGameTime += _currElapsedTime;
+                _currElapsedTime = TimeSpan.Zero;
+
+                Game.DoUpdate(Time);
+            }
+
+            // Draw unless the update suppressed it.
+            if (!_suppressDraw)
+                Game.DoDraw(Time);
+            _suppressDraw = false;
         }
 
         #endregion Methods

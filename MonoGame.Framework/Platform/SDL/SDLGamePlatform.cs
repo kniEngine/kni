@@ -33,6 +33,11 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         private readonly List<Keys> _keys;
 
         private int _isExiting;

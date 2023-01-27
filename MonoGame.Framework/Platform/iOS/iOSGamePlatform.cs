@@ -166,6 +166,11 @@ namespace Microsoft.Xna.Framework
             //Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         [Obsolete(
             "iOSGamePlatform.IsPlayingVideo must be removed when MonoGame " +
             "fully implements the XNA VideoPlayer contract.")]
@@ -222,7 +227,7 @@ namespace Microsoft.Xna.Framework
             CreateDisplayLink();
         }
 
-        internal void Tick()
+        internal void iOSTick()
         {
             if (!Game.IsActive)
                 return;

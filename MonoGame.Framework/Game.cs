@@ -6,11 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-#if WINDOWS_UAP
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
-#endif
-
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -323,7 +318,7 @@ namespace Microsoft.Xna.Framework
 
 #if WINDOWS_UAP
         [CLSCompliant(false)]
-        public ApplicationExecutionState PreviousExecutionState { get; internal set; }
+        public Windows.ApplicationModel.Activation.ApplicationExecutionState PreviousExecutionState { get; internal set; }
 #endif
 
         #endregion
@@ -344,9 +339,6 @@ namespace Microsoft.Xna.Framework
         public void ResetElapsedTime()
         {
             Platform.ResetElapsedTime();
-
-            _currElapsedTime = TimeSpan.Zero;
-            _prevElapsedTime = TimeSpan.Zero;
         }
 
         /// <summary>
@@ -413,14 +405,7 @@ namespace Microsoft.Xna.Framework
         {
             EndRun();
         }
-
-        private TimeSpan _currElapsedTime;
-        private TimeSpan _prevElapsedTime;
-        private int _updateFrameLag;
-#if WINDOWS_UAP
-        private readonly object _locker = new object();
-#endif
-
+        
         /// <summary>
         /// Run one iteration of the game loop.
         ///
@@ -431,103 +416,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Tick()
         {
-            // implement InactiveSleepTime to save battery life 
-            // and/or release CPU time to other threads and processes.
-            if (!IsActive)
-            {
-#if WINDOWS_UAP
-                lock (_locker)
-                    System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
-#else
-                System.Threading.Thread.Sleep((int)InactiveSleepTime.TotalMilliseconds);
-#endif
-            }
-
-        RetryTick:
-
-            // Advance the accumulated elapsed time.
-            TimeSpan elapsedTime = Platform.Timer.Elapsed;
-            TimeSpan dt = elapsedTime - _prevElapsedTime;
-            _currElapsedTime += dt;
-            _prevElapsedTime = elapsedTime;
-
-            if (IsFixedTimeStep && _currElapsedTime < TargetElapsedTime)
-            {
-                // When game IsActive use CPU Spin.
-                /*
-                if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
-                {
-#if WINDOWS || DESKTOPGL || ANDROID || IOS || TVOS
-                    System.Threading.Thread.Sleep(0);
-#elif WINDOWS_UAP
-                    lock (_locker)
-                        System.Threading.Monitor.Wait(_locker, 0);
-#endif
-                }
-                */
-                
-                // Keep looping until it's time to perform the next update
-                goto RetryTick;
-            }
-
-            // Do not allow any update to take longer than our maximum.
-            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
-            if (_currElapsedTime > maxElapsedTime)
-                _currElapsedTime = maxElapsedTime;
-
-            if (IsFixedTimeStep)
-            {
-                Platform.Time.ElapsedGameTime = TargetElapsedTime;
-                int stepCount = 0;
-
-                // Perform as many full fixed length time steps as we can.
-                while (_currElapsedTime >= TargetElapsedTime && !Platform.ShouldExit)
-                {
-                    Platform.Time.TotalGameTime += TargetElapsedTime;
-                    _currElapsedTime -= TargetElapsedTime;
-                    stepCount++;
-
-                    DoUpdate(Platform.Time);
-                }
-
-                //Every update after the first accumulates lag
-                _updateFrameLag += Math.Max(0, stepCount - 1);
-                _updateFrameLag = Math.Min(_updateFrameLag, 5);
-
-                //If we think we are running slowly, wait until the lag clears before resetting it
-                if (Platform.Time.IsRunningSlowly)
-                {
-                    if (_updateFrameLag == 0)
-                        Platform.Time.IsRunningSlowly = false;
-                }
-                else if (_updateFrameLag >= 5)
-                {
-                    //If we lag more than 5 frames, start thinking we are running slowly
-                    Platform.Time.IsRunningSlowly = true;
-                }
-
-                //Every time we just do one update and one draw, then we are not running slowly, so decrease the lag
-                if (stepCount == 1 && _updateFrameLag > 0)
-                    _updateFrameLag--;
-
-                // Draw needs to know the total elapsed time
-                // that occured for the fixed length updates.
-                Platform.Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
-            }
-            else
-            {
-                // Perform a single variable length update.
-                Platform.Time.ElapsedGameTime = _currElapsedTime;
-                Platform.Time.TotalGameTime += _currElapsedTime;
-                _currElapsedTime = TimeSpan.Zero;
-
-                DoUpdate(Platform.Time);
-            }
-
-            // Draw unless the update suppressed it.
-            if (!Platform._suppressDraw)
-                DoDraw(Platform.Time);
-            Platform._suppressDraw = false;
+            Platform.Tick();
 
             if (Platform.ShouldExit)
                 Platform.TickExiting();

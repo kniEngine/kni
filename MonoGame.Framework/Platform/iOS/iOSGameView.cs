@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework {
         [Export("doTick")]
         void DoTick()
         {
-            _platform.Tick();
+            _platform.iOSTick();
         }
 
 		private void CreateFramebuffer ()

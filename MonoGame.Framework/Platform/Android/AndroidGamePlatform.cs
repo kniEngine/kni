@@ -175,6 +175,11 @@ namespace Microsoft.Xna.Framework
             //Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         public override void Log(string Message)
         {
 #if LOGGING

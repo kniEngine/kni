@@ -139,6 +139,11 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         //TODO: merge Run_UAP_XAML() with Run()
         internal override void Run_UAP_XAML()
         {

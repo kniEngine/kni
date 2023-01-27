@@ -45,6 +45,11 @@ namespace MonoGame.Framework
             Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         public override bool IsMouseVisible
         {
             get { return base.IsMouseVisible; }
