@@ -21,12 +21,12 @@ namespace Microsoft.Xna.Framework
         UIViewController
     #endif
     {
-        iOSGamePlatform _platform;
+        ConcreteGame _platform;
         #if TVOS
         IPlatformBackButton platformBackButton;
         #endif
 
-        public iOSGameViewController(iOSGamePlatform platform)
+        public iOSGameViewController(ConcreteGame platform)
         {
             if (platform == null)
                 throw new ArgumentNullException("platform");
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework
                 UIInterfaceOrientation prevOrientation = InterfaceOrientation;
 
                 // In iOS 8+ DidRotate is no longer called after a rotation
-                // But we need to notify iOSGamePlatform to update back buffer so we explicitly call it 
+                // But we need to notify ConcreteGame to update back buffer so we explicitly call it 
 
                 // We do this within the animateAlongside action, which at the point of calling
                 // will have the new InterfaceOrientation set

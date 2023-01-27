@@ -29,7 +29,7 @@ namespace MonoGame.Framework
     {
         internal WinFormsGameForm Form;
 
-        private WinFormsGamePlatform _platform;
+        private ConcreteGame _platform;
 
         private bool _isResizable;
         private bool _isBorderless;
@@ -134,7 +134,7 @@ namespace MonoGame.Framework
 
         #endregion
 
-        internal WinFormsGameWindow(WinFormsGamePlatform platform)
+        internal WinFormsGameWindow(ConcreteGame platform)
         {
             _platform = platform;
             Game = platform.Game;

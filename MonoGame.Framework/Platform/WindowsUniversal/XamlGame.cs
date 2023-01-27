@@ -51,10 +51,10 @@ namespace MonoGame.Framework
                 throw new NullReferenceException("The swap chain panel cannot be null!");
 
             // Save any launch parameters to be parsed by the platform.
-            UAPGamePlatform.LaunchParameters = launchParameters;
+            ConcreteGame.LaunchParameters = launchParameters;
 
             // Setup the window class.
-            UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
+            UAPGameWindow.Instance.Initialize(window, swapChainPanel, ConcreteGame.TouchQueue);
 
             // Construct the game.
             var game = gameConstructor();

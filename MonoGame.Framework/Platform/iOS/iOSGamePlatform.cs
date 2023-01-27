@@ -88,17 +88,17 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    class iOSGamePlatform : GameStrategy
+    class ConcreteGame : GameStrategy
     {
         private iOSGameViewController _viewController;
         private UIWindow _mainWindow;
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
-        public iOSGamePlatform(Game game) :
+        public ConcreteGame(Game game) :
             base(game)
         {
-            game.Services.AddService(typeof(iOSGamePlatform), this);
+            game.Services.AddService(typeof(ConcreteGame), this);
 
             //This also runs the TitleContainer static constructor, ensuring it is done on the main thread
             Directory.SetCurrentDirectory(TitleContainer.Location);
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Platform
         }
 
         [Obsolete(
-            "iOSGamePlatform.IsPlayingVideo must be removed when MonoGame " +
+            "ConcreteGame.IsPlayingVideo must be removed when MonoGame " +
             "fully implements the XNA VideoPlayer contract.")]
         public bool IsPlayingVideo { get; set; }
 
@@ -362,8 +362,7 @@ namespace Microsoft.Xna.Platform
 			var orientation = CurrentOrientation;
 
 			// FIXME: The presentation parameters for the GraphicsDevice should
-			//        be managed by the GraphicsDevice itself.  Not by
-			//        iOSGamePlatform.
+			//            be managed by the GraphicsDevice itself.  Not by ConcreteGame.
 			var gdm = (GraphicsDeviceManager) Game.Services.GetService (typeof (IGraphicsDeviceManager));
 
             TouchPanel.DisplayOrientation = orientation;

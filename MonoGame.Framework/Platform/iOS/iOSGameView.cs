@@ -89,13 +89,13 @@ namespace Microsoft.Xna.Framework {
 
     [Register("iOSGameView")]
 	partial class iOSGameView : UIView {
-		private readonly iOSGamePlatform _platform;
+		private readonly ConcreteGame _platform;
 		private int _colorbuffer;
 		private int _depthbuffer;
 		private int _framebuffer;
 
 		#region Construction/Destruction
-		public iOSGameView (iOSGamePlatform platform, CGRect frame)
+		public iOSGameView (ConcreteGame platform, CGRect frame)
 			: base(frame)
 		{
 			if (platform == null)
@@ -327,7 +327,7 @@ namespace Microsoft.Xna.Framework {
 		// FIXME: This logic belongs in GraphicsDevice.Present, not
 		//        here.  If it can someday be moved there, then the
 		//        normal call to Present in Game.Tick should cover
-		//        this.  For now, iOSGamePlatform will call Present
+		//        this.  For now, ConcreteGame will call Present
 		//        in the Draw/Update loop handler.
 		public void Present ()
 		{

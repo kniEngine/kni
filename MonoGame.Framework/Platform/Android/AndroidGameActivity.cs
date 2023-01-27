@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework
         public override void OnWindowFocusChanged(bool hasFocus)
         {
             base.OnWindowFocusChanged(hasFocus);
-            ((AndroidGamePlatform)Game.Platform).OnWindowFocusChanged(hasFocus);
+            ((ConcreteGame)Game.Platform).OnWindowFocusChanged(hasFocus);
         }
 
 		protected override void OnDestroy()

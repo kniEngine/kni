@@ -14,11 +14,7 @@ namespace Microsoft.Xna.Platform
     {
         internal static GameStrategy PlatformCreate(Game game)
         {
-#if IOS || TVOS
-            return new iOSGamePlatform(game);
-#elif ANDROID
-            return new AndroidGamePlatform(game);
-#endif
+            return new ConcreteGame(game);
         }
     }
 }

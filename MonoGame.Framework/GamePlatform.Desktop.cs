@@ -18,13 +18,7 @@ namespace Microsoft.Xna.Platform
     {
         internal static GameStrategy PlatformCreate(Game game)
         {
-#if DESKTOPGL
-            return new SdlGamePlatform(game);
-#elif WINDOWS
-            return new WinFormsGamePlatform(game);
-#elif WINDOWS_UAP
-            return new UAPGamePlatform(game);
-#endif
+            return new ConcreteGame(game);
         }
    }
 }

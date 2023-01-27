@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework
             get { return _orientation; }
         }
 
-        private UAPGamePlatform Platform { get { return Game.Instance.Platform as UAPGamePlatform; } }
+        private ConcreteGame Platform { get { return Game.Instance.Platform as ConcreteGame; } }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {

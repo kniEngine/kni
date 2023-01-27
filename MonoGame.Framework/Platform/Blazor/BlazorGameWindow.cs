@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework
         }
 
         private Window _window;
-        private BlazorGamePlatform _platform;
+        private ConcreteGame _platform;
 
         private bool _isResizable;
         private bool _isBorderless;
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework
         internal Canvas _canvas { get; private set; }
         internal Window wasmWindow { get { return _window; } }
 
-        internal BlazorGameWindow(BlazorGamePlatform platform)
+        internal BlazorGameWindow(ConcreteGame platform)
         {
             _platform = platform;
 

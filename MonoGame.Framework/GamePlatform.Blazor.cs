@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform
     {
         internal static GameStrategy PlatformCreate(Game game)
         {
-            return new BlazorGamePlatform(game);
+            return new ConcreteGame(game);
         }
     }
 }

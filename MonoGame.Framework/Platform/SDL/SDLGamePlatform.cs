@@ -18,7 +18,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class SdlGamePlatform : GameStrategy
+    internal class ConcreteGame : GameStrategy
     {
         internal override void Run()
         {
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform
 
         private readonly List<string> _dropList;
 
-        public SdlGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             _keys = new List<Keys>();

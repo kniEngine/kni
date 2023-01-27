@@ -24,7 +24,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    class UAPGamePlatform : GameStrategy
+    class ConcreteGame : GameStrategy
     {
         internal static string LaunchParameters;
 
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform
 
         internal static ApplicationExecutionState PreviousExecutionState { get; set; }
 
-        public UAPGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             // Setup the game window.

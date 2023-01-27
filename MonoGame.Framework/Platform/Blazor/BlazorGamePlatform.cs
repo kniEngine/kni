@@ -13,13 +13,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Platform
 {
-    class BlazorGamePlatform : GameStrategy
+    class ConcreteGame : GameStrategy
     {
         //internal static string LaunchParameters;
 
         private BlazorGameWindow _window;
 
-        public BlazorGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             IsActive = true;

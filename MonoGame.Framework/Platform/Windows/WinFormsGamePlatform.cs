@@ -15,13 +15,13 @@ using MonoGame.Framework;
 
 namespace Microsoft.Xna.Platform
 {
-    class WinFormsGamePlatform : GameStrategy
+    class ConcreteGame : GameStrategy
     {
         //internal static string LaunchParameters;
 
         private WinFormsGameWindow _window;
 
-        public WinFormsGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             _window = new WinFormsGameWindow(this);
