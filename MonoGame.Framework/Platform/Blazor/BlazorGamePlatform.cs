@@ -2,15 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    class BlazorGamePlatform : GamePlatform
+    class BlazorGamePlatform : GameStrategy
     {
         //internal static string LaunchParameters;
 

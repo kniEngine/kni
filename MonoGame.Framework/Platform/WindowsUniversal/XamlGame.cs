@@ -3,9 +3,10 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform;
 
 
 namespace MonoGame.Framework

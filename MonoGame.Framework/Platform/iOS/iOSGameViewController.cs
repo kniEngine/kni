@@ -9,6 +9,8 @@ using UIKit;
 using Foundation;
 using CoreGraphics;
 using ObjCRuntime;
+using Microsoft.Xna.Platform;
+
 
 namespace Microsoft.Xna.Framework
 {

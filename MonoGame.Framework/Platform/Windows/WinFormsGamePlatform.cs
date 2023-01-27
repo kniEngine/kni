@@ -11,10 +11,11 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Framework;
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Platform
 {
-    class WinFormsGamePlatform : GamePlatform
+    class WinFormsGamePlatform : GameStrategy
     {
         //internal static string LaunchParameters;
 

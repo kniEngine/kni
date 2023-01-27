@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Framework
 {
     // TODO: BlazorGameWindow should be internal
     public class BlazorGameWindow : GameWindow, IDisposable

@@ -82,6 +82,8 @@ using MonoGame.OpenGL;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform;
+
 
 namespace Microsoft.Xna.Framework {
 

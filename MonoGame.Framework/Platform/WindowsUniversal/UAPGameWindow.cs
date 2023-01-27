@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework
 {

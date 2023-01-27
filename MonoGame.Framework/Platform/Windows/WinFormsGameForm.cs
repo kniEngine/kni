@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Framework;
 
-
 namespace Microsoft.Xna.Framework.Windows
 {
     internal static class MessageExtensions

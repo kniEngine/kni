@@ -66,6 +66,8 @@ non-infringement.
 */
 #endregion License
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,15 +78,17 @@ using UIKit;
 using CoreAnimation;
 using ObjCRuntime;
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 //using Microsoft.Xna.Framework.GamerServices;
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    class iOSGamePlatform : GamePlatform
+    class iOSGamePlatform : GameStrategy
     {
         private iOSGameViewController _viewController;
         private UIWindow _mainWindow;

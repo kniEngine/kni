@@ -2,17 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    abstract partial class GamePlatform : IDisposable
+    abstract partial class GameStrategy : IDisposable
     {
         #region Fields
 
@@ -39,7 +42,7 @@ namespace Microsoft.Xna.Framework
 
         #region Construction/Destruction
 
-		protected GamePlatform(Game game)
+		protected GameStrategy(Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
@@ -51,7 +54,7 @@ namespace Microsoft.Xna.Framework
             _content = new ContentManager(_services);
         }
 
-        ~GamePlatform()
+        ~GameStrategy()
         {
             Dispose(false);
         }

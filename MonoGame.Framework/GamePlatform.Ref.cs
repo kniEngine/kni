@@ -1,13 +1,15 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    partial class GamePlatform
+    partial class GameStrategy
     {
 
-        internal static GamePlatform PlatformCreate(Game game)
+        internal static GameStrategy PlatformCreate(Game game)
         {
             throw new PlatformNotSupportedException();
         }

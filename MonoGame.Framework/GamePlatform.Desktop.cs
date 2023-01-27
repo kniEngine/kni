@@ -2,22 +2,26 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Framework;
 
 #if WINDOWS_UAP
 using Windows.UI.ViewManagement;
 #endif
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    partial class GamePlatform
+    partial class GameStrategy
     {
-        internal static GamePlatform PlatformCreate(Game game)
+        internal static GameStrategy PlatformCreate(Game game)
         {
 #if DESKTOPGL
             return new SdlGamePlatform(game);
 #elif WINDOWS
-            return new MonoGame.Framework.WinFormsGamePlatform(game);
+            return new WinFormsGamePlatform(game);
 #elif WINDOWS_UAP
             return new UAPGamePlatform(game);
 #endif

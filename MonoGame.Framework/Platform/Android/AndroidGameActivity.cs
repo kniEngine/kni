@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Platform;
 
 
 namespace Microsoft.Xna.Framework

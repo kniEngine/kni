@@ -2,13 +2,17 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
+// Copyright (C)2023 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework
+using System;
+using Microsoft.Xna.Framework;
+
+
+namespace Microsoft.Xna.Platform
 {
-    partial class GamePlatform
+    partial class GameStrategy
     {
-        internal static GamePlatform PlatformCreate(Game game)
+        internal static GameStrategy PlatformCreate(Game game)
         {
 #if IOS || TVOS
             return new iOSGamePlatform(game);

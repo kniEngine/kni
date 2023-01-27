@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,7 +23,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     public partial class Game : IDisposable
     {
-        internal GamePlatform Platform;
+        internal GameStrategy Platform;
 
         private DrawableComponents _drawableComponents = new DrawableComponents();
         private UpdateableComponents _updateableComponents = new UpdateableComponents();
@@ -40,11 +42,11 @@ namespace Microsoft.Xna.Framework
 
             LaunchParameters = new LaunchParameters();
 
-            Platform = GamePlatform.PlatformCreate(this);
+            Platform = GameStrategy.PlatformCreate(this);
 
             Platform.Activated += Platform_Activated;
             Platform.Deactivated += Platform_Deactivated;
-            Services.AddService(typeof(GamePlatform), Platform);
+            Services.AddService(typeof(GameStrategy), Platform);
 
         }
 
@@ -106,7 +108,7 @@ namespace Microsoft.Xna.Framework
                     {
                         Platform.Activated -= Platform_Activated;
                         Platform.Deactivated -= Platform_Deactivated;
-                        Services.RemoveService(typeof(GamePlatform));
+                        Services.RemoveService(typeof(GameStrategy));
 
                         Platform.Dispose();
                         Platform = null;

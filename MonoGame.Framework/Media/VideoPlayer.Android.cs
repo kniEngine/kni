@@ -5,6 +5,7 @@
 using System;
 using Android.Widget;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework.Media
 {

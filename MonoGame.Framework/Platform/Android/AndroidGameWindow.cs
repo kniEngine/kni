@@ -8,7 +8,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform;
 using MonoGame.OpenGL;
+
 
 namespace Microsoft.Xna.Framework
 {
