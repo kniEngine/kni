@@ -213,6 +213,25 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
+        public virtual void RunOneFrame()
+        {
+            if (!ANDROID_BeforeRun())
+                return;
+
+            if (!Game.Initialized)
+            {
+                Game.DoInitialize();
+            }
+
+            Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.DoEndRun();
+        }
+
         internal abstract void Run();
 
         internal virtual void Run_UAP_XAML()
