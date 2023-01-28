@@ -215,9 +215,6 @@ namespace Microsoft.Xna.Platform
 
         public virtual void RunOneFrame()
         {
-            if (!ANDROID_BeforeRun())
-                return;
-
             if (!Game.Initialized)
             {
                 Game.DoInitialize();
@@ -248,17 +245,6 @@ namespace Microsoft.Xna.Platform
         public virtual void BeforeInitialize()
         {
             IsActive = true;
-        }
-
-        /// <summary>
-        /// Gives derived classes an opportunity to do work just before the
-        /// run loop is begun.  Implementations may also return false to prevent
-        /// the run loop from starting.
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool ANDROID_BeforeRun()
-        {
-            return true;
         }
 
         /// <summary>
