@@ -21,16 +21,16 @@ namespace Microsoft.Xna.Framework
         UIViewController
     #endif
     {
-        ConcreteGame _platform;
+        ConcreteGame _concreteGame;
         #if TVOS
         IPlatformBackButton platformBackButton;
         #endif
 
-        public iOSGameViewController(ConcreteGame platform)
+        public iOSGameViewController(ConcreteGame concreteGame)
         {
-            if (platform == null)
-                throw new ArgumentNullException("platform");
-            _platform = platform;
+            if (concreteGame == null)
+                throw new ArgumentNullException("concreteGame");
+            _concreteGame = concreteGame;
             SupportedOrientations = 
                 DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight 
                 | DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework
                 #endif
             }
 
-            base.View = new iOSGameView(_platform, frame);
+            base.View = new iOSGameView(_concreteGame, frame);
 
             // Need to set resize mask to ensure a view resize (which in iOS 8+ corresponds with a rotation) adjusts
             // the view and underlying CALayer correctly
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework
         #region Hide statusbar for iOS 7 or newer
         public override bool PrefersStatusBarHidden()
         {
-            return _platform.Game.graphicsDeviceManager.IsFullScreen;
+            return _concreteGame.Game.graphicsDeviceManager.IsFullScreen;
         }
         #endregion
 
@@ -160,15 +160,15 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                return _platform.Game.graphicsDeviceManager.IsFullScreen ? UIRectEdge.All : base.PreferredScreenEdgesDeferringSystemGestures;
+                return _concreteGame.Game.graphicsDeviceManager.IsFullScreen ? UIRectEdge.All : base.PreferredScreenEdgesDeferringSystemGestures;
             }
         }
 
         #endregion
 
-        #endif
+#endif
 
-        #if TVOS
+#if TVOS
 
         public override UIView PreferredFocusedView
         {
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework
                 if (press.Type == UIPressType.Menu)
                 {
                     if (platformBackButton == null)
-                        platformBackButton = _platform.Game.Services.GetService<IPlatformBackButton>();
+                        platformBackButton = _concreteGame.Game.Services.GetService<IPlatformBackButton>();
                     if (platformBackButton != null)
                     {
                         if (!platformBackButton.Handled())
@@ -214,6 +214,6 @@ namespace Microsoft.Xna.Framework
             if (ControllerUserInteractionEnabled)
                 base.PressesEnded(presses, evt);
         }
-        #endif
+#endif
     }
 }

@@ -14,15 +14,15 @@ namespace Microsoft.Xna.Framework.Media
     public sealed partial class VideoPlayer : IDisposable
     {
         private Game _game;
-        private ConcreteGame _platform;
+        private ConcreteGame _concreteGame;
         private NSObject _playbackDidFinishObserver;
 
         private void PlatformInitialize()
         {
             _game = Game.Instance;
-            _platform = (ConcreteGame)_game.Services.GetService(typeof(ConcreteGame));
+            _concreteGame = (ConcreteGame)_game.Services.GetService(typeof(ConcreteGame));
 
-            if (_platform == null)
+            if (_concreteGame == null)
                 throw new InvalidOperationException("No iOSGamePlatform instance was available");
         }
 
@@ -47,14 +47,14 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformPlay()
         {
-            _platform.IsPlayingVideo = true;
+            _concreteGame.IsPlayingVideo = true;
 
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
             _currentVideo.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            _platform.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
+            _concreteGame.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
             _currentVideo.MovieView.MoviePlayer.Play();
         }
 
@@ -67,8 +67,8 @@ namespace Microsoft.Xna.Framework.Media
             }
 
             _currentVideo.MovieView.MoviePlayer.Stop();
-            _platform.IsPlayingVideo = false;
-            _platform.ViewController.DismissViewController(false, null);
+            _concreteGame.IsPlayingVideo = false;
+            _concreteGame.ViewController.DismissViewController(false, null);
         }
 
         private void OnStop(NSNotification e)

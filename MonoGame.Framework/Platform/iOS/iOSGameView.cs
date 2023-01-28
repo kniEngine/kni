@@ -89,18 +89,18 @@ namespace Microsoft.Xna.Framework {
 
     [Register("iOSGameView")]
 	partial class iOSGameView : UIView {
-		private readonly ConcreteGame _platform;
+		private readonly ConcreteGame _concreteGame;
 		private int _colorbuffer;
 		private int _depthbuffer;
 		private int _framebuffer;
 
 		#region Construction/Destruction
-		public iOSGameView (ConcreteGame platform, CGRect frame)
+		public iOSGameView (ConcreteGame concreteGame, CGRect frame)
 			: base(frame)
 		{
-			if (platform == null)
-				throw new ArgumentNullException ("platform");
-			_platform = platform;
+			if (concreteGame == null)
+				throw new ArgumentNullException ("concreteGame");
+			_concreteGame = concreteGame;
 			Initialize ();
 		}
 
@@ -202,7 +202,7 @@ namespace Microsoft.Xna.Framework {
         [Export("doTick")]
         void DoTick()
         {
-            _platform.iOSTick();
+            _concreteGame.iOSTick();
         }
 
 		private void CreateFramebuffer ()
@@ -221,7 +221,7 @@ namespace Microsoft.Xna.Framework {
             _glapi.BindFramebuffer (FramebufferTarget.Framebuffer, _framebuffer);
 
 			// Create our Depth buffer. Color buffer must be the last one bound
-            var gdm = _platform.Game.Services.GetService(
+            var gdm = _concreteGame.Game.Services.GetService(
                 typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
             if (gdm != null)
             {
@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Framework {
 			_glapi.Viewport(0, 0, viewportWidth, viewportHeight);
             _glapi.Scissor(0, 0, viewportWidth, viewportHeight);
 
-			var gds = _platform.Game.Services.GetService(
+			var gds = _concreteGame.Game.Services.GetService(
                 typeof (IGraphicsDeviceService)) as IGraphicsDeviceService;
 
 			if (gds != null && gds.GraphicsDevice != null)
@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Framework {
 
                 if (this.NextResponder is iOSGameViewController)
                 {
-                    var displayOrientation = _platform.Game.Window.CurrentOrientation;
+                    var displayOrientation = _concreteGame.Game.Window.CurrentOrientation;
                     if (displayOrientation == DisplayOrientation.LandscapeLeft || displayOrientation == DisplayOrientation.LandscapeRight)
                     {
                         height = Math.Min(viewportHeight, viewportWidth);
@@ -356,7 +356,7 @@ namespace Microsoft.Xna.Framework {
 		{
 			base.LayoutSubviews ();
 
-            var gds = _platform.Game.Services.GetService (
+            var gds = _concreteGame.Game.Services.GetService (
                 typeof (IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (gds == null || gds.GraphicsDevice == null)

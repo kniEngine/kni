@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform;
 using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
@@ -25,7 +26,7 @@ namespace Microsoft.Xna.Framework
         }
 
         private Window _window;
-        private ConcreteGame _platform;
+        private ConcreteGame _concreteGame;
 
         private bool _isResizable;
         private bool _isBorderless;
@@ -115,9 +116,9 @@ namespace Microsoft.Xna.Framework
         internal Canvas _canvas { get; private set; }
         internal Window wasmWindow { get { return _window; } }
 
-        internal BlazorGameWindow(ConcreteGame platform)
+        internal BlazorGameWindow(ConcreteGame concreteGame)
         {
-            _platform = platform;
+            _concreteGame = concreteGame;
 
             _window = Window.Current;
             _canvas = _window.Document.GetElementById<Canvas>("theCanvas");
@@ -189,7 +190,7 @@ namespace Microsoft.Xna.Framework
 
         private void OnActivated(object sender, EventArgs eventArgs)
         {
-            _platform.IsActive = true;
+            _concreteGame.IsActive = true;
             //Keyboard.SetActive(true);
         }
 
@@ -202,7 +203,7 @@ namespace Microsoft.Xna.Framework
         private void OnMouseEnter(object sender, EventArgs e)
         {
             _isMouseInBounds = true;
-            if (!_platform.IsMouseVisible && !_isMouseHidden)
+            if (!_concreteGame.IsMouseVisible && !_isMouseHidden)
             {
                 _isMouseHidden = true;
                 //Cursor.Hide();
@@ -232,7 +233,7 @@ namespace Microsoft.Xna.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    _platform.Game.GraphicsDevice.OnPresentationChanged();
+                    _concreteGame.Game.GraphicsDevice.OnPresentationChanged();
             }
         }
 
@@ -247,7 +248,7 @@ namespace Microsoft.Xna.Framework
         // TODO: move UpdateBackBufferSize() in graphicsDeviceManager
         private void UpdateBackBufferSize()
         {
-            var game = _platform.Game;
+            var game = _concreteGame.Game;
 
             var manager = game.graphicsDeviceManager;
             if (manager.GraphicsDevice == null)
@@ -307,7 +308,7 @@ namespace Microsoft.Xna.Framework
             _instances.Remove(this.Handle);
             _canvas = null;
 
-            _platform = null;
+            _concreteGame = null;
             Mouse.WindowHandle = IntPtr.Zero;
         }
 
@@ -321,7 +322,7 @@ namespace Microsoft.Xna.Framework
 
         public void MouseVisibleToggled()
         {
-            if (_platform.IsMouseVisible)
+            if (_concreteGame.IsMouseVisible)
             {
                 if (_isMouseHidden)
                 {
@@ -341,9 +342,9 @@ namespace Microsoft.Xna.Framework
             var raiseClientSizeChanged = false;
             if (pp.IsFullScreen && pp.HardwareModeSwitch && IsFullScreen && HardwareModeSwitch)
             {
-                if( _platform.IsActive ) {
+                if( _concreteGame.IsActive ) {
                     // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
-                   // _platform.Game.GraphicsDevice.ResizeTargets();
+                   // _concreteGame.Game.GraphicsDevice.ResizeTargets();
                 } else {
                     // This needs to be called in case the user presses the Windows key while the focus is on the second monitor,
                     //	which (sometimes) causes the window to exit fullscreen mode, but still keeps it visible

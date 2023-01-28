@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Input
                 _domWindow.OnMouseWheel -= OnMouseWheel;
             }
 
-            var gameWindow = MonoGame.Framework.BlazorGameWindow.FromHandle(windowHandle);
+            var gameWindow = BlazorGameWindow.FromHandle(windowHandle);
             _domWindow = gameWindow.wasmWindow;
 
             _domWindow.OnMouseMove += OnMouseMove;
