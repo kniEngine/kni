@@ -509,7 +509,7 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
-    <Compile Include="Platform\SDL\SDLGamePlatform.cs" />
+    <Compile Include="Platform\SDL\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
     <Compile Include="Platform\Input\KeyboardUtil.SDL.cs" />

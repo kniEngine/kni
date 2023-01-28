@@ -527,7 +527,7 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
-    <Compile Include="Platform\Windows\WinFormsGamePlatform.cs" />
+    <Compile Include="Platform\Windows\ConcreteGame.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Media\VideoSampleGrabber.cs" />
 
