@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Framework
 {
     // TODO: BlazorGameWindow should be internal
     public class BlazorGameWindow : GameWindow, IDisposable
@@ -25,7 +25,7 @@ namespace MonoGame.Framework
         }
 
         private Window _window;
-        private BlazorGamePlatform _platform;
+        private ConcreteGame _platform;
 
         private bool _isResizable;
         private bool _isBorderless;
@@ -115,7 +115,7 @@ namespace MonoGame.Framework
         internal Canvas _canvas { get; private set; }
         internal Window wasmWindow { get { return _window; } }
 
-        internal BlazorGameWindow(BlazorGamePlatform platform)
+        internal BlazorGameWindow(ConcreteGame platform)
         {
             _platform = platform;
 

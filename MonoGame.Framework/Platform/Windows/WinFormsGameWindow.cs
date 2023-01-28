@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Windows;
+using Microsoft.Xna.Platform;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = System.Drawing.Point;
@@ -28,7 +29,7 @@ namespace MonoGame.Framework
     {
         internal WinFormsGameForm Form;
 
-        private WinFormsGamePlatform _platform;
+        private ConcreteGame _platform;
 
         private bool _isResizable;
         private bool _isBorderless;
@@ -133,7 +134,7 @@ namespace MonoGame.Framework
 
         #endregion
 
-        internal WinFormsGameWindow(WinFormsGamePlatform platform)
+        internal WinFormsGameWindow(ConcreteGame platform)
         {
             _platform = platform;
             Game = platform.Game;

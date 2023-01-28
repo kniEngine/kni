@@ -168,7 +168,6 @@
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GamePlatform.cs" />
-    <Compile Include="GamePlatform.Desktop.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="IDrawable.cs" />

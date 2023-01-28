@@ -2,21 +2,24 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    class BlazorGamePlatform : GamePlatform
+    sealed class ConcreteGame : GameStrategy
     {
         //internal static string LaunchParameters;
 
         private BlazorGameWindow _window;
 
-        public BlazorGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             IsActive = true;
@@ -43,9 +46,22 @@ namespace MonoGame.Framework
             //Game.DoExiting();
         }
 
-        protected override void OnIsMouseVisibleChanged()
+        public override void Tick()
         {
-            _window.MouseVisibleToggled();
+            base.Tick();
+        }
+
+        public override bool IsMouseVisible
+        {
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    _window.MouseVisibleToggled();
+                }
+            }
         }
 
         public override void BeforeInitialize()
@@ -64,10 +80,11 @@ namespace MonoGame.Framework
             }
         }
         
-        public override void Exit()
+        public override void TickExiting()
         {
             if (_window != null)
                 _window.Dispose();
+
             _window = null;
             Window = null;
         }
@@ -108,10 +125,10 @@ namespace MonoGame.Framework
             Debug.WriteLine(message);
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
             var device = Game.GraphicsDevice;
-            if ( device != null )
+            if (device != null)
                 device.Present();
         }
         

@@ -4,12 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Activation;
+using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework
 {
@@ -37,8 +35,8 @@ namespace Microsoft.Xna.Framework
             if (args.Kind == ActivationKind.Launch)
             {
                 // Save any launch parameters to be parsed by the platform.
-                UAPGamePlatform.LaunchParameters = ((LaunchActivatedEventArgs)args).Arguments;
-                UAPGamePlatform.PreviousExecutionState = ((LaunchActivatedEventArgs)args).PreviousExecutionState;
+                ConcreteGame.LaunchParameters = ((LaunchActivatedEventArgs)args).Arguments;
+                ConcreteGame.PreviousExecutionState = ((LaunchActivatedEventArgs)args).PreviousExecutionState;
 
                 // Construct the game.                
                 _game = new T();
@@ -52,8 +50,8 @@ namespace Microsoft.Xna.Framework
             {
                 // Save any protocol launch parameters to be parsed by the platform.
                 var protocolArgs = args as ProtocolActivatedEventArgs;
-                UAPGamePlatform.LaunchParameters = protocolArgs.Uri.AbsoluteUri;
-                UAPGamePlatform.PreviousExecutionState = protocolArgs.PreviousExecutionState;
+                ConcreteGame.LaunchParameters = protocolArgs.Uri.AbsoluteUri;
+                ConcreteGame.PreviousExecutionState = protocolArgs.PreviousExecutionState;
 
                 // Construct the game if it does not exist
                 // Protocol can be used to reactivate a suspended game
@@ -81,7 +79,7 @@ namespace Microsoft.Xna.Framework
         public void SetWindow(CoreWindow window)
         {
             // Initialize the singleton window.
-            UAPGameWindow.Instance.Initialize(window, null, UAPGamePlatform.TouchQueue);
+            UAPGameWindow.Instance.Initialize(window, null, ConcreteGame.TouchQueue);
         }
 
         public void Uninitialize()

@@ -2,38 +2,59 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    abstract partial class GamePlatform : IDisposable
+    abstract class GameStrategy : IDisposable
     {
         #region Fields
 
-        protected TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
-        protected bool _needsToResetElapsedTime = false;
-        bool disposed;
+        private GameServiceContainer _services;
+        internal GameComponentCollection _components;
+        internal ContentManager _content;
+
+        private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
+        private TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
+
+        private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
+        
+        private bool _isFixedTimeStep = true;
+
+        private bool _shouldExit;
+        private bool _suppressDraw;
+
+        bool _isDisposed;
+
         protected bool InFullScreenMode = false;
-        protected bool IsDisposed { get { return disposed; } }
+        protected bool IsDisposed { get { return _isDisposed; } }
 
         #endregion
 
         #region Construction/Destruction
 
-		protected GamePlatform(Game game)
+		protected GameStrategy(Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
 
             Game = game;
+
+            _services = new GameServiceContainer();
+            _components = new GameComponentCollection();
+            _content = new ContentManager(_services);
         }
 
-        ~GamePlatform()
+        ~GameStrategy()
         {
             Dispose(false);
         }
@@ -42,14 +63,39 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
+        /// <summary>
+        /// Get a container holding service providers attached to this <see cref="Game"/>.
+        /// </summary>
+        public GameServiceContainer Services { get { return _services; } }
+
+        /// <summary>
+        /// A collection of game components attached to this <see cref="Game"/>.
+        /// </summary>
+        public GameComponentCollection Components { get { return _components; } }
+
+        /// <summary>
+        /// The <see cref="ContentManager"/> of this <see cref="Game"/>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">If Content is set to <code>null</code>.</exception>
+        public ContentManager Content
+        {
+            get { return _content; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+
+                _content = value;
+            }
+        }
 
         /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
         public readonly Game Game;
 
-        public readonly GameTime Time = new GameTime();
-        public Stopwatch Timer;
+        private readonly GameTime Time = new GameTime();
+        internal Stopwatch Timer;
 
         private bool _isActive;
         public bool IsActive
@@ -76,17 +122,10 @@ namespace Microsoft.Xna.Framework
         }
         
         private bool _isMouseVisible;
-        public bool IsMouseVisible
+        public virtual bool IsMouseVisible
         {
             get { return _isMouseVisible; }
-            set
-            {
-                if (_isMouseVisible != value)
-                {
-                    _isMouseVisible = value;
-                    OnIsMouseVisibleChanged();
-                }
-            }
+            set { _isMouseVisible = value; }
         }
 
         private GameWindow _window;
@@ -104,6 +143,64 @@ namespace Microsoft.Xna.Framework
                 _window = value;
             }
         }
+
+        public TimeSpan InactiveSleepTime
+        {
+            get { return _inactiveSleepTime; }
+            set
+            {
+                if (value < TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException("InactiveSleepTime must be positive.");
+
+                _inactiveSleepTime = value;
+            }
+        }
+
+        /// <summary>
+        /// The maximum amount of time we will frameskip over and only perform Update calls with no Draw calls.
+        /// MonoGame extension.
+        /// </summary>
+        public TimeSpan MaxElapsedTime
+        {
+            get { return _maxElapsedTime; }
+            set
+            {
+                if (value < TimeSpan.FromMilliseconds(500))
+                    throw new ArgumentOutOfRangeException("MaxElapsedTime must be at least 0.5s");
+
+                _maxElapsedTime = value;
+            }
+        }
+
+        /// <summary>
+        /// The time between frames when running with a fixed time step. <seealso cref="IsFixedTimeStep"/>
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Target elapsed time must be strictly larger than zero.</exception>
+        public virtual TimeSpan TargetElapsedTime
+        {
+            get { return _targetElapsedTime; }
+            set
+            {            
+                if (value <= TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException("TargetElapsedTime must be positive and non-zero.");
+
+                _targetElapsedTime = value;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if this game is running with a fixed time between frames.
+        /// 
+        /// When set to <code>true</code> the target time between frames is
+        /// given by <see cref="TargetElapsedTime"/>.
+        /// </summary>
+        public bool IsFixedTimeStep
+        {
+            get { return _isFixedTimeStep; }
+            set { _isFixedTimeStep = value; }
+        }
+
+        public bool ShouldExit { get { return _shouldExit; } }
 
         #endregion
 
@@ -148,7 +245,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// When implemented in a derived, ends the active run loop.
         /// </summary>
-        public abstract void Exit();
+        public virtual void Exit()
+        {
+            _shouldExit = true;
+            _suppressDraw = true;
+        }
+
+        public abstract void TickExiting();
 
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Update
@@ -181,24 +284,12 @@ namespace Microsoft.Xna.Framework
         public abstract void ExitFullScreen();
 
         /// <summary>
-        /// Gives derived classes an opportunity to modify
-        /// Game.TargetElapsedTime before it is set.
-        /// </summary>
-        /// <param name="value">The proposed new value of TargetElapsedTime.</param>
-        /// <returns>The new value of TargetElapsedTime that will be set.</returns>
-        public virtual TimeSpan TargetElapsedTimeChanging(TimeSpan value)
-        {
-            return value;
-        }
-        /// <summary>
         /// Starts a device transition (windowed to full screen or vice versa).
         /// </summary>
         /// <param name='willBeFullScreen'>
         /// Specifies whether the device will be in full-screen mode upon completion of the change.
         /// </param>
-        public abstract void BeginScreenDeviceChange (
-                 bool willBeFullScreen
-        );
+        public abstract void BeginScreenDeviceChange(bool willBeFullScreen);
 
         /// <summary>
         /// Completes a device transition.
@@ -212,17 +303,11 @@ namespace Microsoft.Xna.Framework
         /// <param name='clientHeight'>
         /// The new height of the game's client window.
         /// </param>
-        public abstract void EndScreenDeviceChange (
+        public abstract void EndScreenDeviceChange(
                  string screenDeviceName,
                  int clientWidth,
                  int clientHeight
         );
-
-        /// <summary>
-        /// Gives derived classes an opportunity to take action after
-        /// Game.TargetElapsedTime has been set.
-        /// </summary>
-        public virtual void TargetElapsedTimeChanged() {}
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
@@ -238,11 +323,20 @@ namespace Microsoft.Xna.Framework
             }
 
             Time.ElapsedGameTime = TimeSpan.Zero;
+
+            _currElapsedTime = TimeSpan.Zero;
+            _prevElapsedTime = TimeSpan.Zero;
+        }
+        
+        /// <summary>
+        /// Supress calling <see cref="Draw"/> in the game loop.
+        /// </summary>
+        public void SuppressDraw()
+        {
+            _suppressDraw = true;
         }
 
-        public virtual void Present() { }
-
-        protected virtual void OnIsMouseVisibleChanged() {}
+        public virtual void EndDraw() { }
 
         /// <summary>
         /// Called by the GraphicsDeviceManager to notify the platform
@@ -251,6 +345,123 @@ namespace Microsoft.Xna.Framework
         /// <param name="pp">The new presentation parameters.</param>
         internal virtual void OnPresentationChanged(PresentationParameters pp)
         {
+        }
+
+#if WINDOWS_UAP
+        private readonly object _locker = new object();
+#endif
+
+        private TimeSpan _currElapsedTime;
+        private TimeSpan _prevElapsedTime;
+        private int _updateFrameLag;
+
+        /// <summary>
+        /// Run one iteration of the game loop.
+        ///
+        /// Makes at least one call to <see cref="Update"/>
+        /// and exactly one call to <see cref="Draw"/> if drawing is not supressed.
+        /// When <see cref="IsFixedTimeStep"/> is set to <code>false</code> this will
+        /// make exactly one call to <see cref="Update"/>.
+        /// </summary>
+        public virtual void Tick()
+        {
+            // implement InactiveSleepTime to save battery life 
+            // and/or release CPU time to other threads and processes.
+            if (!IsActive)
+            {
+#if WINDOWS_UAP
+                lock (_locker)
+                    System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
+#else
+                System.Threading.Thread.Sleep((int)InactiveSleepTime.TotalMilliseconds);
+#endif
+            }
+
+        RetryTick:
+
+            // Advance the accumulated elapsed time.
+            TimeSpan elapsedTime = Timer.Elapsed;
+            TimeSpan dt = elapsedTime - _prevElapsedTime;
+            _currElapsedTime += dt;
+            _prevElapsedTime = elapsedTime;
+
+            if (IsFixedTimeStep && _currElapsedTime < TargetElapsedTime)
+            {
+                // When game IsActive use CPU Spin.
+                /*
+                if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
+                {
+#if WINDOWS || DESKTOPGL || ANDROID || IOS || TVOS
+                    System.Threading.Thread.Sleep(0);
+#elif WINDOWS_UAP
+                    lock (_locker)
+                        System.Threading.Monitor.Wait(_locker, 0);
+#endif
+                }
+                */
+
+                // Keep looping until it's time to perform the next update
+                goto RetryTick;
+            }
+
+            // Do not allow any update to take longer than our maximum.
+            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
+            if (_currElapsedTime > maxElapsedTime)
+                _currElapsedTime = maxElapsedTime;
+
+            if (IsFixedTimeStep)
+            {
+                Time.ElapsedGameTime = TargetElapsedTime;
+                int stepCount = 0;
+
+                // Perform as many full fixed length time steps as we can.
+                while (_currElapsedTime >= TargetElapsedTime && !_shouldExit)
+                {
+                    Time.TotalGameTime += TargetElapsedTime;
+                    _currElapsedTime -= TargetElapsedTime;
+                    stepCount++;
+
+                    Game.DoUpdate(Time);
+                }
+
+                //Every update after the first accumulates lag
+                _updateFrameLag += Math.Max(0, stepCount - 1);
+                _updateFrameLag = Math.Min(_updateFrameLag, 5);
+
+                //If we think we are running slowly, wait until the lag clears before resetting it
+                if (Time.IsRunningSlowly)
+                {
+                    if (_updateFrameLag == 0)
+                        Time.IsRunningSlowly = false;
+                }
+                else if (_updateFrameLag >= 5)
+                {
+                    //If we lag more than 5 frames, start thinking we are running slowly
+                    Time.IsRunningSlowly = true;
+                }
+
+                //Every time we just do one update and one draw, then we are not running slowly, so decrease the lag
+                if (stepCount == 1 && _updateFrameLag > 0)
+                    _updateFrameLag--;
+
+                // Draw needs to know the total elapsed time
+                // that occured for the fixed length updates.
+                Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
+            }
+            else
+            {
+                // Perform a single variable length update.
+                Time.ElapsedGameTime = _currElapsedTime;
+                Time.TotalGameTime += _currElapsedTime;
+                _currElapsedTime = TimeSpan.Zero;
+
+                Game.DoUpdate(Time);
+            }
+
+            // Draw unless the update suppressed it.
+            if (!_suppressDraw)
+                Game.DoDraw(Time);
+            _suppressDraw = false;
         }
 
         #endregion Methods
@@ -269,12 +480,12 @@ namespace Microsoft.Xna.Framework
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 Mouse.PrimaryWindow = null;
                 TouchPanel.PrimaryWindow = null;
 
-                disposed = true;
+                _isDisposed = true;
             }
         }
 		

@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,14 +15,16 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using Microsoft.Xna.Framework;
 //using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    class UAPGamePlatform : GamePlatform
+    sealed class ConcreteGame : GameStrategy
     {
         internal static string LaunchParameters;
 
@@ -28,7 +32,7 @@ namespace Microsoft.Xna.Framework
 
         internal static ApplicationExecutionState PreviousExecutionState { get; set; }
 
-        public UAPGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             // Setup the game window.
@@ -139,6 +143,11 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         //TODO: merge Run_UAP_XAML() with Run()
         internal override void Run_UAP_XAML()
         {
@@ -212,7 +221,7 @@ namespace Microsoft.Xna.Framework
                 dispatcher.RunIdleAsync(OnRenderFrame);
         }
 
-        public override void Exit()
+        public override void TickExiting()
         {
             if (!UAPGameWindow.Instance.IsExiting)
             {
@@ -277,16 +286,25 @@ namespace Microsoft.Xna.Framework
             Debug.WriteLine(Message);
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
             var device = Game.GraphicsDevice;
-            if ( device != null )
+            if (device != null)
                 device.Present();
         }
 
-        protected override void OnIsMouseVisibleChanged() 
+        public override bool IsMouseVisible
         {
-			UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+                }
+                else base.IsMouseVisible = value;
+            }
         }
 		
         protected override void Dispose(bool disposing)

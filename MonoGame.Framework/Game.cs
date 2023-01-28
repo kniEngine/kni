@@ -2,14 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
-#if WINDOWS_UAP
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
-#endif
 
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Audio;
@@ -24,12 +21,9 @@ namespace Microsoft.Xna.Framework
     /// This class is the entry point for most games. Handles setting up
     /// a window and graphics and runs a game loop that calls <see cref="Update"/> and <see cref="Draw"/>.
     /// </summary>
-    public partial class Game : IDisposable
+    public class Game : IDisposable
     {
-        private GameComponentCollection _components;
-        private GameServiceContainer _services;
-        private ContentManager _content;
-        internal GamePlatform Platform;
+        internal GameStrategy Strategy { get; private set; }
 
         private DrawableComponents _drawableComponents = new DrawableComponents();
         private UpdateableComponents _updateableComponents = new UpdateableComponents();
@@ -38,17 +32,6 @@ namespace Microsoft.Xna.Framework
         private IGraphicsDeviceService _graphicsDeviceService;
 
         private bool _initialized = false;
-        private bool _isFixedTimeStep = true;
-
-        private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
-        private TimeSpan _inactiveSleepTime = TimeSpan.FromSeconds(0.02);
-
-        private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
-
-        private bool _shouldExit;
-        private bool _suppressDraw;
-
-        partial void PlatformConstruct();
 
         /// <summary>
         /// Create a <see cref="Game"/>.
@@ -58,17 +41,12 @@ namespace Microsoft.Xna.Framework
             _instance = this;
 
             LaunchParameters = new LaunchParameters();
-            _services = new GameServiceContainer();
-            _components = new GameComponentCollection();
-            _content = new ContentManager(_services);
 
-            Platform = GamePlatform.PlatformCreate(this);
-            Platform.Activated += Platform_Activated;
-            Platform.Deactivated += Platform_Deactivated;
-            _services.AddService(typeof(GamePlatform), Platform);
+            Strategy = new ConcreteGame(this);
 
-            // Allow some optional per-platform construction to occur too.
-            PlatformConstruct();
+            Strategy.Activated += Platform_Activated;
+            Strategy.Deactivated += Platform_Deactivated;
+            Services.AddService(typeof(GameStrategy), Strategy);
 
         }
 
@@ -80,7 +58,7 @@ namespace Microsoft.Xna.Framework
 		[System.Diagnostics.Conditional("DEBUG")]
 		internal void Log(string Message)
 		{
-			if (Platform != null) Platform.Log(Message);
+			if (Strategy != null) Strategy.Log(Message);
 		}
 
         void Platform_Activated(object sender, EventArgs e) { OnActivated(e); }
@@ -106,18 +84,18 @@ namespace Microsoft.Xna.Framework
                 if (disposing)
                 {
                     // Dispose loaded game components
-                    for (int i = 0; i < _components.Count; i++)
+                    for (int i = 0; i < Strategy._components.Count; i++)
                     {
-                        var disposable = _components[i] as IDisposable;
+                        var disposable = Strategy._components[i] as IDisposable;
                         if (disposable != null)
                             disposable.Dispose();
                     }
-                    _components = null;
+                    Strategy._components = null;
 
-                    if (_content != null)
+                    if (Strategy._content != null)
                     {
-                        _content.Dispose();
-                        _content = null;
+                        Strategy._content.Dispose();
+                        Strategy._content = null;
                     }
 
                     if (_graphicsDeviceManager != null)
@@ -126,14 +104,14 @@ namespace Microsoft.Xna.Framework
                         _graphicsDeviceManager = null;
                     }
 
-                    if (Platform != null)
+                    if (Strategy != null)
                     {
-                        Platform.Activated -= Platform_Activated;
-                        Platform.Deactivated -= Platform_Deactivated;
-                        _services.RemoveService(typeof(GamePlatform));
+                        Strategy.Activated -= Platform_Activated;
+                        Strategy.Deactivated -= Platform_Deactivated;
+                        Services.RemoveService(typeof(GameStrategy));
 
-                        Platform.Dispose();
-                        Platform = null;
+                        Strategy.Dispose();
+                        Strategy = null;
                     }
 
                     AudioService.Shutdown();
@@ -176,21 +154,12 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// A collection of game components attached to this <see cref="Game"/>.
         /// </summary>
-        public GameComponentCollection Components
-        {
-            get { return _components; }
-        }
+        public GameComponentCollection Components { get { return Strategy.Components; } }
 
         public TimeSpan InactiveSleepTime
         {
-            get { return _inactiveSleepTime; }
-            set
-            {
-                if (value < TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException("InactiveSleepTime must be positive.");
-
-                _inactiveSleepTime = value;
-            }
+            get { return Strategy.InactiveSleepTime; }
+            set { Strategy.InactiveSleepTime = value; }
         }
 
         /// <summary>
@@ -199,14 +168,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public TimeSpan MaxElapsedTime
         {
-            get { return _maxElapsedTime; }
-            set
-            {
-                if (value < TimeSpan.FromMilliseconds(500))
-                    throw new ArgumentOutOfRangeException("MaxElapsedTime must be at least 0.5s");
-
-                _maxElapsedTime = value;
-            }
+            get { return Strategy.MaxElapsedTime; }
+            set { Strategy.MaxElapsedTime = value; }
         }
 
         /// <summary>
@@ -214,13 +177,13 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsActive
         {
-            get { return Platform.IsActive; }
+            get { return Strategy.IsActive; }
         }
 
 
         public bool IsVisible
         {
-            get { return Platform.IsVisible; }
+            get { return Strategy.IsVisible; }
         }
 
         /// <summary>
@@ -228,8 +191,8 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsMouseVisible
         {
-            get { return Platform.IsMouseVisible; }
-            set { Platform.IsMouseVisible = value; }
+            get { return Strategy.IsMouseVisible; }
+            set { Strategy.IsMouseVisible = value; }
         }
 
         /// <summary>
@@ -238,23 +201,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentOutOfRangeException">Target elapsed time must be strictly larger than zero.</exception>
         public TimeSpan TargetElapsedTime
         {
-            get { return _targetElapsedTime; }
-            set
-            {
-                // Give GamePlatform implementations an opportunity to override
-                // the new value.
-                value = Platform.TargetElapsedTimeChanging(value);
-
-                if (value <= TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException(
-                        "TargetElapsedTime must be positive and non-zero.");
-
-                if (value != _targetElapsedTime)
-                {
-                    _targetElapsedTime = value;
-                    Platform.TargetElapsedTimeChanged();
-                }
-            }
+            get { return Strategy.TargetElapsedTime; }
+            set { Strategy.TargetElapsedTime = value; }
         }
 
 
@@ -266,16 +214,14 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public bool IsFixedTimeStep
         {
-            get { return _isFixedTimeStep; }
-            set { _isFixedTimeStep = value; }
+            get { return Strategy.IsFixedTimeStep; }
+            set { Strategy.IsFixedTimeStep = value; }
         }
 
         /// <summary>
         /// Get a container holding service providers attached to this <see cref="Game"/>.
         /// </summary>
-        public GameServiceContainer Services {
-            get { return _services; }
-        }
+        public GameServiceContainer Services { get { return Strategy.Services; } }
 
 
         /// <summary>
@@ -284,14 +230,8 @@ namespace Microsoft.Xna.Framework
         /// <exception cref="ArgumentNullException">If Content is set to <code>null</code>.</exception>
         public ContentManager Content
         {
-            get { return _content; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException();
-
-                _content = value;
-            }
+            get { return Strategy.Content; }
+            set { Strategy.Content = value; }
         }
 
         /// <summary>
@@ -322,7 +262,7 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public GameWindow Window
         {
-            get { return Platform.Window; }
+            get { return Strategy.Window; }
         }
 
         #endregion Properties
@@ -364,7 +304,7 @@ namespace Microsoft.Xna.Framework
 
 #if WINDOWS_UAP
         [CLSCompliant(false)]
-        public ApplicationExecutionState PreviousExecutionState { get; internal set; }
+        public Windows.ApplicationModel.Activation.ApplicationExecutionState PreviousExecutionState { get; internal set; }
 #endif
 
         #endregion
@@ -376,11 +316,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Exit()
         {
-#if ANDROID || IOS || TVOS
-            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
-#endif
-            _shouldExit = true;
-            _suppressDraw = true;
+            Strategy.Exit();
         }
 
         /// <summary>
@@ -388,10 +324,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void ResetElapsedTime()
         {
-            Platform.ResetElapsedTime();
-
-            _accumulatedElapsedTime = TimeSpan.Zero;
-            _previousElapsedTime = TimeSpan.Zero;
+            Strategy.ResetElapsedTime();
         }
 
         /// <summary>
@@ -399,7 +332,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void SuppressDraw()
         {
-            _suppressDraw = true;
+            Strategy.SuppressDraw();
         }
         
         /// <summary>
@@ -407,16 +340,16 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void RunOneFrame()
         {
-            if (Platform == null)
+            if (Strategy == null)
                 return;
 
-            if (!Platform.ANDROID_BeforeRun())
+            if (!Strategy.ANDROID_BeforeRun())
                 return;
 
             if (!Initialized)
             {
                 DoInitialize();
-                Platform.Timer = Stopwatch.StartNew();
+                Strategy.Timer = Stopwatch.StartNew();
             }
 
             BeginRun();
@@ -435,7 +368,7 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            Platform.Run();
+            Strategy.Run();
         }
 
         /// <summary>
@@ -445,27 +378,20 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            Platform.Run_UAP_XAML();
+            Strategy.Run_UAP_XAML();
         }
 
         internal void DoBeginRun()
         {
             BeginRun();
-            Platform.Timer = Stopwatch.StartNew();
+            Strategy.Timer = Stopwatch.StartNew();
         }
 
         internal void DoEndRun()
         {
             EndRun();
         }
-
-        private TimeSpan _accumulatedElapsedTime;
-        private TimeSpan _previousElapsedTime;
-        private int _updateFrameLag;
-#if WINDOWS_UAP
-        private readonly object _locker = new object();
-#endif
-
+        
         /// <summary>
         /// Run one iteration of the game loop.
         ///
@@ -476,115 +402,10 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Tick()
         {
-            // NOTE: This code is very sensitive and can break very badly
-            // with even what looks like a safe change.  Be sure to test 
-            // any change fully in both the fixed and variable timestep 
-            // modes across multiple devices and platforms.
+            Strategy.Tick();
 
-            // implement InactiveSleepTime to save battery life 
-            // and/or release CPU time to other threads and processes.
-            if (!IsActive)
-            {
-#if WINDOWS_UAP
-                lock (_locker)
-                    System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
-#else
-                System.Threading.Thread.Sleep((int)InactiveSleepTime.TotalMilliseconds);
-#endif
-            }
-
-        RetryTick:
-
-            // Advance the accumulated elapsed time.
-            TimeSpan elapsedTime = Platform.Timer.Elapsed;
-            TimeSpan elapsedTimeDiff = TimeSpan.FromTicks(elapsedTime.Ticks - _previousElapsedTime.Ticks);
-            _previousElapsedTime = elapsedTime;
-
-            _accumulatedElapsedTime += elapsedTimeDiff;
-
-            if (IsFixedTimeStep && _accumulatedElapsedTime < TargetElapsedTime)
-            {
-                // When game IsActive use CPU Spin.
-                /*
-                if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
-                {
-#if WINDOWS || DESKTOPGL || ANDROID || IOS || TVOS
-                    System.Threading.Thread.Sleep(0);
-#elif WINDOWS_UAP
-                    lock (_locker)
-                        System.Threading.Monitor.Wait(_locker, 0);
-#endif
-                }
-                */
-                
-                // Keep looping until it's time to perform the next update
-                goto RetryTick;
-            }
-
-            // Do not allow any update to take longer than our maximum.
-            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(_maxElapsedTime.Ticks, _targetElapsedTime.Ticks));
-            if (_accumulatedElapsedTime > maxElapsedTime)
-                _accumulatedElapsedTime = maxElapsedTime;
-
-            if (IsFixedTimeStep)
-            {
-                Platform.Time.ElapsedGameTime = TargetElapsedTime;
-                int stepCount = 0;
-
-                // Perform as many full fixed length time steps as we can.
-                while (_accumulatedElapsedTime >= TargetElapsedTime && !_shouldExit)
-                {
-                    Platform.Time.TotalGameTime += TargetElapsedTime;
-                    _accumulatedElapsedTime -= TargetElapsedTime;
-                    stepCount++;
-
-                    DoUpdate(Platform.Time);
-                }
-
-                //Every update after the first accumulates lag
-                _updateFrameLag += Math.Max(0, stepCount - 1);
-                _updateFrameLag = Math.Min(_updateFrameLag, 5);
-
-                //If we think we are running slowly, wait until the lag clears before resetting it
-                if (Platform.Time.IsRunningSlowly)
-                {
-                    if (_updateFrameLag == 0)
-                        Platform.Time.IsRunningSlowly = false;
-                }
-                else if (_updateFrameLag >= 5)
-                {
-                    //If we lag more than 5 frames, start thinking we are running slowly
-                    Platform.Time.IsRunningSlowly = true;
-                }
-
-                //Every time we just do one update and one draw, then we are not running slowly, so decrease the lag
-                if (stepCount == 1 && _updateFrameLag > 0)
-                    _updateFrameLag--;
-
-                // Draw needs to know the total elapsed time
-                // that occured for the fixed length updates.
-                Platform.Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
-            }
-            else
-            {
-                // Perform a single variable length update.
-                Platform.Time.ElapsedGameTime = _accumulatedElapsedTime;
-                Platform.Time.TotalGameTime += _accumulatedElapsedTime;
-                _accumulatedElapsedTime = TimeSpan.Zero;
-
-                DoUpdate(Platform.Time);
-            }
-
-            // Draw unless the update suppressed it.
-            if (_suppressDraw)
-                _suppressDraw = false;
-            else
-            {
-                DoDraw(Platform.Time);
-            }
-
-            if (_shouldExit)
-                Platform.Exit();
+            if (Strategy.ShouldExit)
+                Strategy.TickExiting();
         }
 
         #endregion
@@ -606,7 +427,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected virtual void EndDraw()
         {
-            Platform.Present();
+            Strategy.EndDraw();
         }
 
         /// <summary>
@@ -640,18 +461,18 @@ namespace Microsoft.Xna.Framework
 #if ANDROID || IOS || TVOS
             // applyChanges
             {
-                Platform.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
+                Strategy.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
 
                 if (GraphicsDevice.PresentationParameters.IsFullScreen)
-                    Platform.EnterFullScreen();
+                    Strategy.EnterFullScreen();
                 else
-                    Platform.ExitFullScreen();
+                    Strategy.ExitFullScreen();
                 var viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
 
                 GraphicsDevice.Viewport = viewport;
-                Platform.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
+                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
             }
 #endif
 
@@ -738,8 +559,7 @@ namespace Microsoft.Xna.Framework
 
         #region Event Handlers
 
-        private void Components_ComponentAdded(
-            object sender, GameComponentCollectionEventArgs e)
+        private void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
         {
             // Since we only subscribe to ComponentAdded after the graphics
             // devices are set up, it is safe to just blindly call Initialize.
@@ -751,8 +571,7 @@ namespace Microsoft.Xna.Framework
                 _drawableComponents.AddDrawable((IDrawable)e.GameComponent);
         }
 
-        private void Components_ComponentRemoved(
-            object sender, GameComponentCollectionEventArgs e)
+        private void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
         {
             if (e.GameComponent is IUpdateable)
                 _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
@@ -764,15 +583,11 @@ namespace Microsoft.Xna.Framework
 
         #region Internal Methods
 
-        // FIXME: We should work toward eliminating internal methods.  They
-        //        break entirely the possibility that additional platforms could
-        //        be added by third parties without changing MonoGame itself.
-
         internal void DoUpdate(GameTime gameTime)
         {
             AssertNotDisposed();
 
-            if (Platform.BeforeUpdate(gameTime))
+            if (Strategy.BeforeUpdate(gameTime))
             {
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 				
@@ -790,7 +605,7 @@ namespace Microsoft.Xna.Framework
             // Draw and EndDraw should not be called if BeginDraw returns false.
             // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
             // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
-            if (Platform.BeforeDraw(gameTime) && BeginDraw())
+            if (Strategy.BeforeDraw(gameTime) && BeginDraw())
             {
                 Draw(gameTime);
                 EndDraw();
@@ -804,7 +619,7 @@ namespace Microsoft.Xna.Framework
             if (GraphicsDevice == null && graphicsDeviceManager != null)
                 ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
 
-            Platform.BeforeInitialize();
+            Strategy.BeforeInitialize();
             Initialize();
 
             // We need to do this after virtual Initialize(...) is called.
@@ -823,8 +638,8 @@ namespace Microsoft.Xna.Framework
                     _drawableComponents.AddDrawable((IDrawable)Components[i]);
             }
 
-            _components.ComponentAdded += Components_ComponentAdded;
-            _components.ComponentRemoved += Components_ComponentRemoved;
+            Components.ComponentAdded += Components_ComponentAdded;
+            Components.ComponentRemoved += Components_ComponentRemoved;
 
             _initialized = true;
         }

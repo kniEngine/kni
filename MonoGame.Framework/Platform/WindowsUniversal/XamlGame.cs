@@ -3,9 +3,10 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform;
 
 
 namespace MonoGame.Framework
@@ -50,10 +51,10 @@ namespace MonoGame.Framework
                 throw new NullReferenceException("The swap chain panel cannot be null!");
 
             // Save any launch parameters to be parsed by the platform.
-            UAPGamePlatform.LaunchParameters = launchParameters;
+            ConcreteGame.LaunchParameters = launchParameters;
 
             // Setup the window class.
-            UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
+            UAPGameWindow.Instance.Initialize(window, swapChainPanel, ConcreteGame.TouchQueue);
 
             // Construct the game.
             var game = gameConstructor();

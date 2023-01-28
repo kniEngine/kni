@@ -2,19 +2,23 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.Utilities;
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    internal class SdlGamePlatform : GamePlatform
+    sealed class ConcreteGame : GameStrategy
     {
         internal override void Run()
         {
@@ -33,6 +37,11 @@ namespace Microsoft.Xna.Framework
             Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         private readonly List<Keys> _keys;
 
         private int _isExiting;
@@ -40,7 +49,7 @@ namespace Microsoft.Xna.Framework
 
         private readonly List<string> _dropList;
 
-        public SdlGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             _keys = new List<Keys>();
@@ -84,9 +93,17 @@ namespace Microsoft.Xna.Framework
             base.BeforeInitialize();
         }
 
-        protected override void OnIsMouseVisibleChanged()
+        public override bool IsMouseVisible
         {
-            _view.SetCursorVisible(Game.IsMouseVisible);
+            get { return base.IsMouseVisible; }
+            set
+            {
+                if (base.IsMouseVisible != value)
+                {
+                    base.IsMouseVisible = value;
+                    _view.SetCursorVisible(Game.IsMouseVisible);
+                }
+            }
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
@@ -292,7 +309,7 @@ namespace Microsoft.Xna.Framework
                 return -1;
         }
 
-        public override void Exit()
+        public override void TickExiting()
         {
             Interlocked.Increment(ref _isExiting);
         }
@@ -330,10 +347,11 @@ namespace Microsoft.Xna.Framework
             Console.WriteLine(message);
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
-            if (Game.GraphicsDevice != null)
-                Game.GraphicsDevice.Present();
+            var device = Game.GraphicsDevice;
+            if (device != null)
+                device.Present();
         }
 
         protected override void Dispose(bool disposing)

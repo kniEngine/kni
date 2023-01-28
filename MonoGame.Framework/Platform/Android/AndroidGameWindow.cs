@@ -8,7 +8,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform;
 using MonoGame.OpenGL;
+
 
 namespace Microsoft.Xna.Framework
 {
@@ -76,7 +78,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null)
             {
-                if (!GameView.IsResuming && ((AndroidGamePlatform)_game.Platform).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
+                if (!GameView.IsResuming && ((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
                 {
                     _game.Tick();
                 }
@@ -87,7 +89,7 @@ namespace Microsoft.Xna.Framework
                     {
                         Resumer.Draw();
                     }
-                    _game.Platform.Present();
+                    _game.Strategy.EndDraw();
                 }
             }
 

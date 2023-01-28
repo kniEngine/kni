@@ -4,6 +4,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform;
 using MediaPlayer;
 using Foundation;
 using UIKit;
@@ -13,13 +14,13 @@ namespace Microsoft.Xna.Framework.Media
     public sealed partial class VideoPlayer : IDisposable
     {
         private Game _game;
-        private iOSGamePlatform _platform;
+        private ConcreteGame _platform;
         private NSObject _playbackDidFinishObserver;
 
         private void PlatformInitialize()
         {
             _game = Game.Instance;
-            _platform = (iOSGamePlatform)_game.Services.GetService(typeof(iOSGamePlatform));
+            _platform = (ConcreteGame)_game.Services.GetService(typeof(ConcreteGame));
 
             if (_platform == null)
                 throw new InvalidOperationException("No iOSGamePlatform instance was available");

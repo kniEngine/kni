@@ -66,6 +66,8 @@ non-infringement.
 */
 #endregion License
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,25 +78,27 @@ using UIKit;
 using CoreAnimation;
 using ObjCRuntime;
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 //using Microsoft.Xna.Framework.GamerServices;
 
-namespace Microsoft.Xna.Framework
+
+namespace Microsoft.Xna.Platform
 {
-    class iOSGamePlatform : GamePlatform
+    sealed class ConcreteGame : GameStrategy
     {
         private iOSGameViewController _viewController;
         private UIWindow _mainWindow;
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
-        public iOSGamePlatform(Game game) :
+        public ConcreteGame(Game game) :
             base(game)
         {
-            game.Services.AddService(typeof(iOSGamePlatform), this);
+            game.Services.AddService(typeof(ConcreteGame), this);
 
             //This also runs the TitleContainer static constructor, ensuring it is done on the main thread
             Directory.SetCurrentDirectory(TitleContainer.Location);
@@ -123,9 +127,17 @@ namespace Microsoft.Xna.Framework
             //Guide.Initialise(game);
         }
 
-        public override void TargetElapsedTimeChanged ()
+        public override TimeSpan TargetElapsedTime
         {
-            CreateDisplayLink();
+            get { return base.TargetElapsedTime; }
+            set
+            {
+                if (base.TargetElapsedTime != value)
+                {
+                    base.TargetElapsedTime = value;
+                    CreateDisplayLink();
+                }
+            }
         }
 
         private void CreateDisplayLink()
@@ -158,8 +170,13 @@ namespace Microsoft.Xna.Framework
             //Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         [Obsolete(
-            "iOSGamePlatform.IsPlayingVideo must be removed when MonoGame " +
+            "ConcreteGame.IsPlayingVideo must be removed when MonoGame " +
             "fully implements the XNA VideoPlayer contract.")]
         public bool IsPlayingVideo { get; set; }
 
@@ -214,7 +231,7 @@ namespace Microsoft.Xna.Framework
             CreateDisplayLink();
         }
 
-        internal void Tick()
+        internal void iOSTick()
         {
             if (!Game.IsActive)
                 return;
@@ -270,6 +287,11 @@ namespace Microsoft.Xna.Framework
         }
 
         public override void Exit()
+        {
+            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+        }
+
+        public override void TickExiting()
         {
             // Do Nothing: iOS games do not "exit" or shut down.
             throw new NotImplementedException();
@@ -340,8 +362,7 @@ namespace Microsoft.Xna.Framework
 			var orientation = CurrentOrientation;
 
 			// FIXME: The presentation parameters for the GraphicsDevice should
-			//        be managed by the GraphicsDevice itself.  Not by
-			//        iOSGamePlatform.
+			//            be managed by the GraphicsDevice itself.  Not by ConcreteGame.
 			var gdm = (GraphicsDeviceManager) Game.Services.GetService (typeof (IGraphicsDeviceManager));
 
             TouchPanel.DisplayOrientation = orientation;

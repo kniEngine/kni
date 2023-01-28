@@ -2,17 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Android.Views;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    class AndroidGamePlatform : GamePlatform
+    sealed class ConcreteGame : GameStrategy
     {
-        public AndroidGamePlatform(Game game)
+        public ConcreteGame(Game game)
             : base(game)
         {
             System.Diagnostics.Debug.Assert(Game.Activity != null, "Must set Game.Activity before creating the Game instance");
@@ -41,6 +44,11 @@ namespace Microsoft.Xna.Framework
         private AndroidGameWindow _gameWindow;
 
         public override void Exit()
+        {
+            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+        }
+
+        public override void TickExiting()
         {
             // Do Nothing: Android games do not "exit" or shut down.
             throw new NotImplementedException();
@@ -170,6 +178,11 @@ namespace Microsoft.Xna.Framework
             //Game.DoExiting();
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+        }
+
         public override void Log(string Message)
         {
 #if LOGGING
@@ -177,15 +190,13 @@ namespace Microsoft.Xna.Framework
 #endif
         }
 
-        public override void Present()
+        public override void EndDraw()
         {
             try
             {
                 var device = Game.GraphicsDevice;
                 if (device != null)
-                {
                     device.Present();
-                }
 
                 _gameWindow.GameView.SwapBuffers();
             }

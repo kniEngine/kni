@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Platform;
 
 
 namespace Microsoft.Xna.Framework
@@ -94,7 +95,7 @@ namespace Microsoft.Xna.Framework
         public override void OnWindowFocusChanged(bool hasFocus)
         {
             base.OnWindowFocusChanged(hasFocus);
-            ((AndroidGamePlatform)Game.Platform).OnWindowFocusChanged(hasFocus);
+            ((ConcreteGame)Game.Strategy).OnWindowFocusChanged(hasFocus);
         }
 
 		protected override void OnDestroy()

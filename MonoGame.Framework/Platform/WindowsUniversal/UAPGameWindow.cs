@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework
 {
@@ -75,7 +76,7 @@ namespace Microsoft.Xna.Framework
             get { return _orientation; }
         }
 
-        private UAPGamePlatform Platform { get { return Game.Instance.Platform as UAPGamePlatform; } }
+        private ConcreteGame Strategy { get { return Game.Instance.Strategy as ConcreteGame; } }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
@@ -148,7 +149,7 @@ namespace Microsoft.Xna.Framework
 
         void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
         {
-            Platform.IsVisible = args.Visible;
+            Strategy.IsVisible = args.Visible;
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
@@ -167,16 +168,16 @@ namespace Microsoft.Xna.Framework
                 _isFocusChanged = false;
 
                 if (_newActivationState == CoreWindowActivationState.Deactivated)
-                    Platform.IsActive = false;
+                    Strategy.IsActive = false;
                 else
-                    Platform.IsActive = true;
+                    Strategy.IsActive = true;
             }
         }
 
         private void Window_Closed(CoreWindow sender, CoreWindowEventArgs args)
         {
             Game.SuppressDraw();
-            Game.Platform.Exit();
+            Game.Strategy.TickExiting();
         }
 
         private void SetViewBounds(double width, double height)
