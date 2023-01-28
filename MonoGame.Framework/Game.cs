@@ -349,10 +349,10 @@ namespace Microsoft.Xna.Framework
             if (!Initialized)
             {
                 DoInitialize();
-                Strategy.Timer = Stopwatch.StartNew();
             }
 
             BeginRun();
+            Strategy.Timer = Stopwatch.StartNew();
 
             //Not quite right..
             Tick();
@@ -384,7 +384,6 @@ namespace Microsoft.Xna.Framework
         internal void DoBeginRun()
         {
             BeginRun();
-            Strategy.Timer = Stopwatch.StartNew();
         }
 
         internal void DoEndRun()

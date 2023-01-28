@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
