@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="Platform\Android\AndroidCompatibility.cs" />
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
-    <Compile Include="Platform\Android\AndroidGamePlatform.cs" />
+    <Compile Include="Platform\Android\ConcreteGame.cs" />
     <Compile Include="Platform\Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Compass.cs" />

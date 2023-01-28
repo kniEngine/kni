@@ -167,7 +167,7 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GamePlatform.cs" />
+    <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="IDrawable.cs" />
@@ -527,7 +527,7 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
-    <Compile Include="Platform\Windows\WinFormsGamePlatform.cs" />
+    <Compile Include="Platform\Windows\ConcreteGame.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Media\VideoSampleGrabber.cs" />
 

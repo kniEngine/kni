@@ -152,7 +152,7 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GamePlatform.cs" />
+    <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="IDrawable.cs" />
@@ -524,7 +524,7 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Android\AndroidCompatibility.cs" />
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
-    <Compile Include="Platform\Android\AndroidGamePlatform.cs" />
+    <Compile Include="Platform\Android\ConcreteGame.cs" />
     <Compile Include="Platform\Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />

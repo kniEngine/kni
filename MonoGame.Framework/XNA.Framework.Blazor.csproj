@@ -41,7 +41,7 @@
     <Compile Remove="Input\KeyboardInput.cs" />
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
-    <Compile Include="Platform\Blazor\BlazorGamePlatform.cs" />
+    <Compile Include="Platform\Blazor\ConcreteGame.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
