@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache = new ShaderProgramCache(this);
 
             var handle = PresentationParameters.DeviceWindowHandle;
-            var gameWindow = MonoGame.Framework.BlazorGameWindow.FromHandle(handle);
+            var gameWindow = BlazorGameWindow.FromHandle(handle);
             var canvas = gameWindow._canvas;
 
             // create context.
