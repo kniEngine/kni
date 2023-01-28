@@ -321,7 +321,7 @@
     <Compile Include="GameComponent.cs" />
     <Compile Include="GameComponentCollection.cs" />
     <Compile Include="GameComponentCollectionEventArgs.cs" />
-    <Compile Include="GamePlatform.cs" />
+    <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />    
     <Compile Include="GameWindow.cs" />
     <Compile Include="GraphicsDeviceInformation.cs" />
