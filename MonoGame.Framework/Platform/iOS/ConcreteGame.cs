@@ -70,6 +70,7 @@ non-infringement.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 using Foundation;
