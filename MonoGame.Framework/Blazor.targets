@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);BLAZOR</DefineConstants>
+    <DefineConstants>$(DefineConstants);BLAZORGL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
