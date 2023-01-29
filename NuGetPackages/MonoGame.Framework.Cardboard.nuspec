@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>MonoGame.Framework.Cardboard.9000</id>
+    <version>0.0.0.0</version>
+    <title>MonoGame.Framework.Cardboard.9000</title>
+    <authors>Kastellanos Nikos, MonoGame Team</authors>
+    <owners>Kastellanos Nikos</owners>
+    <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+    <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is an experiment port of Google Cardboard on MonoGame/XNA framework.
+    
+    Example:
+    GraphicsDevice.Clear(Color.CornflowerBlue);
+    var vrstate = Microsoft.Xna.Framework.Input.Cardboard.Headset.GetState();
+    
+    var leftEye = vrstate.LeftEye;
+    GraphicsDevice.Viewport = leftEye.Viewport;
+    // draw with leftEye.View, leftEye.Projection.
+    
+    var rightEye = vrstate.RightEye;
+    GraphicsDevice.Viewport = rightEye.Viewport;    
+    // draw with rightEye.View, rightEye.Projection.
+
+             This package provides you with MonoGame/XNA Framework that works on Android-Cardboard.</description>
+    <summary>This package provides you with MonoGame/XNA Framework that works on Android-Cardboard.</summary>
+    <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2020-2023 Kastellanos Nikos</copyright>
+    <language>en-US</language>
+  </metadata>
+  <files>
+    <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.targets" target="build\MonoGame.Framework.Android.targets" />
+    
+    <!-- C# Assemblies -->
+    <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
+    <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
+    <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\GoogleCardboard.dll"    target="lib\MonoAndroid\GoogleCardboard.dll" />
+  </files>
+</package>
