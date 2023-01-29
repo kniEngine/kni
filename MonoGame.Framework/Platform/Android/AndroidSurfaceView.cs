@@ -905,8 +905,5 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        public event EventHandler RenderFrame;
-        public event EventHandler UpdateFrame;        
-
     }
 }
