@@ -163,6 +163,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
 
             StartRunLoop();
 

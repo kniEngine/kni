@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -166,6 +167,7 @@ namespace Microsoft.Xna.Platform
             _gameWindow.GameView.BeforeRun();
 
             Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
 
             // Prevent the default run loop from starting.
             // We will run the loop from the view's IRunnable.Run().
