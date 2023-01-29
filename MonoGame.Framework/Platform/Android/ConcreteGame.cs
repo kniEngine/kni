@@ -89,17 +89,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow.GameView.TouchEnabled = true;
         }
 
-        public override bool ANDROID_BeforeRun()
-        {
-            // User called Game.Run().
-            // Signal the game loop to initialize the game loop.
-            _gameWindow.GameView.BeforeRun();
-
-            // Prevent the default run loop from starting.
-            // We will run the loop from the view's IRunnable.Run().
-            return false;
-        }
-
         public override void EnterFullScreen()
         {
         }
@@ -158,6 +147,30 @@ namespace Microsoft.Xna.Platform
                 if (Game.Activity.AutoPauseAndResumeMediaPlayer)
                     MediaPlayer.Pause();
             }
+        }
+
+        public override void RunOneFrame()
+        {
+            // User called Game.Run().
+            // Signal the game loop to initialize the game loop.
+            _gameWindow.GameView.BeforeRun();
+
+            // Prevent the default run loop from starting.
+            // We will run the loop from the view's IRunnable.Run().
+            return;
+
+            //if (!Game.Initialized)
+            //{
+            //    Game.DoInitialize();
+            //}
+
+            //Game.DoBeginRun();
+            //Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            //Game.Tick();
+
+            //Game.DoEndRun();
         }
 
         internal override void Run()

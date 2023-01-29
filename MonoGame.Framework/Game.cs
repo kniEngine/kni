@@ -343,22 +343,7 @@ namespace Microsoft.Xna.Framework
             if (Strategy == null)
                 return;
 
-            if (!Strategy.ANDROID_BeforeRun())
-                return;
-
-            if (!Initialized)
-            {
-                DoInitialize();
-            }
-
-            BeginRun();
-            Strategy.Timer = Stopwatch.StartNew();
-
-            //Not quite right..
-            Tick();
-
-            EndRun();
-
+            Strategy.RunOneFrame();
         }
 
         /// <summary>

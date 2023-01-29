@@ -213,6 +213,22 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
+        public virtual void RunOneFrame()
+        {
+            if (!Game.Initialized)
+            {
+                Game.DoInitialize();
+            }
+
+            Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.DoEndRun();
+        }
+
         internal abstract void Run();
 
         internal virtual void Run_UAP_XAML()
@@ -229,17 +245,6 @@ namespace Microsoft.Xna.Platform
         public virtual void BeforeInitialize()
         {
             IsActive = true;
-        }
-
-        /// <summary>
-        /// Gives derived classes an opportunity to do work just before the
-        /// run loop is begun.  Implementations may also return false to prevent
-        /// the run loop from starting.
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool ANDROID_BeforeRun()
-        {
-            return true;
         }
 
         /// <summary>
