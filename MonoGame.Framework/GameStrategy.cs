@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Platform
         public readonly Game Game;
 
         private readonly GameTime Time = new GameTime();
-        internal Stopwatch Timer;
+        protected Stopwatch Timer;
 
         private bool _isActive;
         public bool IsActive
