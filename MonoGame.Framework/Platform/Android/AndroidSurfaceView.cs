@@ -395,16 +395,9 @@ namespace Microsoft.Xna.Framework
                 try { Game.Activity._orientationListener.Update(dt); }
                 catch (Exception) { }
 
-                try
-                {
-                    var handler = Tick;
-                    if (handler != null)
-                        handler(this, EventArgs.Empty);
-                }
-                catch (Content.ContentLoadException ex)
-                {
-                    throw ex;
-                }
+                var handler = Tick;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
             }
             catch (MonoGameGLException ex)
             {
@@ -904,9 +897,6 @@ namespace Microsoft.Xna.Framework
         private EGLContext _eglContext;
 
         #endregion
-
-        public event EventHandler RenderFrame;
-        public event EventHandler UpdateFrame;        
 
     }
 }
