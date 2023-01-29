@@ -29,6 +29,7 @@
     <call target="build_blazorGL" />
     <call target="build_windows"/>
     <call target="build_windowsUAP10" />
+    <call target="build_desktopGL"/>
     <call target="build_android" />
     <call target="build_ios" />
   </target>
@@ -67,17 +68,10 @@
       <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
       <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug" />
 
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
       <call target="build_portable"/>
       
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:restore" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:Build /p:Configuration=Release" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
 
       <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Build /p:Configuration=Release" />
       
@@ -111,6 +105,19 @@
     <delete file="MonoGame.Framework.Content.Pipeline\bin\portable-net45+win8+wpa81+wp8\temp.dll" />
     -->
 
+  </target>
+  
+  <target name="build_desktopGL" description="Build DesktopGL" depends="_prebuild">
+
+      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
+      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
+      
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+      
   </target>
 
   <target name="build_ios" description="Build iOS" depends="_prebuild">
