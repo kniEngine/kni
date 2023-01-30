@@ -64,10 +64,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Apply()
         {
             var currentTechnique = _effect.CurrentTechnique;
+
             _effect.OnApply();
 
-            Debug.Assert(_effect.CurrentTechnique == currentTechnique,
-                "CurrentTechnique changed during Effect.OnApply().");
+            if (_effect.CurrentTechnique == currentTechnique)
+                throw new InvalidOperationException("CurrentTechnique changed during Effect.OnApply().");
 
             Apply(_effect.GraphicsDevice);
         }
