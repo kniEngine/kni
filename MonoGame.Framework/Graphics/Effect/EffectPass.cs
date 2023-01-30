@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _effect.OnApply();
 
-            if (_effect.CurrentTechnique == currentTechnique)
+            if (_effect.CurrentTechnique != currentTechnique)
                 throw new InvalidOperationException("CurrentTechnique changed during Effect.OnApply().");
 
             Apply(_effect.GraphicsDevice);
