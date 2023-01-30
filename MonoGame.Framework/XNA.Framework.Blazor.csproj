@@ -4,7 +4,7 @@
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Monogame.Framework\Blazor\</BaseOutputPath>
 
-    <DefineConstants>BLAZOR;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>BLAZORGL;STBSHARP_INTERNAL</DefineConstants>
     
     <Version>3.8.9101.0</Version>
     <AssemblyVersion>3.8.9101.0</AssemblyVersion>
