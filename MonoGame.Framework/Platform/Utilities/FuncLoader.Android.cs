@@ -40,19 +40,24 @@ namespace MonoGame.Framework.Utilities
             return IntPtr.Zero;
         }
 
-        public static T LoadFunction<T>(IntPtr library, string function, bool throwIfNotFound = false)
+        public static T LoadFunction<T>(IntPtr library, string function)
         {
-            var ret = dlsym(library, function);
+            IntPtr funcAddress = dlsym(library, function);
 
-            if (ret == IntPtr.Zero)
-            {
-                if (throwIfNotFound)
-                    throw new EntryPointNotFoundException(function);
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
-                return default(T);
-            }
+            throw new EntryPointNotFoundException(function);
+        }
 
-            return ReflectionHelpers.GetDelegateForFunctionPointer<T>(ret);
+        public static T LoadFunctionOrNull<T>(IntPtr library, string function)
+        {
+            IntPtr funcAddress = dlsym(library, function);
+
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+
+            return default(T);
         }
     }
 }

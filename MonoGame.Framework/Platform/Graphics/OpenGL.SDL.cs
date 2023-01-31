@@ -15,19 +15,24 @@ namespace MonoGame.OpenGL
             BoundApi = RenderApi.GL;
         }
 
-        private static T LoadFunction<T>(string function, bool throwIfNotFound = false)
+        private static T LoadFunction<T>(string function)
         {
-            var ret = Sdl.GL.GetProcAddress(function);
+            IntPtr funcAddress = Sdl.GL.GetProcAddress(function);
 
-            if (ret == IntPtr.Zero)
-            {
-                if (throwIfNotFound)
-                    throw new EntryPointNotFoundException(function);
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
-                return default(T);
-            }
+            throw new EntryPointNotFoundException(function);
+        }
 
-            return ReflectionHelpers.GetDelegateForFunctionPointer<T>(ret);
+        private static T LoadFunctionOrNull<T>(string function)
+        {
+            IntPtr funcAddress = Sdl.GL.GetProcAddress(function);
+
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+
+            return default(T);
         }
 
     }

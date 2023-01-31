@@ -31,7 +31,7 @@ namespace MonoGame.OpenGL
             var eglBindLoaded = false;
             try
             {
-                BindAPI = FuncLoader.LoadFunction<BindAPIDelegate>(libGL, "eglBindAPI", true);
+                BindAPI = FuncLoader.LoadFunctionOrNull<BindAPIDelegate>(libGL, "eglBindAPI", true);
                 eglBindLoaded = true;
             }
             catch { }
@@ -54,9 +54,14 @@ namespace MonoGame.OpenGL
                 Library = libGL;
         }
 
-        private static T LoadFunction<T>(string function, bool throwIfNotFound = false)
+        private static T LoadFunction<T>(string function)
         {
-            return FuncLoader.LoadFunction<T>(Library, function, throwIfNotFound);
+            return FuncLoader.LoadFunction<T>(Library, function);
+        }
+
+        private static T LoadFunctionOrNull<T>(string function)
+        {
+            return FuncLoader.LoadFunctionOrNull<T>(Library, function);
         }
     }
 
