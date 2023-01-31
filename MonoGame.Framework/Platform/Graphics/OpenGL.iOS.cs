@@ -19,12 +19,17 @@ namespace MonoGame.OpenGL
 			BoundApi = RenderApi.ES;
         }
 
-        private static T LoadFunction<T>(string function, bool throwIfNotFound = false)
+        private static T LoadFunction<T>(string function)
         {
-            return FuncLoader.LoadFunction<T>(Library, function, throwIfNotFound);
+            return FuncLoader.LoadFunction<T>(Library, function);
         }
 
-	}
+        private static T LoadFunctionOrNull<T>(string function)
+        {
+            return FuncLoader.LoadFunctionOrNull<T>(Library, function);
+        }
+
+    }
 
     public class GLGraphicsContext : IDisposable
     {

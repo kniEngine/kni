@@ -92,26 +92,38 @@ namespace MonoGame.Framework.Utilities
             return Linux.dlopen(libname, RTLD_LAZY);
         }
 
-        public static T LoadFunction<T>(IntPtr library, string function, bool throwIfNotFound = false)
+        public static T LoadFunction<T>(IntPtr library, string function)
         {
-            var ret = IntPtr.Zero;
+            IntPtr funcAddress = IntPtr.Zero;
 
             if (CurrentPlatform.OS == OS.Windows)
-                ret = Windows.GetProcAddress(library, function);
+                funcAddress = Windows.GetProcAddress(library, function);
             else if (CurrentPlatform.OS == OS.MacOSX)
-                ret = OSX.dlsym(library, function);
+                funcAddress = OSX.dlsym(library, function);
             else
-                ret = Linux.dlsym(library, function);
+                funcAddress = Linux.dlsym(library, function);
 
-            if (ret == IntPtr.Zero)
-            {
-                if (throwIfNotFound)
-                    throw new EntryPointNotFoundException(function);
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
-                return default(T);
-            }
+            throw new EntryPointNotFoundException(function);
+        }
 
-            return ReflectionHelpers.GetDelegateForFunctionPointer<T>(ret);
+        public static T LoadFunctionOrNull<T>(IntPtr library, string function)
+        {
+            IntPtr funcAddress = IntPtr.Zero;
+
+            if (CurrentPlatform.OS == OS.Windows)
+                funcAddress = Windows.GetProcAddress(library, function);
+            else if (CurrentPlatform.OS == OS.MacOSX)
+                funcAddress = OSX.dlsym(library, function);
+            else
+                funcAddress = Linux.dlsym(library, function);
+
+            if (funcAddress != IntPtr.Zero)
+                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+
+            return default(T);
         }
     }
 }
