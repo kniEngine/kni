@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security;
 using Android.Opengl;
 using Javax.Microedition.Khronos.Egl;
 using MonoGame.Framework.Utilities;
@@ -28,30 +27,36 @@ namespace MonoGame.OpenGL
         {
             Android.Util.Log.Verbose("GL", "Loading Entry Points");
 
-            var eglBindLoaded = false;
-            try
-            {
-                BindAPI = FuncLoader.LoadFunction<BindAPIDelegate>(libGL, "eglBindAPI");
-                eglBindLoaded = true;
-            }
-            catch { }
+            BindAPI = FuncLoader.LoadFunctionOrNull<BindAPIDelegate>(libGL, "eglBindAPI");
 
-            var supportsFullGL = eglBindLoaded && BindAPI (RenderApi.GL);
-            if (!supportsFullGL) {
-                if (eglBindLoaded)
-                    BindAPI (RenderApi.ES);
+            if (BindAPI != null)
+            {
+                if (BindAPI(RenderApi.GL))
+                    BoundApi = RenderApi.GL;
+                else if (BindAPI(RenderApi.ES))
+                    BoundApi = RenderApi.ES;
+                else
+                    BoundApi = RenderApi.ES;
+            }
+            else
+            {
                 BoundApi = RenderApi.ES;
             }
                 
             Android.Util.Log.Verbose("GL", "Bound {0}", BoundApi);
 
-            if (GL.BoundApi == GL.RenderApi.ES && libES3 != IntPtr.Zero)
-                Library = libES3;
-
-            if (GL.BoundApi == GL.RenderApi.ES && libES2 != IntPtr.Zero)
-                Library = libES2;
-            else if (GL.BoundApi == GL.RenderApi.GL && libGL != IntPtr.Zero)
-                Library = libGL;
+            if (BoundApi == RenderApi.ES)
+            {
+                if (libES3 != IntPtr.Zero)
+                    Library = libES3;
+                if (libES2 != IntPtr.Zero)
+                    Library = libES2;
+            }
+            else if (BoundApi == RenderApi.GL)
+            {
+                if (libGL != IntPtr.Zero)
+                    Library = libGL;
+            }
         }
 
         private static T LoadFunction<T>(string function)
