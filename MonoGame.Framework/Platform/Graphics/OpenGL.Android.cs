@@ -31,7 +31,7 @@ namespace MonoGame.OpenGL
             var eglBindLoaded = false;
             try
             {
-                BindAPI = FuncLoader.LoadFunctionOrNull<BindAPIDelegate>(libGL, "eglBindAPI", true);
+                BindAPI = FuncLoader.LoadFunction<BindAPIDelegate>(libGL, "eglBindAPI");
                 eglBindLoaded = true;
             }
             catch { }
