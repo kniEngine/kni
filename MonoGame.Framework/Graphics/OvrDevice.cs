@@ -228,6 +228,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     case -6000:
                         OnDisplayLost();
                         return ovre.OvrResult;
+                    case -1015: // InvalidOperation
+                        throw;
                     default:
                         throw;
                 }
