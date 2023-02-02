@@ -25,9 +25,7 @@ internal static class Sdl
             return FuncLoader.LoadLibraryExt("sdl2");
     }
 
-    public static int Major;
-    public static int Minor;
-    public static int Patch;
+    public static Version version;
 
     [Flags]
     public enum InitFlags
@@ -143,6 +141,40 @@ internal static class Sdl
         public byte Major;
         public byte Minor;
         public byte Patch;
+
+        public int PackedValue { get { return (Major << 16 | Minor << 8 | Patch); } }
+
+        public Version(byte major, byte minor, byte patch) : this()
+        {
+            this.Major = major;
+            this.Minor = minor;
+            this.Patch = patch;
+        }
+
+        public static bool operator <(Version l, Version r)
+        {
+            return l.PackedValue < r.PackedValue;
+        }
+
+        public static bool operator >(Version l, Version r)
+        {
+            return l.PackedValue > r.PackedValue;
+        }
+
+        public static bool operator <=(Version l, Version r)
+        {
+            return l.PackedValue <= r.PackedValue;
+        }
+
+        public static bool operator >=(Version l, Version r)
+        {
+            return l.PackedValue >= r.PackedValue;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}.{1}.{2}",Major, Minor, Patch);
+        }
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1007,9 +1039,9 @@ internal static class Sdl
 
     public static class Haptic
     {
-        // For some reason, different game controllers have different maximum value supported
-        // Also, the more the value is close to their limit, the more they tend to randomly ignore it
-        // Hence, we're setting an abitrary safe value as a maximum
+        // For some reason, different game controllers support different maximum values
+        // Also, the closer a given value is to the maximum, the more likely the value will be ignored
+        // Hence, we're setting an arbitrary safe value as a maximum
         public const uint Infinity = 1000000U;
 
         public enum EffectId : ushort

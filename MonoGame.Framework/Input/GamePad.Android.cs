@@ -270,6 +270,10 @@ namespace Microsoft.Xna.Framework.Input
             gamePad._rightStick = new Vector2(e.GetAxisValue(Axis.Z), -e.GetAxisValue(Axis.Rz));
             gamePad._leftTrigger = e.GetAxisValue(Axis.Ltrigger);
             gamePad._rightTrigger = e.GetAxisValue(Axis.Rtrigger);
+            if (gamePad._leftTrigger == 0)
+                gamePad._leftTrigger = e.GetAxisValue(Axis.Brake);
+            if (gamePad._rightTrigger == 0)
+                gamePad._rightTrigger = e.GetAxisValue(Axis.Gas);
 
             if(!gamePad.DPadButtons)
             {
