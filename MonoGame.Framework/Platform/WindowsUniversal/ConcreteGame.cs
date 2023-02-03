@@ -38,7 +38,9 @@ namespace Microsoft.Xna.Platform
             // Setup the game window.
             Window = UAPGameWindow.Instance;
 			UAPGameWindow.Instance.Game = game;
-            UAPGameWindow.Instance.RegisterCoreWindowService();
+
+            // Register the CoreWindow with the services registry
+            Services.AddService(typeof(CoreWindow), UAPGameWindow.Instance.CoreWindow);
 
             // Setup the launch parameters.
             // - Parameters can optionally start with a forward slash.
