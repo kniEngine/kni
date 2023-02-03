@@ -30,7 +30,7 @@
     <language>en-US</language>
   </metadata>
   <files>
-    <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.targets" target="build\MonoGame.Framework.Android.targets" />
+    <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
     
     <!-- C# Assemblies -->
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
