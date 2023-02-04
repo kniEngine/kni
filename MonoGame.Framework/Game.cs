@@ -441,7 +441,7 @@ namespace Microsoft.Xna.Framework
         protected virtual void Initialize()
         {
             // TODO: This should be removed once all platforms use the new GraphicsDeviceManager
-#if ANDROID || IOS || TVOS
+#if DESKTOPGL || ANDROID || IOS || TVOS
             // applyChanges
             {
                 Strategy.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
