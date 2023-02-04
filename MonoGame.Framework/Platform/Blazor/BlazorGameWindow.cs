@@ -312,14 +312,6 @@ namespace Microsoft.Xna.Framework
             Mouse.WindowHandle = IntPtr.Zero;
         }
 
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-        }
-
         public void MouseVisibleToggled()
         {
             if (_concreteGame.IsMouseVisible)

@@ -294,7 +294,8 @@ namespace Microsoft.Xna.Platform
         /// <param name='willBeFullScreen'>
         /// Specifies whether the device will be in full-screen mode upon completion of the change.
         /// </param>
-        public abstract void BeginScreenDeviceChange(bool willBeFullScreen);
+        public virtual void BeginScreenDeviceChange(bool willBeFullScreen)
+        { }
 
         /// <summary>
         /// Completes a device transition.
@@ -308,11 +309,8 @@ namespace Microsoft.Xna.Platform
         /// <param name='clientHeight'>
         /// The new height of the game's client window.
         /// </param>
-        public abstract void EndScreenDeviceChange(
-                 string screenDeviceName,
-                 int clientWidth,
-                 int clientHeight
-        );
+        public virtual void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        { }
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.

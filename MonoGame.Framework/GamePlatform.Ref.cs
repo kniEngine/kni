@@ -57,16 +57,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override void Log(string message)
         {
             throw new PlatformNotSupportedException();

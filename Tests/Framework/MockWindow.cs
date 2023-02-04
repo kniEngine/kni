@@ -32,16 +32,6 @@ namespace MonoGame.Tests.Framework
             get { throw new NotImplementedException(); }
         }
 
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-            throw new NotImplementedException();
-        }
-
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
             throw new NotImplementedException();

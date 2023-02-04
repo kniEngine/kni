@@ -32,8 +32,7 @@ namespace Microsoft.Xna.Platform
 
         internal static ApplicationExecutionState PreviousExecutionState { get; set; }
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             // Setup the game window.
             Window = UAPGameWindow.Instance;
@@ -275,14 +274,6 @@ namespace Microsoft.Xna.Platform
                 EnterFullScreen();
             else
                 ExitFullScreen();
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-        }
-
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
         }
 
         public override void Log(string Message)

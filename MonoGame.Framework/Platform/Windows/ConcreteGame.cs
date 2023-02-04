@@ -21,8 +21,7 @@ namespace Microsoft.Xna.Platform
 
         private WinFormsGameWindow _window;
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             _window = new WinFormsGameWindow(this);
 
@@ -111,14 +110,6 @@ namespace Microsoft.Xna.Platform
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
             _window.OnPresentationChanged(pp);
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-        }
-
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
         }
 
         public override void Log(string message)
