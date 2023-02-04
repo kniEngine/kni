@@ -50,8 +50,7 @@ namespace Microsoft.Xna.Platform
 
         private readonly List<string> _dropList;
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             _keys = new List<Keys>();
             Keyboard.SetKeys(_keys);

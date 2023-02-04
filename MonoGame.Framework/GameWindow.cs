@@ -34,7 +34,11 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Gets or sets a bool that enables usage of Alt+F4 for window closing on desktop platforms. Value is true by default.
         /// </summary>
-        public virtual bool AllowAltF4 { get { return _allowAltF4; } set { _allowAltF4 = value; } }
+        public virtual bool AllowAltF4
+        { 
+            get { return _allowAltF4; }
+            set { _allowAltF4 = value; }
+        }
 
 #if (WINDOWS && !WINDOWS_UAP) || DESKTOPGL
         /// <summary>
@@ -73,8 +77,10 @@ namespace Microsoft.Xna.Framework
         /// </remarks>
         public string Title {
 			get { return _title; }
-			set {
-				if (_title != value) {
+			set 
+            {
+				if (_title != value) 
+                {
 					SetTitle(value);
 					_title = value;
 				}
@@ -89,14 +95,8 @@ namespace Microsoft.Xna.Framework
         /// </exception>
         public virtual bool IsBorderless
         {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return false; }
+            set { throw new NotImplementedException(); }
         }
 
         internal MouseState MouseState;
@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Framework
         /// Called before a game switches from windowed to full screen mode or vice versa.
         /// </summary>
         /// <param name="willBeFullScreen">Indicates what mode the game will switch to.</param>
-        public abstract void BeginScreenDeviceChange (bool willBeFullScreen);
+        public abstract void BeginScreenDeviceChange(bool willBeFullScreen);
 
 	    /// <summary>
 	    /// Called when a transition from windowed to full screen or vice versa ends, or when
@@ -178,15 +178,14 @@ namespace Microsoft.Xna.Framework
 	    /// <param name="screenDeviceName">Name of the screen to move the window to.</param>
 	    /// <param name="clientWidth">The new width of the client rectangle.</param>
 	    /// <param name="clientHeight">The new height of the client rectangle.</param>
-		public abstract void EndScreenDeviceChange (
-			string screenDeviceName, int clientWidth, int clientHeight);
+		public abstract void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight);
 
 	    /// <summary>
 	    /// Called when a transition from windowed to full screen or vice versa ends, or when
 	    /// the <see cref="Graphics.GraphicsDevice"/> is reset.
 	    /// </summary>
 	    /// <param name="screenDeviceName">Name of the screen to move the window to.</param>
-		public void EndScreenDeviceChange (string screenDeviceName)
+		public void EndScreenDeviceChange(string screenDeviceName)
 		{
 			EndScreenDeviceChange(screenDeviceName, ClientBounds.Width, ClientBounds.Height);
 		}
@@ -194,11 +193,11 @@ namespace Microsoft.Xna.Framework
 	    /// <summary>
 	    /// Called when the window gains focus.
 	    /// </summary>
-		protected void OnActivated ()
+		protected void OnActivated()
 		{
 		}
 
-		internal void OnClientSizeChanged ()
+		internal void OnClientSizeChanged()
 		{
             var handler = ClientSizeChanged;
             if (handler != null)
@@ -208,28 +207,28 @@ namespace Microsoft.Xna.Framework
 	    /// <summary>
 	    /// Called when the window loses focus.
 	    /// </summary>
-		protected void OnDeactivated ()
+		protected void OnDeactivated()
 		{
 		}
          
 	    /// <summary>
 	    /// Called when <see cref="CurrentOrientation"/> changed. Raises the <see cref="OnOrientationChanged"/> event.
 	    /// </summary>
-		protected void OnOrientationChanged ()
+		protected void OnOrientationChanged()
 		{
             var handler = OrientationChanged;
             if (handler != null)
                 handler(this, EventArgs.Empty);
 		}
 
-		protected void OnPaint ()
+		protected void OnPaint()
 		{
 		}
 
 	    /// <summary>
 	    /// Called when <see cref="ScreenDeviceName"/> changed. Raises the <see cref="ScreenDeviceNameChanged"/> event.
 	    /// </summary>
-		protected void OnScreenDeviceNameChanged ()
+		protected void OnScreenDeviceNameChanged()
 		{
             var handler = ScreenDeviceNameChanged;
             if (handler != null)
@@ -270,13 +269,13 @@ namespace Microsoft.Xna.Framework
                 handler(this, e);
         }
 
-        protected internal abstract void SetSupportedOrientations (DisplayOrientation orientations);
+        protected internal abstract void SetSupportedOrientations(DisplayOrientation orientations);
 
 	    /// <summary>
 	    /// Set the title of this window to the given string.
 	    /// </summary>
 	    /// <param name="title">The new title of the window.</param>
-		protected abstract void SetTitle (string title);
+		protected abstract void SetTitle(string title);
 
     }
 }

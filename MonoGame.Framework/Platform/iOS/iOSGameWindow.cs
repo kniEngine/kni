@@ -67,14 +67,15 @@ non-infringement.
 #endregion License
 
 using System;
-
 using UIKit;
 
-namespace Microsoft.Xna.Framework {
-	class iOSGameWindow : GameWindow {
+namespace Microsoft.Xna.Framework
+ {
+	class iOSGameWindow : GameWindow
+    {
 		private readonly iOSGameViewController _viewController;
 
-		public iOSGameWindow (iOSGameViewController viewController)
+		public iOSGameWindow(iOSGameViewController viewController)
 		{
 			if (viewController == null)
 				throw new ArgumentNullException("viewController");
@@ -89,13 +90,16 @@ namespace Microsoft.Xna.Framework {
 
 		#region GameWindow Members
 
-		public override bool AllowUserResizing {
+		public override bool AllowUserResizing
+        {
 			get { return false; }
 			set { /* Do nothing. */ }
 		}
 
-		public override Rectangle ClientBounds {
-			get {
+		public override Rectangle ClientBounds
+        {
+			get
+            {
 				var bounds = _viewController.View.Bounds;
                 var scale = _viewController.View.ContentScaleFactor;
 
@@ -133,8 +137,10 @@ namespace Microsoft.Xna.Framework {
 			}
 		}
 
-		public override DisplayOrientation CurrentOrientation {
-			get {
+		public override DisplayOrientation CurrentOrientation
+        {
+			get
+            {
                 #if TVOS
                 return DisplayOrientation.LandscapeLeft;
                 #else
@@ -143,16 +149,20 @@ namespace Microsoft.Xna.Framework {
 			}
 		}
 
-		public override IntPtr Handle {
-			get {
+		public override IntPtr Handle
+        {
+			get 
+            {
 				// TODO: Verify that View.Handle is a sensible
 				//       value to return here.
 				return _viewController.View.Handle;
 			}
 		}
 
-		public override string ScreenDeviceName {
-			get {
+		public override string ScreenDeviceName 
+        {
+			get 
+            {
 				var screen = _viewController.View.Window.Screen;
 				if (screen == UIScreen.MainScreen)
 					return "Main Display";
@@ -172,12 +182,12 @@ namespace Microsoft.Xna.Framework {
 			throw new NotImplementedException ();
 		}
 
-		internal protected override void SetSupportedOrientations (DisplayOrientation orientations)
+		internal protected override void SetSupportedOrientations(DisplayOrientation orientations)
 		{
 			_viewController.SupportedOrientations = orientations;
 		}
 
-		protected override void SetTitle (string title)
+		protected override void SetTitle(string title)
 		{
 			_viewController.Title = title;
 		}

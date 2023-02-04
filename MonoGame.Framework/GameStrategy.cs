@@ -308,11 +308,7 @@ namespace Microsoft.Xna.Platform
         /// <param name='clientHeight'>
         /// The new height of the game's client window.
         /// </param>
-        public abstract void EndScreenDeviceChange(
-                 string screenDeviceName,
-                 int clientWidth,
-                 int clientHeight
-        );
+        public abstract void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight);
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.

@@ -32,8 +32,7 @@ namespace Microsoft.Xna.Platform
 
         internal static ApplicationExecutionState PreviousExecutionState { get; set; }
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             // Setup the game window.
             Window = UAPGameWindow.Instance;

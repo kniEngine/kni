@@ -96,8 +96,7 @@ namespace Microsoft.Xna.Platform
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
-        public ConcreteGame(Game game) :
-            base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             game.Services.AddService(typeof(ConcreteGame), this);
 
@@ -337,7 +336,7 @@ namespace Microsoft.Xna.Platform
         private void Application_WillTerminate(NSNotification notification)
         {
             // FIXME: Cleanly end the run loop.
-			if ( Game != null )
+			if (Game != null)
 			{
 				// TODO MonoGameGame.Terminate();
 			}
@@ -347,8 +346,10 @@ namespace Microsoft.Xna.Platform
 
         #region Helper Property
 
-        private DisplayOrientation CurrentOrientation {
-            get {
+        private DisplayOrientation CurrentOrientation
+        {
+            get
+            {
                 #if TVOS
                 return DisplayOrientation.LandscapeLeft;
                 #else
@@ -359,13 +360,13 @@ namespace Microsoft.Xna.Platform
 
         #endregion
 
-		private void ViewController_InterfaceOrientationChanged (object sender, EventArgs e)
+		private void ViewController_InterfaceOrientationChanged(object sender, EventArgs e)
 		{
 			var orientation = CurrentOrientation;
 
 			// FIXME: The presentation parameters for the GraphicsDevice should
 			//            be managed by the GraphicsDevice itself.  Not by ConcreteGame.
-			var gdm = (GraphicsDeviceManager) Game.Services.GetService (typeof (IGraphicsDeviceManager));
+			var gdm = (GraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
 
             TouchPanel.DisplayOrientation = orientation;
 

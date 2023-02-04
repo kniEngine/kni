@@ -16,8 +16,7 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             System.Diagnostics.Debug.Assert(Game.Activity != null, "Must set Game.Activity before creating the Game instance");
             Game.Activity.Game = Game;

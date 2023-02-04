@@ -19,8 +19,7 @@ namespace Microsoft.Xna.Platform
 
         private BlazorGameWindow _window;
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             IsActive = true;
 

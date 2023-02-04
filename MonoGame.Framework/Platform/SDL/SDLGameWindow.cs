@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Framework
             {
                 // We need to get the display information again in case
                 // the resolution of it was changed.
-                Sdl.Display.GetBounds (displayIndex, out displayRect);
+                Sdl.Display.GetBounds(displayIndex, out displayRect);
 
                 // This centering only occurs when exiting fullscreen
                 // so it should center the window on the current display.

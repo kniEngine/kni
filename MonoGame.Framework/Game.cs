@@ -450,11 +450,12 @@ namespace Microsoft.Xna.Framework
                     Strategy.EnterFullScreen();
                 else
                     Strategy.ExitFullScreen();
+
                 var viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
-
                 GraphicsDevice.Viewport = viewport;
+
                 Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
             }
 #endif
@@ -466,13 +467,11 @@ namespace Microsoft.Xna.Framework
             // Initialize all existing components
             InitializeExistingComponents();
 
-            _graphicsDeviceService = (IGraphicsDeviceService)
-                Services.GetService(typeof(IGraphicsDeviceService));
-
-            if (_graphicsDeviceService != null &&
-                _graphicsDeviceService.GraphicsDevice != null)
+            _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+            if (_graphicsDeviceService != null)
             {
-                LoadContent();
+                if (_graphicsDeviceService.GraphicsDevice != null)
+                    LoadContent();
             }
         }
 

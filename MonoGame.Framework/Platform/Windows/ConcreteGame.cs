@@ -21,8 +21,7 @@ namespace Microsoft.Xna.Platform
 
         private WinFormsGameWindow _window;
 
-        public ConcreteGame(Game game)
-            : base(game)
+        public ConcreteGame(Game game) : base(game)
         {
             _window = new WinFormsGameWindow(this);
 
