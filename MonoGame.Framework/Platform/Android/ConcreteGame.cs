@@ -26,6 +26,7 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new AndroidGameWindow(Game.Activity, game);
             Window = _gameWindow;
+            Services.AddService(typeof(View), _gameWindow.GameView);
 
             MediaLibrary.Context = Game.Activity;
         }

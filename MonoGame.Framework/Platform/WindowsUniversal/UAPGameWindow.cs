@@ -141,12 +141,6 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        internal void RegisterCoreWindowService()
-        {
-            // Register the CoreWindow with the services registry
-            Game.Services.AddService(typeof(CoreWindow), _coreWindow);
-        }
-
         void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
         {
             Strategy.IsVisible = args.Visible;
