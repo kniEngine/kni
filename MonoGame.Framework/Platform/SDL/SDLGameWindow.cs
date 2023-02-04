@@ -206,12 +206,12 @@ namespace Microsoft.Xna.Framework
             Sdl.Mouse.ShowCursor(visible ? 1 : 0);
         }
 
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        internal void BeginScreenDeviceChange(bool willBeFullScreen)
         {
             _willBeFullScreen = willBeFullScreen;
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        internal void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
             _screenDeviceName = screenDeviceName;
 

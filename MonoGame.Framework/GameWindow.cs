@@ -165,31 +165,6 @@ namespace Microsoft.Xna.Framework
 
         #endregion Events
 
-        /// <summary>
-        /// Called before a game switches from windowed to full screen mode or vice versa.
-        /// </summary>
-        /// <param name="willBeFullScreen">Indicates what mode the game will switch to.</param>
-        public abstract void BeginScreenDeviceChange(bool willBeFullScreen);
-
-	    /// <summary>
-	    /// Called when a transition from windowed to full screen or vice versa ends, or when
-	    /// the <see cref="Graphics.GraphicsDevice"/> is reset.
-	    /// </summary>
-	    /// <param name="screenDeviceName">Name of the screen to move the window to.</param>
-	    /// <param name="clientWidth">The new width of the client rectangle.</param>
-	    /// <param name="clientHeight">The new height of the client rectangle.</param>
-		public abstract void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight);
-
-	    /// <summary>
-	    /// Called when a transition from windowed to full screen or vice versa ends, or when
-	    /// the <see cref="Graphics.GraphicsDevice"/> is reset.
-	    /// </summary>
-	    /// <param name="screenDeviceName">Name of the screen to move the window to.</param>
-		public void EndScreenDeviceChange(string screenDeviceName)
-		{
-			EndScreenDeviceChange(screenDeviceName, ClientBounds.Width, ClientBounds.Height);
-		}
-
 	    /// <summary>
 	    /// Called when the window gains focus.
 	    /// </summary>

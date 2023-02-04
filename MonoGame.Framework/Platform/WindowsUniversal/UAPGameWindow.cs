@@ -434,15 +434,6 @@ namespace Microsoft.Xna.Framework
             //window.Dispose();
         }
 
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-
-        }
-
         #endregion
     }
 }
