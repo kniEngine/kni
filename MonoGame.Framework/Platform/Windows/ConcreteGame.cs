@@ -112,14 +112,6 @@ namespace Microsoft.Xna.Platform
             _window.OnPresentationChanged(pp);
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
-        {
-        }
-
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-        }
-
         public override void Log(string message)
         {
             Debug.WriteLine(message);
