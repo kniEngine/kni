@@ -1,5 +1,56 @@
 ﻿# Changelog
 
+## 3.8.9102 Release - February 5, 2023
+
+### Fixed
+ - bugfix: Android gameloop will now pause while app is in the background.
+ - bugfix: FontDescriptionProcessor glyph cropping.
+ - bugfix: FontDescriptionProcessor glyph whitespaces width.
+ - bugfix: GlyphPacker failed when FontDescription imports a single character.
+ - bugfix: [MGCB] processorParam flag changed to 'm'. Fix conflict with processor flag 'p'.
+ - bugfix: [MGCB] remove multiple flags support. Fix conflict with all non-flag parameters.
+ - bugfix: [DesktopGL] Game initialization.
+
+### Performance
+ - [GL] Single ShaderProgramCache lookup.
+ - [GL] Use _blendFactorDirty  & _blendStateDirty to skip checks.
+ - Parallel PixelBitmapContent<T> .ctor() and GetPixelData().
+ - Multithread content pipeline builder.
+
+### Changed
+ - GraphicsAdapter is no longer IDisposable (XNA API compatibility).
+ - MonoGameAndroidGameView renamed to AndroidSurfaceView
+ - base ContentTypeWriter.ShouldCompressContent(...) returns true.
+ - Include type name in the error message for failed resolved Types in content pipeline.
+ - Report duplicate importers/processors without faling/halting the build.
+ - [OpenGL/GLES] resources are released immediately when the object is collected/Disposed.
+ - Song in DesktopGL is re-implemented as DynamicSoundEffectInstance.
+ - Include FontDescription.DefaultCharacter in the imported Glyphs instead of throwing an error (XNA API compatibility).
+ - SpriteFont template updated with DefaultCharacter '�'.
+ - Reverted WinForms editor replaces eto.
+ - Calling EffectPass.Apply() will always apply the EffectPass that it was called on (XNA API compatibility).
+Changing the CurrentTechnique in Effect.OnApply() in no longer allowed and will throw an InvalidOperationException.
+ - MonoGamePlatform enum BLAZOR renamed to BlazorGL.
+ - [BlazorGL] workaround for .net7 Unmarshalled interop bug.
+
+### Added
+ - The following Classes/Methods are now visible in all platforms.
+SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
+SetRenderTarget(RenderTarget3D renderTarget, int arraySlice)
+ - Restored SpriteFont.Characters property (XNA API compatibility).
+ - [MGCB] Parameter 'singleThread' (-s) to turn of Multithread build.
+ - fx macros __DEBUG__, __DIRECTX__, __OPENGL__, __MOJOSHADER__.
+ - DrawableGameComponent and GameComponent VS2022 template.
+ - BlazorGL VS2022 template.
+
+### Removed
+ - IWindowInfo
+ - AndroidGameActivity.RenderOnUIThread
+ - Song.Position
+ - Protected methods PlatformOnSongRepeat(), PlatformPlay(), PlatformResume() in MediaPlayer.
+ - GlyphCollection.CopyTo()
+ - Stadia platform.
+
 ## 3.8.9101 Release - October 9, 2022
 
 ### Fixed
