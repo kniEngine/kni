@@ -5,8 +5,8 @@
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\OculusOvrDX11</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
-    <Version>3.8.9101.1</Version>
-    <AssemblyVersion>3.8.9101.1</AssemblyVersion>
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
 
   </PropertyGroup>
 
@@ -41,7 +41,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="MonoGame.Framework.WindowsDX.9000" Version="3.8.9101" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX.9000" Version="3.8.9102" />
     <PackageReference Include="nkast.LibOVR" Version="1.0.0" />
     <PackageReference Include="SharpDX"  Version="4.0.1" />
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
