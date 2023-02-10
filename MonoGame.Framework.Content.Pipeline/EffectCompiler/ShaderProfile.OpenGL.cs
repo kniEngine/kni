@@ -69,6 +69,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 case TargetPlatform.iOS:
                 case TargetPlatform.Android:
+                case TargetPlatform.BlazorGL:
                 case TargetPlatform.DesktopGL:
                 case TargetPlatform.MacOSX:
                 case TargetPlatform.RaspberryPi:
