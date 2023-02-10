@@ -81,6 +81,14 @@
             // begin game loop
             window.requestAnimationFrame(tickJS);
         };
+
+        window.onkeydown = function(event)
+        {
+            // Prevent Arrows Keys and Spacebar scrolling the outer page
+            // when running inside an iframe. e.g: itch.io embedding.
+            if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1)
+                event.preventDefault();
+        };
     </script>
 </body>
 
