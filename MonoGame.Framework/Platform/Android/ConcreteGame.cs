@@ -67,9 +67,9 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
-            PrimaryThreadLoader.DoLoads();
-            if (ConcreteGame.IsPlayingVideo)
-                return false;
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                return gdm.BeginDraw();
 
             return true;
         }

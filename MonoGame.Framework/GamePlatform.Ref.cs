@@ -39,7 +39,11 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
-            throw new PlatformNotSupportedException();
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                return gdm.BeginDraw();
+
+            return true;
         }
 
         public override void EnterFullScreen()

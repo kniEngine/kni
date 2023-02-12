@@ -259,8 +259,9 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
-            if (this.IsPlayingVideo)
-                return false;
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                return gdm.BeginDraw();
 
             return true;
         }

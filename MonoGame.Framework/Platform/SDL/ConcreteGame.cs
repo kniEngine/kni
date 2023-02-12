@@ -316,6 +316,10 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                return gdm.BeginDraw();
+
             return true;
         }
 

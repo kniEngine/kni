@@ -242,15 +242,9 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
-            var device = this.GraphicsDevice;
-            if (device != null)
-            {
-				// For a UAP app we need to re-apply the
-				// render target before every draw.  
-				// 
-				// I guess the OS changes it and doesn't restore it?
-				device.UAP_ResetRenderTargets();
-            }
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                return gdm.BeginDraw();
 
             return true;
         }
