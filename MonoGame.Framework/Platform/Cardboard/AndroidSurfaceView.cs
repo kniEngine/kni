@@ -898,6 +898,5 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-
     }
 }

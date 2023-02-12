@@ -53,8 +53,6 @@ namespace Microsoft.Xna.Framework
             }
 
             Initialize(activity, size);
-
-            game.Services.AddService(typeof(View), GameView);
         }
 
         private void Initialize(Context context, Point size)
