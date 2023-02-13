@@ -402,7 +402,10 @@ namespace Microsoft.Xna.Framework
         /// <returns>
         ///   <code>true</code> if <see cref="Draw"/> should be called, <code>false</code> if it should not.
         /// </returns>
-        protected virtual bool BeginDraw() { return true; }
+        protected virtual bool BeginDraw()
+        {
+            return Strategy.BeginDraw();
+        }
 
         /// <summary>
         /// Called right after <see cref="Draw"/>. Presents the
