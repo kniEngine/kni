@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             if (IsPlayingVideo)
                 return false;
@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             if (IsPlayingVideo)
                 return false;

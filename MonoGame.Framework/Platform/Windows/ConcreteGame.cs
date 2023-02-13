@@ -89,12 +89,12 @@ namespace Microsoft.Xna.Platform
             Window = null;
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             return true;
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             return true;
         }

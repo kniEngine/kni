@@ -233,13 +233,13 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             TouchQueue.ProcessQueued();
             return true;
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             var device = Game.GraphicsDevice;
             if (device != null)

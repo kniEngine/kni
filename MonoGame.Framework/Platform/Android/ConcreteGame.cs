@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform
             throw new NotImplementedException();
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             if (!_initialized)
             {
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             PrimaryThreadLoader.DoLoads();
             return !IsPlayingVdeo;
