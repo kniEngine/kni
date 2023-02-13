@@ -338,8 +338,14 @@ namespace Microsoft.Xna.Platform
         {
             _suppressDraw = true;
         }
+        public virtual bool BeginDraw()
+        {
+            return true;
+        }
 
-        public virtual void EndDraw() { }
+        public virtual void EndDraw()
+        {
+        }
 
         /// <summary>
         /// Called by the GraphicsDeviceManager to notify the platform

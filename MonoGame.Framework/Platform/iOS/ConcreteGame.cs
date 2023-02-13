@@ -277,6 +277,10 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
+        public override void EndDraw()
+        {
+        }
+
         public override void EnterFullScreen()
         {
             // Do nothing: iOS games are always full screen
