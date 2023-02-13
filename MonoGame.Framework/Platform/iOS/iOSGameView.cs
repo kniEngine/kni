@@ -78,33 +78,33 @@ using OpenGLES;
 using UIKit;
 using CoreGraphics;
 
-using MonoGame.OpenGL;
-
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
+using MonoGame.OpenGL;
 
 
-namespace Microsoft.Xna.Framework {
+namespace Microsoft.Xna.Framework
+{
 
     [Register("iOSGameView")]
-	partial class iOSGameView : UIView {
+	partial class iOSGameView : UIView
+    {
 		private readonly ConcreteGame _concreteGame;
 		private int _colorbuffer;
 		private int _depthbuffer;
 		private int _framebuffer;
 
 		#region Construction/Destruction
-		public iOSGameView (ConcreteGame concreteGame, CGRect frame)
-			: base(frame)
+		public iOSGameView(ConcreteGame concreteGame, CGRect frame) : base(frame)
 		{
 			if (concreteGame == null)
-				throw new ArgumentNullException ("concreteGame");
+				throw new ArgumentNullException("concreteGame");
 			_concreteGame = concreteGame;
-			Initialize ();
+			Initialize();
 		}
 
-		private void Initialize ()
+		private void Initialize()
 		{
             #if !TVOS
 			MultipleTouchEnabled = true;
@@ -112,14 +112,15 @@ namespace Microsoft.Xna.Framework {
 			Opaque = true;
 		}
 
-		protected override void Dispose (bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (disposing) {
+			if (disposing)
+            {
 				if (_glContext != null)
 					DestroyContext();
 			}
 
-			base.Dispose (disposing);
+			base.Dispose(disposing);
 			_isDisposed = true;
 		}
 
@@ -129,23 +130,23 @@ namespace Microsoft.Xna.Framework {
 
 		private bool _isDisposed;
 
-		public bool IsDisposed {
-			get { return _isDisposed; }
-		}
+		public bool IsDisposed { get { return _isDisposed; } }
 
 		#endregion Properties
 
-		[Export ("layerClass")]
-		public static Class GetLayerClass ()
+		[Export("layerClass")]
+		public static Class GetLayerClass()
 		{
-			return new Class (typeof (CAEAGLLayer));
+			return new Class(typeof(CAEAGLLayer));
 		}
 
-		public override bool CanBecomeFirstResponder {
+		public override bool CanBecomeFirstResponder
+        {
 			get { return true; }
 		}
 
-		private new CAEAGLLayer Layer {
+		private new CAEAGLLayer Layer
+        {
 			get { return base.Layer as CAEAGLLayer; }
 		}
 
@@ -155,19 +156,22 @@ namespace Microsoft.Xna.Framework {
 		//        probably always be necessary, unfortunately.
         private GLGraphicsContext _glContext;
 		private IOpenGLApi _glapi;
+
 		private void CreateGLContext()
 		{
-			AssertNotDisposed ();
+			AssertNotDisposed();
 
             // RetainedBacking controls if the content of the colorbuffer should be preserved after being displayed
             // This is the XNA equivalent to set PreserveContent when initializing the GraphicsDevice
             // (should be false by default for better performance)
-			Layer.DrawableProperties = NSDictionary.FromObjectsAndKeys (
-				new NSObject [] {
-					NSNumber.FromBoolean (false), 
+			Layer.DrawableProperties = NSDictionary.FromObjectsAndKeys(
+				new NSObject[]
+                {
+					NSNumber.FromBoolean(false),
 					EAGLColorFormat.RGBA8
 				},
-				new NSObject [] {
+				new NSObject[]
+                {
 					EAGLDrawableProperty.RetainedBacking,
 					EAGLDrawableProperty.ColorFormat
 				});
@@ -178,21 +182,24 @@ namespace Microsoft.Xna.Framework {
 			//strVersion = OpenTK.Graphics.ES20.GL.GetString (OpenTK.Graphics.ES20.All.Version);
 			//var version = Version.Parse (strVersion);
 
-			try {
+			try 
+            {
                 _glContext = new GLGraphicsContext();
                 //new GraphicsContext (null, null, 2, 0, GraphicsContextFlags.Embedded)
-            } catch (Exception ex) {
-                throw new Exception ("Device not Supported. GLES 2.0 or above is required!");
+            } 
+            catch (Exception ex)
+            {
+                throw new Exception("Device not Supported. GLES 2.0 or above is required!");
 			}
 
 			this.MakeCurrent();
             _glapi = new Gles20Api();
 		}
 
-		private void DestroyContext ()
+		private void DestroyContext()
 		{
-			AssertNotDisposed ();
-			AssertValidContext ();
+			AssertNotDisposed();
+			AssertValidContext();
 
             _glContext.Dispose();
             _glContext = null;
@@ -205,7 +212,7 @@ namespace Microsoft.Xna.Framework {
             _concreteGame.iOSTick();
         }
 
-		private void CreateFramebuffer ()
+		private void CreateFramebuffer()
 		{
 			this.MakeCurrent();
 			
@@ -217,8 +224,8 @@ namespace Microsoft.Xna.Framework {
             int viewportHeight = (int)Math.Round(Layer.Bounds.Size.Height * Layer.ContentsScale);
             int viewportWidth = (int)Math.Round(Layer.Bounds.Size.Width * Layer.ContentsScale);
 
-			_glapi.GenFramebuffers (1, ref _framebuffer);
-            _glapi.BindFramebuffer (FramebufferTarget.Framebuffer, _framebuffer);
+			_glapi.GenFramebuffers(1, ref _framebuffer);
+            _glapi.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
 			// Create our Depth buffer. Color buffer must be the last one bound
             var gdm = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
@@ -248,14 +255,13 @@ namespace Microsoft.Xna.Framework {
 			//       on all but the first call.  Nevertheless, it
 			//       works.  Still, it would be nice to know why it
 			//       claims to have failed.
-            _glContext.Context.RenderBufferStorage ((uint) RenderbufferTarget.Renderbuffer, Layer);
+            _glContext.Context.RenderBufferStorage((uint)RenderbufferTarget.Renderbuffer, Layer);
 			
-            _glapi.FramebufferRenderbuffer (FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
+            _glapi.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
 			
 			var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
 			if (status != FramebufferErrorCode.FramebufferComplete)
-				throw new InvalidOperationException (
-					"Framebuffer was not created correctly: " + status);
+				throw new InvalidOperationException("Framebuffer was not created correctly: " + status);
 
 			_glapi.Viewport(0, 0, viewportWidth, viewportHeight);
             _glapi.Scissor(0, 0, viewportWidth, viewportHeight);
@@ -288,8 +294,7 @@ namespace Microsoft.Xna.Framework {
 
 				gds.GraphicsDevice.Viewport = new Viewport(
 					0, 0,
-					pp.BackBufferWidth,
-					pp.BackBufferHeight);
+					pp.BackBufferWidth, pp.BackBufferHeight);
 				
 				// FIXME: These static methods on GraphicsDevice need
 				//        to go away someday.
@@ -300,37 +305,41 @@ namespace Microsoft.Xna.Framework {
                 Threading.BackgroundContext = new OpenGLES.EAGLContext(_glContext.Context.API, _glContext.Context.ShareGroup);
 		}
 
-		private void DestroyFramebuffer ()
+		private void DestroyFramebuffer()
 		{
-			AssertNotDisposed ();
-			AssertValidContext ();
+			AssertNotDisposed();
+			AssertValidContext();
 
             _glContext.MakeCurrent();
 
-			_glapi.DeleteFramebuffers (1, ref _framebuffer);
+			_glapi.DeleteFramebuffers(1, ref _framebuffer);
 			_framebuffer = 0;
 
-			_glapi.DeleteRenderbuffers (1, ref _colorbuffer);
+			_glapi.DeleteRenderbuffers(1, ref _colorbuffer);
 			_colorbuffer = 0;
 			
             if (_depthbuffer != 0)
             {
-			    _glapi.DeleteRenderbuffers (1, ref _depthbuffer);
+			    _glapi.DeleteRenderbuffers(1, ref _depthbuffer);
 			    _depthbuffer = 0;
             }
 		}
 
-        private static readonly FramebufferAttachment[] attachements = new FramebufferAttachment[] { FramebufferAttachment.DepthAttachment, FramebufferAttachment.StencilAttachment };
+        private static readonly FramebufferAttachment[] attachements = new FramebufferAttachment[]
+        {
+            FramebufferAttachment.DepthAttachment, 
+            FramebufferAttachment.StencilAttachment 
+        };
 
 		// FIXME: This logic belongs in GraphicsDevice.Present, not
 		//        here.  If it can someday be moved there, then the
 		//        normal call to Present in Game.Tick should cover
 		//        this.  For now, ConcreteGame will call Present
 		//        in the Draw/Update loop handler.
-		public void Present ()
+		public void Present()
 		{
-            AssertNotDisposed ();
-            AssertValidContext ();
+            AssertNotDisposed();
+            AssertValidContext();
 
             this.MakeCurrent();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, this._colorbuffer);
@@ -339,10 +348,10 @@ namespace Microsoft.Xna.Framework {
 		}
 
 		// FIXME: This functionality belongs in GraphicsDevice.
-		public void MakeCurrent ()
+		public void MakeCurrent()
 		{
-			AssertNotDisposed ();
-			AssertValidContext ();
+			AssertNotDisposed();
+			AssertValidContext();
 
             if (!_glContext.IsCurrent)
             {
@@ -350,9 +359,9 @@ namespace Microsoft.Xna.Framework {
             }
 		}
 
-		public override void LayoutSubviews ()
+		public override void LayoutSubviews()
 		{
-			base.LayoutSubviews ();
+			base.LayoutSubviews();
 
             var gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
@@ -360,40 +369,38 @@ namespace Microsoft.Xna.Framework {
                 return;
 
 			if (_framebuffer != 0)
-				DestroyFramebuffer ();
+				DestroyFramebuffer();
 			if (_glContext == null)
                 CreateGLContext();
-			CreateFramebuffer ();
+			CreateFramebuffer();
 		}
 
 		#region UIWindow Notifications
 
-		[Export ("didMoveToWindow")]
-		public virtual void DidMoveToWindow ()
+		[Export("didMoveToWindow")]
+		public virtual void DidMoveToWindow()
 		{
-
-            if (Window != null) {
-                
+            if (Window != null) 
+            {
                 if (_glContext == null)
                     CreateGLContext();
                 if (_framebuffer == 0)
-                    CreateFramebuffer ();
+                    CreateFramebuffer();
             }
 		}
 
 		#endregion UIWindow Notifications
 
-		private void AssertNotDisposed ()
+		private void AssertNotDisposed()
 		{
 			if (_isDisposed)
-				throw new ObjectDisposedException (GetType ().Name);
+				throw new ObjectDisposedException(GetType().Name);
 		}
 
-		private void AssertValidContext ()
+		private void AssertValidContext()
 		{
 			if (_glContext == null)
-				throw new InvalidOperationException (
-                     "GLGraphicsContext must be created for this operation to succeed.");
+				throw new InvalidOperationException("GLGraphicsContext must be created for this operation to succeed.");
 		}
 	}
 }
