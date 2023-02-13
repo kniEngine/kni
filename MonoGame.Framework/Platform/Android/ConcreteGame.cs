@@ -69,7 +69,10 @@ namespace Microsoft.Xna.Platform
         public override bool BeforeDraw(GameTime gameTime)
         {
             PrimaryThreadLoader.DoLoads();
-            return !IsPlayingVideo;
+            if (ConcreteGame.IsPlayingVideo)
+                return false;
+
+            return true;
         }
 
         public override void BeforeInitialize()
