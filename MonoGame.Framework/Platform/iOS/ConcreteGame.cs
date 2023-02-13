@@ -176,9 +176,8 @@ namespace Microsoft.Xna.Platform
             base.Tick();
         }
 
-        [Obsolete(
-            "ConcreteGame.IsPlayingVideo must be removed when MonoGame " +
-            "fully implements the XNA VideoPlayer contract.")]
+        [Obsolete("ConcreteGame.IsPlayingVideo must be removed when MonoGame " +
+                  "fully implements the XNA VideoPlayer contract.")]
         public bool IsPlayingVideo { get; set; }
 
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
@@ -237,7 +236,7 @@ namespace Microsoft.Xna.Platform
             if (!Game.IsActive)
                 return;
 
-            if (IsPlayingVideo)
+            if (this.IsPlayingVideo)
                 return;
 
             // FIXME: Remove this call, and the whole Tick method, once
@@ -249,21 +248,18 @@ namespace Microsoft.Xna.Platform
             Game.Tick();
             Threading.Run();
 
-            if (!IsPlayingVideo)
-            {
-                if (Game.GraphicsDevice != null)
-                {
-                    // GraphicsDevice.Present() takes care of actually 
-                    // disposing resources disposed from a non-ui thread
-                    Game.GraphicsDevice.Present();
-                }
-                _viewController.View.Present();
-            }
+            if (this.IsPlayingVideo)
+                return;
+
+            if (Game.GraphicsDevice != null)
+                Game.GraphicsDevice.Present();
+
+            _viewController.View.Present();
         }
 
         public override bool BeforeDraw()
         {
-            if (IsPlayingVideo)
+            if (this.IsPlayingVideo)
                 return false;
 
             return true;
@@ -271,7 +267,7 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeUpdate()
         {
-            if (IsPlayingVideo)
+            if (this.IsPlayingVideo)
                 return false;
 
             return true;
