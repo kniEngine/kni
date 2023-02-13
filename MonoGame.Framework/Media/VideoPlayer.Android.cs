@@ -42,14 +42,14 @@ namespace Microsoft.Xna.Framework.Media
             _currentVideo.Player.SetDisplay(((AndroidGameWindow)_game.Window).GameView.Holder);
             _currentVideo.Player.Start();
 
-            ConcreteGame.IsPlayingVdeo = true;
+            ConcreteGame.IsPlayingVideo = true;
         }
 
         private void PlatformStop()
         {
             _currentVideo.Player.Stop();
 
-            ConcreteGame.IsPlayingVdeo = false;
+            ConcreteGame.IsPlayingVideo = false;
             _currentVideo.Player.SetDisplay(null);
         }
 

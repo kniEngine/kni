@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform
         }
 
         private bool _initialized;
-        public static bool IsPlayingVdeo { get; set; }
+        public static bool IsPlayingVideo { get; set; }
         private AndroidGameWindow _gameWindow;
 
         public override void Exit()
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform
         public override bool BeforeDraw(GameTime gameTime)
         {
             PrimaryThreadLoader.DoLoads();
-            return !IsPlayingVdeo;
+            return !IsPlayingVideo;
         }
 
         public override void BeforeInitialize()
