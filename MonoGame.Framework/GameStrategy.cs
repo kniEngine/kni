@@ -274,7 +274,7 @@ namespace Microsoft.Xna.Platform
         /// </summary>
         /// <param name="gameTime"></param>
         /// <returns></returns>
-        public abstract bool BeforeDraw(GameTime gameTime);
+        public abstract bool BeforeDraw();
 
         /// <summary>
         /// When implemented in a derived class, causes the game to enter

@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             throw new PlatformNotSupportedException();
         }

@@ -314,7 +314,7 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw(GameTime gameTime)
+        public override bool BeforeDraw()
         {
             return true;
         }
