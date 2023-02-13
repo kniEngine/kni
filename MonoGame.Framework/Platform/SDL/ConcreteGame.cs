@@ -309,7 +309,7 @@ namespace Microsoft.Xna.Platform
             Interlocked.Increment(ref _isExiting);
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             return true;
         }

@@ -569,7 +569,7 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            if (Strategy.BeforeUpdate(gameTime))
+            if (Strategy.BeforeUpdate())
             {
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 				

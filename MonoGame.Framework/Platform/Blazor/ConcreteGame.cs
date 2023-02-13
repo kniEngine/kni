@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform
             Window = null;
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             return true;
         }

@@ -265,7 +265,7 @@ namespace Microsoft.Xna.Platform
         /// </summary>
         /// <param name="gameTime"></param>
         /// <returns></returns>
-        public abstract bool BeforeUpdate(GameTime gameTime);
+        public abstract bool BeforeUpdate();
 
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Draw

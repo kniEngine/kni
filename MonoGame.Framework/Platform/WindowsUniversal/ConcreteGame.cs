@@ -233,7 +233,7 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             TouchQueue.ProcessQueued();
             return true;

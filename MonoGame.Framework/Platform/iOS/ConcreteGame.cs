@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             if (IsPlayingVideo)
                 return false;

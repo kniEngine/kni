@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform
             throw new NotImplementedException();
         }
 
-        public override bool BeforeUpdate(GameTime gameTime)
+        public override bool BeforeUpdate()
         {
             if (!_initialized)
             {
