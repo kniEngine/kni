@@ -257,5 +257,20 @@ namespace Microsoft.Xna.Platform
             base.Game.Strategy.OnPresentationChanged(args.PresentationParameters);
         }
 
+
+        #region IGraphicsDeviceManager strategy
+
+        public override bool BeginDraw()
+        {
+            return base.BeginDraw();
+        }
+
+        public override void EndDraw()
+        {
+            base.EndDraw();
+        }
+
+        #endregion IGraphicsDeviceManager strategy
+
     }
 }

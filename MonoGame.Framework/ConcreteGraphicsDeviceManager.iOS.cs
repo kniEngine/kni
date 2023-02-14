@@ -139,5 +139,20 @@ namespace Microsoft.Xna.Platform
 
         }
 
+
+        #region IGraphicsDeviceManager strategy
+
+        public override bool BeginDraw()
+        {
+            return base.BeginDraw();
+        }
+
+        public override void EndDraw()
+        {
+            base.EndDraw();
+        }
+
+        #endregion IGraphicsDeviceManager strategy
+
     }
 }

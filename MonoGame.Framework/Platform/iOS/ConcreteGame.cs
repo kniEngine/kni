@@ -386,5 +386,9 @@ namespace Microsoft.Xna.Platform
 			}
 			
 		}
+
+        public override void EndDraw()
+        {
+        }
 	}
 }

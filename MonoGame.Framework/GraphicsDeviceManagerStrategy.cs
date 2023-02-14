@@ -81,10 +81,14 @@ namespace Microsoft.Xna.Platform
 
         public virtual void EndDraw()
         {
-            if (_graphicsDevice != null && _isDrawing)
+            var device = this.GraphicsDevice;
+            if (device != null)
             {
-                _isDrawing = false;
-                _graphicsDevice.Present();
+                if (_isDrawing)
+                {
+                    _isDrawing = false;
+                    _graphicsDevice.Present();
+                }
             }
         }
 
