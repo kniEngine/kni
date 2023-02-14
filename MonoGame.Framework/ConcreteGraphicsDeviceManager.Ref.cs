@@ -44,10 +44,25 @@ namespace Microsoft.Xna.Platform
             base.ApplyChanges();
         }
 
+
+        #region IGraphicsDeviceManager strategy
+
         public override void CreateDevice()
         {
             base.CreateDevice();
         }
+
+        public override bool BeginDraw()
+        {
+            return base.BeginDraw();
+        }
+
+        public override void EndDraw()
+        {
+            base.EndDraw();
+        }
+
+        #endregion IGraphicsDeviceManager strategy
 
     }
 }
