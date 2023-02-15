@@ -20,14 +20,16 @@ namespace Microsoft.Xna.Platform
         #region Fields
 
         private GameServiceContainer _services;
-        internal GameComponentCollection _components;
-        internal ContentManager _content;
+        private ContentManager _content;
+        private GameComponentCollection _components;
+        private DrawableComponents _drawableComponents = new DrawableComponents();
+        private UpdateableComponents _updateableComponents = new UpdateableComponents();
 
         private TimeSpan _targetElapsedTime = TimeSpan.FromTicks(166666); // 60fps
         private TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
 
         private TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds(500);
-        
+
         private bool _isFixedTimeStep = true;
 
         private bool _shouldExit;
@@ -42,7 +44,7 @@ namespace Microsoft.Xna.Platform
 
         #region Construction/Destruction
 
-		protected GameStrategy(Game game)
+        protected GameStrategy(Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
@@ -120,7 +122,7 @@ namespace Microsoft.Xna.Platform
             get { return _isVisible; }
             internal set { _isVisible = value; }
         }
-        
+
         private bool _isMouseVisible;
         public virtual bool IsMouseVisible
         {
@@ -180,7 +182,7 @@ namespace Microsoft.Xna.Platform
         {
             get { return _targetElapsedTime; }
             set
-            {            
+            {
                 if (value <= TimeSpan.Zero)
                     throw new ArgumentOutOfRangeException("TargetElapsedTime must be positive and non-zero.");
 
@@ -246,6 +248,49 @@ namespace Microsoft.Xna.Platform
         {
             IsActive = true;
         }
+
+        internal void InitializeComponents()
+        {
+            // We need to do this after virtual Initialize(...) is called.
+            // 1. Categorize components into IUpdateable and IDrawable lists.
+            // 2. Subscribe to Added/Removed events to keep the categorized
+            //    lists synced and to Initialize future components as they are
+            //    added.            
+
+            _updateableComponents.ClearUpdatables();
+            _drawableComponents.ClearDrawables();
+            for (int i = 0; i < Components.Count; i++)
+            {
+                if (Components[i] is IUpdateable)
+                    _updateableComponents.AddUpdatable((IUpdateable)Components[i]);
+                if (Components[i] is IDrawable)
+                    _drawableComponents.AddDrawable((IDrawable)Components[i]);
+            }
+
+            Components.ComponentAdded += Components_ComponentAdded;
+            Components.ComponentRemoved += Components_ComponentRemoved;
+        }
+
+        private void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
+        {
+            // Since we only subscribe to ComponentAdded after the graphics
+            // devices are set up, it is safe to just blindly call Initialize.
+            e.GameComponent.Initialize();
+
+            if (e.GameComponent is IUpdateable)
+                _updateableComponents.AddUpdatable((IUpdateable)e.GameComponent);
+            if (e.GameComponent is IDrawable)
+                _drawableComponents.AddDrawable((IDrawable)e.GameComponent);
+        }
+
+        private void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
+        {
+            if (e.GameComponent is IUpdateable)
+                _updateableComponents.RemoveUpdatable((IUpdateable)e.GameComponent);
+            if (e.GameComponent is IDrawable)
+                _drawableComponents.RemoveDrawable((IDrawable)e.GameComponent);
+        }
+
 
         /// <summary>
         /// When implemented in a derived, ends the active run loop.
@@ -330,7 +375,17 @@ namespace Microsoft.Xna.Platform
             _currElapsedTime = TimeSpan.Zero;
             _prevElapsedTime = TimeSpan.Zero;
         }
-        
+
+        internal void Update(GameTime gameTime)
+        {
+            _updateableComponents.UpdateEnabledComponent(gameTime);
+        }
+
+        internal void Draw(GameTime gameTime)
+        {
+            _drawableComponents.DrawVisibleComponents(gameTime);
+        }
+
         /// <summary>
         /// Supress calling <see cref="Draw"/> in the game loop.
         /// </summary>
@@ -338,6 +393,7 @@ namespace Microsoft.Xna.Platform
         {
             _suppressDraw = true;
         }
+
         public virtual bool BeginDraw()
         {
             return true;
@@ -386,7 +442,7 @@ namespace Microsoft.Xna.Platform
 #endif
             }
 
-        RetryTick:
+            RetryTick:
 
             // Advance the accumulated elapsed time.
             TimeSpan elapsedTime = Timer.Elapsed;
@@ -497,16 +553,36 @@ namespace Microsoft.Xna.Platform
                 _isDisposed = true;
             }
         }
-		
-		/// <summary>
-		/// Log the specified Message.
-		/// </summary>
-		/// <param name='Message'>
-		/// 
-		/// </param>
-		[System.Diagnostics.Conditional("DEBUG")]
-		public virtual void Log(string Message) {}
-			
+
+        // Dispose loaded game components
+        internal void DisposeComponentsAndContent(bool disposing)
+        {
+            if (disposing)
+            {
+                for (int i = 0; i < _components.Count; i++)
+                {
+                    var disposable = _components[i] as IDisposable;
+                    if (disposable != null)
+                        disposable.Dispose();
+                }
+                _components = null;
+
+                if (_content != null)
+                {
+                    _content.Dispose();
+                    _content = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Log the specified Message.
+        /// </summary>
+        /// <param name='Message'>
+        /// 
+        /// </param>
+        [System.Diagnostics.Conditional("DEBUG")]
+        public virtual void Log(string Message) { }
 
         #endregion
     }
