@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Framework
         internal GameStrategy Strategy { get; private set; }
 
         private IGraphicsDeviceManager _graphicsDeviceManager;
-        private IGraphicsDeviceService _graphicsDeviceService;
 
         private bool _initialized = false;
 
@@ -228,17 +227,7 @@ namespace Microsoft.Xna.Framework
         /// </exception>
         public GraphicsDevice GraphicsDevice
         {
-            get
-            {
-                if (_graphicsDeviceService == null)
-                {
-                    _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
-
-                    if (_graphicsDeviceService == null)
-                        throw new InvalidOperationException("No Graphics Device Service");
-                }
-                return _graphicsDeviceService.GraphicsDevice;
-            }
+            get { return Strategy.GraphicsDevice; }
         }
 
         /// <summary>
@@ -456,10 +445,10 @@ namespace Microsoft.Xna.Framework
             // Initialize all existing components
             InitializeExistingComponents();
 
-            _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
-            if (_graphicsDeviceService != null)
+            Strategy._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+            if (Strategy._graphicsDeviceService != null)
             {
-                if (_graphicsDeviceService.GraphicsDevice != null)
+                if (Strategy._graphicsDeviceService.GraphicsDevice != null)
                     LoadContent();
             }
         }
@@ -563,8 +552,11 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            if (GraphicsDevice == null && graphicsDeviceManager != null)
-                ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
+            if (Strategy.GraphicsDevice == null)
+            {
+                if (graphicsDeviceManager != null)
+                    ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
+            }
 
             Strategy.BeforeInitialize();
             Initialize();

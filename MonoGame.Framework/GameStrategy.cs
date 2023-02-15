@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Platform
         #region Fields
 
         private GameServiceContainer _services;
+        internal IGraphicsDeviceService _graphicsDeviceService;
+
         private ContentManager _content;
         private GameComponentCollection _components;
         private DrawableComponents _drawableComponents = new DrawableComponents();
@@ -88,6 +90,22 @@ namespace Microsoft.Xna.Platform
                     throw new ArgumentNullException();
 
                 _content = value;
+            }
+        }
+
+
+        public GraphicsDevice GraphicsDevice
+        {
+            get
+            {
+                if (_graphicsDeviceService == null)
+                {
+                    _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+
+                    if (_graphicsDeviceService == null)
+                        throw new InvalidOperationException("No Graphics Device Service");
+                }
+                return _graphicsDeviceService.GraphicsDevice;
             }
         }
 
