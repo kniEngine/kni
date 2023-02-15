@@ -111,8 +111,8 @@ namespace Microsoft.Xna.Platform
             if (_runInMainThread)
                 _enableRunLoop = false;
 
-            if (this.Game.GraphicsDevice != null)
-                this.Game.GraphicsDevice.Trim();
+            if (this.GraphicsDevice != null)
+                this.GraphicsDevice.Trim();
         }
 
         private void CoreApplication_Resuming(object sender, Object e)
@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeDraw()
         {
-            var device = Game.GraphicsDevice;
+            var device = this.GraphicsDevice;
             if (device != null)
             {
 				// For a UAP app we need to re-apply the
@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
-            var device = Game.GraphicsDevice;
+            var device = this.GraphicsDevice;
             if (device != null)
                 device.Present();
         }

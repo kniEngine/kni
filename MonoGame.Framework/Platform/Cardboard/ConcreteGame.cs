@@ -208,7 +208,7 @@ namespace Microsoft.Xna.Platform
         {
             try
             {
-                var device = Game.GraphicsDevice;
+                var device = this.GraphicsDevice;
                 if (device != null)
                     device.Present();
 

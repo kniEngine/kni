@@ -233,7 +233,7 @@ namespace Microsoft.Xna.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    _concreteGame.Game.GraphicsDevice.OnPresentationChanged();
+                    _concreteGame.GraphicsDevice.OnPresentationChanged();
             }
         }
 
@@ -334,10 +334,13 @@ namespace Microsoft.Xna.Framework
             var raiseClientSizeChanged = false;
             if (pp.IsFullScreen && pp.HardwareModeSwitch && IsFullScreen && HardwareModeSwitch)
             {
-                if( _concreteGame.IsActive ) {
+                if(_concreteGame.IsActive)
+                {
                     // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
-                   // _concreteGame.Game.GraphicsDevice.ResizeTargets();
-                } else {
+                   // _concreteGame.GraphicsDevice.ResizeTargets();
+                }
+                else
+                {
                     // This needs to be called in case the user presses the Windows key while the focus is on the second monitor,
                     //	which (sometimes) causes the window to exit fullscreen mode, but still keeps it visible
                     MinimizeFullScreen();

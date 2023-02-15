@@ -251,8 +251,8 @@ namespace Microsoft.Xna.Platform
             if (this.IsPlayingVideo)
                 return;
 
-            if (Game.GraphicsDevice != null)
-                Game.GraphicsDevice.Present();
+            if (this.GraphicsDevice != null)
+                this.GraphicsDevice.Present();
 
             _viewController.View.Present();
         }

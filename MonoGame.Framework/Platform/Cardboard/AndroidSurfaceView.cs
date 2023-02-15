@@ -222,8 +222,8 @@ namespace Microsoft.Xna.Framework
 
                     _glContextAvailable = false;
 
-                    if (_game.GraphicsDevice != null)
-                        _game.GraphicsDevice.Android_OnDeviceResetting();
+                    if (_game.Strategy.GraphicsDevice != null)
+                        _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
                 }
                 
                 _appState = AppState.Exited;
@@ -312,8 +312,8 @@ namespace Microsoft.Xna.Framework
                     _glContextAvailable = false;
                     contextLost = true;
 
-                    if (_game.GraphicsDevice != null)
-                        _game.GraphicsDevice.Android_OnDeviceResetting();
+                    if (_game.Strategy.GraphicsDevice != null)
+                        _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
                 }
 
                 CreateGLContext();
@@ -781,7 +781,7 @@ namespace Microsoft.Xna.Framework
 
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
-                if (_game.GraphicsDevice != null)
+                if (_game.Strategy.GraphicsDevice != null)
                     _game.graphicsDeviceManager.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
 
                 if (MonoGame.OpenGL.GL.GetError == null)
@@ -807,9 +807,9 @@ namespace Microsoft.Xna.Framework
         {
             System.Diagnostics.Debug.Assert(_lostglContext == true);
 
-            if (_game.GraphicsDevice != null)
+            if (_game.Strategy.GraphicsDevice != null)
             {
-                _game.GraphicsDevice.Android_ReInitializeContext();
+                _game.Strategy.GraphicsDevice.Android_ReInitializeContext();
 
                 IsResuming = true;
                 if (_gameWindow.Resumer != null)
@@ -826,7 +826,7 @@ namespace Microsoft.Xna.Framework
                         Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                         // DeviceReset events
-                        _game.GraphicsDevice.Android_OnDeviceReset();
+                        _game.Strategy.GraphicsDevice.Android_OnDeviceReset();
 
                         IsResuming = false;
                     });
