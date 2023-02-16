@@ -337,13 +337,6 @@ namespace Microsoft.Xna.Platform
             _view.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight);
         }
 
-        public override void EndDraw()
-        {
-            var device = this.GraphicsDevice;
-            if (device != null)
-                device.Present();
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (_view != null)

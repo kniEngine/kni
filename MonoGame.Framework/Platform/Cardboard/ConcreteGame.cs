@@ -196,21 +196,5 @@ namespace Microsoft.Xna.Platform
         {
             base.Tick();
         }
-
-        public override void EndDraw()
-        {
-            try
-            {
-                var device = this.GraphicsDevice;
-                if (device != null)
-                    device.Present();
-
-                _gameWindow.GameView.SwapBuffers();
-            }
-            catch (Exception ex)
-            {
-                Android.Util.Log.Error("Error in swap buffers", ex.ToString());
-            }
-        }
     }
 }

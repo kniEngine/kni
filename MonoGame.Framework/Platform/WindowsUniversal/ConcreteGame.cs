@@ -276,13 +276,6 @@ namespace Microsoft.Xna.Platform
                 ExitFullScreen();
         }
 
-        public override void EndDraw()
-        {
-            var device = this.GraphicsDevice;
-            if (device != null)
-                device.Present();
-        }
-
         public override bool IsMouseVisible
         {
             get { return base.IsMouseVisible; }

@@ -149,7 +149,8 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
-            base.EndDraw();
+            //base.EndDraw();
+
         }
 
         #endregion IGraphicsDeviceManager strategy
