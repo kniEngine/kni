@@ -240,15 +240,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw()
-        {
-            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
-            if (gdm != null)
-                return gdm.BeginDraw();
-
-            return true;
-        }
-
         public override void EnterFullScreen()
         {
             if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())

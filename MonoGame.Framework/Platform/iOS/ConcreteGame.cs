@@ -257,15 +257,6 @@ namespace Microsoft.Xna.Platform
             _viewController.View.Present();
         }
 
-        public override bool BeforeDraw()
-        {
-            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
-            if (gdm != null)
-                return gdm.BeginDraw();
-
-            return true;
-        }
-
         public override bool BeforeUpdate()
         {
             if (this.IsPlayingVideo)
