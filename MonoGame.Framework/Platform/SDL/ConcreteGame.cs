@@ -337,11 +337,6 @@ namespace Microsoft.Xna.Platform
             _view.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight);
         }
 
-        public override void Log(string message)
-        {
-            Console.WriteLine(message);
-        }
-
         public override void EndDraw()
         {
             var device = this.GraphicsDevice;

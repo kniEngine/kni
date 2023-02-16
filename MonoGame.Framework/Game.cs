@@ -50,12 +50,6 @@ namespace Microsoft.Xna.Framework
             Dispose(false);
         }
 
-		[System.Diagnostics.Conditional("DEBUG")]
-		internal void Log(string Message)
-		{
-			if (Strategy != null) Strategy.Log(Message);
-		}
-
         void Platform_Activated(object sender, EventArgs e) { OnActivated(e); }
         void Platform_Deactivated(object sender, EventArgs e) { OnDeactivated(e); }
 

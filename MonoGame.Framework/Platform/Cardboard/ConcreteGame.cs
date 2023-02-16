@@ -197,13 +197,6 @@ namespace Microsoft.Xna.Platform
             base.Tick();
         }
 
-        public override void Log(string Message)
-        {
-#if LOGGING
-            Android.Util.Log.Debug("MonoGameDebug", Message);
-#endif
-        }
-
         public override void EndDraw()
         {
             try

@@ -593,15 +593,6 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        /// <summary>
-        /// Log the specified Message.
-        /// </summary>
-        /// <param name='Message'>
-        /// 
-        /// </param>
-        [System.Diagnostics.Conditional("DEBUG")]
-        public virtual void Log(string Message) { }
-
         #endregion
     }
 }

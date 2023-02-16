@@ -112,11 +112,6 @@ namespace Microsoft.Xna.Platform
             _window.OnPresentationChanged(pp);
         }
 
-        public override void Log(string message)
-        {
-            Debug.WriteLine(message);
-        }
-
         public override void EndDraw()
         {
             var device = this.GraphicsDevice;
