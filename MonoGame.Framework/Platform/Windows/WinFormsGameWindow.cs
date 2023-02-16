@@ -296,7 +296,7 @@ namespace MonoGame.Framework
             if (_lastFormState == Form.WindowState)
                 _wasMoved = true;
 
-            if (_game.Window == this && Form.WindowState != FormWindowState.Minimized)
+            if (_concreteGame.Window == this && Form.WindowState != FormWindowState.Minimized)
             {
                 // we may need to restore full screen when coming back from a minimized window
                 if (_lastFormState == FormWindowState.Minimized)
@@ -311,7 +311,7 @@ namespace MonoGame.Framework
         private void OnResizeEnd(object sender, EventArgs eventArgs)
         {
             _wasMoved = true;
-            if (_game.Window == this)
+            if (_concreteGame.Window == this)
             {
                 UpdateBackBufferSize();
                 RefreshAdapter();
