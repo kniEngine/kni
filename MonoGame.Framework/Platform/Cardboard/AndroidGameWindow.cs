@@ -72,8 +72,6 @@ namespace Microsoft.Xna.Framework
         {
             GameView.MakeCurrentContext();
 
-            Threading.Run();
-
             if (_game != null)
             {
                 if (!GameView.IsResuming && ((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
@@ -91,9 +89,6 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            GameView.MakeCurrentContext();
-
-            Threading.Run();
         }
 
         #endregion
