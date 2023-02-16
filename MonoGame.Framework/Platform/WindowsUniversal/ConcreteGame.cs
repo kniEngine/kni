@@ -276,11 +276,6 @@ namespace Microsoft.Xna.Platform
                 ExitFullScreen();
         }
 
-        public override void Log(string Message)
-        {
-            Debug.WriteLine(Message);
-        }
-
         public override void EndDraw()
         {
             var device = this.GraphicsDevice;
