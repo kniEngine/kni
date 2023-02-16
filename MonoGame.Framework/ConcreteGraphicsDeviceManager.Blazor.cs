@@ -181,7 +181,11 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
-            base.EndDraw();
+            //base.EndDraw();
+
+            var device = Game.GraphicsDevice;
+            if (device != null)
+                device.Present();
         }
 
         #endregion IGraphicsDeviceManager strategy

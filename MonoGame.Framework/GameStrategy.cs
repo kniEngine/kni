@@ -419,6 +419,10 @@ namespace Microsoft.Xna.Platform
 
         public virtual void EndDraw()
         {
+            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                gdm.EndDraw();
+
         }
 
         /// <summary>

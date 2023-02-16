@@ -205,7 +205,21 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
-            base.EndDraw();
+            //base.EndDraw();
+
+            try
+            {
+                var device = this.GraphicsDevice;
+                if (device != null)
+                    device.Present();
+
+                AndroidGameWindow androidGameWindow = (AndroidGameWindow)Game.Window;
+                androidGameWindow.GameView.SwapBuffers();
+            }
+            catch (Exception ex)
+            {
+                Android.Util.Log.Error("Error in swap buffers", ex.ToString());
+            }
         }
 
         #endregion IGraphicsDeviceManager strategy

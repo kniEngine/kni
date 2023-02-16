@@ -56,10 +56,5 @@ namespace Microsoft.Xna.Platform
         {
             throw new PlatformNotSupportedException();
         }
-
-        public override void EndDraw()
-        {
-            throw new PlatformNotSupportedException();
-        }
     }
 }

@@ -112,13 +112,6 @@ namespace Microsoft.Xna.Platform
             _window.OnPresentationChanged(pp);
         }
 
-        public override void EndDraw()
-        {
-            var device = this.GraphicsDevice;
-            if (device != null)
-                device.Present();
-        }
-		
         protected override void Dispose(bool disposing)
         {
             if (disposing)
