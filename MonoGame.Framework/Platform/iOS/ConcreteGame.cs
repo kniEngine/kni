@@ -246,7 +246,6 @@ namespace Microsoft.Xna.Platform
             //        directly to NSTimer.CreateRepeatingTimer.
             _viewController.View.MakeCurrent();
             Game.Tick();
-            Threading.Run();
 
             if (this.IsPlayingVideo)
                 return;
