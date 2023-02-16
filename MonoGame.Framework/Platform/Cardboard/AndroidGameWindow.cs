@@ -80,9 +80,9 @@ namespace Microsoft.Xna.Framework
                 {
                     _game.Tick();
                 }
-                else if (_game.GraphicsDevice != null)
+                else if (_game.Strategy.GraphicsDevice != null)
                 {
-                    _game.GraphicsDevice.Clear(Color.Black);
+                    _game.Strategy.GraphicsDevice.Clear(Color.Black);
                     if (GameView.IsResuming && Resumer != null)
                     {
                         Resumer.Draw();

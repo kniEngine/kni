@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Media
             MediaManager.Startup();
 
             _devManager = new DXGIDeviceManager();
-            _devManager.ResetDevice(Game.Instance.GraphicsDevice.D3DDevice);
+            _devManager.ResetDevice(Game.Instance.Strategy.GraphicsDevice.D3DDevice);
 
             using (var factory = new MediaEngineClassFactory())
             using (var attributes = new MediaEngineAttributes
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Media
             if (!_mediaEngine.HasVideo() || !_mediaEngine.OnVideoStreamTick(out pts))
                 return _lastFrame;
 
-            _lastFrame = new Texture2D(Game.Instance.GraphicsDevice,
+            _lastFrame = new Texture2D(Game.Instance.Strategy.GraphicsDevice,
                                         _currentVideo.Width,
                                         _currentVideo.Height,
                                         false,

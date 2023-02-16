@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform
             }
             else
             {
-                var pp = Game.GraphicsDevice.PresentationParameters;
+                var pp = this.GraphicsDevice.PresentationParameters;
                 _window.Initialize(pp);
             }
         }
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
-            var device = Game.GraphicsDevice;
+            var device = this.GraphicsDevice;
             if (device != null)
                 device.Present();
         }
