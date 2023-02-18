@@ -76,9 +76,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var texRect = glyph.Subrect;
                 output.Glyphs.Add(texRect);
 
-                var cropping = new Rectangle(
-                    (int)glyph.XOffset, (int)glyph.YOffset,
-                    glyph.Width, glyph.Height);
+                Rectangle cropping;
+                cropping.X = (int)glyph.XOffset;
+                cropping.Y = (int)glyph.YOffset;
+                cropping.Width = glyph.Width;
+                cropping.Height = glyph.Height;
                 output.Cropping.Add(cropping);
 
                 output.Kerning.Add(glyph.Kerning.ToVector3());
