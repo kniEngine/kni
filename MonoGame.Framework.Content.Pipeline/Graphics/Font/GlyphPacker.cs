@@ -13,20 +13,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Helper for arranging many small bitmaps onto a single larger surface.
     internal static class GlyphPacker
     {
-        public static BitmapContent ArrangeGlyphs(Glyph[] glyphs, bool requirePOT, bool requireSquare)
+        public static BitmapContent ArrangeGlyphs(ICollection<Glyph> glyphs, bool requirePOT, bool requireSquare)
         {
             // Build up a list of all the glyphs needing to be arranged.
             var arrangedGlyphs = new List<ArrangedGlyph>();
 
-            for (int i = 0; i < glyphs.Length; i++)
+            foreach (Glyph glyph in glyphs)
             {
                 ArrangedGlyph arrangedGlyph = new ArrangedGlyph();
 
-                arrangedGlyph.Source = glyphs[i];
+                arrangedGlyph.Source = glyph;
+                arrangedGlyph.Width = glyph.Subrect.Width;
+                arrangedGlyph.Height = glyph.Subrect.Height;
 
                 // Leave a one pixel border around every glyph in the output bitmap.
-                arrangedGlyph.Width = glyphs[i].Subrect.Width + 2;
-                arrangedGlyph.Height = glyphs[i].Subrect.Height + 2;
+                arrangedGlyph.Width += 2;
+                arrangedGlyph.Height += 2;
 
                 arrangedGlyphs.Add(arrangedGlyph);
             }
@@ -109,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
 
         // Heuristic guesses what might be a good output width for a list of glyphs.
-        static int GuessOutputWidth(Glyph[] sourceGlyphs)
+        static int GuessOutputWidth(ICollection<Glyph> sourceGlyphs)
         {
             int maxWidth = 0;
             int totalSize = 0;

@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values.ToArray(), requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
                 // Adjust line and character spacing.
                 lineSpacing += input.Spacing;
