@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             if (!File.Exists(fontFile))
-                throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font file.");
+                throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font from file \"+ fontFile +\".");
 
             context.Logger.LogMessage("Building Font {0}", fontFile);
 
@@ -77,11 +77,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
 
             {
-                if (!File.Exists(fontFile))
-                {
-                    throw new Exception(string.Format("Could not load {0}", fontFile));
-                }
-
                 var characters = new List<char>(input.Characters);
                 // add default character
                 if (input.DefaultCharacter != null)
