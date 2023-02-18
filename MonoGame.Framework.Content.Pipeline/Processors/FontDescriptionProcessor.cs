@@ -99,8 +99,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (glyphs.Count == 0)
                     throw new Exception("Font does not contain any glyphs.");
 
-                var glyphset = new HashSet<Glyph>(glyphs.Values);
-
                 // Optimize.
                 foreach (Glyph glyph in glyphs.Values)
                 {
