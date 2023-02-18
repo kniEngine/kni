@@ -91,9 +91,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 characters.Sort();
 
-                float lineSpacing = 0f;
-                int minYOffset = 0;
-                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, characters, out lineSpacing, out minYOffset, fontFile);
+                float metricsHeight  = 0f;
+                int metricsAscender  = 0; // The height used to calculate the Y offset for each character.
+                int metricsDescender = 0;
+                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, fontFile, characters, out metricsHeight, out metricsAscender, out metricsDescender);
 
                 // Validate.
                 if (glyphs.Count == 0)
@@ -109,9 +110,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 var face = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
-                // Adjust line and character spacing.
-                lineSpacing += input.Spacing;
-                output.VerticalLineSpacing = (int)lineSpacing;
+                // calculate line spacing.
+                output.VerticalLineSpacing = (int)(metricsHeight + input.Spacing);
 
                 foreach (char ch in glyphs.Keys)
                 {
@@ -124,9 +124,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     Rectangle cropping;
                     cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset + minYOffset);
+                    cropping.Y = (int)(glyph.YOffset + metricsAscender);
                     cropping.Width  = (int)glyph.XAdvance;
-                    cropping.Height = output.VerticalLineSpacing;
+                    cropping.Height = (int)(metricsHeight + input.Spacing);
                     output.Cropping.Add(cropping);
 
                     // Set the optional character kerning.
@@ -241,7 +241,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int minYOffset, string fontName)
+        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, string fontName, List<char> characters,
+            out float metricsHeight, out int metricsAscender, out int metricsDescender)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
@@ -274,11 +275,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     glyphs.Add(character, glyph);
                 }
 
-                // Store the font height.
-                lineSpacing = face.Size.Metrics.Height >> 6;
-
-                // The height used to calculate the Y offset for each character.
-                minYOffset =  face.Size.Metrics.Ascender >> 6;
+                metricsHeight = face.Size.Metrics.Height >> 6;
+                metricsAscender  = face.Size.Metrics.Ascender >> 6;
+                metricsDescender = face.Size.Metrics.Descender >> 6;
 
                 return glyphs;
             }
