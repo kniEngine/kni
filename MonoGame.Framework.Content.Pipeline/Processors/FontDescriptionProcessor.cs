@@ -204,29 +204,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 s = s.Trim();
 
                 var split = s.Split(':');
-                if (split.Length < 2)
-                    return string.Empty;
-
-                // check font family, fontconfig might return a fallback
-                if (split[1].Contains(","))
+                if (split.Length >= 2)
                 {
-                    // this file defines multiple family names
-                    var families = split[1].Split(',');
-                    foreach (var f in families)
+                    // check font family, fontconfig might return a fallback
+                    if (split[1].Contains(","))
                     {
-                        if (f.ToLowerInvariant() == input.FontName.ToLowerInvariant())
-                            return split[0];
-                    }
-                    // didn't find it
-                    return string.Empty;
-                }
-                else
-                {
-                    if (split[1].ToLowerInvariant() != input.FontName.ToLowerInvariant())
+                        // this file defines multiple family names
+                        var families = split[1].Split(',');
+                        foreach (var f in families)
+                        {
+                            if (f.ToLowerInvariant() == input.FontName.ToLowerInvariant())
+                                return split[0];
+                        }
+                        // didn't find it
                         return string.Empty;
-                }
+                    }
+                    else
+                    {
+                        if (split[1].ToLowerInvariant() != input.FontName.ToLowerInvariant())
+                            return string.Empty;
+                    }
 
-                return split[0];
+                    return split[0];
+                }
             }
 
             return String.Empty;
