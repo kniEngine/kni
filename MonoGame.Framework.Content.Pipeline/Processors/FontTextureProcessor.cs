@@ -86,25 +86,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             output.Texture.Faces[0].Add(face);
 
-            var bmp = output.Texture.Faces[0][0];
             if (PremultiplyAlpha)
             {
-                var data = bmp.GetPixelData();
-                var idx = 0;
-                for (; idx < data.Length;)
+                BitmapContent bmp = output.Texture.Faces[0][0];
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length;idx += 4)
                 {
-                    var r = data[idx + 0];
-                    var g = data[idx + 1];
-                    var b = data[idx + 2];
-                    var a = data[idx + 3];
-                    var col = Color.FromNonPremultiplied(r, g, b, a);
+                    byte r = data[idx + 0];
+                    byte g = data[idx + 1];
+                    byte b = data[idx + 2];
+                    byte a = data[idx + 3];
+                    Color col = Color.FromNonPremultiplied(r, g, b, a);
 
                     data[idx + 0] = col.R;
                     data[idx + 1] = col.G;
                     data[idx + 2] = col.B;
                     data[idx + 3] = col.A;
-
-                    idx += 4;
                 }
 
                 bmp.SetPixelData(data);
