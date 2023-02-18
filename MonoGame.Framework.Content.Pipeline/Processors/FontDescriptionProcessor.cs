@@ -99,11 +99,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (glyphs.Count == 0)
                     throw new Exception("Font does not contain any glyphs.");
 
-                // Optimize.
+                // Optimize glyphs.
                 foreach (Glyph glyph in glyphs.Values)
-                {
                     glyph.Crop();
-                }
 
                 // We need to know how to pack the glyphs.
                 bool requiresPot, requiresSquare;
