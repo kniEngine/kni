@@ -49,9 +49,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public BitmapContent Bitmap;
         public Rectangle Subrect;
 
+        public int FontBitmapLeft;
+        public int FontBitmapTop;
+
         // Layout information.
-        public float XOffset;
-        public float YOffset;
+        public int XOffset;
+        public int YOffset;
         public int Width;
         public int Height;
 
@@ -59,11 +62,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public GlyphKerning Kerning;
 
+        public float GlyphMetricTopBearing;
 #if DEBUG
         public float GlyphMetricLeftBearing;
         public float GlyphMetricWidth;
         public float GlyphMetricXAdvance;
-        public float GlyphBitmapLeft;
 #endif
 
         // Crops unused space from around the edge of a glyph bitmap.
@@ -72,10 +75,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Crop the top.
             while (Subrect.Height > 1 && IsAlphaEntirely(Bitmap, Subrect.X, Subrect.Y, Subrect.Width, 1))
             {
+                YOffset++;
                 Subrect.Y++;
                 Subrect.Height--;
-
-                YOffset++;
             }
 
             // Crop the bottom.
@@ -87,10 +89,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Crop the left.
             while (Subrect.Width > 1 && IsAlphaEntirely(Bitmap, Subrect.X, Subrect.Y, 1, Subrect.Height))
             {
+                XOffset++;
                 Subrect.X++;
                 Subrect.Width--;
-
-                XOffset++;
             }
 
             // Crop the right.

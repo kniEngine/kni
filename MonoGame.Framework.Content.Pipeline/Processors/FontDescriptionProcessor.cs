@@ -120,8 +120,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     output.Glyphs.Add(texRect);
 
                     Rectangle cropping;
-                    cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset + font.MetricsAscender);
+                    cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
+                    cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
                     cropping.Width  = (int)glyph.XAdvance;
                     cropping.Height = (int)(font.MetricsHeight + input.Spacing);
                     output.Cropping.Add(cropping);
@@ -344,16 +344,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Construct the output Glyph object.
             return new Glyph(glyphIndex, glyphBitmap)
             {
-                XOffset  =   face.Glyph.BitmapLeft,
-                XAdvance =  (face.Glyph.Metrics.HorizontalAdvance >> 6),
-                YOffset  = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
+                FontBitmapLeft = face.Glyph.BitmapLeft,
+                FontBitmapTop = face.Glyph.BitmapTop,
+
+                XOffset  = 0,
+                YOffset  = 0,
+                XAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
                 Kerning  = kerning,
 
+                GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY >> 6),
 #if DEBUG
                 GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX >> 6),
                 GlyphMetricWidth = (face.Glyph.Metrics.Width >> 6),
                 GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
-                GlyphBitmapLeft = face.Glyph.BitmapLeft,
 #endif
             };
         }
