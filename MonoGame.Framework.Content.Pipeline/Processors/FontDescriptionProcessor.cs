@@ -51,95 +51,60 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Get the platform specific texture profile.
             var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
 
+            var characters = new List<char>(input.Characters);
+            // add default character
+            if (input.DefaultCharacter != null)
             {
-                var characters = new List<char>(input.Characters);
-                // add default character
-                if (input.DefaultCharacter != null)
-                {
-                    if (!characters.Contains(input.DefaultCharacter.Value))
-                        characters.Add(input.DefaultCharacter.Value);
-                }
-                characters.Sort();
+                if (!characters.Contains(input.DefaultCharacter.Value))
+                    characters.Add(input.DefaultCharacter.Value);
+            }
+            characters.Sort();
 
-                FontContent font = ImportFont(input, fontFile, characters);
+            FontContent font = ImportFont(input, fontFile, characters);
 
-                // Validate.
-                if (font.Glyphs.Count == 0)
-                    throw new Exception("Font does not contain any glyphs.");
+            // Validate.
+            if (font.Glyphs.Count == 0)
+                throw new Exception("Font does not contain any glyphs.");
 
-                // Optimize glyphs.
-                foreach (Glyph glyph in font.Glyphs.Values)
-                    glyph.Crop();
+            // Optimize glyphs.
+            foreach (Glyph glyph in font.Glyphs.Values)
+                glyph.Crop();
 
-                // We need to know how to pack the glyphs.
-                bool requiresPot, requiresSquare;
-                texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
+            // We need to know how to pack the glyphs.
+            bool requiresPot, requiresSquare;
+            texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
+            var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
 
-                // calculate line spacing.
-                output.VerticalLineSpacing = (int)(font.MetricsHeight + input.Spacing);
+            // calculate line spacing.
+            output.VerticalLineSpacing = (int)(font.MetricsHeight + input.Spacing);
 
-                foreach (char ch in font.Glyphs.Keys)
-                {
-                    Glyph glyph = font.Glyphs[ch];
+            foreach (char ch in font.Glyphs.Keys)
+            {
+                Glyph glyph = font.Glyphs[ch];
 
-                    output.CharacterMap.Add(ch);
+                output.CharacterMap.Add(ch);
 
-                    var texRect = glyph.Subrect;
-                    output.Glyphs.Add(texRect);
+                var texRect = glyph.Subrect;
+                output.Glyphs.Add(texRect);
 
-                    Rectangle cropping;
-                    cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
-                    cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
-                    cropping.Width  = (int)glyph.XAdvance;
-                    cropping.Height = (int)(font.MetricsHeight + input.Spacing);
-                    output.Cropping.Add(cropping);
+                Rectangle cropping;
+                cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
+                cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
+                cropping.Width  = (int)glyph.XAdvance;
+                cropping.Height = (int)(font.MetricsHeight + input.Spacing);
+                output.Cropping.Add(cropping);
 
-                    // Set the optional character kerning.
-                    if (input.UseKerning)
-                        output.Kerning.Add(glyph.Kerning.ToVector3());
-                    else
-                        output.Kerning.Add(new Vector3(0, glyph.Width, 0));
-                }
-
-                output.Texture.Faces[0].Add(face);
+                // Set the optional character kerning.
+                if (input.UseKerning)
+                    output.Kerning.Add(glyph.Kerning.ToVector3());
+                else
+                    output.Kerning.Add(new Vector3(0, glyph.Width, 0));
             }
 
-            if (PremultiplyAlpha)
-            {
-                BitmapContent bmp = output.Texture.Faces[0][0];
-                byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length; idx += 4)
-                {
-                    byte r = data[idx + 0];
+            output.Texture.Faces[0].Add(face);
 
-                    // Special case of simply copying the R component into the A, since R is the value of white alpha we want
-                    data[idx + 0] = r;
-                    data[idx + 1] = r;
-                    data[idx + 2] = r;
-                    data[idx + 3] = r;
-                }
-
-                bmp.SetPixelData(data);
-            }
-            else
-            {
-                BitmapContent bmp = output.Texture.Faces[0][0];
-                byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length; idx += 4)
-                {
-                    byte r = data[idx + 0];
-
-                    // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
-                    data[idx + 0] = 255;
-                    data[idx + 1] = 255;
-                    data[idx + 2] = 255;
-                    data[idx + 3] = r;
-                }
-
-                bmp.SetPixelData(data);
-            }
+            ProcessPremultiplyAlpha(face);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -383,5 +348,38 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
+        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        {
+            if (PremultiplyAlpha)
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+
+                    // Special case of simply copying the R component into the A, since R is the value of white alpha we want
+                    data[idx + 0] = r;
+                    data[idx + 1] = r;
+                    data[idx + 2] = r;
+                    data[idx + 3] = r;
+                }
+                bmp.SetPixelData(data);
+            }
+            else
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+
+                    // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
+                    data[idx + 0] = 255;
+                    data[idx + 1] = 255;
+                    data[idx + 2] = 255;
+                    data[idx + 3] = r;
+                }
+                bmp.SetPixelData(data);
+            }
+        }
     }
 }

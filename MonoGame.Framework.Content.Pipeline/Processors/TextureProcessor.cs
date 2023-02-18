@@ -95,15 +95,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             BitmapContent.Copy(bmp, resized);
                         }
 
-                        if (PremultiplyAlpha)
-                        {
-                            for (int y = 0; y < bmp.Height; ++y)
-                            {
-                                var row = bmp.GetRow(y);
-                                for (int x = 0; x < bmp.Width; ++x)
-                                    row[x] = Color.FromNonPremultiplied(row[x]).ToVector4();
-                            }
-                        }
+                        ProcessPremultiplyAlpha(bmp);
 
                         face[m] = bmp;
                     }
@@ -119,6 +111,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             texProfile.ConvertTexture(context, input, TextureFormat, false);	
 
             return input;
+        }
+
+        private void ProcessPremultiplyAlpha(PixelBitmapContent<Vector4> bmp)
+        {
+            if (PremultiplyAlpha)
+            {
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    var row = bmp.GetRow(y);
+                    for (int x = 0; x < bmp.Width; x++)
+                    {
+                        row[x] = Color.FromNonPremultiplied(row[x]).ToVector4();
+                    }
+                }
+            }
         }
     }
 }

@@ -88,26 +88,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             output.Texture.Faces[0].Add(face);
 
-            if (PremultiplyAlpha)
-            {
-                BitmapContent bmp = output.Texture.Faces[0][0];
-                byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length;idx += 4)
-                {
-                    byte r = data[idx + 0];
-                    byte g = data[idx + 1];
-                    byte b = data[idx + 2];
-                    byte a = data[idx + 3];
-                    Color col = Color.FromNonPremultiplied(r, g, b, a);
-
-                    data[idx + 0] = col.R;
-                    data[idx + 1] = col.G;
-                    data[idx + 2] = col.B;
-                    data[idx + 3] = col.A;
-                }
-
-                bmp.SetPixelData(data);
-            }
+            ProcessPremultiplyAlpha(face);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -171,6 +152,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
             }
             return glyphs;
+        }
+
+        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        {
+            if (PremultiplyAlpha)
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+                    byte g = data[idx + 1];
+                    byte b = data[idx + 2];
+                    byte a = data[idx + 3];
+                    Color col = Color.FromNonPremultiplied(r, g, b, a);
+
+                    data[idx + 0] = col.R;
+                    data[idx + 1] = col.G;
+                    data[idx + 2] = col.B;
+                    data[idx + 3] = col.A;
+                }
+                bmp.SetPixelData(data);
+            }
         }
     }
 }
