@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 float metricsHeight  = 0f;
                 int metricsAscender  = 0; // The height used to calculate the Y offset for each character.
                 int metricsDescender = 0;
-                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, fontFile, characters, out metricsHeight, out metricsAscender, out metricsDescender);
+                Dictionary<char, Glyph> glyphs = ImportFont(input, fontFile, characters, out metricsHeight, out metricsAscender, out metricsDescender);
 
                 // Validate.
                 if (glyphs.Count == 0)
@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, string fontName, List<char> characters,
+        private static Dictionary<char, Glyph> ImportFont(FontDescription input, string fontName, List<char> characters,
             out float metricsHeight, out int metricsAscender, out int metricsDescender)
         {
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
