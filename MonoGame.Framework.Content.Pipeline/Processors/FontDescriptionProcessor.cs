@@ -41,32 +41,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             var fontFile = FindFont(input, context);
 
             if (string.IsNullOrWhiteSpace(fontFile))
-            {
-                var directories = new List<string> { Path.GetDirectoryName(input.Identity.SourceFilename) };
-                var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-
-                // Add special per platform directories
-                if (CurrentPlatform.OS == OS.Windows)
-                    directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts"));
-                else if (CurrentPlatform.OS == OS.MacOSX)
-                {
-                    directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                    directories.Add("/Library/Fonts");
-                    directories.Add("/System/Library/Fonts/Supplemental");
-                }
-
-                foreach (var dir in directories)
-                {
-                    foreach (var ext in extensions)
-                    {
-                        fontFile = Path.Combine(dir, input.FontName + ext);
-                        if (File.Exists(fontFile))
-                            break;
-                    }
-                    if (File.Exists(fontFile))
-                        break;
-                }
-            }
+                fontFile = FindFontFile(input, fontFile);
 
             if (!File.Exists(fontFile))
                 throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font from file \"+ fontFile +\".");
@@ -226,6 +201,38 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return String.Empty;
+        }
+
+        private string FindFontFile(FontDescription input, string fontFile)
+        {
+            var directories = new List<string> { Path.GetDirectoryName(input.Identity.SourceFilename) };
+            var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+
+            // Add special per platform directories
+            if (CurrentPlatform.OS == OS.Windows)
+            {
+                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts"));
+            }
+            else if (CurrentPlatform.OS == OS.MacOSX)
+            {
+                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                directories.Add("/Library/Fonts");
+                directories.Add("/System/Library/Fonts/Supplemental");
+            }
+
+            foreach (var dir in directories)
+            {
+                foreach (var ext in extensions)
+                {
+                    fontFile = Path.Combine(dir, input.FontName + ext);
+                    if (File.Exists(fontFile))
+                        break;
+                }
+                if (File.Exists(fontFile))
+                    break;
+            }
+
+            return fontFile;
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
