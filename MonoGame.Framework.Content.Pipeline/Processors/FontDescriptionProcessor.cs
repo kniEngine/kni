@@ -221,11 +221,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     }
                     else
                     {
-                        if (split[1].ToLowerInvariant() != input.FontName.ToLowerInvariant())
-                            return string.Empty;
+                        if (split[1].ToLowerInvariant() == input.FontName.ToLowerInvariant())
+                            return split[0];
                     }
-
-                    return split[0];
                 }
             }
 
