@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             var output = new SpriteFontContent(input);
 
-            var fontFile = FindFont(input.FontName, input.Style.ToString());
+            var fontFile = FindFont(input, context);
 
             if (string.IsNullOrWhiteSpace(fontFile))
             {
@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private string FindFont(string name, string style)
+        private string FindFont(FontDescription input, ContentProcessorContext context)
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
@@ -180,11 +180,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 foreach (var key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                 {
                     var subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                    foreach (var font in subkey.GetValueNames().OrderBy(x => x))
+                    foreach (string font in subkey.GetValueNames().OrderBy(x => x))
                     {
-                        if (font.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                        if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
                         {
-                            var fontPath = subkey.GetValue(font).ToString();
+                            string fontPath = subkey.GetValue(font).ToString();
 
                             // The registry value might have trailing NUL characters
                             // See https://github.com/MonoGame/MonoGame/issues/4061
@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             else if (CurrentPlatform.OS == OS.Linux)
             {
                 string s, e;
-                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", name, style), out s, out e);
+                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", input.FontName, input.Style.ToString()), out s, out e);
                 s = s.Trim();
 
                 var split = s.Split(':');
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     var families = split[1].Split(',');
                     foreach (var f in families)
                     {
-                        if (f.ToLowerInvariant() == name.ToLowerInvariant())
+                        if (f.ToLowerInvariant() == input.FontName.ToLowerInvariant())
                             return split[0];
                     }
                     // didn't find it
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 else
                 {
-                    if (split[1].ToLowerInvariant() != name.ToLowerInvariant())
+                    if (split[1].ToLowerInvariant() != input.FontName.ToLowerInvariant())
                         return string.Empty;
                 }
 
