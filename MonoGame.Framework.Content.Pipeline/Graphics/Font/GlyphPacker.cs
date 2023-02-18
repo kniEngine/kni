@@ -13,37 +13,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Helper for arranging many small bitmaps onto a single larger surface.
     internal static class GlyphPacker
     {
-        public static BitmapContent ArrangeGlyphs(Glyph[] sourceGlyphs, bool requirePOT, bool requireSquare)
+        public static BitmapContent ArrangeGlyphs(Glyph[] glyphs, bool requirePOT, bool requireSquare)
         {
             // Build up a list of all the glyphs needing to be arranged.
-            var glyphs = new List<ArrangedGlyph>();
+            var arrangedGlyphs = new List<ArrangedGlyph>();
 
-            for (int i = 0; i < sourceGlyphs.Length; i++)
+            for (int i = 0; i < glyphs.Length; i++)
             {
-                var glyph = new ArrangedGlyph();
+                ArrangedGlyph arrangedGlyph = new ArrangedGlyph();
 
-                glyph.Source = sourceGlyphs[i];
+                arrangedGlyph.Source = glyphs[i];
 
                 // Leave a one pixel border around every glyph in the output bitmap.
-                glyph.Width = sourceGlyphs[i].Subrect.Width + 2;
-                glyph.Height = sourceGlyphs[i].Subrect.Height + 2;
+                arrangedGlyph.Width = glyphs[i].Subrect.Width + 2;
+                arrangedGlyph.Height = glyphs[i].Subrect.Height + 2;
 
-                glyphs.Add(glyph);
+                arrangedGlyphs.Add(arrangedGlyph);
             }
 
             // Sort so the largest glyphs get arranged first.
-            glyphs.Sort(CompareGlyphSizes);
+            arrangedGlyphs.Sort(CompareGlyphSizes);
 
             // Work out how big the output bitmap should be.
-            int guessedWidth = GuessOutputWidth(sourceGlyphs);
+            int guessedWidth = GuessOutputWidth(glyphs);
             var rectPacker = new MaxRectsBin(guessedWidth, 1024 * 2, GrowRule.Height);
 
-            for (int i = 0; i < glyphs.Count; i++)
+            for (int i = 0; i < arrangedGlyphs.Count; i++)
             {
-                ArrangedGlyph glyph = glyphs[i];
-                Rectangle bounds = rectPacker.Insert(glyph.Width, glyph.Height, MaxRectsHeuristic.Bl);
-                glyph.X = bounds.X;
-                glyph.Y = bounds.Y;
+                ArrangedGlyph arrangedGlyph = arrangedGlyphs[i];
+                Rectangle bounds = rectPacker.Insert(arrangedGlyph.Width, arrangedGlyph.Height, MaxRectsHeuristic.Bl);
+                arrangedGlyph.X = bounds.X;
+                arrangedGlyph.Y = bounds.Y;
             }
 
             // Create the merged output bitmap.
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 outputWidth = outputHeight;
             }
 
-            return CopyGlyphsToOutput(glyphs, outputWidth, outputHeight);
+            return CopyGlyphsToOutput(arrangedGlyphs, outputWidth, outputHeight);
         }
 
         // Once arranging is complete, copies each glyph to its chosen position in the single larger output bitmap.
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             int maxWidth = 0;
             int totalSize = 0;
 
-            foreach (var glyph in sourceGlyphs)
+            foreach (Glyph glyph in sourceGlyphs)
             {
                 maxWidth = Math.Max(maxWidth, glyph.Bitmap.Width+2);
                 totalSize += (glyph.Bitmap.Width+2) * (glyph.Bitmap.Height+2);

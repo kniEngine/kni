@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             face = GlyphPacker.ArrangeGlyphs(glyphs.ToArray(), requiresPot, requiresSquare);
 
-            foreach (var glyph in glyphs)
+            foreach (Glyph glyph in glyphs)
             {
                 output.CharacterMap.Add(GetCharacterForIndex((int)glyph.GlyphIndex));
 
