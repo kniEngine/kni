@@ -213,13 +213,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         var families = split[1].Split(',');
                         foreach (var f in families)
                         {
-                            if (f.ToLowerInvariant() == input.FontName.ToLowerInvariant())
+                            if (input.FontName.Equals(f, StringComparison.InvariantCultureIgnoreCase))
                                 return split[0];
                         }
                     }
                     else
                     {
-                        if (split[1].ToLowerInvariant() == input.FontName.ToLowerInvariant())
+                        if (input.FontName.Equals(split[1], StringComparison.InvariantCultureIgnoreCase))
                             return split[0];
                     }
                 }
