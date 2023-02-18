@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public class Etc1BitmapContent : BitmapContent
     {
-        byte[] _data;
+        byte[] _bitmapData;
 
         /// <summary>
         /// Initializes a new instance of Etc1BitmapContent.
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public override byte[] GetPixelData()
         {
-            return _data;
+            return _bitmapData;
         }
 
         public override void SetPixelData(byte[] sourceData)
@@ -45,9 +45,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 throw new ArgumentException("ETC1 bitmap with width " + Width + " and height " + Height + " needs "
                     + bytesRequired + " bytes. Received " + sourceData.Length + " bytes");
 
-            if (_data == null || _data.Length != bytesRequired)
-                _data = new byte[bytesRequired];
-            Buffer.BlockCopy(sourceData, 0, _data, 0, bytesRequired);
+            if (_bitmapData == null || _bitmapData.Length != bytesRequired)
+                _bitmapData = new byte[bytesRequired];
+            Buffer.BlockCopy(sourceData, 0, _bitmapData, 0, bytesRequired);
         }
 
         protected override bool TryCopyFrom(BitmapContent sourceBitmap, Rectangle sourceRegion, Rectangle destinationRegion)

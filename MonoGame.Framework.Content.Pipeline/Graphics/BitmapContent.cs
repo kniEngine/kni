@@ -12,23 +12,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public abstract class BitmapContent : ContentItem
     {
-        int height;
-        int width;
+        int _height;
+        int _width;
 
         /// <summary>
         /// Gets or sets the height of the bitmap, in pixels.
         /// </summary>
         public int Height
         {
-            get
-            {
-                return height;
-            }
+            get { return _height; }
             protected set
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException("height");
-                height = value;
+
+                _height = value;
             }
         }
 
@@ -37,15 +35,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public int Width
         {
-            get
-            {
-                return width;
-            }
+            get { return _width; }
             protected set
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException("width");
-                width = value;
+
+                _width = value;
             }
         }
 
