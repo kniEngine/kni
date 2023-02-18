@@ -5,6 +5,7 @@
 // Copyright (C)2021 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 
@@ -138,5 +139,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             throw new ArgumentException("Expected PixelBitmapContent<byte> or PixelBitmapContent<Color>, got " + bitmap.GetType().Name, "bitmap");
         }
+    }
+
+    internal class FontContent : ContentItem
+    {
+        public Dictionary<char, Glyph> Glyphs { get; internal set; }
+        public float MetricsHeight;
+        public int MetricsAscender; // The height used to calculate the Y offset for each character.
+        public int MetricsDescender;
     }
 }

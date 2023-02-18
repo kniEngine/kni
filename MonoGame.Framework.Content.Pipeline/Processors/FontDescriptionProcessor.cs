@@ -91,31 +91,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 characters.Sort();
 
-                float metricsHeight  = 0f;
-                int metricsAscender  = 0; // The height used to calculate the Y offset for each character.
-                int metricsDescender = 0;
-                Dictionary<char, Glyph> glyphs = ImportFont(input, fontFile, characters, out metricsHeight, out metricsAscender, out metricsDescender);
+                FontContent font = ImportFont(input, fontFile, characters);
 
                 // Validate.
-                if (glyphs.Count == 0)
+                if (font.Glyphs.Count == 0)
                     throw new Exception("Font does not contain any glyphs.");
 
                 // Optimize glyphs.
-                foreach (Glyph glyph in glyphs.Values)
+                foreach (Glyph glyph in font.Glyphs.Values)
                     glyph.Crop();
 
                 // We need to know how to pack the glyphs.
                 bool requiresPot, requiresSquare;
                 texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
+                var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
 
                 // calculate line spacing.
-                output.VerticalLineSpacing = (int)(metricsHeight + input.Spacing);
+                output.VerticalLineSpacing = (int)(font.MetricsHeight + input.Spacing);
 
-                foreach (char ch in glyphs.Keys)
+                foreach (char ch in font.Glyphs.Keys)
                 {
-                    Glyph glyph = glyphs[ch];
+                    Glyph glyph = font.Glyphs[ch];
 
                     output.CharacterMap.Add(ch);
 
@@ -124,9 +121,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     Rectangle cropping;
                     cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset + metricsAscender);
+                    cropping.Y = (int)(glyph.YOffset + font.MetricsAscender);
                     cropping.Width  = (int)glyph.XAdvance;
-                    cropping.Height = (int)(metricsHeight + input.Spacing);
+                    cropping.Height = (int)(font.MetricsHeight + input.Spacing);
                     output.Cropping.Add(cropping);
 
                     // Set the optional character kerning.
@@ -241,9 +238,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportFont(FontDescription input, string fontName, List<char> characters,
-            out float metricsHeight, out int metricsAscender, out int metricsDescender)
+        private static FontContent ImportFont(FontDescription input, string fontName, List<char> characters)
         {
+            FontContent fontContent = new FontContent();
+
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
             if (!TrueTypeFileExtensions.Contains(fileExtension))
@@ -260,7 +258,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
 
                 var glyphMaps = new Dictionary<uint, Glyph>();
-                var glyphs = new Dictionary<char,Glyph>();
+                fontContent.Glyphs = new Dictionary<char,Glyph>();
 
                 // Rasterize each character in turn.
                 foreach (char character in characters)
@@ -272,14 +270,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         glyphMaps.Add(glyphIndex, glyph);
                     }
 
-                    glyphs.Add(character, glyph);
+                    fontContent.Glyphs.Add(character, glyph);
                 }
 
-                metricsHeight = face.Size.Metrics.Height >> 6;
-                metricsAscender  = face.Size.Metrics.Ascender >> 6;
-                metricsDescender = face.Size.Metrics.Descender >> 6;
+                fontContent.MetricsHeight = face.Size.Metrics.Height >> 6;
+                fontContent.MetricsAscender  = face.Size.Metrics.Ascender >> 6;
+                fontContent.MetricsDescender = face.Size.Metrics.Descender >> 6;
 
-                return glyphs;
+                return fontContent;
             }
         }
 
