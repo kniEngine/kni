@@ -81,6 +81,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // The LineSpacing from XNA font importer is +1px that SharpFont.
             output.VerticalLineSpacing += 1;
 
+            float glyphHeightEx = -(font.MetricsDescender/2f);
+            // The above value of glyphHeightEx match the XNA importer,
+            // however the height of MeasureString() does not match VerticalLineSpacing.
+            //glyphHeightEx = 0;
+            float baseline = font.MetricsHeight + font.MetricsDescender + (font.MetricsDescender/2f) + glyphHeightEx;
+
             foreach (char ch in font.Glyphs.Keys)
             {
                 Glyph glyph = font.Glyphs[ch];
@@ -92,9 +98,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 Rectangle cropping;
                 cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
-                cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
+                cropping.Y = glyph.YOffset + (int)(-glyph.GlyphMetricTopBearing + baseline);
                 cropping.Width  = (int)glyph.XAdvance;
-                cropping.Height = (int)(font.MetricsHeight);
+                cropping.Height = (int)Math.Ceiling(font.MetricsHeight + glyphHeightEx);
                 output.Cropping.Add(cropping);
 
                 // Set the optional character kerning.
