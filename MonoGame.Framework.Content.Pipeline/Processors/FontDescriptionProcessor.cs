@@ -250,8 +250,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, uint glyphIndex, Face face)
         {
             LoadFlags loadFlags = LoadFlags.Default;
-            LoadTarget loadTarget = LoadTarget.Normal;
-            RenderMode renderMode = RenderMode.Normal;
+            LoadTarget loadTarget = LoadTarget.Light;
+            RenderMode renderMode = RenderMode.Light;
 
             face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
             face.Glyph.RenderGlyph(renderMode);
