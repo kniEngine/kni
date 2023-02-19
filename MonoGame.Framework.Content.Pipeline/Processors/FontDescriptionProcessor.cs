@@ -247,8 +247,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         // Rasterizes a single character glyph.
         private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, uint glyphIndex, Face face)
         {
-            face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-            face.Glyph.RenderGlyph(RenderMode.Normal);
+            LoadFlags loadFlags = LoadFlags.Default;
+            LoadTarget loadTarget = LoadTarget.Normal;
+            RenderMode renderMode = RenderMode.Normal;
+
+            face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
+            face.Glyph.RenderGlyph(renderMode);
 
             // Render the character.
             BitmapContent glyphBitmap = null;
