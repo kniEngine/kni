@@ -154,23 +154,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return glyphs;
         }
 
-        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
         {
             if (PremultiplyAlpha)
             {
                 byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length; idx += 4)
+                fixed (byte* pdata = data)
                 {
-                    byte r = data[idx + 0];
-                    byte g = data[idx + 1];
-                    byte b = data[idx + 2];
-                    byte a = data[idx + 3];
-                    Color col = Color.FromNonPremultiplied(r, g, b, a);
+                    int count = data.Length / 4;
+                    for (int idx = 0; idx < count; idx++)
+                    {
+                        byte r = pdata[idx * 4 + 0];
+                        byte g = pdata[idx * 4 + 1];
+                        byte b = pdata[idx * 4 + 2];
+                        byte a = pdata[idx * 4 + 3];
 
-                    data[idx + 0] = col.R;
-                    data[idx + 1] = col.G;
-                    data[idx + 2] = col.B;
-                    data[idx + 3] = col.A;
+                        pdata[idx * 4 + 0] = (byte)((r * a) / 255);
+                        pdata[idx * 4 + 1] = (byte)((g * a) / 255);
+                        pdata[idx * 4 + 2] = (byte)((b * a) / 255);
+                        //pdata[idx * 4 + 3] = a;
+                    }
                 }
                 bmp.SetPixelData(data);
             }

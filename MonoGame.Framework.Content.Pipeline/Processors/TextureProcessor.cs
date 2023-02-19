@@ -113,16 +113,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return input;
         }
 
-        private void ProcessPremultiplyAlpha(PixelBitmapContent<Vector4> bmp)
+        private unsafe void ProcessPremultiplyAlpha(PixelBitmapContent<Vector4> bmp)
         {
             if (PremultiplyAlpha)
             {
                 for (int y = 0; y < bmp.Height; y++)
                 {
-                    var row = bmp.GetRow(y);
-                    for (int x = 0; x < bmp.Width; x++)
+                    Vector4[] row = bmp.GetRow(y);
+                    fixed (Vector4* pdata = row)
                     {
-                        row[x] = Color.FromNonPremultiplied(row[x]).ToVector4();
+                        int count = bmp.Width;
+                        for (int x = 0; x < count; x++)
+                        {
+                            var a = pdata[x].W;
+                            pdata[x].X *= a;
+                            pdata[x].Y *= a;
+                            pdata[x].Z *= a;
+                        }
                     }
                 }
             }
