@@ -77,7 +77,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
 
             // calculate line spacing.
-            output.VerticalLineSpacing = (int)(font.MetricsHeight + input.Spacing);
+            output.VerticalLineSpacing = (int)font.MetricsHeight;
+            // The LineSpacing from XNA font importer is +1px that SharpFont.
+            output.VerticalLineSpacing += 1;
 
             foreach (char ch in font.Glyphs.Keys)
             {
@@ -92,7 +94,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
                 cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
                 cropping.Width  = (int)glyph.XAdvance;
-                cropping.Height = (int)(font.MetricsHeight + input.Spacing);
+                cropping.Height = (int)(font.MetricsHeight);
                 output.Cropping.Add(cropping);
 
                 // Set the optional character kerning.
