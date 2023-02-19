@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             characters.Sort();
 
-            FontContent font = ImportFont(input, fontFile, characters);
+            FontContent font = ImportFont(input, context, fontFile, characters);
 
             // Validate.
             if (font.Glyphs.Count == 0)
@@ -201,7 +201,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static FontContent ImportFont(FontDescription input, string fontName, List<char> characters)
+        private static FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
         {
             FontContent fontContent = new FontContent();
 
@@ -229,7 +229,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     uint glyphIndex = face.GetCharIndex(character);
                     if (!glyphMaps.TryGetValue(glyphIndex, out Glyph glyph))
                     {
-                        glyph = ImportGlyph(glyphIndex, face);
+                        glyph = ImportGlyph(input, context, glyphIndex, face);
                         glyphMaps.Add(glyphIndex, glyph);
                     }
 
@@ -245,7 +245,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private static Glyph ImportGlyph(uint glyphIndex, Face face)
+        private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, uint glyphIndex, Face face)
         {
             face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
             face.Glyph.RenderGlyph(RenderMode.Normal);
