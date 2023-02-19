@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using MonoGame.Framework.Utilities;
 using SharpFont;
 using Glyph = Microsoft.Xna.Framework.Content.Pipeline.Graphics.Glyph;
@@ -255,12 +255,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (face.Glyph.Bitmap.Width > 0 && face.Glyph.Bitmap.Rows > 0)
             {
                 glyphBitmap = new PixelBitmapContent<byte>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
-                byte[] gpixelAlphas = new byte[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
+
                 //if the character bitmap has 1bpp we have to expand the buffer data to get the 8bpp pixel data
                 //each byte in bitmap.bufferdata contains the value of to 8 pixels in the row
                 //if bitmap is of width 10, each row has 2 bytes with 10 valid bits, and the last 6 bits of 2nd byte must be discarded
                 if (face.Glyph.Bitmap.PixelMode == PixelMode.Mono)
                 {
+                    byte[] gpixelAlphas = new byte[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
                     //variables needed for the expansion, amount of written data, length of the data to write
                     int written = 0, length = face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows;
                     for (int i = 0; written < length; i++)
@@ -280,13 +281,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                 i++;
                         }
                     }
+                    glyphBitmap.SetPixelData(gpixelAlphas);
+                }
+                else if (face.Glyph.Bitmap.PixelMode == PixelMode.Gray)
+                {
+                    glyphBitmap.SetPixelData(face.Glyph.Bitmap.BufferData);
                 }
                 else
-                    Marshal.Copy(face.Glyph.Bitmap.Buffer, gpixelAlphas, 0, gpixelAlphas.Length);
-                glyphBitmap.SetPixelData(gpixelAlphas);
+                {
+                    throw new PipelineException(string.Format("Glyph PixelMode {0} is not supported.", face.Glyph.Bitmap.PixelMode));
+                }
             }
-
-            if (glyphBitmap == null)
+            else
             {
                 var gHA = face.Glyph.Metrics.HorizontalAdvance >> 6;
                 var gVA = face.Size.Metrics.Height >> 6;
