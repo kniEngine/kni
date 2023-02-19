@@ -358,35 +358,49 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
         {
             if (PremultiplyAlpha)
             {
                 byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length; idx += 4)
+                fixed (byte* pdata = data)
                 {
-                    byte r = data[idx + 0];
+                    int count = data.Length / 4;
+                    for (int idx = 0; idx < count; idx++)
+                    {
+                        byte r = pdata[idx * 4 + 0];
+                        //byte g = pdata[idx * 4 + 1];
+                        //byte b = pdata[idx * 4 + 2];
+                        //byte a = pdata[idx * 4 + 3];
 
                     // Special case of simply copying the R component into the A, since R is the value of white alpha we want
-                    data[idx + 0] = r;
-                    data[idx + 1] = r;
-                    data[idx + 2] = r;
-                    data[idx + 3] = r;
+                        pdata[idx * 4 + 0] = r;
+                        pdata[idx * 4 + 1] = r;
+                        pdata[idx * 4 + 2] = r;
+                        pdata[idx * 4 + 3] = r;
+                }
                 }
                 bmp.SetPixelData(data);
             }
             else
             {
                 byte[] data = bmp.GetPixelData();
-                for (int idx = 0; idx < data.Length; idx += 4)
+                fixed (byte* pdata = data)
                 {
-                    byte r = data[idx + 0];
+                    int count = data.Length / 4;
+                    for (int idx = 0; idx < count; idx++)
+                {
+                        byte r = pdata[idx * 4 + 0];
+                        //byte g = pdata[idx * 4 + 1];
+                        //byte b = pdata[idx * 4 + 2];
+                        //byte a = pdata[idx * 4 + 3];
 
                     // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
-                    data[idx + 0] = 255;
-                    data[idx + 1] = 255;
-                    data[idx + 2] = 255;
-                    data[idx + 3] = r;
+                        pdata[idx * 4 + 0] = 255;
+                        pdata[idx * 4 + 1] = 255;
+                        pdata[idx * 4 + 2] = 255;
+                        pdata[idx * 4 + 3] = r;
+                    }
                 }
                 bmp.SetPixelData(data);
             }
