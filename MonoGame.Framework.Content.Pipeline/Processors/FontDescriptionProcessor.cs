@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using MonoGame.Framework.Utilities;
 using SharpFont;
 using Glyph = Microsoft.Xna.Framework.Content.Pipeline.Graphics.Glyph;
@@ -38,151 +38,73 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             var output = new SpriteFontContent(input);
 
-            var fontFile = FindFont(input.FontName, input.Style.ToString());
+            var fontFile = FindFont(input, context);
 
             if (string.IsNullOrWhiteSpace(fontFile))
-            {
-                var directories = new List<string> { Path.GetDirectoryName(input.Identity.SourceFilename) };
-                var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-
-                // Add special per platform directories
-                if (CurrentPlatform.OS == OS.Windows)
-                    directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts"));
-                else if (CurrentPlatform.OS == OS.MacOSX)
-                {
-                    directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                    directories.Add("/Library/Fonts");
-                    directories.Add("/System/Library/Fonts/Supplemental");
-                }
-
-                foreach (var dir in directories)
-                {
-                    foreach (var ext in extensions)
-                    {
-                        fontFile = Path.Combine(dir, input.FontName + ext);
-                        if (File.Exists(fontFile))
-                            break;
-                    }
-                    if (File.Exists(fontFile))
-                        break;
-                }
-            }
+                fontFile = FindFontFile(input, fontFile);
 
             if (!File.Exists(fontFile))
-                throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font file.");
+                throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font from file \"+ fontFile +\".");
 
             context.Logger.LogMessage("Building Font {0}", fontFile);
 
             // Get the platform specific texture profile.
             var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
 
+            var characters = new List<char>(input.Characters);
+            // add default character
+            if (input.DefaultCharacter != null)
             {
-                if (!File.Exists(fontFile))
-                {
-                    throw new Exception(string.Format("Could not load {0}", fontFile));
-                }
+                if (!characters.Contains(input.DefaultCharacter.Value))
+                    characters.Add(input.DefaultCharacter.Value);
+            }
+            characters.Sort();
 
-                var characters = new List<char>(input.Characters);
-                // add default character
-                if (input.DefaultCharacter != null)
-                {
-                    if (!characters.Contains(input.DefaultCharacter.Value))
-                        characters.Add(input.DefaultCharacter.Value);
-                }
-                characters.Sort();
+            FontContent font = ImportFont(input, context, fontFile, characters);
 
-                float lineSpacing = 0f;
-                int minYOffset = 0;
-                Dictionary<char, Glyph> glyphs = ImportGlyphs(input, characters, out lineSpacing, out minYOffset, fontFile);
+            // Validate.
+            if (font.Glyphs.Count == 0)
+                throw new Exception("Font does not contain any glyphs.");
 
-                // Validate.
-                if (glyphs.Count == 0)
-                    throw new Exception("Font does not contain any glyphs.");
+            // Optimize glyphs.
+            foreach (Glyph glyph in font.Glyphs.Values)
+                glyph.Crop();
 
-                var glyphset = new HashSet<Glyph>(glyphs.Values);
+            // We need to know how to pack the glyphs.
+            bool requiresPot, requiresSquare;
+            texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-                // Optimize.
-                foreach (Glyph glyph in glyphs.Values)
-                {
-                    glyph.Crop();
-                }
+            var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
 
-                // We need to know how to pack the glyphs.
-                bool requiresPot, requiresSquare;
-                texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
+            // calculate line spacing.
+            output.VerticalLineSpacing = (int)(font.MetricsHeight + input.Spacing);
 
-                var face = GlyphPacker.ArrangeGlyphs(glyphs.Values.ToArray(), requiresPot, requiresSquare);
+            foreach (char ch in font.Glyphs.Keys)
+            {
+                Glyph glyph = font.Glyphs[ch];
 
-                // Adjust line and character spacing.
-                lineSpacing += input.Spacing;
-                output.VerticalLineSpacing = (int)lineSpacing;
+                output.CharacterMap.Add(ch);
 
-                foreach (char ch in glyphs.Keys)
-                {
-                    Glyph glyph = glyphs[ch];
+                var texRect = glyph.Subrect;
+                output.Glyphs.Add(texRect);
 
-                    output.CharacterMap.Add(ch);
+                Rectangle cropping;
+                cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
+                cropping.Y = glyph.YOffset + font.MetricsAscender - (int)glyph.GlyphMetricTopBearing;
+                cropping.Width  = (int)glyph.XAdvance;
+                cropping.Height = (int)(font.MetricsHeight + input.Spacing);
+                output.Cropping.Add(cropping);
 
-                    var texRect = glyph.Subrect;
-                    output.Glyphs.Add(texRect);
-
-                    Rectangle cropping;
-                    cropping.X = (int)glyph.XOffset;
-                    cropping.Y = (int)(glyph.YOffset + minYOffset);
-                    cropping.Width  = (int)glyph.XAdvance;
-                    cropping.Height = output.VerticalLineSpacing;
-                    output.Cropping.Add(cropping);
-
-                    // Set the optional character kerning.
-                    if (input.UseKerning)
-                        output.Kerning.Add(glyph.Kerning.ToVector3());
-                    else
-                        output.Kerning.Add(new Vector3(0, glyph.Width, 0));
-                }
-
-                output.Texture.Faces[0].Add(face);
+                // Set the optional character kerning.
+                if (input.UseKerning)
+                    output.Kerning.Add(glyph.Kerning.ToVector3());
+                else
+                    output.Kerning.Add(new Vector3(0, glyph.Width, 0));
             }
 
-            if (PremultiplyAlpha)
-            {
-                var bmp = output.Texture.Faces[0][0];
-                var data = bmp.GetPixelData();
-                var idx = 0;
-                for (; idx < data.Length;)
-                {
-                    var r = data[idx];
+            output.Texture.Faces[0].Add(face);
 
-                    // Special case of simply copying the R component into the A, since R is the value of white alpha we want
-                    data[idx + 0] = r;
-                    data[idx + 1] = r;
-                    data[idx + 2] = r;
-                    data[idx + 3] = r;
-
-                    idx += 4;
-                }
-
-                bmp.SetPixelData(data);
-            }
-            else
-            {
-                var bmp = output.Texture.Faces[0][0];
-                var data = bmp.GetPixelData();
-                var idx = 0;
-                for (; idx < data.Length;)
-                {
-                    var r = data[idx];
-
-                    // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
-                    data[idx + 0] = 255;
-                    data[idx + 1] = 255;
-                    data[idx + 2] = 255;
-                    data[idx + 3] = r;
-
-                    idx += 4;
-                }
-
-                bmp.SetPixelData(data);
-            }
+            ProcessPremultiplyAlpha(face);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -190,7 +112,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private string FindFont(string name, string style)
+        private string FindFont(FontDescription input, ContentProcessorContext context)
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
@@ -198,11 +120,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 foreach (var key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                 {
                     var subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                    foreach (var font in subkey.GetValueNames().OrderBy(x => x))
+                    foreach (string font in subkey.GetValueNames().OrderBy(x => x))
                     {
-                        if (font.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                        if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
                         {
-                            var fontPath = subkey.GetValue(font).ToString();
+                            string fontPath = subkey.GetValue(font).ToString();
 
                             // The registry value might have trailing NUL characters
                             // See https://github.com/MonoGame/MonoGame/issues/4061
@@ -218,41 +140,71 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             else if (CurrentPlatform.OS == OS.Linux)
             {
                 string s, e;
-                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", name, style), out s, out e);
+                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", input.FontName, input.Style.ToString()), out s, out e);
                 s = s.Trim();
 
                 var split = s.Split(':');
-                if (split.Length < 2)
-                    return string.Empty;
-
-                // check font family, fontconfig might return a fallback
-                if (split[1].Contains(","))
+                if (split.Length >= 2)
                 {
-                    // this file defines multiple family names
-                    var families = split[1].Split(',');
-                    foreach (var f in families)
+                    // check font family, fontconfig might return a fallback
+                    if (split[1].Contains(","))
                     {
-                        if (f.ToLowerInvariant() == name.ToLowerInvariant())
+                        // this file defines multiple family names
+                        var families = split[1].Split(',');
+                        foreach (var f in families)
+                        {
+                            if (input.FontName.Equals(f, StringComparison.InvariantCultureIgnoreCase))
+                                return split[0];
+                        }
+                    }
+                    else
+                    {
+                        if (input.FontName.Equals(split[1], StringComparison.InvariantCultureIgnoreCase))
                             return split[0];
                     }
-                    // didn't find it
-                    return string.Empty;
                 }
-                else
-                {
-                    if (split[1].ToLowerInvariant() != name.ToLowerInvariant())
-                        return string.Empty;
-                }
-
-                return split[0];
             }
 
             return String.Empty;
         }
 
-        // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static Dictionary<char, Glyph> ImportGlyphs(FontDescription input, List<char> characters, out float lineSpacing, out int minYOffset, string fontName)
+        private string FindFontFile(FontDescription input, string fontFile)
         {
+            var directories = new List<string> { Path.GetDirectoryName(input.Identity.SourceFilename) };
+            var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+
+            // Add special per platform directories
+            if (CurrentPlatform.OS == OS.Windows)
+            {
+                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts"));
+            }
+            else if (CurrentPlatform.OS == OS.MacOSX)
+            {
+                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                directories.Add("/Library/Fonts");
+                directories.Add("/System/Library/Fonts/Supplemental");
+            }
+
+            foreach (var dir in directories)
+            {
+                foreach (var ext in extensions)
+                {
+                    fontFile = Path.Combine(dir, input.FontName + ext);
+                    if (File.Exists(fontFile))
+                        break;
+                }
+                if (File.Exists(fontFile))
+                    break;
+            }
+
+            return fontFile;
+        }
+
+        // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
+        private static FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
+        {
+            FontContent fontContent = new FontContent();
+
             var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
             if (!TrueTypeFileExtensions.Contains(fileExtension))
@@ -269,7 +221,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
 
                 var glyphMaps = new Dictionary<uint, Glyph>();
-                var glyphs = new Dictionary<char,Glyph>();
+                fontContent.Glyphs = new Dictionary<char,Glyph>();
 
                 // Rasterize each character in turn.
                 foreach (char character in characters)
@@ -277,40 +229,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     uint glyphIndex = face.GetCharIndex(character);
                     if (!glyphMaps.TryGetValue(glyphIndex, out Glyph glyph))
                     {
-                        glyph = ImportGlyph(glyphIndex, face);
+                        glyph = ImportGlyph(input, context, glyphIndex, face);
                         glyphMaps.Add(glyphIndex, glyph);
                     }
 
-                    glyphs.Add(character, glyph);
+                    fontContent.Glyphs.Add(character, glyph);
                 }
 
-                // Store the font height.
-                lineSpacing = face.Size.Metrics.Height >> 6;
+                fontContent.MetricsHeight = face.Size.Metrics.Height >> 6;
+                fontContent.MetricsAscender  = face.Size.Metrics.Ascender >> 6;
+                fontContent.MetricsDescender = face.Size.Metrics.Descender >> 6;
 
-                // The height used to calculate the Y offset for each character.
-                minYOffset =  face.Size.Metrics.Ascender >> 6;
-
-                return glyphs;
+                return fontContent;
             }
         }
 
         // Rasterizes a single character glyph.
-        private static Glyph ImportGlyph(uint glyphIndex, Face face)
+        private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, uint glyphIndex, Face face)
         {
-            face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-            face.Glyph.RenderGlyph(RenderMode.Normal);
+            LoadFlags loadFlags = LoadFlags.Default;
+            LoadTarget loadTarget = LoadTarget.Normal;
+            RenderMode renderMode = RenderMode.Normal;
+
+            face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
+            face.Glyph.RenderGlyph(renderMode);
 
             // Render the character.
             BitmapContent glyphBitmap = null;
             if (face.Glyph.Bitmap.Width > 0 && face.Glyph.Bitmap.Rows > 0)
             {
                 glyphBitmap = new PixelBitmapContent<byte>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
-                byte[] gpixelAlphas = new byte[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
+
                 //if the character bitmap has 1bpp we have to expand the buffer data to get the 8bpp pixel data
                 //each byte in bitmap.bufferdata contains the value of to 8 pixels in the row
                 //if bitmap is of width 10, each row has 2 bytes with 10 valid bits, and the last 6 bits of 2nd byte must be discarded
                 if (face.Glyph.Bitmap.PixelMode == PixelMode.Mono)
                 {
+                    byte[] gpixelAlphas = new byte[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
                     //variables needed for the expansion, amount of written data, length of the data to write
                     int written = 0, length = face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows;
                     for (int i = 0; written < length; i++)
@@ -330,13 +285,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                 i++;
                         }
                     }
+                    glyphBitmap.SetPixelData(gpixelAlphas);
+                }
+                else if (face.Glyph.Bitmap.PixelMode == PixelMode.Gray)
+                {
+                    glyphBitmap.SetPixelData(face.Glyph.Bitmap.BufferData);
                 }
                 else
-                    Marshal.Copy(face.Glyph.Bitmap.Buffer, gpixelAlphas, 0, gpixelAlphas.Length);
-                glyphBitmap.SetPixelData(gpixelAlphas);
+                {
+                    throw new PipelineException(string.Format("Glyph PixelMode {0} is not supported.", face.Glyph.Bitmap.PixelMode));
+                }
             }
-
-            if (glyphBitmap == null)
+            else
             {
                 var gHA = face.Glyph.Metrics.HorizontalAdvance >> 6;
                 var gVA = face.Size.Metrics.Height >> 6;
@@ -357,16 +317,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Construct the output Glyph object.
             return new Glyph(glyphIndex, glyphBitmap)
             {
-                XOffset  =   face.Glyph.BitmapLeft,
-                XAdvance =  (face.Glyph.Metrics.HorizontalAdvance >> 6),
-                YOffset  = -(face.Glyph.Metrics.HorizontalBearingY >> 6),
+                FontBitmapLeft = face.Glyph.BitmapLeft,
+                FontBitmapTop = face.Glyph.BitmapTop,
+
+                XOffset  = 0,
+                YOffset  = 0,
+                XAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
                 Kerning  = kerning,
 
+                GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY >> 6),
 #if DEBUG
                 GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX >> 6),
                 GlyphMetricWidth = (face.Glyph.Metrics.Width >> 6),
                 GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
-                GlyphBitmapLeft = face.Glyph.BitmapLeft,
 #endif
             };
         }
@@ -395,5 +358,38 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
+        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        {
+            if (PremultiplyAlpha)
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+
+                    // Special case of simply copying the R component into the A, since R is the value of white alpha we want
+                    data[idx + 0] = r;
+                    data[idx + 1] = r;
+                    data[idx + 2] = r;
+                    data[idx + 3] = r;
+                }
+                bmp.SetPixelData(data);
+            }
+            else
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+
+                    // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
+                    data[idx + 0] = 255;
+                    data[idx + 1] = 255;
+                    data[idx + 2] = 255;
+                    data[idx + 3] = r;
+                }
+                bmp.SetPixelData(data);
+            }
+        }
     }
 }

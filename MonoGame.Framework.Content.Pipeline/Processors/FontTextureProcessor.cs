@@ -67,18 +67,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             bool requiresPot, requiresSquare;
             texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-            face = GlyphPacker.ArrangeGlyphs(glyphs.ToArray(), requiresPot, requiresSquare);
+            face = GlyphPacker.ArrangeGlyphs(glyphs, requiresPot, requiresSquare);
 
-            foreach (var glyph in glyphs)
+            foreach (Glyph glyph in glyphs)
             {
                 output.CharacterMap.Add(GetCharacterForIndex((int)glyph.GlyphIndex));
 
                 var texRect = glyph.Subrect;
                 output.Glyphs.Add(texRect);
 
-                var cropping = new Rectangle(
-                    (int)glyph.XOffset, (int)glyph.YOffset,
-                    glyph.Width, glyph.Height);
+                Rectangle cropping;
+                cropping.X = (int)glyph.XOffset;
+                cropping.Y = (int)glyph.YOffset;
+                cropping.Width = glyph.Width;
+                cropping.Height = glyph.Height;
                 output.Cropping.Add(cropping);
 
                 output.Kerning.Add(glyph.Kerning.ToVector3());
@@ -86,29 +88,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             output.Texture.Faces[0].Add(face);
 
-            var bmp = output.Texture.Faces[0][0];
-            if (PremultiplyAlpha)
-            {
-                var data = bmp.GetPixelData();
-                var idx = 0;
-                for (; idx < data.Length;)
-                {
-                    var r = data[idx + 0];
-                    var g = data[idx + 1];
-                    var b = data[idx + 2];
-                    var a = data[idx + 3];
-                    var col = Color.FromNonPremultiplied(r, g, b, a);
-
-                    data[idx + 0] = col.R;
-                    data[idx + 1] = col.G;
-                    data[idx + 2] = col.B;
-                    data[idx + 3] = col.A;
-
-                    idx += 4;
-                }
-
-                bmp.SetPixelData(data);
-            }
+            ProcessPremultiplyAlpha(face);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -172,6 +152,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
             }
             return glyphs;
+        }
+
+        private void ProcessPremultiplyAlpha(BitmapContent bmp)
+        {
+            if (PremultiplyAlpha)
+            {
+                byte[] data = bmp.GetPixelData();
+                for (int idx = 0; idx < data.Length; idx += 4)
+                {
+                    byte r = data[idx + 0];
+                    byte g = data[idx + 1];
+                    byte b = data[idx + 2];
+                    byte a = data[idx + 3];
+                    Color col = Color.FromNonPremultiplied(r, g, b, a);
+
+                    data[idx + 0] = col.R;
+                    data[idx + 1] = col.G;
+                    data[idx + 2] = col.B;
+                    data[idx + 3] = col.A;
+                }
+                bmp.SetPixelData(data);
+            }
         }
     }
 }
