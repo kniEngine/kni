@@ -330,19 +330,19 @@ namespace MonoGame.Framework
 
         private void UpdateBackBufferSize()
         {
-            var manager = _game.graphicsDeviceManager;
-            if (manager.GraphicsDevice == null)
+            var gdm = _concreteGame.GraphicsDeviceManager;
+            if (gdm.GraphicsDevice == null)
                 return;
 
             var newSize = Form.ClientSize;
-            if (newSize.Width == manager.PreferredBackBufferWidth
-                && newSize.Height == manager.PreferredBackBufferHeight)
+            if (newSize.Width == gdm.PreferredBackBufferWidth
+                && newSize.Height == gdm.PreferredBackBufferHeight)
                 return;
 
             // Set the default new back buffer size
-            manager.PreferredBackBufferWidth = newSize.Width;
-            manager.PreferredBackBufferHeight = newSize.Height;
-            manager.ApplyChanges();
+            gdm.PreferredBackBufferWidth = newSize.Width;
+            gdm.PreferredBackBufferHeight = newSize.Height;
+            gdm.ApplyChanges();
         }
 
         protected override void SetTitle(string title)

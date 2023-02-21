@@ -153,8 +153,12 @@ namespace Microsoft.Xna.Framework
             SetDisplayOrientation(newOrientation);
             TouchPanel.DisplayOrientation = newOrientation;
 
-            if (applyGraphicsChanges && oldOrientation != CurrentOrientation && _game.graphicsDeviceManager != null)
-                _game.graphicsDeviceManager.ApplyChanges();
+            if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
+            {
+                var gdm = _game.Strategy.GraphicsDeviceManager;
+                if(gdm != null)
+                    gdm.ApplyChanges();
+            }
         }
 
         public override string ScreenDeviceName

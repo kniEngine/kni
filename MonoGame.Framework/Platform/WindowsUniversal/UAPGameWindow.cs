@@ -91,8 +91,8 @@ namespace Microsoft.Xna.Framework
             if (orientations == DisplayOrientation.Default)
             {
                 // Make the decision based on the preferred backbuffer dimensions.
-                var manager = Game.graphicsDeviceManager;
-                if (manager.PreferredBackBufferWidth > manager.PreferredBackBufferHeight)
+                var gdm = Game.Strategy.GraphicsDeviceManager;
+                if (gdm.PreferredBackBufferWidth > gdm.PreferredBackBufferHeight)
                     supported = FromOrientation(DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                 else
                     supported = FromOrientation(DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
@@ -198,18 +198,17 @@ namespace Microsoft.Xna.Framework
             {
                 _isSizeChanged = false;
 
-                var manager = Game.graphicsDeviceManager;
-
                 // Set the new client bounds.
                 _viewBounds = _newViewBounds;
 
                 // Set the default new back buffer size and viewport, but this
                 // can be overloaded by the two events below.
 
-                manager.IsFullScreen = _appView.IsFullScreenMode;
-                manager.PreferredBackBufferWidth = _viewBounds.Width;
-                manager.PreferredBackBufferHeight = _viewBounds.Height;
-                manager.ApplyChanges();
+                var gdm = Game.Strategy.GraphicsDeviceManager;
+                gdm.IsFullScreen = _appView.IsFullScreenMode;
+                gdm.PreferredBackBufferWidth = _viewBounds.Width;
+                gdm.PreferredBackBufferHeight = _viewBounds.Height;
+                gdm.ApplyChanges();
 
                 // Set the new view state which will trigger the 
                 // Game.ApplicationViewChanged event and signal
@@ -317,7 +316,10 @@ namespace Microsoft.Xna.Framework
 
                 // If we have a valid client bounds then update the graphics device.
                 if (_viewBounds.Width > 0 && _viewBounds.Height > 0)
-                    Game.graphicsDeviceManager.ApplyChanges();
+                {
+                    var gdm = Game.Strategy.GraphicsDeviceManager;
+                    gdm.ApplyChanges();
+                }
             }
         }
 

@@ -221,11 +221,12 @@ namespace Microsoft.Xna.Framework
             Sdl.Rectangle displayRect;
             Sdl.Display.GetBounds(displayIndex, out displayRect);
 
-            if (_willBeFullScreen != IsFullScreen || _hardwareSwitch != _game.graphicsDeviceManager.HardwareModeSwitch)
+            var gdm = _game.Strategy.GraphicsDeviceManager;
+            if (_willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
             {
-                var fullscreenFlag = _game.graphicsDeviceManager.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
+                var fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
                 Sdl.Window.SetFullscreen(Handle, (_willBeFullScreen) ? fullscreenFlag : 0);
-                _hardwareSwitch = _game.graphicsDeviceManager.HardwareModeSwitch;
+                _hardwareSwitch = gdm.HardwareModeSwitch;
             }
             // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
             if (CurrentPlatform.OS == OS.Windows)
@@ -233,7 +234,7 @@ namespace Microsoft.Xna.Framework
                 Sdl.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _willBeFullScreen && _hardwareSwitch ? "1" : "0");
             }
 
-            if (!_willBeFullScreen || _game.graphicsDeviceManager.HardwareModeSwitch)
+            if (!_willBeFullScreen || gdm.HardwareModeSwitch)
             {
                 Sdl.Window.SetSize(Handle, clientWidth, clientHeight);
                 _width = clientWidth;
