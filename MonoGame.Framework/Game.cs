@@ -560,11 +560,6 @@ namespace Microsoft.Xna.Framework
 
         #endregion Internal Methods
 
-        internal GraphicsDeviceManager graphicsDeviceManager
-        {
-            get { return Strategy.GraphicsDeviceManager; }
-        }
-
         // NOTE: InitializeExistingComponents really should only be called once.
         //       Game.Initialize is the only method in a position to guarantee
         //       that no component will get a duplicate Initialize call.
