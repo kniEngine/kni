@@ -21,6 +21,7 @@ namespace Microsoft.Xna.Platform
 
         private GameServiceContainer _services;
         internal IGraphicsDeviceService _graphicsDeviceService;
+        private IGraphicsDeviceManager _graphicsDeviceManager;
 
         private ContentManager _content;
         private GameComponentCollection _components;
@@ -98,14 +99,38 @@ namespace Microsoft.Xna.Platform
         {
             get
             {
-                if (_graphicsDeviceService == null)
-                {
-                    _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+                var graphicsDeviceService = this.GraphicsDeviceService;
 
-                    if (_graphicsDeviceService == null)
-                        throw new InvalidOperationException("No Graphics Device Service");
-                }
-                return _graphicsDeviceService.GraphicsDevice;
+                if (graphicsDeviceService == null)
+                    throw new InvalidOperationException("No Graphics Device Service");
+
+                return graphicsDeviceService.GraphicsDevice;
+            }
+        }
+
+        private IGraphicsDeviceService GraphicsDeviceService
+        {
+            get
+            {
+                if (_graphicsDeviceService != null)
+                    return _graphicsDeviceService;
+
+                _graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+
+                return _graphicsDeviceService;
+            }
+        }
+
+        internal GraphicsDeviceManager GraphicsDeviceManager
+        {
+            get
+            {
+                if (_graphicsDeviceManager != null)
+                    return (GraphicsDeviceManager)_graphicsDeviceManager;
+
+                _graphicsDeviceManager = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+
+                return (GraphicsDeviceManager)_graphicsDeviceManager;
             }
         }
 
@@ -577,7 +602,7 @@ namespace Microsoft.Xna.Platform
         }
 
         // Dispose loaded game components
-        internal void DisposeComponentsAndContent(bool disposing)
+        internal void DisposeComponentsAndContentAndManager(bool disposing)
         {
             if (disposing)
             {
@@ -593,6 +618,12 @@ namespace Microsoft.Xna.Platform
                 {
                     _content.Dispose();
                     _content = null;
+                }
+
+                if (_graphicsDeviceManager != null)
+                {
+                    ((IDisposable)_graphicsDeviceManager).Dispose();
+                    _graphicsDeviceManager = null;
                 }
             }
         }

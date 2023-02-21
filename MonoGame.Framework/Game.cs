@@ -24,8 +24,6 @@ namespace Microsoft.Xna.Framework
     {
         internal GameStrategy Strategy { get; private set; }
 
-        private IGraphicsDeviceManager _graphicsDeviceManager;
-
         private bool _initialized = false;
 
         /// <summary>
@@ -72,13 +70,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (disposing)
                 {
-                    Strategy.DisposeComponentsAndContent(disposing);
-
-                    if (_graphicsDeviceManager != null)
-                    {
-                        (_graphicsDeviceManager as GraphicsDeviceManager).Dispose();
-                        _graphicsDeviceManager = null;
-                    }
+                    Strategy.DisposeComponentsAndContentAndManager(disposing);
 
                     if (Strategy != null)
                     {
@@ -548,8 +540,9 @@ namespace Microsoft.Xna.Framework
 
             if (Strategy.GraphicsDevice == null)
             {
-                if (graphicsDeviceManager != null)
-                    ((IGraphicsDeviceManager)graphicsDeviceManager).CreateDevice();
+                var gdm = Strategy.GraphicsDeviceManager;
+                if (gdm != null)
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
             }
 
             Strategy.BeforeInitialize();
@@ -569,13 +562,7 @@ namespace Microsoft.Xna.Framework
 
         internal GraphicsDeviceManager graphicsDeviceManager
         {
-            get
-            {
-                if (_graphicsDeviceManager == null)
-                    _graphicsDeviceManager = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
-
-                return (GraphicsDeviceManager)_graphicsDeviceManager;
-            }
+            get { return Strategy.GraphicsDeviceManager; }
         }
 
         // NOTE: InitializeExistingComponents really should only be called once.
