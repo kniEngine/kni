@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform
         {
             base.BeforeInitialize();
 
-            var gdm = Game.graphicsDeviceManager;
+            var gdm = this.GraphicsDeviceManager;
             if (gdm == null)
             {
                 _window.Initialize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
