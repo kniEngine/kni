@@ -136,8 +136,8 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformInitialize(PresentationParameters presentationParameters)
         {
-            var surfaceFormat = ToGLColorFormat(base.Game.graphicsDeviceManager.PreferredBackBufferFormat);
-            var depthStencilFormat = base.Game.graphicsDeviceManager.PreferredDepthStencilFormat;
+            var surfaceFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
+            var depthStencilFormat = this.PreferredDepthStencilFormat;
 
             // TODO Need to get this data from the Presentation Parameters
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.RedSize, surfaceFormat.R);
