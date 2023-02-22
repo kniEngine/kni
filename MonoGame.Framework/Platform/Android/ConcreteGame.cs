@@ -40,7 +40,6 @@ namespace Microsoft.Xna.Platform
             base.Dispose(disposing);
         }
 
-        private bool _initialized;
         public static bool IsPlayingVideo { get; set; }
         private AndroidGameWindow _gameWindow;
 
@@ -159,9 +158,10 @@ namespace Microsoft.Xna.Platform
             // We will run the loop from the view's IRunnable.Run().
             return;
 
-            //if (!Game.Initialized)
+            //if (!_initialized)
             //{
             //    Game.DoInitialize();
+            //    _initialized = true;
             //}
 
             //Game.DoBeginRun();

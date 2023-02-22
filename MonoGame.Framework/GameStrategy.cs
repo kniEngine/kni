@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Platform
         protected bool InFullScreenMode = false;
         protected bool IsDisposed { get { return _isDisposed; } }
 
+        protected bool _initialized = false;
+
         #endregion
 
         #region Construction/Destruction
@@ -260,9 +262,10 @@ namespace Microsoft.Xna.Platform
 
         public virtual void RunOneFrame()
         {
-            if (!Game.Initialized)
+            if (!_initialized)
             {
                 Game.DoInitialize();
+                _initialized = true;
             }
 
             Game.DoBeginRun();
