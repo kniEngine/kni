@@ -115,7 +115,8 @@ namespace Microsoft.Xna.Framework
         #region Hide statusbar for iOS 7 or newer
         public override bool PrefersStatusBarHidden()
         {
-            return _concreteGame.Game.graphicsDeviceManager.IsFullScreen;
+            var gdm = _concreteGame.GraphicsDeviceManager;
+            return gdm.IsFullScreen;
         }
         #endregion
 
@@ -160,7 +161,8 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                return _concreteGame.Game.graphicsDeviceManager.IsFullScreen ? UIRectEdge.All : base.PreferredScreenEdgesDeferringSystemGestures;
+                var gdm = _concreteGame.GraphicsDeviceManager;
+                return gdm.IsFullScreen ? UIRectEdge.All : base.PreferredScreenEdgesDeferringSystemGestures;
             }
         }
 

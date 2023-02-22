@@ -607,11 +607,13 @@ namespace Microsoft.Xna.Framework
             if (!_egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + GetErrorAsString());
 
+            var gdm = _game.Strategy.GraphicsDeviceManager;
+
             int depth = 0;
             int stencil = 0;
             int sampleBuffers = 0;
             int samples = 0;
-            switch (_game.graphicsDeviceManager.PreferredDepthStencilFormat)
+            switch (gdm.PreferredDepthStencilFormat)
             {
                 case DepthFormat.Depth16:
                     depth = 16;
@@ -627,7 +629,7 @@ namespace Microsoft.Xna.Framework
                     break;
             }
 
-            if (_game.graphicsDeviceManager.PreferMultiSampling)
+            if (gdm.PreferMultiSampling)
             {
                 sampleBuffers = 1;
                 samples = 4;
@@ -782,7 +784,10 @@ namespace Microsoft.Xna.Framework
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
                 if (_game.Strategy.GraphicsDevice != null)
-                    _game.graphicsDeviceManager.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+                {
+                    var gdm = _game.Strategy.GraphicsDeviceManager;
+                    gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+                }
 
                 if (MonoGame.OpenGL.GL.GetError == null)
                     MonoGame.OpenGL.GL.LoadEntryPoints();

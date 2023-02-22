@@ -103,7 +103,8 @@ namespace Microsoft.Xna.Platform
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
             // Force the Viewport to be correctly set
-            Game.graphicsDeviceManager.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+            var gdm = this.GraphicsDeviceManager;
+            gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
         }
         
         private bool _hasWindowFocus = true;

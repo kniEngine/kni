@@ -293,9 +293,9 @@ namespace Microsoft.Xna.Platform
         protected override void Dispose(bool disposing)
         {
             // Make sure we dispose the graphics system.
-            var graphicsDeviceManager = Game.graphicsDeviceManager;
-            if (graphicsDeviceManager != null)
-                graphicsDeviceManager.Dispose();
+            var gdm = this.GraphicsDeviceManager;
+            if (gdm != null)
+                gdm.Dispose();
 
 			UAPGameWindow.Instance.Dispose();
 			
