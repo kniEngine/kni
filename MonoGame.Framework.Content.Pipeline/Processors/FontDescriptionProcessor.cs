@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 fontFile = FindFontFile(input, fontFile);
 
             if (!File.Exists(fontFile))
-                throw new FileNotFoundException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
+                throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
 
             context.Logger.LogMessage("Building Font {0}", fontFile);
 
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Validate.
             if (font.Glyphs.Count == 0)
-                throw new Exception("Font does not contain any glyphs.");
+                throw new PipelineException("Font does not contain any glyphs.");
 
             // Optimize glyphs.
             foreach (Glyph glyph in font.Glyphs.Values)
