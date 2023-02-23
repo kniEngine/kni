@@ -4,9 +4,7 @@
 
 using System;
 using System.IO;
-using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
@@ -31,14 +29,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 	    /// <returns>Resulting game asset.</returns>
 	    public override FontDescription Import(string filename, ContentImporterContext context)
 	    {
-	        FontDescription fontDescription = null;
-
-	        using (var input = XmlReader.Create(filename))
-	            fontDescription = IntermediateSerializer.Deserialize<FontDescription>(input, filename);
+            XmlImporter xmlImporter = new XmlImporter();
+            FontDescription fontDescription = (FontDescription)xmlImporter.Import(filename, context);
 
 	        fontDescription.Identity = new ContentIdentity(new FileInfo(filename).FullName, "FontDescriptionImporter");
 
-	        return fontDescription;
+            return fontDescription;
 	    }
 	}
 }
