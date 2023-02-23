@@ -46,6 +46,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(fontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
 
+            var extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            string fileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+            if (!extensions.Contains(fileExtension))
+                throw new PipelineException("Unknown file extension " + fileExtension);
+
             context.Logger.LogMessage("Building Font {0}", fontFile);
 
             // Get the platform specific texture profile.
@@ -209,11 +214,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
         {
             FontContent fontContent = new FontContent();
-
-            var extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-            if (!extensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
 
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
