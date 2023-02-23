@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
-                var fontDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                var fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
                 foreach (var key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                 {
                     var subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             // The registry value might have trailing NUL characters
                             fontPath.TrimEnd(new char[] { '\0' });
 
-                            return Path.IsPathRooted(fontPath) ? fontPath : Path.Combine(fontDirectory, fontPath);
+                            return Path.IsPathRooted(fontPath) ? fontPath : Path.Combine(fontsDirectory, fontPath);
                         }
                     }
                 }
@@ -174,13 +174,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private string FindFontFile(FontDescription input, ContentProcessorContext context)
         {
-            var directories = new List<string> { Path.GetDirectoryName(input.Identity.SourceFilename) };
             var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+            var directories = new List<string>();
+
+            directories.Add(Path.GetDirectoryName(input.Identity.SourceFilename));
 
             // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
-                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts"));
+                var fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                directories.Add(fontsDirectory);
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
             {
@@ -207,9 +210,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             FontContent fontContent = new FontContent();
 
-            var TrueTypeFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            var extensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontName).ToLowerInvariant();
-            if (!TrueTypeFileExtensions.Contains(fileExtension))
+            if (!extensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
             using (Library sharpFontLib = new Library())
