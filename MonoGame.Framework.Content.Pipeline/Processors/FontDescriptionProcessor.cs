@@ -236,9 +236,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     fontContent.Glyphs.Add(character, glyph);
                 }
 
+
                 fontContent.MetricsHeight = face.Size.Metrics.Height >> 6;
                 fontContent.MetricsAscender  = face.Size.Metrics.Ascender >> 6;
                 fontContent.MetricsDescender = face.Size.Metrics.Descender >> 6;
+
+#if DEBUG
+                fontContent.FaceUnderlinePosition = face.UnderlinePosition >> 6;
+                fontContent.FaceUnderlineThickness = face.UnderlineThickness >> 6;
+#endif
 
                 return fontContent;
             }
