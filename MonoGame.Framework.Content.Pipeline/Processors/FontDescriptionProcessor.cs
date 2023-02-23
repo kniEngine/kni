@@ -226,19 +226,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (face.FamilyName == "Microsoft Sans Serif" && input.FontName != "Microsoft Sans Serif")
                     throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
 
-                var glyphMaps = new Dictionary<uint, Glyph>();
                 fontContent.Glyphs = new Dictionary<char,Glyph>();
 
                 // Rasterize each character in turn.
                 foreach (char character in characters)
                 {
-                    uint glyphIndex = face.GetCharIndex(character);
-                    if (!glyphMaps.TryGetValue(glyphIndex, out Glyph glyph))
-                    {
-                        glyph = ImportGlyph(input, context, face, glyphIndex);
-                        glyphMaps.Add(glyphIndex, glyph);
-                    }
+                    if (fontContent.Glyphs.ContainsKey(character))
+                        continue;
 
+                    uint glyphIndex = face.GetCharIndex(character);
+                    var glyph = ImportGlyph(input, context, face, glyphIndex);
                     fontContent.Glyphs.Add(character, glyph);
                 }
 
