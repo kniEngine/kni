@@ -222,9 +222,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 int fixedSize = ((int)input.Size) << 6;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
-                if (face.FamilyName == "Microsoft Sans Serif" && input.FontName != "Microsoft Sans Serif")
-                    throw new PipelineException(string.Format("Font {0} is not installed on this computer.", input.FontName));
-
                 // Rasterize each character in turn.
                 foreach (char character in characters)
                 {
