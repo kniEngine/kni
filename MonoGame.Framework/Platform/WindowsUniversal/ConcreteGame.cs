@@ -129,9 +129,10 @@ namespace Microsoft.Xna.Platform
 
         internal override void Run()
         {
-            if (!Game.Initialized)
+            if (!_initialized)
             {
                 Game.DoInitialize();
+                _initialized = true;
             }
 
             Game.DoBeginRun();
@@ -153,9 +154,10 @@ namespace Microsoft.Xna.Platform
         //TODO: merge Run_UAP_XAML() with Run()
         internal override void Run_UAP_XAML()
         {
-            if (!Game.Initialized)
+            if (!_initialized)
             {
                 Game.DoInitialize();
+                _initialized = true;
             }
 
             Game.DoBeginRun();

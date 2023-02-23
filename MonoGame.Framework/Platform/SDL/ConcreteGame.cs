@@ -22,9 +22,10 @@ namespace Microsoft.Xna.Platform
     {
         internal override void Run()
         {
-            if (!Game.Initialized)
+            if (!_initialized)
             {
                 Game.DoInitialize();
+                _initialized = true;
             }
 
             Game.DoBeginRun();

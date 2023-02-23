@@ -24,8 +24,6 @@ namespace Microsoft.Xna.Framework
     {
         internal GameStrategy Strategy { get; private set; }
 
-        private bool _initialized = false;
-
         /// <summary>
         /// Create a <see cref="Game"/>.
         /// </summary>
@@ -226,19 +224,6 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion Properties
-
-        #region Internal Properties
-
-        // FIXME: Internal members should be eliminated.
-        // Currently Game.Initialized is used by the Mac game window class to
-        // determine whether to raise DeviceResetting and DeviceReset on
-        // GraphicsDeviceManager.
-        internal bool Initialized
-        {
-            get { return _initialized; }
-        }
-
-        #endregion Internal Properties
 
         #region Events
 
@@ -546,10 +531,9 @@ namespace Microsoft.Xna.Framework
             }
 
             Strategy.BeforeInitialize();
+
             Initialize();
             Strategy.InitializeComponents();
-
-            _initialized = true;
         }
 
 		internal void DoExiting()
