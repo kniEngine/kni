@@ -234,8 +234,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     if (fontContent.Glyphs.ContainsKey(character))
                         continue;
 
-                    uint glyphIndex = face.GetCharIndex(character);
-                    var glyph = ImportGlyph(input, context, face, glyphIndex);
+                    var glyph = ImportGlyph(input, context, face, character);
                     fontContent.Glyphs.Add(character, glyph);
                 }
 
@@ -248,12 +247,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, uint glyphIndex)
+        private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
         {
             LoadFlags loadFlags = LoadFlags.Default;
             LoadTarget loadTarget = LoadTarget.Light;
             RenderMode renderMode = RenderMode.Light;
 
+            uint glyphIndex = face.GetCharIndex(character);
             face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
             face.Glyph.RenderGlyph(renderMode);
 
