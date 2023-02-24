@@ -218,8 +218,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             using (Library sharpFontLib = new Library())
             using (var face = sharpFontLib.NewFace(fontName, 0))
             {
-                const uint dpi = 96;
                 int fixedSize = ((int)input.Size) << 6;
+                const uint dpi = 0;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
                 // Rasterize each character in turn.
@@ -250,8 +250,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
         {
             LoadFlags loadFlags = LoadFlags.Default;
-            LoadTarget loadTarget = LoadTarget.Light;
-            RenderMode renderMode = RenderMode.Light;
+            LoadTarget loadTarget = LoadTarget.Mono;
+            RenderMode renderMode = RenderMode.Mono;
 
             uint glyphIndex = face.GetCharIndex(character);
             face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
