@@ -147,8 +147,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public readonly Dictionary<char, Glyph> Glyphs = new Dictionary<char, Glyph>();
 
         public float MetricsHeight;
-        public int MetricsAscender; // The height used to calculate the Y offset for each character.
-        public int MetricsDescender;
+        public float MetricsAscender;
+        public float MetricsDescender;
 
 #if DEBUG
         public float FaceUnderlinePosition;

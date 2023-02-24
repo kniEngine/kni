@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 Rectangle cropping;
                 cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
-                cropping.Y = glyph.YOffset + (int)(-glyph.GlyphMetricTopBearing + baseline);
+                cropping.Y = glyph.YOffset + (int)(-glyph.FontBitmapTop + baseline);
                 cropping.Width  = (int)glyph.XAdvance;
                 cropping.Height = (int)Math.Ceiling(font.MetricsHeight + glyphHeightEx);
                 output.Cropping.Add(cropping);
@@ -233,13 +233,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
 
 
-                fontContent.MetricsHeight = face.Size.Metrics.Height >> 6;
-                fontContent.MetricsAscender  = face.Size.Metrics.Ascender >> 6;
-                fontContent.MetricsDescender = face.Size.Metrics.Descender >> 6;
+                fontContent.MetricsHeight = face.Size.Metrics.Height / 64f;
+                fontContent.MetricsAscender  = face.Size.Metrics.Ascender / 64f;
+                fontContent.MetricsDescender = face.Size.Metrics.Descender / 64f;
 
 #if DEBUG
-                fontContent.FaceUnderlinePosition = face.UnderlinePosition >> 6;
-                fontContent.FaceUnderlineThickness = face.UnderlineThickness >> 6;
+                fontContent.FaceUnderlinePosition = face.UnderlinePosition / 64f;
+                fontContent.FaceUnderlineThickness = face.UnderlineThickness / 64f;
 #endif
 
                 return fontContent;
@@ -282,19 +282,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             else
             {
-                var gHA = face.Glyph.Metrics.HorizontalAdvance >> 6;
-                var gVA = face.Size.Metrics.Height >> 6;
+                var gHA = face.Glyph.Metrics.HorizontalAdvance / 64f;
+                var gVA = face.Size.Metrics.Height / 64f;
 
                 gHA = gHA > 0 ? gHA : gVA;
                 gVA = gVA > 0 ? gVA : gHA;
 
-                glyphBitmap = new PixelBitmapContent<byte>(gHA, gVA);
+                glyphBitmap = new PixelBitmapContent<byte>((int)gHA, (int)gVA);
             }
 
             var kerning = new GlyphKerning();
-            kerning.LeftBearing  = (face.Glyph.Metrics.HorizontalBearingX >> 6);
-            kerning.AdvanceWidth = (face.Glyph.Metrics.Width >> 6);
-            kerning.RightBearing = (face.Glyph.Metrics.HorizontalAdvance >> 6) - (kerning.LeftBearing + kerning.AdvanceWidth);
+            kerning.LeftBearing  = (face.Glyph.Metrics.HorizontalBearingX / 64f);
+            kerning.AdvanceWidth = (face.Glyph.Metrics.Width / 64f);
+            kerning.RightBearing = (face.Glyph.Metrics.HorizontalAdvance / 64f) - (kerning.LeftBearing + kerning.AdvanceWidth);
             kerning.LeftBearing  -= face.Glyph.BitmapLeft;
             kerning.AdvanceWidth += face.Glyph.BitmapLeft;
 
@@ -306,14 +306,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 XOffset  = 0,
                 YOffset  = 0,
-                XAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
+                XAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f),
                 Kerning  = kerning,
 
-                GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY >> 6),
+                GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY / 64f),
 #if DEBUG
-                GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX >> 6),
-                GlyphMetricWidth = (face.Glyph.Metrics.Width >> 6),
-                GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance >> 6),
+                GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX / 64f),
+                GlyphMetricWidth = (face.Glyph.Metrics.Width / 64f),
+                GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f),
 #endif
             };
         }
