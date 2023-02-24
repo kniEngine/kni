@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 Rectangle cropping;
                 cropping.X = glyph.XOffset + glyph.FontBitmapLeft;
-                cropping.Y = glyph.YOffset + (int)(-glyph.GlyphMetricTopBearing + baseline);
+                cropping.Y = glyph.YOffset + (int)(-glyph.FontBitmapTop + baseline);
                 cropping.Width  = (int)glyph.XAdvance;
                 cropping.Height = (int)Math.Ceiling(font.MetricsHeight + glyphHeightEx);
                 output.Cropping.Add(cropping);
