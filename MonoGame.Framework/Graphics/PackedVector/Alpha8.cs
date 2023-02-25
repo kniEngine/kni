@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -11,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     /// </summary>
     public struct Alpha8 : IPackedVector<byte>, IEquatable<Alpha8>, IPackedVector
     {
-        private byte packedValue;
+        private byte _packedValue;
 
         /// <summary>
         /// Gets and sets the packed value.
@@ -19,14 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         [CLSCompliant(false)]
         public byte PackedValue
         {
-            get
-            {
-                return packedValue;
-            }
-            set
-            {
-                packedValue = value;
-            }
+            get { return _packedValue; }
+            set { _packedValue = value; }
         }
 
         /// <summary>
@@ -35,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="alpha">The alpha component</param>
         public Alpha8(float alpha)
         {
-            packedValue = Pack(alpha);
+            _packedValue = Pack(alpha);
         }
 
         /// <summary>
@@ -44,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>The packed vector in Vector3 format</returns>
         public float ToAlpha()
         {
-            return (float) (packedValue / 255.0f);
+            return (float) (_packedValue / 255.0f);
         }
 
         /// <summary>
@@ -53,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">Vector containing the components.</param>
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            packedValue = Pack(vector.W);
+            _packedValue = Pack(vector.W);
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
                 0.0f,
                 0.0f,
                 0.0f,
-                (float) (packedValue / 255.0f)
+                (float) (_packedValue / 255.0f)
             );
         }
 
@@ -87,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>True if the packed vectors are equal.</returns>
         public bool Equals(Alpha8 other)
         {
-            return packedValue == other.packedValue;
+            return _packedValue == other._packedValue;
         }
 
         /// <summary>
@@ -96,7 +91,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>A string representation of the packed vector.</returns>
         public override string ToString()
         {
-            return (packedValue / 255.0f).ToString();
+            return (_packedValue / 255.0f).ToString();
         }
 
         /// <summary>
@@ -105,17 +100,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>The hash code for the packed vector.</returns>
         public override int GetHashCode()
         {
-            return packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
-        public static bool operator ==(Alpha8 lhs, Alpha8 rhs)
+        public static bool operator ==(Alpha8 left, Alpha8 right)
         {
-            return lhs.packedValue == rhs.packedValue;
+            return left._packedValue == right._packedValue;
         }
 
-        public static bool operator !=(Alpha8 lhs, Alpha8 rhs)
+        public static bool operator !=(Alpha8 left, Alpha8 right)
         {
-            return lhs.packedValue != rhs.packedValue;
+            return left._packedValue != right._packedValue;
         }
 
         private static byte Pack(float alpha)

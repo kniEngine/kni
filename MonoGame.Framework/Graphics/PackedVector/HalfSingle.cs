@@ -4,38 +4,33 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     public struct HalfSingle : IPackedVector<UInt16>, IEquatable<HalfSingle>, IPackedVector
     {
-        UInt16 packedValue;
-
-        public HalfSingle(float single)
-        {
-            packedValue = HalfTypeHelper.Convert(single);
-        }
+        UInt16 _packedValue;
 
         [CLSCompliant(false)]
         public ushort PackedValue
         {
-            get
-            {
-                return this.packedValue;
-            }
-            set
-            {
-                this.packedValue = value;
-            }
+            get { return _packedValue; }
+            set { _packedValue = value; }
+        }
+
+        public HalfSingle(float single)
+        {
+            _packedValue = HalfTypeHelper.Convert(single);
         }
 
         public float ToSingle()
         {
-            return HalfTypeHelper.Convert(this.packedValue);
+            return HalfTypeHelper.Convert(_packedValue);
         }
 
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            this.packedValue = HalfTypeHelper.Convert(vector.X);
+            _packedValue = HalfTypeHelper.Convert(vector.X);
         }
 
         /// <summary>
@@ -59,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
         public bool Equals(HalfSingle other)
         {
-            return this.packedValue == other.packedValue;
+            return _packedValue == other._packedValue;
         }
 
         public override string ToString()
@@ -69,17 +64,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
         public override int GetHashCode()
         {
-            return this.packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
-        public static bool operator ==(HalfSingle lhs, HalfSingle rhs)
+        public static bool operator ==(HalfSingle left, HalfSingle right)
         {
-            return lhs.packedValue == rhs.packedValue;
+            return left._packedValue == right._packedValue;
         }
 
-        public static bool operator !=(HalfSingle lhs, HalfSingle rhs)
+        public static bool operator !=(HalfSingle left, HalfSingle right)
         {
-            return lhs.packedValue != rhs.packedValue;
+            return left._packedValue != right._packedValue;
         }
     }
 }

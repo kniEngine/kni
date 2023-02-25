@@ -7,6 +7,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Diagnostics;
 
+
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
@@ -166,7 +167,17 @@ namespace Microsoft.Xna.Framework
         // |-------|-------|-------|-------
         // A       B       G       R
         private uint _packedValue;
-	  
+
+        /// <summary>
+        /// Gets or sets packed value of this <see cref="Color"/>.
+        /// </summary>
+        [CLSCompliant(false)]
+        public UInt32 PackedValue
+        {
+            get { return _packedValue; }
+            set { _packedValue = value; }
+        }
+
         /// <summary>
         /// Constructs an RGBA color from a packed value.
         /// The value is a 32-bit unsigned integer, with R in the least significant octet.
@@ -317,17 +328,8 @@ namespace Microsoft.Xna.Framework
         [DataMember]
         public byte B
         {
-            get
-            {
-                unchecked
-                {
-                    return (byte) (this._packedValue >> 16);
-                }
-            }
-            set
-            {
-                this._packedValue = (this._packedValue & 0xff00ffff) | ((uint)value << 16);
-            }
+            get { unchecked { return (byte) (_packedValue >> 16); } }
+            set { _packedValue = (_packedValue & 0xff00ffff) | ((uint)value << 16); }
         }
 
         /// <summary>
@@ -336,17 +338,8 @@ namespace Microsoft.Xna.Framework
         [DataMember]
         public byte G
         {
-            get
-            {
-                unchecked
-                {
-                    return (byte)(this._packedValue >> 8);
-                }
-            }
-            set
-            {
-                this._packedValue = (this._packedValue & 0xffff00ff) | ((uint)value << 8);
-            }
+            get { unchecked { return (byte)(_packedValue >> 8); } }
+            set { _packedValue = (_packedValue & 0xffff00ff) | ((uint)value << 8); }
         }
 
         /// <summary>
@@ -355,17 +348,8 @@ namespace Microsoft.Xna.Framework
         [DataMember]
         public byte R
         {
-            get
-            {
-                unchecked
-                {
-                    return (byte) this._packedValue;
-                }
-            }
-            set
-            {
-                this._packedValue = (this._packedValue & 0xffffff00) | value;
-            }
+            get { unchecked { return (byte)_packedValue; } }
+            set { _packedValue = (_packedValue & 0xffffff00) | value; }
         }
 
         /// <summary>
@@ -374,17 +358,8 @@ namespace Microsoft.Xna.Framework
         [DataMember]
         public byte A
         {
-            get
-            {
-                unchecked
-                {
-                    return (byte)(this._packedValue >> 24);
-                }
-            }
-            set
-            {
-                this._packedValue = (this._packedValue & 0x00ffffff) | ((uint)value << 24);
-            }
+            get { unchecked { return (byte)(_packedValue >> 24); } }
+            set { _packedValue = (_packedValue & 0x00ffffff) | ((uint)value << 24); }
         }
 		
 	/// <summary>
@@ -415,7 +390,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>Hash code of this <see cref="Color"/>.</returns>
         public override int GetHashCode()
         {
-            return this._packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 	
         /// <summary>
@@ -1784,16 +1759,6 @@ namespace Microsoft.Xna.Framework
             return new Vector4(R / 255.0f, G / 255.0f, B / 255.0f, A / 255.0f);
         }
 	
-        /// <summary>
-        /// Gets or sets packed value of this <see cref="Color"/>.
-        /// </summary>
-        [CLSCompliant(false)]
-        public UInt32 PackedValue
-        {
-            get { return _packedValue; }
-            set { _packedValue = value; }
-        }
-
 
         internal string DebugDisplayString
         {

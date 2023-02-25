@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -12,6 +13,16 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     public struct Bgr565 : IPackedVector<UInt16>, IEquatable<Bgr565>, IPackedVector
     {
         UInt16 _packedValue;
+
+        /// <summary>
+        /// Gets and sets the packed value.
+        /// </summary>
+        [CLSCompliant(false)]
+        public UInt16 PackedValue
+        {
+            get { return _packedValue; }
+            set { _packedValue = value; }
+        }
 
         private static UInt16 Pack(float x, float y, float z)
         {
@@ -38,22 +49,6 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Bgr565(Vector3 vector)
         {
             _packedValue = Pack(vector.X, vector.Y, vector.Z);
-        }
-
-        /// <summary>
-        /// Gets and sets the packed value.
-        /// </summary>
-        [CLSCompliant(false)]
-        public UInt16 PackedValue
-        {
-            get
-            {
-                return _packedValue;
-            }
-            set
-            {
-                _packedValue = value;
-            }
         }
 
         /// <summary>
@@ -128,14 +123,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             return _packedValue.GetHashCode();
         }
 
-        public static bool operator ==(Bgr565 lhs, Bgr565 rhs)
+        public static bool operator ==(Bgr565 left, Bgr565 right)
         {
-            return lhs._packedValue == rhs._packedValue;
+            return left._packedValue == right._packedValue;
         }
 
-        public static bool operator !=(Bgr565 lhs, Bgr565 rhs)
+        public static bool operator !=(Bgr565 left, Bgr565 right)
         {
-            return lhs._packedValue != rhs._packedValue;
+            return left._packedValue != right._packedValue;
         }
     }
 }

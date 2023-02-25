@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     internal class HalfTypeHelper

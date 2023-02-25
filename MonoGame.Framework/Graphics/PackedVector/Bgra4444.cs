@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -13,12 +14,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     {
         UInt16 _packedValue;
 
-        private static UInt16 Pack(float x, float y, float z, float w)
+        /// <summary>
+        /// Gets and sets the packed value.
+        /// </summary>
+        [CLSCompliant(false)]
+        public UInt16 PackedValue
         {
-            return (UInt16) ((((int) Math.Round(MathHelper.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
-                (((int) Math.Round(MathHelper.Clamp(x, 0, 1) * 15.0f) & 0x0F) << 8) |
-                (((int) Math.Round(MathHelper.Clamp(y, 0, 1) * 15.0f) & 0x0F) << 4) |
-                ((int) Math.Round(MathHelper.Clamp(z, 0, 1) * 15.0f) & 0x0F));
+            get { return _packedValue; }
+            set { _packedValue = value; }
         }
 
         /// <summary>
@@ -42,20 +45,12 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             _packedValue = Pack(vector.X, vector.Y, vector.Z, vector.W);
         }
 
-        /// <summary>
-        /// Gets and sets the packed value.
-        /// </summary>
-        [CLSCompliant(false)]
-        public UInt16 PackedValue
+        private static UInt16 Pack(float x, float y, float z, float w)
         {
-            get
-            {
-                return _packedValue;
-            }
-            set
-            {
-                _packedValue = value;
-            }
+            return (UInt16) ((((int) Math.Round(MathHelper.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
+                (((int) Math.Round(MathHelper.Clamp(x, 0, 1) * 15.0f) & 0x0F) << 8) |
+                (((int) Math.Round(MathHelper.Clamp(y, 0, 1) * 15.0f) & 0x0F) << 4) |
+                ((int) Math.Round(MathHelper.Clamp(z, 0, 1) * 15.0f) & 0x0F));
         }
 
         /// <summary>
@@ -121,14 +116,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             return _packedValue.GetHashCode();
         }
 
-        public static bool operator ==(Bgra4444 lhs, Bgra4444 rhs)
+        public static bool operator ==(Bgra4444 left, Bgra4444 right)
         {
-            return lhs._packedValue == rhs._packedValue;
+            return left._packedValue == right._packedValue;
         }
 
-        public static bool operator !=(Bgra4444 lhs, Bgra4444 rhs)
+        public static bool operator !=(Bgra4444 left, Bgra4444 right)
         {
-            return lhs._packedValue != rhs._packedValue;
+            return left._packedValue != right._packedValue;
         }
     }
 }
