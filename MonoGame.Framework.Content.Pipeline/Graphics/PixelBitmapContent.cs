@@ -94,6 +94,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             else if (typeof(T) == typeof(Single))
                 format = SurfaceFormat.Single;
 
+            else if (typeof(T) == typeof(Alpha8))
+                format = SurfaceFormat.Alpha8;
             else if (typeof(T) == typeof(Bgr565))
                 format = SurfaceFormat.Bgr565;
             else if (typeof(T) == typeof(Bgra4444))
@@ -113,6 +115,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             else if (typeof(T) == typeof(NormalizedByte2))
                 format = SurfaceFormat.NormalizedByte2;
             else if (typeof(T) == typeof(NormalizedByte4))
+                format = SurfaceFormat.NormalizedByte4;
+            else if (typeof(T) == typeof(NormalizedShort2))
+                format = SurfaceFormat.NormalizedByte2;
+            else if (typeof(T) == typeof(NormalizedShort4))
                 format = SurfaceFormat.NormalizedByte4;
 
             else if (typeof(T) == typeof(Rg32))
