@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -30,20 +30,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     }
 
     // Represents a single character within a font.
-    internal class Glyph
+    internal class FontGlyph
     {
         // Constructor.
-        public Glyph(uint glyphIndex, BitmapContent bitmap)
+        public FontGlyph(BitmapContent bitmap)
         {
-            GlyphIndex = glyphIndex;
             Bitmap = bitmap;
             Subrect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             Width = bitmap.Width;
             Height = bitmap.Height;
         }
-
-        // Font-specific index of glyph
-        public uint GlyphIndex;
 
         // Glyph image data (may only use a portion of a larger bitmap).
         public BitmapContent Bitmap;
@@ -108,43 +104,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Checks whether an area of a bitmap contains entirely the specified alpha value.
         public static bool IsAlphaEntirely(BitmapContent bitmap, int rX, int rY, int rW, int rH)
         {
-            if (bitmap is PixelBitmapContent<byte>)
+            var bmp = (PixelBitmapContent<Color>)bitmap;
+
+            for (int y = 0; y < rH; y++)
             {
-                var bmp = bitmap as PixelBitmapContent<byte>;
-                for (int y = 0; y < rH; y++)
+                for (int x = 0; x < rW; x++)
                 {
-                    for (int x = 0; x < rW; x++)
-                    {
-                        var alpha = bmp.GetPixel(rX + x, rY + y);
-                        if (alpha != TransparentAlpha)
-                            return false;
-                    }
+                    var alpha = bmp.GetPixel(rX + x, rY + y).A;
+                    if (alpha != TransparentAlpha)
+                        return false;
                 }
-                return true;
             }
 
-            if (bitmap is PixelBitmapContent<Color>)
-            {
-                var bmp = bitmap as PixelBitmapContent<Color>;
-                for (int y = 0; y < rH; y++)
-                {
-                    for (int x = 0; x < rW; x++)
-                    {
-                        var alpha = bmp.GetPixel(rX + x, rY + y).A;
-                        if (alpha != TransparentAlpha)
-                            return false;
-                    }
-                }
-                return true;
-            }
-
-            throw new ArgumentException("Expected PixelBitmapContent<byte> or PixelBitmapContent<Color>, got " + bitmap.GetType().Name, "bitmap");
+            return true;
         }
     }
 
     internal class FontContent : ContentItem
     {
-        public readonly Dictionary<char, Glyph> Glyphs = new Dictionary<char, Glyph>();
+        public readonly Dictionary<char, FontGlyph> Glyphs = new Dictionary<char, FontGlyph>();
 
         public float MetricsHeight;
         public float MetricsAscender;

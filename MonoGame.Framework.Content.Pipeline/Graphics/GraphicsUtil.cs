@@ -2,10 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using FreeImageAPI;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -162,6 +165,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new PipelineException("DXT compression requires width and height must be powers of two in Reach graphics profile.");                
             }
 
+            if (isSpriteFont)
+            {
+                CompressFontDXT3(content);
+                return;
+            }
+
             // Test the alpha channel to figure out if we have alpha.
             var alphaRange = CalculateAlphaRange(face);
 
@@ -178,9 +187,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // low frequency alpha like clouds.  I don't know how we can 
             // pick the right thing in this case without a hint.
             //
-            if (isSpriteFont)
-                CompressFontDXT3(content);
-            else if (alphaRange == AlphaRange.Opaque)
+            if (alphaRange == AlphaRange.Opaque)
                 content.ConvertBitmapType(typeof(Dxt1BitmapContent));
             else if (alphaRange == AlphaRange.Cutout)
                 content.ConvertBitmapType(typeof(Dxt3BitmapContent));
@@ -250,7 +257,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         }
 
         // Compress the greyscale font texture page using a specially-formulated DXT3 mode
-        static public unsafe void CompressFontDXT3(TextureContent content)
+        static unsafe void CompressFontDXT3(TextureContent content)
         {
             if (content.Faces.Count > 1)
                 throw new PipelineException("Font textures should only have one face");

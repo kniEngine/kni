@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -13,28 +13,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     // Helper for arranging many small bitmaps onto a single larger surface.
     internal static class GlyphPacker
     {
-        public static BitmapContent ArrangeGlyphs(ICollection<Glyph> glyphs, bool requirePOT, bool requireSquare)
+        public static BitmapContent ArrangeGlyphs(ICollection<FontGlyph> glyphs, bool requirePOT, bool requireSquare)
         {
             // Build up a list of all the glyphs needing to be arranged.
-            var arrangedGlyphs = new List<ArrangedGlyph>();
+            var arrangedGlyphs = new List<ArrangedFontGlyph>();
 
-            foreach (Glyph glyph in glyphs)
+            foreach (FontGlyph glyph in glyphs)
             {
-                ArrangedGlyph arrangedGlyph = new ArrangedGlyph();
-
-                arrangedGlyph.Source = glyph;
-                arrangedGlyph.Width = glyph.Subrect.Width;
-                arrangedGlyph.Height = glyph.Subrect.Height;
+                ArrangedFontGlyph arrangedGlyph = new ArrangedFontGlyph(glyph);
+                arrangedGlyph.Bounds.Size = glyph.Subrect.Size;
 
                 // Leave a one pixel border around every glyph in the output bitmap.
-                arrangedGlyph.Width += 2;
-                arrangedGlyph.Height += 2;
+                arrangedGlyph.Bounds.Width += 2;
+                arrangedGlyph.Bounds.Height += 2;
 
                 arrangedGlyphs.Add(arrangedGlyph);
             }
 
             // Sort so the largest glyphs get arranged first.
-            arrangedGlyphs.Sort(CompareGlyphSizes);
+            arrangedGlyphs.Sort();
 
             // Work out how big the output bitmap should be.
             int guessedWidth = GuessOutputWidth(glyphs);
@@ -42,10 +39,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             for (int i = 0; i < arrangedGlyphs.Count; i++)
             {
-                ArrangedGlyph arrangedGlyph = arrangedGlyphs[i];
-                Rectangle bounds = rectPacker.Insert(arrangedGlyph.Width, arrangedGlyph.Height, MaxRectsHeuristic.Bl);
-                arrangedGlyph.X = bounds.X;
-                arrangedGlyph.Y = bounds.Y;
+                ArrangedFontGlyph arrangedGlyph = arrangedGlyphs[i];
+                Rectangle bounds = rectPacker.Insert(arrangedGlyph.Bounds.Width, arrangedGlyph.Bounds.Height, MaxRectsHeuristic.Bl);
+                arrangedGlyph.Bounds.Location = bounds.Location;
             }
 
             // Create the merged output bitmap.
@@ -62,15 +58,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         }
 
         // Once arranging is complete, copies each glyph to its chosen position in the single larger output bitmap.
-        static BitmapContent CopyGlyphsToOutput(List<ArrangedGlyph> glyphs, int width, int height)
+        static BitmapContent CopyGlyphsToOutput(List<ArrangedFontGlyph> arrangedGlyphs, int width, int height)
         {
             var output = new PixelBitmapContent<Color>(width, height);
 
-            foreach (var glyph in glyphs)
+            foreach (ArrangedFontGlyph glyph in arrangedGlyphs)
             {
-                var sourceGlyph = glyph.Source;
+                var sourceGlyph = glyph.Glyph;
                 var sourceRegion = sourceGlyph.Subrect;
-                var destinationRegion = new Rectangle(glyph.X + 1, glyph.Y + 1, sourceRegion.Width, sourceRegion.Height);
+                var destinationRegion = new Rectangle(glyph.Bounds.Location, sourceRegion.Size);
+                destinationRegion.Offset(1,1);
 
                 BitmapContent.Copy(sourceGlyph.Bitmap, sourceRegion, output, destinationRegion);
 
@@ -83,40 +80,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
 
         // Internal helper class keeps track of a glyph while it is being arranged.
-        class ArrangedGlyph
+        class ArrangedFontGlyph : IComparable<ArrangedFontGlyph>
         {
-            public Glyph Source;
+            public readonly FontGlyph Glyph;
+            public Rectangle Bounds;
 
-            public int X;
-            public int Y;
+            public ArrangedFontGlyph(FontGlyph glyph)
+            {
+                Glyph = glyph;
+            }
 
-            public int Width;
-            public int Height;
-        }
+            int IComparable<ArrangedFontGlyph>.CompareTo(ArrangedFontGlyph other)
+            {
+                int aSize = this.Bounds.Height << 10  + this.Bounds.Width;
+                int bSize = other.Bounds.Height << 10 + other.Bounds.Width;
 
-
-        // Comparison function for sorting glyphs by size.
-        static int CompareGlyphSizes(ArrangedGlyph a, ArrangedGlyph b)
-        {
-            const int heightWeight = 1024;
-
-            int aSize = a.Height * heightWeight + a.Width;
-            int bSize = b.Height * heightWeight + b.Width;
-
-            if (aSize != bSize)
                 return bSize.CompareTo(aSize);
-            else
-                return a.Source.GlyphIndex.CompareTo(b.Source.GlyphIndex);
+            }
         }
-
 
         // Heuristic guesses what might be a good output width for a list of glyphs.
-        static int GuessOutputWidth(ICollection<Glyph> sourceGlyphs)
+        static int GuessOutputWidth(ICollection<FontGlyph> sourceGlyphs)
         {
             int maxWidth = 0;
             int totalSize = 0;
 
-            foreach (Glyph glyph in sourceGlyphs)
+            foreach (FontGlyph glyph in sourceGlyphs)
             {
                 maxWidth = Math.Max(maxWidth, glyph.Bitmap.Width+2);
                 totalSize += (glyph.Bitmap.Width+2) * (glyph.Bitmap.Height+2);

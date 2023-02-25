@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -11,7 +12,18 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     /// </summary>
     public struct Short4 : IPackedVector<ulong>, IEquatable<Short4>
     {
-        ulong packedValue;
+        ulong _packedValue;
+
+        /// <summary>
+        /// Directly gets or sets the packed representation of the value.
+        /// </summary>
+        /// <value>The packed representation of the value.</value>
+        [CLSCompliant(false)]
+        public ulong PackedValue
+        {
+            get { return _packedValue; }
+            set { _packedValue = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the Short4 class.
@@ -19,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">A vector containing the initial values for the components of the Short4 structure.</param>
         public Short4(Vector4 vector)
         {
-            packedValue = Pack(ref vector);
+            _packedValue = Pack(ref vector);
         }
 
         /// <summary>
@@ -32,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Short4(float x, float y, float z, float w)
         {
             var vector = new Vector4(x, y, z, w);
-            packedValue = Pack(ref vector);
+            _packedValue = Pack(ref vector);
         }
 
         /// <summary>
@@ -55,23 +67,6 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public static bool operator ==(Short4 a, Short4 b)
         {
             return a.PackedValue == b.PackedValue;
-        }
-
-        /// <summary>
-        /// Directly gets or sets the packed representation of the value.
-        /// </summary>
-        /// <value>The packed representation of the value.</value>
-        [CLSCompliant(false)]
-        public ulong PackedValue
-        {
-            get
-            {
-                return packedValue;
-            }
-            set
-            {
-                packedValue = value;
-            }
         }
 
         /// <summary>
@@ -102,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>Hash code for the instance.</returns>
         public override int GetHashCode()
         {
-            return packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
         /// <summary>
@@ -111,7 +106,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>String that represents the object.</returns>
         public override string ToString()
         {
-            return packedValue.ToString("x16");
+            return _packedValue.ToString("x16");
         }
 
         /// <summary>
@@ -140,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">The vector to create the packed representation from.</param>
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            packedValue = Pack(ref vector);
+            _packedValue = Pack(ref vector);
         }
 
         /// <summary>
@@ -150,10 +145,10 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Vector4 ToVector4()
         {
             return new Vector4(
-                (short)(packedValue & 0xFFFF),
-                (short)((packedValue >> 0x10) & 0xFFFF),
-                (short)((packedValue >> 0x20) & 0xFFFF),
-                (short)((packedValue >> 0x30) & 0xFFFF));
+                (short)((_packedValue & 0xFFFF)),
+                (short)((_packedValue >> 0x10) & 0xFFFF),
+                (short)((_packedValue >> 0x20) & 0xFFFF),
+                (short)((_packedValue >> 0x30) & 0xFFFF));
         }
     }
 }

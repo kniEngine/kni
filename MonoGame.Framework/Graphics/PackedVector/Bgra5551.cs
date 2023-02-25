@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -12,23 +13,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     /// </summary>
     public struct Bgra5551 : IPackedVector<UInt16>, IEquatable<Bgra5551>, IPackedVector
     {
+        private UInt16 _packedValue;
+
         /// <summary>
         /// Gets and sets the packed value.
         /// </summary>
         [CLSCompliant(false)]
         public UInt16 PackedValue
         {
-            get
-            {
-                return packedValue;
-            }
-            set
-            {
-                packedValue = value;
-            }
+            get { return _packedValue; }
+            set { _packedValue = value; }
         }
-
-        private UInt16 packedValue;
 
         /// <summary>
         /// Creates a new instance of Bgra5551.
@@ -39,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="w">The w component</param>
         public Bgra5551(float x, float y, float z, float w)
         {
-            packedValue = Pack(x, y, z, w);
+            _packedValue = Pack(x, y, z, w);
         }
 
         /// <summary>
@@ -50,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// </param>
         public Bgra5551(Vector4 vector)
         {
-            packedValue = Pack(vector.X, vector.Y, vector.Z, vector.W);
+            _packedValue = Pack(vector.X, vector.Y, vector.Z, vector.W);
         }
 
         /// <summary>
@@ -60,10 +55,10 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Vector4 ToVector4()
         {
             return new Vector4(
-                (float) (((packedValue >> 10) & 0x1F) / 31.0f),
-                (float) (((packedValue >> 5) & 0x1F) / 31.0f),
-                (float) (((packedValue >> 0) & 0x1F) / 31.0f),
-                (float) ((packedValue >> 15)& 0x01)
+                (float) (((_packedValue >> 10) & 0x1F) / 31.0f),
+                (float) (((_packedValue >> 5) & 0x1F) / 31.0f),
+                (float) (((_packedValue >> 0) & 0x1F) / 31.0f),
+                (float) ((_packedValue >> 15)& 0x01)
             );
         }
 
@@ -73,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">Vector containing the components.</param>
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            packedValue = Pack(vector.X, vector.Y, vector.Z, vector.W);
+            _packedValue = Pack(vector.X, vector.Y, vector.Z, vector.W);
         }
 
         /// <summary>
@@ -93,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>True if the packed vectors are equal.</returns>
         public bool Equals(Bgra5551 other)
         {
-            return packedValue == other.packedValue;
+            return _packedValue == other._packedValue;
         }
 
         /// <summary>
@@ -111,17 +106,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>The hash code for the packed vector.</returns>
         public override int GetHashCode()
         {
-            return packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
-        public static bool operator ==(Bgra5551 lhs, Bgra5551 rhs)
+        public static bool operator ==(Bgra5551 left, Bgra5551 right)
         {
-            return lhs.packedValue == rhs.packedValue;
+            return left._packedValue == right._packedValue;
         }
 
-        public static bool operator !=(Bgra5551 lhs, Bgra5551 rhs)
+        public static bool operator !=(Bgra5551 left, Bgra5551 right)
         {
-            return lhs.packedValue != rhs.packedValue;
+            return left._packedValue != right._packedValue;
         }
 
         private static UInt16 Pack(float x, float y, float z, float w)

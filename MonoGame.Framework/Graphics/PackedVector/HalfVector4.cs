@@ -4,6 +4,7 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     /// <summary>
@@ -11,7 +12,18 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
     /// </summary>
     public struct HalfVector4 : IPackedVector<ulong>, IPackedVector, IEquatable<HalfVector4>
     {
-        ulong packedValue;
+        ulong _packedValue;
+
+        /// <summary>
+        /// Directly gets or sets the packed representation of the value.
+        /// </summary>
+        /// <value>The packed representation of the value.</value>
+        [CLSCompliant(false)]
+        public ulong PackedValue
+        {
+            get { return _packedValue; }
+            set { _packedValue = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the HalfVector4 structure.
@@ -23,7 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public HalfVector4(float x, float y, float z, float w)
         {
             var vector = new Vector4(x, y, z, w);
-            packedValue = PackHelper(ref vector);
+            _packedValue = PackHelper(ref vector);
         }
 
         /// <summary>
@@ -32,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">A vector containing the initial values for the components of the HalfVector4 structure.</param>
         public HalfVector4(Vector4 vector)
         {
-            packedValue = PackHelper(ref vector);
+            _packedValue = PackHelper(ref vector);
         }
 
         /// <summary>
@@ -41,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <param name="vector">The vector to create the packed representation from.</param>
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            packedValue = PackHelper(ref vector);
+            _packedValue = PackHelper(ref vector);
         }
 
         /// <summary>
@@ -65,27 +77,10 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Vector4 ToVector4()
         {
             return new Vector4(
-                HalfTypeHelper.Convert((ushort)packedValue),
-                HalfTypeHelper.Convert((ushort)(packedValue >> 0x10)),
-                HalfTypeHelper.Convert((ushort)(packedValue >> 0x20)),
-                HalfTypeHelper.Convert((ushort)(packedValue >> 0x30)));
-        }
-
-        /// <summary>
-        /// Directly gets or sets the packed representation of the value.
-        /// </summary>
-        /// <value>The packed representation of the value.</value>
-        [CLSCompliant(false)]
-        public ulong PackedValue
-        {
-            get
-            {
-                return packedValue;
-            }
-            set
-            {
-                packedValue = value;
-            }
+                HalfTypeHelper.Convert((ushort)_packedValue),
+                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x10)),
+                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x20)),
+                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x30)));
         }
 
         /// <summary>
@@ -103,7 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>Hash code for the instance.</returns>
         public override int GetHashCode()
         {
-            return packedValue.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
         /// <summary>
@@ -123,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>true if the current instance is equal to the specified object; false otherwise.</returns>
         public bool Equals(HalfVector4 other)
         {
-            return packedValue.Equals(other.packedValue);
+            return _packedValue.Equals(other._packedValue);
         }
 
         /// <summary>
