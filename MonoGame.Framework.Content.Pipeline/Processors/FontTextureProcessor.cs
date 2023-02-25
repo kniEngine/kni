@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -37,28 +37,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             var output = new SpriteFontContent();
 
+            BitmapContent fontBitmap = input.Faces[0][0];
+            SurfaceFormat faceFormat;
+            fontBitmap.TryGetFormat(out faceFormat);
+            if (faceFormat != SurfaceFormat.Color)
+            {
+                var colorFace = new PixelBitmapContent<Color>(fontBitmap.Width, fontBitmap.Height);
+                BitmapContent.Copy(fontBitmap, colorFace);
+                fontBitmap = colorFace;
+            }
+
             // extract the glyphs from the texture and map them to a list of characters.
             // we need to call GtCharacterForIndex for each glyph in the Texture to 
             // get the char for that glyph, by default we start at ' ' then '!' and then ASCII
             // after that.
-            BitmapContent face = input.Faces[0][0];
-            SurfaceFormat faceFormat;
-            face.TryGetFormat(out faceFormat);
-            if (faceFormat != SurfaceFormat.Color)
-            {
-                var colorFace = new PixelBitmapContent<Color>(face.Width, face.Height);
-                BitmapContent.Copy(face, colorFace);
-                face = colorFace;
-            }
-
-            var glyphs = ExtractGlyphs((PixelBitmapContent<Color>)face);
+            Dictionary<char, FontGlyph> glyphs = ImportFont(input, context, (PixelBitmapContent<Color>)fontBitmap);
 
             // Optimize glyphs.
-            foreach (var glyph in glyphs)
+            foreach (var glyph in glyphs.Values)
                 glyph.Crop();
 
             // calculate line spacing.
-            foreach (var glyph in glyphs)
+            foreach (var glyph in glyphs.Values)
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
 
             // Get the platform specific texture profile.
@@ -68,11 +68,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             bool requiresPot, requiresSquare;
             texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-            face = GlyphPacker.ArrangeGlyphs(glyphs, requiresPot, requiresSquare);
+            BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
-            foreach (Glyph glyph in glyphs)
+            foreach (char ch in glyphs.Keys)
             {
-                output.CharacterMap.Add(GetCharacterForIndex((int)glyph.GlyphIndex));
+                FontGlyph glyph = glyphs[ch];
+
+                output.CharacterMap.Add(ch);
 
                 var texRect = glyph.Subrect;
                 output.Glyphs.Add(texRect);
@@ -87,9 +89,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 output.Kerning.Add(glyph.Kerning.ToVector3());
             }
 
-            output.Texture.Faces[0].Add(face);
+            ProcessPremultiplyAlpha(glyphAtlas);
 
-            ProcessPremultiplyAlpha(face);
+            output.Texture.Faces[0].Add(glyphAtlas);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -97,15 +99,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-
-        protected virtual char GetCharacterForIndex(int index)
+        private Dictionary<char, FontGlyph> ImportFont(Texture2DContent input, ContentProcessorContext context, PixelBitmapContent<Color> bitmap)
         {
-            return (char)(((int)FirstCharacter) + index);
-        }
+            Dictionary<char, FontGlyph> glyphs = new Dictionary<char, FontGlyph>();
 
-        private List<Glyph> ExtractGlyphs(PixelBitmapContent<Color> bitmap)
-        {
-            var glyphs = new List<Glyph>();
             var regions = new List<Rectangle>();
             for (int y = 0; y < bitmap.Height; y++)
             {
@@ -144,19 +141,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             for (int i = 0; i < regions.Count; i++)
             {
+                var character = (char)(FirstCharacter + i);
+
                 var rect = regions[i];
-                var newBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
-                BitmapContent.Copy(bitmap, rect, newBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
-                var glyphData = new Glyph((uint)i, newBitmap);
-                glyphData.Kerning.AdvanceWidth = glyphData.Bitmap.Width;
-                glyphs.Add(glyphData);
-                //newbitmap.Save (GetCharacterForIndex(i)+".png", System.Drawing.Imaging.ImageFormat.Png);
+                var glyphBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
+                BitmapContent.Copy(bitmap, rect, glyphBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
+
+                GlyphKerning kerning = new GlyphKerning();
+                kerning.AdvanceWidth = glyphBitmap.Width;
+
+                FontGlyph glyph = new FontGlyph(glyphBitmap);
+                glyph.Kerning = kerning;
+
+                glyphs.Add(character, glyph);
+                //newbitmap.Save(""+character+".png", System.Drawing.Imaging.ImageFormat.Png);
             }
+
             return glyphs;
         }
 
         private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
         {
+            System.Diagnostics.Debug.Assert(bmp is PixelBitmapContent<Color>);
+
             if (PremultiplyAlpha)
             {
                 byte[] data = bmp.GetPixelData();

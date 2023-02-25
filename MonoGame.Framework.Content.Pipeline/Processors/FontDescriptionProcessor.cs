@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using MonoGame.Framework.Utilities;
 using SharpFont;
-using Glyph = Microsoft.Xna.Framework.Content.Pipeline.Graphics.Glyph;
 
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
@@ -66,20 +64,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             characters.Sort();
 
             FontContent font = ImportFont(input, context, fontFile, characters);
+            Dictionary<char, FontGlyph> glyphs = font.Glyphs;
 
             // Validate.
-            if (font.Glyphs.Count == 0)
+            if (glyphs.Count == 0)
                 throw new PipelineException("Font does not contain any glyphs.");
 
             // Optimize glyphs.
-            foreach (Glyph glyph in font.Glyphs.Values)
+            foreach (FontGlyph glyph in glyphs.Values)
                 glyph.Crop();
 
             // We need to know how to pack the glyphs.
             bool requiresPot, requiresSquare;
             texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
 
-            var face = GlyphPacker.ArrangeGlyphs(font.Glyphs.Values, requiresPot, requiresSquare);
+            BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
             // calculate line spacing.
             output.VerticalLineSpacing = (int)font.MetricsHeight;
@@ -92,9 +91,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             //glyphHeightEx = 0;
             float baseline = font.MetricsHeight + font.MetricsDescender + (font.MetricsDescender/2f) + glyphHeightEx;
 
-            foreach (char ch in font.Glyphs.Keys)
+            foreach (char ch in glyphs.Keys)
             {
-                Glyph glyph = font.Glyphs[ch];
+                FontGlyph glyph = glyphs[ch];
 
                 output.CharacterMap.Add(ch);
 
@@ -115,9 +114,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     output.Kerning.Add(new Vector3(0, glyph.Width, 0));
             }
 
-            output.Texture.Faces[0].Add(face);
+            ProcessPremultiplyAlpha(glyphAtlas);
 
-            ProcessPremultiplyAlpha(face);
+            output.Texture.Faces[0].Add(glyphAtlas);
 
             // Perform the final texture conversion.
             texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
@@ -247,7 +246,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private static Glyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
+        private static FontGlyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
         {
             LoadFlags loadFlags = LoadFlags.Default;
             LoadTarget loadTarget = LoadTarget.Mono;
@@ -261,37 +260,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             BitmapContent glyphBitmap = null;
             if (face.Glyph.Bitmap.Width > 0 && face.Glyph.Bitmap.Rows > 0)
             {
-                glyphBitmap = new PixelBitmapContent<byte>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                switch (face.Glyph.Bitmap.PixelMode)
+                {
+                    case PixelMode.Mono:
+                        glyphBitmap = new PixelBitmapContent<Color>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                        glyphBitmap.SetPixelData(ConvertMonoToColor(face.Glyph));
+                        break;
 
-                //if the character bitmap has 1bpp we have to expand the buffer data to get the 8bpp pixel data
-                //each byte in bitmap.bufferdata contains the value of to 8 pixels in the row
-                //if bitmap is of width 10, each row has 2 bytes with 10 valid bits, and the last 6 bits of 2nd byte must be discarded
-                if (face.Glyph.Bitmap.PixelMode == PixelMode.Mono)
-                {
-                    byte[] alphaData = ConvertMonoToAlpha(face.Glyph);
-                    glyphBitmap.SetPixelData(alphaData);
-                }
-                else if (face.Glyph.Bitmap.PixelMode == PixelMode.Gray)
-                {
-                    glyphBitmap.SetPixelData(face.Glyph.Bitmap.BufferData);
-                }
-                else
-                {
-                    throw new PipelineException(string.Format("Glyph PixelMode {0} is not supported.", face.Glyph.Bitmap.PixelMode));
+                    case PixelMode.Gray:
+                        glyphBitmap = new PixelBitmapContent<Color>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                        glyphBitmap.SetPixelData(ConvertAlphaToColor(face.Glyph));
+                        break;
+
+                    default:
+                        throw new PipelineException(string.Format("Glyph PixelMode {0} is not supported.", face.Glyph.Bitmap.PixelMode));
                 }
             }
-            else
+            else // whitespace
             {
                 var gHA = face.Glyph.Metrics.HorizontalAdvance / 64f;
                 var gVA = face.Size.Metrics.Height / 64f;
-
                 gHA = gHA > 0 ? gHA : gVA;
                 gVA = gVA > 0 ? gVA : gHA;
-
-                glyphBitmap = new PixelBitmapContent<byte>((int)gHA, (int)gVA);
+                glyphBitmap = new PixelBitmapContent<Color>((int)gHA, (int)gVA);
             }
 
-            var kerning = new GlyphKerning();
+            GlyphKerning kerning = new GlyphKerning();
             kerning.LeftBearing  = (face.Glyph.Metrics.HorizontalBearingX / 64f);
             kerning.AdvanceWidth = (face.Glyph.Metrics.Width / 64f);
             kerning.RightBearing = (face.Glyph.Metrics.HorizontalAdvance / 64f) - (kerning.LeftBearing + kerning.AdvanceWidth);
@@ -299,26 +293,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             kerning.AdvanceWidth += face.Glyph.BitmapLeft;
 
             // Construct the output Glyph object.
-            return new Glyph(glyphIndex, glyphBitmap)
-            {
-                FontBitmapLeft = face.Glyph.BitmapLeft,
-                FontBitmapTop = face.Glyph.BitmapTop,
+            FontGlyph glyph = new FontGlyph(glyphBitmap);
+            glyph.FontBitmapLeft = face.Glyph.BitmapLeft;
+            glyph.FontBitmapTop = face.Glyph.BitmapTop;
 
-                XOffset  = 0,
-                YOffset  = 0,
-                XAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f),
-                Kerning  = kerning,
+            glyph.XOffset = 0;
+            glyph.YOffset = 0;
+            glyph.XAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f);
+            glyph.Kerning = kerning;
 
-                GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY / 64f),
+            glyph.GlyphMetricTopBearing = (face.Glyph.Metrics.HorizontalBearingY / 64f);
 #if DEBUG
-                GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX / 64f),
-                GlyphMetricWidth = (face.Glyph.Metrics.Width / 64f),
-                GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f),
+            glyph.GlyphMetricLeftBearing = (face.Glyph.Metrics.HorizontalBearingX / 64f);
+            glyph.GlyphMetricWidth = (face.Glyph.Metrics.Width / 64f);
+            glyph.GlyphMetricXAdvance = (face.Glyph.Metrics.HorizontalAdvance / 64f);
 #endif
-            };
+
+            return glyph;
         }
 
-        private static unsafe byte[] ConvertMonoToAlpha(GlyphSlot glyph)
+        private static unsafe byte[] ConvertMonoToColor(GlyphSlot glyph)
         {
             FTBitmap bitmap = glyph.Bitmap;
             int cols = bitmap.Width;
@@ -326,13 +320,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             int stride = bitmap.Pitch;
 
             // SharpFont 2.5.3 doesn't return the entire bitmapdata when Pitch > 1.
-            if (glyph.Library.Version != new Version(2,5,3))
-                System.Diagnostics.Debug.Assert(bitmap.BufferData.Length == rows * bitmap.Pitch);
-
+            //System.Diagnostics.Debug.Assert(bitmap.BufferData.Length == rows * bitmap.Pitch);
 
             byte* pGlyphData = (byte*)bitmap.Buffer.ToPointer();
-            byte[] alphaData = new byte[cols * rows];
-            fixed (byte* pAlphaData = alphaData)
+            byte[] data = new byte[cols * rows * 4];
+            fixed (byte* pdata = data)
             {
                 for (int y = 0; y < rows; y++)
                 {
@@ -340,16 +332,49 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         byte b = pGlyphData[(x >> 3) + y * stride];
                         b = (byte)(b & (0x80 >> (x & 0x07)));
-                        pAlphaData[x + y * cols] = (b == (byte)0) ? (byte)0 : (byte)255;
+                        var a = (b == (byte)0) ? (byte)0 : (byte)255;
+
+                        int idx = x + y * cols;
+                        pdata[idx * 4 + 0] = 255;
+                        pdata[idx * 4 + 1] = 255;
+                        pdata[idx * 4 + 2] = 255;
+                        pdata[idx * 4 + 3] = a;
                     }
                 }
             }
 
-            return alphaData;
+            return data;
+        }
+
+        private static unsafe byte[] ConvertAlphaToColor(GlyphSlot glyph)
+        {
+            FTBitmap bitmap = glyph.Bitmap;
+            int cols = bitmap.Width;
+            int rows = bitmap.Rows;
+
+            byte* pGlyphData = (byte*)bitmap.Buffer.ToPointer();
+            byte[] data = new byte[cols * rows * 4];
+            fixed (byte* pdata = data)
+            {
+                int count = data.Length / 4;
+                for (int idx = 0; idx < count; idx++)
+                {
+                    byte a = pGlyphData[idx];
+
+                    pdata[idx * 4 + 0] = 255;
+                    pdata[idx * 4 + 1] = 255;
+                    pdata[idx * 4 + 2] = 255;
+                    pdata[idx * 4 + 3] = a;
+                }
+            }
+
+            return data;
         }
 
         private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
         {
+            System.Diagnostics.Debug.Assert(bmp is PixelBitmapContent<Color>);
+
             if (PremultiplyAlpha)
             {
                 byte[] data = bmp.GetPixelData();
@@ -359,37 +384,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     for (int idx = 0; idx < count; idx++)
                     {
                         byte r = pdata[idx * 4 + 0];
-                        //byte g = pdata[idx * 4 + 1];
-                        //byte b = pdata[idx * 4 + 2];
-                        //byte a = pdata[idx * 4 + 3];
+                        byte g = pdata[idx * 4 + 1];
+                        byte b = pdata[idx * 4 + 2];
+                        byte a = pdata[idx * 4 + 3];
 
-                    // Special case of simply copying the R component into the A, since R is the value of white alpha we want
-                        pdata[idx * 4 + 0] = r;
-                        pdata[idx * 4 + 1] = r;
-                        pdata[idx * 4 + 2] = r;
-                        pdata[idx * 4 + 3] = r;
-                }
-                }
-                bmp.SetPixelData(data);
-            }
-            else
-            {
-                byte[] data = bmp.GetPixelData();
-                fixed (byte* pdata = data)
-                {
-                    int count = data.Length / 4;
-                    for (int idx = 0; idx < count; idx++)
-                {
-                        byte r = pdata[idx * 4 + 0];
-                        //byte g = pdata[idx * 4 + 1];
-                        //byte b = pdata[idx * 4 + 2];
-                        //byte a = pdata[idx * 4 + 3];
-
-                    // Special case of simply moving the R component into the A and setting RGB to solid white, since R is the value of white alpha we want
-                        pdata[idx * 4 + 0] = 255;
-                        pdata[idx * 4 + 1] = 255;
-                        pdata[idx * 4 + 2] = 255;
-                        pdata[idx * 4 + 3] = r;
+                        pdata[idx * 4 + 0] = (byte)((r * a) / 255);
+                        pdata[idx * 4 + 1] = (byte)((g * a) / 255);
+                        pdata[idx * 4 + 2] = (byte)((b * a) / 255);
+                        //pdata[idx * 4 + 3] = a;
                     }
                 }
                 bmp.SetPixelData(data);
