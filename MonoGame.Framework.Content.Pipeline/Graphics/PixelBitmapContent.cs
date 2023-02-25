@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             else
             {
-                format = SurfaceFormat.Color;
+                format = (SurfaceFormat)(int)-1;
                 return false;
             }
 
