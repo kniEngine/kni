@@ -20,11 +20,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessor(DisplayName = "Sprite Font Description - MonoGame")]
     public class FontDescriptionProcessor : ContentProcessor<FontDescription, SpriteFontContent>
     {
+        SmoothingMode _smoothing = SmoothingMode.Disable;
+
         [DefaultValue(true)]
         public virtual bool PremultiplyAlpha { get; set; }
 
         [DefaultValue(typeof(TextureProcessorOutputFormat), "Compressed")]
         public virtual TextureProcessorOutputFormat TextureFormat { get; set; }
+
+        [DefaultValue(typeof(SmoothingMode), "Disable")]
+        public virtual SmoothingMode Smoothing
+        {
+            get { return _smoothing; }
+            set { _smoothing = value; }
+        }
 
         public FontDescriptionProcessor()
         {
@@ -210,7 +219,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private static FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
+        private FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
         {
             FontContent fontContent = new FontContent();
 
@@ -246,11 +255,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private static FontGlyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
+        private FontGlyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
         {
-            LoadFlags loadFlags = LoadFlags.Default;
-            LoadTarget loadTarget = LoadTarget.Mono;
-            RenderMode renderMode = RenderMode.Mono;
+            LoadFlags loadFlags   = LoadFlags.Default;
+            LoadTarget loadTarget = LoadTarget.Normal;
+            RenderMode renderMode = RenderMode.Normal;
+
+            switch (this.Smoothing)
+            {
+                case SmoothingMode.Disable:
+                    //loadTarget = LoadTarget.Mono;
+                    renderMode = RenderMode.Mono;
+                    break;
+                case SmoothingMode.Normal:
+                    break;
+                case SmoothingMode.Light:
+                    loadFlags |= LoadFlags.ForceAutohint;
+                    loadTarget = LoadTarget.Light;
+                    //renderMode = RenderMode.Light;
+                    break;
+                case SmoothingMode.AutoHint:
+                    loadFlags |= LoadFlags.ForceAutohint;
+                    break;
+
+
+                default:
+                    throw new InvalidOperationException("RenderMode");
+            }
 
             uint glyphIndex = face.GetCharIndex(character);
             face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
@@ -396,6 +427,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 bmp.SetPixelData(data);
             }
+        }
+
+        public enum SmoothingMode
+        {
+            [System.ComponentModel.Description("Bitmap with 1bit alpha")]
+            Disable,
+            [System.ComponentModel.Description("Normal hinting")]
+            Normal,
+            [System.ComponentModel.Description("Light hinting")]
+            Light,
+            [System.ComponentModel.Description("Auto-hinter")]
+            AutoHint,
         }
     }
 }
