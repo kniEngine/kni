@@ -2,6 +2,7 @@
   
   <ItemGroup>
     <Compile Include="Processors\PassThroughProcessor.cs" />
+    <Compile Include="XmlImporter.cs" />
   </ItemGroup>
   
   
@@ -41,7 +42,7 @@
     <Compile Include="Serialization\Intermediate\NullableSerializer.cs" />
     <Compile Include="Serialization\Intermediate\PackedElementsHelper.cs" />
     <Compile Include="Serialization\Intermediate\ReflectiveSerializer.cs" />
-  </ItemGroup>  
+  </ItemGroup>
   
   
   <ItemGroup>
@@ -129,6 +130,7 @@
     <Compile Include="IContentImporter.cs" />
     <Compile Include="IContentProcessor.cs" />
     <Compile Include="InvalidContentException.cs" />
+    <Compile Include="LoadedTypeCollection.cs" />
     <Compile Include="NamedValueDictionary.cs" />
     <Compile Include="OpaqueDataDictionary.cs" />
     <Compile Include="PipelineComponentScanner.cs" />
@@ -147,5 +149,4 @@
     <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64HC.Dirty.cs" />
     <Compile Include="Utilities\PathHelper.cs" />
   </ItemGroup>
-  
 </Project>
