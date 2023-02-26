@@ -59,35 +59,45 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
         }
         
-        private static void PrepareNVTT(byte[] data)
+        private unsafe static void PrepareNVTT(byte[] data)
         {
-            for (var x = 0; x < data.Length; x += 4)
+            fixed (byte* pdata = data)
             {
-                // NVTT wants BGRA where our source is RGBA so
-                // we swap the red and blue channels.
-                data[x] ^= data[x + 2];
-                data[x + 2] ^= data[x];
-                data[x] ^= data[x + 2];
+                int count = data.Length / 4;
+                for (var x = 0; x < count; x++)
+                {
+                    // NVTT wants BGRA where our source is RGBA so
+                    // we swap the red and blue channels.
+                    var r = pdata[x*4+0];
+                    var b = pdata[x*4+2];
+                    pdata[x*4+0] = b;
+                    pdata[x*4+2] = r;
+                }
             }
         }
 
-        private static void PrepareNVTT_DXT1(byte[] data, out bool hasTransparency)
+        private unsafe static bool PrepareNVTT_DXT1(byte[] data)
         {
-            hasTransparency = false;
+            bool hasTransparency = false;
 
-            for (var x = 0; x < data.Length; x += 4)
+            fixed (byte* pdata = data)
             {
-                // NVTT wants BGRA where our source is RGBA so
-                // we swap the red and blue channels.
-                data[x] ^= data[x + 2];
-                data[x + 2] ^= data[x];
-                data[x] ^= data[x + 2];
+                int count = data.Length/4;
+                for (var x = 0; x < count; x++)
+                {
+                    // NVTT wants BGRA where our source is RGBA so
+                    // we swap the red and blue channels.
+                    var r = pdata[x*4+0];
+                    var b = pdata[x*4+2];
+                    pdata[x*4+0] = b;
+                    pdata[x*4+2] = r;
 
-                // Look for non-opaque pixels.
-                var alpha = data[x + 3];
-                if (alpha < 255)
-                    hasTransparency = true;
+                    // Look for non-opaque pixels.
+                    hasTransparency = (hasTransparency || pdata[x*4+3] < 255);
+                }
             }
+
+            return hasTransparency;
         }
 
         protected override bool TryCopyFrom(BitmapContent sourceBitmap, Rectangle sourceRegion, Rectangle destinationRegion)
@@ -141,8 +151,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 case SurfaceFormat.Dxt1:
                 case SurfaceFormat.Dxt1SRgb:
                 {
-                    bool hasTransparency;
-                    PrepareNVTT_DXT1(sourceData, out hasTransparency);
+                    bool hasTransparency = PrepareNVTT_DXT1(sourceData);
                     outputFormat = hasTransparency ? Format.DXT1a : Format.DXT1;
                     alphaMode = hasTransparency ? AlphaMode.Transparency : AlphaMode.None;
                     alphaDither = true;

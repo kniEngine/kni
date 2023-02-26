@@ -103,12 +103,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 throw new InvalidOperationException("Could not retrieve surface format of destination bitmap");
 
             // If the formats are the same and the regions are the full bounds of the bitmaps and they are the same size, do a simpler copy
-            if (sourceFormat == destinationFormat && sourceRegion == destinationRegion
+            if (sourceFormat == destinationFormat
+                && sourceRegion == destinationRegion
                 && sourceRegion == new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height)
                 && destinationRegion == new Rectangle(0, 0, destinationBitmap.Width, destinationBitmap.Height))
             {
                 destinationBitmap.SetPixelData(sourceBitmap.GetPixelData());
                 return;
+            }
+
+            // if the destination format is <Vector4> and the regions are the full bounds of the bitmaps and they are the same size,
+            // copy to the destinationBitmap directly using TryCopyTo().
+            if (destinationFormat == SurfaceFormat.Vector4
+                && sourceRegion == destinationRegion
+                && sourceRegion == new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height)
+                && destinationRegion == new Rectangle(0, 0, destinationBitmap.Width, destinationBitmap.Height))
+            {
+                if (sourceBitmap.TryCopyTo(destinationBitmap, sourceRegion, destinationRegion))
+                    return;
             }
 
             // The basic process is
@@ -118,7 +130,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // Copy from the source to the intermediate Vector4 format
             var intermediate = new PixelBitmapContent<Vector4>(sourceRegion.Width, sourceRegion.Height);
-            var intermediateRegion = new Rectangle(0, 0, intermediate.Width, intermediate.Height);
+            var intermediateRegion = new Rectangle(0, 0, sourceRegion.Width, sourceRegion.Height);
             if (sourceBitmap.TryCopyTo(intermediate, sourceRegion, intermediateRegion))
             {
                 // Resize the intermediate if required
