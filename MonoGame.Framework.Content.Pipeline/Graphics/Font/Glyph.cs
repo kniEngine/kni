@@ -99,18 +99,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
         }
 
-        const byte TransparentAlpha = 0;
+        const float TransparentAlpha = 0f;
 
         // Checks whether an area of a bitmap contains entirely the specified alpha value.
         public static bool IsAlphaEntirely(BitmapContent bitmap, int rX, int rY, int rW, int rH)
         {
-            var bmp = (PixelBitmapContent<Color>)bitmap;
+            var bmp = (PixelBitmapContent<Vector4>)bitmap;
 
             for (int y = 0; y < rH; y++)
             {
                 for (int x = 0; x < rW; x++)
                 {
-                    var alpha = bmp.GetPixel(rX + x, rY + y).A;
+                    var alpha = bmp.GetPixel(rX + x, rY + y).W;
                     if (alpha != TransparentAlpha)
                         return false;
                 }
