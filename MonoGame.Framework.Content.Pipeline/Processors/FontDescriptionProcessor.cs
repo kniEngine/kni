@@ -123,7 +123,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     output.Kerning.Add(new Vector3(0, glyph.Width, 0));
             }
 
-            ProcessPremultiplyAlpha(glyphAtlas);
+            if (PremultiplyAlpha)
+                TextureProcessor.ProcessPremultiplyAlpha((PixelBitmapContent<Vector4>)glyphAtlas);
 
             output.Texture.Faces[0].Add(glyphAtlas);
 
@@ -294,13 +295,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 switch (face.Glyph.Bitmap.PixelMode)
                 {
                     case PixelMode.Mono:
-                        glyphBitmap = new PixelBitmapContent<Color>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
-                        glyphBitmap.SetPixelData(ConvertMonoToColor(face.Glyph));
+                        glyphBitmap = new PixelBitmapContent<Vector4>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                        glyphBitmap.SetPixelData(ConvertMonoToVector4(face.Glyph));
                         break;
 
                     case PixelMode.Gray:
-                        glyphBitmap = new PixelBitmapContent<Color>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
-                        glyphBitmap.SetPixelData(ConvertAlphaToColor(face.Glyph));
+                        glyphBitmap = new PixelBitmapContent<Vector4>(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+                        glyphBitmap.SetPixelData(ConvertAlphaToVector4(face.Glyph));
                         break;
 
                     default:
@@ -313,7 +314,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var gVA = face.Size.Metrics.Height / 64f;
                 gHA = gHA > 0 ? gHA : gVA;
                 gVA = gVA > 0 ? gVA : gHA;
-                glyphBitmap = new PixelBitmapContent<Color>((int)gHA, (int)gVA);
+                glyphBitmap = new PixelBitmapContent<Vector4>((int)gHA, (int)gVA);
             }
 
             GlyphKerning kerning = new GlyphKerning();
@@ -343,7 +344,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return glyph;
         }
 
-        private static unsafe byte[] ConvertMonoToColor(GlyphSlot glyph)
+        private static unsafe byte[] ConvertMonoToVector4(GlyphSlot glyph)
         {
             FTBitmap bitmap = glyph.Bitmap;
             int cols = bitmap.Width;
@@ -354,22 +355,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             //System.Diagnostics.Debug.Assert(bitmap.BufferData.Length == rows * bitmap.Pitch);
 
             byte* pGlyphData = (byte*)bitmap.Buffer.ToPointer();
-            byte[] data = new byte[cols * rows * 4];
+            byte[] data = new byte[cols * rows * sizeof(Vector4)];
             fixed (byte* pdata = data)
             {
+                Vector4* pvdata = (Vector4*)pdata;
                 for (int y = 0; y < rows; y++)
                 {
                     for (int x = 0; x < cols; x++)
                     {
                         byte b = pGlyphData[(x >> 3) + y * stride];
                         b = (byte)(b & (0x80 >> (x & 0x07)));
-                        var a = (b == (byte)0) ? (byte)0 : (byte)255;
+                        float a = (b == (byte)0) ? 0f : 1f;
 
                         int idx = x + y * cols;
-                        pdata[idx * 4 + 0] = 255;
-                        pdata[idx * 4 + 1] = 255;
-                        pdata[idx * 4 + 2] = 255;
-                        pdata[idx * 4 + 3] = a;
+                        pvdata[idx].X = 1f;
+                        pvdata[idx].Y = 1f;
+                        pvdata[idx].Z = 1f;
+                        pvdata[idx].W = a;
                     }
                 }
             }
@@ -377,56 +379,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return data;
         }
 
-        private static unsafe byte[] ConvertAlphaToColor(GlyphSlot glyph)
+        private static unsafe byte[] ConvertAlphaToVector4(GlyphSlot glyph)
         {
             FTBitmap bitmap = glyph.Bitmap;
             int cols = bitmap.Width;
             int rows = bitmap.Rows;
 
             byte* pGlyphData = (byte*)bitmap.Buffer.ToPointer();
-            byte[] data = new byte[cols * rows * 4];
+            byte[] data = new byte[cols * rows * sizeof(Vector4)];
             fixed (byte* pdata = data)
             {
-                int count = data.Length / 4;
+                Vector4* pvdata = (Vector4*)pdata;
+                int count = (cols * rows);
                 for (int idx = 0; idx < count; idx++)
                 {
                     byte a = pGlyphData[idx];
 
-                    pdata[idx * 4 + 0] = 255;
-                    pdata[idx * 4 + 1] = 255;
-                    pdata[idx * 4 + 2] = 255;
-                    pdata[idx * 4 + 3] = a;
+                    pvdata[idx].X = 1f;
+                    pvdata[idx].Y = 1f;
+                    pvdata[idx].Z = 1f;
+                    pvdata[idx].W = a / (float)byte.MaxValue;
                 }
             }
 
             return data;
-        }
-
-        private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
-        {
-            System.Diagnostics.Debug.Assert(bmp is PixelBitmapContent<Color>);
-
-            if (PremultiplyAlpha)
-            {
-                byte[] data = bmp.GetPixelData();
-                fixed (byte* pdata = data)
-                {
-                    int count = data.Length / 4;
-                    for (int idx = 0; idx < count; idx++)
-                    {
-                        byte r = pdata[idx * 4 + 0];
-                        byte g = pdata[idx * 4 + 1];
-                        byte b = pdata[idx * 4 + 2];
-                        byte a = pdata[idx * 4 + 3];
-
-                        pdata[idx * 4 + 0] = (byte)((r * a) / 255);
-                        pdata[idx * 4 + 1] = (byte)((g * a) / 255);
-                        pdata[idx * 4 + 2] = (byte)((b * a) / 255);
-                        //pdata[idx * 4 + 3] = a;
-                    }
-                }
-                bmp.SetPixelData(data);
-            }
         }
 
         public enum SmoothingMode

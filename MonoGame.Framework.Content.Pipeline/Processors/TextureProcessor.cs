@@ -95,7 +95,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             BitmapContent.Copy(bmp, resized);
                         }
 
-                        ProcessPremultiplyAlpha(bmp);
+                        if (PremultiplyAlpha)
+                            ProcessPremultiplyAlpha(bmp);
 
                         face[m] = bmp;
                     }
@@ -113,23 +114,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return input;
         }
 
-        private unsafe void ProcessPremultiplyAlpha(PixelBitmapContent<Vector4> bmp)
+        internal static unsafe void ProcessPremultiplyAlpha(PixelBitmapContent<Vector4> bmp)
         {
-            if (PremultiplyAlpha)
+            for (int y = 0; y < bmp.Height; y++)
             {
-                for (int y = 0; y < bmp.Height; y++)
+                Vector4[] row = bmp.GetRow(y);
+                fixed (Vector4* pdata = row)
                 {
-                    Vector4[] row = bmp.GetRow(y);
-                    fixed (Vector4* pdata = row)
+                    int count = bmp.Width;
+                    for (int x = 0; x < count; x++)
                     {
-                        int count = bmp.Width;
-                        for (int x = 0; x < count; x++)
-                        {
-                            var a = pdata[x].W;
-                            pdata[x].X *= a;
-                            pdata[x].Y *= a;
-                            pdata[x].Z *= a;
-                        }
+                        var a = pdata[x].W;
+                        pdata[x].X *= a;
+                        pdata[x].Y *= a;
+                        pdata[x].Z *= a;
                     }
                 }
             }

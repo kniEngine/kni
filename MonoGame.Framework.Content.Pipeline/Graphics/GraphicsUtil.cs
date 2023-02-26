@@ -104,24 +104,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         /// <param name="bitmap">A bitmap of full-colour floating point pixel data in RGBA or BGRA order.</param>
         /// <returns>A member of the AlphaRange enum to describe the range of alpha in the pixel data.</returns>
-		static AlphaRange CalculateAlphaRange(BitmapContent bitmap)
+		static unsafe AlphaRange CalculateAlphaRange(BitmapContent bitmap)
         {
 			AlphaRange result = AlphaRange.Opaque;
 			var pixelBitmap = bitmap as PixelBitmapContent<Vector4>;
+
 			if (pixelBitmap != null)
 			{
 				for (int y = 0; y < pixelBitmap.Height; ++y)
                 {
-                    var row = pixelBitmap.GetRow(y);
-                    foreach (var pixel in row)
+                    Vector4[] row = pixelBitmap.GetRow(y);
+                    fixed (Vector4* prow = row)
                     {
-                        if (pixel.W == 0.0)
-                            result = AlphaRange.Cutout;
-                        else if (pixel.W < 1.0)
-                            return AlphaRange.Full;
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            if (prow[i].W < 1.0)
+                            {
+                                if (prow[i].W == 0.0)
+                                    result = AlphaRange.Cutout;
+                                else 
+                                    return AlphaRange.Full;
+                            }
+                        }
                     }
 				}
 			}
+
             return result;
         }
 
@@ -147,7 +155,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             var face = content.Faces[0][0];
 
-            var alphaRange = CalculateAlphaRange(face);
+            AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Opaque)
                 content.ConvertBitmapType(typeof(PvrtcRgb4BitmapContent));
@@ -172,7 +180,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Test the alpha channel to figure out if we have alpha.
-            var alphaRange = CalculateAlphaRange(face);
+            AlphaRange alphaRange = CalculateAlphaRange(face);
 
             // TODO: This isn't quite right.
             //
@@ -205,7 +213,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             var face = content.Faces[0][0];
-			var alphaRange = CalculateAlphaRange(face);
+            AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Full)
                 content.ConvertBitmapType(typeof(AtcExplicitBitmapContent));
@@ -223,7 +231,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             var face = content.Faces[0][0];
-            var alphaRange = CalculateAlphaRange(face);
+            AlphaRange alphaRange = CalculateAlphaRange(face);
 
             // Use BGRA4444 for textures with non-opaque alpha values
             if (alphaRange != AlphaRange.Opaque)
@@ -246,7 +254,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         static public void CompressColor16Bit(ContentProcessorContext context, TextureContent content)
         {
             var face = content.Faces[0][0];
-            var alphaRange = CalculateAlphaRange(face);
+            AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Opaque)
                 content.ConvertBitmapType(typeof(PixelBitmapContent<Bgr565>));
