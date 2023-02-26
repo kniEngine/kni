@@ -107,28 +107,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		static unsafe AlphaRange CalculateAlphaRange(BitmapContent bitmap)
         {
 			AlphaRange result = AlphaRange.Opaque;
-			var pixelBitmap = bitmap as PixelBitmapContent<Vector4>;
 
-			if (pixelBitmap != null)
-			{
-				for (int y = 0; y < pixelBitmap.Height; ++y)
+            var pixelBitmap = (PixelBitmapContent<Vector4>)bitmap;
+
+            for (int y = 0; y < pixelBitmap.Height; ++y)
+            {
+                Vector4[] row = pixelBitmap.GetRow(y);
+                fixed (Vector4* prow = row)
                 {
-                    Vector4[] row = pixelBitmap.GetRow(y);
-                    fixed (Vector4* prow = row)
+                    for (int i = 0; i < row.Length; i++)
                     {
-                        for (int i = 0; i < row.Length; i++)
+                        if (prow[i].W < 1.0)
                         {
-                            if (prow[i].W < 1.0)
-                            {
-                                if (prow[i].W == 0.0)
-                                    result = AlphaRange.Cutout;
-                                else 
-                                    return AlphaRange.Full;
-                            }
+                            if (prow[i].W == 0.0)
+                                result = AlphaRange.Cutout;
+                            else
+                                return AlphaRange.Full;
                         }
                     }
-				}
-			}
+                }
+            }
 
             return result;
         }
