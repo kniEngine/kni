@@ -93,7 +93,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="destinationRegion">Region of bitmap to be overwritten.</param>
         public static void Copy(BitmapContent sourceBitmap, Rectangle sourceRegion, BitmapContent destinationBitmap, Rectangle destinationRegion)
         {
-            ValidateCopyArguments(sourceBitmap, sourceRegion, destinationBitmap, destinationRegion);
+            if (sourceBitmap == null)
+                throw new ArgumentNullException("sourceBitmap");
+            if (destinationBitmap == null)
+                throw new ArgumentNullException("destinationBitmap");
+
+            // Make sure regions are within the bounds of the bitmaps
+            if (sourceRegion.Left < 0
+            || sourceRegion.Top < 0
+            || sourceRegion.Width <= 0
+            || sourceRegion.Height <= 0
+            || sourceRegion.Right > sourceBitmap.Width
+            || sourceRegion.Bottom > sourceBitmap.Height)
+                throw new ArgumentOutOfRangeException("sourceRegion");
+
+            if (destinationRegion.Left < 0
+            || destinationRegion.Top < 0
+            || destinationRegion.Width <= 0
+            || destinationRegion.Height <= 0
+            || destinationRegion.Right > destinationBitmap.Width
+            || destinationRegion.Bottom > destinationBitmap.Height)
+                throw new ArgumentOutOfRangeException("destinationRegion");
+
 
             SurfaceFormat sourceFormat;
             if (!sourceBitmap.TryGetFormat(out sourceFormat))
@@ -178,35 +199,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="format">Format being retrieved.</param>
         /// <returns>The GPU texture format of the bitmap type.</returns>
         public abstract bool TryGetFormat(out SurfaceFormat format);
-
-        /// <summary>
-        /// Validates the arguments to the Copy function.
-        /// </summary>
-        /// <param name="sourceBitmap">BitmapContent being copied.</param>
-        /// <param name="sourceRegion">Location of sourceBitmap.</param>
-        /// <param name="destinationBitmap">BitmapContent being overwritten.</param>
-        /// <param name="destinationRegion">Region of bitmap to be overwritten.</param>
-        protected static void ValidateCopyArguments(BitmapContent sourceBitmap, Rectangle sourceRegion, BitmapContent destinationBitmap, Rectangle destinationRegion)
-        {
-            if (sourceBitmap == null)
-                throw new ArgumentNullException("sourceBitmap");
-            if (destinationBitmap == null)
-                throw new ArgumentNullException("destinationBitmap");
-            // Make sure regions are within the bounds of the bitmaps
-            if (sourceRegion.Left < 0
-                || sourceRegion.Top < 0
-                || sourceRegion.Width <= 0
-                || sourceRegion.Height <= 0
-                || sourceRegion.Right > sourceBitmap.Width
-                || sourceRegion.Bottom > sourceBitmap.Height)
-                throw new ArgumentOutOfRangeException("sourceRegion");
-            if (destinationRegion.Left < 0
-                || destinationRegion.Top < 0
-                || destinationRegion.Width <= 0
-                || destinationRegion.Height <= 0
-                || destinationRegion.Right > destinationBitmap.Width
-                || destinationRegion.Bottom > destinationBitmap.Height)
-                throw new ArgumentOutOfRangeException("destinationRegion");
-        }
     }
 }
