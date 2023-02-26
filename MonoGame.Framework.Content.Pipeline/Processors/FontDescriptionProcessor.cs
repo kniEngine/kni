@@ -123,7 +123,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     output.Kerning.Add(new Vector3(0, glyph.Width, 0));
             }
 
-            ProcessPremultiplyAlpha(glyphAtlas);
+            if (PremultiplyAlpha)
+                TextureProcessor.ProcessPremultiplyAlpha((PixelBitmapContent<Vector4>)glyphAtlas);
 
             output.Texture.Faces[0].Add(glyphAtlas);
 
@@ -400,33 +401,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return data;
-        }
-
-        private unsafe void ProcessPremultiplyAlpha(BitmapContent bmp)
-        {
-            System.Diagnostics.Debug.Assert(bmp is PixelBitmapContent<Color>);
-
-            if (PremultiplyAlpha)
-            {
-                byte[] data = bmp.GetPixelData();
-                fixed (byte* pdata = data)
-                {
-                    int count = data.Length / 4;
-                    for (int idx = 0; idx < count; idx++)
-                    {
-                        byte r = pdata[idx * 4 + 0];
-                        byte g = pdata[idx * 4 + 1];
-                        byte b = pdata[idx * 4 + 2];
-                        byte a = pdata[idx * 4 + 3];
-
-                        pdata[idx * 4 + 0] = (byte)((r * a) / 255);
-                        pdata[idx * 4 + 1] = (byte)((g * a) / 255);
-                        pdata[idx * 4 + 2] = (byte)((b * a) / 255);
-                        //pdata[idx * 4 + 3] = a;
-                    }
-                }
-                bmp.SetPixelData(data);
-            }
         }
 
         public enum SmoothingMode
