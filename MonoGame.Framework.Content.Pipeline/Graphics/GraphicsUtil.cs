@@ -193,12 +193,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // low frequency alpha like clouds.  I don't know how we can 
             // pick the right thing in this case without a hint.
             //
-            if (alphaRange == AlphaRange.Opaque)
-                content.ConvertBitmapType(typeof(Dxt1BitmapContent));
-            else if (alphaRange == AlphaRange.Cutout)
-                content.ConvertBitmapType(typeof(Dxt3BitmapContent));
-            else
-                content.ConvertBitmapType(typeof(Dxt5BitmapContent));
+            switch (alphaRange)
+            {
+                case AlphaRange.Opaque:
+                    content.ConvertBitmapType(typeof(Dxt1BitmapContent));
+                    break;
+                case AlphaRange.Cutout:
+                    content.ConvertBitmapType(typeof(Dxt3BitmapContent));
+                    break;
+                case AlphaRange.Full:
+                    content.ConvertBitmapType(typeof(Dxt5BitmapContent));
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         static public void CompressAti(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
