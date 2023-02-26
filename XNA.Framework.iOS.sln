@@ -1,10 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1145
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 16.0.29728.190
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.iOS", "MonoGame.Framework\XNA.Framework.iOS.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
