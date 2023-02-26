@@ -107,28 +107,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		static unsafe AlphaRange CalculateAlphaRange(BitmapContent bitmap)
         {
 			AlphaRange result = AlphaRange.Opaque;
-			var pixelBitmap = bitmap as PixelBitmapContent<Vector4>;
 
-			if (pixelBitmap != null)
-			{
-				for (int y = 0; y < pixelBitmap.Height; ++y)
+            var pixelBitmap = (PixelBitmapContent<Vector4>)bitmap;
+
+            for (int y = 0; y < pixelBitmap.Height; ++y)
+            {
+                Vector4[] row = pixelBitmap.GetRow(y);
+                fixed (Vector4* prow = row)
                 {
-                    Vector4[] row = pixelBitmap.GetRow(y);
-                    fixed (Vector4* prow = row)
+                    for (int i = 0; i < row.Length; i++)
                     {
-                        for (int i = 0; i < row.Length; i++)
+                        if (prow[i].W < 1.0)
                         {
-                            if (prow[i].W < 1.0)
-                            {
-                                if (prow[i].W == 0.0)
-                                    result = AlphaRange.Cutout;
-                                else 
-                                    return AlphaRange.Full;
-                            }
+                            if (prow[i].W == 0.0)
+                                result = AlphaRange.Cutout;
+                            else
+                                return AlphaRange.Full;
                         }
                     }
-				}
-			}
+                }
+            }
 
             return result;
         }
@@ -195,12 +193,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // low frequency alpha like clouds.  I don't know how we can 
             // pick the right thing in this case without a hint.
             //
-            if (alphaRange == AlphaRange.Opaque)
-                content.ConvertBitmapType(typeof(Dxt1BitmapContent));
-            else if (alphaRange == AlphaRange.Cutout)
-                content.ConvertBitmapType(typeof(Dxt3BitmapContent));
-            else
-                content.ConvertBitmapType(typeof(Dxt5BitmapContent));
+            switch (alphaRange)
+            {
+                case AlphaRange.Opaque:
+                    content.ConvertBitmapType(typeof(Dxt1BitmapContent));
+                    break;
+                case AlphaRange.Cutout:
+                    content.ConvertBitmapType(typeof(Dxt3BitmapContent));
+                    break;
+                case AlphaRange.Full:
+                    content.ConvertBitmapType(typeof(Dxt5BitmapContent));
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         static public void CompressAti(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
