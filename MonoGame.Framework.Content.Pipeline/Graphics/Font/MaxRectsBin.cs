@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <summary>
         /// Indicates if rectangle can be rotated.
         /// </summary>
-        public bool AllowRotations { get; }
+        public bool AllowRotations { get; private set; }
 
         /// <summary>
         /// Padding to add to both sides in the horizontal dimension. Default is 0.
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public int GrowLimit
         {
-            get => _growLimit;
+            get { return _growLimit;  }
             set
             {
                 if (value <= 0)
@@ -174,33 +174,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             width += PaddingWidth;
             height += PaddingHeight;
 
-            void FindPositionForNewNode(out Rectangle rect)
-            {
-                var score1 = 0; // Unused in this function. We don't need to know the score after finding the position.
-                var score2 = 0;
-                switch (heuristic)
-                {
-                    case MaxRectsHeuristic.Bssf:
-                        rect = FindPositionForNewNodeBestShortSideFit(width, height, ref score1, ref score2);
-                        break;
-                    case MaxRectsHeuristic.Bl:
-                        rect = FindPositionForNewNodeBottomLeft(width, height, ref score1, ref score2);
-                        break;
-                    case MaxRectsHeuristic.RectContactPointRule:
-                        rect = FindPositionForNewNodeContactPoint(width, height, ref score1);
-                        break;
-                    case MaxRectsHeuristic.Blsf:
-                        rect = FindPositionForNewNodeBestLongSideFit(width, height, ref score2, ref score1);
-                        break;
-                    case MaxRectsHeuristic.Baf:
-                        rect = FindPositionForNewNodeBestAreaFit(width, height, ref score1, ref score2);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(heuristic), heuristic, null);
-                }
-            }
-
-            FindPositionForNewNode(out var newNode);
+            Rectangle newNode;
+            FindPositionForNewNode(heuristic, width, height, out newNode);
 
             if (Grow == GrowRule.None && newNode.Height == 0)
                 throw new Exception($"Failed to pack rectangle of size ({width}, {height}). BinWidth: {BinWidth}, BinHeight: {BinHeight}. Growing not allowed.");
@@ -210,7 +185,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 DoGrow();
                 growTries++;
-                FindPositionForNewNode(out newNode);
+                FindPositionForNewNode(heuristic, width, height, out newNode);
                 if (growTries >= GrowLimit)
                     throw new Exception($"Failed to pack rectangle of size ({width}, {height}). BinWidth: {BinWidth}, BinHeight: {BinHeight}, Occupancy: {GetOccupancy()}");
             }
@@ -223,10 +198,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 UsedHeight = newNode.Bottom;
 
             if (!IncludePadding)
+            {
                 newNode = new Rectangle(
                     newNode.X + PaddingWidth, newNode.Y + PaddingHeight,
                     newNode.Width - PaddingWidth * 2, newNode.Height - PaddingHeight * 2);
+            }
             return newNode;
+        }
+
+        void FindPositionForNewNode(MaxRectsHeuristic heuristic, int width, int height, 
+                  out Rectangle rect)
+        {
+            var score1 = 0; // Unused in this function. We don't need to know the score after finding the position.
+            var score2 = 0;
+            switch (heuristic)
+            {
+                case MaxRectsHeuristic.Bssf:
+                    rect = FindPositionForNewNodeBestShortSideFit(width, height, ref score1, ref score2);
+                    break;
+                case MaxRectsHeuristic.Bl:
+                    rect = FindPositionForNewNodeBottomLeft(width, height, ref score1, ref score2);
+                    break;
+                case MaxRectsHeuristic.RectContactPointRule:
+                    rect = FindPositionForNewNodeContactPoint(width, height, ref score1);
+                    break;
+                case MaxRectsHeuristic.Blsf:
+                    rect = FindPositionForNewNodeBestLongSideFit(width, height, ref score2, ref score1);
+                    break;
+                case MaxRectsHeuristic.Baf:
+                    rect = FindPositionForNewNodeBestAreaFit(width, height, ref score1, ref score2);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(heuristic), heuristic, null);
+            }
         }
 
         /// <summary>
