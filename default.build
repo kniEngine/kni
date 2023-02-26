@@ -5,8 +5,7 @@
 
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
   <property name="msbuild15" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe" />
-  <property name="msbuild16" value="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\msbuild.exe" />
-  <property name="msbuildwin17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
+  <property name="msbuild17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
   
   <!-- Helper default target. -->
   <target   name="build" 
@@ -63,11 +62,11 @@
   
   <target name="build_windows" description="Build Windows" depends="_prebuild">
 
-      <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug" />
 
       <call target="build_portable"/>
       
@@ -110,11 +109,11 @@
   
   <target name="build_desktopGL" description="Build DesktopGL" depends="_prebuild">
 
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
-      <exec program="${msbuild16}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
       
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
@@ -133,20 +132,20 @@
     </if>
     -->
 
-      <exec program="${msbuildwin17}" commandline="XNA.Framework.iOS.sln /t:restore" />
-      <exec program="${msbuildwin17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Debug" />
-      <exec program="${msbuildwin17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Debug" />
-      <exec program="${msbuildwin17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
-      <exec program="${msbuildwin17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:restore" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
 
   </target>
 
   <target name="build_android" description="Build Android" depends="_prebuild">
 
       <!--
-      <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild16}" commandline="MonoGame.Framework.Android.9K.sln /t:Clean /p:Configuration=Release" />
-        <exec program="${msbuild16}" commandline="MonoGame.Framework.Android.9K.sln /t:Build /p:Configuration=Release" />
+      <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
+        <exec program="${msbuild17}" commandline="MonoGame.Framework.Android.9K.sln /t:Clean /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="MonoGame.Framework.Android.9K.sln /t:Build /p:Configuration=Release" />
       </if>
       -->
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
@@ -166,12 +165,12 @@
   <target name="build_windowsUAP10" description="Build Windows 10 UAP" depends="_prebuild">
 
       <!--
-      <exec program="${msbuild16}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild16}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /p:Configuration=Release' />
       -->
-      <exec program="${msbuild16}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
-      <exec program="${msbuild16}" commandline='XNA.Framework.UAP.sln /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild16}" commandline='XNA.Framework.UAP.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
+      <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
+      <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
 
   </target>
 
