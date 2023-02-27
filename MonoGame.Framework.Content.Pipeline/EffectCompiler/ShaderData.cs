@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     /// <summary>
     /// Defines types for effect parameters and shader constants.
     /// </summary>
-    public enum EffectParameterTypeContent
+    enum EffectParameterTypeContent
     {
         /// <summary>
         /// Pointer to void type.
