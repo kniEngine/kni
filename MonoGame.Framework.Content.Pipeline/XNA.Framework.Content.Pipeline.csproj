@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{73509F44-3566-4B79-BB47-C7C6E2AA2351}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Xna.Framework.Content.Pipeline</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+    <OutputPath>..\Artifacts\Xna.Framework.Content.Pipeline\Debug\net40</OutputPath>
+    <IntermediateOutputPath>obj\Debug\net40</IntermediateOutputPath>
+    <DocumentationFile>bin\Debug\net40\Xna.Framework.Content.Pipeline.xml</DocumentationFile>
+    <DefineConstants>DEBUG;TRACE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <OutputPath>..\Artifacts\Xna.Framework.Content.Pipeline\Release\net40</OutputPath>
+    <IntermediateOutputPath>obj\Release\net40</IntermediateOutputPath>
+    <DocumentationFile>bin\Release\net40\Xna.Framework.Content.Pipeline.xml</DocumentationFile>
+    <DefineConstants>TRACE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Processors\PassThroughProcessor.cs" />
+    <Compile Include="LoadedTypeCollection.cs" />
+    <Compile Include="XmlImporter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\ArrayWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBaseGeneric.cs" />
+    <Compile Include="Serialization\Compiler\DictionaryWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />
+    <Compile Include="Serialization\Compiler\ContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\EnumWriter.cs" />
+    <Compile Include="Serialization\Compiler\ExternalReferenceWriter.cs" />
+    <Compile Include="Serialization\Compiler\MultiArrayWriter.cs" />
+    <Compile Include="Serialization\Compiler\NullableWriter.cs" />
+    <Compile Include="Serialization\Compiler\ReflectiveWriter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\ArraySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializerAttribute.cs" />
+    <Compile Include="Serialization\Intermediate\ContentTypeSerializerT.cs" />
+    <Compile Include="Serialization\Intermediate\DictionarySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ElementSerializerT.cs" />
+    <Compile Include="Serialization\Intermediate\EnumSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ExternalReferenceSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\GenericCollectionHelper.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateReader.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\IntermediateWriter.cs" />
+    <Compile Include="Serialization\Intermediate\ListSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NamedValueDictionarySerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NamespaceAliasHelper.cs" />
+    <Compile Include="Serialization\Intermediate\NonGenericIListSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\NullableSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PackedElementsHelper.cs" />
+    <Compile Include="Serialization\Intermediate\ReflectiveSerializer.cs" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\BooleanWriter.cs" />
+    <Compile Include="Serialization\Compiler\ByteWriter.cs" />
+    <Compile Include="Serialization\Compiler\CharWriter.cs" />
+    <Compile Include="Serialization\Compiler\DateTimeWriter.cs" />
+    <Compile Include="Serialization\Compiler\DecimalWriter.cs" />
+    <Compile Include="Serialization\Compiler\DoubleWriter.cs" />
+    <Compile Include="Serialization\Compiler\Int16Writer.cs" />
+    <Compile Include="Serialization\Compiler\Int32Writer.cs" />
+    <Compile Include="Serialization\Compiler\Int64Writer.cs" />
+    <Compile Include="Serialization\Compiler\ListWriter.cs" />
+    <Compile Include="Serialization\Compiler\SByteWriter.cs" />
+    <Compile Include="Serialization\Compiler\SingleWriter.cs" />
+    <Compile Include="Serialization\Compiler\StringWriter.cs" />
+    <Compile Include="Serialization\Compiler\TimeSpanWriter.cs" />
+    <Compile Include="Serialization\Compiler\UInt16Writer.cs" />
+    <Compile Include="Serialization\Compiler\UInt32Writer.cs" />
+    <Compile Include="Serialization\Compiler\UInt64Writer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\BoolSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ByteSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\CharSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\DoubleSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\FloatSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\IntSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\LongSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\SByteSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ShortSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\StringSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\TimeSpanSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\UIntSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\ULongSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\UShortSerializer.cs" />
+  </ItemGroup>
+    
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\BoundingBoxWriter.cs" />
+    <Compile Include="Serialization\Compiler\BoundingFrustumWriter.cs" />
+    <Compile Include="Serialization\Compiler\BoundingSphereWriter.cs" />
+    <Compile Include="Serialization\Compiler\ColorWriter.cs" />
+    <Compile Include="Serialization\Compiler\ComplexWriter.cs" />
+    <Compile Include="Serialization\Compiler\CurveWriter.cs" />
+    <Compile Include="Serialization\Compiler\MatrixWriter.cs" />
+    <Compile Include="Serialization\Compiler\PlaneWriter.cs" />
+    <Compile Include="Serialization\Compiler\PointWriter.cs" />
+    <Compile Include="Serialization\Compiler\QuaternionWriter.cs" />
+    <Compile Include="Serialization\Compiler\RayWriter.cs" />
+    <Compile Include="Serialization\Compiler\RectangleWriter.cs" />
+    <Compile Include="Serialization\Compiler\Vector2Writer.cs" />
+    <Compile Include="Serialization\Compiler\Vector3Writer.cs" />
+    <Compile Include="Serialization\Compiler\Vector4Writer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Intermediate\ColorSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\CurveKeyCollectionSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\MatrixSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PlaneSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\PointSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\QuaternionSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\RectangleSerializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector2Serializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector3Serializer.cs" />
+    <Compile Include="Serialization\Intermediate\Vector4Serializer.cs" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Include="ChildCollection.cs" />
+    <Compile Include="ContentBuildLogger.cs" />
+    <Compile Include="ContentIdentity.cs" />
+    <Compile Include="ContentImporter.cs" />
+    <Compile Include="ContentImporterAttribute.cs" />
+    <Compile Include="ContentImporterContext.cs" />
+    <Compile Include="ContentItem.cs" />
+    <Compile Include="ContentProcessor.cs" />
+    <Compile Include="ContentProcessorAttribute.cs" />
+    <Compile Include="ContentProcessorContext.cs" />
+    <Compile Include="ExternalReference.cs" />
+    <Compile Include="IContentImporter.cs" />
+    <Compile Include="IContentProcessor.cs" />
+    <Compile Include="InvalidContentException.cs" />
+    <Compile Include="NamedValueDictionary.cs" />
+    <Compile Include="OpaqueDataDictionary.cs" />
+    <Compile Include="PipelineComponentScanner.cs" />
+    <Compile Include="PipelineException.cs" />
+    <Compile Include="ProcessorParameter.cs" />
+    <Compile Include="ProcessorParameterCollection.cs" />
+    <Compile Include="TargetPlatform.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Utilities\LZ4\LZ4Codec.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe32.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe32HC.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64.Dirty.cs" />
+    <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64HC.Dirty.cs" />
+    <Compile Include="Utilities\PathHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+      <Link>Utilities\CurrentPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
+      <Link>Utilities\ReflectionHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\MonoGame.Framework\Graphics\GraphicsExtensions.cs">
+      <Link>Utilities\GraphicsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\MonoGame.Framework\Content\ContentExtensions.cs">
+      <Link>Utilities\ContentExtensions.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>XNA.Framework.WindowsDX11</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
