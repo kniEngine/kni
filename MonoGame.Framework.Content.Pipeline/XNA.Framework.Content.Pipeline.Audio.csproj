@@ -1,55 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ACD26013-5730-4CAF-9468-3BAAE867A8A2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <BaseOutputPath>..\Artifacts\Xna.Framework.Content.Pipeline.Audio\</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <AssemblyName>Xna.Framework.Content.Pipeline.Audio</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Audio</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants></DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>..\Artifacts\Xna.Framework.Content.Pipeline.Audio\Debug\net40</OutputPath>
-    <IntermediateOutputPath>obj\Debug\net40</IntermediateOutputPath>
-    <DocumentationFile>bin\Debug\net40\Xna.Framework.Content.Pipeline.Audio.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>..\Artifacts\Xna.Framework.Content.Pipeline.Audio\Release\net40</OutputPath>
-    <IntermediateOutputPath>obj\Release\net40</IntermediateOutputPath>
-    <DocumentationFile>bin\Release\net40\Xna.Framework.Content.Pipeline.Audio.xml</DocumentationFile>
-    <DefineConstants>TRACE;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Audio\AudioContent.cs" />
@@ -104,7 +73,6 @@
     </None>
   </ItemGroup>
 
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
       <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
