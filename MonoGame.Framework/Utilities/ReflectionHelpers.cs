@@ -125,7 +125,7 @@ namespace MonoGame.Framework.Utilities
 
         internal static TDelegate GetDelegateForFunctionPointer<TDelegate>(IntPtr ptr)
         {
-#if NET40 || NET45
+#if NET40 || NET45 || NET40_OR_GREATER
             return (TDelegate)(object)Marshal.GetDelegateForFunctionPointer(ptr, typeof(TDelegate));
 #else
             return Marshal.GetDelegateForFunctionPointer<TDelegate>(ptr);
@@ -154,7 +154,7 @@ namespace MonoGame.Framework.Utilities
 
             static ManagedSizeOf()
             {
-#if NET40 || NET45
+#if NET40 || NET45 || NET40_OR_GREATER
                 Value = Marshal.SizeOf(typeof(T));
 #else
                 Value = Marshal.SizeOf<T>();
