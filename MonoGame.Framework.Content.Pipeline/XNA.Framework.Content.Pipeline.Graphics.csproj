@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="EffectCompiler\SamplerStateContent.cs" />
     <Compile Include="EffectCompiler\TPGParser\Parser.cs" />
     <Compile Include="EffectCompiler\TPGParser\ParseTree.cs" />
