@@ -33,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="Processors\EffectProcessor.cs" />
     <Compile Include="Processors\EffectProcessorDebugMode.cs" />
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />

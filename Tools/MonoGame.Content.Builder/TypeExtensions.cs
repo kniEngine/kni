@@ -10,16 +10,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     static internal class TypeExtensions
     {
-        public static Color ToColor(this System.Drawing.Color color)
-        {
-            return new Color(color.R, color.G, color.B, color.A);
-        }
-
-        public static Vector3 ToVector3(this System.Drawing.Color color)
-        {
-            return new Vector3(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f);
-        }
-
         public static void AddUnique<T>(this List<T> list, T item)
         {
             if (!list.Contains(item))

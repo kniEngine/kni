@@ -43,7 +43,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Drawing" />
     <PackageReference Include="NUnitLite" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />

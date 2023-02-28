@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             _writers = new List<Type>();
 
             // import the build-in Processors
-            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly);
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly); // Common
 
             // import the referenced Processors
             foreach (var assemblyPath in Assemblies)
