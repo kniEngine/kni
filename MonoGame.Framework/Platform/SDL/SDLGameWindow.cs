@@ -2,12 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework
 {
@@ -35,24 +37,6 @@ namespace Microsoft.Xna.Framework
                 int x = 0, y = 0;
                 Sdl.Window.GetPosition(Handle, out x, out y);
                 return new Rectangle(x, y, _width, _height);
-            }
-        }
-
-        public override Point Position
-        {
-            get
-            {
-                int x = 0, y = 0;
-
-                if (!IsFullScreen)
-                    Sdl.Window.GetPosition(Handle, out x, out y);
-
-                return new Point(x, y);
-            }
-            set
-            {
-                Sdl.Window.SetPosition(Handle, value.X, value.Y);
-                _wasMoved = true;
             }
         }
 

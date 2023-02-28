@@ -2,12 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.ComponentModel;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
+
 
 namespace Microsoft.Xna.Framework
 {
@@ -40,14 +41,6 @@ namespace Microsoft.Xna.Framework
             set { _allowAltF4 = value; }
         }
 
-#if (WINDOWS && !WINDOWS_UAP) || DESKTOPGL
-        /// <summary>
-        /// The location of this window on the desktop, eg: global coordinate space
-        /// which stretches across all screens.
-        /// </summary>
-        public abstract Point Position { get; set; }
-#endif
-
 	    /// <summary>
 	    /// The display orientation on a mobile device.
 	    /// </summary>
@@ -75,7 +68,8 @@ namespace Microsoft.Xna.Framework
         /// For UWP this has no effect. The title should be
         /// set by using the DisplayName property found in the app manifest file.
         /// </remarks>
-        public string Title {
+        public string Title
+        {
 			get { return _title; }
 			set 
             {
