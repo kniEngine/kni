@@ -1,4 +1,10 @@
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.nuspec		        -OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
+
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Audio.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Graphics.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Media.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
+
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.DesktopGL.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.Android.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.8.9102.0  -Properties Configuration=Release
