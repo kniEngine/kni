@@ -247,11 +247,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public event EventHandler<EventArgs> Exiting;
 
-#if WINDOWS_UAP
-        [CLSCompliant(false)]
-        public Windows.ApplicationModel.Activation.ApplicationExecutionState PreviousExecutionState { get; internal set; }
-#endif
-
         #endregion
 
         #region Public Methods

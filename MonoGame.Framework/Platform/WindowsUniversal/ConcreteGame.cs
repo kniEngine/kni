@@ -30,7 +30,8 @@ namespace Microsoft.Xna.Platform
 
         internal static readonly TouchQueue TouchQueue = new TouchQueue();
 
-        internal static ApplicationExecutionState PreviousExecutionState { get; set; }
+        [CLSCompliant(false)]
+        public static ApplicationExecutionState PreviousExecutionState { get; internal set; }
 
         public ConcreteGame(Game game) : base(game)
         {
@@ -102,8 +103,6 @@ namespace Microsoft.Xna.Platform
 
             CoreApplication.Suspending += this.CoreApplication_Suspending;
             CoreApplication.Resuming += this.CoreApplication_Resuming;
-
-            Game.PreviousExecutionState = PreviousExecutionState;
         }
 
         private void CoreApplication_Suspending(object sender, SuspendingEventArgs e)
