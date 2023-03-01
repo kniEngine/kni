@@ -2,11 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -14,14 +13,11 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Windows;
 using Microsoft.Xna.Platform;
-using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+using SysDrawing = System.Drawing;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using Point = System.Drawing.Point;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using XnaPoint = Microsoft.Xna.Framework.Point;
+
 
 namespace MonoGame.Framework
 {
@@ -37,7 +33,7 @@ namespace MonoGame.Framework
         private bool _isMouseHidden;
         private bool _isMouseInBounds;
 
-        private Point _locationBeforeFullScreen;
+        private SysDrawing.Point _locationBeforeFullScreen;
         // flag to indicate that we're switching to/from full screen and should ignore resize events
         private bool _switchingFullScreen;
 
@@ -59,7 +55,7 @@ namespace MonoGame.Framework
         {
             get
             {
-                var position = Form.PointToScreen(Point.Empty);
+                var position = Form.PointToScreen(SysDrawing.Point.Empty);
                 var size = Form.ClientSize;
                 return new Rectangle(position.X, position.Y, size.Width, size.Height);
             }
@@ -98,17 +94,6 @@ namespace MonoGame.Framework
             get { return DisplayOrientation.Default; }
         }
 
-        public override XnaPoint Position
-        {
-            get { return new XnaPoint(Form.Location.X, Form.Location.Y); }
-            set
-            {
-                _wasMoved = true;
-                Form.Location = new Point(value.X, value.Y);
-                RefreshAdapter();
-            }
-        }
-
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
         }
@@ -140,7 +125,7 @@ namespace MonoGame.Framework
             _game = concreteGame.Game;
 
             Form = new WinFormsGameForm(this);
-            ChangeClientSize(new Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight));
+            ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
             SetIcon();
             Title = MonoGame.Framework.Utilities.AssemblyHelper.GetDefaultWindowTitle();
@@ -191,7 +176,7 @@ namespace MonoGame.Framework
                 return;
             var handle = ExtractIcon(IntPtr.Zero, assembly.Location, 0);
             if (handle != IntPtr.Zero)
-                Form.Icon = Icon.FromHandle(handle);
+                Form.Icon = SysDrawing.Icon.FromHandle(handle);
         }
 
         ~WinFormsGameWindow()
@@ -251,12 +236,12 @@ namespace MonoGame.Framework
 
         internal void Initialize(int width, int height)
         {
-            ChangeClientSize(new Size(width, height));
+            ChangeClientSize(width, height);
         }
 
         internal void Initialize(PresentationParameters pp)
         {
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (pp.IsFullScreen)
             {
@@ -314,18 +299,14 @@ namespace MonoGame.Framework
             if (_concreteGame.Window == this)
             {
                 UpdateBackBufferSize();
-                RefreshAdapter();
+
+                // the display that the window is on might have changed, so we need to
+                // check and possibly update the Adapter of the GraphicsDevice
+                if (_concreteGame.GraphicsDevice != null)
+                    _concreteGame.GraphicsDevice.RefreshAdapter();
             }
 
             OnClientSizeChanged();
-        }
-
-        private void RefreshAdapter()
-        {
-            // the display that the window is on might have changed, so we need to
-            // check and possibly update the Adapter of the GraphicsDevice
-            if (_concreteGame.GraphicsDevice != null)
-                _concreteGame.GraphicsDevice.RefreshAdapter();
         }
 
         private void UpdateBackBufferSize()
@@ -403,13 +384,15 @@ namespace MonoGame.Framework
             public System.Drawing.Point p;
         }
 
-        internal void ChangeClientSize(Size clientBounds)
+        internal void ChangeClientSize(int width, int height)
         {
+            var clientBounds = new SysDrawing.Size(width, height);
+
             var prevIsResizing = Form.IsResizing;
             // make sure we don't see the events from this as a user resize
             Form.IsResizing = true;
 
-            if(this.Form.ClientSize != clientBounds)
+            if (this.Form.ClientSize != clientBounds)
                 this.Form.ClientSize = clientBounds;
 
             // if the window wasn't moved manually and it's resized, it should be centered
@@ -489,7 +472,7 @@ namespace MonoGame.Framework
                 raiseClientSizeChanged = true;
             }
 
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (raiseClientSizeChanged)
                 OnClientSizeChanged();
