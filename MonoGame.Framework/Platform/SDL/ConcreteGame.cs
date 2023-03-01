@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform
         private readonly List<Keys> _keys;
 
         private int _isExiting;
-        private SdlGameWindow _view;
+        private SdlGameWindow _window;
 
         private readonly List<string> _dropList;
 
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform
             Sdl.DisableScreenSaver();
 
             GamePad.InitDatabase();
-            Window = _view = new SdlGameWindow(Game);
+            Window = _window = new SdlGameWindow(Game);
         }
 
         public override void BeforeInitialize()
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform
                 if (base.IsMouseVisible != value)
                 {
                     base.IsMouseVisible = value;
-                    _view.SetCursorVisible(Game.IsMouseVisible);
+                    _window.SetCursorVisible(Game.IsMouseVisible);
                 }
             }
         }
@@ -161,20 +161,20 @@ namespace Microsoft.Xna.Platform
                         if (!_keys.Contains(key))
                             _keys.Add(key);
                         char character = (char)ev.Key.Keysym.Sym;
-                        _view.OnKeyDown(key);
+                        _window.OnKeyDown(key);
                         if (char.IsControl(character))
-                            _view.OnTextInput(character, key);
+                            _window.OnTextInput(character, key);
                         break;
                     }
                     case Sdl.EventType.KeyUp:
                     {
                         var key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
                         _keys.Remove(key);
-                        _view.OnKeyUp(key);
+                        _window.OnKeyUp(key);
                         break;
                     }
                     case Sdl.EventType.TextInput:
-                        if (_view.IsTextInputAttached())
+                        if (_window.IsTextInputAttached())
                         {
                             int len = 0;
                             int utf8character = 0; // using an int to encode multibyte characters longer than 2 bytes
@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Platform
 
                                         if (codepoint >= 0 && codepoint < 0xFFFF)
                                         {
-                                            _view.OnTextInput((char)codepoint, KeyboardUtil.ToXna(codepoint));
+                                            _window.OnTextInput((char)codepoint, KeyboardUtil.ToXna(codepoint));
                                             // UTF16 characters beyond 0xFFFF are not supported (and would require a surrogate encoding that is not supported by the char type)
                                         }
                                     }
@@ -233,14 +233,14 @@ namespace Microsoft.Xna.Platform
                         // If the ID is not the same as our main window ID
                         // that means that we received an event from the
                         // dummy window, so don't process the event.
-                        if (ev.Window.WindowID != _view.Id)
+                        if (ev.Window.WindowID != _window.Id)
                             break;
 
                         switch (ev.Window.EventID)
                         {
                             case Sdl.Window.EventId.Resized:
                             case Sdl.Window.EventId.SizeChanged:
-                                _view.ClientResize(ev.Window.Data1, ev.Window.Data2);
+                                _window.ClientResize(ev.Window.Data1, ev.Window.Data2);
                                 break;
                             case Sdl.Window.EventId.FocusGained:
                                 IsActive = true;
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Platform
                                 IsActive = false;
                                 break;
                             case Sdl.Window.EventId.Moved:
-                                _view.Moved();
+                                _window.Moved();
                                 break;
                             case Sdl.Window.EventId.Close:
                                 _isExiting++;
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Platform
                         break;
 
                     case Sdl.EventType.DropFile:
-                        if (ev.Drop.WindowId != _view.Id)
+                        if (ev.Drop.WindowId != _window.Id)
                             break;
 
                         string path = InteropHelpers.Utf8ToString(ev.Drop.File);
@@ -268,12 +268,12 @@ namespace Microsoft.Xna.Platform
                         break;
 
                     case Sdl.EventType.DropComplete:
-                        if (ev.Drop.WindowId != _view.Id)
+                        if (ev.Drop.WindowId != _window.Id)
                             break;
 
                         if (_dropList.Count > 0)
                         {
-                            _view.OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
+                            _window.OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
                             _dropList.Clear();
                         }
 
@@ -329,20 +329,20 @@ namespace Microsoft.Xna.Platform
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
         {
-            _view.BeginScreenDeviceChange(willBeFullScreen);
+            _window.BeginScreenDeviceChange(willBeFullScreen);
         }
 
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
-            _view.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight);
+            _window.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (_view != null)
+            if (_window != null)
             {
-                _view.Dispose();
-                _view = null;
+                _window.Dispose();
+                _window = null;
 
                 Joystick.CloseDevices();
 
