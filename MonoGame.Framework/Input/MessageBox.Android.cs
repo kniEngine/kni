@@ -13,9 +13,9 @@ namespace Microsoft.Xna.Framework.Input
         private static Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             tcs = new TaskCompletionSource<int?>();
-            Game.Activity.RunOnUiThread(() =>
+            AndroidGameWindow.Activity.RunOnUiThread(() =>
             {
-                alert = new AlertDialog.Builder(Game.Activity).Create();
+                alert = new AlertDialog.Builder(AndroidGameWindow.Activity).Create();
 
                 alert.SetTitle(title);
                 alert.SetMessage(description);

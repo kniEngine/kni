@@ -18,16 +18,16 @@ namespace Microsoft.Xna.Platform
     {
         public ConcreteGame(Game game) : base(game)
         {
-            System.Diagnostics.Debug.Assert(Game.Activity != null, "Must set Game.Activity before creating the Game instance");
-            Game.Activity.Game = Game;
+            System.Diagnostics.Debug.Assert(AndroidGameWindow.Activity != null, "Must set Game.Activity before creating the Game instance");
+            AndroidGameWindow.Activity.Game = Game;
             AndroidGameActivity.Paused += Activity_Paused;
             AndroidGameActivity.Resumed += Activity_Resumed;
 
-            _gameWindow = new AndroidGameWindow(Game.Activity, game);
+            _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             Window = _gameWindow;
             Services.AddService(typeof(View), _gameWindow.GameView);
 
-            MediaLibrary.Context = Game.Activity;
+            MediaLibrary.Context = AndroidGameWindow.Activity;
         }
 
         protected override void Dispose(bool disposing)
@@ -76,9 +76,9 @@ namespace Microsoft.Xna.Platform
 
         public override void BeforeInitialize()
         {
-            var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(Game.Activity);
+            var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
 
-            switch (Game.Activity.Resources.Configuration.Orientation)
+            switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
             {
                 case Android.Content.Res.Orientation.Portrait:
                     this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.PortraitDown ? DisplayOrientation.PortraitDown : DisplayOrientation.Portrait, false);
@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Platform
                 _isActivityActive = true;
                 IsActive = _isActivityActive && _hasWindowFocus;
                 _gameWindow.GameView.Resume();
-                if (_mediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
+                if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
                     MediaPlayer.Resume();
                 if (!_gameWindow.GameView.IsFocused)
                     _gameWindow.GameView.RequestFocus();
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform
                 _mediaPlayer_PrevState = MediaPlayer.State;
                 _gameWindow.GameView.Pause();
                 _gameWindow.GameView.ClearFocus();
-                if (Game.Activity.AutoPauseAndResumeMediaPlayer)
+                if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
                     MediaPlayer.Pause();
             }
         }

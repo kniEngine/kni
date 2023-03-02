@@ -69,7 +69,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         static void Initialize()
         {
-            sensorManager = (SensorManager)Game.Activity.GetSystemService(Context.SensorService);
+            sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
             sensorMagneticField = sensorManager.GetDefaultSensor(SensorType.MagneticField);
             sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }

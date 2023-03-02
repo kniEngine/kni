@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Media
             Player = new Android.Media.MediaPlayer();
             if (Player != null)
             {
-                var afd = Game.Activity.Assets.OpenFd(FileName);
+                var afd = AndroidGameWindow.Activity.Assets.OpenFd(FileName);
                 if (afd != null)
                 {
                     Player.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
