@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework
                 }
 
 #if ANDROID
-                Activity = null;
+                AndroidGameWindow.Activity = null;
 #endif
 
                 _isDisposed = true;
@@ -110,7 +110,8 @@ namespace Microsoft.Xna.Framework
 
 #if ANDROID
         [CLSCompliant(false)]
-        public static AndroidGameActivity Activity { get; internal set; }
+        [Obsolete]
+        public static AndroidGameActivity Activity { get { return AndroidGameWindow.Activity; } }
 #endif
         private static Game _instance = null;
         internal static Game Instance { get { return Game._instance; } }
@@ -246,11 +247,6 @@ namespace Microsoft.Xna.Framework
         /// Raised when this game is exiting.
         /// </summary>
         public event EventHandler<EventArgs> Exiting;
-
-#if WINDOWS_UAP
-        [CLSCompliant(false)]
-        public Windows.ApplicationModel.Activation.ApplicationExecutionState PreviousExecutionState { get; internal set; }
-#endif
 
         #endregion
 

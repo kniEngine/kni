@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 isConnected = (maximumTouchCount > 0);
 #elif ANDROID
                 // http://developer.android.com/reference/android/content/pm/PackageManager.html#FEATURE_TOUCHSCREEN
-                var pm = Game.Activity.PackageManager;
+                var pm = AndroidGameWindow.Activity.PackageManager;
                 isConnected = pm.HasSystemFeature(PackageManager.FeatureTouchscreen);
                 if (pm.HasSystemFeature(PackageManager.FeatureTouchscreenMultitouchJazzhand))
                     maximumTouchCount = 5;

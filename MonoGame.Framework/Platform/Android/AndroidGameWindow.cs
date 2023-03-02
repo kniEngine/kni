@@ -17,6 +17,8 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
+        internal static AndroidGameActivity Activity { get; set; }
+
         internal AndroidSurfaceView GameView { get; private set; }
         internal IResumeManager Resumer;
 
@@ -298,7 +300,7 @@ namespace Microsoft.Xna.Framework
                         TouchPanelState.ReleaseAllTouches();
                     }
 
-                    Game.Activity.RequestedOrientation = requestedOrientation;
+                    AndroidGameWindow.Activity.RequestedOrientation = requestedOrientation;
 
                     OnOrientationChanged();
                 }

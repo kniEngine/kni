@@ -14,14 +14,14 @@ namespace Microsoft.Xna.Framework.Input
         {
             tcs = new TaskCompletionSource<string>();
 
-            Game.Activity.RunOnUiThread(() =>
+            AndroidGameWindow.Activity.RunOnUiThread(() =>
             {
-                alert = new AlertDialog.Builder(Game.Activity).Create();
+                alert = new AlertDialog.Builder(AndroidGameWindow.Activity).Create();
 
                 alert.SetTitle(title);
                 alert.SetMessage(description);
 
-                var input = new EditText(Game.Activity) { Text = defaultText };
+                var input = new EditText(AndroidGameWindow.Activity) { Text = defaultText };
 
                 if (defaultText != null)
                     input.SetSelection(defaultText.Length);

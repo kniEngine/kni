@@ -71,7 +71,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         static void Initialize()
         {
-            sensorManager = (SensorManager)Game.Activity.GetSystemService(Context.SensorService);
+            sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
             sensor = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 

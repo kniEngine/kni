@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
                         // TODO: Find a way to set Game.IsActive = false during a call.
                         // View.ClearFocus() doesn't have any affect. 
                         // The best we can do currently is to sent the game to foreground.
-                        Game.Activity.MoveTaskToBack(true);
+                        AndroidGameWindow.Activity.MoveTaskToBack(true);
                     }
                 }
             }
