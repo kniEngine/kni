@@ -347,7 +347,8 @@ namespace MonoGame.Tests {
 				else
 					reason = ExitReason.None;
 
-				if (reason != ExitReason.None) {
+				if (reason != ExitReason.None)
+                {
 					ExitReason = reason;
 					DoExit();
 				}

@@ -66,14 +66,8 @@ namespace $safeprojectname$
             if (keyboardState.IsKeyDown(Keys.Escape) ||
                 keyboardState.IsKeyDown(Keys.Back))
             {
-#if ANDROID
-                // Exit() is obsolete on ANDROID
-                Microsoft.Xna.Framework.Game.Activity.MoveTaskToBack(true);
-#elif __IOS__ || __TVOS__
-                // Exit() is obsolete on iOS
-#else
-                Exit();
-#endif
+                try { Game.Exit(); }
+                catch (PlatformNotSupportedException ex) { }
             }
 
             // TODO: Add your update logic here

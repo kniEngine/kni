@@ -45,13 +45,13 @@ namespace Microsoft.Xna.Platform
 
         public override void Exit()
         {
-            throw new InvalidOperationException("This platform's policy does not allow programmatically closing.");
+            throw new PlatformNotSupportedException("This platform's policy does not allow programmatically closing.");
         }
 
         public override void TickExiting()
         {
-            // Do Nothing: Android games do not "exit" or shut down.
-            throw new NotImplementedException();
+            // Android games do not "exit" or shut down.
+            throw new PlatformNotSupportedException();
         }
 
         public override bool BeforeUpdate()
