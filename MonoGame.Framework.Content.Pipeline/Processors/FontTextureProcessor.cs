@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessorAttribute(DisplayName = "Font Texture - MonoGame")]
     public class FontTextureProcessor : ContentProcessor<Texture2DContent, SpriteFontContent>
     {
-        private Color transparentPixel = Color.Magenta;
+        private Vector4 transparentPixel = Color.Magenta.ToVector4();
 
         [DefaultValue(' ')]
         public virtual char FirstCharacter { get; set; }
@@ -40,9 +40,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             BitmapContent fontBitmap = input.Faces[0][0];
             SurfaceFormat faceFormat;
             fontBitmap.TryGetFormat(out faceFormat);
-            if (faceFormat != SurfaceFormat.Color)
+            if (faceFormat != SurfaceFormat.Vector4)
             {
-                var colorFace = new PixelBitmapContent<Color>(fontBitmap.Width, fontBitmap.Height);
+                var colorFace = new PixelBitmapContent<Vector4>(fontBitmap.Width, fontBitmap.Height);
                 BitmapContent.Copy(fontBitmap, colorFace);
                 fontBitmap = colorFace;
             }
@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // we need to call GtCharacterForIndex for each glyph in the Texture to 
             // get the char for that glyph, by default we start at ' ' then '!' and then ASCII
             // after that.
-            Dictionary<char, FontGlyph> glyphs = ImportFont(input, context, (PixelBitmapContent<Color>)fontBitmap);
+            Dictionary<char, FontGlyph> glyphs = ImportFont(input, context, (PixelBitmapContent<Vector4>)fontBitmap);
 
             // Optimize glyphs.
             foreach (var glyph in glyphs.Values)
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private Dictionary<char, FontGlyph> ImportFont(Texture2DContent input, ContentProcessorContext context, PixelBitmapContent<Color> bitmap)
+        private Dictionary<char, FontGlyph> ImportFont(Texture2DContent input, ContentProcessorContext context, PixelBitmapContent<Vector4> bitmap)
         {
             Dictionary<char, FontGlyph> glyphs = new Dictionary<char, FontGlyph>();
 
