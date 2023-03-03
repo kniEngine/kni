@@ -253,6 +253,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Exit the game at the end of this tick.
         /// </summary>
+        /// <exception cref="PlatformNotSupportedException"></exception>
         public void Exit()
         {
             Strategy.Exit();
