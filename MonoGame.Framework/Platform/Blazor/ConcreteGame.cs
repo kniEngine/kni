@@ -80,6 +80,11 @@ namespace Microsoft.Xna.Platform
                 _window.Initialize(pp);
             }
         }
+
+        public override void Exit()
+        {
+            throw new PlatformNotSupportedException("BlazorGL platform does not allow programmatically closing.");
+        }
         
         public override void TickExiting()
         {
