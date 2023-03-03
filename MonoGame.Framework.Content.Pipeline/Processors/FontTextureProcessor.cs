@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 var character = (char)(FirstCharacter + i);
 
                 var rect = regions[i];
-                var glyphBitmap = new PixelBitmapContent<Color>(rect.Width, rect.Height);
+                var glyphBitmap = new PixelBitmapContent<Vector4>(rect.Width, rect.Height);
                 BitmapContent.Copy(bitmap, rect, glyphBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
 
                 GlyphKerning kerning = new GlyphKerning();
