@@ -204,6 +204,24 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
 		}
 
+        internal void OnFileDrop(FileDropEventArgs e)
+        {
+            var handler = FileDrop;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected internal abstract void SetSupportedOrientations(DisplayOrientation orientations);
+
+	    /// <summary>
+	    /// Set the title of this window to the given string.
+	    /// </summary>
+	    /// <param name="title">The new title of the window.</param>
+		protected abstract void SetTitle(string title);
+
+
+        #region Keyboard events
+
 #if WINDOWS || WINDOWS_UAP || DESKTOPGL
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
@@ -231,20 +249,7 @@ namespace Microsoft.Xna.Framework
         internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
 #endif
 
-        internal void OnFileDrop(FileDropEventArgs e)
-        {
-            var handler = FileDrop;
-            if (handler != null)
-                handler(this, e);
-        }
-
-        protected internal abstract void SetSupportedOrientations(DisplayOrientation orientations);
-
-	    /// <summary>
-	    /// Set the title of this window to the given string.
-	    /// </summary>
-	    /// <param name="title">The new title of the window.</param>
-		protected abstract void SetTitle(string title);
+        #endregion Keyboard events
 
     }
 }
