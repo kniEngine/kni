@@ -226,27 +226,27 @@ namespace Microsoft.Xna.Framework
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>
-		internal void OnTextInput(char character, Keys key)
+		internal void Platform_OnTextInput(char character, Keys key)
 		{
             var handler = TextInput;
             if (handler != null)
                 handler(this, new TextInputEventArgs(key, character));
 		}
-        internal void OnKeyDown(Keys key)
+        internal void Platform_OnKeyDown(Keys key)
 	    {
             var handler = KeyDown;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
 	    }
-        internal void OnKeyUp(Keys key)
+        internal void Platform_OnKeyUp(Keys key)
 	    {
             var handler = KeyUp;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
 	    }
 
-        internal bool IsTextInputAttached() { return (TextInput != null); }
-        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
+        internal bool Platform_IsTextInputAttached() { return (TextInput != null); }
+        internal bool Platform_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
 #endif
 
         #endregion Keyboard events
