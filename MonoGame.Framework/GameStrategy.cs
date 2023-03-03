@@ -345,7 +345,7 @@ namespace Microsoft.Xna.Platform
         public virtual void Exit()
         {
             _shouldExit = true;
-            _suppressDraw = true;
+            SuppressDraw();
         }
 
         public abstract void TickExiting();
@@ -434,7 +434,7 @@ namespace Microsoft.Xna.Platform
         }
 
         /// <summary>
-        /// Supress calling <see cref="Draw"/> in the game loop.
+        /// Suppress the next <see cref="Draw"/> call in the game loop.
         /// </summary>
         public void SuppressDraw()
         {
@@ -574,10 +574,11 @@ namespace Microsoft.Xna.Platform
                 Game.DoUpdate(Time);
             }
 
-            // Draw unless the update suppressed it.
             if (!_suppressDraw)
+            {
+                _suppressDraw = false;
                 Game.DoDraw(Time);
-            _suppressDraw = false;
+            }
         }
 
         #endregion Methods
