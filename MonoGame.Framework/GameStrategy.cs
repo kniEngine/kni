@@ -360,22 +360,6 @@ namespace Microsoft.Xna.Platform
         public abstract bool BeforeUpdate();
 
         /// <summary>
-        /// Gives derived classes an opportunity to do work just before Draw
-        /// is called for all IDrawable components.  Returning false from this
-        /// method will result in this round of Draw calls being skipped.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
-        public bool BeforeDraw()
-        {
-            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
-            if (gdm != null)
-                return gdm.BeginDraw();
-
-            return true;
-        }
-
-        /// <summary>
         /// When implemented in a derived class, causes the game to enter
         /// full-screen mode.
         /// </summary>
