@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework
 
             _orientationListener = new OrientationListener(this);
 
-			Game.Activity = this;
+            AndroidGameWindow.Activity = this;
 		}
 
         public static event EventHandler Paused;
@@ -83,12 +83,14 @@ namespace Microsoft.Xna.Framework
             if (Game != null)
             {
                 var deviceManager = (IGraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
-                if (deviceManager == null)
-                    return;
-                ((GraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
-                ((AndroidGameWindow)Game.Window).GameView.RequestFocus();
-                if (_orientationListener.CanDetectOrientation())
-                    _orientationListener.Enable();
+                if (deviceManager != null)
+                {
+                    ((GraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
+                    ((AndroidGameWindow)Game.Window).GameView.RequestFocus();
+
+                    if (_orientationListener.CanDetectOrientation())
+                        _orientationListener.Enable();
+                }
             }
         }
 
@@ -103,9 +105,13 @@ namespace Microsoft.Xna.Framework
             UnregisterReceiver(screenReceiver);
             ScreenReceiver.ScreenLocked = false;
             _orientationListener = null;
+
             if (Game != null)
+            {
                 Game.Dispose();
-            Game = null;
+                Game = null;
+            }
+
 			base.OnDestroy();
 		}
     }
