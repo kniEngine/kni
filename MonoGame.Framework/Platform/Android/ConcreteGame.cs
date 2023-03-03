@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform
 
         public override void Exit()
         {
-            throw new PlatformNotSupportedException("This platform's policy does not allow programmatically closing.");
+            throw new PlatformNotSupportedException("Android platform does not allow programmatically closing.");
         }
 
         public override void TickExiting()
