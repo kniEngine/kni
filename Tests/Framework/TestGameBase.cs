@@ -227,28 +227,25 @@ namespace MonoGame.Tests {
 
         protected void DoExit()
         {
-#if XNA
-            Exit();
-#else
-            // NOTE: We avoid Game.Exit() here as we marked it
-            // obsolete on platforms that disallow exit in 
-            // shipping games.
-            //
-            // We however need it here to halt the app after we
-            // complete running all the unit tests.  So we do the
-            // next best thing can call the internal platform code
-            // directly which produces the same result.
-            Strategy.Exit();
-            SuppressDraw();
-#endif
+            try { Exit(); }
+            catch (PlatformNotSupportedException ex)
+            {
+                // We need to halt the app on platforms that disallow 
+                // exit after we complete running all the unit tests.
+                // So we do the next best thing can call the internal
+                // platform code directly which produces the same result.
+                Strategy.Exit();
+                SuppressDraw();
+            }
         }
 
-		private void EvaluateExitCondition ()
+		private void EvaluateExitCondition()
 		{
 			if (_isExiting || ExitCondition == null)
 				return;
 
-			if (ExitCondition (_frameInfo)) {
+			if (ExitCondition(_frameInfo))
+            {
 				_isExiting = true;
 				DoExit();
 			}
