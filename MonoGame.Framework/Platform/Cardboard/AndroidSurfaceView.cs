@@ -392,7 +392,7 @@ namespace Microsoft.Xna.Framework
                 }
                 _prevTickTime = currTickTime;
 
-                try { Game.Activity._orientationListener.Update(dt); }
+                try { AndroidGameWindow.Activity._orientationListener.Update(dt); }
                 catch (Exception) { }
 
                 var handler = Tick;
