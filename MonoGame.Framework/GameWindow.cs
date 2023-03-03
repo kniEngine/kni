@@ -204,33 +204,6 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
 		}
 
-#if WINDOWS || WINDOWS_UAP || DESKTOPGL
-	    /// <summary>
-	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
-	    /// </summary>
-		internal void OnTextInput(char character, Keys key)
-		{
-            var handler = TextInput;
-            if (handler != null)
-                handler(this, new TextInputEventArgs(key, character));
-		}
-        internal void OnKeyDown(Keys key)
-	    {
-            var handler = KeyDown;
-            if (handler != null)
-                handler(this, new InputKeyEventArgs(key));
-	    }
-        internal void OnKeyUp(Keys key)
-	    {
-            var handler = KeyUp;
-            if (handler != null)
-                handler(this, new InputKeyEventArgs(key));
-	    }
-
-        internal bool IsTextInputAttached() { return (TextInput != null); }
-        internal bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
-#endif
-
         internal void OnFileDrop(FileDropEventArgs e)
         {
             var handler = FileDrop;
@@ -245,6 +218,38 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 	    /// <param name="title">The new title of the window.</param>
 		protected abstract void SetTitle(string title);
+
+
+        #region Keyboard events
+
+#if WINDOWS || WINDOWS_UAP || DESKTOPGL
+	    /// <summary>
+	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
+	    /// </summary>
+		internal void Platform_OnTextInput(char character, Keys key)
+		{
+            var handler = TextInput;
+            if (handler != null)
+                handler(this, new TextInputEventArgs(key, character));
+		}
+        internal void Platform_OnKeyDown(Keys key)
+	    {
+            var handler = KeyDown;
+            if (handler != null)
+                handler(this, new InputKeyEventArgs(key));
+	    }
+        internal void Platform_OnKeyUp(Keys key)
+	    {
+            var handler = KeyUp;
+            if (handler != null)
+                handler(this, new InputKeyEventArgs(key));
+	    }
+
+        internal bool Platform_IsTextInputAttached() { return (TextInput != null); }
+        internal bool Platform_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
+#endif
+
+        #endregion Keyboard events
 
     }
 }
