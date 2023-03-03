@@ -5,6 +5,7 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -632,6 +633,368 @@ namespace Microsoft.Xna.Platform
         }
 
         #endregion
+
+
+        #region Component Collections
+
+        private class DrawableComponents
+        {
+            private readonly List<IDrawable> _drawableComponents = new List<IDrawable>();
+            private readonly List<IDrawable> _visibleComponents = new List<IDrawable>();
+            private bool _isVisibleCacheInvalidated = true;
+
+            private readonly List<DrawableJournalEntry> _addDrawableJournal = new List<DrawableJournalEntry>();
+            private readonly List<int> _removeDrawableJournal = new List<int>();
+            private int _addDrawableJournalCount;
+
+            public void AddDrawable(IDrawable component)
+            {
+                // NOTE: We subscribe to item events after components in _addDrawableJournal have been merged.
+                _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
+                _isVisibleCacheInvalidated = true;
+            }
+
+            public void RemoveDrawable(IDrawable component)
+            {
+                if (_addDrawableJournal.Remove(new DrawableJournalEntry(component, -1)))
+                    return;
+
+                var index = _drawableComponents.IndexOf(component);
+                if (index >= 0)
+                {
+                    component.VisibleChanged -= Component_VisibleChanged;
+                    component.DrawOrderChanged -= Component_DrawOrderChanged;
+                    _removeDrawableJournal.Add(index);
+                    _isVisibleCacheInvalidated = true;
+                }
+            }
+
+            public void ClearDrawables()
+            {
+                for (int i = 0; i < _drawableComponents.Count; i++)
+                {
+                    _drawableComponents[i].VisibleChanged -= Component_VisibleChanged;
+                    _drawableComponents[i].DrawOrderChanged -= Component_DrawOrderChanged;
+                }
+
+                _addDrawableJournal.Clear();
+                _removeDrawableJournal.Clear();
+                _drawableComponents.Clear();
+                _isVisibleCacheInvalidated = true;
+            }
+
+            private void Component_VisibleChanged(object sender, EventArgs e)
+            {
+                _isVisibleCacheInvalidated = true;
+            }
+
+            private void Component_DrawOrderChanged(object sender, EventArgs e)
+            {
+                var component = (IDrawable)sender;
+                var index = _drawableComponents.IndexOf(component);
+
+                _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
+
+                component.VisibleChanged -= Component_VisibleChanged;
+                component.DrawOrderChanged -= Component_DrawOrderChanged;
+                _removeDrawableJournal.Add(index);
+
+                _isVisibleCacheInvalidated = true;
+            }
+
+            internal void DrawVisibleComponents(GameTime gameTime)
+            {
+                if (_removeDrawableJournal.Count > 0)
+                    ProcessRemoveDrawableJournal();
+                if (_addDrawableJournal.Count > 0)
+                    ProcessAddDrawableJournal();
+
+                // rebuild _visibleComponents
+                if (_isVisibleCacheInvalidated)
+                {
+                    _visibleComponents.Clear();
+                    for (int i = 0; i < _drawableComponents.Count; i++)
+                        if (_drawableComponents[i].Visible)
+                            _visibleComponents.Add(_drawableComponents[i]);
+
+                    _isVisibleCacheInvalidated = false;
+                }
+
+                // draw components
+                for (int i = 0; i < _visibleComponents.Count; i++)
+                    _visibleComponents[i].Draw(gameTime);
+
+                // If the cache was invalidated as a result of processing components,
+                // now is a good time to clear it and give the GC (more of) a
+                // chance to do its thing.
+                if (_isVisibleCacheInvalidated)
+                    _visibleComponents.Clear();
+            }
+
+            private void ProcessRemoveDrawableJournal()
+            {
+                // Remove components in reverse.
+                _removeDrawableJournal.Sort();
+                for (int i = _removeDrawableJournal.Count - 1; i >= 0; i--)
+                    _drawableComponents.RemoveAt(_removeDrawableJournal[i]);
+
+                _removeDrawableJournal.Clear();
+            }
+
+            private void ProcessAddDrawableJournal()
+            {
+                // Prepare the _addJournal to be merge-sorted with _drawableComponents.
+                // _drawableComponents is always sorted.
+                _addDrawableJournal.Sort(DrawableJournalEntry.CompareAddJournalEntry);
+                _addDrawableJournalCount = 0;
+
+                int iAddJournal = 0;
+                int iItems = 0;
+
+                while (iItems < _drawableComponents.Count && iAddJournal < _addDrawableJournal.Count)
+                {
+                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addJournalItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
+                    {
+                        addJournalItem.VisibleChanged += Component_VisibleChanged;
+                        addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
+                        _drawableComponents.Insert(iItems, addJournalItem);
+                        iAddJournal++;
+                    }
+                    // Always increment iItems, either because we inserted and
+                    // need to move past the insertion, or because we didn't
+                    // insert and need to consider the next element.
+                    iItems++;
+                }
+
+                // If _addJournal had any "tail" items, append them all now.
+                for (; iAddJournal < _addDrawableJournal.Count; iAddJournal++)
+                {
+                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    addJournalItem.VisibleChanged += Component_VisibleChanged;
+                    addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
+                    _drawableComponents.Add(addJournalItem);
+                }
+
+                _addDrawableJournal.Clear();
+            }
+
+            private struct DrawableJournalEntry
+            {
+                private readonly int AddOrder;
+                public readonly IDrawable Component;
+
+                public DrawableJournalEntry(IDrawable component, int addOrder)
+                {
+                    Component = component;
+                    this.AddOrder = addOrder;
+                }
+
+                public override int GetHashCode()
+                {
+                    return Component.GetHashCode();
+                }
+
+                public override bool Equals(object obj)
+                {
+                    if (!(obj is DrawableJournalEntry))
+                        return false;
+
+                    return object.ReferenceEquals(Component, ((DrawableJournalEntry)obj).Component);
+                }
+
+                internal static int CompareAddJournalEntry(DrawableJournalEntry x, DrawableJournalEntry y)
+                {
+                    int result = Comparer<int>.Default.Compare(x.Component.DrawOrder, y.Component.DrawOrder);
+                    if (result == 0)
+                        result = x.AddOrder - y.AddOrder;
+                    return result;
+                }
+            }
+        }
+
+        private class UpdateableComponents
+        {
+            private readonly List<IUpdateable> _updateableComponents = new List<IUpdateable>();
+            private readonly List<IUpdateable> _enabledComponents = new List<IUpdateable>();
+            private bool _isEnabledCacheInvalidated = true;
+
+            private readonly List<UpdateableJournalEntry> _addUpdateableJournal = new List<UpdateableJournalEntry>();
+            private readonly List<int> _removeUpdateableJournal = new List<int>();
+            private int _addUpdateableJournalCount;
+
+            public void AddUpdatable(IUpdateable component)
+            {
+                // NOTE: We subscribe to item events after items in _addUpdateableJournal have been merged.
+                _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
+                _isEnabledCacheInvalidated = true;
+            }
+
+            public void RemoveUpdatable(IUpdateable component)
+            {
+                if (_addUpdateableJournal.Remove(new UpdateableJournalEntry(component, -1)))
+                    return;
+
+                var index = _updateableComponents.IndexOf(component);
+                if (index >= 0)
+                {
+                    component.EnabledChanged -= Component_EnabledChanged;
+                    component.UpdateOrderChanged -= Component_UpdateOrderChanged;
+
+                    _removeUpdateableJournal.Add(index);
+                    _isEnabledCacheInvalidated = true;
+                }
+            }
+
+            public void ClearUpdatables()
+            {
+                for (int i = 0; i < _updateableComponents.Count; i++)
+                {
+                    _updateableComponents[i].EnabledChanged -= Component_EnabledChanged;
+                    _updateableComponents[i].UpdateOrderChanged -= Component_UpdateOrderChanged;
+                }
+
+                _addUpdateableJournal.Clear();
+                _removeUpdateableJournal.Clear();
+                _updateableComponents.Clear();
+
+                _isEnabledCacheInvalidated = true;
+            }
+
+            private void Component_EnabledChanged(object sender, EventArgs e)
+            {
+                _isEnabledCacheInvalidated = true;
+            }
+
+            private void Component_UpdateOrderChanged(object sender, EventArgs e)
+            {
+                var component = (IUpdateable)sender;
+                var index = _updateableComponents.IndexOf(component);
+
+                _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
+
+                component.EnabledChanged -= Component_EnabledChanged;
+                component.UpdateOrderChanged -= Component_UpdateOrderChanged;
+                _removeUpdateableJournal.Add(index);
+
+                _isEnabledCacheInvalidated = true;
+            }
+
+            private void ProcessRemoveUpdateableJournal()
+            {
+                // Remove components in reverse.
+                _removeUpdateableJournal.Sort();
+                for (int i = _removeUpdateableJournal.Count - 1; i >= 0; i--)
+                    _updateableComponents.RemoveAt(_removeUpdateableJournal[i]);
+
+                _removeUpdateableJournal.Clear();
+            }
+
+            internal void UpdateEnabledComponent(GameTime gameTime)
+            {
+                if (_removeUpdateableJournal.Count > 0)
+                    ProcessRemoveUpdateableJournal();
+                if (_addUpdateableJournal.Count > 0)
+                    ProcessAddUpdateableJournal();
+
+                // rebuild _enabledComponents
+                if (_isEnabledCacheInvalidated)
+                {
+                    _enabledComponents.Clear();
+                    for (int i = 0; i < _updateableComponents.Count; i++)
+                        if (_updateableComponents[i].Enabled)
+                            _enabledComponents.Add(_updateableComponents[i]);
+
+                    _isEnabledCacheInvalidated = false;
+                }
+
+                // update components
+                for (int i = 0; i < _enabledComponents.Count; i++)
+                    _enabledComponents[i].Update(gameTime);
+
+                // If the cache was invalidated as a result of processing components,
+                // now is a good time to clear it and give the GC (more of) a
+                // chance to do its thing.
+                if (_isEnabledCacheInvalidated)
+                    _enabledComponents.Clear();
+            }
+
+            private void ProcessAddUpdateableJournal()
+            {
+                // Prepare the _addJournal to be merge-sorted with _updateableComponents.
+                // _updateableComponents is always sorted.
+                _addUpdateableJournal.Sort(UpdateableJournalEntry.CompareAddJournalEntry);
+                _addUpdateableJournalCount = 0;
+
+                int iAddJournal = 0;
+                int iItems = 0;
+
+                while (iItems < _updateableComponents.Count && iAddJournal < _addUpdateableJournal.Count)
+                {
+                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addJournalItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
+                    {
+                        addJournalItem.EnabledChanged += Component_EnabledChanged;
+                        addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                        _updateableComponents.Insert(iItems, addJournalItem);
+                        iAddJournal++;
+                    }
+                    // Always increment iItems, either because we inserted and
+                    // need to move past the insertion, or because we didn't
+                    // insert and need to consider the next element.
+                    iItems++;
+                }
+
+                // If _addJournal had any "tail" items, append them all now.
+                for (; iAddJournal < _addUpdateableJournal.Count; iAddJournal++)
+                {
+                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    addJournalItem.EnabledChanged += Component_EnabledChanged;
+                    addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+
+                    _updateableComponents.Add(addJournalItem);
+                }
+
+                _addUpdateableJournal.Clear();
+            }
+
+            private struct UpdateableJournalEntry
+            {
+                private readonly int AddOrder;
+                public readonly IUpdateable Component;
+
+                public UpdateableJournalEntry(IUpdateable component, int addOrder)
+                {
+                    Component = component;
+                    AddOrder = addOrder;
+                }
+
+                public override int GetHashCode()
+                {
+                    return Component.GetHashCode();
+                }
+
+                public override bool Equals(object obj)
+                {
+                    if (!(obj is UpdateableJournalEntry))
+                        return false;
+
+                    return object.Equals(Component, ((UpdateableJournalEntry)obj).Component);
+                }
+
+                internal static int CompareAddJournalEntry(UpdateableJournalEntry x, UpdateableJournalEntry y)
+                {
+                    int result = Comparer<int>.Default.Compare(x.Component.UpdateOrder, y.Component.UpdateOrder);
+                    if (result == 0)
+                        result = x.AddOrder - y.AddOrder;
+                    return result;
+                }
+            }
+        }
+        #endregion Component Collections
+
     }
 }
 
