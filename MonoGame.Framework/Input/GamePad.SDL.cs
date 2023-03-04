@@ -219,8 +219,8 @@ namespace Microsoft.Xna.Framework.Input
 
         private static bool Match(string match, string input, ref int startIndex)
         {
-            int matchLength = Math.Min(match.Length, input.Length - startIndex);
-            int matchIndex = input.IndexOf(match, startIndex, matchLength);
+            int maxLength = Math.Min(match.Length, input.Length - startIndex);
+            int matchIndex = input.IndexOf(match, startIndex, maxLength);
             if (matchIndex != startIndex)
                 return false;
 
