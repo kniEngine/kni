@@ -125,75 +125,86 @@ namespace Microsoft.Xna.Framework.Input
             caps.GamePadType = GamePadType.GamePad;
 
             var mappings = mapping.Split(',');
+            int idx = 0;
             for (int i = 0; i < mappings.Length; i++)
             {
                 var map = mappings[i];
 
-                if (map.StartsWith("a:"))
+                if (Match("a:", map, ref idx))
                     caps.HasAButton = true;
                 else
-                if (map.StartsWith("b:"))
+                if (Match("b:", map, ref idx))
                     caps.HasBButton = true;
                 else
-                if (map.StartsWith("x:"))
+                if (Match("x:", map, ref idx))
                     caps.HasXButton = true;
                 else
-                if (map.StartsWith("y:"))
+                if (Match("y:", map, ref idx))
                     caps.HasYButton = true;
                 else
-                if (map.StartsWith("back:"))
+                if (Match("back:", map, ref idx))
                     caps.HasBackButton = true;
                 else
-                if (map.StartsWith("guide:"))
+                if (Match("guide:", map, ref idx))
                     caps.HasBigButton = true;
                 else
-                if (map.StartsWith("start:"))
+                if (Match("start:", map, ref idx))
                     caps.HasStartButton = true;
                 else
-                if (map.StartsWith("dpleft:"))
+                if (Match("dpleft:", map, ref idx))
                     caps.HasDPadLeftButton = true;
                 else
-                if (map.StartsWith("dpdown:"))
+                if (Match("dpdown:", map, ref idx))
                     caps.HasDPadDownButton = true;
                 else
-                if (map.StartsWith("dpright:"))
+                if (Match("dpright:", map, ref idx))
                     caps.HasDPadRightButton = true;
                 else
-                if (map.StartsWith("dpup:"))
+                if (Match("dpup:", map, ref idx))
                     caps.HasDPadUpButton = true;
                 else
-                if (map.StartsWith("leftshoulder:"))
+                if (Match("leftshoulder:", map, ref idx))
                     caps.HasLeftShoulderButton = true;
                 else
-                if (map.StartsWith("lefttrigger:"))
+                if (Match("lefttrigger:", map, ref idx))
                     caps.HasLeftTrigger = true;
                 else
-                if (map.StartsWith("rightshoulder:"))
+                if (Match("rightshoulder:", map, ref idx))
                     caps.HasRightShoulderButton = true;
                 else
-                if (map.StartsWith("righttrigger:"))
+                if (Match("righttrigger:", map, ref idx))
                     caps.HasRightTrigger = true;
                 else
-                if (map.StartsWith("leftstick:"))
+                if (Match("leftstick:", map, ref idx))
                     caps.HasLeftStickButton = true;
                 else
-                if (map.StartsWith("rightstick:"))
+                if (Match("rightstick:", map, ref idx))
                     caps.HasRightStickButton = true;
                 else
-                if (map.StartsWith("leftx:"))
+                if (Match("leftx:", map, ref idx))
                     caps.HasLeftXThumbStick = true;
                 else
-                if (map.StartsWith("lefty:"))
+                if (Match("lefty:", map, ref idx))
                     caps.HasLeftYThumbStick = true;
                 else
-                if (map.StartsWith("rightx:"))
+                if (Match("rightx:", map, ref idx))
                     caps.HasRightXThumbStick = true;
                 else
-                if (map.StartsWith("righty:"))
+                if (Match("righty:", map, ref idx))
                     caps.HasRightYThumbStick = true;
             }
 
             return caps;
+        }
+
+        private static bool Match(string match, string input, ref int startIndex)
+        {
+            int matchLength = Math.Min(match.Length, input.Length - startIndex);
+            int matchIndex = input.IndexOf(match, startIndex, matchLength);
+            if (matchIndex != startIndex)
+                return false;
+
+            return true;
         }
 
         private static float GetFromSdlAxis(int axis)
