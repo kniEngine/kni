@@ -126,67 +126,67 @@ namespace Microsoft.Xna.Framework.Input
 
             for (int idx = 0; idx < mapping.Length;)
             {
-                if (Match("a:", mapping, ref idx))
+                if (MatchKey("a", mapping, ref idx))
                     caps.HasAButton = true;
                 else
-                if (Match("b:", mapping, ref idx))
+                if (MatchKey("b", mapping, ref idx))
                     caps.HasBButton = true;
                 else
-                if (Match("x:", mapping, ref idx))
+                if (MatchKey("x", mapping, ref idx))
                     caps.HasXButton = true;
                 else
-                if (Match("y:", mapping, ref idx))
+                if (MatchKey("y", mapping, ref idx))
                     caps.HasYButton = true;
                 else
-                if (Match("back:", mapping, ref idx))
+                if (MatchKey("back", mapping, ref idx))
                     caps.HasBackButton = true;
                 else
-                if (Match("guide:", mapping, ref idx))
+                if (MatchKey("guide", mapping, ref idx))
                     caps.HasBigButton = true;
                 else
-                if (Match("start:", mapping, ref idx))
+                if (MatchKey("start", mapping, ref idx))
                     caps.HasStartButton = true;
                 else
-                if (Match("dpleft:", mapping, ref idx))
+                if (MatchKey("dpleft", mapping, ref idx))
                     caps.HasDPadLeftButton = true;
                 else
-                if (Match("dpdown:", mapping, ref idx))
+                if (MatchKey("dpdown", mapping, ref idx))
                     caps.HasDPadDownButton = true;
                 else
-                if (Match("dpright:", mapping, ref idx))
+                if (MatchKey("dpright", mapping, ref idx))
                     caps.HasDPadRightButton = true;
                 else
-                if (Match("dpup:", mapping, ref idx))
+                if (MatchKey("dpup", mapping, ref idx))
                     caps.HasDPadUpButton = true;
                 else
-                if (Match("leftshoulder:", mapping, ref idx))
+                if (MatchKey("leftshoulder", mapping, ref idx))
                     caps.HasLeftShoulderButton = true;
                 else
-                if (Match("lefttrigger:", mapping, ref idx))
+                if (MatchKey("lefttrigger", mapping, ref idx))
                     caps.HasLeftTrigger = true;
                 else
-                if (Match("rightshoulder:", mapping, ref idx))
+                if (MatchKey("rightshoulder", mapping, ref idx))
                     caps.HasRightShoulderButton = true;
                 else
-                if (Match("righttrigger:", mapping, ref idx))
+                if (MatchKey("righttrigger", mapping, ref idx))
                     caps.HasRightTrigger = true;
                 else
-                if (Match("leftstick:", mapping, ref idx))
+                if (MatchKey("leftstick", mapping, ref idx))
                     caps.HasLeftStickButton = true;
                 else
-                if (Match("rightstick:", mapping, ref idx))
+                if (MatchKey("rightstick", mapping, ref idx))
                     caps.HasRightStickButton = true;
                 else
-                if (Match("leftx:", mapping, ref idx))
+                if (MatchKey("leftx", mapping, ref idx))
                     caps.HasLeftXThumbStick = true;
                 else
-                if (Match("lefty:", mapping, ref idx))
+                if (MatchKey("lefty", mapping, ref idx))
                     caps.HasLeftYThumbStick = true;
                 else
-                if (Match("rightx:", mapping, ref idx))
+                if (MatchKey("rightx", mapping, ref idx))
                     caps.HasRightXThumbStick = true;
                 else
-                if (Match("righty:", mapping, ref idx))
+                if (MatchKey("righty", mapping, ref idx))
                     caps.HasRightYThumbStick = true;
 
                 if (idx < mapping.Length)
@@ -202,6 +202,18 @@ namespace Microsoft.Xna.Framework.Input
             }
 
             return caps;
+        }
+
+        private static bool MatchKey(string match, string input, ref int startIndex)
+        {
+            int nIndex = startIndex;
+            if (!Match(match, input, ref nIndex))
+                return false;
+            if (!Match(":", input, ref nIndex))
+                return false;
+
+            startIndex = nIndex;
+            return true;
         }
 
         private static bool Match(string match, string input, ref int startIndex)
