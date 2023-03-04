@@ -115,8 +115,6 @@ namespace Microsoft.Xna.Framework.Input
 
             var gamecontroller = Gamepads[index].Device;
 
-            var mappings = Sdl.GameController.GetMapping(gamecontroller);
-
             var caps = new GamePadCapabilities();
             caps.IsConnected = true;
             caps.DisplayName = Sdl.GameController.GetName(gamecontroller);
@@ -124,85 +122,104 @@ namespace Microsoft.Xna.Framework.Input
             caps.HasLeftVibrationMotor = caps.HasRightVibrationMotor = Sdl.GameController.HasRumble(gamecontroller) != 0;
             caps.GamePadType = GamePadType.GamePad;
 
-            // parse Capabilities from mappings string
-            for (int idx = 0; idx < mappings.Length;)
-            {
-                if (MatchKey("a", mappings, ref idx))
-                    caps.HasAButton = true;
-                else
-                if (MatchKey("b", mappings, ref idx))
-                    caps.HasBButton = true;
-                else
-                if (MatchKey("x", mappings, ref idx))
-                    caps.HasXButton = true;
-                else
-                if (MatchKey("y", mappings, ref idx))
-                    caps.HasYButton = true;
-                else
-                if (MatchKey("back", mappings, ref idx))
-                    caps.HasBackButton = true;
-                else
-                if (MatchKey("guide", mappings, ref idx))
-                    caps.HasBigButton = true;
-                else
-                if (MatchKey("start", mappings, ref idx))
-                    caps.HasStartButton = true;
-                else
-                if (MatchKey("dpleft", mappings, ref idx))
-                    caps.HasDPadLeftButton = true;
-                else
-                if (MatchKey("dpdown", mappings, ref idx))
-                    caps.HasDPadDownButton = true;
-                else
-                if (MatchKey("dpright", mappings, ref idx))
-                    caps.HasDPadRightButton = true;
-                else
-                if (MatchKey("dpup", mappings, ref idx))
-                    caps.HasDPadUpButton = true;
-                else
-                if (MatchKey("leftshoulder", mappings, ref idx))
-                    caps.HasLeftShoulderButton = true;
-                else
-                if (MatchKey("lefttrigger", mappings, ref idx))
-                    caps.HasLeftTrigger = true;
-                else
-                if (MatchKey("rightshoulder", mappings, ref idx))
-                    caps.HasRightShoulderButton = true;
-                else
-                if (MatchKey("righttrigger", mappings, ref idx))
-                    caps.HasRightTrigger = true;
-                else
-                if (MatchKey("leftstick", mappings, ref idx))
-                    caps.HasLeftStickButton = true;
-                else
-                if (MatchKey("rightstick", mappings, ref idx))
-                    caps.HasRightStickButton = true;
-                else
-                if (MatchKey("leftx", mappings, ref idx))
-                    caps.HasLeftXThumbStick = true;
-                else
-                if (MatchKey("lefty", mappings, ref idx))
-                    caps.HasLeftYThumbStick = true;
-                else
-                if (MatchKey("rightx", mappings, ref idx))
-                    caps.HasRightXThumbStick = true;
-                else
-                if (MatchKey("righty", mappings, ref idx))
-                    caps.HasRightYThumbStick = true;
-
-                if (idx < mappings.Length)
-                {
-                    int nidx = mappings.IndexOf(',', idx);
-                    if (nidx != -1)
-                    {
-                        idx = nidx + 1;
-                        continue;
-                    }
-                }
-                break;
-            }
+            ParseCapabilities(gamecontroller, ref caps);
 
             return caps;
+        }
+
+        private static void ParseCapabilities(IntPtr gamecontroller, ref GamePadCapabilities caps)
+        {
+            IntPtr pStrMappings = IntPtr.Zero;
+            try
+            {
+                pStrMappings = Sdl.GameController.SDL_GameControllerMapping(gamecontroller);
+                if (pStrMappings == IntPtr.Zero)
+                    return;
+
+                string mappings = InteropHelpers.Utf8ToString(pStrMappings);
+
+                for (int idx = 0; idx < mappings.Length;)
+                {
+                    if (MatchKey("a", mappings, ref idx))
+                        caps.HasAButton = true;
+                    else
+                    if (MatchKey("b", mappings, ref idx))
+                        caps.HasBButton = true;
+                    else
+                    if (MatchKey("x", mappings, ref idx))
+                        caps.HasXButton = true;
+                    else
+                    if (MatchKey("y", mappings, ref idx))
+                        caps.HasYButton = true;
+                    else
+                    if (MatchKey("back", mappings, ref idx))
+                        caps.HasBackButton = true;
+                    else
+                    if (MatchKey("guide", mappings, ref idx))
+                        caps.HasBigButton = true;
+                    else
+                    if (MatchKey("start", mappings, ref idx))
+                        caps.HasStartButton = true;
+                    else
+                    if (MatchKey("dpleft", mappings, ref idx))
+                        caps.HasDPadLeftButton = true;
+                    else
+                    if (MatchKey("dpdown", mappings, ref idx))
+                        caps.HasDPadDownButton = true;
+                    else
+                    if (MatchKey("dpright", mappings, ref idx))
+                        caps.HasDPadRightButton = true;
+                    else
+                    if (MatchKey("dpup", mappings, ref idx))
+                        caps.HasDPadUpButton = true;
+                    else
+                    if (MatchKey("leftshoulder", mappings, ref idx))
+                        caps.HasLeftShoulderButton = true;
+                    else
+                    if (MatchKey("lefttrigger", mappings, ref idx))
+                        caps.HasLeftTrigger = true;
+                    else
+                    if (MatchKey("rightshoulder", mappings, ref idx))
+                        caps.HasRightShoulderButton = true;
+                    else
+                    if (MatchKey("righttrigger", mappings, ref idx))
+                        caps.HasRightTrigger = true;
+                    else
+                    if (MatchKey("leftstick", mappings, ref idx))
+                        caps.HasLeftStickButton = true;
+                    else
+                    if (MatchKey("rightstick", mappings, ref idx))
+                        caps.HasRightStickButton = true;
+                    else
+                    if (MatchKey("leftx", mappings, ref idx))
+                        caps.HasLeftXThumbStick = true;
+                    else
+                    if (MatchKey("lefty", mappings, ref idx))
+                        caps.HasLeftYThumbStick = true;
+                    else
+                    if (MatchKey("rightx", mappings, ref idx))
+                        caps.HasRightXThumbStick = true;
+                    else
+                    if (MatchKey("righty", mappings, ref idx))
+                        caps.HasRightYThumbStick = true;
+
+                    if (idx < mappings.Length)
+                    {
+                        int nidx = mappings.IndexOf(',', idx);
+                        if (nidx != -1)
+                        {
+                            idx = nidx + 1;
+                            continue;
+                        }
+                    }
+                    break;
+                }
+            }
+            finally
+            {
+                if (pStrMappings != IntPtr.Zero)
+                    Sdl.GameController.SDL_Free(pStrMappings);
+            }
         }
 
         private static bool MatchKey(string match, string input, ref int startIndex)

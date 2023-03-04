@@ -991,22 +991,8 @@ internal static class Sdl
         public static d_sdl_isgamecontroller IsGameController = FuncLoader.LoadFunctionOrNull<d_sdl_isgamecontroller>(NativeLibrary, "SDL_IsGameController");
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate IntPtr d_sdl_gamecontrollermapping(IntPtr gamecontroller);
-        private static d_sdl_gamecontrollermapping SDL_GameControllerMapping = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrollermapping>(NativeLibrary, "SDL_GameControllerMapping");
-
-        public static string GetMapping(IntPtr gamecontroller)
-        {
-            IntPtr nativeStr = SDL_GameControllerMapping(gamecontroller);
-            if (nativeStr == IntPtr.Zero)
-                return string.Empty;
-
-            string mappingStr = InteropHelpers.Utf8ToString(nativeStr);
-
-            //The mapping string returned by SDL is owned by us and thus must be freed
-            SDL_Free(nativeStr);
-
-            return mappingStr;
-        }
+        public delegate IntPtr d_sdl_gamecontrollermapping(IntPtr gamecontroller);
+        public static d_sdl_gamecontrollermapping SDL_GameControllerMapping = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrollermapping>(NativeLibrary, "SDL_GameControllerMapping");
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr d_sdl_gamecontrolleropen(int joystickIndex);
