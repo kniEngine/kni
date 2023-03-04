@@ -114,90 +114,120 @@ namespace Microsoft.Xna.Framework.Input
                 return new GamePadCapabilities();
 
             var gamecontroller = Gamepads[index].Device;
-            var caps = new GamePadCapabilities();
-            var mapping = Sdl.GameController.GetMapping(gamecontroller).Split(',');
 
+            var mappings = Sdl.GameController.GetMapping(gamecontroller);
+
+            var caps = new GamePadCapabilities();
             caps.IsConnected = true;
             caps.DisplayName = Sdl.GameController.GetName(gamecontroller);
             caps.Identifier = Sdl.Joystick.GetGUID(Sdl.GameController.GetJoystick(gamecontroller)).ToString();
             caps.HasLeftVibrationMotor = caps.HasRightVibrationMotor = Sdl.GameController.HasRumble(gamecontroller) != 0;
             caps.GamePadType = GamePadType.GamePad;
 
-            foreach (var map in mapping)
+            // parse Capabilities from mappings string
+            for (int idx = 0; idx < mappings.Length;)
             {
-                var split = map.Split(':');
-                if (split.Length != 2)
-                    continue;
+                if (MatchKey("a", mappings, ref idx))
+                    caps.HasAButton = true;
+                else
+                if (MatchKey("b", mappings, ref idx))
+                    caps.HasBButton = true;
+                else
+                if (MatchKey("x", mappings, ref idx))
+                    caps.HasXButton = true;
+                else
+                if (MatchKey("y", mappings, ref idx))
+                    caps.HasYButton = true;
+                else
+                if (MatchKey("back", mappings, ref idx))
+                    caps.HasBackButton = true;
+                else
+                if (MatchKey("guide", mappings, ref idx))
+                    caps.HasBigButton = true;
+                else
+                if (MatchKey("start", mappings, ref idx))
+                    caps.HasStartButton = true;
+                else
+                if (MatchKey("dpleft", mappings, ref idx))
+                    caps.HasDPadLeftButton = true;
+                else
+                if (MatchKey("dpdown", mappings, ref idx))
+                    caps.HasDPadDownButton = true;
+                else
+                if (MatchKey("dpright", mappings, ref idx))
+                    caps.HasDPadRightButton = true;
+                else
+                if (MatchKey("dpup", mappings, ref idx))
+                    caps.HasDPadUpButton = true;
+                else
+                if (MatchKey("leftshoulder", mappings, ref idx))
+                    caps.HasLeftShoulderButton = true;
+                else
+                if (MatchKey("lefttrigger", mappings, ref idx))
+                    caps.HasLeftTrigger = true;
+                else
+                if (MatchKey("rightshoulder", mappings, ref idx))
+                    caps.HasRightShoulderButton = true;
+                else
+                if (MatchKey("righttrigger", mappings, ref idx))
+                    caps.HasRightTrigger = true;
+                else
+                if (MatchKey("leftstick", mappings, ref idx))
+                    caps.HasLeftStickButton = true;
+                else
+                if (MatchKey("rightstick", mappings, ref idx))
+                    caps.HasRightStickButton = true;
+                else
+                if (MatchKey("leftx", mappings, ref idx))
+                    caps.HasLeftXThumbStick = true;
+                else
+                if (MatchKey("lefty", mappings, ref idx))
+                    caps.HasLeftYThumbStick = true;
+                else
+                if (MatchKey("rightx", mappings, ref idx))
+                    caps.HasRightXThumbStick = true;
+                else
+                if (MatchKey("righty", mappings, ref idx))
+                    caps.HasRightYThumbStick = true;
 
-                switch (split[0])
+                if (idx < mappings.Length)
                 {
-                    case "a":
-                        caps.HasAButton = true;
-                        break;
-                    case "b":
-                        caps.HasBButton = true;
-                        break;
-                    case "x":
-                        caps.HasXButton = true;
-                        break;
-                    case "y":
-                        caps.HasYButton = true;
-                        break;
-                    case "back":
-                        caps.HasBackButton = true;
-                        break;
-                    case "guide":
-                        caps.HasBigButton = true;
-                        break;
-                    case "start":
-                        caps.HasStartButton = true;
-                        break;
-                    case "dpleft":
-                        caps.HasDPadLeftButton = true;
-                        break;
-                    case "dpdown":
-                        caps.HasDPadDownButton = true;
-                        break;
-                    case "dpright":
-                        caps.HasDPadRightButton = true;
-                        break;
-                    case "dpup":
-                        caps.HasDPadUpButton = true;
-                        break;
-                    case "leftshoulder":
-                        caps.HasLeftShoulderButton = true;
-                        break;
-                    case "lefttrigger":
-                        caps.HasLeftTrigger = true;
-                        break;
-                    case "rightshoulder":
-                        caps.HasRightShoulderButton = true;
-                        break;
-                    case "righttrigger":
-                        caps.HasRightTrigger = true;
-                        break;
-                    case "leftstick":
-                        caps.HasLeftStickButton = true;
-                        break;
-                    case "rightstick":
-                        caps.HasRightStickButton = true;
-                        break;
-                    case "leftx":
-                        caps.HasLeftXThumbStick = true;
-                        break;
-                    case "lefty":
-                        caps.HasLeftYThumbStick = true;
-                        break;
-                    case "rightx":
-                        caps.HasRightXThumbStick = true;
-                        break;
-                    case "righty":
-                        caps.HasRightYThumbStick = true;
-                        break;
+                    int nidx = mappings.IndexOf(',', idx);
+                    if (nidx != -1)
+                    {
+                        idx = nidx + 1;
+                        continue;
+                    }
                 }
+                break;
             }
 
             return caps;
+        }
+
+        private static bool MatchKey(string match, string input, ref int startIndex)
+        {
+            int nIndex = startIndex;
+            if (!Match(match, input, ref nIndex))
+                return false;
+            if (!Match(":", input, ref nIndex))
+                return false;
+
+            startIndex = nIndex;
+            return true;
+        }
+
+        private static bool Match(string match, string input, ref int startIndex)
+        {
+            if (input.Length - startIndex < match.Length)
+                return false;
+
+            int matchIndex = input.IndexOf(match, startIndex, match.Length);
+            if (matchIndex != startIndex)
+                return false;
+
+            startIndex += match.Length;
+            return true;
         }
 
         private static float GetFromSdlAxis(int axis)
