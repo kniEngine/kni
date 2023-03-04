@@ -125,80 +125,72 @@ namespace Microsoft.Xna.Framework.Input
             caps.GamePadType = GamePadType.GamePad;
 
             var mappings = mapping.Split(',');
-            for(int i= 0; i< mappings.Length; i++)
+            for (int i = 0; i < mappings.Length; i++)
             {
                 var map = mappings[i];
 
-                var split = map.Split(':');
-                if (split.Length != 2)
-                    continue;
-
-                switch (split[0])
-                {
-                    case "a":
-                        caps.HasAButton = true;
-                        break;
-                    case "b":
-                        caps.HasBButton = true;
-                        break;
-                    case "x":
-                        caps.HasXButton = true;
-                        break;
-                    case "y":
-                        caps.HasYButton = true;
-                        break;
-                    case "back":
-                        caps.HasBackButton = true;
-                        break;
-                    case "guide":
-                        caps.HasBigButton = true;
-                        break;
-                    case "start":
-                        caps.HasStartButton = true;
-                        break;
-                    case "dpleft":
-                        caps.HasDPadLeftButton = true;
-                        break;
-                    case "dpdown":
-                        caps.HasDPadDownButton = true;
-                        break;
-                    case "dpright":
-                        caps.HasDPadRightButton = true;
-                        break;
-                    case "dpup":
-                        caps.HasDPadUpButton = true;
-                        break;
-                    case "leftshoulder":
-                        caps.HasLeftShoulderButton = true;
-                        break;
-                    case "lefttrigger":
-                        caps.HasLeftTrigger = true;
-                        break;
-                    case "rightshoulder":
-                        caps.HasRightShoulderButton = true;
-                        break;
-                    case "righttrigger":
-                        caps.HasRightTrigger = true;
-                        break;
-                    case "leftstick":
-                        caps.HasLeftStickButton = true;
-                        break;
-                    case "rightstick":
-                        caps.HasRightStickButton = true;
-                        break;
-                    case "leftx":
-                        caps.HasLeftXThumbStick = true;
-                        break;
-                    case "lefty":
-                        caps.HasLeftYThumbStick = true;
-                        break;
-                    case "rightx":
-                        caps.HasRightXThumbStick = true;
-                        break;
-                    case "righty":
-                        caps.HasRightYThumbStick = true;
-                        break;
-                }
+                if (map.StartsWith("a:"))
+                    caps.HasAButton = true;
+                else
+                if (map.StartsWith("b:"))
+                    caps.HasBButton = true;
+                else
+                if (map.StartsWith("x:"))
+                    caps.HasXButton = true;
+                else
+                if (map.StartsWith("y:"))
+                    caps.HasYButton = true;
+                else
+                if (map.StartsWith("back:"))
+                    caps.HasBackButton = true;
+                else
+                if (map.StartsWith("guide:"))
+                    caps.HasBigButton = true;
+                else
+                if (map.StartsWith("start:"))
+                    caps.HasStartButton = true;
+                else
+                if (map.StartsWith("dpleft:"))
+                    caps.HasDPadLeftButton = true;
+                else
+                if (map.StartsWith("dpdown:"))
+                    caps.HasDPadDownButton = true;
+                else
+                if (map.StartsWith("dpright:"))
+                    caps.HasDPadRightButton = true;
+                else
+                if (map.StartsWith("dpup:"))
+                    caps.HasDPadUpButton = true;
+                else
+                if (map.StartsWith("leftshoulder:"))
+                    caps.HasLeftShoulderButton = true;
+                else
+                if (map.StartsWith("lefttrigger:"))
+                    caps.HasLeftTrigger = true;
+                else
+                if (map.StartsWith("rightshoulder:"))
+                    caps.HasRightShoulderButton = true;
+                else
+                if (map.StartsWith("righttrigger:"))
+                    caps.HasRightTrigger = true;
+                else
+                if (map.StartsWith("leftstick:"))
+                    caps.HasLeftStickButton = true;
+                else
+                if (map.StartsWith("rightstick:"))
+                    caps.HasRightStickButton = true;
+                else
+                if (map.StartsWith("leftx:"))
+                    caps.HasLeftXThumbStick = true;
+                else
+                if (map.StartsWith("lefty:"))
+                    caps.HasLeftYThumbStick = true;
+                else
+                if (map.StartsWith("rightx:"))
+                    caps.HasRightXThumbStick = true;
+                else
+                if (map.StartsWith("righty:"))
+                    caps.HasRightYThumbStick = true;
             }
 
             return caps;
