@@ -114,17 +114,21 @@ namespace Microsoft.Xna.Framework.Input
                 return new GamePadCapabilities();
 
             var gamecontroller = Gamepads[index].Device;
-            var caps = new GamePadCapabilities();
-            var mapping = Sdl.GameController.GetMapping(gamecontroller).Split(',');
 
+            var mapping = Sdl.GameController.GetMapping(gamecontroller);
+
+            var caps = new GamePadCapabilities();
             caps.IsConnected = true;
             caps.DisplayName = Sdl.GameController.GetName(gamecontroller);
             caps.Identifier = Sdl.Joystick.GetGUID(Sdl.GameController.GetJoystick(gamecontroller)).ToString();
             caps.HasLeftVibrationMotor = caps.HasRightVibrationMotor = Sdl.GameController.HasRumble(gamecontroller) != 0;
             caps.GamePadType = GamePadType.GamePad;
 
-            foreach (var map in mapping)
+            var mappings = mapping.Split(',');
+            for(int i= 0; i< mappings.Length; i++)
             {
+                var map = mappings[i];
+
                 var split = map.Split(':');
                 if (split.Length != 2)
                     continue;
