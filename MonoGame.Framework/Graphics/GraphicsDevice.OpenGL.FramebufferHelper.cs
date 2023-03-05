@@ -113,12 +113,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void GenerateMipmap(TextureTarget target)
-            {
-                GL.GenerateMipmap(target);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

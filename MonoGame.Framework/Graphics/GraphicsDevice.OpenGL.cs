@@ -732,7 +732,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
                     GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
                     GraphicsExtensions.CheckGLError();
-                    _framebufferHelper.GenerateMipmap(renderTargetGL.GLTarget);
+                    GL.GenerateMipmap(renderTargetGL.GLTarget);
+                    GraphicsExtensions.CheckGLError();
                 }
             }
         }
