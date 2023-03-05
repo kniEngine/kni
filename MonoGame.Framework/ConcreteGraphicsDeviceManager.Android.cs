@@ -200,7 +200,13 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeginDraw()
         {
-            return base.BeginDraw();
+            //return base.BeginDraw();
+
+            PrimaryThreadLoader.DoLoads();
+            if (ConcreteGame.IsPlayingVideo)
+                return false;
+
+            return true;
         }
 
         public override void EndDraw()

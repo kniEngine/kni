@@ -54,7 +54,9 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeginDraw()
         {
-            return base.BeginDraw();
+            //return base.BeginDraw();
+
+            return true;
         }
 
         public override void EndDraw()

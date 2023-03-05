@@ -504,10 +504,17 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
+            bool gdmBeginDraw;
+            var gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                gdmBeginDraw = gdm.BeginDraw();
+            else // (gdm == null)
+                gdmBeginDraw = true;
+
             // Draw and EndDraw should not be called if BeginDraw returns false.
             // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
             // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
-            if (Strategy.BeforeDraw() && BeginDraw())
+            if (gdmBeginDraw && BeginDraw())
             {
                 Draw(gameTime);
                 EndDraw();

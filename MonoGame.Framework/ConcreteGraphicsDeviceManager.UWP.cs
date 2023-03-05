@@ -201,7 +201,18 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeginDraw()
         {
-            return base.BeginDraw();
+            //return base.BeginDraw();
+
+            var device = this.GraphicsDevice;
+            if (device != null)
+            {
+                // For a UAP app we need to re-apply the
+                // render target before every draw.
+                // I guess the OS changes it and doesn't restore it?
+                device.UAP_ResetRenderTargets();
+            }
+
+            return true;
         }
 
         public override void EndDraw()

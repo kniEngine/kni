@@ -314,11 +314,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw()
-        {
-            return true;
-        }
-
         public override void EnterFullScreen()
         {
         }

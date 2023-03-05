@@ -37,11 +37,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override bool BeforeDraw()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override void EnterFullScreen()
         {
             throw new PlatformNotSupportedException();

@@ -257,14 +257,6 @@ namespace Microsoft.Xna.Platform
             _viewController.View.Present();
         }
 
-        public override bool BeforeDraw()
-        {
-            if (this.IsPlayingVideo)
-                return false;
-
-            return true;
-        }
-
         public override bool BeforeUpdate()
         {
             if (this.IsPlayingVideo)

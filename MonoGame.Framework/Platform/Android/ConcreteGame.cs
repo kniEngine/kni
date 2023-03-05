@@ -65,15 +65,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw()
-        {
-            PrimaryThreadLoader.DoLoads();
-            if (ConcreteGame.IsPlayingVideo)
-                return false;
-
-            return true;
-        }
-
         public override void BeforeInitialize()
         {
             var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);

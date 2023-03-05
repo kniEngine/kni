@@ -240,21 +240,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override bool BeforeDraw()
-        {
-            var device = this.GraphicsDevice;
-            if (device != null)
-            {
-				// For a UAP app we need to re-apply the
-				// render target before every draw.  
-				// 
-				// I guess the OS changes it and doesn't restore it?
-				device.UAP_ResetRenderTargets();
-            }
-
-            return true;
-        }
-
         public override void EnterFullScreen()
         {
             if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())
