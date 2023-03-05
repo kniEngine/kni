@@ -125,11 +125,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void BlitFramebuffer(int iColorAttachment, int width, int height)
-            {
-                throw new NotImplementedException();
-            }
-
         }
     }
 }

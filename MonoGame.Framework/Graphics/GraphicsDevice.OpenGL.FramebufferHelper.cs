@@ -119,16 +119,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void BlitFramebuffer(int iColorAttachment, int width, int height)
-            {
-                GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + iColorAttachment);
-                GraphicsExtensions.CheckGLError();
-                GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + iColorAttachment);
-                GraphicsExtensions.CheckGLError();
-                GL.BlitFramebuffer(0, 0, width, height, 0, 0, width, height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

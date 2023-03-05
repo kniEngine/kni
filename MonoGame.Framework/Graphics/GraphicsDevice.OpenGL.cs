@@ -704,7 +704,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-                    _framebufferHelper.BlitFramebuffer(i, renderTarget.Width, renderTarget.Height);
+                    GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + i);
+                    GraphicsExtensions.CheckGLError();
+                    GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
+                    GraphicsExtensions.CheckGLError();
+                    GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height, 0, 0, renderTarget.Width, renderTarget.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+                    GraphicsExtensions.CheckGLError();
                 }
 
                 if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _framebufferHelper.SupportsInvalidateFramebuffer)
