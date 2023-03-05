@@ -3,8 +3,6 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using MonoGame.OpenGL;
 
 
@@ -15,13 +13,16 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal class FramebufferHelper
         {
-            private static FramebufferHelper _instance;
+            public bool SupportsInvalidateFramebuffer { get; private set; }
+            public bool SupportsBlitFramebuffer { get; private set; }
 
-            public static FramebufferHelper Create(GraphicsDevice device)
+            internal FramebufferHelper(GraphicsDevice graphicsDevice)
             {
-                if (device.GraphicsCapabilities.SupportsFramebufferObjectARB || device.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+                if (graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectARB
+                || graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectEXT)
                 {
-                    _instance = new FramebufferHelper(device);
+                    this.SupportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                    this.SupportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
                 }
                 else
                 {
@@ -29,46 +30,27 @@ namespace Microsoft.Xna.Framework.Graphics
                         "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
                         "Try updating your graphics drivers.");
                 }
-
-                return _instance;
             }
 
-            public static FramebufferHelper Get()
-            {
-                if (_instance == null)
-                    throw new InvalidOperationException("The FramebufferHelper has not been created yet!");
-                return _instance;
-            }
-
-            public bool SupportsInvalidateFramebuffer { get; private set; }
-
-            public bool SupportsBlitFramebuffer { get; private set; }
-
-            internal FramebufferHelper(GraphicsDevice graphicsDevice)
-            {
-                this.SupportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                this.SupportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
-            }
-
-            internal virtual void GenRenderbuffer(out int renderbuffer)
+            internal void GenRenderbuffer(out int renderbuffer)
             {
                 GL.GenRenderbuffers(1, out renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindRenderbuffer(int renderbuffer)
+            internal void BindRenderbuffer(int renderbuffer)
             {
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void DeleteRenderbuffer(int renderbuffer)
+            internal void DeleteRenderbuffer(int renderbuffer)
             {
                 GL.DeleteRenderbuffers(1, ref renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void RenderbufferStorageMultisample(int samples, RenderbufferStorage internalFormat, int width, int height)
+            internal void RenderbufferStorageMultisample(int samples, RenderbufferStorage internalFormat, int width, int height)
             {
                 if (samples > 0 && GL.RenderbufferStorageMultisample != null)
                     GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, samples, internalFormat, width, height);
@@ -77,19 +59,19 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenFramebuffer(out int framebuffer)
+            internal void GenFramebuffer(out int framebuffer)
             {
                 GL.GenFramebuffers(1, out framebuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindFramebuffer(int framebuffer)
+            internal void BindFramebuffer(int framebuffer)
             {
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindReadFramebuffer(int readFramebuffer)
+            internal void BindReadFramebuffer(int readFramebuffer)
             {
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, readFramebuffer);
                 GraphicsExtensions.CheckGLError();
@@ -101,43 +83,43 @@ namespace Microsoft.Xna.Framework.Graphics
                 FramebufferAttachment.StencilAttachment,
             };
 
-            internal virtual void InvalidateDrawFramebuffer()
+            internal void InvalidateDrawFramebuffer()
             {
-                Debug.Assert(this.SupportsInvalidateFramebuffer);
+                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
                 GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
             }
 
-            internal virtual void InvalidateReadFramebuffer()
+            internal void InvalidateReadFramebuffer()
             {
-                Debug.Assert(this.SupportsInvalidateFramebuffer);
+                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
                 GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
             }
 
-            internal virtual void DeleteFramebuffer(int framebuffer)
+            internal void DeleteFramebuffer(int framebuffer)
             {
                 GL.DeleteFramebuffers(1, ref framebuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferTexture2D(FramebufferAttachment attachement, TextureTarget target, int texture, int level = 0, int samples = 0)
+            internal void FramebufferTexture2D(FramebufferAttachment attachement, TextureTarget target, int texture, int level = 0, int samples = 0)
             {
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, texture, level);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferRenderbuffer(FramebufferAttachment attachement, int renderbuffer, int level = 0)
+            internal void FramebufferRenderbuffer(FramebufferAttachment attachement, int renderbuffer, int level = 0)
             {
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenerateMipmap(TextureTarget target)
+            internal void GenerateMipmap(TextureTarget target)
             {
                 GL.GenerateMipmap(target);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BlitFramebuffer(int iColorAttachment, int width, int height)
+            internal void BlitFramebuffer(int iColorAttachment, int width, int height)
             {
                 GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + iColorAttachment);
                 GraphicsExtensions.CheckGLError();
