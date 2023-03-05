@@ -66,12 +66,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void GenFramebuffer(out WebGLFramebuffer framebuffer)
-            {
-                framebuffer = GL.CreateFramebuffer();
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

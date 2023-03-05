@@ -529,7 +529,8 @@ namespace Microsoft.Xna.Framework.Graphics
             WebGLFramebuffer glFramebuffer = null;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
-                _framebufferHelper.GenFramebuffer(out glFramebuffer);
+                glFramebuffer = GL.CreateFramebuffer();
+                GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];

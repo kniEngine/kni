@@ -686,7 +686,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 var glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
                 {
-                    _framebufferHelper.GenFramebuffer(out glResolveFramebuffer);
+                    GL.GenFramebuffers(1, out glResolveFramebuffer);
+                    GraphicsExtensions.CheckGLError();
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
                     GraphicsExtensions.CheckGLError();
 
@@ -761,7 +762,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var glFramebuffer = 0;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
-                _framebufferHelper.GenFramebuffer(out glFramebuffer);
+                GL.GenFramebuffers(1, out glFramebuffer);
+                GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
