@@ -101,12 +101,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void FramebufferTexture2D(FramebufferAttachment attachement, TextureTarget target, int texture, int level = 0, int samples = 0)
-            {
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, texture, level);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

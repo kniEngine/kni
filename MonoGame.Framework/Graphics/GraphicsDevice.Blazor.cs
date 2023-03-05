@@ -538,7 +538,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     else
                     {
-                        _framebufferHelper.FramebufferTexture2D(attachement, renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
+                        WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, renderTargetGL.GLTexture);
+                        GraphicsExtensions.CheckGLError();
                     }
                 }
 

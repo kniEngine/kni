@@ -681,7 +681,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     for (var i = 0; i < _currentRenderTargetCount; i++)
                     {
                         var renderTargetGL = (IRenderTargetGL)_currentRenderTargetBindings[i].RenderTarget;
-                        _framebufferHelper.FramebufferTexture2D((FramebufferAttachment.ColorAttachment0 + i), renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture);
+                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);                       
+                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, target, renderTargetGL.GLTexture, 0);
+                        GraphicsExtensions.CheckGLError();
                     }
                     _glResolveFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
@@ -765,7 +767,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     else
                     {
-                        _framebufferHelper.FramebufferTexture2D(attachement, renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
+                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        GraphicsExtensions.CheckGLError();
                     }
                 }
 

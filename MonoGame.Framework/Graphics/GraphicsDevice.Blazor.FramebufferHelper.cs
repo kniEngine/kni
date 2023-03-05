@@ -107,12 +107,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void FramebufferTexture2D(WebGLFramebufferAttachmentPoint attachement, WebGLTextureTarget target, WebGLTexture texture, int level = 0, int samples = 0)
-            {
-                GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, texture);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
