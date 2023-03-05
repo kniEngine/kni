@@ -65,18 +65,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void BindFramebuffer(int framebuffer)
-            {
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
-            internal void BindReadFramebuffer(int readFramebuffer)
-            {
-                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, readFramebuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

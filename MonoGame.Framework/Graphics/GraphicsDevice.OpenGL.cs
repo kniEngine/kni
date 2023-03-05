@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal int glMajorVersion = 0;
         internal int glMinorVersion = 0;
-        internal int _glFramebuffer = 0;
+        internal int _glDefaultFramebuffer = 0;
         internal int MaxVertexAttributes;
         internal int _maxTextureSize = 0;
 
@@ -470,7 +470,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyDefaultRenderTarget()
         {
-            _framebufferHelper.BindFramebuffer(_glFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glDefaultFramebuffer);
+            GraphicsExtensions.CheckGLError();
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
@@ -686,7 +687,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
                 {
                     _framebufferHelper.GenFramebuffer(out glResolveFramebuffer);
-                    _framebufferHelper.BindFramebuffer(glResolveFramebuffer);
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GraphicsExtensions.CheckGLError();
+
                     for (var i = 0; i < _currentRenderTargetCount; i++)
                     {
                         var renderTargetGL = (IRenderTargetGL)_currentRenderTargetBindings[i].RenderTarget;
@@ -698,7 +701,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    _framebufferHelper.BindFramebuffer(glResolveFramebuffer);
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GraphicsExtensions.CheckGLError();
                 }
 
                 // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
@@ -709,7 +713,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
-                _framebufferHelper.BindReadFramebuffer(glFramebuffer);
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
 
                 for (var i = 0; i < _currentRenderTargetCount; i++)
                 {
@@ -757,7 +762,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
                 _framebufferHelper.GenFramebuffer(out glFramebuffer);
-                _framebufferHelper.BindFramebuffer(glFramebuffer);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
                 var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
@@ -790,7 +796,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _framebufferHelper.BindFramebuffer(glFramebuffer);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
             }
 #if !GLES
             GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);

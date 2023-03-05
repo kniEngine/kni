@@ -35,6 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal FramebufferHelper _framebufferHelper;
 
+        private const WebGLFramebuffer _glDefaultFramebuffer = null;
         internal int MaxVertexAttributes;
         internal int _maxTextureSize = 0;
 
@@ -319,7 +320,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyDefaultRenderTarget()
         {
-            _framebufferHelper.BindFramebuffer(null);
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, _glDefaultFramebuffer);
+            GraphicsExtensions.CheckGLError();
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
@@ -528,7 +530,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
                 _framebufferHelper.GenFramebuffer(out glFramebuffer);
-                _framebufferHelper.BindFramebuffer(glFramebuffer);
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
                 var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;             
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
@@ -560,7 +563,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _framebufferHelper.BindFramebuffer(glFramebuffer);
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
             }
 #if !GLES
             //GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);

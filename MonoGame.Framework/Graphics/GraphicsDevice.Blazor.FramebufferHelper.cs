@@ -72,17 +72,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void BindFramebuffer(WebGLFramebuffer framebuffer)
-            {
-                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, framebuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
-            internal void BindReadFramebuffer(int readFramebuffer)
-            {
-                throw new NotImplementedException();
-            }
-
         }
     }
 }
