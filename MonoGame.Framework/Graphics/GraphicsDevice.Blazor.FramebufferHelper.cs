@@ -3,8 +3,6 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -15,18 +13,23 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal class FramebufferHelper
         {
-            private static FramebufferHelper _instance;
             private GraphicsDevice _device;
+            public bool SupportsInvalidateFramebuffer { get; private set; }
+            public bool SupportsBlitFramebuffer { get; private set; }
 
             private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
-            public static FramebufferHelper Create(GraphicsDevice device)
+            internal FramebufferHelper(GraphicsDevice graphicsDevice)
             {
-                //if (devic.GraphicsCapabilities.SupportsFramebufferObjectARB || devic.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+                this._device = graphicsDevice;
+
+                //if (graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectARB
+                //|| graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectEXT)
                 // TODO: check for FramebufferObjectARB
                 if (true)
                 {
-                    _instance = new FramebufferHelper(device);
+                    this.SupportsBlitFramebuffer = false;
+                    this.SupportsInvalidateFramebuffer = false;
                 }
                 else
                 {
@@ -34,48 +37,27 @@ namespace Microsoft.Xna.Framework.Graphics
                         "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
                         "Try updating your graphics drivers.");
                 }
-
-                return _instance;
             }
 
-            public static FramebufferHelper Get()
-            {
-                if (_instance == null)
-                    throw new InvalidOperationException("The FramebufferHelper has not been created yet!");
-                return _instance;
-            }
-
-            public bool SupportsInvalidateFramebuffer { get; private set; }
-
-            public bool SupportsBlitFramebuffer { get; private set; }
-
-            internal FramebufferHelper(GraphicsDevice graphicsDevice)
-            {
-                this._device = graphicsDevice;
-
-                this.SupportsBlitFramebuffer = false;
-                this.SupportsInvalidateFramebuffer = false;
-            }
-
-            internal virtual void GenRenderbuffer(out WebGLRenderbuffer renderbuffer)
+            internal void GenRenderbuffer(out WebGLRenderbuffer renderbuffer)
             {
                 renderbuffer = GL.CreateRenderbuffer();
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindRenderbuffer(WebGLRenderbuffer renderbuffer)
+            internal void BindRenderbuffer(WebGLRenderbuffer renderbuffer)
             {
                 GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void DeleteRenderbuffer(WebGLRenderbuffer renderbuffer)
+            internal void DeleteRenderbuffer(WebGLRenderbuffer renderbuffer)
             {
                 renderbuffer.Dispose();
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void RenderbufferStorageMultisample(int samples, WebGLRenderbufferInternalFormat internalFormat, int width, int height)
+            internal void RenderbufferStorageMultisample(int samples, WebGLRenderbufferInternalFormat internalFormat, int width, int height)
             {
                 if (samples > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
                     throw new NotImplementedException();
@@ -84,19 +66,19 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenFramebuffer(out WebGLFramebuffer framebuffer)
+            internal void GenFramebuffer(out WebGLFramebuffer framebuffer)
             {
                 framebuffer = GL.CreateFramebuffer();
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindFramebuffer(WebGLFramebuffer framebuffer)
+            internal void BindFramebuffer(WebGLFramebuffer framebuffer)
             {
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, framebuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BindReadFramebuffer(int readFramebuffer)
+            internal void BindReadFramebuffer(int readFramebuffer)
             {
                 throw new NotImplementedException();
             }
@@ -107,41 +89,43 @@ namespace Microsoft.Xna.Framework.Graphics
                 WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
             };
 
-            internal virtual void InvalidateDrawFramebuffer()
+            internal void InvalidateDrawFramebuffer()
             {
+                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
                 throw new NotImplementedException();
             }
 
-            internal virtual void InvalidateReadFramebuffer()
+            internal void InvalidateReadFramebuffer()
             {
+                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
                 throw new NotImplementedException();
             }
 
-            internal virtual void DeleteFramebuffer(WebGLFramebuffer framebuffer)
+            internal void DeleteFramebuffer(WebGLFramebuffer framebuffer)
             {
                 framebuffer.Dispose();
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferTexture2D(WebGLFramebufferAttachmentPoint attachement, WebGLTextureTarget target, WebGLTexture texture, int level = 0, int samples = 0)
+            internal void FramebufferTexture2D(WebGLFramebufferAttachmentPoint attachement, WebGLTextureTarget target, WebGLTexture texture, int level = 0, int samples = 0)
             {
                 GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, texture);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint attachement, WebGLRenderbuffer renderbuffer)
+            internal void FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint attachement, WebGLRenderbuffer renderbuffer)
             {
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, attachement, WebGLRenderbufferType.RENDERBUFFER, renderbuffer);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void GenerateMipmap(WebGLTextureTarget target)
+            internal void GenerateMipmap(WebGLTextureTarget target)
             {
                 GL.GenerateMipmap(target);
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal virtual void BlitFramebuffer(int iColorAttachment, int width, int height)
+            internal void BlitFramebuffer(int iColorAttachment, int width, int height)
             {
                 throw new NotImplementedException();
             }

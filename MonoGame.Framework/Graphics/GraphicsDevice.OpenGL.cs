@@ -338,7 +338,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.DisposePrograms();
             _shaderProgram = null;
 
-            _framebufferHelper = FramebufferHelper.Create(this);
+            _framebufferHelper = new FramebufferHelper(this);
 
             // Force resetting states
             this._actualBlendState.PlatformApplyState(this, true);
@@ -689,28 +689,36 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _framebufferHelper.BindFramebuffer(glResolveFramebuffer);
                 }
+
                 // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
                 if (_lastRasterizerState.ScissorTestEnable)
                 {
                     GL.Disable(EnableCap.ScissorTest);
                     GraphicsExtensions.CheckGLError();
                 }
+
                 var glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
                 _framebufferHelper.BindReadFramebuffer(glFramebuffer);
+
                 for (var i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
                     _framebufferHelper.BlitFramebuffer(i, renderTarget.Width, renderTarget.Height);
                 }
+
                 if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _framebufferHelper.SupportsInvalidateFramebuffer)
+                {
                     _framebufferHelper.InvalidateReadFramebuffer();
+                }
+
                 if (_lastRasterizerState.ScissorTestEnable)
                 {
                     GL.Enable(EnableCap.ScissorTest);
                     GraphicsExtensions.CheckGLError();
                 }
             }
+
             for (var i = 0; i < _currentRenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
@@ -735,6 +743,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
                 _framebufferHelper.FramebufferRenderbuffer(FramebufferAttachment.DepthAttachment, renderTargetGL.GLDepthBuffer, 0);
                 _framebufferHelper.FramebufferRenderbuffer(FramebufferAttachment.StencilAttachment, renderTargetGL.GLStencilBuffer, 0);
+
                 for (var i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
@@ -742,9 +751,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
                     var attachement = (FramebufferAttachment.ColorAttachment0 + i);
                     if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    {
                         _framebufferHelper.FramebufferRenderbuffer(attachement, renderTargetGL.GLColorBuffer, 0);
+                    }
                     else
+                    {
                         _framebufferHelper.FramebufferTexture2D(attachement, renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
+                    }
                 }
 
                 GraphicsExtensions.CheckFramebufferStatus();

@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.DisposePrograms();
             _shaderProgram = null;
 
-            _framebufferHelper = FramebufferHelper.Create(this);
+            _framebufferHelper = new FramebufferHelper(this);
 
             // Force resetting states
             this._actualBlendState.PlatformApplyState(this, true);
@@ -497,6 +497,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 throw new NotImplementedException();
             }
+
             for (var i = 0; i < _currentRenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
@@ -521,6 +522,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
                 _framebufferHelper.FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, renderTargetGL.GLDepthBuffer);
                 _framebufferHelper.FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, renderTargetGL.GLStencilBuffer);
+
                 for (var i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
@@ -528,9 +530,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
                     var attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
                     if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    {
                         throw new NotImplementedException();
+                    }
                     else
+                    {
                         _framebufferHelper.FramebufferTexture2D(attachement, renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice), renderTargetGL.GLTexture, 0, renderTarget.MultiSampleCount);
+                    }
                 }
 
                 GraphicsExtensions.CheckFramebufferStatus();
