@@ -107,12 +107,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void FramebufferRenderbuffer(FramebufferAttachment attachement, int renderbuffer, int level = 0)
-            {
-                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

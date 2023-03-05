@@ -520,9 +520,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 _framebufferHelper.GenFramebuffer(out glFramebuffer);
                 _framebufferHelper.BindFramebuffer(glFramebuffer);
                 var renderTargetBinding = _currentRenderTargetBindings[0];
-                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
-                _framebufferHelper.FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, renderTargetGL.GLDepthBuffer);
-                _framebufferHelper.FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, renderTargetGL.GLStencilBuffer);
+                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;             
+                GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
+                GraphicsExtensions.CheckGLError();
+                GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
+                GraphicsExtensions.CheckGLError();
 
                 for (var i = 0; i < _currentRenderTargetCount; i++)
                 {

@@ -113,12 +113,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void FramebufferRenderbuffer(WebGLFramebufferAttachmentPoint attachement, WebGLRenderbuffer renderbuffer)
-            {
-                GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, attachement, WebGLRenderbufferType.RENDERBUFFER, renderbuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
