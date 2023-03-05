@@ -540,7 +540,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _framebufferHelper.GenRenderbuffer(out color);
                 _framebufferHelper.BindRenderbuffer(color);
-                _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                else
+                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
+                GraphicsExtensions.CheckGLError();
             }
 
             if (preferredDepthFormat != DepthFormat.None)
@@ -590,7 +594,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _framebufferHelper.GenRenderbuffer(out depth);
                     _framebufferHelper.BindRenderbuffer(depth);
-                    _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, depthInternalFormat, width, height);
+                    if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, depthInternalFormat, width, height);
+                    else
+                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
+                    GraphicsExtensions.CheckGLError();
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         stencil = depth;
@@ -598,7 +606,11 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             _framebufferHelper.GenRenderbuffer(out stencil);
                             _framebufferHelper.BindRenderbuffer(stencil);
-                            _framebufferHelper.RenderbufferStorageMultisample(preferredMultiSampleCount, stencilInternalFormat, width, height);
+                            if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                                GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, stencilInternalFormat, width, height);
+                            else
+                                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
+                            GraphicsExtensions.CheckGLError();
                         }
                     }
                 }

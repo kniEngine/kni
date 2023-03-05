@@ -50,15 +50,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void RenderbufferStorageMultisample(int samples, RenderbufferStorage internalFormat, int width, int height)
-            {
-                if (samples > 0 && GL.RenderbufferStorageMultisample != null)
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, samples, internalFormat, width, height);
-                else
-                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, internalFormat, width, height);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

@@ -57,15 +57,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void RenderbufferStorageMultisample(int samples, WebGLRenderbufferInternalFormat internalFormat, int width, int height)
-            {
-                if (samples > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
-                    throw new NotImplementedException();
-                else
-                    GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, internalFormat, width, height);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
