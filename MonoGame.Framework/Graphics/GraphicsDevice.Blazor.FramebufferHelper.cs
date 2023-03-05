@@ -28,8 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 // TODO: check for FramebufferObjectARB
                 if (true)
                 {
-                    this.SupportsBlitFramebuffer = false;
-                    this.SupportsInvalidateFramebuffer = false;
+                    this.SupportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
+                    this.SupportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
                 }
                 else
                 {
@@ -80,24 +80,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal void BindReadFramebuffer(int readFramebuffer)
             {
-                throw new NotImplementedException();
-            }
-
-            static readonly WebGLFramebufferAttachmentPoint[] FramebufferAttachements = {
-                WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
-                WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT,
-                WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
-            };
-
-            internal void InvalidateDrawFramebuffer()
-            {
-                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
-                throw new NotImplementedException();
-            }
-
-            internal void InvalidateReadFramebuffer()
-            {
-                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
                 throw new NotImplementedException();
             }
 

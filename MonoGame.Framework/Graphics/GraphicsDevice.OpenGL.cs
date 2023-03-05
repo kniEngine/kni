@@ -666,6 +666,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        internal static readonly FramebufferAttachment[] InvalidateFramebufferAttachements =
+        {
+            FramebufferAttachment.ColorAttachment0,
+            FramebufferAttachment.DepthAttachment,
+            FramebufferAttachment.StencilAttachment,
+        };
+
         private void PlatformResolveRenderTargets()
         {
             if (!this.IsRenderTargetBound)
@@ -718,7 +725,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _framebufferHelper.SupportsInvalidateFramebuffer)
                 {
-                    _framebufferHelper.InvalidateReadFramebuffer();
+                    Debug.Assert(_framebufferHelper.SupportsInvalidateFramebuffer);
+                    GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
+                    GraphicsExtensions.CheckGLError();
                 }
 
                 if (_lastRasterizerState.ScissorTestEnable)

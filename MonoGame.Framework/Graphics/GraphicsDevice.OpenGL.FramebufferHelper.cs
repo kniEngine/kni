@@ -77,24 +77,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            static readonly FramebufferAttachment[] FramebufferAttachements = {
-                FramebufferAttachment.ColorAttachment0,
-                FramebufferAttachment.DepthAttachment,
-                FramebufferAttachment.StencilAttachment,
-            };
-
-            internal void InvalidateDrawFramebuffer()
-            {
-                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
-                GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
-            }
-
-            internal void InvalidateReadFramebuffer()
-            {
-                System.Diagnostics.Debug.Assert(this.SupportsInvalidateFramebuffer);
-                GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
-            }
-
         }
     }
 }

@@ -489,6 +489,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        internal static readonly WebGLFramebufferAttachmentPoint[] InvalidateFramebufferAttachements =
+        {
+            WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
+            WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT,
+            WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
+        };
+
         private void PlatformResolveRenderTargets()
         {
             if (!this.IsRenderTargetBound)

@@ -1417,11 +1417,13 @@ namespace MonoGame.OpenGL
                 // Ignore the debug message callback if the entry point can not be found
             }
 #endif
-            if (BoundApi == RenderApi.ES) {
+
+            if (BoundApi == RenderApi.ES)
+            {
                 InvalidateFramebuffer = LoadFunctionOrNull<InvalidateFramebufferDelegate>("glDiscardFramebufferEXT");
             }
 
-            LoadExtensions ();
+            LoadExtensions();
         }
 
         internal static List<string> Extensions = new List<string> ();
