@@ -95,12 +95,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, FramebufferAttachements);
             }
 
-            internal void DeleteFramebuffer(int framebuffer)
-            {
-                GL.DeleteFramebuffers(1, ref framebuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

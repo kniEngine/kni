@@ -652,12 +652,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     var fbo = 0;
                     if (_glFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        _framebufferHelper.DeleteFramebuffer(fbo);
+                        GL.DeleteFramebuffers(1, ref fbo);
+                        GraphicsExtensions.CheckGLError();
                         _glFramebuffers.Remove(bindings);
                     }
                     if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        _framebufferHelper.DeleteFramebuffer(fbo);
+                        GL.DeleteFramebuffers(1, ref fbo);
+                        GraphicsExtensions.CheckGLError();
                         _glResolveFramebuffers.Remove(bindings);
                     }
                 }

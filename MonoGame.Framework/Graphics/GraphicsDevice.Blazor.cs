@@ -474,12 +474,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     WebGLFramebuffer fbo = null;
                     if (_glFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        _framebufferHelper.DeleteFramebuffer(fbo);
+                        fbo.Dispose();
+                        GraphicsExtensions.CheckGLError();
                         _glFramebuffers.Remove(bindings);
                     }
                     if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        _framebufferHelper.DeleteFramebuffer(fbo);
+                        fbo.Dispose();
+                        GraphicsExtensions.CheckGLError();
+
                         _glResolveFramebuffers.Remove(bindings);
                     }
                 }

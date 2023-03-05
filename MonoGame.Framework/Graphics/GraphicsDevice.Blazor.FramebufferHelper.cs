@@ -101,12 +101,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotImplementedException();
             }
 
-            internal void DeleteFramebuffer(WebGLFramebuffer framebuffer)
-            {
-                framebuffer.Dispose();
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
