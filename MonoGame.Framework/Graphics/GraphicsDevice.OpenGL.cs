@@ -539,7 +539,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (preferredMultiSampleCount > 0 && _framebufferHelper.SupportsBlitFramebuffer)
             {
                 _framebufferHelper.GenRenderbuffer(out color);
-                _framebufferHelper.BindRenderbuffer(color);
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
+                GraphicsExtensions.CheckGLError();
                 if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
                     GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
                 else
@@ -593,7 +594,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (depthInternalFormat != 0)
                 {
                     _framebufferHelper.GenRenderbuffer(out depth);
-                    _framebufferHelper.BindRenderbuffer(depth);
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
+                    GraphicsExtensions.CheckGLError();
                     if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
                         GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, depthInternalFormat, width, height);
                     else
@@ -605,7 +607,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         if (stencilInternalFormat != 0)
                         {
                             _framebufferHelper.GenRenderbuffer(out stencil);
-                            _framebufferHelper.BindRenderbuffer(stencil);
+                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
+                            GraphicsExtensions.CheckGLError();
                             if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
                                 GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, stencilInternalFormat, width, height);
                             else

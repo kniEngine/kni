@@ -45,12 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void BindRenderbuffer(WebGLRenderbuffer renderbuffer)
-            {
-                GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderbuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
