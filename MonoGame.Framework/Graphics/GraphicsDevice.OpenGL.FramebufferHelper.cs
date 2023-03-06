@@ -44,12 +44,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void DeleteRenderbuffer(int renderbuffer)
-            {
-                GL.DeleteRenderbuffers(1, ref renderbuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

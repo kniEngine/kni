@@ -51,12 +51,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            internal void DeleteRenderbuffer(WebGLRenderbuffer renderbuffer)
-            {
-                renderbuffer.Dispose();
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

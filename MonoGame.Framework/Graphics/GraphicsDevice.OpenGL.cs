@@ -627,25 +627,33 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformDeleteRenderTarget(IRenderTarget renderTarget)
         {
-            var color = 0;
-            var depth = 0;
-            var stencil = 0;
-            var colorIsRenderbuffer = false;
+            int color = 0;
+            int depth = 0;
+            int stencil = 0;
 
             var renderTargetGL = (IRenderTargetGL)renderTarget;
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
-            colorIsRenderbuffer = color != renderTargetGL.GLTexture;
+            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
 
             if (color != 0)
             {
                 if (colorIsRenderbuffer)
-                    _framebufferHelper.DeleteRenderbuffer(color);
+                {
+                    GL.DeleteRenderbuffers(1, ref color);
+                    GraphicsExtensions.CheckGLError();
+                }
                 if (stencil != 0 && stencil != depth)
-                    _framebufferHelper.DeleteRenderbuffer(stencil);
+                {
+                    GL.DeleteRenderbuffers(1, ref stencil);
+                    GraphicsExtensions.CheckGLError();
+                }
                 if (depth != 0)
-                    _framebufferHelper.DeleteRenderbuffer(depth);
+                {
+                    GL.DeleteRenderbuffers(1, ref depth);
+                    GraphicsExtensions.CheckGLError();
+                }
 
                 var bindingsToDelete = new List<RenderTargetBinding[]>();
                 foreach (var bindings in _glFramebuffers.Keys)

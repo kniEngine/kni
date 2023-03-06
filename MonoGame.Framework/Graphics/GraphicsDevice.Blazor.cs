@@ -449,22 +449,29 @@ namespace Microsoft.Xna.Framework.Graphics
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
-            var colorIsRenderbuffer = false;
 
             var renderTargetGL = (IRenderTargetGL)renderTarget;
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
-            colorIsRenderbuffer = color != renderTargetGL.GLTexture;
+            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
 
             if (color != null)
             {
                 if (colorIsRenderbuffer)
+                {
                     throw new NotImplementedException();
+                }
                 if (stencil != null && stencil != depth)
-                    _framebufferHelper.DeleteRenderbuffer(stencil);
+                {
+                    stencil.Dispose();
+                    GraphicsExtensions.CheckGLError();
+                }
                 if (depth != null)
-                    _framebufferHelper.DeleteRenderbuffer(depth);
+                {
+                    depth.Dispose();
+                    GraphicsExtensions.CheckGLError();
+                }
 
                 var bindingsToDelete = new List<RenderTargetBinding[]>();
                 foreach (var bindings in _glFramebuffers.Keys)
