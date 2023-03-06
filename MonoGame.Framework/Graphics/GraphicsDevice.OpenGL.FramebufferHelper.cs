@@ -32,12 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            internal void GenRenderbuffer(out int renderbuffer)
-            {
-                GL.GenRenderbuffers(1, out renderbuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }

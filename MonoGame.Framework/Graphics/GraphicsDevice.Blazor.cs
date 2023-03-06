@@ -411,7 +411,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (depthInternalFormat != 0)
                 {
-                    _framebufferHelper.GenRenderbuffer(out depth);
+                    depth = GL.CreateRenderbuffer();
+                    GraphicsExtensions.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
                     GraphicsExtensions.CheckGLError();
                     if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
@@ -424,7 +425,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         stencil = depth;
                         if (stencilInternalFormat != 0)
                         {
-                            _framebufferHelper.GenRenderbuffer(out stencil);
+                            stencil = GL.CreateRenderbuffer();
+                            GraphicsExtensions.CheckGLError();
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
                             GraphicsExtensions.CheckGLError();
                             if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)

@@ -39,12 +39,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            internal void GenRenderbuffer(out WebGLRenderbuffer renderbuffer)
-            {
-                renderbuffer = GL.CreateRenderbuffer();
-                GraphicsExtensions.CheckGLError();
-            }
-
         }
     }
 }
