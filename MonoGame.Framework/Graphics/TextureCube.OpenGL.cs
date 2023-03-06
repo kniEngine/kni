@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.GenerateMipmap(TextureTarget.TextureCubeMap);
                     GraphicsExtensions.CheckGLError();
 #else
-                    graphicsDevice._framebufferHelper.GenerateMipmap(glTarget);
+                    GL.GenerateMipmap(glTarget);
                     GraphicsExtensions.CheckGLError();
                     // This updates the mipmaps after a change in the base texture
                     GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);

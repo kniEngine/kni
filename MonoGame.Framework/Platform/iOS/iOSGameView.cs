@@ -296,9 +296,7 @@ namespace Microsoft.Xna.Framework
 					0, 0,
 					pp.BackBufferWidth, pp.BackBufferHeight);
 				
-				// FIXME: These static methods on GraphicsDevice need
-				//        to go away someday.
-				gds.GraphicsDevice._glFramebuffer = _framebuffer;
+				gds.GraphicsDevice._glDefaultFramebuffer = _framebuffer;
 			}
 		}
 
