@@ -49,7 +49,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
         private bool _attribsDirty;
 
-        internal FramebufferHelper _framebufferHelper;
+        private bool _supportsInvalidateFramebuffer;
+        private bool _supportsBlitFramebuffer;
 
         internal int glMajorVersion = 0;
         internal int glMinorVersion = 0;
@@ -338,7 +339,18 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.DisposePrograms();
             _shaderProgram = null;
 
-            _framebufferHelper = new FramebufferHelper(this);
+            if (GraphicsCapabilities.SupportsFramebufferObjectARB
+            || GraphicsCapabilities.SupportsFramebufferObjectEXT)
+            {
+                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
 
             // Force resetting states
             this._actualBlendState.PlatformApplyState(this, true);
@@ -536,7 +548,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var depth = 0;
             var stencil = 0;
             
-            if (preferredMultiSampleCount > 0 && _framebufferHelper.SupportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
                 GL.GenRenderbuffers(1, out color);
                 GraphicsExtensions.CheckGLError();
@@ -707,7 +719,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             var renderTargetBinding = _currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && _framebufferHelper.SupportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
                 var glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
@@ -755,9 +767,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _framebufferHelper.SupportsInvalidateFramebuffer)
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _supportsInvalidateFramebuffer)
                 {
-                    Debug.Assert(_framebufferHelper.SupportsInvalidateFramebuffer);
+                    Debug.Assert(_supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GraphicsExtensions.CheckGLError();
                 }

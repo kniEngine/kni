@@ -33,7 +33,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
         private bool _attribsDirty;
 
-        internal FramebufferHelper _framebufferHelper;
+        private bool _supportsInvalidateFramebuffer;
+        private bool _supportsBlitFramebuffer;
 
         private const WebGLFramebuffer _glDefaultFramebuffer = null;
         internal int MaxVertexAttributes;
@@ -240,7 +241,20 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.DisposePrograms();
             _shaderProgram = null;
 
-            _framebufferHelper = new FramebufferHelper(this);
+            // TODO: check for FramebufferObjectARB
+            //if (graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectARB
+            //|| graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+            if (true)
+            {
+                this._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
+                this._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
 
             // Force resetting states
             this._actualBlendState.PlatformApplyState(this, true);
@@ -386,7 +400,7 @@ namespace Microsoft.Xna.Framework.Graphics
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
             
-            if (preferredMultiSampleCount > 0 && _framebufferHelper.SupportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
@@ -524,7 +538,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             var renderTargetBinding = _currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && _framebufferHelper.SupportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
