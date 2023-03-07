@@ -163,16 +163,14 @@ namespace Microsoft.Xna.Framework.Graphics
             private set;
         }
 
-        internal GraphicsMetrics _graphicsMetrics;
-
         /// <summary>
         /// The rendering information for debugging and profiling.
         /// The metrics are reset every frame after draw within <see cref="GraphicsDevice.Present"/>. 
         /// </summary>
         public GraphicsMetrics Metrics
         {
-            get { return _graphicsMetrics; }
-            set { _graphicsMetrics = value; }
+            get { return CurrentContext.Metrics; }
+            set { CurrentContext.Metrics = value; }
         }
 
         private GraphicsDebug _graphicsDebug;
@@ -520,21 +518,21 @@ namespace Microsoft.Xna.Framework.Graphics
             options |= ClearOptions.Stencil;
             PlatformClear(options, color.ToVector4(), _viewport.MaxDepth, 0);
 
-            unchecked { _graphicsMetrics._clearCount++; }
+            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
         }
 
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
             PlatformClear(options, color.ToVector4(), depth, stencil);
 
-            unchecked { _graphicsMetrics._clearCount++; }
+            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
         }
 
 		public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             PlatformClear(options, color, depth, stencil);
 
-            unchecked { _graphicsMetrics._clearCount++; }
+            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
         }
 
         public void Dispose()
@@ -617,7 +615,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
             // reset _graphicsMetrics
-            _graphicsMetrics = new GraphicsMetrics();
+            CurrentContext._graphicsMetrics = new GraphicsMetrics();
 
             PlatformPresent();
         }
@@ -784,11 +782,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (renderTargetCount == 0)
             {
-                unchecked { _graphicsMetrics._targetCount++; }
+                unchecked { CurrentContext._graphicsMetrics._targetCount++; }
             }
             else
             {
-                unchecked { _graphicsMetrics._targetCount += renderTargetCount; }
+                unchecked { CurrentContext._graphicsMetrics._targetCount += renderTargetCount; }
             }
         }
 
@@ -1014,8 +1012,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -1084,8 +1082,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -1127,8 +1125,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawPrimitives(primitiveType, vertexStart, vertexCount);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -1223,8 +1221,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -1322,8 +1320,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -1387,8 +1385,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformDrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
+            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
+            unchecked { CurrentContext._graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
         }
 
         /// <summary>
