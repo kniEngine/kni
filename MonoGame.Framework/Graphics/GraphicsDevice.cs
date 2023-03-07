@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -294,11 +296,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, true);
-            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, true);
+            Textures = new TextureCollection(this, MaxTextureSlots, ShaderStage.Pixel);
+            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, ShaderStage.Vertex);
 
-            Textures = new TextureCollection(this, MaxTextureSlots, false);
-            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, false);
+            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, ShaderStage.Pixel);
+            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, ShaderStage.Vertex);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();

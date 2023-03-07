@@ -4,13 +4,17 @@
 //
 // Author: Kenneth James Pouncey
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
 	{
         private readonly GraphicsDevice _device;
+        private readonly ShaderStage _stage = ShaderStage.Pixel;
 
         private readonly SamplerState _samplerStateAnisotropicClamp;
         private readonly SamplerState _samplerStateAnisotropicWrap;
@@ -21,11 +25,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private readonly SamplerState[] _samplers;
         private readonly SamplerState[] _actualSamplers;
-        private readonly bool _applyToVertexStage;
 
-		internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, bool applyToVertexStage)
+        internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, ShaderStage stage)
 		{
 		    _device = device;
+            _stage = stage;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
             _samplerStateAnisotropicWrap = SamplerState.AnisotropicWrap.Clone();
@@ -36,7 +40,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _samplers = new SamplerState[maxSamplers];
             _actualSamplers = new SamplerState[maxSamplers];
-            _applyToVertexStage = applyToVertexStage;
 
 		    Clear();
         }
