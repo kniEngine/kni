@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindTexture(tex.glTarget, tex.glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    unchecked { _device._graphicsMetrics._textureCount++; }
+                    unchecked { _device.CurrentContext._graphicsMetrics._textureCount++; }
                 }
 
                 // clear texture bit

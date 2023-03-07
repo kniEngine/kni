@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
-                    unchecked { _device._graphicsMetrics._textureCount++; }
+                    unchecked { _device.CurrentContext._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);
