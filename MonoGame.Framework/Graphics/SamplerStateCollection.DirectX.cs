@@ -4,6 +4,11 @@
 //
 // Author: Kenneth James Pouncey
 
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
+
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
@@ -29,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApply()
         {
-            if (!_applyToVertexStage || _device.GraphicsCapabilities.SupportsVertexTextures)
+            if (_stage != ShaderStage.Vertex || _device.GraphicsCapabilities.SupportsVertexTextures)
             {
                 for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
                 {
@@ -40,10 +45,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     // NOTE: We make the assumption here that the caller has
                     // locked the d3dContext for us to use.
                     SharpDX.Direct3D11.CommonShaderStage shaderStage;
-                    if (!_applyToVertexStage)
-                        shaderStage = _device.CurrentD3DContext.PixelShader;
-                    else
-                        shaderStage = _device.CurrentD3DContext.VertexShader;
+                    switch (_stage)
+                    {
+                        case ShaderStage.Pixel: shaderStage = _device.CurrentD3DContext.PixelShader; break;
+                        case ShaderStage.Vertex: shaderStage = _device.CurrentD3DContext.VertexShader; break;
+                        default: throw new InvalidOperationException();
+                    }
 
                     var sampler = _actualSamplers[i];
                     SharpDX.Direct3D11.SamplerState state = null;
