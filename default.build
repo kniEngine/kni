@@ -10,19 +10,38 @@
   <!-- Helper default target. -->
   <target   name="build" 
             description="Build, run tests, generate docs, and create installers." 
-            depends="build_code,run_tests,build_docs,build_installer" />
-
-  <!-- Some additional helper dependencies. -->
-  <target name="_prebuild" depends="_clean" />
+            depends="_clean,build_code,run_tests,build_docs,build_installer" />
 
   <!-- Clean the build output directories. -->
   <target name="_clean">
+    <delete dir="${project::get-base-directory()}\Artifacts" />
     <delete dir="${project::get-base-directory()}\MonoGame.Framework\obj" />
     <delete dir="${project::get-base-directory()}\MonoGame.Framework.Content.Pipeline\obj" />
+    
+    <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:Clean /p:Configuration=Release" />
+    
+    <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
+    
+    <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Clean /p:Configuration=Release" />
+    
+    <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
+    
+    <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
+    
+    <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
+    
+    <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Debug" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
+    
   </target>
   
   <!-- Shortcut for building all valid target platforms -->
   <target name="build_code" description="Build all the projects.">
+      
     <call target="build_framework"/>
     <call target="build_ref"/>
     <call target="build_blazorGL" />
@@ -38,35 +57,32 @@
 
   <!-- Build targets for the various platforms. -->
 
-  <target name="build_framework" description="Build framework" depends="_prebuild">
+  <target name="build_framework" description="Build framework">
 
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
 
   </target>
     
-  <target name="build_ref" description="Build reference" depends="_prebuild">
+  <target name="build_ref" description="Build reference">
 
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
 
   </target>
   
-  <target name="build_blazorGL" description="Build BlazorGL" depends="_prebuild">
+  <target name="build_blazorGL" description="Build BlazorGL">
 
-      <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
       <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:restore" />
       <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Build /p:Configuration=Release" />
       
   </target>
   
-  <target name="build_windows" description="Build Windows" depends="_prebuild">
+  <target name="build_windows" description="Build Windows">
 
       <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release /m" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug /m" />
 
       <call target="build_portable"/>
       
@@ -77,7 +93,7 @@
       
   </target>
 
-  <target name="build_portable" description="Build Portable" depends="_prebuild">
+  <target name="build_portable" description="Build Portable">
 	
     <!-- Convert MonoGame.Framework.dll -->
     <mkdir dir="MonoGame.Framework\bin\portable-net40+sl5+win8+wpa81+wp8" />
@@ -107,12 +123,10 @@
 
   </target>
   
-  <target name="build_desktopGL" description="Build DesktopGL" depends="_prebuild">
+  <target name="build_desktopGL" description="Build DesktopGL">
 
       <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
       <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
       <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
       
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
@@ -120,7 +134,7 @@
       
   </target>
 
-  <target name="build_ios" description="Build iOS" depends="_prebuild">
+  <target name="build_ios" description="Build iOS">
 
     <!--
     <if test="${os == 'MacOS'}">
@@ -133,14 +147,12 @@
     -->
 
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Debug" />
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Debug" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
 
   </target>
 
-  <target name="build_android" description="Build Android" depends="_prebuild">
+  <target name="build_android" description="Build Android">
 
       <!--
       <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
@@ -149,26 +161,23 @@
       </if>
       -->
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
         <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
       </if>
 
   </target>
   
-  <target name="build_cardboard" description="Build Cardboard" depends="_prebuild">
+  <target name="build_cardboard" description="Build Cardboard">
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
         <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Build /p:Configuration=Release" />
       </if>
   </target>
 
-  <target name="build_windowsUAP10" description="Build Windows 10 UAP" depends="_prebuild">
+  <target name="build_windowsUAP10" description="Build Windows 10 UAP">
 
       <!--
       <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /p:Configuration=Release' />
       -->
-      <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
       <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
 
