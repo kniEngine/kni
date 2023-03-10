@@ -13,11 +13,11 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
     {
-        private int _d3dDirty;
+        private uint _d3dDirty;
 
         private void PlatformSetSamplerState(int index)
         {
-            var mask = 1 << index;
+            uint mask = ((uint)1) << index;
             _d3dDirty |= mask;
         }
 
@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDirty()
         {
             for (var i = 0; i < _actualSamplers.Length; i++)
-                _d3dDirty |= (1 << i);
+                _d3dDirty |= (((uint)1) << i);
         }
 
         internal void PlatformApply()
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
                 {
-                    var mask = 1 << i;
+                    uint mask = ((uint)1) << i;
                     if ((_d3dDirty & mask) == 0)
                         continue;
 

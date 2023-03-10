@@ -29,6 +29,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal SamplerStateCollection(GraphicsDevice device, ShaderStage stage, int capacity)
 		{
+            // hard limit of 32 because of _d3dDirty flags being 32bits.
+            if (capacity > 32)
+                throw new ArgumentOutOfRangeException("capacity");
+
 		    _device = device;
             _stage = stage;
 
