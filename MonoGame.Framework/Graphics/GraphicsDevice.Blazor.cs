@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //_glContext = new LogContent(_glContext);
 
 
-            MaxTextureSlots = 4;
+            MaxTextureSlots = 8;
 
             _maxTextureSize = 2048;
 
