@@ -13,14 +13,18 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private readonly GraphicsDevice _device;
         private readonly ShaderStage _stage = ShaderStage.Pixel;
+
         private readonly Texture[] _textures;
         private int _dirty;
 
-        internal TextureCollection(GraphicsDevice device, int maxTextures, ShaderStage stage)
+
+        internal TextureCollection(GraphicsDevice device, ShaderStage stage, int capacity)
         {
             _device = device;
             _stage = stage;
-            _textures = new Texture[maxTextures];
+
+            _textures = new Texture[capacity];
+
             Dirty();
             PlatformInit();
         }

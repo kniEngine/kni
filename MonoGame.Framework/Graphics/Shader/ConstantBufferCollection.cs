@@ -9,17 +9,20 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal sealed class ConstantBufferCollection
     {
+        private ShaderStage _stage;
+
         private readonly ConstantBuffer[] _buffers;
 
-        private ShaderStage _stage;
         private ShaderStage Stage { get { return _stage; } }
 
         private int _valid;
 
-        internal ConstantBufferCollection(ShaderStage stage, int maxBuffers)
+
+        internal ConstantBufferCollection(ShaderStage stage, int capacity)
         {
             _stage = stage;
-            _buffers = new ConstantBuffer[maxBuffers];
+
+            _buffers = new ConstantBuffer[capacity];
             _valid = 0;
         }
 

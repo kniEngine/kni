@@ -26,7 +26,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly SamplerState[] _samplers;
         private readonly SamplerState[] _actualSamplers;
 
-        internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, ShaderStage stage)
+
+        internal SamplerStateCollection(GraphicsDevice device, ShaderStage stage, int capacity)
 		{
 		    _device = device;
             _stage = stage;
@@ -38,8 +39,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _samplerStatePointClamp = SamplerState.PointClamp.Clone();
             _samplerStatePointWrap = SamplerState.PointWrap.Clone();
 
-            _samplers = new SamplerState[maxSamplers];
-            _actualSamplers = new SamplerState[maxSamplers];
+            _samplers = new SamplerState[capacity];
+            _actualSamplers = new SamplerState[capacity];
 
 		    Clear();
         }
