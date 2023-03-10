@@ -35,10 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Texture this[int index]
         {
-            get
-            {
-                return _textures[index];
-            }
+            get { return _textures[index]; }
             set
             {
                 if (_stage != ShaderStage.Vertex || _device.GraphicsCapabilities.SupportsVertexTextures)

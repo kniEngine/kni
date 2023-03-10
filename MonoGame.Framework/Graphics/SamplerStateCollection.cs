@@ -28,12 +28,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         internal SamplerStateCollection(GraphicsDevice device, ShaderStage stage, int capacity)
-		{
+        {
             // hard limit of 32 because of _d3dDirty flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
 
-		    _device = device;
+            _device = device;
             _stage = stage;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
@@ -46,17 +46,13 @@ namespace Microsoft.Xna.Framework.Graphics
             _samplers = new SamplerState[capacity];
             _actualSamplers = new SamplerState[capacity];
 
-		    Clear();
+            Clear();
         }
 		
-		public SamplerState this [int index] 
+		public SamplerState this[int index] 
         {
-			get 
-            { 
-                return _samplers[index]; 
-            }
-
-			set 
+			get { return _samplers[index]; }
+			set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
@@ -110,5 +106,5 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             PlatformDirty();
         }
-	}
+    }
 }

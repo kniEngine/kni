@@ -7,6 +7,7 @@
 using System;
 using nkast.Wasm.Canvas.WebGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection

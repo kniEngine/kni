@@ -6,6 +6,7 @@
 
 using MonoGame.OpenGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection

@@ -11,7 +11,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection
     {
+
         void PlatformInit()
+        {
+        }
+
+        void PlatformClear()
         {
         }
 
@@ -54,10 +59,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        void PlatformClear()
-        {
-        }
-
         void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
@@ -91,5 +92,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 _dirty &= ~mask;
             }
         }
+
     }
 }
