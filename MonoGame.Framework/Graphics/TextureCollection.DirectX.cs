@@ -11,7 +11,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection
     {
+
         void PlatformInit()
+        {
+        }
+
+        void PlatformClear()
         {
         }
 
@@ -43,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (_textures[i] == targets[k].RenderTarget)
                     {
-                        var mask = 1 << i;
+                        uint mask = ((uint)1) << i;
                         // clear texture bit
                         _dirty &= ~mask;
                         _textures[i] = null;
@@ -54,15 +59,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        void PlatformClear()
-        {
-        }
-
         void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
-                var mask = 1 << i;
+                uint mask = ((uint)1) << i;
                 if ((_dirty & mask) == 0)
                     continue;
 
@@ -87,8 +88,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 else
                     shaderStage.SetShaderResource(i, null);
 
+                // clear texture bit
                 _dirty &= ~mask;
             }
         }
+
     }
 }

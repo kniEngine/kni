@@ -26,9 +26,14 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly SamplerState[] _samplers;
         private readonly SamplerState[] _actualSamplers;
 
-        internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, ShaderStage stage)
-		{
-		    _device = device;
+
+        internal SamplerStateCollection(GraphicsDevice device, ShaderStage stage, int capacity)
+        {
+            // hard limit of 32 because of _d3dDirty flags being 32bits.
+            if (capacity > 32)
+                throw new ArgumentOutOfRangeException("capacity");
+
+            _device = device;
             _stage = stage;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
@@ -38,20 +43,16 @@ namespace Microsoft.Xna.Framework.Graphics
             _samplerStatePointClamp = SamplerState.PointClamp.Clone();
             _samplerStatePointWrap = SamplerState.PointWrap.Clone();
 
-            _samplers = new SamplerState[maxSamplers];
-            _actualSamplers = new SamplerState[maxSamplers];
+            _samplers = new SamplerState[capacity];
+            _actualSamplers = new SamplerState[capacity];
 
-		    Clear();
+            Clear();
         }
 		
-		public SamplerState this [int index] 
+		public SamplerState this[int index] 
         {
-			get 
-            { 
-                return _samplers[index]; 
-            }
-
-			set 
+			get { return _samplers[index]; }
+			set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
@@ -105,5 +106,5 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             PlatformDirty();
         }
-	}
+    }
 }

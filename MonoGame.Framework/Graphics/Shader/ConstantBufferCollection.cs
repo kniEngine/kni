@@ -2,24 +2,33 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal sealed class ConstantBufferCollection
     {
-        private readonly ConstantBuffer[] _buffers;
-
         private ShaderStage _stage;
+
+        private readonly ConstantBuffer[] _buffers;
+        private uint _valid;
+
         private ShaderStage Stage { get { return _stage; } }
 
-        private int _valid;
 
-        internal ConstantBufferCollection(ShaderStage stage, int maxBuffers)
+
+        internal ConstantBufferCollection(ShaderStage stage, int capacity)
         {
+            // hard limit of 32 because of _valid flags being 32bits.
+            if (capacity > 32)
+                throw new ArgumentOutOfRangeException("capacity");
+
             _stage = stage;
-            _buffers = new ConstantBuffer[maxBuffers];
+
+            _buffers = new ConstantBuffer[capacity];
             _valid = 0;
         }
 
@@ -32,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _buffers[index] = value;
 
-                    var mask = 1 << index;
+                    uint mask = ((uint)1) << index;
                     if (value != null)
                         _valid |= mask;
                     else
@@ -51,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Apply()
         {
-            var validMask = _valid;
+            uint validMask = _valid;
 
             for (var i = 0; validMask != 0 && i < _buffers.Length; i++)
             {
@@ -62,7 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     buffer.Apply(_stage, i);
                 }
 
-                var mask = 1 << i;
+                uint mask = ((uint)1) << i;
                 // clear buffer bit
                 validMask &= ~mask;
             }

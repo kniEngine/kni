@@ -296,11 +296,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            Textures = new TextureCollection(this, MaxTextureSlots, ShaderStage.Pixel);
-            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, ShaderStage.Vertex);
+            Textures = new TextureCollection(this, ShaderStage.Pixel, MaxTextureSlots);
+            VertexTextures = new TextureCollection(this, ShaderStage.Vertex, MaxVertexTextureSlots);
 
-            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, ShaderStage.Pixel);
-            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, ShaderStage.Vertex);
+            SamplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, MaxTextureSlots);
+            VertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, MaxVertexTextureSlots);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();

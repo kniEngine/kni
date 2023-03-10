@@ -2,8 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using nkast.Wasm.Canvas.WebGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -28,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
-                var mask = 1 << i;
+                uint mask = ((uint)1) << i;
                 if ((_dirty & mask) == 0)
                     continue;
 
