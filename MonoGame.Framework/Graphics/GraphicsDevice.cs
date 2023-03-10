@@ -82,9 +82,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
 
-        public TextureCollection VertexTextures { get; private set; }
+        public TextureCollection VertexTextures
+        {
+            get;
+            private set;
+        }
 
-        public SamplerStateCollection VertexSamplerStates { get; private set; }
+        public SamplerStateCollection VertexSamplerStates
+        {
+            get;
+            private set;
+        }
 
         public TextureCollection Textures { get; private set; }
 

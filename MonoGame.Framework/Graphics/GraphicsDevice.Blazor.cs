@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
@@ -212,8 +213,8 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-
             MaxTextureSlots = 8;
+            MaxVertexTextureSlots = 0;
 
             _maxTextureSize = 2048;
 

@@ -38,17 +38,15 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _textures[index]; }
             set
             {
-                if (_stage != ShaderStage.Vertex || _device.GraphicsCapabilities.SupportsVertexTextures)
-                {
-                    if (_textures[index] != value)
-                    {
-                        uint mask = ((uint)1) << index;
-                        _textures[index] = value;
-                        _dirty |= mask;
-                    }
-                }
-                else
+                if (!_device.GraphicsCapabilities.SupportsVertexTextures && _stage == ShaderStage.Vertex)
                     throw new NotSupportedException("Vertex textures are not supported on this device.");
+
+                if (_textures[index] != value)
+                {
+                    uint mask = ((uint)1) << index;
+                    _textures[index] = value;
+                    _dirty |= mask;
+                }
             }
         }
 

@@ -19,7 +19,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private ShaderStage Stage { get { return _stage; } }
 
 
-
         internal ConstantBufferCollection(ShaderStage stage, int capacity)
         {
             // hard limit of 32 because of _valid flags being 32bits.

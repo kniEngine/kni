@@ -7,6 +7,7 @@ using MonoGame.OpenGL;
 using GetParamName = MonoGame.OpenGL.GetPName;
 #endif
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
 
@@ -115,7 +116,6 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsDepthClamp = GL.Extensions.Contains("GL_ARB_depth_clamp");
 
             SupportsVertexTextures = false; // For now, until we implement vertex textures in OpenGL.
-
 
             GL.GetInteger((GetPName)GetParamName.MaxSamples, out _maxMultiSampleCount);
 
