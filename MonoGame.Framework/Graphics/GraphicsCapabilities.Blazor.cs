@@ -4,11 +4,11 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class GraphicsCapabilities
     {
-
 
         private void PlatformInitialize(GraphicsDevice device)
         {
@@ -31,10 +31,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsDepthClamp = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            
+            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
 
             SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level

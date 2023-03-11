@@ -22,14 +22,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ClearTargets(GraphicsDevice device, RenderTargetBinding[] targets)
         {
-            if (_stage == ShaderStage.Pixel)
+            switch (_stage)
             {
-                ClearTargets(targets, device.CurrentD3DContext.PixelShader);
-            }
-            else
-            {
-                if (device.GraphicsCapabilities.SupportsVertexTextures)
+                case ShaderStage.Pixel:
+                    ClearTargets(targets, device.CurrentD3DContext.PixelShader);
+                    break;
+                case ShaderStage.Vertex:
+                    if (!device.GraphicsCapabilities.SupportsVertexTextures)
+                        return;
+
                     ClearTargets(targets, device.CurrentD3DContext.VertexShader);
+                    break;
+
+                default: throw new InvalidOperationException(_stage.ToString());
             }
         }
 
