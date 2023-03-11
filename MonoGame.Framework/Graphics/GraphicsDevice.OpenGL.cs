@@ -243,12 +243,7 @@ namespace Microsoft.Xna.Framework.Graphics
             CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
 #endif
 
-#if ANDROID
-            var contextStrategy = new ConcreteGraphicsContext(this);
-            _mainContext = new GraphicsContext(this, contextStrategy);
-#endif
-
-#if IOS || TVOS
+#if ANDROID  || (IOS || TVOS)
             var contextStrategy = new ConcreteGraphicsContext(this);
             _mainContext = new GraphicsContext(this, contextStrategy);
 #endif
@@ -322,6 +317,9 @@ namespace Microsoft.Xna.Framework.Graphics
 			for (int i = 0; i < maxDrawBuffers; i++)
 				_drawBuffers[i] = (DrawBuffersEnum)(FramebufferAttachment.ColorAttachment0Ext + i);
 #endif
+
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.Initialize(this);
         }
 
         private void PlatformInitialize()
