@@ -94,9 +94,17 @@ namespace Microsoft.Xna.Framework.Graphics
             private set;
         }
 
-        public TextureCollection Textures { get; private set; }
+        public TextureCollection Textures
+        {
+            get;
+            private set;
+        }
 
-        public SamplerStateCollection SamplerStates { get; private set; }
+        public SamplerStateCollection SamplerStates
+        {
+            get; 
+            private set;
+        }
 
         /// <summary>
         /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
