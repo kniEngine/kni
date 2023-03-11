@@ -2,6 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class GraphicsCapabilities
@@ -25,7 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.FL10_0;
             SupportsDepthClamp = device.GraphicsProfile >= GraphicsProfile.HiDef;
 
-            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.FL10_0;
+            _maxTextureSlots = 16;
+            _maxVertexTextureSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_0) ? 16 : 0;
 
             SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;

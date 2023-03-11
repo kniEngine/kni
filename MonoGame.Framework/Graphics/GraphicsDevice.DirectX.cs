@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -91,9 +91,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-            MaxTextureSlots = 16;
-            MaxVertexTextureSlots = 16;
-
 			CreateDeviceIndependentResources();
 			CreateDeviceResources();
 
@@ -1230,9 +1227,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _vertexConstantBuffers.Apply();
             _pixelConstantBuffers.Apply();
 
-            VertexTextures.Apply();
+            VertexTextures.PlatformApply();
             VertexSamplerStates.PlatformApply();
-            Textures.Apply();
+            Textures.PlatformApply();
             SamplerStates.PlatformApply();
         }
 

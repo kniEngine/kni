@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 
@@ -35,7 +37,16 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
             
-            SupportsVertexTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            _maxTextureSlots = 8;
+            _maxVertexTextureSlots = 0;
+            // fix for bad GL drivers
+            int maxCombinedTextureImageUnits;
+            maxCombinedTextureImageUnits = 8;
+            _maxTextureSlots = Math.Min(_maxTextureSlots, maxCombinedTextureImageUnits);
+            _maxVertexTextureSlots = Math.Min(_maxVertexTextureSlots, maxCombinedTextureImageUnits);
+            // limit texture slots to Reach profile limit until we implement profile detection.
+            _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
+            _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
             SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level

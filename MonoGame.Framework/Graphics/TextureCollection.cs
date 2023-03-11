@@ -29,8 +29,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _textures = new Texture[capacity];
 
-            Dirty();
             PlatformInit();
+            PlatformClear();
+            Dirty();
         }
 
         public Texture this[int index]
@@ -38,9 +39,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _textures[index]; }
             set
             {
-                if (!_device.GraphicsCapabilities.SupportsVertexTextures && _stage == ShaderStage.Vertex)
-                    throw new NotSupportedException("Vertex textures are not supported on this device.");
-
                 if (_textures[index] != value)
                 {
                     uint mask = ((uint)1) << index;
@@ -68,12 +66,5 @@ namespace Microsoft.Xna.Framework.Graphics
                 _dirty |= (((uint)1) << i);
         }
 
-        internal void Apply()
-        {
-            if (_stage != ShaderStage.Vertex || _device.GraphicsCapabilities.SupportsVertexTextures)
-            {
-                PlatformApply();
-            }
-        }
     }
 }

@@ -34,9 +34,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApply()
         {
-            if (!_device.GraphicsCapabilities.SupportsVertexTextures && _stage == ShaderStage.Vertex)
-                return;
-
             for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
             {
                 uint mask = ((uint)1) << i;

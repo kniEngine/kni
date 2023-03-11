@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,6 +19,7 @@ using Matrix = Microsoft.Xna.Framework.Matrix;
 #if __IOS__ || __TVOS__
 using ObjCRuntime;
 #endif
+
 
 namespace MonoGame.OpenGL
 {
@@ -255,6 +258,7 @@ namespace MonoGame.OpenGL
     {
         ArrayBufferBinding = 0x8894,
         MaxTextureImageUnits = 0x8872,
+        MaxVertexTextureImageUnits = 0x8B4C,
         MaxCombinedTextureImageUnits = 0x8B4D,
         MaxVertexAttribs = 0x8869,
         MaxTextureSize = 0x0D33,
