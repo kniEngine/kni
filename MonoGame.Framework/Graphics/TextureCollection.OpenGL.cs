@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _targets[i] = 0;
         }
 
-        void PlatformApply()
+        internal void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {

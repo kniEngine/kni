@@ -2,6 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
 #if OPENGL
 using MonoGame.OpenGL;
 using GetParamName = MonoGame.OpenGL.GetPName;
@@ -115,7 +118,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SupportsDepthClamp = GL.Extensions.Contains("GL_ARB_depth_clamp");
 
-            SupportsVertexTextures = false; // For now, until we implement vertex textures in OpenGL.
+            GL.GetInteger(GetPName.MaxTextureImageUnits, out _maxTextureSlots);
+            GraphicsExtensions.CheckGLError();
+            GL.GetInteger(GetPName.MaxVertexTextureImageUnits, out _maxVertexTextureSlots);
+            GraphicsExtensions.CheckGLError();
+            // fix for bad GL drivers
+            int maxCombinedTextureImageUnits;
+            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
+            _maxTextureSlots = Math.Min(_maxTextureSlots, maxCombinedTextureImageUnits);
+            _maxVertexTextureSlots = Math.Min(_maxVertexTextureSlots, maxCombinedTextureImageUnits);
+            // limit texture slots to Reach profile limit until we implement profile detection.
+            _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
+            _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
             GL.GetInteger((GetPName)GetParamName.MaxSamples, out _maxMultiSampleCount);
 

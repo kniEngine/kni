@@ -28,9 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     ClearTargets(targets, device.CurrentD3DContext.PixelShader);
                     break;
                 case ShaderStage.Vertex:
-                    if (!device.GraphicsCapabilities.SupportsVertexTextures)
-                        return;
-
                     ClearTargets(targets, device.CurrentD3DContext.VertexShader);
                     break;
 
@@ -64,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        void PlatformApply()
+        internal void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {

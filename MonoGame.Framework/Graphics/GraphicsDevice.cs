@@ -154,8 +154,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
         private int _maxVertexBufferSlots;
-        internal int MaxTextureSlots;
-        internal int MaxVertexTextureSlots;
 
         public bool IsDisposed 
         { 
@@ -312,11 +310,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            Textures = new TextureCollection(this, ShaderStage.Pixel, MaxTextureSlots);
-            VertexTextures = new TextureCollection(this, ShaderStage.Vertex, MaxVertexTextureSlots);
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.Initialize(this);
 
-            SamplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, MaxTextureSlots);
-            VertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, MaxVertexTextureSlots);
+            Textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            VertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+
+            SamplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            VertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -339,9 +340,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup end
 
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
-
             PlatformInitialize();
 
             // Force set the default render states.
@@ -352,13 +350,6 @@ namespace Microsoft.Xna.Framework.Graphics
             BlendState = BlendState.Opaque;
             DepthStencilState = DepthStencilState.Default;
             RasterizerState = RasterizerState.CullCounterClockwise;
-
-            // Clear the texture and sampler collections forcing
-            // the state to be reapplied.
-            VertexTextures.Clear();
-            VertexSamplerStates.Clear();
-            Textures.Clear();
-            SamplerStates.Clear();
 
             // Clear constant buffers
             _vertexConstantBuffers.Clear();
@@ -1013,7 +1004,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < MaxTextureSlots; i++)
+                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -1075,7 +1066,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < MaxTextureSlots; i++)
+                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -1124,7 +1115,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < MaxTextureSlots; i++)
+                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -1212,7 +1203,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < MaxTextureSlots; i++)
+                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -1311,7 +1302,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < MaxTextureSlots; i++)
+                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)

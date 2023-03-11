@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 
@@ -80,7 +82,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal bool SupportsDepthClamp { get; private set; }
 
-        internal bool SupportsVertexTextures { get; private set; }
+        private int _maxTextureSlots;
+        private int _maxVertexTextureSlots;
+
+        internal int MaxTextureSlots { get { return _maxTextureSlots; } }
+        internal int MaxVertexTextureSlots { get { return _maxVertexTextureSlots; } }
 
         /// <summary>
         /// True, if the underlying platform supports floating point textures. 

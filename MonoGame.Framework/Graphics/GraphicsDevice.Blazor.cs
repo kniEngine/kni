@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -213,8 +213,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-            MaxTextureSlots = 8;
-            MaxVertexTextureSlots = 0;
 
             _maxTextureSize = 2048;
 
@@ -824,7 +822,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _vertexConstantBuffers.Apply();
             _pixelConstantBuffers.Apply();
 
-            Textures.Apply();
+            VertexTextures.PlatformApply();
+            VertexSamplerStates.PlatformApply();
+            Textures.PlatformApply();
             SamplerStates.PlatformApply();
         }
 
