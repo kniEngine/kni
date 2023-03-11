@@ -213,7 +213,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-
             _maxTextureSize = 2048;
 
             MaxVertexAttributes = 16;
@@ -222,7 +221,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxVertexBufferSlots = MaxVertexAttributes;
             _newEnabledVertexAttributes = new bool[MaxVertexAttributes];
 
-
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.Initialize(this);
         }
 
         private void PlatformInitialize()

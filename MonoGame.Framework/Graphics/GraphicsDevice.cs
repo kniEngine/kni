@@ -310,9 +310,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
-
             Textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
             VertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
