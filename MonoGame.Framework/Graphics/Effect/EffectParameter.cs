@@ -809,18 +809,17 @@ namespace Microsoft.Xna.Framework.Graphics
                         fData[0] = value.M11;
                         fData[1] = value.M12;
                         fData[2] = value.M13;
+                        fData[3] = value.M14;
 
-                        fData[3] = value.M21;
-                        fData[4] = value.M22;
-                        fData[5] = value.M23;
+                        fData[4] = value.M21;
+                        fData[5] = value.M22;
+                        fData[6] = value.M23;
+                        fData[7] = value.M24;
 
-                        fData[6] = value.M31;
-                        fData[7] = value.M32;
-                        fData[8] = value.M33;
-
-                        fData[9] = value.M41;
-                        fData[10] = value.M42;
-                        fData[11] = value.M43;
+                        fData[8] = value.M31;
+                        fData[9] = value.M32;
+                        fData[10] = value.M33;
+                        fData[11] = value.M34;
                     }
                     else if (ColumnCount == 2)
                     {
@@ -840,17 +839,18 @@ namespace Microsoft.Xna.Framework.Graphics
                         fData[0] = value.M11;
                         fData[1] = value.M12;
                         fData[2] = value.M13;
-                        fData[3] = value.M14;
 
-                        fData[4] = value.M21;
-                        fData[5] = value.M22;
-                        fData[6] = value.M23;
-                        fData[7] = value.M24;
+                        fData[3] = value.M21;
+                        fData[4] = value.M22;
+                        fData[5] = value.M23;
 
-                        fData[8] = value.M31;
-                        fData[9] = value.M32;
-                        fData[10] = value.M33;
-                        fData[11] = value.M34;
+                        fData[6] = value.M31;
+                        fData[7] = value.M32;
+                        fData[8] = value.M33;
+
+                        fData[9] = value.M41;
+                        fData[10] = value.M42;
+                        fData[11] = value.M43;
                     }
                     else if (ColumnCount == 3)
                     {
