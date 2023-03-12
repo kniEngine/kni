@@ -593,6 +593,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     fData[4] = value.M22;
                     fData[5] = value.M32;
                 }
+                else
+                    throw new InvalidCastException();
 
                 StateKey = unchecked(NextStateKey++);
             }
@@ -725,6 +727,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         fData[5] = value[i].M32;
                     }
                 }
+                else
+                    throw new InvalidCastException();
 
                 StateKey = unchecked(NextStateKey++);
             }
@@ -831,6 +835,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 fData[4] = value.M22;
                 fData[5] = value.M23;
             }
+            else
+                throw new InvalidCastException();
 
             StateKey = unchecked(NextStateKey++);
         }
