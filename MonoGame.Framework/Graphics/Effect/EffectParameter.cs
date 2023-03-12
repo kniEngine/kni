@@ -551,7 +551,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     {
                         var fData = (float[])Data;
 
-                        throw new NotImplementedException();
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
+                        fData[3] = value.M41;
+
+                        fData[4] = value.M12;
+                        fData[5] = value.M22;
+                        fData[6] = value.M32;
+                        fData[7] = value.M42;
                     }
                     else
                         throw new InvalidCastException();
@@ -690,9 +698,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     else if (ColumnCount == 2)
                     {
-                        var fData = (float[])Data;
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
 
-                        throw new NotImplementedException();
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
+                            fData[3] = value[i].M41;
+
+                            fData[4] = value[i].M12;
+                            fData[5] = value[i].M22;
+                            fData[6] = value[i].M32;
+                            fData[7] = value[i].M42;
+                        }
                     }
                     else
                         throw new InvalidCastException();
@@ -825,7 +844,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     {
                         var fData = (float[])Data;
 
-                        throw new NotImplementedException();
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
+                        fData[3] = value.M41;
+
+                        fData[4] = value.M12;
+                        fData[5] = value.M22;
+                        fData[6] = value.M32;
+                        fData[7] = value.M42;
                     }
                     else
                         throw new InvalidCastException();
