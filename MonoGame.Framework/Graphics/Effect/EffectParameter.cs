@@ -502,96 +502,106 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // HLSL expects matrices to be transposed by default.
                 // These unrolled loops do the transpose during assignment.
-                if (RowCount == 4 && ColumnCount == 4)
+                if (RowCount == 4)
                 {
-                    var fData = (float[])Data;
+                    if (ColumnCount == 4)
+                    {
+                        var fData = (float[])Data;
 
-                    fData[0] = value.M11;
-                    fData[1] = value.M21;
-                    fData[2] = value.M31;
-                    fData[3] = value.M41;
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
+                        fData[3] = value.M41;
 
-                    fData[4] = value.M12;
-                    fData[5] = value.M22;
-                    fData[6] = value.M32;
-                    fData[7] = value.M42;
+                        fData[4] = value.M12;
+                        fData[5] = value.M22;
+                        fData[6] = value.M32;
+                        fData[7] = value.M42;
 
-                    fData[8] = value.M13;
-                    fData[9] = value.M23;
-                    fData[10] = value.M33;
-                    fData[11] = value.M43;
+                        fData[8] = value.M13;
+                        fData[9] = value.M23;
+                        fData[10] = value.M33;
+                        fData[11] = value.M43;
 
-                    fData[12] = value.M14;
-                    fData[13] = value.M24;
-                    fData[14] = value.M34;
-                    fData[15] = value.M44;
+                        fData[12] = value.M14;
+                        fData[13] = value.M24;
+                        fData[14] = value.M34;
+                        fData[15] = value.M44;
+                    }
+                    else if (ColumnCount == 3)
+                    {
+                        var fData = (float[])Data;
+
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
+                        fData[3] = value.M41;
+
+                        fData[4] = value.M12;
+                        fData[5] = value.M22;
+                        fData[6] = value.M32;
+                        fData[7] = value.M42;
+
+                        fData[8] = value.M13;
+                        fData[9] = value.M23;
+                        fData[10] = value.M33;
+                        fData[11] = value.M43;
+                    }
+                    else
+                        throw new InvalidCastException();
                 }
-                else if (RowCount == 4 && ColumnCount == 3)
+                else if (RowCount == 3)
                 {
-                    var fData = (float[])Data;
+                    if (ColumnCount == 4)
+                    {
+                        var fData = (float[])Data;
 
-                    fData[0] = value.M11;
-                    fData[1] = value.M21;
-                    fData[2] = value.M31;
-                    fData[3] = value.M41;
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
 
-                    fData[4] = value.M12;
-                    fData[5] = value.M22;
-                    fData[6] = value.M32;
-                    fData[7] = value.M42;
+                        fData[3] = value.M12;
+                        fData[4] = value.M22;
+                        fData[5] = value.M32;
 
-                    fData[8] = value.M13;
-                    fData[9] = value.M23;
-                    fData[10] = value.M33;
-                    fData[11] = value.M43;
-                }
-                else if (RowCount == 3 && ColumnCount == 4)
-                {
-                    var fData = (float[])Data;
+                        fData[6] = value.M13;
+                        fData[7] = value.M23;
+                        fData[8] = value.M33;
 
-                    fData[0] = value.M11;
-                    fData[1] = value.M21;
-                    fData[2] = value.M31;
+                        fData[9] = value.M14;
+                        fData[10] = value.M24;
+                        fData[11] = value.M34;
+                    }
+                    else if (ColumnCount == 3)
+                    {
+                        var fData = (float[])Data;
 
-                    fData[3] = value.M12;
-                    fData[4] = value.M22;
-                    fData[5] = value.M32;
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
 
-                    fData[6] = value.M13;
-                    fData[7] = value.M23;
-                    fData[8] = value.M33;
+                        fData[3] = value.M12;
+                        fData[4] = value.M22;
+                        fData[5] = value.M32;
 
-                    fData[9] = value.M14;
-                    fData[10] = value.M24;
-                    fData[11] = value.M34;
-                }
-                else if (RowCount == 3 && ColumnCount == 3)
-                {
-                    var fData = (float[])Data;
+                        fData[6] = value.M13;
+                        fData[7] = value.M23;
+                        fData[8] = value.M33;
+                    }
+                    else if (ColumnCount == 2)
+                    {
+                        var fData = (float[])Data;
 
-                    fData[0] = value.M11;
-                    fData[1] = value.M21;
-                    fData[2] = value.M31;
+                        fData[0] = value.M11;
+                        fData[1] = value.M21;
+                        fData[2] = value.M31;
 
-                    fData[3] = value.M12;
-                    fData[4] = value.M22;
-                    fData[5] = value.M32;
-
-                    fData[6] = value.M13;
-                    fData[7] = value.M23;
-                    fData[8] = value.M33;
-                }
-                else if (RowCount == 3 && ColumnCount == 2)
-                {
-                    var fData = (float[])Data;
-
-                    fData[0] = value.M11;
-                    fData[1] = value.M21;
-                    fData[2] = value.M31;
-
-                    fData[3] = value.M12;
-                    fData[4] = value.M22;
-                    fData[5] = value.M32;
+                        fData[3] = value.M12;
+                        fData[4] = value.M22;
+                        fData[5] = value.M32;
+                    }
+                    else
+                        throw new InvalidCastException();
                 }
                 else
                     throw new InvalidCastException();
@@ -621,111 +631,121 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Matrix && ParameterType == EffectParameterType.Single)
             {
-                if (RowCount == 4 && ColumnCount == 4)
+                if (RowCount == 4)
                 {
-                    for (var i = 0; i < value.Length; i++)
+                    if (ColumnCount == 4)
                     {
-                        var fData = (float[])Elements[i].Data;
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
 
-                        fData[0] = value[i].M11;
-                        fData[1] = value[i].M21;
-                        fData[2] = value[i].M31;
-                        fData[3] = value[i].M41;
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
+                            fData[3] = value[i].M41;
 
-                        fData[4] = value[i].M12;
-                        fData[5] = value[i].M22;
-                        fData[6] = value[i].M32;
-                        fData[7] = value[i].M42;
+                            fData[4] = value[i].M12;
+                            fData[5] = value[i].M22;
+                            fData[6] = value[i].M32;
+                            fData[7] = value[i].M42;
 
-                        fData[8] = value[i].M13;
-                        fData[9] = value[i].M23;
-                        fData[10] = value[i].M33;
-                        fData[11] = value[i].M43;
+                            fData[8] = value[i].M13;
+                            fData[9] = value[i].M23;
+                            fData[10] = value[i].M33;
+                            fData[11] = value[i].M43;
 
-                        fData[12] = value[i].M14;
-                        fData[13] = value[i].M24;
-                        fData[14] = value[i].M34;
-                        fData[15] = value[i].M44;
+                            fData[12] = value[i].M14;
+                            fData[13] = value[i].M24;
+                            fData[14] = value[i].M34;
+                            fData[15] = value[i].M44;
+                        }
                     }
+                    else if (ColumnCount == 3)
+                    {
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
+
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
+                            fData[3] = value[i].M41;
+
+                            fData[4] = value[i].M12;
+                            fData[5] = value[i].M22;
+                            fData[6] = value[i].M32;
+                            fData[7] = value[i].M42;
+
+                            fData[8] = value[i].M13;
+                            fData[9] = value[i].M23;
+                            fData[10] = value[i].M33;
+                            fData[11] = value[i].M43;
+                        }
+                    }
+                    else
+                        throw new InvalidCastException();
                 }
-                else if (RowCount == 4 && ColumnCount == 3)
+                else if (RowCount == 3)
                 {
-                    for (var i = 0; i < value.Length; i++)
+                    if (ColumnCount == 4)
                     {
-                        var fData = (float[])Elements[i].Data;
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
 
-                        fData[0] = value[i].M11;
-                        fData[1] = value[i].M21;
-                        fData[2] = value[i].M31;
-                        fData[3] = value[i].M41;
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
 
-                        fData[4] = value[i].M12;
-                        fData[5] = value[i].M22;
-                        fData[6] = value[i].M32;
-                        fData[7] = value[i].M42;
+                            fData[3] = value[i].M12;
+                            fData[4] = value[i].M22;
+                            fData[5] = value[i].M32;
 
-                        fData[8] = value[i].M13;
-                        fData[9] = value[i].M23;
-                        fData[10] = value[i].M33;
-                        fData[11] = value[i].M43;
+                            fData[6] = value[i].M13;
+                            fData[7] = value[i].M23;
+                            fData[8] = value[i].M33;
+
+                            fData[9] = value[i].M14;
+                            fData[10] = value[i].M24;
+                            fData[11] = value[i].M34;
+                        }
                     }
-                }
-                else if (RowCount == 3 && ColumnCount == 4)
-                {
-                    for (var i = 0; i < value.Length; i++)
+                    else if (ColumnCount == 3)
                     {
-                        var fData = (float[])Elements[i].Data;
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
 
-                        fData[0] = value[i].M11;
-                        fData[1] = value[i].M21;
-                        fData[2] = value[i].M31;
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
 
-                        fData[3] = value[i].M12;
-                        fData[4] = value[i].M22;
-                        fData[5] = value[i].M32;
+                            fData[3] = value[i].M12;
+                            fData[4] = value[i].M22;
+                            fData[5] = value[i].M32;
 
-                        fData[6] = value[i].M13;
-                        fData[7] = value[i].M23;
-                        fData[8] = value[i].M33;
-
-                        fData[9] = value[i].M14;
-                        fData[10] = value[i].M24;
-                        fData[11] = value[i].M34;
+                            fData[6] = value[i].M13;
+                            fData[7] = value[i].M23;
+                            fData[8] = value[i].M33;
+                        }
                     }
-                }
-                else if (RowCount == 3 && ColumnCount == 3)
-                {
-                    for (var i = 0; i < value.Length; i++)
+                    else if (ColumnCount == 2)
                     {
-                        var fData = (float[])Elements[i].Data;
+                        for (var i = 0; i < value.Length; i++)
+                        {
+                            var fData = (float[])Elements[i].Data;
 
-                        fData[0] = value[i].M11;
-                        fData[1] = value[i].M21;
-                        fData[2] = value[i].M31;
+                            fData[0] = value[i].M11;
+                            fData[1] = value[i].M21;
+                            fData[2] = value[i].M31;
 
-                        fData[3] = value[i].M12;
-                        fData[4] = value[i].M22;
-                        fData[5] = value[i].M32;
-
-                        fData[6] = value[i].M13;
-                        fData[7] = value[i].M23;
-                        fData[8] = value[i].M33;
+                            fData[3] = value[i].M12;
+                            fData[4] = value[i].M22;
+                            fData[5] = value[i].M32;
+                        }
                     }
-                }
-                else if (RowCount == 3 && ColumnCount == 2)
-                {
-                    for (var i = 0; i < value.Length; i++)
-                    {
-                        var fData = (float[])Elements[i].Data;
-
-                        fData[0] = value[i].M11;
-                        fData[1] = value[i].M21;
-                        fData[2] = value[i].M31;
-
-                        fData[3] = value[i].M12;
-                        fData[4] = value[i].M22;
-                        fData[5] = value[i].M32;
-                    }
+                    else
+                        throw new InvalidCastException();                    
                 }
                 else
                     throw new InvalidCastException();
@@ -739,106 +759,119 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetValueTranspose(Matrix value)
         {
-            if (ParameterClass != EffectParameterClass.Matrix || ParameterType != EffectParameterType.Single)
-                throw new InvalidCastException();
-
-            // HLSL expects matrices to be transposed by default, so copying them straight
-            // from the in-memory version effectively transposes them back to row-major.
-            if (RowCount == 4 && ColumnCount == 4)
+            if (ParameterClass == EffectParameterClass.Matrix && ParameterType == EffectParameterType.Single)
             {
-                var fData = (float[])Data;
+                // HLSL expects matrices to be transposed by default, so copying them straight
+                // from the in-memory version effectively transposes them back to row-major.
+            
+                if (RowCount == 4)
+                {
+                    if (ColumnCount == 4)
+                    {
+                        var fData = (float[])Data;
 
-                fData[0] = value.M11;
-                fData[1] = value.M12;
-                fData[2] = value.M13;
-                fData[3] = value.M14;
+                        fData[0] = value.M11;
+                        fData[1] = value.M12;
+                        fData[2] = value.M13;
+                        fData[3] = value.M14;
 
-                fData[4] = value.M21;
-                fData[5] = value.M22;
-                fData[6] = value.M23;
-                fData[7] = value.M24;
+                        fData[4] = value.M21;
+                        fData[5] = value.M22;
+                        fData[6] = value.M23;
+                        fData[7] = value.M24;
 
-                fData[8] = value.M31;
-                fData[9] = value.M32;
-                fData[10] = value.M33;
-                fData[11] = value.M34;
+                        fData[8] = value.M31;
+                        fData[9] = value.M32;
+                        fData[10] = value.M33;
+                        fData[11] = value.M34;
 
-                fData[12] = value.M41;
-                fData[13] = value.M42;
-                fData[14] = value.M43;
-                fData[15] = value.M44;
-            }
-            else if (RowCount == 4 && ColumnCount == 3)
-            {
-                var fData = (float[])Data;
+                        fData[12] = value.M41;
+                        fData[13] = value.M42;
+                        fData[14] = value.M43;
+                        fData[15] = value.M44;
+                    }
+                    else if (ColumnCount == 3)
+                    {
+                        var fData = (float[])Data;
 
-                fData[0] = value.M11;
-                fData[1] = value.M12;
-                fData[2] = value.M13;
+                        fData[0] = value.M11;
+                        fData[1] = value.M12;
+                        fData[2] = value.M13;
 
-                fData[3] = value.M21;
-                fData[4] = value.M22;
-                fData[5] = value.M23;
+                        fData[3] = value.M21;
+                        fData[4] = value.M22;
+                        fData[5] = value.M23;
 
-                fData[6] = value.M31;
-                fData[7] = value.M32;
-                fData[8] = value.M33;
+                        fData[6] = value.M31;
+                        fData[7] = value.M32;
+                        fData[8] = value.M33;
 
-                fData[9] = value.M41;
-                fData[10] = value.M42;
-                fData[11] = value.M43;
-            }
-            else if (RowCount == 3 && ColumnCount == 4)
-            {
-                var fData = (float[])Data;
+                        fData[9] = value.M41;
+                        fData[10] = value.M42;
+                        fData[11] = value.M43;
+                    }
+                    else
+                        throw new InvalidCastException();
+                }
+                else if (RowCount == 3)
+                {
+                    if (ColumnCount == 4)
+                    {
+                        var fData = (float[])Data;
 
-                fData[0] = value.M11;
-                fData[1] = value.M12;
-                fData[2] = value.M13;
-                fData[3] = value.M14;
+                        fData[0] = value.M11;
+                        fData[1] = value.M12;
+                        fData[2] = value.M13;
+                        fData[3] = value.M14;
 
-                fData[4] = value.M21;
-                fData[5] = value.M22;
-                fData[6] = value.M23;
-                fData[7] = value.M24;
+                        fData[4] = value.M21;
+                        fData[5] = value.M22;
+                        fData[6] = value.M23;
+                        fData[7] = value.M24;
 
-                fData[8] = value.M31;
-                fData[9] = value.M32;
-                fData[10] = value.M33;
-                fData[11] = value.M34;
-            }
-            else if (RowCount == 3 && ColumnCount == 3)
-            {
-                var fData = (float[])Data;
+                        fData[8] = value.M31;
+                        fData[9] = value.M32;
+                        fData[10] = value.M33;
+                        fData[11] = value.M34;
+                    }
+                    else if (ColumnCount == 3)
+                    {
+                        var fData = (float[])Data;
 
-                fData[0] = value.M11;
-                fData[1] = value.M12;
-                fData[2] = value.M13;
+                        fData[0] = value.M11;
+                        fData[1] = value.M12;
+                        fData[2] = value.M13;
 
-                fData[3] = value.M21;
-                fData[4] = value.M22;
-                fData[5] = value.M23;
+                        fData[3] = value.M21;
+                        fData[4] = value.M22;
+                        fData[5] = value.M23;
 
-                fData[6] = value.M31;
-                fData[7] = value.M32;
-                fData[8] = value.M33;
-            }
-            else if (RowCount == 3 && ColumnCount == 2)
-            {
-                var fData = (float[])Data;
+                        fData[6] = value.M31;
+                        fData[7] = value.M32;
+                        fData[8] = value.M33;
+                    }
+                    else if (ColumnCount == 2)
+                    {
+                        var fData = (float[])Data;
 
-                fData[0] = value.M11;
-                fData[1] = value.M12;
-                fData[2] = value.M13;
+                        fData[0] = value.M11;
+                        fData[1] = value.M12;
+                        fData[2] = value.M13;
 
-                fData[3] = value.M21;
-                fData[4] = value.M22;
-                fData[5] = value.M23;
+                        fData[3] = value.M21;
+                        fData[4] = value.M22;
+                        fData[5] = value.M23;
+                    }
+                    else
+                        throw new InvalidCastException();
+                }
+                else
+                    throw new InvalidCastException();
+
+                StateKey = unchecked(NextStateKey++);            
             }
             else
                 throw new InvalidCastException();
-
-            StateKey = unchecked(NextStateKey++);
         }
 
 
