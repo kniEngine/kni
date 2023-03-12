@@ -547,6 +547,12 @@ namespace Microsoft.Xna.Framework.Graphics
                         fData[10] = value.M33;
                         fData[11] = value.M43;
                     }
+                    else if (ColumnCount == 2)
+                    {
+                        var fData = (float[])Data;
+
+                        throw new NotImplementedException();
+                    }
                     else
                         throw new InvalidCastException();
                 }
@@ -682,6 +688,12 @@ namespace Microsoft.Xna.Framework.Graphics
                             fData[11] = value[i].M43;
                         }
                     }
+                    else if (ColumnCount == 2)
+                    {
+                        var fData = (float[])Data;
+
+                        throw new NotImplementedException();
+                    }
                     else
                         throw new InvalidCastException();
                 }
@@ -809,6 +821,12 @@ namespace Microsoft.Xna.Framework.Graphics
                         fData[9] = value.M41;
                         fData[10] = value.M42;
                         fData[11] = value.M43;
+                    }
+                    else if (ColumnCount == 2)
+                    {
+                        var fData = (float[])Data;
+
+                        throw new NotImplementedException();
                     }
                     else
                         throw new InvalidCastException();
