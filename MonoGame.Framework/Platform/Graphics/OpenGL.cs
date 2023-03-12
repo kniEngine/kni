@@ -481,7 +481,7 @@ namespace MonoGame.OpenGL
         internal readonly int B;
         internal readonly int A;
 
-        internal ColorFormat (int r, int g, int b, int a)
+        internal ColorFormat(int r, int g, int b, int a)
         {
             R = r;
             G = g;
@@ -1222,15 +1222,15 @@ namespace MonoGame.OpenGL
         internal static VertexAttribDivisorDelegate VertexAttribDivisor;
 
 #if DEBUG
-        [UnmanagedFunctionPointer (CallingConvention.StdCall)]
-        delegate void DebugMessageCallbackProc (int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        delegate void DebugMessageCallbackProc(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam);
         static DebugMessageCallbackProc DebugProc;
-        [System.Security.SuppressUnmanagedCodeSecurity ()]
+        [System.Security.SuppressUnmanagedCodeSecurity()]
         [MonoNativeFunctionWrapper]
-        delegate void DebugMessageCallbackDelegate (DebugMessageCallbackProc callback, IntPtr userParam);
+        delegate void DebugMessageCallbackDelegate(DebugMessageCallbackProc callback, IntPtr userParam);
         static DebugMessageCallbackDelegate DebugMessageCallback;
 
-        internal delegate void ErrorDelegate (string message);
+        internal delegate void ErrorDelegate(string message);
         internal static event ErrorDelegate OnError;
 
         static void DebugMessageCallbackHandler(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam)
@@ -1274,7 +1274,7 @@ namespace MonoGame.OpenGL
             ClearColor = LoadFunctionOrNull<ClearColorDelegate>("glClearColor");
             ClearStencil = LoadFunctionOrNull<ClearStencilDelegate>("glClearStencil");
             Flush = LoadFunctionOrNull<FlushDelegate>("glFlush");
-            GenTextures = LoadFunctionOrNull<GenTexturesDelegte> ("glGenTextures");
+            GenTextures = LoadFunctionOrNull<GenTexturesDelegte>("glGenTextures");
             BindTexture = LoadFunctionOrNull<BindTextureDelegate>("glBindTexture");
 
             Enable = LoadFunctionOrNull<EnableDelegate>("glEnable");
@@ -1430,7 +1430,7 @@ namespace MonoGame.OpenGL
             LoadExtensions();
         }
 
-        internal static List<string> Extensions = new List<string> ();
+        internal static List<string> Extensions = new List<string>();
 
         //[Conditional("DEBUG")]
         //[DebuggerHidden]
@@ -1576,88 +1576,99 @@ namespace MonoGame.OpenGL
             UniformMatrix4fv(location, count, transpose, value);
         }
 
-        internal unsafe static string GetString (StringName name)
+        internal unsafe static string GetString(StringName name)
         {
-            return Marshal.PtrToStringAnsi (GetStringInternal (name));
+            return Marshal.PtrToStringAnsi(GetStringInternal(name));
         }
 
-        protected static IntPtr MarshalStringArrayToPtr (string[] strings)
+        protected static IntPtr MarshalStringArrayToPtr(string[] strings)
         {
             IntPtr intPtr = IntPtr.Zero;
-            if (strings != null && strings.Length != 0) {
+            if (strings != null && strings.Length != 0)
+            {
                 intPtr = Marshal.AllocHGlobal (strings.Length * IntPtr.Size);
-                if (intPtr == IntPtr.Zero) {
-                    throw new OutOfMemoryException ();
+                if (intPtr == IntPtr.Zero)
+                {
+                    throw new OutOfMemoryException();
                 }
                 int i = 0;
-                try {
-                    for (i = 0; i < strings.Length; i++) {
-                        IntPtr val = MarshalStringToPtr (strings [i]);
-                        Marshal.WriteIntPtr (intPtr, i * IntPtr.Size, val);
+                try
+                {
+                    for (i = 0; i < strings.Length; i++)
+                    {
+                        IntPtr val = MarshalStringToPtr(strings [i]);
+                        Marshal.WriteIntPtr(intPtr, i * IntPtr.Size, val);
                     }
                 }
-                catch (OutOfMemoryException) {
-                    for (i--; i >= 0; i--) {
-                        Marshal.FreeHGlobal (Marshal.ReadIntPtr (intPtr, i * IntPtr.Size));
+                catch (OutOfMemoryException)
+                {
+                    for (i--; i >= 0; i--)
+                    {
+                        Marshal.FreeHGlobal(Marshal.ReadIntPtr (intPtr, i * IntPtr.Size));
                     }
-                    Marshal.FreeHGlobal (intPtr);
+                    Marshal.FreeHGlobal(intPtr);
                     throw;
                 }
             }
             return intPtr;
         }
 
-        protected unsafe static IntPtr MarshalStringToPtr (string str)
+        protected unsafe static IntPtr MarshalStringToPtr(string str)
         {
-            if (string.IsNullOrEmpty (str)) {
+            if (string.IsNullOrEmpty (str))
+            {
                 return IntPtr.Zero;
             }
-            int num = Encoding.ASCII.GetMaxByteCount (str.Length) + 1;
-            IntPtr intPtr = Marshal.AllocHGlobal (num);
-            if (intPtr == IntPtr.Zero) {
-                throw new OutOfMemoryException ();
+            int num = Encoding.ASCII.GetMaxByteCount(str.Length) + 1;
+            IntPtr intPtr = Marshal.AllocHGlobal(num);
+            if (intPtr == IntPtr.Zero)
+            {
+                throw new OutOfMemoryException();
             }
-            fixed (char* chars = str + RuntimeHelpers.OffsetToStringData / 2) {
-                int bytes = Encoding.ASCII.GetBytes (chars, str.Length, (byte*)((void*)intPtr), num);
-                Marshal.WriteByte (intPtr, bytes, 0);
+            fixed (char* chars = str + RuntimeHelpers.OffsetToStringData / 2)
+            {
+                int bytes = Encoding.ASCII.GetBytes(chars, str.Length, (byte*)((void*)intPtr), num);
+                Marshal.WriteByte(intPtr, bytes, 0);
                 return intPtr;
             }
         }
 
-        protected static void FreeStringArrayPtr (IntPtr ptr, int length)
+        protected static void FreeStringArrayPtr(IntPtr ptr, int length)
         {
-            for (int i = 0; i < length; i++) {
-                Marshal.FreeHGlobal (Marshal.ReadIntPtr (ptr, i * IntPtr.Size));
+            for (int i = 0; i < length; i++)
+            {
+                Marshal.FreeHGlobal(Marshal.ReadIntPtr(ptr, i * IntPtr.Size));
             }
-            Marshal.FreeHGlobal (ptr);
+            Marshal.FreeHGlobal(ptr);
         }
 
-        internal static string GetProgramInfoLog (int programId)
+        internal static string GetProgramInfoLog(int programId)
         {
             int length = 0;
             GetProgram(programId, GetProgramParameterName.LogLength, out length);
             var sb = new StringBuilder(length, length);
-            GetProgramInfoLogInternal (programId, length, IntPtr.Zero, sb);
+            GetProgramInfoLogInternal(programId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
 
-        internal static string GetShaderInfoLog (int shaderId) {
+        internal static string GetShaderInfoLog(int shaderId)
+        {
             int length = 0;
             GetShader(shaderId, ShaderParameter.LogLength, out length);
             var sb = new StringBuilder(length, length);
-            GetShaderInfoLogInternal (shaderId, length, IntPtr.Zero, sb);
+            GetShaderInfoLogInternal(shaderId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
 
         internal unsafe static void ShaderSource(int shaderId, string code)
         {
             int length = code.Length;
-            IntPtr intPtr = MarshalStringArrayToPtr (new string[] { code });
+            IntPtr intPtr = MarshalStringArrayToPtr(new string[] { code });
             ShaderSourceInternal(shaderId, 1, intPtr, &length);
             FreeStringArrayPtr(intPtr, 1);
         }
 
-        internal unsafe static void GetShader (int shaderId, ShaderParameter name, out int result)
+        internal unsafe static void GetShader(int shaderId, ShaderParameter name, out int result)
         {
             fixed (int* ptr = &result)
             {
@@ -1673,18 +1684,19 @@ namespace MonoGame.OpenGL
             }
         }
 
-        internal unsafe static void GetInteger (GetPName name, out int value)
-        {
-            fixed (int* ptr = &value) {
-                GetIntegerv ((int)name, ptr);
-            }
-        }
-
-        internal unsafe static void GetInteger (int name, out int value)
+        internal unsafe static void GetInteger(GetPName name, out int value)
         {
             fixed (int* ptr = &value)
             {
-                GetIntegerv (name, ptr);
+                GetIntegerv((int)name, ptr);
+            }
+        }
+
+        internal unsafe static void GetInteger(int name, out int value)
+        {
+            fixed (int* ptr = &value)
+            {
+                GetIntegerv(name, ptr);
             }
         }
 
