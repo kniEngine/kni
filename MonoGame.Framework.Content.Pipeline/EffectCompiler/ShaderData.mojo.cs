@@ -29,13 +29,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				IntPtr.Zero,
 				IntPtr.Zero);
 
-			var parseData = MarshalHelper.Unmarshal<MojoShader.ParseData> (parseDataPtr);
-			if (parseData.error_count > 0) {
-				var errors = MarshalHelper.UnmarshalArray<MojoShader.Error> (
+			var parseData = MarshalHelper.Unmarshal<MojoShader.ParseData>(parseDataPtr);
+			if (parseData.error_count > 0)
+            {
+				var errors = MarshalHelper.UnmarshalArray<MojoShader.Error>(
 					parseData.errors,
 					parseData.error_count
 				);
-				throw new Exception (errors [0].error);
+				throw new Exception(errors [0].error);
 			}
 
 			// Conver the attributes.
@@ -43,30 +44,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			// TODO: Could this be done using DX shader reflection?
 			//
 			{
-				var attributes = MarshalHelper.UnmarshalArray<MojoShader.Attribute> (
+				var attributes = MarshalHelper.UnmarshalArray<MojoShader.Attribute>(
 						parseData.attributes, parseData.attribute_count);
 
 				dxshader._attributes = new Attribute[attributes.Length];
-				for (var i = 0; i < attributes.Length; i++) {
+				for (var i = 0; i < attributes.Length; i++)
+                {
 					dxshader._attributes [i].name = attributes [i].name;
 					dxshader._attributes [i].index = attributes [i].index;
 					dxshader._attributes [i].usage = EffectObject.ToXNAVertexElementUsage (attributes [i].usage);
 				}
 			}
 
-			var symbols = MarshalHelper.UnmarshalArray<MojoShader.Symbol> (
+			var symbols = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
 					parseData.symbols, parseData.symbol_count);
 
 			//try to put the symbols in the order they are eventually packed into the uniform arrays
 			//this /should/ be done by pulling the info from mojoshader
-			Array.Sort (symbols, delegate(MojoShader.Symbol a, MojoShader.Symbol b) {
+			Array.Sort(symbols, delegate(MojoShader.Symbol a, MojoShader.Symbol b)
+            {
 				uint va = a.register_index;
 				if (a.info.elements == 1)
 					va += 1024; //hax. mojoshader puts array objects first
 				uint vb = b.register_index;
 				if (b.info.elements == 1)
 					vb += 1024;
-				return va.CompareTo (vb);
+				return va.CompareTo(vb);
 			}
 			);//(a, b) => ((int)(a.info.elements > 1))a.register_index.CompareTo(b.register_index));
 
@@ -81,31 +84,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				uint float4_index = 0;
 				uint int4_index = 0;
 
-				for (var i = 0; i < symbols.Length; i++) {
-					switch (symbols [i].register_set) {
-					case MojoShader.SymbolRegisterSet.BOOL:
-						symbols [i].register_index = bool_index;
-						bool_index += symbols [i].register_count;
-						break;
+				for (var i = 0; i < symbols.Length; i++)
+                {
+					switch (symbols [i].register_set)
+                    {
+					    case MojoShader.SymbolRegisterSet.BOOL:
+						    symbols [i].register_index = bool_index;
+						    bool_index += symbols [i].register_count;
+						    break;
 
-					case MojoShader.SymbolRegisterSet.FLOAT4:
-						symbols [i].register_index = float4_index;
-						float4_index += symbols[i].register_count;
-						break;
+					    case MojoShader.SymbolRegisterSet.FLOAT4:
+						    symbols [i].register_index = float4_index;
+						    float4_index += symbols[i].register_count;
+						    break;
 
-					case MojoShader.SymbolRegisterSet.INT4:
-						symbols [i].register_index = int4_index;
-						int4_index += symbols [i].register_count;
-						break;
+					    case MojoShader.SymbolRegisterSet.INT4:
+						    symbols [i].register_index = int4_index;
+						    int4_index += symbols [i].register_count;
+						    break;
 					}
 				}
 			}
 
 			// Get the samplers.
-			var samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler> (
+			var samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler>(
 					parseData.samplers, parseData.sampler_count);
 			dxshader._samplers = new Sampler[samplers.Length];
-			for (var i = 0; i < samplers.Length; i++) 
+			for (var i = 0; i < samplers.Length; i++)
             {
                 // We need the original sampler name... look for that in the symbols.
                 var originalSamplerName =
@@ -147,22 +152,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
 			};
 
-			var cbuffer_index = new List<int> ();
-			for (var i = 0; i < symbol_types.Length; i++) {
-				var cbuffer = new ConstantBufferData (symbol_types [i].name,
-													   symbol_types [i].set,
-													   symbols);
+			var cbuffer_index = new List<int>();
+			for (var i = 0; i < symbol_types.Length; i++)
+            {
+				var cbuffer = new ConstantBufferData(symbol_types [i].name,
+													 symbol_types [i].set,
+													 symbols);
 				if (cbuffer.Size == 0)
 					continue;
 
-				var match = cbuffers.FindIndex (e => e.SameAs (cbuffer));
-				if (match == -1) {
-					cbuffer_index.Add (cbuffers.Count);
-					cbuffers.Add (cbuffer);
-				} else
-					cbuffer_index.Add (match);
+				var match = cbuffers.FindIndex(e => e.SameAs(cbuffer));
+				if (match == -1)
+                {
+					cbuffer_index.Add(cbuffers.Count);
+					cbuffers.Add(cbuffer);
+				}
+                else
+					cbuffer_index.Add(match);
 			}
-			dxshader._cbuffers = cbuffer_index.ToArray ();
+			dxshader._cbuffers = cbuffer_index.ToArray();
 
 			var glslCode = parseData.output;
 
@@ -170,7 +178,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			// code valid for GLES out of the box?
 
 			// GLES platforms do not like this.
-			glslCode = glslCode.Replace ("#version 110", "");
+			glslCode = glslCode.Replace("#version 110", "");
 
 			// Add the required precision specifiers for GLES.
 
@@ -183,16 +191,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				glslCode;
 
 			// Enable standard derivatives extension as necessary
-			if ((glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0)
-				|| (glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0))
+			if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
+			||  glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0)
 			{
 				glslCode = "#extension GL_OES_standard_derivatives : enable\r\n" + glslCode;
 			}
 
 			// Store the code for serialization.
-			dxshader.ShaderCode = Encoding.ASCII.GetBytes (glslCode);
+			dxshader.ShaderCode = Encoding.ASCII.GetBytes(glslCode);
 
-			return dxshader;
+            return dxshader;
 		}
 	}
 }

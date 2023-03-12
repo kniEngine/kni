@@ -17,26 +17,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		{
 			Name = name ?? string.Empty;
 
-			ParameterIndex = new List<int> ();
-			ParameterOffset = new List<int> ();
-			Parameters = new List<EffectObject.EffectParameterContent> ();
+			ParameterIndex = new List<int>();
+			ParameterOffset = new List<int>();
+			Parameters = new List<EffectObject.EffectParameterContent>();
 
 			int minRegister = short.MaxValue;
 			int maxRegister = 0;
 
 			var registerSize = (set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
 
-			foreach (var symbol in symbols) {
+			foreach (var symbol in symbols)
+            {
 				if (symbol.register_set != set)
 					continue;
 
 				// Create the parameter.
-				var parm = GetParameterFromSymbol (symbol);
+				var parm = GetParameterFromSymbol(symbol);
 
 				var offset = (int)symbol.register_index * registerSize;
 				parm.bufferOffset = offset;
 
-				Parameters.Add (parm);
+				Parameters.Add(parm);
                 ParameterOffset.Add(offset);
 
                 minRegister = Math.Min(minRegister, (int)symbol.register_index);
