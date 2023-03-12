@@ -588,8 +588,8 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void GenTexturesDelegte(int count, [Out] out int id);
-        internal static GenTexturesDelegte GenTextures;
+        internal delegate void GenTexturesDelegate(int count, [Out] out int id);
+        internal static GenTexturesDelegate GenTextures;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1274,7 +1274,7 @@ namespace MonoGame.OpenGL
             ClearColor = LoadFunctionOrNull<ClearColorDelegate>("glClearColor");
             ClearStencil = LoadFunctionOrNull<ClearStencilDelegate>("glClearStencil");
             Flush = LoadFunctionOrNull<FlushDelegate>("glFlush");
-            GenTextures = LoadFunctionOrNull<GenTexturesDelegte>("glGenTextures");
+            GenTextures = LoadFunctionOrNull<GenTexturesDelegate>("glGenTextures");
             BindTexture = LoadFunctionOrNull<BindTextureDelegate>("glBindTexture");
 
             Enable = LoadFunctionOrNull<EnableDelegate>("glEnable");
