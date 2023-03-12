@@ -480,14 +480,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Matrix && ParameterType == EffectParameterType.Single)
             {
-                var floatData = (float[])Data;
+                var fData = (float[])Data;
 
                 if (RowCount == 4 && ColumnCount == 4)
                 {
-                    return new Matrix(floatData[0], floatData[4], floatData[8],  floatData[12],
-                                      floatData[1], floatData[5], floatData[9],  floatData[13],
-                                      floatData[2], floatData[6], floatData[10], floatData[14],
-                                      floatData[3], floatData[7], floatData[11], floatData[15]);
+                    return new Matrix(fData[0], fData[4], fData[ 8], fData[12],
+                                      fData[1], fData[5], fData[ 9], fData[13],
+                                      fData[2], fData[6], fData[10], fData[14],
+                                      fData[3], fData[7], fData[11], fData[15]);
                 }
                 else
                     throw new InvalidCastException();
