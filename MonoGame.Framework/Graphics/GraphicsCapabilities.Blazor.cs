@@ -48,6 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
             _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
+            _maxVertexBufferSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+
             SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;

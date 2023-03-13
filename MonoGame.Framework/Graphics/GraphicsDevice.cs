@@ -153,8 +153,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
-        internal int _maxVertexBufferSlots;
-
         public bool IsDisposed 
         { 
             get { return _isDisposed; } 
@@ -353,7 +351,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _vertexBuffers = new VertexBufferBindings(_maxVertexBufferSlots);
+            _vertexBuffers = new VertexBufferBindings(GraphicsCapabilities.MaxVertexBufferSlots);
             _vertexBuffersDirty = true;
             _indexBufferDirty = true;
             _vertexShaderDirty = true;
@@ -894,13 +892,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                if (vertexBuffers.Length <= _maxVertexBufferSlots)
+                if (vertexBuffers.Length <= GraphicsCapabilities.MaxVertexBufferSlots)
                 {
                     _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
                 }
                 else
                 {
-                    var message = string.Format("Max number of vertex buffers is {0}.", _maxVertexBufferSlots);
+                    var message = string.Format("Max number of vertex buffers is {0}.", GraphicsCapabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }

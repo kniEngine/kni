@@ -98,8 +98,6 @@ namespace Microsoft.Xna.Framework.Graphics
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
 
-            _maxVertexBufferSlots = (this.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
-
             GraphicsCapabilities = new GraphicsCapabilities();
             GraphicsCapabilities.Initialize(this);
         }

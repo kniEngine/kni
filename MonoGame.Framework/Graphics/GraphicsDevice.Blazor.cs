@@ -214,12 +214,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _maxTextureSize = 2048;
 
-            _maxVertexBufferSlots = (this.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
-
-            _newEnabledVertexAttributes = new bool[_maxVertexBufferSlots];
-
             GraphicsCapabilities = new GraphicsCapabilities();
             GraphicsCapabilities.Initialize(this);
+
+
+            _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -257,7 +256,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(this, true);
 
-            _bufferBindingInfos = new BufferBindingInfo[_maxVertexBufferSlots];
+            _bufferBindingInfos = new BufferBindingInfo[GraphicsCapabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
                 _bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }

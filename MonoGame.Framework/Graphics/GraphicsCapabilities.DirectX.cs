@@ -31,6 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxTextureSlots = 16;
             _maxVertexTextureSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_0) ? 16 : 0;
 
+            _maxVertexBufferSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+
             SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
