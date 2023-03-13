@@ -55,7 +55,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int glMajorVersion = 0;
         internal int glMinorVersion = 0;
         internal int _glDefaultFramebuffer = 0;
-        internal int MaxVertexAttributes;
         internal int _maxTextureSize = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -251,11 +250,13 @@ namespace Microsoft.Xna.Framework.Graphics
             GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();
 
-            MaxVertexAttributes = 16;
-            if (this.GraphicsProfile >= GraphicsProfile.FL10_1) _maxVertexBufferSlots = 32;
+            int maxVertexAttribs;
+            GL.GetInteger(GetPName.MaxVertexAttribs, out maxVertexAttribs);
+            GraphicsExtensions.CheckGLError();
+            _maxVertexBufferSlots = (this.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+            _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
 
-            _maxVertexBufferSlots = MaxVertexAttributes;
-            _newEnabledVertexAttributes = new bool[MaxVertexAttributes];
+            _newEnabledVertexAttributes = new bool[_maxVertexBufferSlots];
 
 
             // try getting the context version

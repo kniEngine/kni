@@ -38,7 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _supportsBlitFramebuffer;
 
         private const WebGLFramebuffer _glDefaultFramebuffer = null;
-        internal int MaxVertexAttributes;
         internal int _maxTextureSize = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -215,11 +214,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _maxTextureSize = 2048;
 
-            MaxVertexAttributes = 16;
-            if (this.GraphicsProfile >= GraphicsProfile.FL10_1) _maxVertexBufferSlots = 32;
+            _maxVertexBufferSlots = (this.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
 
-            _maxVertexBufferSlots = MaxVertexAttributes;
-            _newEnabledVertexAttributes = new bool[MaxVertexAttributes];
+            _newEnabledVertexAttributes = new bool[_maxVertexBufferSlots];
 
             GraphicsCapabilities = new GraphicsCapabilities();
             GraphicsCapabilities.Initialize(this);

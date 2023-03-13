@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
-        private int _maxVertexBufferSlots;
+        internal int _maxVertexBufferSlots;
 
         public bool IsDisposed 
         { 
