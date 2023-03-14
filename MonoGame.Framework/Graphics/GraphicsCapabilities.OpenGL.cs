@@ -5,10 +5,8 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-#if OPENGL
 using MonoGame.OpenGL;
 using GetParamName = MonoGame.OpenGL.GetPName;
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -44,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.Extensions.Contains("GL_ARB_texture_non_power_of_two") ||
                 GL.Extensions.Contains("GL_IMG_texture_npot") ||
                 GL.Extensions.Contains("GL_NV_texture_npot_2D_mipmap");
-#else
+#elif DESKTOPGL
             // Unfortunately non PoT texture support is patchy even on desktop systems and we can't
             // rely on the fact that GL2.0+ supposedly supports npot in the core.
             // Reference: http://aras-p.info/blog/2012/10/17/non-power-of-two-textures/
@@ -58,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			SupportsPackedDepthStencil = GL.Extensions.Contains("GL_OES_packed_depth_stencil");
 			SupportsDepthNonLinear = GL.Extensions.Contains("GL_NV_depth_nonlinear");
             SupportsTextureMaxLevel = GL.Extensions.Contains("GL_APPLE_texture_max_level");
-#else
+#elif DESKTOPGL
             SupportsDepth24 = true;
             SupportsPackedDepthStencil = true;
             SupportsDepthNonLinear = false;
@@ -89,7 +87,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                                  GL.Extensions.Contains("GL_APPLE_framebuffer_multisample") |
                                                  GL.Extensions.Contains("GL_EXT_multisampled_render_to_texture") |
                                                  GL.Extensions.Contains("GL_NV_framebuffer_multisample");
-#else
+#elif DESKTOPGL
             // if we're on GL 3.0+, frame buffer extensions are guaranteed to be present, but extensions may be missing
             // it is then safe to assume that GL_ARB_framebuffer_object is present so that the standard function are loaded
             SupportsFramebufferObjectARB = device.glMajorVersion >= 3 || GL.Extensions.Contains("GL_ARB_framebuffer_object");
@@ -110,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsFloatTextures = GL.BoundApi == GL.RenderApi.ES && (device.glMajorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_float"));
             SupportsHalfFloatTextures = GL.BoundApi == GL.RenderApi.ES && (device.glMajorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_half_float"));
             SupportsNormalized = GL.BoundApi == GL.RenderApi.ES && (device.glMajorVersion >= 3 && GL.Extensions.Contains("GL_EXT_texture_norm16"));
-#else
+#elif DESKTOPGL
             SupportsSRgb = GL.Extensions.Contains("GL_EXT_texture_sRGB") && GL.Extensions.Contains("GL_EXT_framebuffer_sRGB");
             SupportsFloatTextures = GL.BoundApi == GL.RenderApi.GL && (device.glMajorVersion >= 3 || GL.Extensions.Contains("GL_ARB_texture_float"));
             SupportsHalfFloatTextures = GL.BoundApi == GL.RenderApi.GL && (device.glMajorVersion >= 3 || GL.Extensions.Contains("GL_ARB_half_float_pixel"));;
@@ -150,7 +148,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if GLES
             SupportsSeparateBlendStates = false;
-#else
+#elif DESKTOPGL
             SupportsSeparateBlendStates = device.glMajorVersion >= 4 || GL.Extensions.Contains("GL_ARB_draw_buffers_blend");
 #endif
         }
