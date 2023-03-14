@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-#if !GLES
+#if DESKTOPGL
         private DrawBuffersEnum[] _drawBuffers;
 #endif
 
@@ -204,7 +204,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (IntPtr)(baseVertex.ToInt64() + element.Offset));
                 GraphicsExtensions.CheckGLError();
 
-#if !GLES
+#if DESKTOPGL
                 if (GraphicsCapabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
@@ -220,71 +220,45 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetup()
         {
             _programCache = new ShaderProgramCache(this);
-#if DESKTOPGL
-            _currentWindowHandle = SdlGameWindow.Instance.Handle;
 
-            if (_mainContext == null)
-            {
+#if DESKTOPGL
+            System.Diagnostics.Debug.Assert(_mainContext == null);
+
 #if DEBUG
-                // create debug context, so we get better error messages (glDebugMessageCallback)
-                Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
+            // create debug context, so we get better error messages (glDebugMessageCallback)
+            Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-                var contextStrategy = new ConcreteGraphicsContext(this, _currentWindowHandle);
-                _mainContext = new GraphicsContext(this, contextStrategy);
-            }
+            _currentWindowHandle = SdlGameWindow.Instance.Handle;
+            var contextStrategy = new ConcreteGraphicsContext(this, _currentWindowHandle);
+             _mainContext = new GraphicsContext(this, contextStrategy);
 
-            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
+            contextStrategy.MakeCurrent(_currentWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
-
-            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
-#endif
-
-#if ANDROID  || (IOS || TVOS)
+#elif GLES
             var contextStrategy = new ConcreteGraphicsContext(this);
             _mainContext = new GraphicsContext(this, contextStrategy);
 #endif
 
             // try getting the context version
-            // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on the GL_VERSION string
-            // for non GLES this string always starts with the version number in the "major.minor" format, but can be followed by
-            // multiple vendor specific characters
-            // For GLES this string is formatted as: OpenGL<space>ES<space><version number><space><vendor-specific information>
-#if GLES
+            // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
             try
             {
                 string version = GL.GetString(StringName.Version);
-
                 if (string.IsNullOrEmpty(version))
                     throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
 
-                string[] versionSplit = version.Split(' ');
-                if (versionSplit.Length > 2 && versionSplit[0].Equals("OpenGL") && versionSplit[1].Equals("ES"))
-                {
-                    glMajorVersion = Convert.ToInt32(versionSplit[2].Substring(0, 1));
-                    glMinorVersion = Convert.ToInt32(versionSplit[2].Substring(2, 1));
-                }
-                else
-                {
-                    glMajorVersion = 1;
-                    glMinorVersion = 1;
-                }
-            }
-            catch (FormatException)
-            {
-                //if it fails we default to 1.1 context
-                glMajorVersion = 1;
-                glMinorVersion = 1;
-            }
-#else
-                try
-            {
-                string version = GL.GetString(StringName.Version);
-
-                if (string.IsNullOrEmpty(version))
-                    throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
-
+                // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
+                // optionally followed by multiple vendor specific characters
+                // for GLES, the GL_VERSION string is formatted as:
+                //     OpenGL<space>ES<space><version number><space><vendor-specific information>
+#if GLES
+                if (version.StartsWith("OpenGL ES "))
+                    version =  version.Split(' ')[2];
+                else // if it fails, we assume to be on a 1.1 context
+                    version = "1.1";
+#endif
                 glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
                 glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
             }
@@ -294,21 +268,20 @@ namespace Microsoft.Xna.Framework.Graphics
                 glMajorVersion = 1;
                 glMinorVersion = 1;
             }
-#endif
 
-#if !GLES
+            GraphicsCapabilities = new GraphicsCapabilities();
+            GraphicsCapabilities.PlatformInitialize(this, glMajorVersion, glMinorVersion);
+
+
+#if DESKTOPGL
 			// Initialize draw buffer attachment array
 			int maxDrawBuffers;
             GL.GetInteger(GetPName.MaxDrawBuffers, out maxDrawBuffers);
-            GraphicsExtensions.CheckGLError ();
+            GraphicsExtensions.CheckGLError();
 			_drawBuffers = new DrawBuffersEnum[maxDrawBuffers];
 			for (int i = 0; i < maxDrawBuffers; i++)
 				_drawBuffers[i] = (DrawBuffersEnum)(FramebufferAttachment.ColorAttachment0Ext + i);
 #endif
-
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.PlatformInitialize(this);
-
 
             _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
         }
@@ -824,7 +797,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
             }
-#if !GLES
+
+#if DESKTOPGL
             GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);
 #endif
 
