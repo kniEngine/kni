@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using nkast.Wasm.Canvas.WebGL;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -12,23 +13,24 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class GraphicsCapabilities
     {
 
-        private void PlatformInitialize(GraphicsDevice device)
+        internal void PlatformInitialize(GraphicsDevice device)
         {
-            var GL = device._glContext;
+            GraphicsProfile profile = device.GraphicsProfile;
+            IWebGLRenderingContext GL = device._glContext;
 
             _maxTextureSize = 2048;
-            if (device.GraphicsProfile == GraphicsProfile.HiDef)
+            if (profile == GraphicsProfile.HiDef)
                 _maxTextureSize = 4096;
-            if (device.GraphicsProfile == GraphicsProfile.FL10_0)
+            if (profile == GraphicsProfile.FL10_0)
                 _maxTextureSize = 8192;
-            if (device.GraphicsProfile == GraphicsProfile.FL10_1)
+            if (profile == GraphicsProfile.FL10_1)
                 _maxTextureSize = 8192;
-            if (device.GraphicsProfile == GraphicsProfile.FL11_0)
+            if (profile == GraphicsProfile.FL11_0)
                 _maxTextureSize = 16384;
-            if (device.GraphicsProfile == GraphicsProfile.FL11_1)
+            if (profile == GraphicsProfile.FL11_1)
                 _maxTextureSize = 16384;
 
-            SupportsNonPowerOfTwo = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            SupportsNonPowerOfTwo = profile >= GraphicsProfile.HiDef;
 
             SupportsTextureFilterAnisotropic = false; // TODO: check for TEXTURE_MAX_ANISOTROPY_EXT
 
@@ -43,11 +45,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SupportsSRgb = true;
 
-            SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsDepthClamp = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            SupportsTextureArrays = profile >= GraphicsProfile.HiDef;
+            SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
+            SupportsFloatTextures = profile >= GraphicsProfile.HiDef;
+            SupportsHalfFloatTextures = profile >= GraphicsProfile.HiDef;
+            SupportsNormalized = profile >= GraphicsProfile.HiDef;
             
             _maxTextureSlots = 8;
             _maxVertexTextureSlots = 0;
@@ -60,14 +62,14 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
             _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
-            _maxVertexBufferSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+            _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
 
             SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
 
-            MaxTextureAnisotropy = (device.GraphicsProfile == GraphicsProfile.Reach) ? 2 : 16;
+            MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
 
             _maxMultiSampleCount = GetMaxMultiSampleCount(device);
         }

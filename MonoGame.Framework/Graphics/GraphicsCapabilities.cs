@@ -17,10 +17,6 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     internal partial class GraphicsCapabilities
     {
-        internal void Initialize(GraphicsDevice device)
-        {
-            PlatformInitialize(device);
-        }
 
         /// <summary>
         /// Whether the device fully supports non power-of-two textures, including

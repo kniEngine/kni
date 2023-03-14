@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			CreateDeviceResources();
 
             GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
+            GraphicsCapabilities.PlatformInitialize(this);
 
 #if WINDOWS_UAP
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
