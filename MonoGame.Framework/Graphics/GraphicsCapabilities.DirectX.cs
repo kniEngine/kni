@@ -11,6 +11,18 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformInitialize(GraphicsDevice device)
         {
+            _maxTextureSize = 2048;
+            if (device.GraphicsProfile == GraphicsProfile.HiDef)
+                _maxTextureSize = 4096;
+            if (device.GraphicsProfile == GraphicsProfile.FL10_0)
+                _maxTextureSize = 8192;
+            if (device.GraphicsProfile == GraphicsProfile.FL10_1)
+                _maxTextureSize = 8192;
+            if (device.GraphicsProfile == GraphicsProfile.FL11_0)
+                _maxTextureSize = 16384;
+            if (device.GraphicsProfile == GraphicsProfile.FL11_1)
+                _maxTextureSize = 16384;
+
             SupportsNonPowerOfTwo = device.GraphicsProfile >= GraphicsProfile.HiDef;
             SupportsTextureFilterAnisotropic = true;
 

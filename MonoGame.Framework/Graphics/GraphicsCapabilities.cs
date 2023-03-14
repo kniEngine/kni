@@ -82,9 +82,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal bool SupportsDepthClamp { get; private set; }
 
+        private int _maxTextureSize;
         private int _maxTextureSlots;
         private int _maxVertexTextureSlots;
 
+        internal int MaxTextureSize { get { return _maxTextureSize; } }
         internal int MaxTextureSlots { get { return _maxTextureSlots; } }
         internal int MaxVertexTextureSlots { get { return _maxVertexTextureSlots; } }
 

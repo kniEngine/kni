@@ -34,6 +34,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformInitialize(GraphicsDevice device)
         {
+            GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
+            GraphicsExtensions.CheckGLError();
+
 #if GLES
             SupportsNonPowerOfTwo = GL.Extensions.Contains("GL_OES_texture_npot") ||
                 GL.Extensions.Contains("GL_ARB_texture_non_power_of_two") ||
@@ -43,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Unfortunately non PoT texture support is patchy even on desktop systems and we can't
             // rely on the fact that GL2.0+ supposedly supports npot in the core.
             // Reference: http://aras-p.info/blog/2012/10/17/non-power-of-two-textures/
-            SupportsNonPowerOfTwo = device._maxTextureSize >= 8192;
+            SupportsNonPowerOfTwo = _maxTextureSize >= 8192;
 #endif
 
             SupportsTextureFilterAnisotropic = GL.Extensions.Contains("GL_EXT_texture_filter_anisotropic");
