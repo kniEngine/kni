@@ -307,7 +307,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.Initialize(this);
+            GraphicsCapabilities.PlatformInitialize(this);
 
 
             _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];

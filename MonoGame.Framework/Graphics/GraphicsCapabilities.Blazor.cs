@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class GraphicsCapabilities
     {
 
-        private void PlatformInitialize(GraphicsDevice device)
+        internal void PlatformInitialize(GraphicsDevice device)
         {
             var GL = device._glContext;
 

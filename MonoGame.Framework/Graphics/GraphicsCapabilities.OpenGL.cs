@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal bool SupportsFramebufferObjectIMG { get; private set; }
 
 
-        private void PlatformInitialize(GraphicsDevice device)
+        internal void PlatformInitialize(GraphicsDevice device)
         {
             GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();

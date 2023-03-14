@@ -9,7 +9,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class GraphicsCapabilities
     {
-        private void PlatformInitialize(GraphicsDevice device)
+
+        internal void PlatformInitialize(GraphicsDevice device)
         {
             _maxTextureSize = 2048;
             if (device.GraphicsProfile == GraphicsProfile.HiDef)
