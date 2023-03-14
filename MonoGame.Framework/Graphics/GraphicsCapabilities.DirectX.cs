@@ -12,19 +12,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformInitialize(GraphicsDevice device)
         {
+            GraphicsProfile profile = device.GraphicsProfile;
+
             _maxTextureSize = 2048;
-            if (device.GraphicsProfile == GraphicsProfile.HiDef)
+            if (profile == GraphicsProfile.HiDef)
                 _maxTextureSize = 4096;
-            if (device.GraphicsProfile == GraphicsProfile.FL10_0)
+            if (profile == GraphicsProfile.FL10_0)
                 _maxTextureSize = 8192;
-            if (device.GraphicsProfile == GraphicsProfile.FL10_1)
+            if (profile == GraphicsProfile.FL10_1)
                 _maxTextureSize = 8192;
-            if (device.GraphicsProfile == GraphicsProfile.FL11_0)
+            if (profile == GraphicsProfile.FL11_0)
                 _maxTextureSize = 16384;
-            if (device.GraphicsProfile == GraphicsProfile.FL11_1)
+            if (profile == GraphicsProfile.FL11_1)
                 _maxTextureSize = 16384;
 
-            SupportsNonPowerOfTwo = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            SupportsNonPowerOfTwo = profile >= GraphicsProfile.HiDef;
             SupportsTextureFilterAnisotropic = true;
 
             SupportsDepth24 = false;
@@ -38,24 +40,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SupportsSRgb = true;
 
-            SupportsTextureArrays = device.GraphicsProfile >= GraphicsProfile.FL10_0;
-            SupportsDepthClamp = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            SupportsTextureArrays = profile >= GraphicsProfile.FL10_0;
+            SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
 
             _maxTextureSlots = 16;
-            _maxVertexTextureSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_0) ? 16 : 0;
+            _maxVertexTextureSlots = (profile >= GraphicsProfile.FL10_0) ? 16 : 0;
 
-            _maxVertexBufferSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+            _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
 
-            SupportsFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsHalfFloatTextures = device.GraphicsProfile >= GraphicsProfile.HiDef;
-            SupportsNormalized = device.GraphicsProfile >= GraphicsProfile.HiDef;
+            SupportsFloatTextures = profile >= GraphicsProfile.HiDef;
+            SupportsHalfFloatTextures = profile >= GraphicsProfile.HiDef;
+            SupportsNormalized = profile >= GraphicsProfile.HiDef;
 
             SupportsInstancing = true;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
 
-            MaxTextureAnisotropy = (device.GraphicsProfile == GraphicsProfile.Reach) ? 2 : 16;
+            MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
 
             _maxMultiSampleCount = GetMaxMultiSampleCount(device);
         }
