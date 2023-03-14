@@ -55,7 +55,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int glMajorVersion = 0;
         internal int glMinorVersion = 0;
         internal int _glDefaultFramebuffer = 0;
-        internal int _maxTextureSize = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal bool _lastBlendEnable = false;
@@ -246,9 +245,6 @@ namespace Microsoft.Xna.Framework.Graphics
             var contextStrategy = new ConcreteGraphicsContext(this);
             _mainContext = new GraphicsContext(this, contextStrategy);
 #endif
-
-            GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
-            GraphicsExtensions.CheckGLError();
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on the GL_VERSION string

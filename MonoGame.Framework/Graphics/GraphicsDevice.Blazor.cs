@@ -38,7 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _supportsBlitFramebuffer;
 
         private const WebGLFramebuffer _glDefaultFramebuffer = null;
-        internal int _maxTextureSize = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal bool _lastBlendEnable = false;
@@ -211,8 +210,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext = new GraphicsContext(this, contextStrategy);
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
-
-            _maxTextureSize = 2048;
 
             GraphicsCapabilities = new GraphicsCapabilities();
             GraphicsCapabilities.Initialize(this);
