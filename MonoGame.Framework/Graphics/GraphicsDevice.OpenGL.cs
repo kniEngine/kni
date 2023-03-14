@@ -55,7 +55,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int glMajorVersion = 0;
         internal int glMinorVersion = 0;
         internal int _glDefaultFramebuffer = 0;
-        internal int MaxVertexAttributes;
         internal int _maxTextureSize = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -251,13 +250,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();
 
-            MaxVertexAttributes = 16;
-            if (this.GraphicsProfile >= GraphicsProfile.FL10_1) _maxVertexBufferSlots = 32;
-
-            _maxVertexBufferSlots = MaxVertexAttributes;
-            _newEnabledVertexAttributes = new bool[MaxVertexAttributes];
-
-
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on the GL_VERSION string
             // for non GLES this string always starts with the version number in the "major.minor" format, but can be followed by
@@ -320,6 +312,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GraphicsCapabilities = new GraphicsCapabilities();
             GraphicsCapabilities.Initialize(this);
+
+
+            _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -351,7 +346,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(this, true);
 
-            _bufferBindingInfos = new BufferBindingInfo[_maxVertexBufferSlots];
+            _bufferBindingInfos = new BufferBindingInfo[GraphicsCapabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
                 _bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, -1);
         }
@@ -1391,7 +1386,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _vertexBuffers = new VertexBufferBindings(_maxVertexBufferSlots);
+            _vertexBuffers = new VertexBufferBindings(GraphicsCapabilities.MaxVertexBufferSlots);
             _vertexBuffersDirty = true;
             _indexBufferDirty = true;
             _vertexShaderDirty = true;

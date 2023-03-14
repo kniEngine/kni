@@ -88,6 +88,10 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int MaxTextureSlots { get { return _maxTextureSlots; } }
         internal int MaxVertexTextureSlots { get { return _maxVertexTextureSlots; } }
 
+        private int _maxVertexBufferSlots;
+
+        internal int MaxVertexBufferSlots { get { return _maxVertexBufferSlots; } }
+
         /// <summary>
         /// True, if the underlying platform supports floating point textures. 
         /// For Direct3D platforms this is always <code>true</code>.

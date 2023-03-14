@@ -131,6 +131,12 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
             _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
+            int maxVertexAttribs;
+            GL.GetInteger(GetPName.MaxVertexAttribs, out maxVertexAttribs);
+            GraphicsExtensions.CheckGLError();
+            _maxVertexBufferSlots = (device.GraphicsProfile >= GraphicsProfile.FL10_1) ? 32 : 16;
+            _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
+
             GL.GetInteger((GetPName)GetParamName.MaxSamples, out _maxMultiSampleCount);
 
             SupportsInstancing = GL.VertexAttribDivisor != null;
