@@ -68,8 +68,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             SamplerStateInfo state;
                             if (samplerStates.TryGetValue(samplerName, out state))
                             {
-                                sampler.parameterName = state.TextureName ?? samplerName;
                                 sampler.state = state.State;
+
+                                if (state.TextureName == null)
+                                    sampler.parameterName = samplerName;
                             }
                             else
                             {
