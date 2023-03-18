@@ -5,16 +5,18 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
 
-#ifdef __DIRECTX__
-
-
-// HLSL Shader Model 4.0 macros (for targeting DirectX11)
 
 #define TECHNIQUE(name, vsname, psname ) \
 	technique name { pass { VertexShader = compile vs_4_0_level_9_1 vsname (); PixelShader = compile ps_4_0_level_9_1 psname(); } }
 
 #define TECHNIQUE_9_3(name, vsname, psname ) \
 	technique name { pass { VertexShader = compile vs_4_0_level_9_3 vsname (); PixelShader = compile ps_4_0_level_9_3 psname(); } }
+
+
+#ifdef __DIRECTX__
+
+
+// HLSL Shader Model 4.0 macros (for targeting DirectX11)
 
 #define BEGIN_CONSTANTS     cbuffer Parameters : register(b0) {
 #define MATRIX_CONSTANTS
@@ -40,12 +42,6 @@
 
 
 // HLSL Shader Model 2.0 & 3.0 macros (for targeting DirectX9/XNA or openGL/MojoShader)
-
-#define TECHNIQUE(name, vsname, psname ) \
-	technique name { pass { VertexShader = compile vs_2_0 vsname (); PixelShader = compile ps_2_0 psname(); } }
-
-#define TECHNIQUE_9_3(name, vsname, psname ) \
-	technique name { pass { VertexShader = compile vs_3_0 vsname (); PixelShader = compile ps_3_0 psname(); } }
 
 #define BEGIN_CONSTANTS
 #define MATRIX_CONSTANTS
