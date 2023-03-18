@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			// Use MojoShader to convert the HLSL bytecode to GLSL.
 
 			var parseDataPtr = MojoShader.NativeMethods.Parse(
-				"glsl",
+				MojoShader.NativeConstants.PROFILE_GLSL,
 				byteCode,
 				byteCode.Length,
 				IntPtr.Zero,
@@ -113,10 +113,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			for (var i = 0; i < samplers.Length; i++)
             {
                 // We need the original sampler name... look for that in the symbols.
-                var originalSamplerName =
-                    symbols.First(e => e.register_set == MojoShader.SymbolRegisterSet.SAMPLER &&
-                    e.register_index == samplers[i].index
-                ).name;
+                var samplerName = symbols.First(e => e.register_set == MojoShader.SymbolRegisterSet.SAMPLER &&
+                                                     e.register_index == samplers[i].index
+                                               ).name;
 
                 var sampler = new Sampler
                 {
@@ -127,7 +126,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     samplerName = samplers[i].name,
 
                     // By default use the original sampler name for the parameter name.
-                    parameterName = originalSamplerName,
+                    parameterName = samplerName,
 
                     textureSlot = samplers[i].index,
                     samplerSlot = samplers[i].index,
@@ -135,10 +134,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 };
 
                 SamplerStateInfo state;
-                if (samplerStates.TryGetValue(originalSamplerName, out state))
+                if (samplerStates.TryGetValue(samplerName, out state))
                 {
                     sampler.state = state.State;
-                    sampler.parameterName = state.TextureName ?? originalSamplerName;
+
+                    if (state.TextureName == null)
+                        sampler.parameterName = state.TextureName;
+
+                    sampler.parameterName = state.TextureName ?? samplerName;
                 }
 
                 // Store the sampler.
