@@ -88,11 +88,8 @@ namespace Microsoft.Xna.Platform
         
         public override void TickExiting()
         {
-            if (_window != null)
-                _window.Dispose();
-
-            _window = null;
-            Window = null;
+            // BlazorGL games do not "exit" or shut down.
+            throw new PlatformNotSupportedException();
         }
 
         public override bool BeforeUpdate()
