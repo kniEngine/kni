@@ -28,11 +28,11 @@
 
 #define DECLARE_TEXTURE(Name, index) \
     Texture2D<float4> Name : register(t##index); \
-    sampler Name##Sampler : register(s##index)
+    sampler Name##Sampler : register(s##index) = sampler_state { Texture = <Name>; }
 
 #define DECLARE_CUBEMAP(Name, index) \
     TextureCube<float4> Name : register(t##index); \
-    sampler Name##Sampler : register(s##index)
+    sampler Name##Sampler : register(s##index) = sampler_state { Texture = <Name>; }
 
 #define SAMPLE_TEXTURE(Name, texCoord)  Name.Sample(Name##Sampler, texCoord)
 #define SAMPLE_CUBEMAP(Name, texCoord)  Name.Sample(Name##Sampler, texCoord)
@@ -52,13 +52,15 @@
 #define _cb(r)
 
 #define DECLARE_TEXTURE(Name, index) \
-    sampler2D Name : register(s##index);
+    Texture2D Name : register(t##index); \
+    sampler2D Name##Sampler : register(s##index) = sampler_state { Texture = <Name>; };
 
 #define DECLARE_CUBEMAP(Name, index) \
-    samplerCUBE Name : register(s##index);
+    TextureCube Name : register(t##index); \
+    samplerCUBE Name##Sampler : register(s##index) = sampler_state { Texture = <Name>; };
 
-#define SAMPLE_TEXTURE(Name, texCoord)  tex2D(Name, texCoord)
-#define SAMPLE_CUBEMAP(Name, texCoord)  texCUBE(Name, texCoord)
+#define SAMPLE_TEXTURE(Name, texCoord)  tex2D(Name##Sampler, texCoord)
+#define SAMPLE_CUBEMAP(Name, texCoord)  texCUBE(Name##Sampler, texCoord)
 
 
 #endif
