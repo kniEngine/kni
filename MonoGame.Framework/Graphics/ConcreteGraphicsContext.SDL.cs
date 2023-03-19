@@ -45,11 +45,13 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 ThrowIfDisposed();
 
-                GraphicsDevice.DisposeContext(_glContext);
-                _glContext = IntPtr.Zero;
-
-                base.Dispose(disposing);
             }
+
+            if (_glContext != IntPtr.Zero)
+                Sdl.GL.DeleteContext(_glContext);
+            _glContext = IntPtr.Zero;
+
+            base.Dispose(disposing);
         }
 
     }
