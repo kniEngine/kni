@@ -14,16 +14,14 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class VideoPlayer : IDisposable
     {
-        private Game _game;
         NSSDLWindow nsWindow;
         AVPlayerLayer layer;
         NSView view;
 
         private void PlatformInitialize()
         {
-            _game = Game.Instance;
             Sdl.Window.SDL_SysWMinfo sys = new Sdl.Window.SDL_SysWMinfo();
-            Sdl.Window.GetWindowWMInfo(_game.Window.Handle, ref sys);
+            Sdl.Window.GetWindowWMInfo(Game.Instance.Window.Handle, ref sys);
             nsWindow = new NSSDLWindow(sys.window);
         }
 

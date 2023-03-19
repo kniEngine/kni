@@ -13,17 +13,11 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class VideoPlayer : IDisposable
     {
-        private Game _game;
-        private ConcreteGame _concreteGame;
         private NSObject _playbackDidFinishObserver;
 
         private void PlatformInitialize()
         {
-            _game = Game.Instance;
-            _concreteGame = (ConcreteGame)_game.Services.GetService(typeof(ConcreteGame));
 
-            if (_concreteGame == null)
-                throw new InvalidOperationException("No iOSGamePlatform instance was available");
         }
 
         private Texture2D PlatformGetTexture()
@@ -47,19 +41,27 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformPlay()
         {
-            _concreteGame.IsPlayingVideo = true;
+            ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
+            if (concreteGame == null)
+                throw new InvalidOperationException("No iOS GameStrategy instance was available");
+
+            concreteGame.IsPlayingVideo = true;
 
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
             _currentVideo.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            _concreteGame.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
+            concreteGame.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
             _currentVideo.MovieView.MoviePlayer.Play();
         }
 
         private void PlatformStop()
         {
+            ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
+            if (concreteGame == null)
+                throw new InvalidOperationException("No iOS GameStrategy instance was available");
+
             if (_playbackDidFinishObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playbackDidFinishObserver);
@@ -67,8 +69,8 @@ namespace Microsoft.Xna.Framework.Media
             }
 
             _currentVideo.MovieView.MoviePlayer.Stop();
-            _concreteGame.IsPlayingVideo = false;
-            _concreteGame.ViewController.DismissViewController(false, null);
+            concreteGame.IsPlayingVideo = false;
+            concreteGame.ViewController.DismissViewController(false, null);
         }
 
         private void OnStop(NSNotification e)

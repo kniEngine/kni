@@ -11,11 +11,10 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class VideoPlayer : IDisposable
     {
-        private Game _game;
 
         private void PlatformInitialize()
         {
-            _game = Game.Instance;
+            
         }
 
         private Texture2D PlatformGetTexture()
@@ -39,7 +38,7 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformPlay()
         {
-            _currentVideo.Player.SetDisplay(((AndroidGameWindow)_game.Window).GameView.Holder);
+            _currentVideo.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
             _currentVideo.Player.Start();
 
             ConcreteGame.IsPlayingVideo = true;
