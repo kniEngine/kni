@@ -217,10 +217,10 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (disposing)
             {
+                if (_lastFrame != null)
+                    _lastFrame.Dispose();
+                _lastFrame = null;
             }
-
-            if (_lastFrame != null)
-                _lastFrame.Dispose();
 
         }
 
