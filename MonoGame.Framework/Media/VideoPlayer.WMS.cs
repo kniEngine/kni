@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Media
             // It's entirely possible that we could lose the d3d context and therefore lose this texture, 
             // but it's better than allocating a new texture each call!
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(Game.Instance.Strategy.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
 
             _lastFrame.SetData(texData);
             
@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework.Media
                 _lastFrame.Dispose();
 
             // Create cached texture
-            _lastFrame = new Texture2D(Game.Instance.Strategy.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+            _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
         }
 
         private void PlatformResume()

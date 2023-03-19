@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Media
             if (!_mediaEngine.HasVideo() || !_mediaEngine.OnVideoStreamTick(out pts))
                 return _lastFrame;
 
-            _lastFrame = new Texture2D( Game.Instance.Strategy.GraphicsDevice,
+            _lastFrame = new Texture2D( _currentVideo.GraphicsDevice,
                                         _currentVideo.Width,
                                         _currentVideo.Height,
                                         false,
