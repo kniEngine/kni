@@ -11,10 +11,10 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class VideoPlayer : IDisposable
     {
-        private MediaEngine _mediaEngine;
-        private Texture2D _lastFrame;
-
         DXGIDeviceManager _devManager;
+        private MediaEngine _mediaEngine;
+
+        private Texture2D _lastFrame;
 
         private void PlatformInitialize()
         {
@@ -28,7 +28,6 @@ namespace Microsoft.Xna.Framework.Media
             {
                 VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm,
                 DxgiManager = _devManager
-                
             })
             {
                 _mediaEngine = new MediaEngine(factory, attributes, MediaEngineCreateFlags.None, OnMediaEngineEvent);
@@ -72,11 +71,11 @@ namespace Microsoft.Xna.Framework.Media
             if (!_mediaEngine.HasVideo() || !_mediaEngine.OnVideoStreamTick(out pts))
                 return _lastFrame;
 
-            _lastFrame = new Texture2D(Game.Instance.Strategy.GraphicsDevice,
+            _lastFrame = new Texture2D( Game.Instance.Strategy.GraphicsDevice,
                                         _currentVideo.Width,
                                         _currentVideo.Height,
                                         false,
-                                        SurfaceFormat.Bgra32, 
+                                        SurfaceFormat.Bgra32,
                                         Texture2D.SurfaceType.RenderTarget);
 
 			var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
@@ -143,6 +142,10 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformDispose(bool disposing)
         {
+            if (disposing)
+            {
+            }
+
         }
     }
 }

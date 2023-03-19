@@ -12,14 +12,14 @@ namespace Microsoft.Xna.Framework.Media
     /// </summary>
     public sealed partial class Video : IDisposable
 	{
-		private bool _disposed;
+        private bool _disposed;
 
-		#region Public API
+        #region Public API
 
-		/// <summary>
-		/// I actually think this is a file PATH...
-		/// </summary>
-		public string FileName { get; private set; }
+        /// <summary>
+        /// I actually think this is a file PATH...
+        /// </summary>
+        public string FileName { get; private set; }
 
 		/// <summary>
 		/// Gets the duration of the Video.
@@ -50,15 +50,10 @@ namespace Microsoft.Xna.Framework.Media
 
         #region Internal API
 
-        internal Video(string fileName, float durationMS) :
-            this(fileName)
-        {
-            Duration = TimeSpan.FromMilliseconds(durationMS);
-        }
-
-        internal Video(string fileName)
+        internal Video(string fileName, float durationMS)
         {
             FileName = fileName;
+            Duration = TimeSpan.FromMilliseconds(durationMS);
 
             PlatformInitialize();
         }
