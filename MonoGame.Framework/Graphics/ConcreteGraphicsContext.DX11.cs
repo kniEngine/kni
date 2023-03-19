@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_d3dContext != null)
                     _d3dContext.Dispose();
                 _d3dContext = null;
-
-                base.Dispose(disposing);
             }
+
+            base.Dispose(disposing);
         }
 
     }

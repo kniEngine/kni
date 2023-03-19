@@ -33,11 +33,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private DrawBuffersEnum[] _drawBuffers;
 #endif
 
-#if DESKTOPGL
-        static List<IntPtr> _disposeContexts = new List<IntPtr>();
-        static object _disposeContextsLock = new object();
-#endif
-
         private ShaderProgramCache _programCache;
         private ShaderProgram _shaderProgram = null;
 
@@ -409,26 +404,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _currentWindowHandle = IntPtr.Zero;
 #endif
         }
-
-#if DESKTOPGL
-        static internal void DisposeContext(IntPtr resource)
-        {
-            lock (_disposeContextsLock)
-            {
-                _disposeContexts.Add(resource);
-            }
-        }
-
-        static internal void DisposeContexts()
-        {
-            lock (_disposeContextsLock)
-            {
-                for (int i = 0; i < _disposeContexts.Count; i++)
-                    Sdl.GL.DeleteContext(_disposeContexts[i]);
-                _disposeContexts.Clear();
-            }
-        }
-#endif
 
         private void PlatformPresent()
         {
