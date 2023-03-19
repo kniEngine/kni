@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework
 
         public float Magnitude
         {
-            get { return (float)Math.Round(Math.Sqrt((R * R) + (i * i))); }
+            get { return (float)Math.Sqrt((R * R) + (i * i)); }
         }
 
         internal string DebugDisplayString
