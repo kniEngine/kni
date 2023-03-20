@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -12,14 +13,16 @@ namespace Microsoft.Xna.Framework.Media
     /// </summary>
     public sealed partial class Video : IDisposable
 	{
-		private bool _disposed;
+        private bool _disposed;
 
-		#region Public API
+        internal GraphicsDevice GraphicsDevice { get; private set; }
 
-		/// <summary>
-		/// I actually think this is a file PATH...
-		/// </summary>
-		public string FileName { get; private set; }
+        #region Public API
+
+        /// <summary>
+        /// I actually think this is a file PATH...
+        /// </summary>
+        public string FileName { get; private set; }
 
 		/// <summary>
 		/// Gets the duration of the Video.
@@ -50,15 +53,11 @@ namespace Microsoft.Xna.Framework.Media
 
         #region Internal API
 
-        internal Video(string fileName, float durationMS) :
-            this(fileName)
+        internal Video(GraphicsDevice graphicsDevice, string fileName, float durationMS)
         {
-            Duration = TimeSpan.FromMilliseconds(durationMS);
-        }
-
-        internal Video(string fileName)
-        {
+            GraphicsDevice = graphicsDevice;
             FileName = fileName;
+            Duration = TimeSpan.FromMilliseconds(durationMS);
 
             PlatformInitialize();
         }
@@ -85,6 +84,8 @@ namespace Microsoft.Xna.Framework.Media
                 //PlatformDispose(disposing);
                 _disposed = true;
             }
+
+            GraphicsDevice = null;
         }
 
         #endregion

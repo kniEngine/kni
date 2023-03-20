@@ -147,9 +147,8 @@ namespace Microsoft.Xna.Framework.Media
             {
                 texture = PlatformGetTexture();
                 if (texture != null)
-                {
                     break;
-                }
+
                 var sleepTime = i*sleepTimeFactor;
                 Debug.WriteLine("PlatformGetTexture returned null ({0}) sleeping for {1} ms", i + 1, sleepTime);
 #if WINDOWS_UAP
@@ -158,10 +157,9 @@ namespace Microsoft.Xna.Framework.Media
                 Thread.Sleep(sleepTime); //Sleep for longer and longer times
 #endif
             }
+
             if (texture == null)
-            {
                 throw new InvalidOperationException("Platform returned a null texture");
-            }
 
             return texture;
         }

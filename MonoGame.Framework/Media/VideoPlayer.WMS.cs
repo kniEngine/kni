@@ -18,6 +18,8 @@ namespace Microsoft.Xna.Framework.Media
         // HACK: Need SharpDX to fix this.
         private static Guid AudioStreamVolumeGuid;
 
+        private Texture2D _lastFrame;
+
         private static Callback _callback;
 
         private class Callback : IAsyncCallback
@@ -50,7 +52,6 @@ namespace Microsoft.Xna.Framework.Media
             public WorkQueueId WorkQueueId { get; private set; }
         }
 
-        private Texture2D _videoCache;
 
         private void PlatformInitialize()
         {
@@ -71,13 +72,14 @@ namespace Microsoft.Xna.Framework.Media
             if (texData == null)
                 return null;
 
-            // NOTE: It's entirely possible that we could lose the d3d context and therefore lose this texture, but it's better than allocating a new texture each call!
-            if (_videoCache == null)
-                _videoCache = new Texture2D(Game.Instance.Strategy.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+            // It's entirely possible that we could lose the d3d context and therefore lose this texture, 
+            // but it's better than allocating a new texture each call!
+            if (_lastFrame == null)
+                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
 
-            _videoCache.SetData(texData);
+            _lastFrame.SetData(texData);
             
-            return _videoCache;
+            return _lastFrame;
         }
 
         private void PlatformGetState(ref MediaState result)
@@ -141,10 +143,11 @@ namespace Microsoft.Xna.Framework.Media
             _session.Start(null, varStart);
 
             // we need to dispose of the old texture if we have one
-            if (_videoCache != null)
-                _videoCache.Dispose();
+            if (_lastFrame != null)
+                _lastFrame.Dispose();
+
             // Create cached texture
-            _videoCache = new Texture2D(Game.Instance.Strategy.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+            _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
         }
 
         private void PlatformResume()
@@ -212,10 +215,13 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformDispose(bool disposing)
         {
-            if (_videoCache != null)
+            if (disposing)
             {
-                _videoCache.Dispose();
+                if (_lastFrame != null)
+                    _lastFrame.Dispose();
+                _lastFrame = null;
             }
+
         }
 
         private void OnTopologyReady()

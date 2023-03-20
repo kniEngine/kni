@@ -9,11 +9,10 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class VideoPlayer : IDisposable
     {
-        private Game _game;
 
         private void PlatformInitialize()
         {
-            _game = Game.Instance;
+            
         }
 
         private Texture2D PlatformGetTexture()
