@@ -66,7 +66,16 @@ namespace MonoGame.Tests.ContentPipeline
             }
         }
 
-        private static T Deserialize<T>(string file, Action<T> doAsserts)
+        private static void DeserializeCompileAndLoad<T>(string file, Action<T> doAsserts)
+        {
+            T result = Deserialize<T>(file);
+            doAsserts((T)result);
+
+            T loaded = CompileAndLoad(result);
+            doAsserts(loaded);
+        }
+
+        private static T Deserialize<T>(string file)
         {
             object result;
             var filePath = Paths.Xml(file);
@@ -76,15 +85,11 @@ namespace MonoGame.Tests.ContentPipeline
             Assert.NotNull(result);
             Assert.IsAssignableFrom<T>(result);
 
-            doAsserts((T)result);
-
             return (T)result;
         }
 
-        private static void DeserializeCompileAndLoad<T>(string file, Action<T> doAsserts)
+        private static T CompileAndLoad<T>(T result)
         {
-            var result = Deserialize(file, doAsserts);
-
             var xnbStream = new MemoryStream();
 #if XNA
             // In MS XNA the ContentCompiler is completely internal, so we need
@@ -97,15 +102,15 @@ namespace MonoGame.Tests.ContentPipeline
                                 false, Directory.GetCurrentDirectory(), "referenceRelocationPath" });
 #else
             var compiler = new ContentCompiler();
-            compiler.Compile(xnbStream, result, TargetPlatform.Windows, GraphicsProfile.Reach, 
+            compiler.Compile(xnbStream, result, TargetPlatform.Windows, GraphicsProfile.Reach,
                                 false, "rootDirectory", "referenceRelocationPath");
 #endif
 
             var content = new TestContentManager(xnbStream);
             var loaded = content.Load<T>("Whatever");
-
-            doAsserts(loaded);
+            return loaded;
         }
+
 
         [Test]
         public void TheBasics()
@@ -402,16 +407,15 @@ namespace MonoGame.Tests.ContentPipeline
         [Test]
         public void ExternalReferences()
         {
-            Deserialize<ExternalReferences>("17_ExternalReferences.xml", externalReferences =>
-            {
-                Assert.NotNull(externalReferences.Texture);
-                Assert.IsTrue(externalReferences.Texture.Filename.EndsWith("/Xml/grass.tga".Replace('/', Path.DirectorySeparatorChar)));
-                Assert.NotNull(externalReferences.Texture2);
-                Assert.IsTrue(externalReferences.Texture2.Filename.EndsWith("/Xml/grass.tga".Replace ('/', Path.DirectorySeparatorChar)));
-                Assert.AreNotSame(externalReferences.Texture, externalReferences.Texture2);
-                Assert.NotNull(externalReferences.Shader);
-                Assert.IsTrue(externalReferences.Shader.Filename.EndsWith("/Xml/foliage.fx".Replace ('/', Path.DirectorySeparatorChar)));
-            });
+            var externalReferences = Deserialize<ExternalReferences>("17_ExternalReferences.xml");
+
+            Assert.NotNull(externalReferences.Texture);
+            Assert.IsTrue(externalReferences.Texture.Filename.EndsWith("/Xml/grass.tga".Replace('/', Path.DirectorySeparatorChar)));
+            Assert.NotNull(externalReferences.Texture2);
+            Assert.IsTrue(externalReferences.Texture2.Filename.EndsWith("/Xml/grass.tga".Replace('/', Path.DirectorySeparatorChar)));
+            Assert.AreNotSame(externalReferences.Texture, externalReferences.Texture2);
+            Assert.NotNull(externalReferences.Shader);
+            Assert.IsTrue(externalReferences.Shader.Filename.EndsWith("/Xml/foliage.fx".Replace('/', Path.DirectorySeparatorChar)));
         }
 
         [Test]
@@ -569,15 +573,14 @@ namespace MonoGame.Tests.ContentPipeline
         {
             // ChildCollection is a ContentPipeline-only type, so we don't need to / shouldn't
             // test running it through ContentCompiler.
-            Deserialize<ChildCollections>("26_ChildCollections.xml", childCollections =>
-            {
-                Assert.IsNotNull(childCollections.Children);
-                Assert.AreEqual(2, childCollections.Children.Count);
-                Assert.AreEqual(childCollections, childCollections.Children[0].Parent);
-                Assert.AreEqual("Foo", childCollections.Children[0].Name);
-                Assert.AreEqual(childCollections, childCollections.Children[1].Parent);
-                Assert.AreEqual("Bar", childCollections.Children[1].Name);
-            });
+            var childCollections = Deserialize<ChildCollections>("26_ChildCollections.xml");
+
+            Assert.IsNotNull(childCollections.Children);
+            Assert.AreEqual(2, childCollections.Children.Count);
+            Assert.AreEqual(childCollections, childCollections.Children[0].Parent);
+            Assert.AreEqual("Foo", childCollections.Children[0].Name);
+            Assert.AreEqual(childCollections, childCollections.Children[1].Parent);
+            Assert.AreEqual("Bar", childCollections.Children[1].Name);
         }
 
         [Test]
