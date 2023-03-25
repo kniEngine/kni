@@ -311,30 +311,30 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Compares whether two <see cref="KeyboardState"/> instances are equal.
         /// </summary>
-        /// <param name="a"><see cref="KeyboardState"/> instance to the left of the equality operator.</param>
-        /// <param name="b"><see cref="KeyboardState"/> instance to the right of the equality operator.</param>
+        /// <param name="left"><see cref="KeyboardState"/> instance to the left of the equality operator.</param>
+        /// <param name="right"><see cref="KeyboardState"/> instance to the right of the equality operator.</param>
         /// <returns>true if the instances are equal; false otherwise.</returns>
-        public static bool operator ==(KeyboardState a, KeyboardState b)
+        public static bool operator ==(KeyboardState left, KeyboardState right)
         {
-            return a._keys0 == b._keys0
-                && a._keys1 == b._keys1
-                && a._keys2 == b._keys2
-                && a._keys3 == b._keys3
-                && a._keys4 == b._keys4
-                && a._keys5 == b._keys5
-                && a._keys6 == b._keys6
-                && a._keys7 == b._keys7;
+            return left._keys0 == right._keys0
+                && left._keys1 == right._keys1
+                && left._keys2 == right._keys2
+                && left._keys3 == right._keys3
+                && left._keys4 == right._keys4
+                && left._keys5 == right._keys5
+                && left._keys6 == right._keys6
+                && left._keys7 == right._keys7;
         }
 
         /// <summary>
         /// Compares whether two <see cref="KeyboardState"/> instances are not equal.
         /// </summary>
-        /// <param name="a"><see cref="KeyboardState"/> instance to the left of the inequality operator.</param>
-        /// <param name="b"><see cref="KeyboardState"/> instance to the right of the inequality operator.</param>
+        /// <param name="left"><see cref="KeyboardState"/> instance to the left of the inequality operator.</param>
+        /// <param name="right"><see cref="KeyboardState"/> instance to the right of the inequality operator.</param>
         /// <returns>true if the instances are different; false otherwise.</returns>
-        public static bool operator !=(KeyboardState a, KeyboardState b)
+        public static bool operator !=(KeyboardState left, KeyboardState right)
         {
-            return !(a == b);
+            return !(left == right);
         }
 
         /// <summary>

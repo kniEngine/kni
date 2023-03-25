@@ -50,23 +50,23 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <summary>
         /// Compares the current instance of a class to another instance to determine whether they are different.
         /// </summary>
-        /// <param name="a">The object to the left of the equality operator.</param>
-        /// <param name="b">The object to the right of the equality operator.</param>
+        /// <param name="left">The object to the left of the equality operator.</param>
+        /// <param name="right">The object to the right of the equality operator.</param>
         /// <returns>true if the objects are different; false otherwise.</returns>
-        public static bool operator !=(Byte4 a, Byte4 b)
+        public static bool operator !=(Byte4 left, Byte4 right)
         {
-            return a.PackedValue != b.PackedValue;
+            return left.PackedValue != right.PackedValue;
         }
 
         /// <summary>
         /// Compares the current instance of a class to another instance to determine whether they are the same.
         /// </summary>
-        /// <param name="a">The object to the left of the equality operator.</param>
-        /// <param name="b">The object to the right of the equality operator.</param>
+        /// <param name="left">The object to the left of the equality operator.</param>
+        /// <param name="right">The object to the right of the equality operator.</param>
         /// <returns>true if the objects are the same; false otherwise.</returns>
-        public static bool operator ==(Byte4 a, Byte4 b)
+        public static bool operator ==(Byte4 left, Byte4 right)
         {
-            return a.PackedValue == b.PackedValue;
+            return left.PackedValue == right.PackedValue;
         }
 
         /// <summary>

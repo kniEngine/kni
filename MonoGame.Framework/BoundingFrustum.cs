@@ -140,29 +140,29 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Compares whether two <see cref="BoundingFrustum"/> instances are equal.
         /// </summary>
-        /// <param name="a"><see cref="BoundingFrustum"/> instance on the left of the equal sign.</param>
-        /// <param name="b"><see cref="BoundingFrustum"/> instance on the right of the equal sign.</param>
+        /// <param name="left"><see cref="BoundingFrustum"/> instance on the left of the equal sign.</param>
+        /// <param name="right"><see cref="BoundingFrustum"/> instance on the right of the equal sign.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-        public static bool operator ==(BoundingFrustum a, BoundingFrustum b)
+        public static bool operator ==(BoundingFrustum left, BoundingFrustum right)
         {
-            if (Equals(a, null))
-                return (Equals(b, null));
+            if (Equals(left, null))
+                return (Equals(right, null));
 
-            if (Equals(b, null))
-                return (Equals(a, null));
+            if (Equals(right, null))
+                return (Equals(left, null));
 
-            return a._matrix == (b._matrix);
+            return left._matrix == (right._matrix);
         }
 
         /// <summary>
         /// Compares whether two <see cref="BoundingFrustum"/> instances are not equal.
         /// </summary>
-        /// <param name="a"><see cref="BoundingFrustum"/> instance on the left of the not equal sign.</param>
-        /// <param name="b"><see cref="BoundingFrustum"/> instance on the right of the not equal sign.</param>
+        /// <param name="left"><see cref="BoundingFrustum"/> instance on the left of the not equal sign.</param>
+        /// <param name="right"><see cref="BoundingFrustum"/> instance on the right of the not equal sign.</param>
         /// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
-        public static bool operator !=(BoundingFrustum a, BoundingFrustum b)
+        public static bool operator !=(BoundingFrustum left, BoundingFrustum right)
         {
-            return !(a == b);
+            return !(left == right);
         }
 
         #endregion

@@ -995,17 +995,17 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 transformation.M11 = (flippedHorz ? -scale.X : scale.X);
                 transformation.M22 = (flippedVert ? -scale.Y : scale.Y);
-                transformation.M41 = ((flipAdjustment.X - origin.X) * transformation.M11) + position.X;
-                transformation.M42 = ((flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
+                transformation.M41 = (flipAdjustment.X - origin.X) * transformation.M11 + position.X;
+                transformation.M42 = (flipAdjustment.Y - origin.Y) * transformation.M22 + position.Y;
             }
             else
             {
-                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * rotation.R;
-                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * rotation.i;
-                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-rotation.i);
-                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * rotation.R;
-                transformation.M41 = (((flipAdjustment.X - origin.X) * transformation.M11) + (flipAdjustment.Y - origin.Y) * transformation.M21) + position.X;
-                transformation.M42 = (((flipAdjustment.X - origin.X) * transformation.M12) + (flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
+                transformation.M11 = (flippedHorz ? -scale.X : scale.X) *  rotation.R;
+                transformation.M12 = (flippedHorz ? -scale.X : scale.X) *  rotation.i;
+                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * -rotation.i;
+                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) *  rotation.R;
+                transformation.M41 = (flipAdjustment.X - origin.X) * transformation.M11 + (flipAdjustment.Y - origin.Y) * transformation.M21 + position.X;
+                transformation.M42 = (flipAdjustment.X - origin.X) * transformation.M12 + (flipAdjustment.Y - origin.Y) * transformation.M22 + position.Y;
             }
 
             var offset = Vector2.Zero;
@@ -1266,17 +1266,17 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 transformation.M11 = (flippedHorz ? -scale.X : scale.X);
                 transformation.M22 = (flippedVert ? -scale.Y : scale.Y);
-                transformation.M41 = ((flipAdjustment.X - origin.X) * transformation.M11) + position.X;
-                transformation.M42 = ((flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
+                transformation.M41 = (flipAdjustment.X - origin.X) * transformation.M11 + position.X;
+                transformation.M42 = (flipAdjustment.Y - origin.Y) * transformation.M22 + position.Y;
             }
             else
             {
-                transformation.M11 = (flippedHorz ? -scale.X : scale.X) * rotation.R;
-                transformation.M12 = (flippedHorz ? -scale.X : scale.X) * rotation.i;
-                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * (-rotation.i);
-                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) * rotation.R;
-                transformation.M41 = (((flipAdjustment.X - origin.X) * transformation.M11) + (flipAdjustment.Y - origin.Y) * transformation.M21) + position.X;
-                transformation.M42 = (((flipAdjustment.X - origin.X) * transformation.M12) + (flipAdjustment.Y - origin.Y) * transformation.M22) + position.Y;
+                transformation.M11 = (flippedHorz ? -scale.X : scale.X) *  rotation.R;
+                transformation.M12 = (flippedHorz ? -scale.X : scale.X) *  rotation.i;
+                transformation.M21 = (flippedVert ? -scale.Y : scale.Y) * -rotation.i;
+                transformation.M22 = (flippedVert ? -scale.Y : scale.Y) *  rotation.R;
+                transformation.M41 = (flipAdjustment.X - origin.X) * transformation.M11 + (flipAdjustment.Y - origin.Y) * transformation.M21 + position.X;
+                transformation.M42 = (flipAdjustment.X - origin.X) * transformation.M12 + (flipAdjustment.Y - origin.Y) * transformation.M22 + position.Y;
             }
 
             var offset = Vector2.Zero;

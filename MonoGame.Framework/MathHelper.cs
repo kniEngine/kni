@@ -164,8 +164,8 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Linearly interpolates between two values.
         /// </summary>
-        /// <param name="value1">Source value.</param>
-        /// <param name="value2">Destination value.</param>
+        /// <param name="start">Source value.</param>
+        /// <param name="end">Destination value.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
         /// <returns>Interpolated value.</returns> 
         /// <remarks>This method performs the linear interpolation based on the following formula:
@@ -173,9 +173,9 @@ namespace Microsoft.Xna.Framework
         /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
         /// See <see cref="MathHelper.LerpPrecise"/> for a less efficient version with more precision around edge cases.
         /// </remarks>
-        public static float Lerp(float value1, float value2, float amount)
+        public static float Lerp(float start, float end, float amount)
         {
-            return value1 + (value2 - value1) * amount;
+            return start + (end - start) * amount;
         }
 
 
@@ -184,8 +184,8 @@ namespace Microsoft.Xna.Framework
         /// This method is a less efficient, more precise version of <see cref="MathHelper.Lerp"/>.
         /// See remarks for more info.
         /// </summary>
-        /// <param name="value1">Source value.</param>
-        /// <param name="value2">Destination value.</param>
+        /// <param name="start">Source value.</param>
+        /// <param name="end">Destination value.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
         /// <returns>Interpolated value.</returns>
         /// <remarks>This method performs the linear interpolation based on the following formula:
@@ -199,9 +199,9 @@ namespace Microsoft.Xna.Framework
         /// Relevant Wikipedia Article: https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
         /// Relevant StackOverflow Answer: http://stackoverflow.com/questions/4353525/floating-point-linear-interpolation#answer-23716956
         /// </remarks>
-        public static float LerpPrecise(float value1, float value2, float amount)
+        public static float LerpPrecise(float start, float end, float amount)
         {
-            return ((1 - amount) * value1) + (value2 * amount);
+            return (start * (1 - amount)) + (end * amount);
         }
 
         /// <summary>
@@ -313,14 +313,14 @@ namespace Microsoft.Xna.Framework
             return angle;
         }
 
- 	/// <summary>
+        /// <summary>
         /// Determines if value is powered by two.
         /// </summary>
         /// <param name="value">A value.</param>
         /// <returns><c>true</c> if <c>value</c> is powered by two; otherwise <c>false</c>.</returns>
-	public static bool IsPowerOfTwo(int value)
-	{
-	     return (value > 0) && ((value & (value - 1)) == 0);
-	}
+        public static bool IsPowerOfTwo(int value)
+        {
+            return (value > 0) && ((value & (value - 1)) == 0);
+        }
     }
 }

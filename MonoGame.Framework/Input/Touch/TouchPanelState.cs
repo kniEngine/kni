@@ -917,22 +917,22 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 return true;
             }
 
-            public static bool operator !=(TouchLocationData value1, TouchLocationData value2)
+            public static bool operator !=(TouchLocationData left, TouchLocationData right)
             {
-                return value1._id != value2._id ||
-                        value1._state != value2._state ||
-                        value1._position != value2._position ||
-                        value1._previousState != value2._previousState ||
-                        value1._previousPosition != value2._previousPosition;
+                return left._id != right._id ||
+                       left._state != right._state ||
+                       left._position != right._position ||
+                       left._previousState != right._previousState ||
+                       left._previousPosition != right._previousPosition;
             }
 
-            public static bool operator ==(TouchLocationData value1, TouchLocationData value2)
+            public static bool operator ==(TouchLocationData left, TouchLocationData right)
             {
-                return value1._id == value2._id &&
-                        value1._state == value2._state &&
-                        value1._position == value2._position &&
-                        value1._previousState == value2._previousState &&
-                        value1._previousPosition == value2._previousPosition;
+                return left._id == right._id &&
+                       left._state == right._state &&
+                       left._position == right._position &&
+                       left._previousState == right._previousState &&
+                       left._previousPosition == right._previousPosition;
             }
 
 

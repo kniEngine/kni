@@ -782,29 +782,29 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         ///   Check if two <see cref="BoundingBox"/> instances are equal.
         /// </summary>
-        /// <param name="a">A <see cref="BoundingBox"/> to compare the other.</param>
-        /// <param name="b">A <see cref="BoundingBox"/> to compare the other.</param>
+        /// <param name="left">A <see cref="BoundingBox"/> to compare the other.</param>
+        /// <param name="right">A <see cref="BoundingBox"/> to compare the other.</param>
         /// <returns>
         ///   <code>true</code> if <see cref="a"/> is equal to this <see cref="b"/>,
         ///   <code>false</code> if it is not.
         /// </returns>
-        public static bool operator ==(BoundingBox a, BoundingBox b)
+        public static bool operator ==(BoundingBox left, BoundingBox right)
         {
-            return a.Equals(b);
+            return left.Equals(right);
         }
 
         /// <summary>
         ///   Check if two <see cref="BoundingBox"/> instances are not equal.
         /// </summary>
-        /// <param name="a">A <see cref="BoundingBox"/> to compare the other.</param>
+        /// <param name="left">A <see cref="BoundingBox"/> to compare the other.</param>
         /// <param name="b">A <see cref="BoundingBox"/> to compare the other.</param>
         /// <returns>
         ///   <code>true</code> if <see cref="a"/> is not equal to this <see cref="b"/>,
         ///   <code>false</code> if it is.
         /// </returns>
-        public static bool operator !=(BoundingBox a, BoundingBox b)
+        public static bool operator !=(BoundingBox left, BoundingBox b)
         {
-            return !a.Equals(b);
+            return !left.Equals(b);
         }
 
         internal string DebugDisplayString

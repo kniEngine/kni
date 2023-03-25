@@ -63,11 +63,11 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>The ulong containing the packed values.</returns>
         static ulong PackHelper(ref Vector4 vector)
         {
-            ulong num4 = (ulong)HalfTypeHelper.Convert(vector.X);
-            ulong num3 = ((ulong)HalfTypeHelper.Convert(vector.Y) << 0x10);
-            ulong num2 = ((ulong)HalfTypeHelper.Convert(vector.Z) << 0x20);
-            ulong num1 = ((ulong)HalfTypeHelper.Convert(vector.W) << 0x30);
-            return num4 | num3 | num2 | num1;
+            ulong word4 =  (ulong)HalfTypeHelper.Convert(vector.X);
+            ulong word3 = ((ulong)HalfTypeHelper.Convert(vector.Y) << 0x10);
+            ulong word2 = ((ulong)HalfTypeHelper.Convert(vector.Z) << 0x20);
+            ulong word1 = ((ulong)HalfTypeHelper.Convert(vector.W) << 0x30);
+            return word4 | word3 | word2 | word1;
         }
 
         /// <summary>
@@ -76,11 +76,12 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <returns>The expanded vector.</returns>
         public Vector4 ToVector4()
         {
-            return new Vector4(
-                HalfTypeHelper.Convert((ushort)_packedValue),
-                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x10)),
-                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x20)),
-                HalfTypeHelper.Convert((ushort)(_packedValue >> 0x30)));
+            Vector4 result;
+            result.X = HalfTypeHelper.Convert((ushort)_packedValue);
+            result.Y = HalfTypeHelper.Convert((ushort)(_packedValue >> 0x10));
+            result.Z = HalfTypeHelper.Convert((ushort)(_packedValue >> 0x20));
+            result.W = HalfTypeHelper.Convert((ushort)(_packedValue >> 0x30));
+            return result;
         }
 
         /// <summary>
@@ -124,23 +125,23 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         /// <summary>
         /// Compares the current instance of a class to another instance to determine whether they are the same.
         /// </summary>
-        /// <param name="a">The object to the left of the equality operator.</param>
-        /// <param name="b">The object to the right of the equality operator.</param>
+        /// <param name="left">The object to the left of the equality operator.</param>
+        /// <param name="right">The object to the right of the equality operator.</param>
         /// <returns>true if the objects are the same; false otherwise.</returns>
-        public static bool operator ==(HalfVector4 a, HalfVector4 b)
+        public static bool operator ==(HalfVector4 left, HalfVector4 right)
         {
-            return a.Equals(b);
+            return left.Equals(right);
         }
 
         /// <summary>
         /// Compares the current instance of a class to another instance to determine whether they are different.
         /// </summary>
-        /// <param name="a">The object to the left of the equality operator.</param>
-        /// <param name="b">The object to the right of the equality operator.</param>
+        /// <param name="left">The object to the left of the equality operator.</param>
+        /// <param name="right">The object to the right of the equality operator.</param>
         /// <returns>true if the objects are different; false otherwise.</returns>
-        public static bool operator !=(HalfVector4 a, HalfVector4 b)
+        public static bool operator !=(HalfVector4 left, HalfVector4 right)
         {
-            return !a.Equals(b);
+            return !left.Equals(right);
         }
     }
 }

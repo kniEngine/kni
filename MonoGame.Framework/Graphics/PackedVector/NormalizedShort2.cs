@@ -21,14 +21,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             short2Packed = PackInTwo(x, y);
 		}
 
-        public static bool operator !=(NormalizedShort2 a, NormalizedShort2 b)
+        public static bool operator !=(NormalizedShort2 left, NormalizedShort2 right)
 		{
-			return !a.Equals (b);
+			return !left.Equals (right);
 		}
 
-        public static bool operator ==(NormalizedShort2 a, NormalizedShort2 b)
+        public static bool operator ==(NormalizedShort2 left, NormalizedShort2 right)
 		{
-			return a.Equals (b);
+			return left.Equals (right);
 		}
 
         [CLSCompliant(false)]

@@ -134,33 +134,33 @@ namespace Microsoft.Xna.Framework
         /// 
         /// Compares whether two <see cref="CurveKey"/> instances are not equal.
         /// </summary>
-        /// <param name="value1"><see cref="CurveKey"/> instance on the left of the not equal sign.</param>
-        /// <param name="value2"><see cref="CurveKey"/> instance on the right of the not equal sign.</param>
+        /// <param name="left"><see cref="CurveKey"/> instance on the left of the not equal sign.</param>
+        /// <param name="right"><see cref="CurveKey"/> instance on the right of the not equal sign.</param>
         /// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>	
-        public static bool operator !=(CurveKey value1, CurveKey value2)
+        public static bool operator !=(CurveKey left, CurveKey right)
         {
-            return !(value1 == value2);
+            return !(left == right);
         }
 
         /// <summary>
         /// Compares whether two <see cref="CurveKey"/> instances are equal.
         /// </summary>
-        /// <param name="value1"><see cref="CurveKey"/> instance on the left of the equal sign.</param>
-        /// <param name="value2"><see cref="CurveKey"/> instance on the right of the equal sign.</param>
+        /// <param name="left"><see cref="CurveKey"/> instance on the left of the equal sign.</param>
+        /// <param name="right"><see cref="CurveKey"/> instance on the right of the equal sign.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-        public static bool operator ==(CurveKey value1, CurveKey value2)
+        public static bool operator ==(CurveKey left, CurveKey right)
         {
-            if (object.Equals(value1, null))
-                return object.Equals(value2, null);
+            if (object.Equals(left, null))
+                return object.Equals(right, null);
 
-            if (object.Equals(value2, null))
-                return object.Equals(value1, null);
+            if (object.Equals(right, null))
+                return object.Equals(left, null);
 
-            return (value1._position == value2._position)
-                && (value1._value == value2._value)
-                && (value1._tangentIn == value2._tangentIn)
-                && (value1._tangentOut == value2._tangentOut)
-                && (value1._continuity == value2._continuity);
+            return (left._position == right._position)
+                && (left._value == right._value)
+                && (left._tangentIn == right._tangentIn)
+                && (left._tangentOut == right._tangentOut)
+                && (left._continuity == right._continuity);
         }
 
         /// <summary>

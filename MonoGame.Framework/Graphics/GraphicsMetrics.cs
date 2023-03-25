@@ -61,42 +61,42 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Returns the difference between two sets of metrics.
         /// </summary>
-        /// <param name="value1">Source <see cref="GraphicsMetrics"/> on the left of the sub sign.</param>
-        /// <param name="value2">Source <see cref="GraphicsMetrics"/> on the right of the sub sign.</param>
+        /// <param name="left">Source <see cref="GraphicsMetrics"/> on the left of the sub sign.</param>
+        /// <param name="right">Source <see cref="GraphicsMetrics"/> on the right of the sub sign.</param>
         /// <returns>Difference between two sets of metrics.</returns>
-        public static GraphicsMetrics operator -(GraphicsMetrics value1, GraphicsMetrics value2)
+        public static GraphicsMetrics operator -(GraphicsMetrics left, GraphicsMetrics right)
         {
             return new GraphicsMetrics()
             {
-                _clearCount = value1._clearCount - value2._clearCount,
-                _drawCount = value1._drawCount - value2._drawCount,
-                _pixelShaderCount = value1._pixelShaderCount - value2._pixelShaderCount,
-                _primitiveCount = value1._primitiveCount - value2._primitiveCount,
-                _spriteCount = value1._spriteCount - value2._spriteCount,
-                _targetCount = value1._targetCount - value2._targetCount,
-                _textureCount = value1._textureCount - value2._textureCount,
-                _vertexShaderCount = value1._vertexShaderCount - value2._vertexShaderCount
+                _clearCount = left._clearCount - right._clearCount,
+                _drawCount = left._drawCount - right._drawCount,
+                _pixelShaderCount = left._pixelShaderCount - right._pixelShaderCount,
+                _primitiveCount = left._primitiveCount - right._primitiveCount,
+                _spriteCount = left._spriteCount - right._spriteCount,
+                _targetCount = left._targetCount - right._targetCount,
+                _textureCount = left._textureCount - right._textureCount,
+                _vertexShaderCount = left._vertexShaderCount - right._vertexShaderCount
             };
         }
 
         /// <summary>
         /// Returns the combination of two sets of metrics.
         /// </summary>
-        /// <param name="value1">Source <see cref="GraphicsMetrics"/> on the left of the add sign.</param>
-        /// <param name="value2">Source <see cref="GraphicsMetrics"/> on the right of the add sign.</param>
+        /// <param name="left">Source <see cref="GraphicsMetrics"/> on the left of the add sign.</param>
+        /// <param name="right">Source <see cref="GraphicsMetrics"/> on the right of the add sign.</param>
         /// <returns>Combination of two sets of metrics.</returns>
-        public static GraphicsMetrics operator +(GraphicsMetrics value1, GraphicsMetrics value2)
+        public static GraphicsMetrics operator +(GraphicsMetrics left, GraphicsMetrics right)
         {
             return new GraphicsMetrics()
             {
-                _clearCount =  value1._clearCount + value2._clearCount,
-                _drawCount = value1._drawCount + value2._drawCount,
-                _pixelShaderCount = value1._pixelShaderCount + value2._pixelShaderCount,
-                _primitiveCount = value1._primitiveCount + value2._primitiveCount,
-                _spriteCount = value1._spriteCount + value2._spriteCount,
-                _targetCount = value1._targetCount + value2._targetCount,
-                _textureCount = value1._textureCount + value2._textureCount,
-                _vertexShaderCount = value1._vertexShaderCount + value2._vertexShaderCount
+                _clearCount =  left._clearCount + right._clearCount,
+                _drawCount = left._drawCount + right._drawCount,
+                _pixelShaderCount = left._pixelShaderCount + right._pixelShaderCount,
+                _primitiveCount = left._primitiveCount + right._primitiveCount,
+                _spriteCount = left._spriteCount + right._spriteCount,
+                _targetCount = left._targetCount + right._targetCount,
+                _textureCount = left._textureCount + right._textureCount,
+                _vertexShaderCount = left._vertexShaderCount + right._vertexShaderCount
             };
         }
     }

@@ -264,13 +264,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Divides the components of a <see cref="Complex"/> by a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Complex"/>.</param>
+        /// <param name="left">Source <see cref="Complex"/>.</param>
         /// <param name="right">Divisor scalar.</param>
         /// <param name="result">The result of dividing a Complex by a scalar as an output parameter.</param>
-        public static void Divide(ref Complex value1, float right, out Complex result)
+        public static void Divide(ref Complex left, float right, out Complex result)
         {
-            result.R = value1.R / right;
-            result.i = value1.i / right;
+            result.R = left.R / right;
+            result.i = left.i / right;
         }
 
         /// <summary>

@@ -187,34 +187,34 @@ namespace Microsoft.Xna.Framework
         #region Public Methods
 
         /// <summary>
-        /// Performs vector addition on <paramref name="value1"/> and <paramref name="value2"/>.
+        /// Performs vector addition on <paramref name="left"/> and <paramref name="right"/>.
         /// </summary>
-        /// <param name="value1">The first vector to add.</param>
-        /// <param name="value2">The second vector to add.</param>
+        /// <param name="left">The first vector to add.</param>
+        /// <param name="right">The second vector to add.</param>
         /// <returns>The result of the vector addition.</returns>
-        public static Vector4 Add(Vector4 value1, Vector4 value2)
+        public static Vector4 Add(Vector4 left, Vector4 right)
         {
-            value1.X += value2.X;
-            value1.Y += value2.Y;
-            value1.Z += value2.Z;
-            value1.W += value2.W;
-            return value1;
+            left.X += right.X;
+            left.Y += right.Y;
+            left.Z += right.Z;
+            left.W += right.W;
+            return left;
         }
 
         /// <summary>
-        /// Performs vector addition on <paramref name="value1"/> and
-        /// <paramref name="value2"/>, storing the result of the
+        /// Performs vector addition on <paramref name="left"/> and
+        /// <paramref name="right"/>, storing the result of the
         /// addition in <paramref name="result"/>.
         /// </summary>
-        /// <param name="value1">The first vector to add.</param>
-        /// <param name="value2">The second vector to add.</param>
+        /// <param name="left">The first vector to add.</param>
+        /// <param name="right">The second vector to add.</param>
         /// <param name="result">The result of the vector addition.</param>
-        public static void Add(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
+        public static void Add(ref Vector4 left, ref Vector4 right, out Vector4 result)
         {
-            result.X = value1.X + value2.X;
-            result.Y = value1.Y + value2.Y;
-            result.Z = value1.Z + value2.Z;
-            result.W = value1.W + value2.W;
+            result.X = left.X + right.X;
+            result.Y = left.Y + right.Y;
+            result.Z = left.Z + right.Z;
+            result.W = left.W + right.W;
         }
 
         /// <summary>
@@ -409,83 +409,83 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by the components of another <see cref="Vector4"/>.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Divisor <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Divisor <see cref="Vector4"/>.</param>
         /// <returns>The result of dividing the vectors.</returns>
-        public static Vector4 Divide(Vector4 value1, Vector4 value2)
+        public static Vector4 Divide(Vector4 left, Vector4 right)
         {
-            value1.W /= value2.W;
-            value1.X /= value2.X;
-            value1.Y /= value2.Y;
-            value1.Z /= value2.Z;
-            return value1;
+            left.W /= right.W;
+            left.X /= right.X;
+            left.Y /= right.Y;
+            left.Z /= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="divider">Divisor scalar.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Divisor scalar.</param>
         /// <returns>The result of dividing a vector by a scalar.</returns>
-        public static Vector4 Divide(Vector4 value1, float divider)
+        public static Vector4 Divide(Vector4 left, float right)
         {
-            float factor = 1f / divider;
-            value1.W *= factor;
-            value1.X *= factor;
-            value1.Y *= factor;
-            value1.Z *= factor;
-            return value1;
+            float factor = 1f / right;
+            left.W *= factor;
+            left.X *= factor;
+            left.Y *= factor;
+            left.Z *= factor;
+            return left;
         }
 
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="divider">Divisor scalar.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Divisor scalar.</param>
         /// <param name="result">The result of dividing a vector by a scalar as an output parameter.</param>
-        public static void Divide(ref Vector4 value1, float divider, out Vector4 result)
+        public static void Divide(ref Vector4 left, float right, out Vector4 result)
         {
-            float factor = 1f / divider;
-            result.W = value1.W * factor;
-            result.X = value1.X * factor;
-            result.Y = value1.Y * factor;
-            result.Z = value1.Z * factor;
+            float factor = 1f / right;
+            result.W = left.W * factor;
+            result.X = left.X * factor;
+            result.Y = left.Y * factor;
+            result.Z = left.Z * factor;
         }
 
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by the components of another <see cref="Vector4"/>.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Divisor <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Divisor <see cref="Vector4"/>.</param>
         /// <param name="result">The result of dividing the vectors as an output parameter.</param>
-        public static void Divide(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
+        public static void Divide(ref Vector4 left, ref Vector4 right, out Vector4 result)
         {
-            result.W = value1.W / value2.W;
-            result.X = value1.X / value2.X;
-            result.Y = value1.Y / value2.Y;
-            result.Z = value1.Z / value2.Z;
+            result.W = left.W / right.W;
+            result.X = left.X / right.X;
+            result.Y = left.Y / right.Y;
+            result.Z = left.Z / right.Z;
         }
 
         /// <summary>
         /// Returns a dot product of two vectors.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
         /// <returns>The dot product of two vectors.</returns>
-        public static float Dot(Vector4 value1, Vector4 value2)
+        public static float Dot(Vector4 left, Vector4 right)
         {
-            return value1.X * value2.X + value1.Y * value2.Y + value1.Z * value2.Z + value1.W * value2.W;
+            return left.X * right.X + left.Y * right.Y + left.Z * right.Z + left.W * right.W;
         }
 
         /// <summary>
         /// Returns a dot product of two vectors.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
         /// <param name="result">The dot product of two vectors as an output parameter.</param>
-        public static void Dot(ref Vector4 value1, ref Vector4 value2, out float result)
+        public static void Dot(ref Vector4 left, ref Vector4 right, out float result)
         {
-            result = value1.X * value2.X + value1.Y * value2.Y + value1.Z * value2.Z + value1.W * value2.W;
+            result = left.X * right.X + left.Y * right.Y + left.Z * right.Z + left.W * right.W;
         }
 
         /// <summary>
@@ -620,32 +620,33 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains linear interpolation of the specified vectors.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="start">The first vector.</param>
+        /// <param name="end">The second vector.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <returns>The result of linear interpolation of the specified vectors.</returns>
-        public static Vector4 Lerp(Vector4 value1, Vector4 value2, float amount)
+        public static Vector4 Lerp(Vector4 start, Vector4 end, float amount)
         {
-            return new Vector4(
-                MathHelper.Lerp(value1.X, value2.X, amount),
-                MathHelper.Lerp(value1.Y, value2.Y, amount),
-                MathHelper.Lerp(value1.Z, value2.Z, amount),
-                MathHelper.Lerp(value1.W, value2.W, amount));
+            Vector4 result;
+            result.X = MathHelper.Lerp(start.X, end.X, amount);
+            result.Y = MathHelper.Lerp(start.Y, end.Y, amount);
+            result.Z = MathHelper.Lerp(start.Z, end.Z, amount);
+            result.W = MathHelper.Lerp(start.W, end.W, amount);
+            return result;
         }
 
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains linear interpolation of the specified vectors.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="start">The first vector.</param>
+        /// <param name="end">The second vector.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <param name="result">The result of linear interpolation of the specified vectors as an output parameter.</param>
-        public static void Lerp(ref Vector4 value1, ref Vector4 value2, float amount, out Vector4 result)
+        public static void Lerp(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
         {
-            result.X = MathHelper.Lerp(value1.X, value2.X, amount);
-            result.Y = MathHelper.Lerp(value1.Y, value2.Y, amount);
-            result.Z = MathHelper.Lerp(value1.Z, value2.Z, amount);
-            result.W = MathHelper.Lerp(value1.W, value2.W, amount);
+            result.X = MathHelper.Lerp(start.X, end.X, amount);
+            result.Y = MathHelper.Lerp(start.Y, end.Y, amount);
+            result.Z = MathHelper.Lerp(start.Z, end.Z, amount);
+            result.W = MathHelper.Lerp(start.W, end.W, amount);
         }
 
         /// <summary>
@@ -654,17 +655,18 @@ namespace Microsoft.Xna.Framework
         /// Less efficient but more precise compared to <see cref="Vector4.Lerp(Vector4, Vector4, float)"/>.
         /// See remarks section of <see cref="MathHelper.LerpPrecise"/> on MathHelper for more info.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="start">The first vector.</param>
+        /// <param name="end">The second vector.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <returns>The result of linear interpolation of the specified vectors.</returns>
-        public static Vector4 LerpPrecise(Vector4 value1, Vector4 value2, float amount)
+        public static Vector4 LerpPrecise(Vector4 start, Vector4 end, float amount)
         {
-            return new Vector4(
-                MathHelper.LerpPrecise(value1.X, value2.X, amount),
-                MathHelper.LerpPrecise(value1.Y, value2.Y, amount),
-                MathHelper.LerpPrecise(value1.Z, value2.Z, amount),
-                MathHelper.LerpPrecise(value1.W, value2.W, amount));
+            Vector4 result;
+            result.X = MathHelper.LerpPrecise(start.X, end.X, amount);
+            result.Y = MathHelper.LerpPrecise(start.Y, end.Y, amount);
+            result.Z = MathHelper.LerpPrecise(start.Z, end.Z, amount);
+            result.W = MathHelper.LerpPrecise(start.W, end.W, amount);
+            return result;
         }
 
         /// <summary>
@@ -673,16 +675,16 @@ namespace Microsoft.Xna.Framework
         /// Less efficient but more precise compared to <see cref="Vector4.Lerp(ref Vector4, ref Vector4, float, out Vector4)"/>.
         /// See remarks section of <see cref="MathHelper.LerpPrecise"/> on MathHelper for more info.
         /// </summary>
-        /// <param name="value1">The first vector.</param>
-        /// <param name="value2">The second vector.</param>
+        /// <param name="start">The first vector.</param>
+        /// <param name="end">The second vector.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <param name="result">The result of linear interpolation of the specified vectors as an output parameter.</param>
-        public static void LerpPrecise(ref Vector4 value1, ref Vector4 value2, float amount, out Vector4 result)
+        public static void LerpPrecise(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
         {
-            result.X = MathHelper.LerpPrecise(value1.X, value2.X, amount);
-            result.Y = MathHelper.LerpPrecise(value1.Y, value2.Y, amount);
-            result.Z = MathHelper.LerpPrecise(value1.Z, value2.Z, amount);
-            result.W = MathHelper.LerpPrecise(value1.W, value2.W, amount);
+            result.X = MathHelper.LerpPrecise(start.X, end.X, amount);
+            result.Y = MathHelper.LerpPrecise(start.Y, end.Y, amount);
+            result.Z = MathHelper.LerpPrecise(start.Z, end.Z, amount);
+            result.W = MathHelper.LerpPrecise(start.W, end.W, amount);
         }
 
         /// <summary>
@@ -746,59 +748,59 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains a multiplication of two vectors.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Source <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Source <see cref="Vector4"/>.</param>
         /// <returns>The result of the vector multiplication.</returns>
-        public static Vector4 Multiply(Vector4 value1, Vector4 value2)
+        public static Vector4 Multiply(Vector4 left, Vector4 right)
         {
-            value1.W *= value2.W;
-            value1.X *= value2.X;
-            value1.Y *= value2.Y;
-            value1.Z *= value2.Z;
-            return value1;
+            left.W *= right.W;
+            left.X *= right.X;
+            left.Y *= right.Y;
+            left.Z *= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains a multiplication of <see cref="Vector4"/> and a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="scaleFactor">Scalar value.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Scalar value.</param>
         /// <returns>The result of the vector multiplication with a scalar.</returns>
-        public static Vector4 Multiply(Vector4 value1, float scaleFactor)
+        public static Vector4 Multiply(Vector4 left, float right)
         {
-            value1.W *= scaleFactor;
-            value1.X *= scaleFactor;
-            value1.Y *= scaleFactor;
-            value1.Z *= scaleFactor;
-            return value1;
+            left.W *= right;
+            left.X *= right;
+            left.Y *= right;
+            left.Z *= right;
+            return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains a multiplication of <see cref="Vector4"/> and a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="scaleFactor">Scalar value.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Scalar value.</param>
         /// <param name="result">The result of the multiplication with a scalar as an output parameter.</param>
-        public static void Multiply(ref Vector4 value1, float scaleFactor, out Vector4 result)
+        public static void Multiply(ref Vector4 left, float right, out Vector4 result)
         {
-            result.W = value1.W * scaleFactor;
-            result.X = value1.X * scaleFactor;
-            result.Y = value1.Y * scaleFactor;
-            result.Z = value1.Z * scaleFactor;
+            result.W = left.W * right;
+            result.X = left.X * right;
+            result.Y = left.Y * right;
+            result.Z = left.Z * right;
         }
 
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains a multiplication of two vectors.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Source <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Source <see cref="Vector4"/>.</param>
         /// <param name="result">The result of the vector multiplication as an output parameter.</param>
-        public static void Multiply(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
+        public static void Multiply(ref Vector4 left, ref Vector4 right, out Vector4 result)
         {
-            result.W = value1.W * value2.W;
-            result.X = value1.X * value2.X;
-            result.Y = value1.Y * value2.Y;
-            result.Z = value1.Z * value2.Z;
+            result.W = left.W * right.W;
+            result.X = left.X * right.X;
+            result.Y = left.Y * right.Y;
+            result.Z = left.Z * right.Z;
         }
 
         /// <summary>
@@ -937,30 +939,30 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains subtraction of on <see cref="Vector4"/> from a another.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Source <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Source <see cref="Vector4"/>.</param>
         /// <returns>The result of the vector subtraction.</returns>
-        public static Vector4 Subtract(Vector4 value1, Vector4 value2)
+        public static Vector4 Subtract(Vector4 left, Vector4 right)
         {
-            value1.W -= value2.W;
-            value1.X -= value2.X;
-            value1.Y -= value2.Y;
-            value1.Z -= value2.Z;
-            return value1;
+            left.W -= right.W;
+            left.X -= right.X;
+            left.Y -= right.Y;
+            left.Z -= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Vector4"/> that contains subtraction of on <see cref="Vector4"/> from a another.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/>.</param>
-        /// <param name="value2">Source <see cref="Vector4"/>.</param>
+        /// <param name="left">Source <see cref="Vector4"/>.</param>
+        /// <param name="right">Source <see cref="Vector4"/>.</param>
         /// <param name="result">The result of the vector subtraction as an output parameter.</param>
-        public static void Subtract(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
+        public static void Subtract(ref Vector4 left, ref Vector4 right, out Vector4 result)
         {
-            result.W = value1.W - value2.W;
-            result.X = value1.X - value2.X;
-            result.Y = value1.Y - value2.Y;
-            result.Z = value1.Z - value2.Z;
+            result.W = left.W - right.W;
+            result.X = left.X - right.X;
+            result.Y = left.Y - right.Y;
+            result.Z = left.Z - right.Z;
         }
 
         #region Transform
@@ -1296,132 +1298,132 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Compares whether two <see cref="Vector4"/> instances are equal.
         /// </summary>
-        /// <param name="value1"><see cref="Vector4"/> instance on the left of the equal sign.</param>
-        /// <param name="value2"><see cref="Vector4"/> instance on the right of the equal sign.</param>
+        /// <param name="left"><see cref="Vector4"/> instance on the left of the equal sign.</param>
+        /// <param name="right"><see cref="Vector4"/> instance on the right of the equal sign.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-        public static bool operator ==(Vector4 value1, Vector4 value2)
+        public static bool operator ==(Vector4 left, Vector4 right)
         {
-            return value1.W == value2.W
-                && value1.X == value2.X
-                && value1.Y == value2.Y
-                && value1.Z == value2.Z;
+            return left.W == right.W
+                && left.X == right.X
+                && left.Y == right.Y
+                && left.Z == right.Z;
         }
 
         /// <summary>
         /// Compares whether two <see cref="Vector4"/> instances are not equal.
         /// </summary>
-        /// <param name="value1"><see cref="Vector4"/> instance on the left of the not equal sign.</param>
-        /// <param name="value2"><see cref="Vector4"/> instance on the right of the not equal sign.</param>
+        /// <param name="left"><see cref="Vector4"/> instance on the left of the not equal sign.</param>
+        /// <param name="right"><see cref="Vector4"/> instance on the right of the not equal sign.</param>
         /// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>	
-        public static bool operator !=(Vector4 value1, Vector4 value2)
+        public static bool operator !=(Vector4 left, Vector4 right)
         {
-            return !(value1 == value2);
+            return !(left == right);
         }
 
         /// <summary>
         /// Adds two vectors.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/> on the left of the add sign.</param>
-        /// <param name="value2">Source <see cref="Vector4"/> on the right of the add sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the add sign.</param>
+        /// <param name="right">Source <see cref="Vector4"/> on the right of the add sign.</param>
         /// <returns>Sum of the vectors.</returns>
-        public static Vector4 operator +(Vector4 value1, Vector4 value2)
+        public static Vector4 operator +(Vector4 left, Vector4 right)
         {
-            value1.W += value2.W;
-            value1.X += value2.X;
-            value1.Y += value2.Y;
-            value1.Z += value2.Z;
-            return value1;
+            left.W += right.W;
+            left.X += right.X;
+            left.Y += right.Y;
+            left.Z += right.Z;
+            return left;
         }
 
         /// <summary>
         /// Subtracts a <see cref="Vector4"/> from a <see cref="Vector4"/>.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/> on the left of the sub sign.</param>
-        /// <param name="value2">Source <see cref="Vector4"/> on the right of the sub sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the sub sign.</param>
+        /// <param name="right">Source <see cref="Vector4"/> on the right of the sub sign.</param>
         /// <returns>Result of the vector subtraction.</returns>
-        public static Vector4 operator -(Vector4 value1, Vector4 value2)
+        public static Vector4 operator -(Vector4 left, Vector4 right)
         {
-            value1.W -= value2.W;
-            value1.X -= value2.X;
-            value1.Y -= value2.Y;
-            value1.Z -= value2.Z;
-            return value1;
+            left.W -= right.W;
+            left.X -= right.X;
+            left.Y -= right.Y;
+            left.Z -= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Multiplies the components of two vectors by each other.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/> on the left of the mul sign.</param>
-        /// <param name="value2">Source <see cref="Vector4"/> on the right of the mul sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Vector4"/> on the right of the mul sign.</param>
         /// <returns>Result of the vector multiplication.</returns>
-        public static Vector4 operator *(Vector4 value1, Vector4 value2)
+        public static Vector4 operator *(Vector4 left, Vector4 right)
         {
-            value1.W *= value2.W;
-            value1.X *= value2.X;
-            value1.Y *= value2.Y;
-            value1.Z *= value2.Z;
-            return value1;
+            left.W *= right.W;
+            left.X *= right.X;
+            left.Y *= right.Y;
+            left.Z *= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Multiplies the components of vector by a scalar.
         /// </summary>
-        /// <param name="value">Source <see cref="Vector4"/> on the left of the mul sign.</param>
-        /// <param name="scaleFactor">Scalar value on the right of the mul sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the mul sign.</param>
+        /// <param name="right">Scalar value on the right of the mul sign.</param>
         /// <returns>Result of the vector multiplication with a scalar.</returns>
-        public static Vector4 operator *(Vector4 value, float scaleFactor)
+        public static Vector4 operator *(Vector4 left, float right)
         {
-            value.W *= scaleFactor;
-            value.X *= scaleFactor;
-            value.Y *= scaleFactor;
-            value.Z *= scaleFactor;
-            return value;
+            left.W *= right;
+            left.X *= right;
+            left.Y *= right;
+            left.Z *= right;
+            return left;
         }
 
         /// <summary>
         /// Multiplies the components of vector by a scalar.
         /// </summary>
-        /// <param name="scaleFactor">Scalar value on the left of the mul sign.</param>
-        /// <param name="value">Source <see cref="Vector4"/> on the right of the mul sign.</param>
+        /// <param name="left">Scalar value on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Vector4"/> on the right of the mul sign.</param>
         /// <returns>Result of the vector multiplication with a scalar.</returns>
-        public static Vector4 operator *(float scaleFactor, Vector4 value)
+        public static Vector4 operator *(float left, Vector4 right)
         {
-            value.W *= scaleFactor;
-            value.X *= scaleFactor;
-            value.Y *= scaleFactor;
-            value.Z *= scaleFactor;
-            return value;
+            right.W *= left;
+            right.X *= left;
+            right.Y *= left;
+            right.Z *= left;
+            return right;
         }
 
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by the components of another <see cref="Vector4"/>.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/> on the left of the div sign.</param>
-        /// <param name="value2">Divisor <see cref="Vector4"/> on the right of the div sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the div sign.</param>
+        /// <param name="right">Divisor <see cref="Vector4"/> on the right of the div sign.</param>
         /// <returns>The result of dividing the vectors.</returns>
-        public static Vector4 operator /(Vector4 value1, Vector4 value2)
+        public static Vector4 operator /(Vector4 left, Vector4 right)
         {
-            value1.W /= value2.W;
-            value1.X /= value2.X;
-            value1.Y /= value2.Y;
-            value1.Z /= value2.Z;
-            return value1;
+            left.W /= right.W;
+            left.X /= right.X;
+            left.Y /= right.Y;
+            left.Z /= right.Z;
+            return left;
         }
 
         /// <summary>
         /// Divides the components of a <see cref="Vector4"/> by a scalar.
         /// </summary>
-        /// <param name="value1">Source <see cref="Vector4"/> on the left of the div sign.</param>
-        /// <param name="divider">Divisor scalar on the right of the div sign.</param>
+        /// <param name="left">Source <see cref="Vector4"/> on the left of the div sign.</param>
+        /// <param name="right">Divisor scalar on the right of the div sign.</param>
         /// <returns>The result of dividing a vector by a scalar.</returns>
-        public static Vector4 operator /(Vector4 value1, float divider)
+        public static Vector4 operator /(Vector4 left, float right)
         {
-            float factor = 1f / divider;
-            value1.W *= factor;
-            value1.X *= factor;
-            value1.Y *= factor;
-            value1.Z *= factor;
-            return value1;
+            float factor = 1f / right;
+            left.W *= factor;
+            left.X *= factor;
+            left.Y *= factor;
+            left.Z *= factor;
+            return left;
         }
 
         #endregion

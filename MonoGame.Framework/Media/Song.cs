@@ -127,19 +127,19 @@ namespace Microsoft.Xna.Framework.Media
 			return Equals(obj as Song);  
 		}
 		
-		public static bool operator ==(Song song1, Song song2)
+		public static bool operator ==(Song left, Song right)
 		{
-			if((object)song1 == null)
+			if((object)left == null)
 			{
-				return (object)song2 == null;
+				return (object)right == null;
 			}
 
-			return song1.Equals(song2);
+			return left.Equals(right);
 		}
 		
-		public static bool operator !=(Song song1, Song song2)
+		public static bool operator !=(Song left, Song right)
 		{
-		  return ! (song1 == song2);
+		  return ! (left == right);
 		}
 
         public TimeSpan Duration

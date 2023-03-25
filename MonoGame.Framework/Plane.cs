@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>The dot product of the specified <see cref="Vector4"/> and this <see cref="Plane"/>.</returns>
         public float Dot(Vector4 value)
         {
-            return ((((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z)) + (this.D * value.W));
+            return this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z + this.D * value.W;
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Dot(ref Vector4 value, out float result)
         {
-            result = (((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z)) + (this.D * value.W);
+            result = this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z + this.D * value.W;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public float DotCoordinate(Vector3 value)
         {
-            return ((((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z)) + this.D);
+            return this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z + this.D;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void DotCoordinate(ref Vector3 value, out float result)
         {
-            result = (((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z)) + this.D;
+            result = this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z + this.D;
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public float DotNormal(Vector3 value)
         {
-            return (((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z));
+            return this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void DotNormal(ref Vector3 value, out float result)
         {
-            result = ((this.Normal.X * value.X) + (this.Normal.Y * value.Y)) + (this.Normal.Z * value.Z);
+            result = this.Normal.X * value.X + this.Normal.Y * value.Y + this.Normal.Z * value.Z;
         }
 
         /// <summary>
@@ -254,8 +254,10 @@ namespace Microsoft.Xna.Framework
         public void Normalize()
         {
             float length = Normal.Length();
-            float factor =  1f / length;            
-            Vector3.Multiply(ref Normal, factor, out Normal);
+            float factor =  1f / length;
+            Normal.X = Normal.X * factor;
+            Normal.Y = Normal.Y * factor;
+            Normal.Z = Normal.Z * factor;
             D = D * factor;
         }
 
@@ -266,9 +268,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>A normalized version of the specified <see cref="Plane"/>.</returns>
         public static Plane Normalize(Plane value)
         {
-			Plane ret;
-			Normalize(ref value, out ret);
-			return ret;
+			Plane result;
+			Normalize(ref value, out result);
+			return result;
         }
 
         /// <summary>
@@ -279,31 +281,33 @@ namespace Microsoft.Xna.Framework
         public static void Normalize(ref Plane value, out Plane result)
         {
             float length = value.Normal.Length();
-            float factor =  1f / length;            
-            Vector3.Multiply(ref value.Normal, factor, out result.Normal);
+            float factor =  1f / length;
+            result.Normal.X = value.Normal.X * factor;
+            result.Normal.Y = value.Normal.Y * factor;
+            result.Normal.Z = value.Normal.Z * factor;
             result.D = value.D * factor;
         }
 
         /// <summary>
         /// Check if two planes are not equal.
         /// </summary>
-        /// <param name="plane1">A <see cref="Plane"/> to check for inequality.</param>
-        /// <param name="plane2">A <see cref="Plane"/> to check for inequality.</param>
+        /// <param name="left">A <see cref="Plane"/> to check for inequality.</param>
+        /// <param name="right">A <see cref="Plane"/> to check for inequality.</param>
         /// <returns><code>true</code> if the two planes are not equal, <code>false</code> if they are.</returns>
-        public static bool operator !=(Plane plane1, Plane plane2)
+        public static bool operator !=(Plane left, Plane right)
         {
-            return !plane1.Equals(plane2);
+            return !left.Equals(right);
         }
 
         /// <summary>
         /// Check if two planes are equal.
         /// </summary>
-        /// <param name="plane1">A <see cref="Plane"/> to check for equality.</param>
-        /// <param name="plane2">A <see cref="Plane"/> to check for equality.</param>
+        /// <param name="left">A <see cref="Plane"/> to check for equality.</param>
+        /// <param name="right">A <see cref="Plane"/> to check for equality.</param>
         /// <returns><code>true</code> if the two planes are equal, <code>false</code> if they are not.</returns>
-        public static bool operator ==(Plane plane1, Plane plane2)
+        public static bool operator ==(Plane left, Plane right)
         {
-            return plane1.Equals(plane2);
+            return left.Equals(right);
         }
 
         /// <summary>
