@@ -148,23 +148,23 @@ namespace Microsoft.Xna.Framework.Audio
         /// <summary>
         /// Determines whether two AudioCategory instances are equal.
         /// </summary>
-        /// <param name="first">First AudioCategory instance to compare.</param>
-        /// <param name="second">Second AudioCategory instance to compare.</param>
+        /// <param name="left">First AudioCategory instance to compare.</param>
+        /// <param name="right">Second AudioCategory instance to compare.</param>
         /// <returns>true if the objects are equal or false if they aren't.</returns>
-        public static bool operator ==(AudioCategory first, AudioCategory second)
+        public static bool operator ==(AudioCategory left, AudioCategory right)
         {
-            return first._engine == second._engine && first._name.Equals(second._name, StringComparison.Ordinal);
+            return left._engine == right._engine && left._name.Equals(right._name, StringComparison.Ordinal);
         }
 
         /// <summary>
         /// Determines whether two AudioCategory instances are not equal.
         /// </summary>
-        /// <param name="first">First AudioCategory instance to compare.</param>
+        /// <param name="left">First AudioCategory instance to compare.</param>
         /// <param name="second">Second AudioCategory instance to compare.</param>
         /// <returns>true if the objects are not equal or false if they are.</returns>
-        public static bool operator !=(AudioCategory first, AudioCategory second)
+        public static bool operator !=(AudioCategory left, AudioCategory second)
         {
-            return first._engine != second._engine || !first._name.Equals(second._name, StringComparison.Ordinal);
+            return left._engine != second._engine || !left._name.Equals(second._name, StringComparison.Ordinal);
         }
 
         /// <summary>

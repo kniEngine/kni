@@ -308,23 +308,23 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Check if two rays are not equal.
         /// </summary>
-        /// <param name="a">A ray to check for inequality.</param>
-        /// <param name="b">A ray to check for inequality.</param>
+        /// <param name="left">A ray to check for inequality.</param>
+        /// <param name="right">A ray to check for inequality.</param>
         /// <returns><code>true</code> if the two rays are not equal, <code>false</code> if they are.</returns>
-        public static bool operator !=(Ray a, Ray b)
+        public static bool operator !=(Ray left, Ray right)
         {
-            return !a.Equals(b);
+            return !left.Equals(right);
         }
 
         /// <summary>
         /// Check if two rays are equal.
         /// </summary>
-        /// <param name="a">A ray to check for equality.</param>
-        /// <param name="b">A ray to check for equality.</param>
+        /// <param name="left">A ray to check for equality.</param>
+        /// <param name="right">A ray to check for equality.</param>
         /// <returns><code>true</code> if the two rays are equals, <code>false</code> if they are not.</returns>
-        public static bool operator ==(Ray a, Ray b)
+        public static bool operator ==(Ray left, Ray right)
         {
-            return a.Equals(b);
+            return left.Equals(right);
         }
 
         internal string DebugDisplayString

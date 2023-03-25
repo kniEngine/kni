@@ -28,14 +28,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 			_packedValue = PackInTwo(x, y);
 		}
 
-		public static bool operator !=(Short2 a, Short2 b)
+		public static bool operator !=(Short2 left, Short2 right)
 		{
-			return a.PackedValue != b.PackedValue;
+			return left.PackedValue != right.PackedValue;
 		}
 
-		public static bool operator ==(Short2 a, Short2 b)
+		public static bool operator ==(Short2 left, Short2 right)
 		{
-			return a.PackedValue == b.PackedValue;
+			return left.PackedValue == right.PackedValue;
 		}
 
 		public override bool Equals(object obj)

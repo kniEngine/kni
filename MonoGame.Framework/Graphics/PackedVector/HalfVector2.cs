@@ -35,17 +35,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
         private static uint PackHelper(float vectorX, float vectorY)
         {
-            uint num2 = HalfTypeHelper.Convert(vectorX);
-            uint num = (uint)(HalfTypeHelper.Convert(vectorY) << 0x10);
-            return (num2 | num);
+            uint word2 = HalfTypeHelper.Convert(vectorX);
+            uint word1 = (uint)(HalfTypeHelper.Convert(vectorY) << 0x10);
+            return (word2 | word1);
         }
 
         public Vector2 ToVector2()
         {
-            Vector2 vector;
-            vector.X = HalfTypeHelper.Convert((ushort)_packedValue);
-            vector.Y = HalfTypeHelper.Convert((ushort)(_packedValue >> 0x10));
-            return vector;
+            Vector2 result;
+            result.X = HalfTypeHelper.Convert((ushort)_packedValue);
+            result.Y = HalfTypeHelper.Convert((ushort)(_packedValue >> 0x10));
+            return result;
         }
 
         /// <summary>
@@ -78,14 +78,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             return _packedValue.Equals(other._packedValue);
         }
 
-        public static bool operator ==(HalfVector2 a, HalfVector2 b)
+        public static bool operator ==(HalfVector2 left, HalfVector2 right)
         {
-            return a.Equals(b);
+            return left.Equals(right);
         }
 
-        public static bool operator !=(HalfVector2 a, HalfVector2 b)
+        public static bool operator !=(HalfVector2 left, HalfVector2 right)
         {
-            return !a.Equals(b);
+            return !left.Equals(right);
         }
     }
 }

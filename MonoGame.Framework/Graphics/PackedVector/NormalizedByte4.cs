@@ -21,14 +21,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
             _packed = Pack(x, y, z, w);
         }
 
-        public static bool operator !=(NormalizedByte4 a, NormalizedByte4 b)
+        public static bool operator !=(NormalizedByte4 left, NormalizedByte4 right)
         {
-            return a._packed != b._packed;
+            return left._packed != right._packed;
         }
 
-        public static bool operator ==(NormalizedByte4 a, NormalizedByte4 b)
+        public static bool operator ==(NormalizedByte4 left, NormalizedByte4 right)
         {
-            return a._packed == b._packed;
+            return left._packed == right._packed;
         }
 
         [CLSCompliant(false)]

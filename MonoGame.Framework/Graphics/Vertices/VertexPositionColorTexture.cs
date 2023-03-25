@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public static bool operator ==(VertexPositionColorTexture left, VertexPositionColorTexture right)
         {
-            return (((left.Position == right.Position) && (left.Color == right.Color)) && (left.TextureCoordinate == right.TextureCoordinate));
+            return ((left.Position == right.Position) && (left.Color == right.Color) && (left.TextureCoordinate == right.TextureCoordinate));
         }
 
         public static bool operator !=(VertexPositionColorTexture left, VertexPositionColorTexture right)

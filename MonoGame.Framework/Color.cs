@@ -365,23 +365,23 @@ namespace Microsoft.Xna.Framework
 	/// <summary>
         /// Compares whether two <see cref="Color"/> instances are equal.
         /// </summary>
-        /// <param name="a"><see cref="Color"/> instance on the left of the equal sign.</param>
-        /// <param name="b"><see cref="Color"/> instance on the right of the equal sign.</param>
+        /// <param name="left"><see cref="Color"/> instance on the left of the equal sign.</param>
+        /// <param name="right"><see cref="Color"/> instance on the right of the equal sign.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-        public static bool operator ==(Color a, Color b)
+        public static bool operator ==(Color left, Color right)
         {
-            return (a._packedValue == b._packedValue);
+            return (left._packedValue == right._packedValue);
         }
 	
 	/// <summary>
         /// Compares whether two <see cref="Color"/> instances are not equal.
         /// </summary>
-        /// <param name="a"><see cref="Color"/> instance on the left of the not equal sign.</param>
-        /// <param name="b"><see cref="Color"/> instance on the right of the not equal sign.</param>
+        /// <param name="left"><see cref="Color"/> instance on the left of the not equal sign.</param>
+        /// <param name="right"><see cref="Color"/> instance on the right of the not equal sign.</param>
         /// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>	
-        public static bool operator !=(Color a, Color b)
+        public static bool operator !=(Color left, Color right)
         {
-            return (a._packedValue != b._packedValue);
+            return (left._packedValue != right._packedValue);
         }
 
         /// <summary>
@@ -1685,18 +1685,18 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Performs linear interpolation of <see cref="Color"/>.
         /// </summary>
-        /// <param name="value1">Source <see cref="Color"/>.</param>
-        /// <param name="value2">Destination <see cref="Color"/>.</param>
+        /// <param name="start">Source <see cref="Color"/>.</param>
+        /// <param name="end">Destination <see cref="Color"/>.</param>
         /// <param name="amount">Interpolation factor.</param>
         /// <returns>Interpolated <see cref="Color"/>.</returns>
-        public static Color Lerp(Color value1, Color value2, Single amount)
+        public static Color Lerp(Color start, Color end, Single amount)
         {
 			amount = MathHelper.Clamp(amount, 0, 1);
-            return new Color(   
-                (int)MathHelper.Lerp(value1.R, value2.R, amount),
-                (int)MathHelper.Lerp(value1.G, value2.G, amount),
-                (int)MathHelper.Lerp(value1.B, value2.B, amount),
-                (int)MathHelper.Lerp(value1.A, value2.A, amount) );
+            return new Color(
+                (int)MathHelper.Lerp(start.R, end.R, amount),
+                (int)MathHelper.Lerp(start.G, end.G, amount),
+                (int)MathHelper.Lerp(start.B, end.B, amount),
+                (int)MathHelper.Lerp(start.A, end.A, amount) );
         }
 
         /// <summary>
@@ -1704,41 +1704,47 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <returns>Interpolated <see cref="Color"/>.</returns>
         [Obsolete("Color.Lerp should be used instead of this function.")]
-        public static Color LerpPrecise(Color value1, Color value2, Single amount)
+        public static Color LerpPrecise(Color start, Color end, Single amount)
         {
             amount = MathHelper.Clamp(amount, 0, 1);
             return new Color(
-                (int)MathHelper.LerpPrecise(value1.R, value2.R, amount),
-                (int)MathHelper.LerpPrecise(value1.G, value2.G, amount),
-                (int)MathHelper.LerpPrecise(value1.B, value2.B, amount),
-                (int)MathHelper.LerpPrecise(value1.A, value2.A, amount));
+                (int)MathHelper.LerpPrecise(start.R, end.R, amount),
+                (int)MathHelper.LerpPrecise(start.G, end.G, amount),
+                (int)MathHelper.LerpPrecise(start.B, end.B, amount),
+                (int)MathHelper.LerpPrecise(start.A, end.A, amount));
         }
 		
 	    /// <summary>
         /// Multiply <see cref="Color"/> by value.
         /// </summary>
-        /// <param name="value">Source <see cref="Color"/>.</param>
-        /// <param name="scale">Multiplicator.</param>
+        /// <param name="left">Source <see cref="Color"/>.</param>
+        /// <param name="right">Multiplicator.</param>
         /// <returns>Multiplication result.</returns>
-	    public static Color Multiply(Color value, float scale)
+	    public static Color Multiply(Color left, float right)
 	    {
-	        return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), (int)(value.A * scale));
+	        return new Color((int)(left.R * right), (int)(left.G * right), (int)(left.B * right), (int)(left.A * right));
 	    }
 	
 	    /// <summary>
         /// Multiply <see cref="Color"/> by value.
         /// </summary>
-        /// <param name="value">Source <see cref="Color"/>.</param>
-        /// <param name="scale">Multiplicator.</param>
+        /// <param name="left">Source <see cref="Color"/>.</param>
+        /// <param name="right">Multiplicator.</param>
         /// <returns>Multiplication result.</returns>
-	    public static Color operator *(Color value, float scale)
+	    public static Color operator *(Color left, float right)
         {
-            return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), (int)(value.A * scale));
+            return new Color((int)(left.R * right), (int)(left.G * right), (int)(left.B * right), (int)(left.A * right));
         }
 
-        public static Color operator *(float scale, Color value)
+        /// <summary>
+        /// Multiply <see cref="Color"/> by value.
+        /// </summary>
+        /// <param name="left">Scalar value on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Color"/>.</param>
+        /// <returns>Multiplication result.</returns>
+        public static Color operator *(float left, Color right)
         {
-            return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), (int)(value.A * scale));
+            return new Color((int)(right.R * left), (int)(right.G * left), (int)(right.B * left), (int)(right.A * left));
         }
 
         /// <summary>

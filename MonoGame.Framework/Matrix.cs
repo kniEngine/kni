@@ -283,10 +283,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Backward
         {
-            get
-            {
-                return new Vector3(this.M31, this.M32, this.M33);
-            }
+            get { return new Vector3(this.M31, this.M32, this.M33); }
             set
             {
                 this.M31 = value.X;
@@ -300,10 +297,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Down
         {
-            get
-            {
-                return new Vector3(-this.M21, -this.M22, -this.M23);
-            }
+            get { return new Vector3(-this.M21, -this.M22, -this.M23); }
             set
             {
                 this.M21 = -value.X;
@@ -317,10 +311,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Forward
         {
-            get
-            {
-                return new Vector3(-this.M31, -this.M32, -this.M33);
-            }
+            get { return new Vector3(-this.M31, -this.M32, -this.M33); }
             set
             {
                 this.M31 = -value.X;
@@ -342,10 +333,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Left
         {
-            get
-            {
-                return new Vector3(-this.M11, -this.M12, -this.M13);
-            }
+            get { return new Vector3(-this.M11, -this.M12, -this.M13); }
             set
             {
                 this.M11 = -value.X;
@@ -359,10 +347,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Right
         {
-            get
-            {
-                return new Vector3(this.M11, this.M12, this.M13);
-            }
+            get { return new Vector3(this.M11, this.M12, this.M13); }
             set
             {
                 this.M11 = value.X;
@@ -376,10 +361,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Translation
         {
-            get
-            {
-                return new Vector3(this.M41, this.M42, this.M43);
-            }
+            get { return new Vector3(this.M41, this.M42, this.M43); }
             set
             {
                 this.M41 = value.X;
@@ -393,10 +375,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Vector3 Up
         {
-            get
-            {
-                return new Vector3(this.M21, this.M22, this.M23);
-            }
+            get { return new Vector3(this.M21, this.M22, this.M23); }
             set
             {
                 this.M21 = value.X;
@@ -411,54 +390,54 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Matrix"/> which contains sum of two matrixes.
         /// </summary>
-        /// <param name="matrix1">The first matrix to add.</param>
-        /// <param name="matrix2">The second matrix to add.</param>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
         /// <returns>The result of the matrix addition.</returns>
-        public static Matrix Add(Matrix matrix1, Matrix matrix2)
+        public static Matrix Add(Matrix left, Matrix right)
         {
-            matrix1.M11 += matrix2.M11;
-            matrix1.M12 += matrix2.M12;
-            matrix1.M13 += matrix2.M13;
-            matrix1.M14 += matrix2.M14;
-            matrix1.M21 += matrix2.M21;
-            matrix1.M22 += matrix2.M22;
-            matrix1.M23 += matrix2.M23;
-            matrix1.M24 += matrix2.M24;
-            matrix1.M31 += matrix2.M31;
-            matrix1.M32 += matrix2.M32;
-            matrix1.M33 += matrix2.M33;
-            matrix1.M34 += matrix2.M34;
-            matrix1.M41 += matrix2.M41;
-            matrix1.M42 += matrix2.M42;
-            matrix1.M43 += matrix2.M43;
-            matrix1.M44 += matrix2.M44;
-            return matrix1;
+            left.M11 += right.M11;
+            left.M12 += right.M12;
+            left.M13 += right.M13;
+            left.M14 += right.M14;
+            left.M21 += right.M21;
+            left.M22 += right.M22;
+            left.M23 += right.M23;
+            left.M24 += right.M24;
+            left.M31 += right.M31;
+            left.M32 += right.M32;
+            left.M33 += right.M33;
+            left.M34 += right.M34;
+            left.M41 += right.M41;
+            left.M42 += right.M42;
+            left.M43 += right.M43;
+            left.M44 += right.M44;
+            return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> which contains sum of two matrixes.
         /// </summary>
-        /// <param name="matrix1">The first matrix to add.</param>
-        /// <param name="matrix2">The second matrix to add.</param>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
         /// <param name="result">The result of the matrix addition as an output parameter.</param>
-        public static void Add(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
+        public static void Add(ref Matrix left, ref Matrix right, out Matrix result)
         {
-            result.M11 = matrix1.M11 + matrix2.M11;
-            result.M12 = matrix1.M12 + matrix2.M12;
-            result.M13 = matrix1.M13 + matrix2.M13;
-            result.M14 = matrix1.M14 + matrix2.M14;
-            result.M21 = matrix1.M21 + matrix2.M21;
-            result.M22 = matrix1.M22 + matrix2.M22;
-            result.M23 = matrix1.M23 + matrix2.M23;
-            result.M24 = matrix1.M24 + matrix2.M24;
-            result.M31 = matrix1.M31 + matrix2.M31;
-            result.M32 = matrix1.M32 + matrix2.M32;
-            result.M33 = matrix1.M33 + matrix2.M33;
-            result.M34 = matrix1.M34 + matrix2.M34;
-            result.M41 = matrix1.M41 + matrix2.M41;
-            result.M42 = matrix1.M42 + matrix2.M42;
-            result.M43 = matrix1.M43 + matrix2.M43;
-            result.M44 = matrix1.M44 + matrix2.M44;
+            result.M11 = left.M11 + right.M11;
+            result.M12 = left.M12 + right.M12;
+            result.M13 = left.M13 + right.M13;
+            result.M14 = left.M14 + right.M14;
+            result.M21 = left.M21 + right.M21;
+            result.M22 = left.M22 + right.M22;
+            result.M23 = left.M23 + right.M23;
+            result.M24 = left.M24 + right.M24;
+            result.M31 = left.M31 + right.M31;
+            result.M32 = left.M32 + right.M32;
+            result.M33 = left.M33 + right.M33;
+            result.M34 = left.M34 + right.M34;
+            result.M41 = left.M41 + right.M41;
+            result.M42 = left.M42 + right.M42;
+            result.M43 = left.M43 + right.M43;
+            result.M44 = left.M44 + right.M44;
 
         }
 
@@ -492,35 +471,40 @@ namespace Microsoft.Xna.Framework
         public static void CreateBillboard(ref Vector3 objectPosition, ref Vector3 cameraPosition,
             ref Vector3 cameraUpVector, Vector3? cameraForwardVector, out Matrix result)
         {
-            Vector3 vector;
-            Vector3 vector2;
-            Vector3 vector3;
-            vector.X = objectPosition.X - cameraPosition.X;
-            vector.Y = objectPosition.Y - cameraPosition.Y;
-            vector.Z = objectPosition.Z - cameraPosition.Z;
-            float num = vector.LengthSquared();
-            if (num < 0.0001f)
+            Vector3 diffPosition;
+            diffPosition.X = objectPosition.X - cameraPosition.X;
+            diffPosition.Y = objectPosition.Y - cameraPosition.Y;
+            diffPosition.Z = objectPosition.Z - cameraPosition.Z;
+            float distanceSq = diffPosition.LengthSquared();
+            if (distanceSq < 0.0001f)
             {
-                vector = cameraForwardVector.HasValue ? -cameraForwardVector.Value : Vector3.Forward;
+                diffPosition = (cameraForwardVector.HasValue)
+                             ? -cameraForwardVector.Value
+                             : Vector3.Forward;
             }
             else
             {
-                Vector3.Multiply(ref vector, (float)(1f / ((float)Math.Sqrt((double)num))), out vector);
+                float distance = (float)Math.Sqrt((double)distanceSq);
+                Vector3.Divide(ref diffPosition, distance, out diffPosition);
             }
-            Vector3.Cross(ref cameraUpVector, ref vector, out vector3);
-            vector3.Normalize();
-            Vector3.Cross(ref vector, ref vector3, out vector2);
-            result.M11 = vector3.X;
-            result.M12 = vector3.Y;
-            result.M13 = vector3.Z;
+
+            Vector3 right;
+            Vector3.Cross(ref cameraUpVector, ref diffPosition, out right);
+            right.Normalize();
+            Vector3 up;
+            Vector3.Cross(ref diffPosition, ref right, out up);
+
+            result.M11 = right.X;
+            result.M12 = right.Y;
+            result.M13 = right.Z;
             result.M14 = 0;
-            result.M21 = vector2.X;
-            result.M22 = vector2.Y;
-            result.M23 = vector2.Z;
+            result.M21 = up.X;
+            result.M22 = up.Y;
+            result.M23 = up.Z;
             result.M24 = 0;
-            result.M31 = vector.X;
-            result.M32 = vector.Y;
-            result.M33 = vector.Z;
+            result.M31 = diffPosition.X;
+            result.M32 = diffPosition.Y;
+            result.M33 = diffPosition.Z;
             result.M34 = 0;
             result.M41 = objectPosition.X;
             result.M42 = objectPosition.Y;
@@ -558,64 +542,72 @@ namespace Microsoft.Xna.Framework
         public static void CreateConstrainedBillboard(ref Vector3 objectPosition, ref Vector3 cameraPosition,
             ref Vector3 rotateAxis, Vector3? cameraForwardVector, Vector3? objectForwardVector, out Matrix result)
         {
-            float num;
-		    Vector3 vector;
-		    Vector3 vector2;
-		    Vector3 vector3;
-		    vector2.X = objectPosition.X - cameraPosition.X;
-		    vector2.Y = objectPosition.Y - cameraPosition.Y;
-		    vector2.Z = objectPosition.Z - cameraPosition.Z;
-		    float num2 = vector2.LengthSquared();
-		    if (num2 < 0.0001f)
+		    Vector3 diffPosition;
+		    diffPosition.X = objectPosition.X - cameraPosition.X;
+		    diffPosition.Y = objectPosition.Y - cameraPosition.Y;
+		    diffPosition.Z = objectPosition.Z - cameraPosition.Z;
+		    float distanceSq = diffPosition.LengthSquared();
+		    if (distanceSq < 0.0001f)
 		    {
-		        vector2 = cameraForwardVector.HasValue ? -cameraForwardVector.Value : Vector3.Forward;
+		        diffPosition = (cameraForwardVector.HasValue)
+                             ? -cameraForwardVector.Value
+                             : Vector3.Forward;
 		    }
 		    else
 		    {
-		        Vector3.Multiply(ref vector2, (float) (1f / ((float) Math.Sqrt((double) num2))), out vector2);
+                float distance = (float)Math.Sqrt((double)distanceSq);
+                Vector3.Divide(ref diffPosition, distance, out diffPosition);
 		    }
-		    Vector3 vector4 = rotateAxis;
-		    Vector3.Dot(ref rotateAxis, ref vector2, out num);
-		    if (Math.Abs(num) > 0.9982547f)
+
+		    Vector3 backward;
+		    Vector3 right;
+		    Vector3 up = rotateAxis;
+            float dot;
+		    Vector3.Dot(ref rotateAxis, ref diffPosition, out dot);
+		    if (Math.Abs(dot) > 0.9982547f)
 		    {
 		        if (objectForwardVector.HasValue)
 		        {
-		            vector = objectForwardVector.Value;
-		            Vector3.Dot(ref rotateAxis, ref vector, out num);
-		            if (Math.Abs(num) > 0.9982547f)
+		            backward = objectForwardVector.Value;
+		            Vector3.Dot(ref rotateAxis, ref backward, out dot);
+		            if (Math.Abs(dot) > 0.9982547f)
 		            {
-		                num = ((rotateAxis.X * Vector3.Forward.X) + (rotateAxis.Y * Vector3.Forward.Y)) + (rotateAxis.Z * Vector3.Forward.Z);
-		                vector = (Math.Abs(num) > 0.9982547f) ? Vector3.Right : Vector3.Forward;
+		                dot = ((rotateAxis.X * Vector3.Forward.X) + (rotateAxis.Y * Vector3.Forward.Y)) + (rotateAxis.Z * Vector3.Forward.Z);
+		                backward = (Math.Abs(dot) > 0.9982547f)
+                                 ? Vector3.Right
+                                 : Vector3.Forward;
 		            }
 		        }
 		        else
 		        {
-		            num = ((rotateAxis.X * Vector3.Forward.X) + (rotateAxis.Y * Vector3.Forward.Y)) + (rotateAxis.Z * Vector3.Forward.Z);
-		            vector = (Math.Abs(num) > 0.9982547f) ? Vector3.Right : Vector3.Forward;
+		            dot = ((rotateAxis.X * Vector3.Forward.X) + (rotateAxis.Y * Vector3.Forward.Y)) + (rotateAxis.Z * Vector3.Forward.Z);
+		            backward = (Math.Abs(dot) > 0.9982547f)
+                             ? Vector3.Right
+                             : Vector3.Forward;
 		        }
-		        Vector3.Cross(ref rotateAxis, ref vector, out vector3);
-		        vector3.Normalize();
-		        Vector3.Cross(ref vector3, ref rotateAxis, out vector);
-		        vector.Normalize();
+		        Vector3.Cross(ref rotateAxis, ref backward, out right);
+		        right.Normalize();
+		        Vector3.Cross(ref right, ref rotateAxis, out backward);
+		        backward.Normalize();
 		    }
 		    else
 		    {
-		        Vector3.Cross(ref rotateAxis, ref vector2, out vector3);
-		        vector3.Normalize();
-		        Vector3.Cross(ref vector3, ref vector4, out vector);
-		        vector.Normalize();
+		        Vector3.Cross(ref rotateAxis, ref diffPosition, out right);
+		        right.Normalize();
+		        Vector3.Cross(ref right, ref up, out backward);
+		        backward.Normalize();
 		    }
-		    result.M11 = vector3.X;
-		    result.M12 = vector3.Y;
-		    result.M13 = vector3.Z;
+		    result.M11 = right.X;
+		    result.M12 = right.Y;
+		    result.M13 = right.Z;
 		    result.M14 = 0;
-		    result.M21 = vector4.X;
-		    result.M22 = vector4.Y;
-		    result.M23 = vector4.Z;
+		    result.M21 = up.X;
+		    result.M22 = up.Y;
+		    result.M23 = up.Z;
 		    result.M24 = 0;
-		    result.M31 = vector.X;
-		    result.M32 = vector.Y;
-		    result.M33 = vector.Z;
+		    result.M31 = backward.X;
+		    result.M32 = backward.Y;
+		    result.M33 = backward.Z;
 		    result.M34 = 0;
 		    result.M41 = objectPosition.X;
 		    result.M42 = objectPosition.Y;
@@ -648,25 +640,28 @@ namespace Microsoft.Xna.Framework
             float x = axis.X;
 		    float y = axis.Y;
 		    float z = axis.Z;
-		    float num2 = (float) Math.Sin((double) angle);
-		    float num = (float) Math.Cos((double) angle);
-		    float num11 = x * x;
-		    float num10 = y * y;
-		    float num9 = z * z;
-		    float num8 = x * y;
-		    float num7 = x * z;
-		    float num6 = y * z;
-		    result.M11 = num11 + (num * (1f - num11));
-		    result.M12 = (num8 - (num * num8)) + (num2 * z);
-		    result.M13 = (num7 - (num * num7)) - (num2 * y);
+
+		    float sin = (float) Math.Sin((double)angle);
+		    float cos = (float) Math.Cos((double)angle);
+
+		    float xx = x * x;
+		    float yy = y * y;
+		    float zz = z * z;
+		    float xy = x * y;
+		    float xz = x * z;
+		    float yz = y * z;
+
+		    result.M11 = xx + (cos * (1f - xx));
+		    result.M12 = xy - (cos * xy) + (sin * z);
+		    result.M13 = xz - (cos * xz) - (sin * y);
 		    result.M14 = 0;
-		    result.M21 = (num8 - (num * num8)) - (num2 * z);
-		    result.M22 = num10 + (num * (1f - num10));
-		    result.M23 = (num6 - (num * num6)) + (num2 * x);
+		    result.M21 = xy - (cos * xy) - (sin * z);
+		    result.M22 = yy + (cos * (1f - yy));
+		    result.M23 = yz - (cos * yz) + (sin * x);
 		    result.M24 = 0;
-		    result.M31 = (num7 - (num * num7)) + (num2 * y);
-		    result.M32 = (num6 - (num * num6)) - (num2 * x);
-		    result.M33 = num9 + (num * (1f - num9));
+		    result.M31 = xz - (cos * xz) + (sin * y);
+		    result.M32 = yz - (cos * yz) - (sin * x);
+		    result.M33 = zz + (cos * (1f - zz));
 		    result.M34 = 0;
 		    result.M41 = 0;
 		    result.M42 = 0;
@@ -693,26 +688,27 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">The rotation <see cref="Matrix"/> as an output parameter.</param>
         public static void CreateFromQuaternion(ref Quaternion quaternion, out Matrix result)
         {
-            float num9 = quaternion.X * quaternion.X;
-		    float num8 = quaternion.Y * quaternion.Y;
-		    float num7 = quaternion.Z * quaternion.Z;
-		    float num6 = quaternion.X * quaternion.Y;
-		    float num5 = quaternion.Z * quaternion.W;
-		    float num4 = quaternion.Z * quaternion.X;
-		    float num3 = quaternion.Y * quaternion.W;
-		    float num2 = quaternion.Y * quaternion.Z;
-		    float num = quaternion.X * quaternion.W;
-		    result.M11 = 1f - (2f * (num8 + num7));
-		    result.M12 = 2f * (num6 + num5);
-		    result.M13 = 2f * (num4 - num3);
+            float xx = quaternion.X * quaternion.X;
+		    float yy = quaternion.Y * quaternion.Y;
+		    float zz = quaternion.Z * quaternion.Z;
+		    float xy = quaternion.X * quaternion.Y;
+		    float zw = quaternion.Z * quaternion.W;
+		    float zx = quaternion.Z * quaternion.X;
+		    float yw = quaternion.Y * quaternion.W;
+		    float yz = quaternion.Y * quaternion.Z;
+		    float xw = quaternion.X * quaternion.W;
+
+		    result.M11 = 1f - (2f * (yy + zz));
+		    result.M12 = 2f * (xy + zw);
+		    result.M13 = 2f * (zx - yw);
 		    result.M14 = 0f;
-		    result.M21 = 2f * (num6 - num5);
-		    result.M22 = 1f - (2f * (num7 + num9));
-		    result.M23 = 2f * (num2 + num);
+		    result.M21 = 2f * (xy - zw);
+		    result.M22 = 1f - (2f * (zz + xx));
+		    result.M23 = 2f * (yz + xw);
 		    result.M24 = 0f;
-		    result.M31 = 2f * (num4 + num3);
-		    result.M32 = 2f * (num2 - num);
-		    result.M33 = 1f - (2f * (num8 + num9));
+		    result.M31 = 2f * (zx + yw);
+		    result.M32 = 2f * (yz - xw);
+		    result.M33 = 1f - (2f * (yy + xx));
 		    result.M34 = 0f;
 		    result.M41 = 0f;
 		    result.M42 = 0f;
@@ -731,9 +727,9 @@ namespace Microsoft.Xna.Framework
         /// </remarks>
 		public static Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll)
 		{
-			Matrix matrix;
-            CreateFromYawPitchRoll(yaw, pitch, roll, out matrix);
-		    return matrix;
+			Matrix result;
+            CreateFromYawPitchRoll(yaw, pitch, roll, out result);
+		    return result;
 		}
 
         /// <summary>
@@ -761,9 +757,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The viewing <see cref="Matrix"/>.</returns>
         public static Matrix CreateLookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
         {
-            Matrix matrix;
-            CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out matrix);
-            return matrix;
+            Matrix result;
+            CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out result);
+            return result;
         }
 
         /// <summary>
@@ -806,9 +802,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The new projection <see cref="Matrix"/> for orthographic view.</returns>
         public static Matrix CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane)
         {
-            Matrix matrix;
-            CreateOrthographic(width, height, zNearPlane, zFarPlane, out matrix);
-		    return matrix;
+            Matrix result;
+            CreateOrthographic(width, height, zNearPlane, zFarPlane, out result);
+		    return result;
         }
 
         /// <summary>
@@ -844,9 +840,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The new projection <see cref="Matrix"/> for customized orthographic view.</returns>
         public static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
         {
-			Matrix matrix;
-            CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out matrix);
-			return matrix;
+			Matrix result;
+            CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out result);
+			return result;
         }
 
         /// <summary>
@@ -858,9 +854,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The new projection <see cref="Matrix"/> for customized orthographic view.</returns>
         public static Matrix CreateOrthographicOffCenter(Rectangle viewingVolume, float zNearPlane, float zFarPlane)
         {
-            Matrix matrix;
-            CreateOrthographicOffCenter(viewingVolume.Left, viewingVolume.Right, viewingVolume.Bottom, viewingVolume.Top, zNearPlane, zFarPlane, out matrix);
-            return matrix;
+            Matrix result;
+            CreateOrthographicOffCenter(viewingVolume.Left, viewingVolume.Right, viewingVolume.Bottom, viewingVolume.Top, zNearPlane, zFarPlane, out result);
+            return result;
         }
 
         /// <summary>
@@ -903,9 +899,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The new projection <see cref="Matrix"/> for perspective view.</returns>
         public static Matrix CreatePerspective(float width, float height, float nearPlaneDistance, float farPlaneDistance)
         {
-            Matrix matrix;
-            CreatePerspective(width, height, nearPlaneDistance, farPlaneDistance, out matrix);
-		    return matrix;
+            Matrix result;
+            CreatePerspective(width, height, nearPlaneDistance, farPlaneDistance, out result);
+		    return result;
         }
 
         /// <summary>
@@ -1401,28 +1397,30 @@ namespace Microsoft.Xna.Framework
         {
             Plane plane;
             Plane.Normalize(ref value, out plane);
-            float x = plane.Normal.X;
-            float y = plane.Normal.Y;
-            float z = plane.Normal.Z;
-            float num3 = -2f * x;
-            float num2 = -2f * y;
-            float num = -2f * z;
-            result.M11 = (num3 * x) + 1f;
-            result.M12 = num2 * x;
-            result.M13 = num * x;
+
+            float nx = plane.Normal.X;
+            float ny = plane.Normal.Y;
+            float nz = plane.Normal.Z;
+            float x2 = -2f * nx;
+            float y2 = -2f * ny;
+            float z2 = -2f * nz;
+
+            result.M11 = x2 * nx + 1f;
+            result.M12 = y2 * nx;
+            result.M13 = z2 * nx;
             result.M14 = 0;
-            result.M21 = num3 * y;
-            result.M22 = (num2 * y) + 1;
-            result.M23 = num * y;
+            result.M21 = x2 * ny;
+            result.M22 = y2 * ny + 1;
+            result.M23 = z2 * ny;
             result.M24 = 0;
-            result.M31 = num3 * z;
-            result.M32 = num2 * z;
-            result.M33 = (num * z) + 1;
+            result.M31 = x2 * nz;
+            result.M32 = y2 * nz;
+            result.M33 = z2 * nz + 1;
             result.M34 = 0;
-            result.M41 = num3 * plane.D;
-            result.M42 = num2 * plane.D;
-            result.M43 = num * plane.D;
-            result.M44 = 1;
+            result.M41 = x2 * plane.D;
+            result.M42 = y2 * plane.D;
+            result.M43 = z2 * plane.D;
+            result.M44 = 0 + 1;
         }
 
         /// <summary>
@@ -1434,9 +1432,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The world <see cref="Matrix"/>.</returns>
         public static Matrix CreateWorld(Vector3 position, Vector3 forward, Vector3 up)
         {
-            Matrix ret;
-                        CreateWorld(ref position, ref forward, ref up, out ret);
-                        return ret;
+            Matrix result;
+            CreateWorld(ref position, ref forward, ref up, out result);
+            return result;
         }
 
         /// <summary>
@@ -1507,137 +1505,127 @@ namespace Microsoft.Xna.Framework
         /// </remarks>
         public float Determinant()
         {
-            float num22 = this.M11;
-		    float num21 = this.M12;
-		    float num20 = this.M13;
-		    float num19 = this.M14;
-		    float num12 = this.M21;
-		    float num11 = this.M22;
-		    float num10 = this.M23;
-		    float num9 = this.M24;
-		    float num8 = this.M31;
-		    float num7 = this.M32;
-		    float num6 = this.M33;
-		    float num5 = this.M34;
-		    float num4 = this.M41;
-		    float num3 = this.M42;
-		    float num2 = this.M43;
-		    float num = this.M44;
-		    float num18 = (num6 * num) - (num5 * num2);
-		    float num17 = (num7 * num) - (num5 * num3);
-		    float num16 = (num7 * num2) - (num6 * num3);
-		    float num15 = (num8 * num) - (num5 * num4);
-		    float num14 = (num8 * num2) - (num6 * num4);
-		    float num13 = (num8 * num3) - (num7 * num4);
-		    return ((((num22 * (((num11 * num18) - (num10 * num17)) + (num9 * num16))) - (num21 * (((num12 * num18) - (num10 * num15)) + (num9 * num14)))) + (num20 * (((num12 * num17) - (num11 * num15)) + (num9 * num13)))) - (num19 * (((num12 * num16) - (num11 * num14)) + (num10 * num13))));
+		    float tmp1 = (M33 * M44) - (M34 * M43);
+		    float tmp2 = (M32 * M44) - (M34 * M42);
+		    float tmp3 = (M32 * M43) - (M33 * M42);
+		    float tmp4 = (M31 * M44) - (M34 * M41);
+		    float tmp5 = (M31 * M43) - (M33 * M41);
+		    float tmp6 = (M31 * M42) - (M32 * M41);
+
+            float det = 0f;
+            det = det + M11 * ( (M22 * tmp1) - (M23 * tmp2) + (M24 * tmp3) );
+            det = det - M12 * ( (M21 * tmp1) - (M23 * tmp4) + (M24 * tmp5) );
+            det = det + M13 * ( (M21 * tmp2) - (M22 * tmp4) + (M24 * tmp6) );
+            det = det - M14 * ( (M21 * tmp3) - (M22 * tmp5) + (M23 * tmp6) );
+            return det;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by the elements of another matrix.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">Divisor <see cref="Matrix"/>.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Divisor <see cref="Matrix"/>.</param>
         /// <returns>The result of dividing the matrix.</returns>
-        public static Matrix Divide(Matrix matrix1, Matrix matrix2)
+        public static Matrix Divide(Matrix left, Matrix right)
         {
-		    matrix1.M11 = matrix1.M11 / matrix2.M11;
-		    matrix1.M12 = matrix1.M12 / matrix2.M12;
-		    matrix1.M13 = matrix1.M13 / matrix2.M13;
-		    matrix1.M14 = matrix1.M14 / matrix2.M14;
-		    matrix1.M21 = matrix1.M21 / matrix2.M21;
-		    matrix1.M22 = matrix1.M22 / matrix2.M22;
-		    matrix1.M23 = matrix1.M23 / matrix2.M23;
-		    matrix1.M24 = matrix1.M24 / matrix2.M24;
-		    matrix1.M31 = matrix1.M31 / matrix2.M31;
-		    matrix1.M32 = matrix1.M32 / matrix2.M32;
-		    matrix1.M33 = matrix1.M33 / matrix2.M33;
-		    matrix1.M34 = matrix1.M34 / matrix2.M34;
-		    matrix1.M41 = matrix1.M41 / matrix2.M41;
-		    matrix1.M42 = matrix1.M42 / matrix2.M42;
-		    matrix1.M43 = matrix1.M43 / matrix2.M43;
-		    matrix1.M44 = matrix1.M44 / matrix2.M44;
-		    return matrix1;
+		    left.M11 = left.M11 / right.M11;
+		    left.M12 = left.M12 / right.M12;
+		    left.M13 = left.M13 / right.M13;
+		    left.M14 = left.M14 / right.M14;
+		    left.M21 = left.M21 / right.M21;
+		    left.M22 = left.M22 / right.M22;
+		    left.M23 = left.M23 / right.M23;
+		    left.M24 = left.M24 / right.M24;
+		    left.M31 = left.M31 / right.M31;
+		    left.M32 = left.M32 / right.M32;
+		    left.M33 = left.M33 / right.M33;
+		    left.M34 = left.M34 / right.M34;
+		    left.M41 = left.M41 / right.M41;
+		    left.M42 = left.M42 / right.M42;
+		    left.M43 = left.M43 / right.M43;
+		    left.M44 = left.M44 / right.M44;
+		    return left;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by the elements of another matrix.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">Divisor <see cref="Matrix"/>.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Divisor <see cref="Matrix"/>.</param>
         /// <param name="result">The result of dividing the matrix as an output parameter.</param>
-        public static void Divide(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
+        public static void Divide(ref Matrix left, ref Matrix right, out Matrix result)
         {
-            result.M11 = matrix1.M11 / matrix2.M11;
-		    result.M12 = matrix1.M12 / matrix2.M12;
-		    result.M13 = matrix1.M13 / matrix2.M13;
-		    result.M14 = matrix1.M14 / matrix2.M14;
-		    result.M21 = matrix1.M21 / matrix2.M21;
-		    result.M22 = matrix1.M22 / matrix2.M22;
-		    result.M23 = matrix1.M23 / matrix2.M23;
-		    result.M24 = matrix1.M24 / matrix2.M24;
-		    result.M31 = matrix1.M31 / matrix2.M31;
-		    result.M32 = matrix1.M32 / matrix2.M32;
-		    result.M33 = matrix1.M33 / matrix2.M33;
-		    result.M34 = matrix1.M34 / matrix2.M34;
-		    result.M41 = matrix1.M41 / matrix2.M41;
-		    result.M42 = matrix1.M42 / matrix2.M42;
-		    result.M43 = matrix1.M43 / matrix2.M43;
-		    result.M44 = matrix1.M44 / matrix2.M44;
+            result.M11 = left.M11 / right.M11;
+		    result.M12 = left.M12 / right.M12;
+		    result.M13 = left.M13 / right.M13;
+		    result.M14 = left.M14 / right.M14;
+		    result.M21 = left.M21 / right.M21;
+		    result.M22 = left.M22 / right.M22;
+		    result.M23 = left.M23 / right.M23;
+		    result.M24 = left.M24 / right.M24;
+		    result.M31 = left.M31 / right.M31;
+		    result.M32 = left.M32 / right.M32;
+		    result.M33 = left.M33 / right.M33;
+		    result.M34 = left.M34 / right.M34;
+		    result.M41 = left.M41 / right.M41;
+		    result.M42 = left.M42 / right.M42;
+		    result.M43 = left.M43 / right.M43;
+		    result.M44 = left.M44 / right.M44;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by a scalar.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="divider">Divisor scalar.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Divisor scalar.</param>
         /// <returns>The result of dividing a matrix by a scalar.</returns>
-        public static Matrix Divide(Matrix matrix1, float divider)
+        public static Matrix Divide(Matrix left, float right)
         {
-		    float num = 1f / divider;
-		    matrix1.M11 = matrix1.M11 * num;
-		    matrix1.M12 = matrix1.M12 * num;
-		    matrix1.M13 = matrix1.M13 * num;
-		    matrix1.M14 = matrix1.M14 * num;
-		    matrix1.M21 = matrix1.M21 * num;
-		    matrix1.M22 = matrix1.M22 * num;
-		    matrix1.M23 = matrix1.M23 * num;
-		    matrix1.M24 = matrix1.M24 * num;
-		    matrix1.M31 = matrix1.M31 * num;
-		    matrix1.M32 = matrix1.M32 * num;
-		    matrix1.M33 = matrix1.M33 * num;
-		    matrix1.M34 = matrix1.M34 * num;
-		    matrix1.M41 = matrix1.M41 * num;
-		    matrix1.M42 = matrix1.M42 * num;
-		    matrix1.M43 = matrix1.M43 * num;
-		    matrix1.M44 = matrix1.M44 * num;
-		    return matrix1;
+		    float factor = 1f / right;
+		    left.M11 = left.M11 * factor;
+		    left.M12 = left.M12 * factor;
+		    left.M13 = left.M13 * factor;
+		    left.M14 = left.M14 * factor;
+		    left.M21 = left.M21 * factor;
+		    left.M22 = left.M22 * factor;
+		    left.M23 = left.M23 * factor;
+		    left.M24 = left.M24 * factor;
+		    left.M31 = left.M31 * factor;
+		    left.M32 = left.M32 * factor;
+		    left.M33 = left.M33 * factor;
+		    left.M34 = left.M34 * factor;
+		    left.M41 = left.M41 * factor;
+		    left.M42 = left.M42 * factor;
+		    left.M43 = left.M43 * factor;
+		    left.M44 = left.M44 * factor;
+		    return left;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by a scalar.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="divider">Divisor scalar.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Divisor scalar.</param>
         /// <param name="result">The result of dividing a matrix by a scalar as an output parameter.</param>
-        public static void Divide(ref Matrix matrix1, float divider, out Matrix result)
+        public static void Divide(ref Matrix left, float right, out Matrix result)
         {
-            float num = 1f / divider;
-		    result.M11 = matrix1.M11 * num;
-		    result.M12 = matrix1.M12 * num;
-		    result.M13 = matrix1.M13 * num;
-		    result.M14 = matrix1.M14 * num;
-		    result.M21 = matrix1.M21 * num;
-		    result.M22 = matrix1.M22 * num;
-		    result.M23 = matrix1.M23 * num;
-		    result.M24 = matrix1.M24 * num;
-		    result.M31 = matrix1.M31 * num;
-		    result.M32 = matrix1.M32 * num;
-		    result.M33 = matrix1.M33 * num;
-		    result.M34 = matrix1.M34 * num;
-		    result.M41 = matrix1.M41 * num;
-		    result.M42 = matrix1.M42 * num;
-		    result.M43 = matrix1.M43 * num;
-		    result.M44 = matrix1.M44 * num;
+            float factor = 1f / right;
+		    result.M11 = left.M11 * factor;
+		    result.M12 = left.M12 * factor;
+		    result.M13 = left.M13 * factor;
+		    result.M14 = left.M14 * factor;
+		    result.M21 = left.M21 * factor;
+		    result.M22 = left.M22 * factor;
+		    result.M23 = left.M23 * factor;
+		    result.M24 = left.M24 * factor;
+		    result.M31 = left.M31 * factor;
+		    result.M32 = left.M32 * factor;
+		    result.M33 = left.M33 * factor;
+		    result.M34 = left.M34 * factor;
+		    result.M41 = left.M41 * factor;
+		    result.M42 = left.M42 * factor;
+		    result.M43 = left.M43 * factor;
+		    result.M44 = left.M44 * factor;
         }
 
         /// <summary>
@@ -1647,7 +1635,7 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
         public bool Equals(Matrix other)
         {
-            return ((((((this.M11 == other.M11) && (this.M22 == other.M22)) && ((this.M33 == other.M33) && (this.M44 == other.M44))) && (((this.M12 == other.M12) && (this.M13 == other.M13)) && ((this.M14 == other.M14) && (this.M21 == other.M21)))) && ((((this.M23 == other.M23) && (this.M24 == other.M24)) && ((this.M31 == other.M31) && (this.M32 == other.M32))) && (((this.M34 == other.M34) && (this.M41 == other.M41)) && (this.M42 == other.M42)))) && (this.M43 == other.M43));
+            return ((this.M11 == other.M11) && (this.M22 == other.M22) && (this.M33 == other.M33) && (this.M44 == other.M44) && (this.M12 == other.M12) && (this.M13 == other.M13) && (this.M14 == other.M14) && (this.M21 == other.M21) && (this.M23 == other.M23) && (this.M24 == other.M24) && (this.M31 == other.M31) && (this.M32 == other.M32) && (this.M34 == other.M34) && (this.M41 == other.M41) && (this.M42 == other.M42) && (this.M43 == other.M43));
         }
 
         /// <summary>
@@ -1671,88 +1659,94 @@ namespace Microsoft.Xna.Framework
         /// <returns>Hash code of this <see cref="Matrix"/>.</returns>
         public override int GetHashCode()
         {
-            return (((((((((((((((this.M11.GetHashCode() + this.M12.GetHashCode()) + this.M13.GetHashCode()) + this.M14.GetHashCode()) + this.M21.GetHashCode()) + this.M22.GetHashCode()) + this.M23.GetHashCode()) + this.M24.GetHashCode()) + this.M31.GetHashCode()) + this.M32.GetHashCode()) + this.M33.GetHashCode()) + this.M34.GetHashCode()) + this.M41.GetHashCode()) + this.M42.GetHashCode()) + this.M43.GetHashCode()) + this.M44.GetHashCode());
+            return (this.M11.GetHashCode() + this.M12.GetHashCode() + this.M13.GetHashCode() + this.M14.GetHashCode() + this.M21.GetHashCode() + this.M22.GetHashCode() + this.M23.GetHashCode() + this.M24.GetHashCode() + this.M31.GetHashCode() + this.M32.GetHashCode() + this.M33.GetHashCode() + this.M34.GetHashCode() + this.M41.GetHashCode() + this.M42.GetHashCode() + this.M43.GetHashCode() + this.M44.GetHashCode());
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> which contains inversion of the specified matrix. 
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/>.</param>
+        /// <param name="value">Source <see cref="Matrix"/>.</param>
         /// <returns>The inverted matrix.</returns>
-        public static Matrix Invert(Matrix matrix)
+        public static Matrix Invert(Matrix value)
         {
             Matrix result;
-            Invert(ref matrix, out result);
+            Invert(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> which contains inversion of the specified matrix. 
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/>.</param>
+        /// <param name="value">Source <see cref="Matrix"/>.</param>
         /// <param name="result">The inverted matrix as output parameter.</param>
-        public static void Invert(ref Matrix matrix, out Matrix result)
+        public static void Invert(ref Matrix value, out Matrix result)
         {
-			float num1 = matrix.M11;
-			float num2 = matrix.M12;
-			float num3 = matrix.M13;
-			float num4 = matrix.M14;
-			float num5 = matrix.M21;
-			float num6 = matrix.M22;
-			float num7 = matrix.M23;
-			float num8 = matrix.M24;
-			float num9 = matrix.M31;
-			float num10 = matrix.M32;
-			float num11 = matrix.M33;
-			float num12 = matrix.M34;
-			float num13 = matrix.M41;
-			float num14 = matrix.M42;
-			float num15 = matrix.M43;
-			float num16 = matrix.M44;
-			float num17 = (float) ((double) num11 * (double) num16 - (double) num12 * (double) num15);
-			float num18 = (float) ((double) num10 * (double) num16 - (double) num12 * (double) num14);
-			float num19 = (float) ((double) num10 * (double) num15 - (double) num11 * (double) num14);
-			float num20 = (float) ((double) num9 * (double) num16 - (double) num12 * (double) num13);
-			float num21 = (float) ((double) num9 * (double) num15 - (double) num11 * (double) num13);
-			float num22 = (float) ((double) num9 * (double) num14 - (double) num10 * (double) num13);
-			float num23 = (float) ((double) num6 * (double) num17 - (double) num7 * (double) num18 + (double) num8 * (double) num19);
-			float num24 = (float) -((double) num5 * (double) num17 - (double) num7 * (double) num20 + (double) num8 * (double) num21);
-			float num25 = (float) ((double) num5 * (double) num18 - (double) num6 * (double) num20 + (double) num8 * (double) num22);
-			float num26 = (float) -((double) num5 * (double) num19 - (double) num6 * (double) num21 + (double) num7 * (double) num22);
-			float num27 = (float) (1.0 / ((double) num1 * (double) num23 + (double) num2 * (double) num24 + (double) num3 * (double) num25 + (double) num4 * (double) num26));
-			
-			result.M11 = num23 * num27;
-			result.M21 = num24 * num27;
-			result.M31 = num25 * num27;
-			result.M41 = num26 * num27;
-			result.M12 = (float) -((double) num2 * (double) num17 - (double) num3 * (double) num18 + (double) num4 * (double) num19) * num27;
-			result.M22 = (float) ((double) num1 * (double) num17 - (double) num3 * (double) num20 + (double) num4 * (double) num21) * num27;
-			result.M32 = (float) -((double) num1 * (double) num18 - (double) num2 * (double) num20 + (double) num4 * (double) num22) * num27;
-			result.M42 = (float) ((double) num1 * (double) num19 - (double) num2 * (double) num21 + (double) num3 * (double) num22) * num27;
-			float num28 = (float) ((double) num7 * (double) num16 - (double) num8 * (double) num15);
-			float num29 = (float) ((double) num6 * (double) num16 - (double) num8 * (double) num14);
-			float num30 = (float) ((double) num6 * (double) num15 - (double) num7 * (double) num14);
-			float num31 = (float) ((double) num5 * (double) num16 - (double) num8 * (double) num13);
-			float num32 = (float) ((double) num5 * (double) num15 - (double) num7 * (double) num13);
-			float num33 = (float) ((double) num5 * (double) num14 - (double) num6 * (double) num13);
-			result.M13 = (float) ((double) num2 * (double) num28 - (double) num3 * (double) num29 + (double) num4 * (double) num30) * num27;
-			result.M23 = (float) -((double) num1 * (double) num28 - (double) num3 * (double) num31 + (double) num4 * (double) num32) * num27;
-			result.M33 = (float) ((double) num1 * (double) num29 - (double) num2 * (double) num31 + (double) num4 * (double) num33) * num27;
-			result.M43 = (float) -((double) num1 * (double) num30 - (double) num2 * (double) num32 + (double) num3 * (double) num33) * num27;
-			float num34 = (float) ((double) num7 * (double) num12 - (double) num8 * (double) num11);
-			float num35 = (float) ((double) num6 * (double) num12 - (double) num8 * (double) num10);
-			float num36 = (float) ((double) num6 * (double) num11 - (double) num7 * (double) num10);
-			float num37 = (float) ((double) num5 * (double) num12 - (double) num8 * (double) num9);
-			float num38 = (float) ((double) num5 * (double) num11 - (double) num7 * (double) num9);
-			float num39 = (float) ((double) num5 * (double) num10 - (double) num6 * (double) num9);
-			result.M14 = (float) -((double) num2 * (double) num34 - (double) num3 * (double) num35 + (double) num4 * (double) num36) * num27;
-			result.M24 = (float) ((double) num1 * (double) num34 - (double) num3 * (double) num37 + (double) num4 * (double) num38) * num27;
-			result.M34 = (float) -((double) num1 * (double) num35 - (double) num2 * (double) num37 + (double) num4 * (double) num39) * num27;
-			result.M44 = (float) ((double) num1 * (double) num36 - (double) num2 * (double) num38 + (double) num3 * (double) num39) * num27;
-			
-			
-			/*
-			
+			float tmp01 = (float)  ((double)value.M33 * (double)value.M44 - (double)value.M34 * (double)value.M43);
+			float tmp02 = (float)  ((double)value.M32 * (double)value.M44 - (double)value.M34 * (double)value.M42);
+			float tmp03 = (float)  ((double)value.M32 * (double)value.M43 - (double)value.M33 * (double)value.M42);
+			float tmp04 = (float)  ((double)value.M31 * (double)value.M44 - (double)value.M34 * (double)value.M41);
+			float tmp05 = (float)  ((double)value.M31 * (double)value.M43 - (double)value.M33 * (double)value.M41);
+			float tmp06 = (float)  ((double)value.M31 * (double)value.M42 - (double)value.M32 * (double)value.M41);
+
+			float tmp07 = (float)  ((double)value.M22 * (double)tmp01 - (double)value.M23 * (double)tmp02 + (double) value.M24 * (double)tmp03);
+			float tmp08 = (float) -((double)value.M21 * (double)tmp01 - (double)value.M23 * (double)tmp04 + (double) value.M24 * (double)tmp05);
+			float tmp09 = (float)  ((double)value.M21 * (double)tmp02 - (double)value.M22 * (double)tmp04 + (double) value.M24 * (double)tmp06);
+			float tmp10 = (float) -((double)value.M21 * (double)tmp03 - (double)value.M22 * (double)tmp05 + (double) value.M23 * (double)tmp06);
+			float tmp11 = (float)  (1.0 / ((double)value.M11 * (double)tmp07 + (double)value.M12 * (double)tmp08 + (double)value.M13 * (double)tmp09 + (double)value.M14 * (double)tmp10));
+
+			float m11 = tmp07 * tmp11;
+            float m21 = tmp08 * tmp11;
+            float m31 = tmp09 * tmp11;
+            float m41 = tmp10 * tmp11;
+
+            float m12 = (float) -((double) value.M12 * (double)tmp01 - (double)value.M13 * (double)tmp02 + (double)value.M14 * (double)tmp03) * tmp11;
+            float m22 = (float)  ((double) value.M11 * (double)tmp01 - (double)value.M13 * (double)tmp04 + (double)value.M14 * (double)tmp05) * tmp11;
+            float m32 = (float) -((double) value.M11 * (double)tmp02 - (double)value.M12 * (double)tmp04 + (double)value.M14 * (double)tmp06) * tmp11;
+            float m42 = (float)  ((double) value.M11 * (double)tmp03 - (double)value.M12 * (double)tmp05 + (double)value.M13 * (double)tmp06) * tmp11;
+
+			float tmp12 = (float) ((double)value.M23 * (double)value.M44 - (double)value.M24 * (double)value.M43);
+			float tmp13 = (float) ((double)value.M22 * (double)value.M44 - (double)value.M24 * (double)value.M42);
+			float tmp14 = (float) ((double)value.M22 * (double)value.M43 - (double)value.M23 * (double)value.M42);
+			float tmp15 = (float) ((double)value.M21 * (double)value.M44 - (double)value.M24 * (double)value.M41);
+			float tmp16 = (float) ((double)value.M21 * (double)value.M43 - (double)value.M23 * (double)value.M41);
+			float tmp17 = (float) ((double)value.M21 * (double)value.M42 - (double)value.M22 * (double)value.M41);
+
+            float m13 = (float)  ((double)value.M12 * (double)tmp12 - (double)value.M13 * (double)tmp13 + (double)value.M14 * (double)tmp14) * tmp11;
+            float m23 = (float) -((double)value.M11 * (double)tmp12 - (double)value.M13 * (double)tmp15 + (double)value.M14 * (double)tmp16) * tmp11;
+            float m33 = (float)  ((double)value.M11 * (double)tmp13 - (double)value.M12 * (double)tmp15 + (double)value.M14 * (double)tmp17) * tmp11;
+            float m43 = (float) -((double)value.M11 * (double)tmp14 - (double)value.M12 * (double)tmp16 + (double)value.M13 * (double)tmp17) * tmp11;
+
+			float tmp18 = (float) ((double)value.M23 * (double)value.M34 - (double)value.M24 * (double)value.M33);
+			float tmp19 = (float) ((double)value.M22 * (double)value.M34 - (double)value.M24 * (double)value.M32);
+			float tmp20 = (float) ((double)value.M22 * (double)value.M33 - (double)value.M23 * (double)value.M32);
+			float tmp21 = (float) ((double)value.M21 * (double)value.M34 - (double)value.M24 * (double)value.M31);
+			float tmp22 = (float) ((double)value.M21 * (double)value.M33 - (double)value.M23 * (double)value.M31);
+			float tmp23 = (float) ((double)value.M21 * (double)value.M32 - (double)value.M22 * (double)value.M31);
+
+            float m14 = (float) -((double)value.M12 * (double)tmp18 - (double)value.M13 * (double)tmp19 + (double)value.M14 * (double)tmp20) * tmp11;
+            float m24 = (float)  ((double)value.M11 * (double)tmp18 - (double)value.M13 * (double)tmp21 + (double)value.M14 * (double)tmp22) * tmp11;
+            float m34 = (float) -((double)value.M11 * (double)tmp19 - (double)value.M12 * (double)tmp21 + (double)value.M14 * (double)tmp23) * tmp11;
+            float m44 = (float)  ((double)value.M11 * (double)tmp20 - (double)value.M12 * (double)tmp22 + (double)value.M13 * (double)tmp23) * tmp11;
+
+            result.M11 = m11;
+            result.M12 = m12;
+            result.M13 = m13;
+            result.M14 = m14;
+            result.M21 = m21;
+            result.M22 = m22;
+            result.M23 = m23;
+            result.M24 = m24;
+            result.M31 = m31;
+            result.M32 = m32;
+            result.M33 = m33;
+            result.M34 = m34;
+            result.M41 = m41;
+            result.M42 = m42;
+            result.M43 = m43;
+            result.M44 = m44;
+
+
+            /*			
 			
             ///
             // Use Laplace expansion theorem to calculate the inverse of a 4x4 matrix
@@ -1794,125 +1788,125 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains linear interpolation of the values in specified matrixes.
         /// </summary>
-        /// <param name="matrix1">The first <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">The second <see cref="Vector2"/>.</param>
+        /// <param name="start">The first <see cref="Matrix"/>.</param>
+        /// <param name="end">The second <see cref="Vector2"/>.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <returns>>The result of linear interpolation of the specified matrixes.</returns>
-        public static Matrix Lerp(Matrix matrix1, Matrix matrix2, float amount)
+        public static Matrix Lerp(Matrix start, Matrix end, float amount)
         {
-		    matrix1.M11 = matrix1.M11 + ((matrix2.M11 - matrix1.M11) * amount);
-		    matrix1.M12 = matrix1.M12 + ((matrix2.M12 - matrix1.M12) * amount);
-		    matrix1.M13 = matrix1.M13 + ((matrix2.M13 - matrix1.M13) * amount);
-		    matrix1.M14 = matrix1.M14 + ((matrix2.M14 - matrix1.M14) * amount);
-		    matrix1.M21 = matrix1.M21 + ((matrix2.M21 - matrix1.M21) * amount);
-		    matrix1.M22 = matrix1.M22 + ((matrix2.M22 - matrix1.M22) * amount);
-		    matrix1.M23 = matrix1.M23 + ((matrix2.M23 - matrix1.M23) * amount);
-		    matrix1.M24 = matrix1.M24 + ((matrix2.M24 - matrix1.M24) * amount);
-		    matrix1.M31 = matrix1.M31 + ((matrix2.M31 - matrix1.M31) * amount);
-		    matrix1.M32 = matrix1.M32 + ((matrix2.M32 - matrix1.M32) * amount);
-		    matrix1.M33 = matrix1.M33 + ((matrix2.M33 - matrix1.M33) * amount);
-		    matrix1.M34 = matrix1.M34 + ((matrix2.M34 - matrix1.M34) * amount);
-		    matrix1.M41 = matrix1.M41 + ((matrix2.M41 - matrix1.M41) * amount);
-		    matrix1.M42 = matrix1.M42 + ((matrix2.M42 - matrix1.M42) * amount);
-		    matrix1.M43 = matrix1.M43 + ((matrix2.M43 - matrix1.M43) * amount);
-		    matrix1.M44 = matrix1.M44 + ((matrix2.M44 - matrix1.M44) * amount);
-		    return matrix1;
+		    start.M11 = start.M11 + ((end.M11 - start.M11) * amount);
+		    start.M12 = start.M12 + ((end.M12 - start.M12) * amount);
+		    start.M13 = start.M13 + ((end.M13 - start.M13) * amount);
+		    start.M14 = start.M14 + ((end.M14 - start.M14) * amount);
+		    start.M21 = start.M21 + ((end.M21 - start.M21) * amount);
+		    start.M22 = start.M22 + ((end.M22 - start.M22) * amount);
+		    start.M23 = start.M23 + ((end.M23 - start.M23) * amount);
+		    start.M24 = start.M24 + ((end.M24 - start.M24) * amount);
+		    start.M31 = start.M31 + ((end.M31 - start.M31) * amount);
+		    start.M32 = start.M32 + ((end.M32 - start.M32) * amount);
+		    start.M33 = start.M33 + ((end.M33 - start.M33) * amount);
+		    start.M34 = start.M34 + ((end.M34 - start.M34) * amount);
+		    start.M41 = start.M41 + ((end.M41 - start.M41) * amount);
+		    start.M42 = start.M42 + ((end.M42 - start.M42) * amount);
+		    start.M43 = start.M43 + ((end.M43 - start.M43) * amount);
+		    start.M44 = start.M44 + ((end.M44 - start.M44) * amount);
+		    return start;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains linear interpolation of the values in specified matrixes.
         /// </summary>
-        /// <param name="matrix1">The first <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">The second <see cref="Vector2"/>.</param>
+        /// <param name="start">The first <see cref="Matrix"/>.</param>
+        /// <param name="end">The second <see cref="Vector2"/>.</param>
         /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
         /// <param name="result">The result of linear interpolation of the specified matrixes as an output parameter.</param>
-        public static void Lerp(ref Matrix matrix1, ref Matrix matrix2, float amount, out Matrix result)
+        public static void Lerp(ref Matrix start, ref Matrix end, float amount, out Matrix result)
         {
-            result.M11 = matrix1.M11 + ((matrix2.M11 - matrix1.M11) * amount);
-		    result.M12 = matrix1.M12 + ((matrix2.M12 - matrix1.M12) * amount);
-		    result.M13 = matrix1.M13 + ((matrix2.M13 - matrix1.M13) * amount);
-		    result.M14 = matrix1.M14 + ((matrix2.M14 - matrix1.M14) * amount);
-		    result.M21 = matrix1.M21 + ((matrix2.M21 - matrix1.M21) * amount);
-		    result.M22 = matrix1.M22 + ((matrix2.M22 - matrix1.M22) * amount);
-		    result.M23 = matrix1.M23 + ((matrix2.M23 - matrix1.M23) * amount);
-		    result.M24 = matrix1.M24 + ((matrix2.M24 - matrix1.M24) * amount);
-		    result.M31 = matrix1.M31 + ((matrix2.M31 - matrix1.M31) * amount);
-		    result.M32 = matrix1.M32 + ((matrix2.M32 - matrix1.M32) * amount);
-		    result.M33 = matrix1.M33 + ((matrix2.M33 - matrix1.M33) * amount);
-		    result.M34 = matrix1.M34 + ((matrix2.M34 - matrix1.M34) * amount);
-		    result.M41 = matrix1.M41 + ((matrix2.M41 - matrix1.M41) * amount);
-		    result.M42 = matrix1.M42 + ((matrix2.M42 - matrix1.M42) * amount);
-		    result.M43 = matrix1.M43 + ((matrix2.M43 - matrix1.M43) * amount);
-		    result.M44 = matrix1.M44 + ((matrix2.M44 - matrix1.M44) * amount);
+            result.M11 = start.M11 + ((end.M11 - start.M11) * amount);
+		    result.M12 = start.M12 + ((end.M12 - start.M12) * amount);
+		    result.M13 = start.M13 + ((end.M13 - start.M13) * amount);
+		    result.M14 = start.M14 + ((end.M14 - start.M14) * amount);
+		    result.M21 = start.M21 + ((end.M21 - start.M21) * amount);
+		    result.M22 = start.M22 + ((end.M22 - start.M22) * amount);
+		    result.M23 = start.M23 + ((end.M23 - start.M23) * amount);
+		    result.M24 = start.M24 + ((end.M24 - start.M24) * amount);
+		    result.M31 = start.M31 + ((end.M31 - start.M31) * amount);
+		    result.M32 = start.M32 + ((end.M32 - start.M32) * amount);
+		    result.M33 = start.M33 + ((end.M33 - start.M33) * amount);
+		    result.M34 = start.M34 + ((end.M34 - start.M34) * amount);
+		    result.M41 = start.M41 + ((end.M41 - start.M41) * amount);
+		    result.M42 = start.M42 + ((end.M42 - start.M42) * amount);
+		    result.M43 = start.M43 + ((end.M43 - start.M43) * amount);
+		    result.M44 = start.M44 + ((end.M44 - start.M44) * amount);
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains a multiplication of two matrix.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/>.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Source <see cref="Matrix"/>.</param>
         /// <returns>Result of the matrix multiplication.</returns>
-        public static Matrix Multiply(Matrix matrix1, Matrix matrix2)
+        public static Matrix Multiply(Matrix left, Matrix right)
         {
-            var m11 = (((matrix1.M11 * matrix2.M11) + (matrix1.M12 * matrix2.M21)) + (matrix1.M13 * matrix2.M31)) + (matrix1.M14 * matrix2.M41);
-            var m12 = (((matrix1.M11 * matrix2.M12) + (matrix1.M12 * matrix2.M22)) + (matrix1.M13 * matrix2.M32)) + (matrix1.M14 * matrix2.M42);
-            var m13 = (((matrix1.M11 * matrix2.M13) + (matrix1.M12 * matrix2.M23)) + (matrix1.M13 * matrix2.M33)) + (matrix1.M14 * matrix2.M43);
-            var m14 = (((matrix1.M11 * matrix2.M14) + (matrix1.M12 * matrix2.M24)) + (matrix1.M13 * matrix2.M34)) + (matrix1.M14 * matrix2.M44);
-            var m21 = (((matrix1.M21 * matrix2.M11) + (matrix1.M22 * matrix2.M21)) + (matrix1.M23 * matrix2.M31)) + (matrix1.M24 * matrix2.M41);
-            var m22 = (((matrix1.M21 * matrix2.M12) + (matrix1.M22 * matrix2.M22)) + (matrix1.M23 * matrix2.M32)) + (matrix1.M24 * matrix2.M42);
-            var m23 = (((matrix1.M21 * matrix2.M13) + (matrix1.M22 * matrix2.M23)) + (matrix1.M23 * matrix2.M33)) + (matrix1.M24 * matrix2.M43);
-            var m24 = (((matrix1.M21 * matrix2.M14) + (matrix1.M22 * matrix2.M24)) + (matrix1.M23 * matrix2.M34)) + (matrix1.M24 * matrix2.M44);
-            var m31 = (((matrix1.M31 * matrix2.M11) + (matrix1.M32 * matrix2.M21)) + (matrix1.M33 * matrix2.M31)) + (matrix1.M34 * matrix2.M41);
-            var m32 = (((matrix1.M31 * matrix2.M12) + (matrix1.M32 * matrix2.M22)) + (matrix1.M33 * matrix2.M32)) + (matrix1.M34 * matrix2.M42);
-            var m33 = (((matrix1.M31 * matrix2.M13) + (matrix1.M32 * matrix2.M23)) + (matrix1.M33 * matrix2.M33)) + (matrix1.M34 * matrix2.M43);
-            var m34 = (((matrix1.M31 * matrix2.M14) + (matrix1.M32 * matrix2.M24)) + (matrix1.M33 * matrix2.M34)) + (matrix1.M34 * matrix2.M44);
-            var m41 = (((matrix1.M41 * matrix2.M11) + (matrix1.M42 * matrix2.M21)) + (matrix1.M43 * matrix2.M31)) + (matrix1.M44 * matrix2.M41);
-            var m42 = (((matrix1.M41 * matrix2.M12) + (matrix1.M42 * matrix2.M22)) + (matrix1.M43 * matrix2.M32)) + (matrix1.M44 * matrix2.M42);
-            var m43 = (((matrix1.M41 * matrix2.M13) + (matrix1.M42 * matrix2.M23)) + (matrix1.M43 * matrix2.M33)) + (matrix1.M44 * matrix2.M43);
-           	var m44 = (((matrix1.M41 * matrix2.M14) + (matrix1.M42 * matrix2.M24)) + (matrix1.M43 * matrix2.M34)) + (matrix1.M44 * matrix2.M44);
-            matrix1.M11 = m11;
-			matrix1.M12 = m12;
-			matrix1.M13 = m13;
-			matrix1.M14 = m14;
-			matrix1.M21 = m21;
-			matrix1.M22 = m22;
-			matrix1.M23 = m23;
-			matrix1.M24 = m24;
-			matrix1.M31 = m31;
-			matrix1.M32 = m32;
-			matrix1.M33 = m33;
-			matrix1.M34 = m34;
-			matrix1.M41 = m41;
-			matrix1.M42 = m42;
-			matrix1.M43 = m43;
-			matrix1.M44 = m44;
-			return matrix1;
+            float m11 = (left.M11 * right.M11) + (left.M12 * right.M21) + (left.M13 * right.M31) + (left.M14 * right.M41);
+            float m12 = (left.M11 * right.M12) + (left.M12 * right.M22) + (left.M13 * right.M32) + (left.M14 * right.M42);
+            float m13 = (left.M11 * right.M13) + (left.M12 * right.M23) + (left.M13 * right.M33) + (left.M14 * right.M43);
+            float m14 = (left.M11 * right.M14) + (left.M12 * right.M24) + (left.M13 * right.M34) + (left.M14 * right.M44);
+            float m21 = (left.M21 * right.M11) + (left.M22 * right.M21) + (left.M23 * right.M31) + (left.M24 * right.M41);
+            float m22 = (left.M21 * right.M12) + (left.M22 * right.M22) + (left.M23 * right.M32) + (left.M24 * right.M42);
+            float m23 = (left.M21 * right.M13) + (left.M22 * right.M23) + (left.M23 * right.M33) + (left.M24 * right.M43);
+            float m24 = (left.M21 * right.M14) + (left.M22 * right.M24) + (left.M23 * right.M34) + (left.M24 * right.M44);
+            float m31 = (left.M31 * right.M11) + (left.M32 * right.M21) + (left.M33 * right.M31) + (left.M34 * right.M41);
+            float m32 = (left.M31 * right.M12) + (left.M32 * right.M22) + (left.M33 * right.M32) + (left.M34 * right.M42);
+            float m33 = (left.M31 * right.M13) + (left.M32 * right.M23) + (left.M33 * right.M33) + (left.M34 * right.M43);
+            float m34 = (left.M31 * right.M14) + (left.M32 * right.M24) + (left.M33 * right.M34) + (left.M34 * right.M44);
+            float m41 = (left.M41 * right.M11) + (left.M42 * right.M21) + (left.M43 * right.M31) + (left.M44 * right.M41);
+            float m42 = (left.M41 * right.M12) + (left.M42 * right.M22) + (left.M43 * right.M32) + (left.M44 * right.M42);
+            float m43 = (left.M41 * right.M13) + (left.M42 * right.M23) + (left.M43 * right.M33) + (left.M44 * right.M43);
+            float m44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
+            left.M11 = m11;
+			left.M12 = m12;
+			left.M13 = m13;
+			left.M14 = m14;
+			left.M21 = m21;
+			left.M22 = m22;
+			left.M23 = m23;
+			left.M24 = m24;
+			left.M31 = m31;
+			left.M32 = m32;
+			left.M33 = m33;
+			left.M34 = m34;
+			left.M41 = m41;
+			left.M42 = m42;
+			left.M43 = m43;
+			left.M44 = m44;
+			return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains a multiplication of two matrix.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/>.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Source <see cref="Matrix"/>.</param>
         /// <param name="result">Result of the matrix multiplication as an output parameter.</param>
-        public static void Multiply(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
+        public static void Multiply(ref Matrix left, ref Matrix right, out Matrix result)
         {
-            var m11 = (((matrix1.M11 * matrix2.M11) + (matrix1.M12 * matrix2.M21)) + (matrix1.M13 * matrix2.M31)) + (matrix1.M14 * matrix2.M41);
-            var m12 = (((matrix1.M11 * matrix2.M12) + (matrix1.M12 * matrix2.M22)) + (matrix1.M13 * matrix2.M32)) + (matrix1.M14 * matrix2.M42);
-            var m13 = (((matrix1.M11 * matrix2.M13) + (matrix1.M12 * matrix2.M23)) + (matrix1.M13 * matrix2.M33)) + (matrix1.M14 * matrix2.M43);
-            var m14 = (((matrix1.M11 * matrix2.M14) + (matrix1.M12 * matrix2.M24)) + (matrix1.M13 * matrix2.M34)) + (matrix1.M14 * matrix2.M44);
-            var m21 = (((matrix1.M21 * matrix2.M11) + (matrix1.M22 * matrix2.M21)) + (matrix1.M23 * matrix2.M31)) + (matrix1.M24 * matrix2.M41);
-            var m22 = (((matrix1.M21 * matrix2.M12) + (matrix1.M22 * matrix2.M22)) + (matrix1.M23 * matrix2.M32)) + (matrix1.M24 * matrix2.M42);
-            var m23 = (((matrix1.M21 * matrix2.M13) + (matrix1.M22 * matrix2.M23)) + (matrix1.M23 * matrix2.M33)) + (matrix1.M24 * matrix2.M43);
-            var m24 = (((matrix1.M21 * matrix2.M14) + (matrix1.M22 * matrix2.M24)) + (matrix1.M23 * matrix2.M34)) + (matrix1.M24 * matrix2.M44);
-            var m31 = (((matrix1.M31 * matrix2.M11) + (matrix1.M32 * matrix2.M21)) + (matrix1.M33 * matrix2.M31)) + (matrix1.M34 * matrix2.M41);
-            var m32 = (((matrix1.M31 * matrix2.M12) + (matrix1.M32 * matrix2.M22)) + (matrix1.M33 * matrix2.M32)) + (matrix1.M34 * matrix2.M42);
-            var m33 = (((matrix1.M31 * matrix2.M13) + (matrix1.M32 * matrix2.M23)) + (matrix1.M33 * matrix2.M33)) + (matrix1.M34 * matrix2.M43);
-            var m34 = (((matrix1.M31 * matrix2.M14) + (matrix1.M32 * matrix2.M24)) + (matrix1.M33 * matrix2.M34)) + (matrix1.M34 * matrix2.M44);
-            var m41 = (((matrix1.M41 * matrix2.M11) + (matrix1.M42 * matrix2.M21)) + (matrix1.M43 * matrix2.M31)) + (matrix1.M44 * matrix2.M41);
-            var m42 = (((matrix1.M41 * matrix2.M12) + (matrix1.M42 * matrix2.M22)) + (matrix1.M43 * matrix2.M32)) + (matrix1.M44 * matrix2.M42);
-            var m43 = (((matrix1.M41 * matrix2.M13) + (matrix1.M42 * matrix2.M23)) + (matrix1.M43 * matrix2.M33)) + (matrix1.M44 * matrix2.M43);
-           	var m44 = (((matrix1.M41 * matrix2.M14) + (matrix1.M42 * matrix2.M24)) + (matrix1.M43 * matrix2.M34)) + (matrix1.M44 * matrix2.M44);
+            float m11 = (left.M11 * right.M11) + (left.M12 * right.M21) + (left.M13 * right.M31) + (left.M14 * right.M41);
+            float m12 = (left.M11 * right.M12) + (left.M12 * right.M22) + (left.M13 * right.M32) + (left.M14 * right.M42);
+            float m13 = (left.M11 * right.M13) + (left.M12 * right.M23) + (left.M13 * right.M33) + (left.M14 * right.M43);
+            float m14 = (left.M11 * right.M14) + (left.M12 * right.M24) + (left.M13 * right.M34) + (left.M14 * right.M44);
+            float m21 = (left.M21 * right.M11) + (left.M22 * right.M21) + (left.M23 * right.M31) + (left.M24 * right.M41);
+            float m22 = (left.M21 * right.M12) + (left.M22 * right.M22) + (left.M23 * right.M32) + (left.M24 * right.M42);
+            float m23 = (left.M21 * right.M13) + (left.M22 * right.M23) + (left.M23 * right.M33) + (left.M24 * right.M43);
+            float m24 = (left.M21 * right.M14) + (left.M22 * right.M24) + (left.M23 * right.M34) + (left.M24 * right.M44);
+            float m31 = (left.M31 * right.M11) + (left.M32 * right.M21) + (left.M33 * right.M31) + (left.M34 * right.M41);
+            float m32 = (left.M31 * right.M12) + (left.M32 * right.M22) + (left.M33 * right.M32) + (left.M34 * right.M42);
+            float m33 = (left.M31 * right.M13) + (left.M32 * right.M23) + (left.M33 * right.M33) + (left.M34 * right.M43);
+            float m34 = (left.M31 * right.M14) + (left.M32 * right.M24) + (left.M33 * right.M34) + (left.M34 * right.M44);
+            float m41 = (left.M41 * right.M11) + (left.M42 * right.M21) + (left.M43 * right.M31) + (left.M44 * right.M41);
+            float m42 = (left.M41 * right.M12) + (left.M42 * right.M22) + (left.M43 * right.M32) + (left.M44 * right.M42);
+            float m43 = (left.M41 * right.M13) + (left.M42 * right.M23) + (left.M43 * right.M33) + (left.M44 * right.M43);
+            float m44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
             result.M11 = m11;
 			result.M12 = m12;
 			result.M13 = m13;
@@ -1934,54 +1928,54 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains a multiplication of <see cref="Matrix"/> and a scalar.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="scaleFactor">Scalar value.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Scalar value.</param>
         /// <returns>Result of the matrix multiplication with a scalar.</returns>
-        public static Matrix Multiply(Matrix matrix1, float scaleFactor)
+        public static Matrix Multiply(Matrix left, float right)
         {
-            matrix1.M11 *= scaleFactor;
-            matrix1.M12 *= scaleFactor;
-            matrix1.M13 *= scaleFactor;
-            matrix1.M14 *= scaleFactor;
-            matrix1.M21 *= scaleFactor;
-            matrix1.M22 *= scaleFactor;
-            matrix1.M23 *= scaleFactor;
-            matrix1.M24 *= scaleFactor;
-            matrix1.M31 *= scaleFactor;
-            matrix1.M32 *= scaleFactor;
-            matrix1.M33 *= scaleFactor;
-            matrix1.M34 *= scaleFactor;
-            matrix1.M41 *= scaleFactor;
-            matrix1.M42 *= scaleFactor;
-            matrix1.M43 *= scaleFactor;
-            matrix1.M44 *= scaleFactor;
-            return matrix1;
+            left.M11 *= right;
+            left.M12 *= right;
+            left.M13 *= right;
+            left.M14 *= right;
+            left.M21 *= right;
+            left.M22 *= right;
+            left.M23 *= right;
+            left.M24 *= right;
+            left.M31 *= right;
+            left.M32 *= right;
+            left.M33 *= right;
+            left.M34 *= right;
+            left.M41 *= right;
+            left.M42 *= right;
+            left.M43 *= right;
+            left.M44 *= right;
+            return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains a multiplication of <see cref="Matrix"/> and a scalar.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/>.</param>
-        /// <param name="scaleFactor">Scalar value.</param>
+        /// <param name="left">Source <see cref="Matrix"/>.</param>
+        /// <param name="right">Scalar value.</param>
         /// <param name="result">Result of the matrix multiplication with a scalar as an output parameter.</param>
-        public static void Multiply(ref Matrix matrix1, float scaleFactor, out Matrix result)
+        public static void Multiply(ref Matrix left, float right, out Matrix result)
         {
-            result.M11 = matrix1.M11 * scaleFactor;
-            result.M12 = matrix1.M12 * scaleFactor;
-            result.M13 = matrix1.M13 * scaleFactor;
-            result.M14 = matrix1.M14 * scaleFactor;
-            result.M21 = matrix1.M21 * scaleFactor;
-            result.M22 = matrix1.M22 * scaleFactor;
-            result.M23 = matrix1.M23 * scaleFactor;
-            result.M24 = matrix1.M24 * scaleFactor;
-            result.M31 = matrix1.M31 * scaleFactor;
-            result.M32 = matrix1.M32 * scaleFactor;
-            result.M33 = matrix1.M33 * scaleFactor;
-            result.M34 = matrix1.M34 * scaleFactor;
-            result.M41 = matrix1.M41 * scaleFactor;
-            result.M42 = matrix1.M42 * scaleFactor;
-            result.M43 = matrix1.M43 * scaleFactor;
-            result.M44 = matrix1.M44 * scaleFactor;
+            result.M11 = left.M11 * right;
+            result.M12 = left.M12 * right;
+            result.M13 = left.M13 * right;
+            result.M14 = left.M14 * right;
+            result.M21 = left.M21 * right;
+            result.M22 = left.M22 * right;
+            result.M23 = left.M23 * right;
+            result.M24 = left.M24 * right;
+            result.M31 = left.M31 * right;
+            result.M32 = left.M32 * right;
+            result.M33 = left.M33 * right;
+            result.M34 = left.M34 * right;
+            result.M41 = left.M41 * right;
+            result.M42 = left.M42 * right;
+            result.M43 = left.M43 * right;
+            result.M44 = left.M44 * right;
 
         }
 
@@ -2007,369 +2001,369 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Returns a matrix with the all values negated.
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/>.</param>
+        /// <param name="value">Source <see cref="Matrix"/>.</param>
         /// <returns>Result of the matrix negation.</returns>
-        public static Matrix Negate(Matrix matrix)
+        public static Matrix Negate(Matrix value)
         {
-		    matrix.M11 = -matrix.M11;
-		    matrix.M12 = -matrix.M12;
-		    matrix.M13 = -matrix.M13;
-		    matrix.M14 = -matrix.M14;
-		    matrix.M21 = -matrix.M21;
-		    matrix.M22 = -matrix.M22;
-		    matrix.M23 = -matrix.M23;
-		    matrix.M24 = -matrix.M24;
-		    matrix.M31 = -matrix.M31;
-		    matrix.M32 = -matrix.M32;
-		    matrix.M33 = -matrix.M33;
-		    matrix.M34 = -matrix.M34;
-		    matrix.M41 = -matrix.M41;
-		    matrix.M42 = -matrix.M42;
-		    matrix.M43 = -matrix.M43;
-		    matrix.M44 = -matrix.M44;
-		    return matrix;
+		    value.M11 = -value.M11;
+		    value.M12 = -value.M12;
+		    value.M13 = -value.M13;
+		    value.M14 = -value.M14;
+		    value.M21 = -value.M21;
+		    value.M22 = -value.M22;
+		    value.M23 = -value.M23;
+		    value.M24 = -value.M24;
+		    value.M31 = -value.M31;
+		    value.M32 = -value.M32;
+		    value.M33 = -value.M33;
+		    value.M34 = -value.M34;
+		    value.M41 = -value.M41;
+		    value.M42 = -value.M42;
+		    value.M43 = -value.M43;
+		    value.M44 = -value.M44;
+		    return value;
         }
 
         /// <summary>
         /// Returns a matrix with the all values negated.
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/>.</param>
+        /// <param name="value">Source <see cref="Matrix"/>.</param>
         /// <param name="result">Result of the matrix negation as an output parameter.</param>
-        public static void Negate(ref Matrix matrix, out Matrix result)
+        public static void Negate(ref Matrix value, out Matrix result)
         {
-            result.M11 = -matrix.M11;
-		    result.M12 = -matrix.M12;
-		    result.M13 = -matrix.M13;
-		    result.M14 = -matrix.M14;
-		    result.M21 = -matrix.M21;
-		    result.M22 = -matrix.M22;
-		    result.M23 = -matrix.M23;
-		    result.M24 = -matrix.M24;
-		    result.M31 = -matrix.M31;
-		    result.M32 = -matrix.M32;
-		    result.M33 = -matrix.M33;
-		    result.M34 = -matrix.M34;
-		    result.M41 = -matrix.M41;
-		    result.M42 = -matrix.M42;
-		    result.M43 = -matrix.M43;
-		    result.M44 = -matrix.M44;
+            result.M11 = -value.M11;
+		    result.M12 = -value.M12;
+		    result.M13 = -value.M13;
+		    result.M14 = -value.M14;
+		    result.M21 = -value.M21;
+		    result.M22 = -value.M22;
+		    result.M23 = -value.M23;
+		    result.M24 = -value.M24;
+		    result.M31 = -value.M31;
+		    result.M32 = -value.M32;
+		    result.M33 = -value.M33;
+		    result.M34 = -value.M34;
+		    result.M41 = -value.M41;
+		    result.M42 = -value.M42;
+		    result.M43 = -value.M43;
+		    result.M44 = -value.M44;
         }
 
         /// <summary>
         /// Adds two matrixes.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the add sign.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/> on the right of the add sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the add sign.</param>
+        /// <param name="right">Source <see cref="Matrix"/> on the right of the add sign.</param>
         /// <returns>Sum of the matrixes.</returns>
-        public static Matrix operator +(Matrix matrix1, Matrix matrix2)
+        public static Matrix operator +(Matrix left, Matrix right)
         {
-            matrix1.M11 = matrix1.M11 + matrix2.M11;
-            matrix1.M12 = matrix1.M12 + matrix2.M12;
-            matrix1.M13 = matrix1.M13 + matrix2.M13;
-            matrix1.M14 = matrix1.M14 + matrix2.M14;
-            matrix1.M21 = matrix1.M21 + matrix2.M21;
-            matrix1.M22 = matrix1.M22 + matrix2.M22;
-            matrix1.M23 = matrix1.M23 + matrix2.M23;
-            matrix1.M24 = matrix1.M24 + matrix2.M24;
-            matrix1.M31 = matrix1.M31 + matrix2.M31;
-            matrix1.M32 = matrix1.M32 + matrix2.M32;
-            matrix1.M33 = matrix1.M33 + matrix2.M33;
-            matrix1.M34 = matrix1.M34 + matrix2.M34;
-            matrix1.M41 = matrix1.M41 + matrix2.M41;
-            matrix1.M42 = matrix1.M42 + matrix2.M42;
-            matrix1.M43 = matrix1.M43 + matrix2.M43;
-            matrix1.M44 = matrix1.M44 + matrix2.M44;
-            return matrix1;
+            left.M11 = left.M11 + right.M11;
+            left.M12 = left.M12 + right.M12;
+            left.M13 = left.M13 + right.M13;
+            left.M14 = left.M14 + right.M14;
+            left.M21 = left.M21 + right.M21;
+            left.M22 = left.M22 + right.M22;
+            left.M23 = left.M23 + right.M23;
+            left.M24 = left.M24 + right.M24;
+            left.M31 = left.M31 + right.M31;
+            left.M32 = left.M32 + right.M32;
+            left.M33 = left.M33 + right.M33;
+            left.M34 = left.M34 + right.M34;
+            left.M41 = left.M41 + right.M41;
+            left.M42 = left.M42 + right.M42;
+            left.M43 = left.M43 + right.M43;
+            left.M44 = left.M44 + right.M44;
+            return left;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by the elements of another <see cref="Matrix"/>.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the div sign.</param>
-        /// <param name="matrix2">Divisor <see cref="Matrix"/> on the right of the div sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the div sign.</param>
+        /// <param name="right">Divisor <see cref="Matrix"/> on the right of the div sign.</param>
         /// <returns>The result of dividing the matrixes.</returns>
-        public static Matrix operator /(Matrix matrix1, Matrix matrix2)
+        public static Matrix operator /(Matrix left, Matrix right)
         {
-		    matrix1.M11 = matrix1.M11 / matrix2.M11;
-		    matrix1.M12 = matrix1.M12 / matrix2.M12;
-		    matrix1.M13 = matrix1.M13 / matrix2.M13;
-		    matrix1.M14 = matrix1.M14 / matrix2.M14;
-		    matrix1.M21 = matrix1.M21 / matrix2.M21;
-		    matrix1.M22 = matrix1.M22 / matrix2.M22;
-		    matrix1.M23 = matrix1.M23 / matrix2.M23;
-		    matrix1.M24 = matrix1.M24 / matrix2.M24;
-		    matrix1.M31 = matrix1.M31 / matrix2.M31;
-		    matrix1.M32 = matrix1.M32 / matrix2.M32;
-		    matrix1.M33 = matrix1.M33 / matrix2.M33;
-		    matrix1.M34 = matrix1.M34 / matrix2.M34;
-		    matrix1.M41 = matrix1.M41 / matrix2.M41;
-		    matrix1.M42 = matrix1.M42 / matrix2.M42;
-		    matrix1.M43 = matrix1.M43 / matrix2.M43;
-		    matrix1.M44 = matrix1.M44 / matrix2.M44;
-		    return matrix1;
+		    left.M11 = left.M11 / right.M11;
+		    left.M12 = left.M12 / right.M12;
+		    left.M13 = left.M13 / right.M13;
+		    left.M14 = left.M14 / right.M14;
+		    left.M21 = left.M21 / right.M21;
+		    left.M22 = left.M22 / right.M22;
+		    left.M23 = left.M23 / right.M23;
+		    left.M24 = left.M24 / right.M24;
+		    left.M31 = left.M31 / right.M31;
+		    left.M32 = left.M32 / right.M32;
+		    left.M33 = left.M33 / right.M33;
+		    left.M34 = left.M34 / right.M34;
+		    left.M41 = left.M41 / right.M41;
+		    left.M42 = left.M42 / right.M42;
+		    left.M43 = left.M43 / right.M43;
+		    left.M44 = left.M44 / right.M44;
+		    return left;
         }
 
         /// <summary>
         /// Divides the elements of a <see cref="Matrix"/> by a scalar.
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/> on the left of the div sign.</param>
-        /// <param name="divider">Divisor scalar on the right of the div sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the div sign.</param>
+        /// <param name="right">Divisor scalar on the right of the div sign.</param>
         /// <returns>The result of dividing a matrix by a scalar.</returns>
-        public static Matrix operator /(Matrix matrix, float divider)
+        public static Matrix operator /(Matrix left, float right)
         {
-		    float num = 1f / divider;
-		    matrix.M11 = matrix.M11 * num;
-		    matrix.M12 = matrix.M12 * num;
-		    matrix.M13 = matrix.M13 * num;
-		    matrix.M14 = matrix.M14 * num;
-		    matrix.M21 = matrix.M21 * num;
-		    matrix.M22 = matrix.M22 * num;
-		    matrix.M23 = matrix.M23 * num;
-		    matrix.M24 = matrix.M24 * num;
-		    matrix.M31 = matrix.M31 * num;
-		    matrix.M32 = matrix.M32 * num;
-		    matrix.M33 = matrix.M33 * num;
-		    matrix.M34 = matrix.M34 * num;
-		    matrix.M41 = matrix.M41 * num;
-		    matrix.M42 = matrix.M42 * num;
-		    matrix.M43 = matrix.M43 * num;
-		    matrix.M44 = matrix.M44 * num;
-		    return matrix;
+		    float factor = 1f / right;
+		    left.M11 = left.M11 * factor;
+		    left.M12 = left.M12 * factor;
+		    left.M13 = left.M13 * factor;
+		    left.M14 = left.M14 * factor;
+		    left.M21 = left.M21 * factor;
+		    left.M22 = left.M22 * factor;
+		    left.M23 = left.M23 * factor;
+		    left.M24 = left.M24 * factor;
+		    left.M31 = left.M31 * factor;
+		    left.M32 = left.M32 * factor;
+		    left.M33 = left.M33 * factor;
+		    left.M34 = left.M34 * factor;
+		    left.M41 = left.M41 * factor;
+		    left.M42 = left.M42 * factor;
+		    left.M43 = left.M43 * factor;
+		    left.M44 = left.M44 * factor;
+		    return left;
         }
 
         /// <summary>
         /// Compares whether two <see cref="Matrix"/> instances are equal without any tolerance.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the equal sign.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/> on the right of the equal sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the equal sign.</param>
+        /// <param name="right">Source <see cref="Matrix"/> on the right of the equal sign.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-        public static bool operator ==(Matrix matrix1, Matrix matrix2)
+        public static bool operator ==(Matrix left, Matrix right)
         {
             return (
-                matrix1.M11 == matrix2.M11 &&
-                matrix1.M12 == matrix2.M12 &&
-                matrix1.M13 == matrix2.M13 &&
-                matrix1.M14 == matrix2.M14 &&
-                matrix1.M21 == matrix2.M21 &&
-                matrix1.M22 == matrix2.M22 &&
-                matrix1.M23 == matrix2.M23 &&
-                matrix1.M24 == matrix2.M24 &&
-                matrix1.M31 == matrix2.M31 &&
-                matrix1.M32 == matrix2.M32 &&
-                matrix1.M33 == matrix2.M33 &&
-                matrix1.M34 == matrix2.M34 &&
-                matrix1.M41 == matrix2.M41 &&
-                matrix1.M42 == matrix2.M42 &&
-                matrix1.M43 == matrix2.M43 &&
-                matrix1.M44 == matrix2.M44                  
+                left.M11 == right.M11 &&
+                left.M12 == right.M12 &&
+                left.M13 == right.M13 &&
+                left.M14 == right.M14 &&
+                left.M21 == right.M21 &&
+                left.M22 == right.M22 &&
+                left.M23 == right.M23 &&
+                left.M24 == right.M24 &&
+                left.M31 == right.M31 &&
+                left.M32 == right.M32 &&
+                left.M33 == right.M33 &&
+                left.M34 == right.M34 &&
+                left.M41 == right.M41 &&
+                left.M42 == right.M42 &&
+                left.M43 == right.M43 &&
+                left.M44 == right.M44
                 );
         }
 
         /// <summary>
         /// Compares whether two <see cref="Matrix"/> instances are not equal without any tolerance.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the not equal sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the not equal sign.</param>
         /// <param name="matrix2">Source <see cref="Matrix"/> on the right of the not equal sign.</param>
         /// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
-        public static bool operator !=(Matrix matrix1, Matrix matrix2)
+        public static bool operator !=(Matrix left, Matrix matrix2)
         {
             return (
-                matrix1.M11 != matrix2.M11 ||
-                matrix1.M12 != matrix2.M12 ||
-                matrix1.M13 != matrix2.M13 ||
-                matrix1.M14 != matrix2.M14 ||
-                matrix1.M21 != matrix2.M21 ||
-                matrix1.M22 != matrix2.M22 ||
-                matrix1.M23 != matrix2.M23 ||
-                matrix1.M24 != matrix2.M24 ||
-                matrix1.M31 != matrix2.M31 ||
-                matrix1.M32 != matrix2.M32 ||
-                matrix1.M33 != matrix2.M33 ||
-                matrix1.M34 != matrix2.M34 || 
-                matrix1.M41 != matrix2.M41 ||
-                matrix1.M42 != matrix2.M42 ||
-                matrix1.M43 != matrix2.M43 ||
-                matrix1.M44 != matrix2.M44                  
+                left.M11 != matrix2.M11 ||
+                left.M12 != matrix2.M12 ||
+                left.M13 != matrix2.M13 ||
+                left.M14 != matrix2.M14 ||
+                left.M21 != matrix2.M21 ||
+                left.M22 != matrix2.M22 ||
+                left.M23 != matrix2.M23 ||
+                left.M24 != matrix2.M24 ||
+                left.M31 != matrix2.M31 ||
+                left.M32 != matrix2.M32 ||
+                left.M33 != matrix2.M33 ||
+                left.M34 != matrix2.M34 ||
+                left.M41 != matrix2.M41 ||
+                left.M42 != matrix2.M42 ||
+                left.M43 != matrix2.M43 ||
+                left.M44 != matrix2.M44
                 );
         }
 
         /// <summary>
         /// Multiplies two matrixes.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the mul sign.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/> on the right of the mul sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Matrix"/> on the right of the mul sign.</param>
         /// <returns>Result of the matrix multiplication.</returns>
         /// <remarks>
         /// Using matrix multiplication algorithm - see http://en.wikipedia.org/wiki/Matrix_multiplication.
         /// </remarks>
-        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        public static Matrix operator *(Matrix left, Matrix right)
         {
-            var m11 = (((matrix1.M11 * matrix2.M11) + (matrix1.M12 * matrix2.M21)) + (matrix1.M13 * matrix2.M31)) + (matrix1.M14 * matrix2.M41);
-            var m12 = (((matrix1.M11 * matrix2.M12) + (matrix1.M12 * matrix2.M22)) + (matrix1.M13 * matrix2.M32)) + (matrix1.M14 * matrix2.M42);
-            var m13 = (((matrix1.M11 * matrix2.M13) + (matrix1.M12 * matrix2.M23)) + (matrix1.M13 * matrix2.M33)) + (matrix1.M14 * matrix2.M43);
-            var m14 = (((matrix1.M11 * matrix2.M14) + (matrix1.M12 * matrix2.M24)) + (matrix1.M13 * matrix2.M34)) + (matrix1.M14 * matrix2.M44);
-            var m21 = (((matrix1.M21 * matrix2.M11) + (matrix1.M22 * matrix2.M21)) + (matrix1.M23 * matrix2.M31)) + (matrix1.M24 * matrix2.M41);
-            var m22 = (((matrix1.M21 * matrix2.M12) + (matrix1.M22 * matrix2.M22)) + (matrix1.M23 * matrix2.M32)) + (matrix1.M24 * matrix2.M42);
-            var m23 = (((matrix1.M21 * matrix2.M13) + (matrix1.M22 * matrix2.M23)) + (matrix1.M23 * matrix2.M33)) + (matrix1.M24 * matrix2.M43);
-            var m24 = (((matrix1.M21 * matrix2.M14) + (matrix1.M22 * matrix2.M24)) + (matrix1.M23 * matrix2.M34)) + (matrix1.M24 * matrix2.M44);
-            var m31 = (((matrix1.M31 * matrix2.M11) + (matrix1.M32 * matrix2.M21)) + (matrix1.M33 * matrix2.M31)) + (matrix1.M34 * matrix2.M41);
-            var m32 = (((matrix1.M31 * matrix2.M12) + (matrix1.M32 * matrix2.M22)) + (matrix1.M33 * matrix2.M32)) + (matrix1.M34 * matrix2.M42);
-            var m33 = (((matrix1.M31 * matrix2.M13) + (matrix1.M32 * matrix2.M23)) + (matrix1.M33 * matrix2.M33)) + (matrix1.M34 * matrix2.M43);
-            var m34 = (((matrix1.M31 * matrix2.M14) + (matrix1.M32 * matrix2.M24)) + (matrix1.M33 * matrix2.M34)) + (matrix1.M34 * matrix2.M44);
-            var m41 = (((matrix1.M41 * matrix2.M11) + (matrix1.M42 * matrix2.M21)) + (matrix1.M43 * matrix2.M31)) + (matrix1.M44 * matrix2.M41);
-            var m42 = (((matrix1.M41 * matrix2.M12) + (matrix1.M42 * matrix2.M22)) + (matrix1.M43 * matrix2.M32)) + (matrix1.M44 * matrix2.M42);
-            var m43 = (((matrix1.M41 * matrix2.M13) + (matrix1.M42 * matrix2.M23)) + (matrix1.M43 * matrix2.M33)) + (matrix1.M44 * matrix2.M43);
-           	var m44 = (((matrix1.M41 * matrix2.M14) + (matrix1.M42 * matrix2.M24)) + (matrix1.M43 * matrix2.M34)) + (matrix1.M44 * matrix2.M44);
-            matrix1.M11 = m11;
-			matrix1.M12 = m12;
-			matrix1.M13 = m13;
-			matrix1.M14 = m14;
-			matrix1.M21 = m21;
-			matrix1.M22 = m22;
-			matrix1.M23 = m23;
-			matrix1.M24 = m24;
-			matrix1.M31 = m31;
-			matrix1.M32 = m32;
-			matrix1.M33 = m33;
-			matrix1.M34 = m34;
-			matrix1.M41 = m41;
-			matrix1.M42 = m42;
-			matrix1.M43 = m43;
-			matrix1.M44 = m44;
-			return matrix1;
+            float m11 = (left.M11 * right.M11) + (left.M12 * right.M21) + (left.M13 * right.M31) + (left.M14 * right.M41);
+            float m12 = (left.M11 * right.M12) + (left.M12 * right.M22) + (left.M13 * right.M32) + (left.M14 * right.M42);
+            float m13 = (left.M11 * right.M13) + (left.M12 * right.M23) + (left.M13 * right.M33) + (left.M14 * right.M43);
+            float m14 = (left.M11 * right.M14) + (left.M12 * right.M24) + (left.M13 * right.M34) + (left.M14 * right.M44);
+            float m21 = (left.M21 * right.M11) + (left.M22 * right.M21) + (left.M23 * right.M31) + (left.M24 * right.M41);
+            float m22 = (left.M21 * right.M12) + (left.M22 * right.M22) + (left.M23 * right.M32) + (left.M24 * right.M42);
+            float m23 = (left.M21 * right.M13) + (left.M22 * right.M23) + (left.M23 * right.M33) + (left.M24 * right.M43);
+            float m24 = (left.M21 * right.M14) + (left.M22 * right.M24) + (left.M23 * right.M34) + (left.M24 * right.M44);
+            float m31 = (left.M31 * right.M11) + (left.M32 * right.M21) + (left.M33 * right.M31) + (left.M34 * right.M41);
+            float m32 = (left.M31 * right.M12) + (left.M32 * right.M22) + (left.M33 * right.M32) + (left.M34 * right.M42);
+            float m33 = (left.M31 * right.M13) + (left.M32 * right.M23) + (left.M33 * right.M33) + (left.M34 * right.M43);
+            float m34 = (left.M31 * right.M14) + (left.M32 * right.M24) + (left.M33 * right.M34) + (left.M34 * right.M44);
+            float m41 = (left.M41 * right.M11) + (left.M42 * right.M21) + (left.M43 * right.M31) + (left.M44 * right.M41);
+            float m42 = (left.M41 * right.M12) + (left.M42 * right.M22) + (left.M43 * right.M32) + (left.M44 * right.M42);
+            float m43 = (left.M41 * right.M13) + (left.M42 * right.M23) + (left.M43 * right.M33) + (left.M44 * right.M43);
+            float m44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
+            left.M11 = m11;
+			left.M12 = m12;
+			left.M13 = m13;
+			left.M14 = m14;
+			left.M21 = m21;
+			left.M22 = m22;
+			left.M23 = m23;
+			left.M24 = m24;
+			left.M31 = m31;
+			left.M32 = m32;
+			left.M33 = m33;
+			left.M34 = m34;
+			left.M41 = m41;
+			left.M42 = m42;
+			left.M43 = m43;
+			left.M44 = m44;
+			return left;
         }
 
         /// <summary>
         /// Multiplies the elements of matrix by a scalar.
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/> on the left of the mul sign.</param>
-        /// <param name="scaleFactor">Scalar value on the right of the mul sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the mul sign.</param>
+        /// <param name="right">Scalar value on the right of the mul sign.</param>
         /// <returns>Result of the matrix multiplication with a scalar.</returns>
-        public static Matrix operator *(Matrix matrix, float scaleFactor)
+        public static Matrix operator *(Matrix left, float right)
         {
-		    matrix.M11 = matrix.M11 * scaleFactor;
-		    matrix.M12 = matrix.M12 * scaleFactor;
-		    matrix.M13 = matrix.M13 * scaleFactor;
-		    matrix.M14 = matrix.M14 * scaleFactor;
-		    matrix.M21 = matrix.M21 * scaleFactor;
-		    matrix.M22 = matrix.M22 * scaleFactor;
-		    matrix.M23 = matrix.M23 * scaleFactor;
-		    matrix.M24 = matrix.M24 * scaleFactor;
-		    matrix.M31 = matrix.M31 * scaleFactor;
-		    matrix.M32 = matrix.M32 * scaleFactor;
-		    matrix.M33 = matrix.M33 * scaleFactor;
-		    matrix.M34 = matrix.M34 * scaleFactor;
-		    matrix.M41 = matrix.M41 * scaleFactor;
-		    matrix.M42 = matrix.M42 * scaleFactor;
-		    matrix.M43 = matrix.M43 * scaleFactor;
-		    matrix.M44 = matrix.M44 * scaleFactor;
-		    return matrix;
+		    left.M11 = left.M11 * right;
+		    left.M12 = left.M12 * right;
+		    left.M13 = left.M13 * right;
+		    left.M14 = left.M14 * right;
+		    left.M21 = left.M21 * right;
+		    left.M22 = left.M22 * right;
+		    left.M23 = left.M23 * right;
+		    left.M24 = left.M24 * right;
+		    left.M31 = left.M31 * right;
+		    left.M32 = left.M32 * right;
+		    left.M33 = left.M33 * right;
+		    left.M34 = left.M34 * right;
+		    left.M41 = left.M41 * right;
+		    left.M42 = left.M42 * right;
+		    left.M43 = left.M43 * right;
+		    left.M44 = left.M44 * right;
+		    return left;
         }
 
         /// <summary>
         /// Subtracts the values of one <see cref="Matrix"/> from another <see cref="Matrix"/>.
         /// </summary>
-        /// <param name="matrix1">Source <see cref="Matrix"/> on the left of the sub sign.</param>
-        /// <param name="matrix2">Source <see cref="Matrix"/> on the right of the sub sign.</param>
+        /// <param name="left">Source <see cref="Matrix"/> on the left of the sub sign.</param>
+        /// <param name="right">Source <see cref="Matrix"/> on the right of the sub sign.</param>
         /// <returns>Result of the matrix subtraction.</returns>
-        public static Matrix operator -(Matrix matrix1, Matrix matrix2)
+        public static Matrix operator -(Matrix left, Matrix right)
         {
-		    matrix1.M11 = matrix1.M11 - matrix2.M11;
-		    matrix1.M12 = matrix1.M12 - matrix2.M12;
-		    matrix1.M13 = matrix1.M13 - matrix2.M13;
-		    matrix1.M14 = matrix1.M14 - matrix2.M14;
-		    matrix1.M21 = matrix1.M21 - matrix2.M21;
-		    matrix1.M22 = matrix1.M22 - matrix2.M22;
-		    matrix1.M23 = matrix1.M23 - matrix2.M23;
-		    matrix1.M24 = matrix1.M24 - matrix2.M24;
-		    matrix1.M31 = matrix1.M31 - matrix2.M31;
-		    matrix1.M32 = matrix1.M32 - matrix2.M32;
-		    matrix1.M33 = matrix1.M33 - matrix2.M33;
-		    matrix1.M34 = matrix1.M34 - matrix2.M34;
-		    matrix1.M41 = matrix1.M41 - matrix2.M41;
-		    matrix1.M42 = matrix1.M42 - matrix2.M42;
-		    matrix1.M43 = matrix1.M43 - matrix2.M43;
-		    matrix1.M44 = matrix1.M44 - matrix2.M44;
-		    return matrix1;
+		    left.M11 = left.M11 - right.M11;
+		    left.M12 = left.M12 - right.M12;
+		    left.M13 = left.M13 - right.M13;
+		    left.M14 = left.M14 - right.M14;
+		    left.M21 = left.M21 - right.M21;
+		    left.M22 = left.M22 - right.M22;
+		    left.M23 = left.M23 - right.M23;
+		    left.M24 = left.M24 - right.M24;
+		    left.M31 = left.M31 - right.M31;
+		    left.M32 = left.M32 - right.M32;
+		    left.M33 = left.M33 - right.M33;
+		    left.M34 = left.M34 - right.M34;
+		    left.M41 = left.M41 - right.M41;
+		    left.M42 = left.M42 - right.M42;
+		    left.M43 = left.M43 - right.M43;
+		    left.M44 = left.M44 - right.M44;
+		    return left;
         }
 
         /// <summary>
         /// Inverts values in the specified <see cref="Matrix"/>.
         /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/> on the right of the sub sign.</param>
+        /// <param name="value">Source <see cref="Matrix"/> on the right of the sub sign.</param>
         /// <returns>Result of the inversion.</returns>
-        public static Matrix operator -(Matrix matrix)
+        public static Matrix operator -(Matrix value)
         {
-		    matrix.M11 = -matrix.M11;
-		    matrix.M12 = -matrix.M12;
-		    matrix.M13 = -matrix.M13;
-		    matrix.M14 = -matrix.M14;
-		    matrix.M21 = -matrix.M21;
-		    matrix.M22 = -matrix.M22;
-		    matrix.M23 = -matrix.M23;
-		    matrix.M24 = -matrix.M24;
-		    matrix.M31 = -matrix.M31;
-		    matrix.M32 = -matrix.M32;
-		    matrix.M33 = -matrix.M33;
-		    matrix.M34 = -matrix.M34;
-		    matrix.M41 = -matrix.M41;
-		    matrix.M42 = -matrix.M42;
-		    matrix.M43 = -matrix.M43;
-		    matrix.M44 = -matrix.M44;
-			return matrix;
+		    value.M11 = -value.M11;
+		    value.M12 = -value.M12;
+		    value.M13 = -value.M13;
+		    value.M14 = -value.M14;
+		    value.M21 = -value.M21;
+		    value.M22 = -value.M22;
+		    value.M23 = -value.M23;
+		    value.M24 = -value.M24;
+		    value.M31 = -value.M31;
+		    value.M32 = -value.M32;
+		    value.M33 = -value.M33;
+		    value.M34 = -value.M34;
+		    value.M41 = -value.M41;
+		    value.M42 = -value.M42;
+		    value.M43 = -value.M43;
+		    value.M44 = -value.M44;
+			return value;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains subtraction of one matrix from another.
         /// </summary>
-        /// <param name="matrix1">The first <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">The second <see cref="Matrix"/>.</param>
+        /// <param name="left">The first <see cref="Matrix"/>.</param>
+        /// <param name="right">The second <see cref="Matrix"/>.</param>
         /// <returns>The result of the matrix subtraction.</returns>
-        public static Matrix Subtract(Matrix matrix1, Matrix matrix2)
+        public static Matrix Subtract(Matrix left, Matrix right)
         {
-		    matrix1.M11 = matrix1.M11 - matrix2.M11;
-		    matrix1.M12 = matrix1.M12 - matrix2.M12;
-		    matrix1.M13 = matrix1.M13 - matrix2.M13;
-		    matrix1.M14 = matrix1.M14 - matrix2.M14;
-		    matrix1.M21 = matrix1.M21 - matrix2.M21;
-		    matrix1.M22 = matrix1.M22 - matrix2.M22;
-		    matrix1.M23 = matrix1.M23 - matrix2.M23;
-		    matrix1.M24 = matrix1.M24 - matrix2.M24;
-		    matrix1.M31 = matrix1.M31 - matrix2.M31;
-		    matrix1.M32 = matrix1.M32 - matrix2.M32;
-		    matrix1.M33 = matrix1.M33 - matrix2.M33;
-		    matrix1.M34 = matrix1.M34 - matrix2.M34;
-		    matrix1.M41 = matrix1.M41 - matrix2.M41;
-		    matrix1.M42 = matrix1.M42 - matrix2.M42;
-		    matrix1.M43 = matrix1.M43 - matrix2.M43;
-		    matrix1.M44 = matrix1.M44 - matrix2.M44;
-		    return matrix1;
+		    left.M11 = left.M11 - right.M11;
+		    left.M12 = left.M12 - right.M12;
+		    left.M13 = left.M13 - right.M13;
+		    left.M14 = left.M14 - right.M14;
+		    left.M21 = left.M21 - right.M21;
+		    left.M22 = left.M22 - right.M22;
+		    left.M23 = left.M23 - right.M23;
+		    left.M24 = left.M24 - right.M24;
+		    left.M31 = left.M31 - right.M31;
+		    left.M32 = left.M32 - right.M32;
+		    left.M33 = left.M33 - right.M33;
+		    left.M34 = left.M34 - right.M34;
+		    left.M41 = left.M41 - right.M41;
+		    left.M42 = left.M42 - right.M42;
+		    left.M43 = left.M43 - right.M43;
+		    left.M44 = left.M44 - right.M44;
+		    return left;
         }
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains subtraction of one matrix from another.
         /// </summary>
-        /// <param name="matrix1">The first <see cref="Matrix"/>.</param>
-        /// <param name="matrix2">The second <see cref="Matrix"/>.</param>
+        /// <param name="left">The first <see cref="Matrix"/>.</param>
+        /// <param name="right">The second <see cref="Matrix"/>.</param>
         /// <param name="result">The result of the matrix subtraction as an output parameter.</param>
-        public static void Subtract(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
+        public static void Subtract(ref Matrix left, ref Matrix right, out Matrix result)
         {
-            result.M11 = matrix1.M11 - matrix2.M11;
-		    result.M12 = matrix1.M12 - matrix2.M12;
-		    result.M13 = matrix1.M13 - matrix2.M13;
-		    result.M14 = matrix1.M14 - matrix2.M14;
-		    result.M21 = matrix1.M21 - matrix2.M21;
-		    result.M22 = matrix1.M22 - matrix2.M22;
-		    result.M23 = matrix1.M23 - matrix2.M23;
-		    result.M24 = matrix1.M24 - matrix2.M24;
-		    result.M31 = matrix1.M31 - matrix2.M31;
-		    result.M32 = matrix1.M32 - matrix2.M32;
-		    result.M33 = matrix1.M33 - matrix2.M33;
-		    result.M34 = matrix1.M34 - matrix2.M34;
-		    result.M41 = matrix1.M41 - matrix2.M41;
-		    result.M42 = matrix1.M42 - matrix2.M42;
-		    result.M43 = matrix1.M43 - matrix2.M43;
-		    result.M44 = matrix1.M44 - matrix2.M44;
+            result.M11 = left.M11 - right.M11;
+		    result.M12 = left.M12 - right.M12;
+		    result.M13 = left.M13 - right.M13;
+		    result.M14 = left.M14 - right.M14;
+		    result.M21 = left.M21 - right.M21;
+		    result.M22 = left.M22 - right.M22;
+		    result.M23 = left.M23 - right.M23;
+		    result.M24 = left.M24 - right.M24;
+		    result.M31 = left.M31 - right.M31;
+		    result.M32 = left.M32 - right.M32;
+		    result.M33 = left.M33 - right.M33;
+		    result.M34 = left.M34 - right.M34;
+		    result.M41 = left.M41 - right.M41;
+		    result.M42 = left.M42 - right.M42;
+		    result.M43 = left.M43 - right.M43;
+		    result.M44 = left.M44 - right.M44;
         }
 
         internal string DebugDisplayString
@@ -2408,43 +2402,43 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Swap the matrix rows and columns.
         /// </summary>
-        /// <param name="matrix">The matrix for transposing operation.</param>
+        /// <param name="value">The matrix for transposing operation.</param>
         /// <returns>The new <see cref="Matrix"/> which contains the transposing result.</returns>
-        public static Matrix Transpose(Matrix matrix)
+        public static Matrix Transpose(Matrix value)
         {
-            Matrix ret;
-            Transpose(ref matrix, out ret);
-            return ret;
+            Matrix result;
+            Transpose(ref value, out result);
+            return result;
         }
 
         /// <summary>
         /// Swap the matrix rows and columns.
         /// </summary>
-        /// <param name="matrix">The matrix for transposing operation.</param>
+        /// <param name="value">The matrix for transposing operation.</param>
         /// <param name="result">The new <see cref="Matrix"/> which contains the transposing result as an output parameter.</param>
-        public static void Transpose(ref Matrix matrix, out Matrix result)
+        public static void Transpose(ref Matrix value, out Matrix result)
         {
             Matrix ret;
             
-            ret.M11 = matrix.M11;
-            ret.M12 = matrix.M21;
-            ret.M13 = matrix.M31;
-            ret.M14 = matrix.M41;
+            ret.M11 = value.M11;
+            ret.M12 = value.M21;
+            ret.M13 = value.M31;
+            ret.M14 = value.M41;
 
-            ret.M21 = matrix.M12;
-            ret.M22 = matrix.M22;
-            ret.M23 = matrix.M32;
-            ret.M24 = matrix.M42;
+            ret.M21 = value.M12;
+            ret.M22 = value.M22;
+            ret.M23 = value.M32;
+            ret.M24 = value.M42;
 
-            ret.M31 = matrix.M13;
-            ret.M32 = matrix.M23;
-            ret.M33 = matrix.M33;
-            ret.M34 = matrix.M43;
+            ret.M31 = value.M13;
+            ret.M32 = value.M23;
+            ret.M33 = value.M33;
+            ret.M34 = value.M43;
 
-            ret.M41 = matrix.M14;
-            ret.M42 = matrix.M24;
-            ret.M43 = matrix.M34;
-            ret.M44 = matrix.M44;
+            ret.M41 = value.M14;
+            ret.M42 = value.M24;
+            ret.M43 = value.M34;
+            ret.M44 = value.M44;
             
             result = ret;
         }
@@ -2456,22 +2450,22 @@ namespace Microsoft.Xna.Framework
         /// Helper method for using the Laplace expansion theorem using two rows expansions to calculate major and 
         /// minor determinants of a 4x4 matrix. This method is used for inverting a matrix.
         /// </summary>
-        private static void FindDeterminants(ref Matrix matrix, out float major, 
+        private static void FindDeterminants(ref Matrix value, out float major, 
                                              out float minor1, out float minor2, out float minor3, out float minor4, out float minor5, out float minor6,
                                              out float minor7, out float minor8, out float minor9, out float minor10, out float minor11, out float minor12)
         {
-                double det1 = (double)matrix.M11 * (double)matrix.M22 - (double)matrix.M12 * (double)matrix.M21;
-                double det2 = (double)matrix.M11 * (double)matrix.M23 - (double)matrix.M13 * (double)matrix.M21;
-                double det3 = (double)matrix.M11 * (double)matrix.M24 - (double)matrix.M14 * (double)matrix.M21;
-                double det4 = (double)matrix.M12 * (double)matrix.M23 - (double)matrix.M13 * (double)matrix.M22;
-                double det5 = (double)matrix.M12 * (double)matrix.M24 - (double)matrix.M14 * (double)matrix.M22;
-                double det6 = (double)matrix.M13 * (double)matrix.M24 - (double)matrix.M14 * (double)matrix.M23;
-                double det7 = (double)matrix.M31 * (double)matrix.M42 - (double)matrix.M32 * (double)matrix.M41;
-                double det8 = (double)matrix.M31 * (double)matrix.M43 - (double)matrix.M33 * (double)matrix.M41;
-                double det9 = (double)matrix.M31 * (double)matrix.M44 - (double)matrix.M34 * (double)matrix.M41;
-                double det10 = (double)matrix.M32 * (double)matrix.M43 - (double)matrix.M33 * (double)matrix.M42;
-                double det11 = (double)matrix.M32 * (double)matrix.M44 - (double)matrix.M34 * (double)matrix.M42;
-                double det12 = (double)matrix.M33 * (double)matrix.M44 - (double)matrix.M34 * (double)matrix.M43;
+                double det1 = (double)value.M11 * (double)value.M22 - (double)value.M12 * (double)value.M21;
+                double det2 = (double)value.M11 * (double)value.M23 - (double)value.M13 * (double)value.M21;
+                double det3 = (double)value.M11 * (double)value.M24 - (double)value.M14 * (double)value.M21;
+                double det4 = (double)value.M12 * (double)value.M23 - (double)value.M13 * (double)value.M22;
+                double det5 = (double)value.M12 * (double)value.M24 - (double)value.M14 * (double)value.M22;
+                double det6 = (double)value.M13 * (double)value.M24 - (double)value.M14 * (double)value.M23;
+                double det7 = (double)value.M31 * (double)value.M42 - (double)value.M32 * (double)value.M41;
+                double det8 = (double)value.M31 * (double)value.M43 - (double)value.M33 * (double)value.M41;
+                double det9 = (double)value.M31 * (double)value.M44 - (double)value.M34 * (double)value.M41;
+                double det10 = (double)value.M32 * (double)value.M43 - (double)value.M33 * (double)value.M42;
+                double det11 = (double)value.M32 * (double)value.M44 - (double)value.M34 * (double)value.M42;
+                double det12 = (double)value.M33 * (double)value.M44 - (double)value.M34 * (double)value.M43;
                 
                 major = (float)(det1*det12 - det2*det11 + det3*det10 + det4*det9 - det5*det8 + det6*det7);
                 minor1 = (float)det1;

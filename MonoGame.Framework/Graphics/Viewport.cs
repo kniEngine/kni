@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				if ((h != 0) && (w != 0))
 				{
-					return (((float) w)/((float)h));
+					return ((float)w / (float)h);
 				}
 				return 0f;
 			}
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Matrix.Multiply(ref world, ref view, out view);
             Matrix.Multiply(ref view, ref projection, out projection);
-            float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
+            float w = (source.X * projection.M14) + (source.Y * projection.M24) + (source.Z * projection.M34) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
 
             var invW = 1 / w;
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    source.X = (((source.X - this.x) / ((float) this.w)) * 2f) - 1f;
 		    source.Y = -((((source.Y - this.y) / ((float) this.h)) * 2f) - 1f);
 		    source.Z = (source.Z - this.minDepth) / (this.maxDepth - this.minDepth);
-            float w = (((source.X * projection.M14) + (source.Y * projection.M24)) + (source.Z * projection.M34)) + projection.M44;
+            float w = (source.X * projection.M14) + (source.Y * projection.M24) + (source.Z * projection.M34) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
 		    
             var invW = 1 / w;
