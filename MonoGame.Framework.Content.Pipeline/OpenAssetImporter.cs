@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +14,7 @@ using Assimp;
 using Assimp.Unmanaged;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
@@ -908,7 +911,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             //                 "nodeXyz_$AssimpFbx$_Rotation",
             //                 "nodeXyz_$AssimpFbx$_Scaling"
             // Group animation channels by name (strip the "_$AssimpFbx$" part).
-            IEnumerable < IGrouping < string,NodeAnimationChannel >> channelGroups;
+            IEnumerable<IGrouping<string,NodeAnimationChannel>> channelGroups;
             if (nodeName != null)
             {
                 channelGroups = aiAnimation.NodeAnimationChannels
@@ -971,118 +974,112 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 // Get all unique keyframe times. (Assuming that no two key frames
                 // have the same time, which is usually a safe assumption.)
-                var times = scaleKeys.Select(k => k.Time)
-                                     .Union(rotationKeys.Select(k => k.Time))
-                                     .Union(translationKeys.Select(k => k.Time))
-                                     .OrderBy(t => t)
-                                     .ToList();
+                List<double> times = scaleKeys.Select(k => k.Time)
+                                              .Union(rotationKeys.Select(k => k.Time))
+                                              .Union(translationKeys.Select(k => k.Time))
+                                              .OrderBy(t => t)
+                                              .ToList();
 
-                Debug.Assert(times.Count == times.Distinct().Count(), "Sequences combined with Union() should not have duplicates.");
+                int scaleIndex = 0;
+                int rotationIndex = 0;
+                int translationIndex = 0;
 
-                int prevScaleIndex = -1;
-                int prevRotationIndex = -1;
-                int prevTranslationIndex = -1;
-                double prevScaleTime = 0.0;
-                double prevRotationTime = 0.0;
-                double prevTranslationTime = 0.0;
-                Vector3? prevScale = null;
-                Quaternion? prevRotation = null;
-                Vector3? prevTranslation = null;
-
-                foreach (var time in times)
+                for (int frame = 0; frame < times.Count; frame++)
                 {
+                    double time = times[frame];
+
                     // Get scaling.
-                    Vector3? scale;
-                    int scaleIndex = scaleKeys.FindIndex(k => k.Time == time);
-                    if (scaleIndex != -1)
+                    Vector3? scale = null;
+                    if (scaleKeys.Count > 0)
                     {
-                        // Scaling key found.
-                        scale = ToXna(scaleKeys[scaleIndex].Value);
-                        prevScaleIndex = scaleIndex;
-                        prevScaleTime = time;
-                        prevScale = scale;
-                    }
-                    else
-                    {
-                        // No scaling key found.
-                        if (prevScaleIndex != -1 && prevScaleIndex + 1 < scaleKeys.Count)
+                        int nextScaleIndex = scaleKeys.FindIndex(scaleIndex+1, k => k.Time <= time);
+                        scaleIndex = Math.Max(scaleIndex, nextScaleIndex);
+                        if ((scaleIndex+1) < scaleKeys.Count)
                         {
-                            // Lerp between previous and next scaling key.
-                            var nextScaleKey = scaleKeys[prevScaleIndex + 1];
-                            var nextScaleTime = nextScaleKey.Time;
-                            var nextScale = ToXna(nextScaleKey.Value);
-                            var amount = (float)((time - prevScaleTime) / (nextScaleTime - prevScaleTime));
-                            scale = Vector3.Lerp(prevScale.Value, nextScale, amount);
+                            // Lerp between current and next scaling key.
+                            double scaleTimeA = scaleKeys[scaleIndex].Time;
+                            double scaleTimeB = scaleKeys[scaleIndex+1].Time;
+                            float amount = (float)((time - scaleTimeA) / (scaleTimeB - scaleTimeA));
+                            amount = MathHelper.Clamp(amount, 0, 1);
+                            if (amount == 0)
+                            {
+                                scale = ToXna(scaleKeys[scaleIndex].Value);
+                            }
+                            else
+                            {
+                                Vector3 scaleA = ToXna(scaleKeys[scaleIndex].Value);
+                                Vector3 scaleB = ToXna(scaleKeys[scaleIndex + 1].Value);
+                                scale = Vector3.Lerp(scaleA, scaleB, amount);
+                            }
                         }
                         else
                         {
-                            // Hold previous scaling value.
-                            scale = prevScale;
+                            scale = ToXna(scaleKeys[scaleIndex].Value);
                         }
                     }
 
                     // Get rotation.
-                    Quaternion? rotation;
-                    int rotationIndex = rotationKeys.FindIndex(k => k.Time == time);
-                    if (rotationIndex != -1)
+                    Quaternion? rotation = null;
+                    if (rotationKeys.Count > 0)
                     {
-                        // Rotation key found.
-                        rotation = ToXna(rotationKeys[rotationIndex].Value);
-                        prevRotationIndex = rotationIndex;
-                        prevRotationTime = time;
-                        prevRotation = rotation;
-                    }
-                    else
-                    {
-                        // No rotation key found.
-                        if (prevRotationIndex != -1 && prevRotationIndex + 1 < rotationKeys.Count)
+                        int nextRotationIndex = rotationKeys.FindIndex(rotationIndex+1, k => k.Time <= time);
+                        rotationIndex = Math.Max(rotationIndex, nextRotationIndex);
+                        if ((rotationIndex+1) < rotationKeys.Count)
                         {
-                            // Lerp between previous and next rotation key.
-                            var nextRotationKey = rotationKeys[prevRotationIndex + 1];
-                            var nextRotationTime = nextRotationKey.Time;
-                            var nextRotation = ToXna(nextRotationKey.Value);
-                            var amount = (float)((time - prevRotationTime) / (nextRotationTime - prevRotationTime));
-                            rotation = Quaternion.Slerp(prevRotation.Value, nextRotation, amount);
+                            // Lerp between current and next rotation key.
+                            double rotationTimeA = rotationKeys[rotationIndex].Time;
+                            double rotationTimeB = rotationKeys[rotationIndex+1].Time;
+                            float amount = (float)((time - rotationTimeA) / (rotationTimeB - rotationTimeA));
+                            amount = MathHelper.Clamp(amount, 0, 1);
+                            if (amount == 0)
+                            {
+                                rotation = ToXna(rotationKeys[rotationIndex].Value);
+                            }
+                            else
+                            {
+                                Quaternion rotationA = ToXna(rotationKeys[rotationIndex].Value);
+                                Quaternion rotationB = ToXna(rotationKeys[rotationIndex + 1].Value);
+                                rotation = Quaternion.Slerp(rotationA, rotationB, amount);
+                            }
                         }
                         else
                         {
-                            // Hold previous rotation value.
-                            rotation = prevRotation;
+                            rotation = ToXna(rotationKeys[rotationIndex].Value);
                         }
                     }
 
                     // Get translation.
-                    Vector3? translation;
-                    int translationIndex = translationKeys.FindIndex(k => k.Time == time);
-                    if (translationIndex != -1)
+                    Vector3? translation = null;
+                    if (translationKeys.Count > 0)
                     {
-                        // Translation key found.
-                        translation = ToXna(translationKeys[translationIndex].Value);
-                        prevTranslationIndex = translationIndex;
-                        prevTranslationTime = time;
-                        prevTranslation = translation;
-                    }
-                    else
-                    {
-                        // No translation key found.
-                        if (prevTranslationIndex != -1 && prevTranslationIndex + 1 < translationKeys.Count)
+                        int nextTranslationIndex = translationKeys.FindIndex(translationIndex+1, k => k.Time <= time);
+                        translationIndex = Math.Max(translationIndex, nextTranslationIndex);
+                        if ((translationIndex+1) < translationKeys.Count)
                         {
-                            // Lerp between previous and next translation key.
-                            var nextTranslationKey = translationKeys[prevTranslationIndex + 1];
-                            var nextTranslationTime = nextTranslationKey.Time;
-                            var nextTranslation = ToXna(nextTranslationKey.Value);
-                            var amount = (float)((time - prevTranslationTime) / (nextTranslationTime - prevTranslationTime));
-                            translation = Vector3.Lerp(prevTranslation.Value, nextTranslation, amount);
+                            // Lerp between current and next translation key.
+                            double translationTimeA = translationKeys[translationIndex].Time;
+                            double translationTimeB = translationKeys[translationIndex+1].Time;
+                            float amount = (float)((time - translationTimeA) / (translationTimeB - translationTimeA));
+                            amount = MathHelper.Clamp(amount, 0, 1);
+                            if (amount == 0)
+                            {
+                                translation = ToXna(translationKeys[translationIndex].Value);
+                            }
+                            else
+                            {
+                                Vector3 translationA = ToXna(translationKeys[translationIndex].Value);
+                                Vector3 translationB = ToXna(translationKeys[translationIndex + 1].Value);
+                                translation = Vector3.Lerp(translationA, translationB, amount);
+                            }
                         }
                         else
                         {
-                            // Hold previous translation value.
-                            translation = prevTranslation;
+                            translation = ToXna(translationKeys[translationIndex].Value);
                         }
                     }
 
                     // Apply transformation pivot.
-                    var transform = pivot.GetTransform(scale, rotation, translation);
+                    Matrix transform = pivot.GetTransform(scale, rotation, translation);
 
                     long ticks = (long)(time * (TimeSpan.TicksPerSecond / aiAnimation.TicksPerSecond));
                     channel.Add(new AnimationKeyframe(TimeSpan.FromTicks(ticks), transform));
@@ -1161,9 +1158,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         #region Conversion Helpers
 
         [DebuggerStepThrough]
-        public static Matrix ToXna(Matrix4x4 matrix)
+        private static Matrix ToXna(Matrix4x4 matrix)
         {
-            var result = Matrix.Identity;
+            Matrix result;
 
             result.M11 = matrix.A1;
             result.M12 = matrix.B1;
@@ -1189,37 +1186,56 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         }
 
         [DebuggerStepThrough]
-        public static Vector2 ToXna(Vector2D vector)
+        private static Vector2 ToXna(Vector2D vector)
         {
-            return new Vector2(vector.X, vector.Y);
+            Vector2 result;
+            result.X = vector.X;
+            result.Y = vector.Y;
+            return result;
         }
 
         [DebuggerStepThrough]
-        public static Vector3 ToXna(Vector3D vector)
+        private static Vector3 ToXna(Vector3D vector)
         {
-            return new Vector3(vector.X, vector.Y, vector.Z);
+            Vector3 result;
+            result.X = vector.X;
+            result.Y = vector.Y;
+            result.Z = vector.Z;
+            return result;
         }
 
         [DebuggerStepThrough]
-        public static Quaternion ToXna(Assimp.Quaternion quaternion)
+        private static Quaternion ToXna(Assimp.Quaternion quaternion)
         {
-            return new Quaternion(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+            Quaternion result;
+            result.X = quaternion.X;
+            result.Y = quaternion.Y;
+            result.Z = quaternion.Z;
+            result.W = quaternion.W;
+            return result;
         }
 
         [DebuggerStepThrough]
-        public static Vector3 ToXna(Color4D color)
+        private static Vector3 ToXna(Color4D color)
         {
-            return new Vector3(color.R, color.G, color.B);
+            Vector3 result;
+            result.X = color.R;
+            result.Y = color.G;
+            result.Z = color.B;
+            return result;
         }
 
         [DebuggerStepThrough]
-        public static Vector2 ToXnaTexCoord(Vector3D vector)
+        private static Vector2 ToXnaTexCoord(Vector3D vector)
         {
-            return new Vector2(vector.X, vector.Y);
+            Vector2 result;
+            result.X = vector.X;
+            result.Y = vector.Y;
+            return result;
         }
 
         [DebuggerStepThrough]
-        public static Color ToXnaColor(Color4D color)
+        private static Color ToXnaColor(Color4D color)
         {
             return new Color(color.R, color.G, color.B, color.A);
         }

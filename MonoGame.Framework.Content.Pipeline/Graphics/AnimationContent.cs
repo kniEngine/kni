@@ -11,18 +11,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public class AnimationContent : ContentItem
     {
-        AnimationChannelDictionary channels;
-        TimeSpan duration;
+        TimeSpan _duration;
+        AnimationChannelDictionary _channels;
 
         /// <summary>
         /// Gets the collection of animation data channels. Each channel describes the movement of a single bone or rigid object.
         /// </summary>
         public AnimationChannelDictionary Channels
         {
-            get
-            {
-                return channels;
-            }
+            get { return _channels; }
         }
 
         /// <summary>
@@ -30,14 +27,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public TimeSpan Duration
         {
-            get
-            {
-                return duration;
-            }
-            set
-            {
-                duration = value;
-            }
+            get { return _duration; }
+            set { _duration = value; }
         }
 
         /// <summary>
@@ -45,7 +36,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public AnimationContent()
         {
-            channels = new AnimationChannelDictionary();
+            _channels = new AnimationChannelDictionary();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{{Duration:{0}, _channels: {1}}}", _duration, _channels.Count);
         }
     }
 }
