@@ -14,18 +14,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public sealed class AnimationKeyframe : IComparable<AnimationKeyframe>
     {
-        TimeSpan time;
-        Matrix transform;
+        TimeSpan _time;
+        Matrix _transform;
 
         /// <summary>
         /// Gets the time offset from the start of the animation to the position described by this keyframe.
         /// </summary>
         public TimeSpan Time
         {
-            get
-            {
-                return time;
-            }
+            get { return _time; }
         }
 
         /// <summary>
@@ -33,14 +30,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public Matrix Transform
         {
-            get
-            {
-                return transform;
-            }
-            set
-            {
-                transform = value;
-            }
+            get { return _transform; }
+            set { _transform = value; }
         }
 
         /// <summary>
@@ -50,8 +41,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="transform">Position of the keyframe.</param>
         public AnimationKeyframe(TimeSpan time, Matrix transform)
         {
-            this.time = time;
-            this.transform = transform;
+            this._time = time;
+            this._transform = transform;
         }
 
         /// <summary>
@@ -63,7 +54,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             // No sense in comparing the transform, so compare the time.
             // This would be used for sorting keyframes in time order.
-            return time.CompareTo(other.time);
+            return _time.CompareTo(other._time);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{{Time:{0}, Transform: {1}}}", _time, _transform);
         }
     }
 }
