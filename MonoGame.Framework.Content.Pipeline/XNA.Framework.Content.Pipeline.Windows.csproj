@@ -57,9 +57,6 @@
     <Reference Include="CppNet">
       <HintPath>..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
-    <Reference Include="AssimpNet">
-      <HintPath>..\ThirdParty\Dependencies\assimp\AssimpNet.dll</HintPath>
-    </Reference>
     <Reference Include="Nvidia.TextureTools">
       <HintPath>..\ThirdParty\Dependencies\NVTT\Nvidia.TextureTools.dll</HintPath>
     </Reference>
@@ -73,6 +70,11 @@
       <HintPath>..\ThirdParty\Dependencies\ATI.TextureConverter\ATI.TextureConverter.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AssimpNet" Version="4.1.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -390,11 +392,6 @@
   <ItemGroup>
     <None Include="..\ThirdParty\Dependencies\NVTT\Windows\nvtt.dll">
       <Link>nvtt.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <NativeBinary>True</NativeBinary>
-    </None>
-    <None Include="..\ThirdParty\Dependencies\assimp\Assimp64.dll">
-      <Link>Assimp64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <NativeBinary>True</NativeBinary>
     </None>
