@@ -48,8 +48,8 @@ namespace Content.Pipeline.Editor
             var faces = new [] { "Consolas", "Lucida Console", "Courier New" };
             for (var f=0; f < faces.Length; f++)
             {
-                _outputWindow.Font = new System.Drawing.Font(faces[f], 9F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-                _filterOutputWindow.Font = new System.Drawing.Font(faces[f], 9F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+                _outputWindow.Font = new System.Drawing.Font(faces[f], 11F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+                _filterOutputWindow.Font = new System.Drawing.Font(faces[f], 11F, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
                 if (_outputWindow.Font.Name == faces[f])
                     break;               
             }
