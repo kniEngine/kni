@@ -980,9 +980,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                                               .OrderBy(t => t)
                                               .ToList();
 
-                int scaleIndex = 0;
-                int rotationIndex = 0;
-                int translationIndex = 0;
+                int scaleIndex = -1;
+                int rotationIndex = -1;
+                int translationIndex = -1;
 
                 for (int frame = 0; frame < times.Count; frame++)
                 {
@@ -992,7 +992,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     Vector3? scale = null;
                     if (scaleKeys.Count > 0)
                     {
-                        int nextScaleIndex = scaleKeys.FindIndex(scaleIndex+1, k => k.Time <= time);
+                        int nextScaleIndex = scaleKeys.FindIndex(scaleIndex+1, k => k.Time >= time);
                         scaleIndex = Math.Max(scaleIndex, nextScaleIndex);
                         if ((scaleIndex+1) < scaleKeys.Count)
                         {
@@ -1022,7 +1022,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     Quaternion? rotation = null;
                     if (rotationKeys.Count > 0)
                     {
-                        int nextRotationIndex = rotationKeys.FindIndex(rotationIndex+1, k => k.Time <= time);
+                        int nextRotationIndex = rotationKeys.FindIndex(rotationIndex+1, k => k.Time >= time);
                         rotationIndex = Math.Max(rotationIndex, nextRotationIndex);
                         if ((rotationIndex+1) < rotationKeys.Count)
                         {
@@ -1052,7 +1052,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     Vector3? translation = null;
                     if (translationKeys.Count > 0)
                     {
-                        int nextTranslationIndex = translationKeys.FindIndex(translationIndex+1, k => k.Time <= time);
+                        int nextTranslationIndex = translationKeys.FindIndex(translationIndex+1, k => k.Time >= time);
                         translationIndex = Math.Max(translationIndex, nextTranslationIndex);
                         if ((translationIndex+1) < translationKeys.Count)
                         {
