@@ -719,34 +719,27 @@ namespace Microsoft.Xna.Framework
         /// <returns>The result of spherical linear blending between two quaternions.</returns>
         public static Quaternion Slerp(Quaternion start, Quaternion end, float amount)
         {
-		    float a;
-            float b;
-		    float dot = start.X * end.X + start.Y * end.Y + start.Z * end.Z + start.W * end.W;
+            float a = 1f - amount;
+            float b = amount;
+            float dot = start.X * end.X + start.Y * end.Y + start.Z * end.Z + start.W * end.W;
 
             float dotAbs = Math.Abs(dot);
-
-		    if (dotAbs > 0.999999f)
-		    {
-		        a = 1f - amount;
-                b = amount;
-		    }
-		    else
-		    {
-		        float acos   = (float)Math.Acos((double)dotAbs);
-		        float invSin = (float) (1.0 / Math.Sin((double)acos));
-		        a = ((float)Math.Sin((double)((1f - amount) * acos))) * invSin;
-                b = ((float)Math.Sin((double)(amount * acos))) * invSin;
-		    }
-
+            if (dotAbs <= 0.999999f)
+            {
+                float acos   = (float)Math.Acos(dotAbs);
+                float invSin = (float)(1.0 / Math.Sin(acos));
+                a = (float)Math.Sin(a * acos) * invSin;
+                b = (float)Math.Sin(b * acos) * invSin;
+            }
             if (dot < 0f)
                 b = -b;
 
-		    Quaternion result;
-		    result.X = a * start.X + b * end.X;
-		    result.Y = a * start.Y + b * end.Y;
-		    result.Z = a * start.Z + b * end.Z;
-		    result.W = a * start.W + b * end.W;
-		    return result;
+            Quaternion result;
+            result.X = a * start.X + b * end.X;
+            result.Y = a * start.Y + b * end.Y;
+            result.Z = a * start.Z + b * end.Z;
+            result.W = a * start.W + b * end.W;
+            return result;
         }
 
         /// <summary>
@@ -758,32 +751,25 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">The result of spherical linear blending between two quaternions as an output parameter.</param>
         public static void Slerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
         {
-		    float a;
-            float b;
-		    float dot = start.X * end.X + start.Y * end.Y + start.Z * end.Z + start.W * end.W;
+            float a = 1f - amount;
+            float b = amount;
+            float dot = start.X * end.X + start.Y * end.Y + start.Z * end.Z + start.W * end.W;
 
             float dotAbs = Math.Abs(dot);
-
-            if (dotAbs > 0.999999f)
-		    {
-		        a = 1f - amount;
-                b = amount;
+            if (dotAbs <= 0.999999f)
+            {
+                float acos   = (float)Math.Acos(dotAbs);
+                float invSin = (float)(1.0 / Math.Sin(acos));
+                a = (float)Math.Sin(a * acos) * invSin;
+                b = (float)Math.Sin(b * acos) * invSin;
             }
-		    else
-		    {
-		        float acos   = (float)Math.Acos((double)dotAbs);
-		        float invSin = (float) (1.0 / Math.Sin((double)acos));
-		        a = ((float)Math.Sin((double)((1f - amount) * acos))) * invSin;
-                b = ((float)Math.Sin((double)(amount * acos))) * invSin;
-            }
-
             if (dot < 0f)
                 b = -b;
 
-		    result.X = a * start.X + b * end.X;
-		    result.Y = a * start.Y + b * end.Y;
-		    result.Z = a * start.Z + b * end.Z;
-		    result.W = a * start.W + b * end.W;
+            result.X = a * start.X + b * end.X;
+            result.Y = a * start.Y + b * end.Y;
+            result.Z = a * start.Z + b * end.Z;
+            result.W = a * start.W + b * end.W;
         }
 
         #endregion
