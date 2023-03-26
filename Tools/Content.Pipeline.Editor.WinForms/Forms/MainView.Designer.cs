@@ -756,8 +756,8 @@ namespace Content.Pipeline.Editor
             this._treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this._treeView.DragOverNodeBackColor = System.Drawing.SystemColors.Highlight;
             this._treeView.DragOverNodeForeColor = System.Drawing.SystemColors.HighlightText;
-            this._treeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
-            this._treeView.ItemHeight = 18;
+            this._treeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._treeView.ItemHeight = 22;
             this._treeView.Location = new System.Drawing.Point(0, 0);
             this._treeView.Name = "_treeView";
             this._treeView.Size = new System.Drawing.Size(306, 198);
@@ -772,7 +772,7 @@ namespace Content.Pipeline.Editor
             // 
             this._propertyGrid.CategoryForeColor = System.Drawing.SystemColors.InactiveCaptionText;
             this._propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._propertyGrid.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._propertyGrid.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
             this._propertyGrid.Location = new System.Drawing.Point(0, 0);
             this._propertyGrid.Name = "_propertyGrid";
             this._propertyGrid.Size = new System.Drawing.Size(306, 306);
@@ -784,7 +784,7 @@ namespace Content.Pipeline.Editor
             this._outputTabs.Controls.Add(this._outputTabPage1);
             this._outputTabs.Controls.Add(this._outputTabPage2);
             this._outputTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._outputTabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._outputTabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
             this._outputTabs.HideTabHeader = true;
             this._outputTabs.Location = new System.Drawing.Point(0, 0);
             this._outputTabs.Margin = new System.Windows.Forms.Padding(0);
@@ -809,7 +809,7 @@ namespace Content.Pipeline.Editor
             // _outputWindow
             // 
             this._outputWindow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._outputWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._outputWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
             this._outputWindow.HideSelection = false;
             this._outputWindow.Location = new System.Drawing.Point(0, 0);
             this._outputWindow.Name = "_outputWindow";
@@ -835,10 +835,10 @@ namespace Content.Pipeline.Editor
             // 
             this._filterOutputWindow.BackColor = System.Drawing.SystemColors.Control;
             this._filterOutputWindow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._filterOutputWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this._filterOutputWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
             this._filterOutputWindow.FullRowSelect = true;
             this._filterOutputWindow.ImageIndex = 0;
-            this._filterOutputWindow.ItemHeight = 20;
+            this._filterOutputWindow.ItemHeight = 22;
             this._filterOutputWindow.Location = new System.Drawing.Point(0, 0);
             this._filterOutputWindow.Name = "_filterOutputWindow";
             this._filterOutputWindow.SelectedImageIndex = 0;
