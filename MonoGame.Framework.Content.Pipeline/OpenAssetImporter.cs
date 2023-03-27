@@ -926,17 +926,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             foreach (var channelGroup in channelGroups)
             {
-                var boneName = channelGroup.Key;
-                var channel = new AnimationChannel();
+                string boneName = channelGroup.Key;
+                AnimationChannel channel = new AnimationChannel();
 
                 // Get transformation pivot for current bone.
                 FbxPivot pivot;
                 if (!_pivots.TryGetValue(boneName, out pivot))
                     pivot = FbxPivot.Default;
 
-                var scaleKeys = EmptyVectorKeys;
-                var rotationKeys = EmptyQuaternionKeys;
-                var translationKeys = EmptyVectorKeys;
+                List<VectorKey> scaleKeys = EmptyVectorKeys;
+                List<QuaternionKey> rotationKeys = EmptyQuaternionKeys;
+                List<VectorKey> translationKeys = EmptyVectorKeys;
 
                 foreach (var aiChannel in channelGroup)
                 {
@@ -988,7 +988,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 {
                     double time = times[frame];
 
-                    // Get scaling.
                     Vector3? scale = null;
                     if (scaleKeys.Count > 0)
                     {
@@ -996,7 +995,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         scaleIndex = Math.Max(scaleIndex, nextScaleIndex);
                         if ((scaleIndex+1) < scaleKeys.Count)
                         {
-                            // Lerp between current and next scaling key.
                             double scaleTimeA = scaleKeys[scaleIndex].Time;
                             double scaleTimeB = scaleKeys[scaleIndex+1].Time;
                             float amount = (float)((time - scaleTimeA) / (scaleTimeB - scaleTimeA));
@@ -1018,7 +1016,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         }
                     }
 
-                    // Get rotation.
                     Quaternion? rotation = null;
                     if (rotationKeys.Count > 0)
                     {
@@ -1026,7 +1023,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         rotationIndex = Math.Max(rotationIndex, nextRotationIndex);
                         if ((rotationIndex+1) < rotationKeys.Count)
                         {
-                            // Lerp between current and next rotation key.
                             double rotationTimeA = rotationKeys[rotationIndex].Time;
                             double rotationTimeB = rotationKeys[rotationIndex+1].Time;
                             float amount = (float)((time - rotationTimeA) / (rotationTimeB - rotationTimeA));
@@ -1048,7 +1044,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         }
                     }
 
-                    // Get translation.
                     Vector3? translation = null;
                     if (translationKeys.Count > 0)
                     {
@@ -1056,7 +1051,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         translationIndex = Math.Max(translationIndex, nextTranslationIndex);
                         if ((translationIndex+1) < translationKeys.Count)
                         {
-                            // Lerp between current and next translation key.
                             double translationTimeA = translationKeys[translationIndex].Time;
                             double translationTimeB = translationKeys[translationIndex+1].Time;
                             float amount = (float)((time - translationTimeA) / (translationTimeB - translationTimeA));
