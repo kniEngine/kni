@@ -260,6 +260,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         static public void CompressColor16Bit(ContentProcessorContext context, TextureContent content)
         {
+            content.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>));
+
             var face = content.Faces[0][0];
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
