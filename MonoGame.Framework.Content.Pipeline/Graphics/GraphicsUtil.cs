@@ -106,29 +106,56 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>A member of the AlphaRange enum to describe the range of alpha in the pixel data.</returns>
 		static unsafe AlphaRange CalculateAlphaRange(BitmapContent bitmap)
         {
-			AlphaRange result = AlphaRange.Opaque;
+            AlphaRange result = AlphaRange.Opaque;
 
-            var pixelBitmap = (PixelBitmapContent<Vector4>)bitmap;
-
-            for (int y = 0; y < pixelBitmap.Height; ++y)
+            if (bitmap is PixelBitmapContent<Vector4>)
             {
-                Vector4[] row = pixelBitmap.GetRow(y);
-                fixed (Vector4* prow = row)
+                var pixelBitmap = (PixelBitmapContent<Vector4>)bitmap;
+                for (int y = 0; y < pixelBitmap.Height; ++y)
                 {
-                    for (int i = 0; i < row.Length; i++)
+                    Vector4[] row = pixelBitmap.GetRow(y);
+                    fixed (Vector4* prow = row)
                     {
-                        if (prow[i].W < 1.0)
+                        for (int i = 0; i < row.Length; i++)
                         {
-                            if (prow[i].W == 0.0)
-                                result = AlphaRange.Cutout;
-                            else
-                                return AlphaRange.Full;
+                            if (prow[i].W < 1.0)
+                            {
+                                if (prow[i].W == 0.0)
+                                    result = AlphaRange.Cutout;
+                                else
+                                    return AlphaRange.Full;
+                            }
                         }
                     }
                 }
+                return result;
             }
-
-            return result;
+            else if (bitmap is PixelBitmapContent<Color>)
+            {
+                var pixelBitmap = (PixelBitmapContent<Color>)bitmap;
+                for (int y = 0; y < pixelBitmap.Height; ++y)
+                {
+                    Color[] row = pixelBitmap.GetRow(y);
+                    fixed (Color* prow = row)
+                    {
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            if (prow[i].A < 255)
+                            {
+                                if (prow[i].A == 0.0)
+                                    result = AlphaRange.Cutout;
+                                else
+                                    return AlphaRange.Full;
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public static void CompressPvrtc(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
@@ -260,8 +287,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         static public void CompressColor16Bit(ContentProcessorContext context, TextureContent content)
         {
-            content.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>));
-
             var face = content.Faces[0][0];
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
