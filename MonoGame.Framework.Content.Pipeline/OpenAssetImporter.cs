@@ -171,30 +171,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     transform *= GeometricRotation.Value;
                 if (GeometricTranslation.HasValue)
                     transform *= GeometricTranslation.Value;
+
                 if (ScalingPivotInverse.HasValue)
                     transform *= ScalingPivotInverse.Value;
+
                 if (scale.HasValue)
                     transform *= Matrix.CreateScale(scale.Value);
                 else if (Scaling.HasValue)
                     transform *= Scaling.Value;
+
                 if (ScalingPivot.HasValue)
                     transform *= ScalingPivot.Value;
                 if (ScalingOffset.HasValue)
                     transform *= ScalingOffset.Value;
+
                 if (RotationPivotInverse.HasValue)
                     transform *= RotationPivotInverse.Value;
                 if (PostRotation.HasValue)
                     transform *= PostRotation.Value;
+
                 if (rotation.HasValue)
                     transform *= Matrix.CreateFromQuaternion(rotation.Value);
                 else if (Rotation.HasValue)
                     transform *= Rotation.Value;
+
                 if (PreRotation.HasValue)
                     transform *= PreRotation.Value;
                 if (RotationPivot.HasValue)
                     transform *= RotationPivot.Value;
                 if (RotationOffset.HasValue)
                     transform *= RotationOffset.Value;
+
                 if (translation.HasValue)
                     transform *= Matrix.CreateTranslation(translation.Value);
                 else if (Translation.HasValue)
@@ -972,103 +979,105 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     }
                 }
 
-                // Get all unique keyframe times. (Assuming that no two key frames
-                // have the same time, which is usually a safe assumption.)
-                List<double> times = scaleKeys.Select(k => k.Time)
-                                              .Union(rotationKeys.Select(k => k.Time))
-                                              .Union(translationKeys.Select(k => k.Time))
-                                              .OrderBy(t => t)
-                                              .ToList();
-
                 int scaleIndex = -1;
                 int rotationIndex = -1;
                 int translationIndex = -1;
 
-                for (int frame = 0; frame < times.Count; frame++)
+                // Interpolate frames  
+                int framesPerSecond = 60;
+                double ticksPerFrame = aiAnimation.TicksPerSecond / framesPerSecond;
+                int frames = (int)Math.Ceiling(aiAnimation.DurationInTicks / ticksPerFrame);
+                for (int frame = 0; frame < frames; frame++)
                 {
-                    double time = times[frame];
+                    double time = frame * ticksPerFrame;
 
                     Vector3? scale = null;
                     if (scaleKeys.Count > 0)
                     {
-                        int nextScaleIndex = scaleKeys.FindIndex(scaleIndex+1, k => k.Time >= time);
-                        scaleIndex = Math.Max(scaleIndex, nextScaleIndex);
-                        if ((scaleIndex+1) < scaleKeys.Count)
+                        while ((scaleIndex+1) < scaleKeys.Count &&
+                               time > scaleKeys[(scaleIndex+1)].Time)
+                            scaleIndex++;
+
+                        int scaleIndexA = scaleIndex;
+                        if (scaleIndexA == -1) // wrap scaleIndexA
+                            scaleIndexA = scaleKeys.Count-1;
+                        int scaleIndexB = Math.Min(scaleIndex+1, scaleKeys.Count-1); // (scaleIndex+1) % scaleKeys.Count;
+
+                        double scaleTimeA = scaleKeys[scaleIndexA].Time;
+                        double scaleTimeB = scaleKeys[scaleIndexB].Time;
+                        if (scaleIndexA == scaleKeys.Count-1) // wrap scaleTimeA
+                            scaleTimeA = Math.Min(0, scaleTimeA - aiAnimation.DurationInTicks);
+                        double dt = scaleTimeB - scaleTimeA;
+                        if (dt != 0)
                         {
-                            double scaleTimeA = scaleKeys[scaleIndex].Time;
-                            double scaleTimeB = scaleKeys[scaleIndex+1].Time;
-                            float amount = (float)((time - scaleTimeA) / (scaleTimeB - scaleTimeA));
-                            amount = MathHelper.Clamp(amount, 0, 1);
-                            if (amount == 0)
-                            {
-                                scale = ToXna(scaleKeys[scaleIndex].Value);
-                            }
-                            else
-                            {
-                                Vector3 scaleA = ToXna(scaleKeys[scaleIndex].Value);
-                                Vector3 scaleB = ToXna(scaleKeys[scaleIndex + 1].Value);
-                                scale = Vector3.Lerp(scaleA, scaleB, amount);
-                            }
+                            float amount = (float)((time - scaleTimeA) / dt);
+                            Vector3 scaleA = ToXna(scaleKeys[scaleIndexA].Value);
+                            Vector3 scaleB = ToXna(scaleKeys[scaleIndexB].Value);
+                            scale = Vector3.Lerp(scaleA, scaleB, amount);
                         }
                         else
                         {
-                            scale = ToXna(scaleKeys[scaleIndex].Value);
+                            scale = ToXna(scaleKeys[scaleIndexB].Value);
                         }
                     }
 
                     Quaternion? rotation = null;
                     if (rotationKeys.Count > 0)
                     {
-                        int nextRotationIndex = rotationKeys.FindIndex(rotationIndex+1, k => k.Time >= time);
-                        rotationIndex = Math.Max(rotationIndex, nextRotationIndex);
-                        if ((rotationIndex+1) < rotationKeys.Count)
+                        while ((rotationIndex+1) < rotationKeys.Count &&
+                               time > rotationKeys[(rotationIndex+1)].Time)
+                            rotationIndex++;
+
+                        int rotationIndexA = rotationIndex;
+                        if (rotationIndexA == -1) // wrap rotationIndexA
+                            rotationIndexA = rotationKeys.Count-1;
+                        int rotationIndexB = Math.Min(rotationIndex+1, rotationKeys.Count - 1); // (rotationIndex+1) % rotationKeys.Count;
+
+                        double rotationTimeA = rotationKeys[rotationIndexA].Time;
+                        double rotationTimeB = rotationKeys[rotationIndexB].Time;
+                        if (rotationIndexA == rotationKeys.Count-1) // wrap rotationTimeA
+                            rotationTimeA = Math.Min(0, rotationTimeA - aiAnimation.DurationInTicks);
+                        double dt = rotationTimeB - rotationTimeA;
+                        if (dt != 0)
                         {
-                            double rotationTimeA = rotationKeys[rotationIndex].Time;
-                            double rotationTimeB = rotationKeys[rotationIndex+1].Time;
-                            float amount = (float)((time - rotationTimeA) / (rotationTimeB - rotationTimeA));
-                            amount = MathHelper.Clamp(amount, 0, 1);
-                            if (amount == 0)
-                            {
-                                rotation = ToXna(rotationKeys[rotationIndex].Value);
-                            }
-                            else
-                            {
-                                Quaternion rotationA = ToXna(rotationKeys[rotationIndex].Value);
-                                Quaternion rotationB = ToXna(rotationKeys[rotationIndex + 1].Value);
-                                rotation = Quaternion.Slerp(rotationA, rotationB, amount);
-                            }
+                            float amount = (float)((time - rotationTimeA) / dt);
+                            Quaternion rotationA = ToXna(rotationKeys[rotationIndexA].Value);
+                            Quaternion rotationB = ToXna(rotationKeys[rotationIndexB].Value);
+                            rotation = Quaternion.Slerp(rotationA, rotationB, amount);
                         }
                         else
                         {
-                            rotation = ToXna(rotationKeys[rotationIndex].Value);
+                            rotation = ToXna(rotationKeys[rotationIndexB].Value);
                         }
                     }
 
                     Vector3? translation = null;
                     if (translationKeys.Count > 0)
                     {
-                        int nextTranslationIndex = translationKeys.FindIndex(translationIndex+1, k => k.Time >= time);
-                        translationIndex = Math.Max(translationIndex, nextTranslationIndex);
-                        if ((translationIndex+1) < translationKeys.Count)
+                        while ((translationIndex+1) < translationKeys.Count &&
+                               time > translationKeys[(translationIndex+1)].Time)
+                            translationIndex++;
+
+                        int translationIndexA = translationIndex;
+                        if (translationIndexA == -1) // wrap translationIndexA
+                            translationIndexA = translationKeys.Count-1;
+                        int translationIndexB = Math.Min(translationIndex+1, translationKeys.Count-1); // (translationIndex+1) % translationKeys.Count;
+
+                        double translationTimeA = translationKeys[translationIndexA].Time;
+                        double translationTimeB = translationKeys[translationIndexB].Time;
+                        if (translationIndexA == translationKeys.Count-1) // wrap translationTimeA
+                            translationTimeA = Math.Min(0, translationTimeA - aiAnimation.DurationInTicks);
+                        double dt = translationTimeB - translationTimeA;
+                        if (dt != 0)
                         {
-                            double translationTimeA = translationKeys[translationIndex].Time;
-                            double translationTimeB = translationKeys[translationIndex+1].Time;
-                            float amount = (float)((time - translationTimeA) / (translationTimeB - translationTimeA));
-                            amount = MathHelper.Clamp(amount, 0, 1);
-                            if (amount == 0)
-                            {
-                                translation = ToXna(translationKeys[translationIndex].Value);
-                            }
-                            else
-                            {
-                                Vector3 translationA = ToXna(translationKeys[translationIndex].Value);
-                                Vector3 translationB = ToXna(translationKeys[translationIndex + 1].Value);
-                                translation = Vector3.Lerp(translationA, translationB, amount);
-                            }
+                            float amount = (float)((time - translationTimeA) / dt);
+                            Vector3 translationA = ToXna(translationKeys[translationIndexA].Value);
+                            Vector3 translationB = ToXna(translationKeys[translationIndexB].Value);
+                            translation = Vector3.Lerp(translationA, translationB, amount);
                         }
                         else
                         {
-                            translation = ToXna(translationKeys[translationIndex].Value);
+                            translation = ToXna(translationKeys[translationIndexB].Value);
                         }
                     }
 
