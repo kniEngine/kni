@@ -408,8 +408,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The distance between two vectors.</returns>
         public static float Distance(Vector2 value1, Vector2 value2)
         {
-            float v1 = value1.X - value2.X, v2 = value1.Y - value2.Y;
-            return (float)Math.Sqrt((v1 * v1) + (v2 * v2));
+            float dX = value1.X - value2.X;
+            float dY = value1.Y - value2.Y;
+            return (float)Math.Sqrt(dX * dX + dY * dY);
         }
 
         /// <summary>
@@ -432,8 +433,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>The squared distance between two vectors.</returns>
         public static float DistanceSquared(Vector2 value1, Vector2 value2)
         {
-            float v1 = value1.X - value2.X, v2 = value1.Y - value2.Y;
-            return (v1 * v1) + (v2 * v2);
+            float dX = value1.X - value2.X;
+            float dY = value1.Y - value2.Y;
+            return (dX * dX + dY * dY);
         }
 
         /// <summary>

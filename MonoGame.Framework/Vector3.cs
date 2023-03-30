@@ -374,8 +374,11 @@ namespace Microsoft.Xna.Framework
         /// <returns>The cross product of two vectors.</returns>
         public static Vector3 Cross(Vector3 left, Vector3 right)
         {
-            Cross(ref left, ref right, out left);
-            return left;
+            Vector3 result;
+            result.X =  (left.Y * right.Z) - (right.Y * left.Z);
+            result.Y = -(left.X * right.Z) + (right.X * left.Z);
+            result.Z =  (left.X * right.Y) - (right.X * left.Y);
+            return result;
         }
 
         /// <summary>
