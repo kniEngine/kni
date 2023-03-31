@@ -21,10 +21,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		public event EventHandler<EventArgs> ContentLost;
 		
-        private bool SuppressEventHandlerWarningsUntilEventsAreProperlyImplemented()
-        {
-            return ContentLost != null;
-        }
 
         /// <summary>
         /// Allows child class to specify the surface type, eg: a swap chain.
