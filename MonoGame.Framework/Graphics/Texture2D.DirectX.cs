@@ -254,6 +254,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformReload(Stream textureStream)
         {
+            throw new NotImplementedException();
         }
     }
 }
