@@ -2,28 +2,25 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class TextureCube : Texture
 	{
-		internal int size;
+		internal int _size;
 
         /// <summary>
         /// Gets the width and height of the cube map face in pixels.
         /// </summary>
         /// <value>The width and height of a cube map face in pixels.</value>
-        public int Size
-        {
-            get
-            {
-                return size;
-            }
-        }
+        public int Size { get { return _size; } }
 		
-		public TextureCube (GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+		public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, size, mipMap, format, false)
 		{
         }
@@ -52,7 +49,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");
 
             this.GraphicsDevice = graphicsDevice;
-			this.size = size;
+			this._size = size;
             this._format = format;
             this._levelCount = mipMap ? CalculateMipLevels(size) : 1;
 
@@ -84,7 +81,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        PlatformGetData(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
 	    }
 
-		public void SetData<T> (CubeMapFace face, T[] data) where T : struct
+		public void SetData<T>(CubeMapFace face, T[] data) where T : struct
 		{
             if (data == null)
                 throw new ArgumentNullException("data");

@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -32,10 +35,10 @@ namespace Microsoft.Xna.Framework.Graphics
             var viewTex = MultiSampleCount > 1 ? GetMSTexture() : GetTexture();
 
             // Create a view interface on the rendertarget to use on bind.
-            if (ArraySize > 1)
+            if (_arraySize > 1)
             {
-                _renderTargetViews = new RenderTargetView[ArraySize];
-                for (var i = 0; i < ArraySize; i++)
+                _renderTargetViews = new RenderTargetView[_arraySize];
+                for (var i = 0; i < _arraySize; i++)
                 {
                     var renderTargetViewDescription = new RenderTargetViewDescription();
                     if (MultiSampleCount > 1)
@@ -78,8 +81,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
                 ArraySize = 1,
                 MipLevels = 1,
-                Width = width,
-                Height = height,
+                Width = _width,
+                Height = _height,
                 SampleDescription = multisampleDesc,
                 BindFlags = BindFlags.DepthStencil,
             }))

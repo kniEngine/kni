@@ -2,10 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2023 Nick Kastellanos
 
 using System;
 using System.Text;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -520,7 +521,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                size = new Vector2(texture.width, texture.height);
+                size = new Vector2(texture._width, texture._height);
                 _texCoordTL = Vector2.Zero;
                 _texCoordBR = Vector2.One;
             }

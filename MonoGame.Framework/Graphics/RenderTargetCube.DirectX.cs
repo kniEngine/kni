@@ -2,10 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX.DXGI;
 using SharpDX.Direct3D11;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -48,8 +51,8 @@ namespace Microsoft.Xna.Framework.Graphics
             depthStencilDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
             depthStencilDesc.ArraySize = 1;
             depthStencilDesc.MipLevels = 1;
-            depthStencilDesc.Width = size;
-            depthStencilDesc.Height = size;
+            depthStencilDesc.Width = _size;
+            depthStencilDesc.Height = _size;
             depthStencilDesc.SampleDescription = sampleDescription;
             depthStencilDesc.BindFlags = BindFlags.DepthStencil;
 

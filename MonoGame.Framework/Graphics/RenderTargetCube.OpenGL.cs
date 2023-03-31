@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -27,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
             {
                 graphicsDevice.PlatformCreateRenderTarget(
-                    this, size, size, mipMap, this.Format, preferredDepthFormat, preferredMultiSampleCount, usage);
+                    this, _size, _size, mipMap, this.Format, preferredDepthFormat, preferredMultiSampleCount, usage);
             }
         }
 

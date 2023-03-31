@@ -2,7 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -32,13 +35,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <inheritdoc/>
         int IRenderTarget.Width
         {
-            get { return size; }
+            get { return _size; }
         }
 
         /// <inheritdoc/>
         int IRenderTarget.Height
         {
-            get { return size; }
+            get { return _size; }
         }
 
 		public bool IsContentLost { get { return false; } }
@@ -54,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="preferredDepthFormat">The preferred format of the depth-stencil buffer.</param>
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
             : this(graphicsDevice, size, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents)
-        {            
+        {
         }
 
         /// <summary>

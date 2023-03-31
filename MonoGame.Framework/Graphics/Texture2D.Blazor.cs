@@ -2,10 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -152,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
                 // dimension is not a power of two.
                 var wrap = WebGLTexParam.REPEAT;
-                if (((width & (width - 1)) != 0) || ((height & (height - 1)) != 0))
+                if (((_width & (_width - 1)) != 0) || ((_height & (_height - 1)) != 0))
                     wrap = WebGLTexParam.CLAMP_TO_EDGE;
 
                 GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, this.glTexture);
