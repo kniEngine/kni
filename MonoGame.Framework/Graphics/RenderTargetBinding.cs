@@ -40,7 +40,10 @@
 //
 // Author: Kenneth James Pouncey
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -83,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (renderTarget == null)
                 throw new ArgumentNullException("renderTarget");
-            if (arraySlice < 0 || arraySlice >= renderTarget.ArraySize)
+            if (arraySlice < 0 || arraySlice >= renderTarget._arraySize)
                 throw new ArgumentOutOfRangeException("arraySlice");
             if (!renderTarget.GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");

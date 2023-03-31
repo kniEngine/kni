@@ -71,15 +71,15 @@ namespace Microsoft.Xna.Framework.Media
             if (!_mediaEngine.HasVideo() || !_mediaEngine.OnVideoStreamTick(out pts))
                 return _lastFrame;
 
-            _lastFrame = new Texture2D( _currentVideo.GraphicsDevice,
-                                        _currentVideo.Width,
-                                        _currentVideo.Height,
-                                        false,
-                                        SurfaceFormat.Bgra32,
-                                        Texture2D.SurfaceType.RenderTarget);
+            _lastFrame = new Texture2D(_currentVideo.GraphicsDevice,
+                                       _currentVideo.Width, _currentVideo.Height,
+                                       false,
+                                       SurfaceFormat.Bgra32,
+                                       Texture2D.SurfaceType.RenderTarget);
 
 			var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
-            _mediaEngine.TransferVideoFrame(_lastFrame.GetTexture(), null, region, null);
+            SharpDX.ComObject dstSurfRef = _lastFrame.GetTexture();
+            _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
 
             return _lastFrame;
         }

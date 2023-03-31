@@ -2,9 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -14,27 +17,18 @@ namespace Microsoft.Xna.Framework.Graphics
         private int _height;
         private int _depth;
 
-        public int Width
-        {
-            get { return _width; }
-        }
+        public int Width { get { return _width; } }
 
-        public int Height
-        {
-            get { return _height; }
-        }
+        public int Height { get { return _height; } }
 
-        public int Depth
-        {
-            get { return _depth; }
-        }
+        public int Depth { get { return _depth; } }
 
 		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, false)
 		{
 		}
 
-		protected Texture3D (GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+		protected Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
 		{
 		    if (graphicsDevice == null)
 		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -71,17 +65,18 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             if (data == null)
                 throw new ArgumentNullException("data");
+
 			SetData(data, 0, data.Length);
 		}
 
-		public void SetData<T> (T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
 		{
 			SetData(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
-		public void SetData<T> (int level,
-		                        int left, int top, int right, int bottom, int front, int back,
-		                        T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T>(int level,
+		                       int left, int top, int right, int bottom, int front, int back,
+		                       T[] data, int startIndex, int elementCount) where T : struct
 		{
             ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
 
@@ -106,7 +101,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         /// <param name="startIndex">Index of the first element to get.</param>
         /// <param name="elementCount">Number of elements to get.</param>
-        public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct
+        public void GetData<T>(int level,
+                               int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount) where T : struct
         {
             ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
             PlatformGetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
@@ -133,12 +130,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (data == null)
                 throw new ArgumentNullException("data");
+
             GetData(data, 0, data.Length);
         }
 
         private void ValidateParams<T>(int level,
-		                        int left, int top, int right, int bottom, int front, int back,
-		                        T[] data, int startIndex, int elementCount) where T : struct
+		                               int left, int top, int right, int bottom, int front, int back,
+		                               T[] data, int startIndex, int elementCount) where T : struct
         {
             var texWidth = Math.Max(Width >> level, 1);
             var texHeight = Math.Max(Height >> level, 1);

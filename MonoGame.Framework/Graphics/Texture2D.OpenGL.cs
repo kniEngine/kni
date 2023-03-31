@@ -2,10 +2,22 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
+
+#if OPENGL
+using MonoGame.OpenGL;
+using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
+using PixelFormat = MonoGame.OpenGL.PixelFormat;
+#endif
+
+#if ANDROID && OPENGL
+using Android.Graphics;
+#endif
 
 #if IOS || TVOS
 using UIKit;
@@ -14,15 +26,6 @@ using Foundation;
 using System.Drawing;
 #endif
 
-#if OPENGL
-using MonoGame.OpenGL;
-using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
-using PixelFormat = MonoGame.OpenGL.PixelFormat;
-
-#if ANDROID
-using Android.Graphics;
-#endif
-#endif // OPENGL
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -226,8 +229,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 var pixelToT = Format.GetSize() / tSizeInByte;
-                var tFullWidth = Math.Max(this.width >> level, 1) / 4 * pixelToT;
-                var temp = new T[Math.Max(this.height >> level, 1) / 4 * tFullWidth];
+                var tFullWidth = Math.Max(this._width >> level, 1) / 4 * pixelToT;
+                var temp = new T[Math.Max(this._height >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(TextureTarget.Texture2D, level, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -243,8 +246,8 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                var tFullWidth = Math.Max(this.width >> level, 1) * Format.GetSize() / tSizeInByte;
-                var temp = new T[Math.Max(this.height >> level, 1) * tFullWidth];
+                var tFullWidth = Math.Max(this._width >> level, 1) * Format.GetSize() / tSizeInByte;
+                var temp = new T[Math.Max(this._height >> level, 1) * tFullWidth];
                 GL.GetTexImage(TextureTarget.Texture2D, level, glFormat, glType, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -413,7 +416,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
                 // dimension is not a power of two.
                 var wrap = TextureWrapMode.Repeat;
-                if (((width & (width - 1)) != 0) || ((height & (height - 1)) != 0))
+                if (((_width & (_width - 1)) != 0) || ((_height & (_height - 1)) != 0))
                     wrap = TextureWrapMode.ClampToEdge;
 
                 GL.BindTexture(TextureTarget.Texture2D, this.glTexture);

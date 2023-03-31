@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -10,6 +12,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -31,8 +34,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var description = new Texture2DDescription
             {
-                Width = size,
-                Height = size,
+                Width = _size,
+                Height = _size,
                 MipLevels = _levelCount,
                 ArraySize = 6, // A texture cube is a 2D texture array with 6 textures.
                 Format = GraphicsExtensions.ToDXFormat(_format),
@@ -61,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // and not creating a new one each time.
             //
             var min = _format.IsCompressedFormat() ? 4 : 1;
-            var levelSize = Math.Max(size >> level, min);
+            var levelSize = Math.Max(_size >> level, min);
 
             var desc = new Texture2DDescription
             {

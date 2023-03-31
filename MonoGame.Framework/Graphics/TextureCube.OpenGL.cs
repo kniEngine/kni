@@ -2,11 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Runtime.InteropServices;
 using MonoGame.OpenGL;
 using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
 using MonoGame.Framework.Utilities;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -119,8 +122,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 var pixelToT = Format.GetSize() / tSizeInByte;
-                var tFullWidth = Math.Max(this.size >> level, 1) / 4 * pixelToT;
-                var temp = new T[Math.Max(this.size >> level, 1) / 4 * tFullWidth];
+                var tFullWidth = Math.Max(this._size >> level, 1) / 4 * pixelToT;
+                var temp = new T[Math.Max(this._size >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(target, level, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -136,8 +139,8 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                var tFullWidth = Math.Max(this.size >> level, 1) * Format.GetSize() / tSizeInByte;
-                var temp = new T[Math.Max(this.size >> level, 1) * tFullWidth];
+                var tFullWidth = Math.Max(this._size >> level, 1) * Format.GetSize() / tSizeInByte;
+                var temp = new T[Math.Max(this._size >> level, 1) * tFullWidth];
                 GL.GetTexImage(target, level, glFormat, glType, temp);
                 GraphicsExtensions.CheckGLError();
 

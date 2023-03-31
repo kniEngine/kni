@@ -1,12 +1,13 @@
-﻿using System;
+﻿
+// Copyright (C)2023 Nick Kastellanos
 
+using System;
 using SharpDX.DXGI;
 using SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-
     /// <summary>
     /// A swap chain used for rendering to a secondary GameWindow.
     /// </summary>
@@ -22,44 +23,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public readonly PresentInterval PresentInterval;
 
-        public SwapChainRenderTarget(   GraphicsDevice graphicsDevice,
-                                        IntPtr windowHandle,
-                                        int width,
-                                        int height)
-            : this( 
-                graphicsDevice, 
-                windowHandle, 
-                width, 
-                height, 
-                false, 
-                SurfaceFormat.Color,
-                DepthFormat.Depth24,
-                0, 
-                RenderTargetUsage.DiscardContents,
-                PresentInterval.Default)
+        public SwapChainRenderTarget(GraphicsDevice graphicsDevice, IntPtr windowHandle, int width, int height)
+            : this(graphicsDevice, windowHandle, width, height,
+                   false, SurfaceFormat.Color, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents,
+                   PresentInterval.Default)
         {
         }
 
-        public SwapChainRenderTarget(   GraphicsDevice graphicsDevice,
-                                        IntPtr windowHandle,                                     
-                                        int width,
-                                        int height,
-                                        bool mipMap,
-                                        SurfaceFormat surfaceFormat,
-                                        DepthFormat depthFormat,                                        
-                                        int preferredMultiSampleCount,
-                                        RenderTargetUsage usage,
-                                        PresentInterval presentInterval)
-            : base(
-                graphicsDevice,
-                width,
-                height,
-                mipMap,
-                surfaceFormat,
-                depthFormat,
-                preferredMultiSampleCount,
-                usage,
-                SurfaceType.SwapChainRenderTarget)
+        public SwapChainRenderTarget(GraphicsDevice graphicsDevice,
+                                     IntPtr windowHandle,
+                                     int width, int height,
+                                     bool mipMap,
+                                     SurfaceFormat surfaceFormat,
+                                     DepthFormat depthFormat,
+                                     int preferredMultiSampleCount,
+                                     RenderTargetUsage usage,
+                                     PresentInterval presentInterval)
+            : base(graphicsDevice, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, usage,
+                   SurfaceType.SwapChainRenderTarget)
         {
             var dxgiFormat = surfaceFormat == SurfaceFormat.Color
                              ? SharpDX.DXGI.Format.B8G8R8A8_UNorm
@@ -82,8 +63,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     Format = dxgiFormat,
                     Scaling = DisplayModeScaling.Stretched,
-                    Width = width,
-                    Height = height,
+                    Width = _width,
+                    Height = _height,
                 },
 
                 OutputHandle = _windowHandle,
