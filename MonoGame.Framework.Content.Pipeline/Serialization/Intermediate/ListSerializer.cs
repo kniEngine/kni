@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         protected internal override List<T> Deserialize(IntermediateReader input, ContentSerializerAttribute format, List<T> existingInstance)
         {
-            var result = existingInstance ?? new List<T>();
+            List<T> result = existingInstance ?? new List<T>();
 
             var elementSerializer = _itemSerializer as ElementSerializer<T>;
             if (elementSerializer != null)

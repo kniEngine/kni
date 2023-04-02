@@ -53,10 +53,10 @@ namespace Microsoft.Xna.Framework.Content
             {
                 for (int i = 0; i < count; i++)
                 {
-                    var keyReaderType = input.Read7BitEncodedInt();
+                    int keyReaderType = input.Read7BitEncodedInt();
                     TKey key = keyReaderType > 0 ? input.ReadObject<TKey>(input.TypeReaders[keyReaderType - 1]) : default(TKey);
 
-                    var valueReaderType = input.Read7BitEncodedInt();
+                    int valueReaderType = input.Read7BitEncodedInt();
                     TValue value = valueReaderType > 0 ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType - 1]) : default(TValue);
 
                     dictionary.Add(key, value);

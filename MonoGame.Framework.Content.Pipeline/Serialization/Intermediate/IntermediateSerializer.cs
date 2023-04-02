@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         {
             var serializer = new IntermediateSerializer();
             var reader = new IntermediateReader(serializer, input, referenceRelocationPath);
-            var asset = default(T);
+            T asset = default(T);
 
             try
             {
@@ -122,11 +122,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 _genericSerializerTypes = new Dictionary<Type, Type>();
 
                 var types = ContentTypeSerializerAttribute.GetTypes();
-                foreach (var t in types)
+                foreach (Type t in types)
                 {
                     if (t.IsGenericType)
                     {
-                        var genericType = t.BaseType.GetGenericArguments()[0];
+                        Type genericType = t.BaseType.GetGenericArguments()[0];
                         _genericSerializerTypes.Add(genericType.GetGenericTypeDefinition(), t);
                     }
                     else
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 if (type.GetArrayRank() != 1)
                     throw new RankException("We only support single dimension arrays.");
 
-                var arrayType = typeof(ArraySerializer<>).MakeGenericType(new[] { type.GetElementType() });
+                Type arrayType = typeof(ArraySerializer<>).MakeGenericType(new[] { type.GetElementType() });
                 serializer = (ContentTypeSerializer)Activator.CreateInstance(arrayType);
             }
             else if (type.IsGenericType && _genericSerializerTypes.TryGetValue(type.GetGenericTypeDefinition(), out serializerType))
@@ -230,7 +230,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         {
             _namespaceLookup = new Dictionary<string, string>();
 
-            for (var i=0; i < reader.AttributeCount; i++)
+            for (int i=0; i < reader.AttributeCount; i++)
             {
                 reader.MoveToAttribute(i);
 
@@ -257,7 +257,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
             // If this is an array then handle it separately.
             if (typeName.EndsWith("[]"))
             {
-                var arrayType = typeName.Substring(0, typeName.Length - 2);
+                string arrayType = typeName.Substring(0, typeName.Length - 2);
                 foundType = FindType(arrayType);
                 return foundType == null ? null : foundType.MakeArrayType();
             }
@@ -265,18 +265,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
             // Expand any namespaces in the asset type
             foreach (var pair in _namespaceLookup)
                 typeName = typeName.Replace(pair.Key, pair.Value);
-            var expandedName = typeName;
+            string expandedName = typeName;
 
             // If this a generic type, handle it separately.
             if (typeName.EndsWith("]"))
             {
-                var openBracketIndex = typeName.IndexOf("[");
+                int openBracketIndex = typeName.IndexOf("[");
 
-                var typeNameWithoutArguments = typeName.Substring(0, openBracketIndex);
+                string typeNameWithoutArguments = typeName.Substring(0, openBracketIndex);
 
-                var genericArgumentsString = typeName.Substring(openBracketIndex + 1, typeName.Length - openBracketIndex - 2);
-                var genericArgumentsArray = genericArgumentsString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                var genericArguments = genericArgumentsArray.Select(FindType).ToArray();
+                string genericArgumentsString = typeName.Substring(openBracketIndex + 1, typeName.Length - openBracketIndex - 2);
+                string[] genericArgumentsArray = genericArgumentsString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                Type[] genericArguments = genericArgumentsArray.Select(FindType).ToArray();
 
                 foundType = FindType(typeNameWithoutArguments + "`" + genericArguments.Length);
                 return (foundType == null) ? null : foundType.MakeGenericType(genericArguments);
@@ -321,7 +321,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 return typeName;
 
             // Fallback to full type name.
-            var typeNamespace = type.Namespace;
+            string typeNamespace = type.Namespace;
             if (!string.IsNullOrEmpty(typeNamespace))
                 typeName = typeNamespace + ".";
             typeName += GetTypeName(type);
@@ -338,12 +338,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         {
             if (type.IsGenericType)
             {
-                var typeName = type.Name;
+                string typeName = type.Name;
                 int genericBacktickIndex = typeName.IndexOf("`");
                 if (genericBacktickIndex >= 0)
                     typeName = typeName.Substring(0, genericBacktickIndex);
 
-                var result = typeName + "[";
+                string result = typeName + "[";
                 result += string.Join(",", type.GetGenericArguments().Select(GetFullTypeName));
                 result += "]";
                 return result;

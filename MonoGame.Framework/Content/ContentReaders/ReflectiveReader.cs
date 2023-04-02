@@ -36,28 +36,28 @@ namespace Microsoft.Xna.Framework.Content
         {
             base.Initialize(manager);
 
-            var baseType = ReflectionHelpers.GetBaseType(TargetType);
+            Type baseType = ReflectionHelpers.GetBaseType(TargetType);
             if (baseType != null && baseType != typeof(object))
 				_baseTypeReader = manager.GetTypeReader(baseType);
 
             _constructor = TargetType.GetDefaultConstructor();
 
-            var properties = TargetType.GetAllProperties();
-            var fields = TargetType.GetAllFields();
+            PropertyInfo[] properties = TargetType.GetAllProperties();
+            FieldInfo[] fields = TargetType.GetAllFields();
             _readers = new List<ReadElement>(fields.Length + properties.Length);
 
             // Gather the properties.
-            foreach (var property in properties)
+            foreach (PropertyInfo property in properties)
             {
-                var read = GetElementReader(manager, property);
+                ReadElement read = GetElementReader(manager, property);
                 if (read != null)
                     _readers.Add(read);
             }
             
             // Gather the fields.
-            foreach (var field in fields)
+            foreach (FieldInfo field in fields)
             {
-                var read = GetElementReader(manager, field);
+                ReadElement read = GetElementReader(manager, field);
                 if (read != null)
                     _readers.Add(read);
             }
@@ -65,8 +65,8 @@ namespace Microsoft.Xna.Framework.Content
 
         private static ReadElement GetElementReader(ContentTypeReaderManager manager, MemberInfo member)
         {
-            var property = member as PropertyInfo;
-            var field = member as FieldInfo;
+            PropertyInfo property = member as PropertyInfo;
+            FieldInfo field = member as FieldInfo;
             Debug.Assert(field != null || property != null);
 
             if (property != null)
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Content
                     // then it is safe to deserialize into the existing object.
                     if (!property.CanWrite)
                     {
-                        var typeReader = manager.GetTypeReader(property.PropertyType);
+                        ContentTypeReader typeReader = manager.GetTypeReader(property.PropertyType);
                         if (typeReader == null || !typeReader.CanDeserializeIntoExistingObject)
                             return null;
                     }
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // We need to have a reader at this point.
-            var reader = manager.GetTypeReader(elementType);
+            ContentTypeReader reader = manager.GetTypeReader(elementType);
             if (reader == null)
                 if (elementType == typeof(System.Array))
                     reader = new ArrayReader<Array>();
@@ -159,8 +159,8 @@ namespace Microsoft.Xna.Framework.Content
 
             return (input, parent) =>
             {
-                var existing = construct(parent);
-                var obj2 = input.ReadObject(reader, existing);
+                object existing = construct(parent);
+                object obj2 = input.ReadObject(reader, existing);
                 setter(parent, obj2);
             };
         }
@@ -177,9 +177,9 @@ namespace Microsoft.Xna.Framework.Content
 				_baseTypeReader.Read(input, obj);
 
             // Box the type.
-            var boxed = (object)obj;
+            object boxed = (object)obj;
 
-            foreach (var reader in _readers)
+            foreach (ReadElement reader in _readers)
                 reader(input, boxed);
 
             // Unbox it... required for value types.

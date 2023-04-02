@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         protected internal override object Deserialize(IntermediateReader input, ContentSerializerAttribute format, object existingInstance)
         {
-            var cast = existingInstance == null ? default(T) : (T)existingInstance;
+            T cast = existingInstance == null ? default(T) : (T)existingInstance;
             return Deserialize(input, format, cast);
         }
 
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
         
         public override bool ObjectIsEmpty(object value)
         {
-            var cast = value == null ? default(T) : (T)value;
+            T cast = value == null ? default(T) : (T)value;
             return ObjectIsEmpty(cast);
         }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         protected internal override void Serialize(IntermediateWriter output, object value, ContentSerializerAttribute format)
         {
-            var cast = value == null ? default(T) : (T)value;
+            T cast = value == null ? default(T) : (T)value;
             Serialize(output, cast, format);
         }
     }
