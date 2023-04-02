@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         public T ReadRawObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer)
         {
-            return ReadRawObject(format, typeSerializer, default(T));         
+            return ReadRawObject(format, typeSerializer, default(T));
         }
 
         public T ReadRawObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, T existingInstance)
