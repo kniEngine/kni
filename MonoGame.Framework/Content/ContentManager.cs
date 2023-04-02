@@ -247,7 +247,7 @@ namespace Microsoft.Xna.Framework.Content
             // loading "content/asset1.xnb" and "content\\ASSET1.xnb" as if they were two 
             // different files. This matches stock XNA behavior.
             // The dictionary will ignore case differences
-            var key = assetName.Replace('\\', '/');
+            string key = assetName.Replace('\\', '/');
 
             // Check for a previously loaded asset first
             object asset = null;
@@ -309,10 +309,10 @@ namespace Microsoft.Xna.Framework.Content
 			object result = null;
 
             // Try to load as XNB file
-            var stream = OpenStream(assetName);
-            using (var xnbReader = new BinaryReader(stream))
+            Stream stream = OpenStream(assetName);
+            using (BinaryReader xnbReader = new BinaryReader(stream))
             {
-                using (var reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
+                using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
                 {
                     result = reader.ReadAsset<T>();
                 }

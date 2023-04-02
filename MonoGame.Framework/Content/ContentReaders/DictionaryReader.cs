@@ -34,6 +34,7 @@ namespace Microsoft.Xna.Framework.Content
         protected internal override Dictionary<TKey, TValue> Read(ContentReader input, Dictionary<TKey, TValue> existingInstance)
         {
             int count = input.ReadInt32();
+
             Dictionary<TKey, TValue> dictionary = existingInstance;
             if (dictionary == null)
                 dictionary = new Dictionary<TKey, TValue>(count);
@@ -45,7 +46,9 @@ namespace Microsoft.Xna.Framework.Content
                 for (int i = 0; i < count; i++)
                 {
                     TKey key = input.ReadObject<TKey>(keyReader);
+
                     TValue value = input.ReadObject<TValue>(valueReader);
+
                     dictionary.Add(key, value);
                 }
             }
@@ -53,11 +56,15 @@ namespace Microsoft.Xna.Framework.Content
             {
                 for (int i = 0; i < count; i++)
                 {
-                    var keyReaderType = input.Read7BitEncodedInt();
-                    TKey key = keyReaderType > 0 ? input.ReadObject<TKey>(input.TypeReaders[keyReaderType - 1]) : default(TKey);
+                    int keyReaderType = input.Read7BitEncodedInt();
+                    TKey key = (keyReaderType > 0)
+                             ? input.ReadObject<TKey>(input.TypeReaders[keyReaderType - 1])
+                             : default(TKey);
 
-                    var valueReaderType = input.Read7BitEncodedInt();
-                    TValue value = valueReaderType > 0 ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType - 1]) : default(TValue);
+                    int valueReaderType = input.Read7BitEncodedInt();
+                    TValue value = (valueReaderType > 0)
+                                 ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType-1])
+                                 : default(TValue);
 
                     dictionary.Add(key, value);
                 }

@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Content
 #pragma warning restore 0219, 0649
 
             // The first content byte i read tells me the number of content readers in this XNB file
-            var numberOfReaders = reader.Read7BitEncodedInt();
+            int numberOfReaders = reader.Read7BitEncodedInt();
             var contentReaders = new ContentTypeReader[numberOfReaders];
             var needsInitialize = new BitArray(numberOfReaders);
             _contentReaders = new Dictionary<Type, ContentTypeReader>(numberOfReaders);
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 // For each reader in the file, we read out the length of the string which contains the type of the reader,
                 // then we read out the string. Finally we instantiate an instance of that reader using reflection
-                for (var i = 0; i < numberOfReaders; i++)
+                for (int i = 0; i < numberOfReaders; i++)
                 {
                     // This string tells us what reader we need to decode the following data
                     string readerTypeName = reader.ReadString();
@@ -171,14 +171,14 @@ namespace Microsoft.Xna.Framework.Content
                     contentReaders[i] = typeReader;
 
 
-                    var targetType = contentReaders[i].TargetType;
+                    Type targetType = contentReaders[i].TargetType;
                     if (targetType != null)
                         if (!_contentReaders.ContainsKey(targetType))
                             _contentReaders.Add(targetType, contentReaders[i]);
                 }
 
                 // Initialize any new readers.
-                for (var i = 0; i < contentReaders.Length; i++)
+                for (int i = 0; i < contentReaders.Length; i++)
                 {
                     if (needsInitialize.Get(i))
                         contentReaders[i].Initialize(this);

@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Content
             InitializeTypeReaders();
 
             // Read primary object
-            object result = ReadObject<T>();
+            T result = ReadObject<T>();
 
             // Read shared resources
             ReadSharedResources();
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Framework.Content
                 return;
 
             var sharedResources = new object[sharedResourceCount];
-            for (var i = 0; i < sharedResourceCount; ++i)
+            for (int i = 0; i < sharedResourceCount; ++i)
             {
                 object existingInstance;
                 string key = assetName.Replace('\\', '/') +"_SharedResource_" + i + "_" + this.xnbLength;
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadExternalReference<T>()
         {
-            var externalReference = ReadString();
+            string externalReference = ReadString();
 
             if (!String.IsNullOrEmpty(externalReference))
             {
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework.Content
             
         private void RecordDisposable<T>(T result)
         {
-            var disposable = result as IDisposable;
+            IDisposable disposable = result as IDisposable;
             if (disposable == null)
                 return;
 
@@ -131,12 +131,12 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>()
         {
-            return InnerReadObject(default(T));
+            return InnerReadObject<T>(default(T));
         }
 
         public T ReadObject<T>(ContentTypeReader typeReader)
         {
-            var result = (T)typeReader.Read(this, default(T));            
+            var result = (T)typeReader.Read(this, default(T));
             RecordDisposable(result);
             return result;
         }
@@ -148,15 +148,15 @@ namespace Microsoft.Xna.Framework.Content
 
         private T InnerReadObject<T>(T existingInstance)
         {
-            var typeReaderIndex = Read7BitEncodedInt();
+            int typeReaderIndex = Read7BitEncodedInt();
             if (typeReaderIndex == 0)
                 return existingInstance;
 
             if (typeReaderIndex > typeReaders.Length)
                 throw new ContentLoadException("Incorrect type reader index found!");
 
-            var typeReader = typeReaders[typeReaderIndex - 1];
-            var result = (T)typeReader.Read(this, existingInstance);
+            ContentTypeReader typeReader = typeReaders[typeReaderIndex - 1];
+            T result = (T)typeReader.Read(this, existingInstance);
 
             RecordDisposable(result);
 
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Framework.Content
             if (!ReflectionHelpers.IsValueType(typeReader.TargetType))
                 return ReadObject(existingInstance);
 
-            var result = (T)typeReader.Read(this, existingInstance);
+            T result = (T)typeReader.Read(this, existingInstance);
 
             RecordDisposable(result);
 
