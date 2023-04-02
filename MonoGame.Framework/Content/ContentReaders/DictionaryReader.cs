@@ -47,7 +47,18 @@ namespace Microsoft.Xna.Framework.Content
                 {
                     TKey key = input.ReadObject<TKey>(keyReader);
 
-                    TValue value = input.ReadObject<TValue>(valueReader);
+                    TValue value;
+                    if (ReflectionHelpers.IsValueType(valueType))
+                    {
+                        value = input.ReadObject<TValue>(valueReader);
+                    }
+                    else
+                    {
+                        int valueReaderType = input.Read7BitEncodedInt();
+                        value = (valueReaderType) > 0
+                              ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType-1])
+                              : default(TValue);
+                    }
 
                     dictionary.Add(key, value);
                 }
@@ -61,10 +72,18 @@ namespace Microsoft.Xna.Framework.Content
                              ? input.ReadObject<TKey>(input.TypeReaders[keyReaderType - 1])
                              : default(TKey);
 
-                    int valueReaderType = input.Read7BitEncodedInt();
-                    TValue value = (valueReaderType > 0)
-                                 ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType-1])
-                                 : default(TValue);
+                    TValue value;
+                    if (ReflectionHelpers.IsValueType(valueType))
+                    {
+                        value = input.ReadObject<TValue>(valueReader);
+                    }
+                    else
+                    {
+                        int valueReaderType = input.Read7BitEncodedInt();
+                        value = (valueReaderType > 0)
+                              ? input.ReadObject<TValue>(input.TypeReaders[valueReaderType-1])
+                              : default(TValue);
+                    }
 
                     dictionary.Add(key, value);
                 }
