@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>()
         {
-            return InnerReadObject(default(T));
+            return InnerReadObject<T>(default(T));
         }
 
         public T ReadObject<T>(ContentTypeReader typeReader)

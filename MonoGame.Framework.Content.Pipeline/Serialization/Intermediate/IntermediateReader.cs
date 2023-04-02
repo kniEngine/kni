@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         public T ReadObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer)
         {
-            return ReadObject(format, typeSerializer, default(T));
+            return ReadObject<T>(format, typeSerializer, default(T));
         }
 
         public T ReadObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, T existingInstance)
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
                 }
             }
             
-            return ReadRawObject(format, typeSerializer, existingInstance);
+            return ReadRawObject<T>(format, typeSerializer, existingInstance);
         }
 
         public T ReadObject<T>(ContentSerializerAttribute format, T existingInstance)
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
 
         public T ReadRawObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer)
         {
-            return ReadRawObject(format, typeSerializer, default(T));
+            return ReadRawObject<T>(format, typeSerializer, default(T));
         }
 
         public T ReadRawObject<T>(ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, T existingInstance)
