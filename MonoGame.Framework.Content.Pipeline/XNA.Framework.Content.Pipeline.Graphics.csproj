@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Xna.Framework.Content.Pipeline.Graphics\</BaseOutputPath>
-    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\Pipeline.Graphics\</BaseIntermediateOutputPath>
     
     <Version>3.8.9102.0</Version>
     <AssemblyVersion>3.8.9102.0</AssemblyVersion>
