@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Content.Pipeline.Audio\</BaseOutputPath>
+    
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Xna.Framework.Content.Pipeline.Audio</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Audio</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants></DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Audio\AudioContent.cs" />
+    <Compile Include="Audio\AudioFileType.cs" />
+    <Compile Include="Audio\AudioFormat.cs" />
+    <Compile Include="Audio\AudioHelper.cs" />
+    <Compile Include="Audio\AudioProfile.cs" />
+    <Compile Include="Audio\ConversionFormat.cs" />
+    <Compile Include="Audio\ConversionQuality.cs" />
+    <Compile Include="Audio\DefaultAudioProfile.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Processors\SoundEffectContent.cs" />
+    <Compile Include="Processors\SoundEffectProcessor.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\SoundEffectContentWriter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Mp3Importer.cs" />
+    <Compile Include="OggImporter.cs" />
+    <Compile Include="WavImporter.cs" />
+    <Compile Include="WmaImporter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="ExternalTool.cs" />
+    <Compile Include="Utilities\PathHelper.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+      <Link>Utilities\CurrentPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
+      <Link>Utilities\ReflectionHelpers.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ThirdParty\Dependencies\ffmpeg\Windows\x64\ffmpeg.exe">
+      <Link>ffmpeg.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+    <None Include="..\..\ThirdParty\Dependencies\ffmpeg\Windows\x64\ffprobe.exe">
+      <Link>ffprobe.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Framework\Xna.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>Xna.Framework.WindowsDX11</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
+      <Project>{73509F44-3566-4B79-BB47-C7C6E2AA2351}</Project>
+      <Name>Xna.Framework.Content.Pipeline</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

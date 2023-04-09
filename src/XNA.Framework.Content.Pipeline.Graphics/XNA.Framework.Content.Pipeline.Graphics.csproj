@@ -1,0 +1,246 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Content.Pipeline.Graphics\</BaseOutputPath>
+    
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>6</LangVersion>
+    <AssemblyName>Xna.Framework.Content.Pipeline.Graphics</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Graphics</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>STBSHARP_INTERNAL</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Nvidia.TextureTools">
+      <HintPath>..\..\ThirdParty\Dependencies\NVTT\Nvidia.TextureTools.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpFont">
+      <HintPath>..\..\ThirdParty\SharpFont\Windows\x64\SharpFont.dll</HintPath>
+    </Reference>
+    <Reference Include="PVRTexLibNET">
+      <HintPath>..\..\ThirdParty\PVRTexLibNET\PVRTexLibNET.dll</HintPath>
+    </Reference>
+    <Reference Include="ATI.TextureConverter">
+      <HintPath>..\..\ThirdParty\Dependencies\ATI.TextureConverter\ATI.TextureConverter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AssimpNet" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="EffectCompiler\SamplerStateContent.cs" />
+    <Compile Include="EffectCompiler\TPGParser\Parser.cs" />
+    <Compile Include="EffectCompiler\TPGParser\ParseTree.cs" />
+    <Compile Include="EffectCompiler\TPGParser\ParseTreeTools.cs" />
+    <Compile Include="EffectCompiler\TPGParser\PassInfo.cs" />
+    <Compile Include="EffectCompiler\TPGParser\SamplerStateInfo.cs" />
+    <Compile Include="EffectCompiler\TPGParser\Scanner.cs" />
+    <Compile Include="EffectCompiler\TPGParser\ShaderInfo.cs" />
+    <Compile Include="EffectCompiler\TPGParser\TechniqueInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Graphics\Font\CharacterRegion.cs" />
+    <Compile Include="Graphics\Font\CharacterRegionTypeConverter.cs" />
+    <Compile Include="Graphics\Font\Glyph.cs" />
+    <Compile Include="Graphics\Font\GlyphPacker.cs" />
+    <Compile Include="Graphics\Font\GrowRule.cs" />
+    <Compile Include="Graphics\Font\MaxRectsBin.cs" />
+    <Compile Include="Graphics\Font\MaxRectsHeuristic.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Graphics\AlphaTestMaterialContent.cs" />
+    <Compile Include="Graphics\AnimationChannel.cs" />
+    <Compile Include="Graphics\AnimationChannelDictionary.cs" />
+    <Compile Include="Graphics\AnimationContent.cs" />
+    <Compile Include="Graphics\AnimationContentDictionary.cs" />
+    <Compile Include="Graphics\AnimationKeyframe.cs" />
+    <Compile Include="Graphics\AtcBitmapContent.cs" />
+    <Compile Include="Graphics\AtcExplicitBitmapContent.cs" />
+    <Compile Include="Graphics\AtcInterpolatedBitmapContent.cs" />
+    <Compile Include="Graphics\BasicMaterialContent.cs" />
+    <Compile Include="Graphics\BitmapContent.cs" />
+    <Compile Include="Graphics\BoneContent.cs" />
+    <Compile Include="Graphics\BoneWeight.cs" />
+    <Compile Include="Graphics\BoneWeightCollection.cs" />
+    <Compile Include="Graphics\DefaultTextureProfile.cs" />
+    <Compile Include="Graphics\DualTextureMaterialContent.cs" />
+    <Compile Include="Graphics\Dxt1BitmapContent.cs" />
+    <Compile Include="Graphics\Dxt3BitmapContent.cs" />
+    <Compile Include="Graphics\Dxt5BitmapContent.cs" />
+    <Compile Include="Graphics\DxtBitmapContent.cs" />
+    <Compile Include="Graphics\EffectContent.cs" />
+    <Compile Include="Graphics\EffectMaterialContent.cs" />
+    <Compile Include="Graphics\EnvironmentMapMaterialContent.cs" />
+    <Compile Include="Graphics\Etc1BitmapContent.cs" />
+    <Compile Include="Graphics\FontDescription.cs" />
+    <Compile Include="Graphics\FontDescriptionStyle.cs" />
+    <Compile Include="Graphics\GeometryContent.cs" />
+    <Compile Include="Graphics\GeometryContentCollection.cs" />
+    <Compile Include="Graphics\GraphicsUtil.cs" />
+    <Compile Include="Graphics\IndexCollection.cs" />
+    <Compile Include="Graphics\IndirectPositionCollection.cs" />
+    <Compile Include="Graphics\LocalizedFontDescription.cs" />
+    <Compile Include="Graphics\MaterialContent.cs" />
+    <Compile Include="Graphics\MeshBuilder.cs" />
+    <Compile Include="Graphics\MeshContent.cs" />
+    <Compile Include="Graphics\MeshHelper.cs" />
+    <Compile Include="Graphics\MipmapChain.cs" />
+    <Compile Include="Graphics\MipmapChainCollection.cs" />
+    <Compile Include="Graphics\NodeContent.cs" />
+    <Compile Include="Graphics\NodeContentCollection.cs" />
+    <Compile Include="Graphics\PixelBitmapContent.cs" />
+    <Compile Include="Graphics\PositionCollection.cs" />
+    <Compile Include="Graphics\PvrtcBitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgb2BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgb4BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgba2BitmapContent.cs" />
+    <Compile Include="Graphics\PvrtcRgba4BitmapContent.cs" />
+    <Compile Include="Graphics\SkinnedMaterialContent.cs" />
+    <Compile Include="Graphics\Texture2DContent.cs" />
+    <Compile Include="Graphics\Texture3DContent.cs" />
+    <Compile Include="Graphics\TextureContent.cs" />
+    <Compile Include="Graphics\TextureCubeContent.cs" />
+    <Compile Include="Graphics\TextureProfile.cs" />
+    <Compile Include="Graphics\TextureReferenceDictionary.cs" />
+    <Compile Include="Graphics\VectorConverter.cs" />
+    <Compile Include="Graphics\VertexChannel.cs" />
+    <Compile Include="Graphics\VertexChannelCollection.cs" />
+    <Compile Include="Graphics\VertexChannelGeneric.cs" />
+    <Compile Include="Graphics\VertexChannelNames.cs" />
+    <Compile Include="Graphics\VertexContent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Processors\CompiledEffectContent.cs" />
+    <Compile Include="Processors\FontDescriptionProcessor.cs" />
+    <Compile Include="Processors\FontTextureProcessor.cs" />
+    <Compile Include="Processors\LocalizedFontProcessor.cs" />
+    <Compile Include="Processors\MaterialProcessor.cs" />
+    <Compile Include="Processors\MaterialProcessorDefaultEffect.cs" />
+    <Compile Include="Processors\ModelBoneContent.cs" />
+    <Compile Include="Processors\ModelBoneContentCollection.cs" />
+    <Compile Include="Processors\ModelContent.cs" />
+    <Compile Include="Processors\ModelMeshContent.cs" />
+    <Compile Include="Processors\ModelMeshContentCollection.cs" />
+    <Compile Include="Processors\ModelMeshPartContent.cs" />
+    <Compile Include="Processors\ModelMeshPartContentCollection.cs" />
+    <Compile Include="Processors\ModelProcessor.cs" />
+    <Compile Include="Processors\SpriteFontContent.cs" />
+    <Compile Include="Processors\TextureProcessor.cs" />
+    <Compile Include="Processors\TextureProcessorOutputFormat.cs" />
+    <Compile Include="Processors\VertexBufferContent.cs" />
+    <Compile Include="Processors\VertexDeclarationContent.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Serialization\Compiler\AlphaTestEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\BasicEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\CompiledEffectContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\DualTextureEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\EffectMaterialWriter.cs" />
+    <Compile Include="Serialization\Compiler\EnvironmentMapEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\IndexBufferWriter.cs" />
+    <Compile Include="Serialization\Compiler\ModelWriter.cs" />
+    <Compile Include="Serialization\Compiler\SkinnedEffectWriter.cs" />
+    <Compile Include="Serialization\Compiler\SpriteFontContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\Texture2DContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\TextureCubeWriter.cs" />
+    <Compile Include="Serialization\Compiler\TextureWriter.cs" />
+    <Compile Include="Serialization\Compiler\VertexBufferWriter.cs" />
+    <Compile Include="Serialization\Compiler\VertexDeclarationWriter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="DdsLoader.cs" />
+    <Compile Include="EffectImporter.cs" />
+    <Compile Include="FbxImporter.cs" />
+    <Compile Include="FontDescriptionImporter.cs" />
+    <Compile Include="OpenAssetImporter.cs" />
+    <Compile Include="TextureImporter.cs" />
+    <Compile Include="XImporter.cs" />
+    <Compile Include="Utilities\Vector4Converter.cs" />
+    <Compile Include="Utilities\FreeImageAPI.cs" />
+    <Compile Include="Utilities\FreeImageAPIC.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="ExternalTool.cs" />
+    <Compile Include="Utilities\PathHelper.cs" />
+    <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+      <Link>Utilities\CurrentPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
+      <Link>Utilities\ReflectionHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MonoGame.Framework\Graphics\GraphicsExtensions.cs">
+      <Link>Utilities\GraphicsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ThirdParty\Dependencies\NVTT\Windows\nvtt.dll">
+      <Link>nvtt.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+    <None Include="..\..\ThirdParty\SharpFont\Windows\x64\freetype6.dll">
+      <Link>freetype6.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+    <None Include="..\..\ThirdParty\SharpFont\Windows\x64\msvcr110.dll">
+      <Link>msvcr110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+    <None Include="..\..\ThirdParty\Dependencies\FreeImage.NET\Windows\FreeImage.dll">
+      <Link>FreeImage.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+    <None Include="..\..\ThirdParty\PVRTexLibNET\Windows\x64\PVRTexLibWrapper.dll">
+      <Link>PVRTexLibWrapper.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Framework\Xna.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>Xna.Framework.WindowsDX11</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
+      <Project>{73509F44-3566-4B79-BB47-C7C6E2AA2351}</Project>
+      <Name>Xna.Framework.Content.Pipeline</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

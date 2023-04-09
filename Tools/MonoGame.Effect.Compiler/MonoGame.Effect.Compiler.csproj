@@ -18,9 +18,9 @@
   <Import Project="MonoGame.Effect.Compiler.Common.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj" />
     <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj" />
   </ItemGroup>
 
 

@@ -1,0 +1,112 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\</BaseOutputPath>
+    
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <AssemblyName>Xna.Framework.Content.Pipeline.Graphics.MojoProcessor</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Graphics</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants></DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40' ">
+    <Reference Include="SharpDX">
+      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="CppNet">
+      <HintPath>..\..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
+    <Reference Include="SharpDX">
+      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="CppNet">
+      <HintPath>..\..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
+    </Reference>
+
+    <PackageReference Include="Microsoft.NETCore.Platforms">
+      <Version>2.0.2</Version>
+    </PackageReference>
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Processors\EffectProcessor.cs" />
+    <Compile Include="Processors\EffectProcessorDebugMode.cs" />
+    <Compile Include="EffectCompiler\ConstantBufferData.cs" />
+    <Compile Include="EffectCompiler\ConstantBufferData.mojo.cs" />
+    <Compile Include="EffectCompiler\ConstantBufferData.sharpdx.cs" />
+    <Compile Include="EffectCompiler\EffectObject.cs" />
+    <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
+    <Compile Include="EffectCompiler\MarshalHelper.cs" />
+    <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
+    <Compile Include="EffectCompiler\ShaderData.cs" />
+    <Compile Include="EffectCompiler\ShaderData.mojo.cs" />
+    <Compile Include="EffectCompiler\ShaderData.sharpdx.cs" />
+    <Compile Include="EffectCompiler\MojoShader.cs" />
+    <Compile Include="EffectCompiler\Preprocessor.cs" />
+    <Compile Include="EffectCompiler\ShaderProfile.cs" />
+    <Compile Include="EffectCompiler\ShaderProfile.DirectX.cs" />
+    <Compile Include="EffectCompiler\ShaderProfile.OpenGL.cs" />
+    <Compile Include="EffectCompiler\ShaderResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExternalTool.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+      <Link>Utilities\CurrentPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MonoGame.Framework\Utilities\Hash.cs">
+      <Link>Utilities\Hash.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ThirdParty\Dependencies\MojoShader\Windows\libmojoshader_64.dll">
+      <Link>libmojoshader_64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Framework\Xna.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>Xna.Framework.WindowsDX11</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
+      <Project>{73509F44-3566-4B79-BB47-C7C6E2AA2351}</Project>
+      <Name>Xna.Framework.Content.Pipeline</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj">
+      <Project>{7a3fa1d0-1b03-49cb-9e1b-b9dbf27d74b1}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
