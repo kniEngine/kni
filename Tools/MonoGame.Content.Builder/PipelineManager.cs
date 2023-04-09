@@ -148,6 +148,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // import the build-in Processors
             LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly); // Common
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.SoundEffectProcessor).Assembly); // Audio
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.VideoProcessor).Assembly); // Media
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.TextureProcessor).Assembly); // Graphics
+            LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.EffectProcessor).Assembly); // Graphics Effects
 
             // import the referenced Processors
             foreach (var assemblyPath in Assemblies)

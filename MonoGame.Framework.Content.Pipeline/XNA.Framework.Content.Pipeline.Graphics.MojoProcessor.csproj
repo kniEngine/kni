@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\</BaseOutputPath>
-    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\Pipeline.Graphics.MojoProcessor\</BaseIntermediateOutputPath>
     
     <Version>3.8.9102.0</Version>
     <AssemblyVersion>3.8.9102.0</AssemblyVersion>
@@ -20,7 +20,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40' ">
     <Reference Include="SharpDX">
       <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
     </Reference>
@@ -30,6 +30,23 @@
     <Reference Include="CppNet">
       <HintPath>..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
+    <Reference Include="SharpDX">
+      <HintPath>..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="CppNet">
+      <HintPath>..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
+    </Reference>
+
+    <PackageReference Include="Microsoft.NETCore.Platforms">
+      <Version>2.0.2</Version>
+    </PackageReference>
+
   </ItemGroup>
 
   <ItemGroup>
