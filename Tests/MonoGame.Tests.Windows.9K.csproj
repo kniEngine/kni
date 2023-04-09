@@ -1184,9 +1184,21 @@
       <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
       <Name>XNA.Framework.WindowsDX11</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Windows.csproj">
-      <Project>{B950DE10-AC5D-4BD9-B817-51247C4A732D}</Project>
-      <Name>XNA.Framework.Content.Pipeline.Windows</Name>
+    <ProjectReference Include="..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.csproj">
+      <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
+      <Name>XNA.Framework.Content.Pipeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj">
+      <Project>{476ee43e-e93b-4019-b8b7-ad52c4216456}</Project>
+      <Name>XNA.Framework.Content.Pipeline.Graphics.MojoProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.Audio.csproj">
+      <Project>{acd26013-5730-4caf-9468-3baae867a8a2}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.Graphics.csproj">
+      <Project>{7a3fa1d0-1b03-49cb-9e1b-b9dbf27d74b1}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
       <Project>{4243474D-572E-6E69-646F-77734D474342}</Project>
