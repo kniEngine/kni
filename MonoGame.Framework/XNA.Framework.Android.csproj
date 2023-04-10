@@ -58,11 +58,13 @@
     <Reference Include="mscorlib" />
     <Reference Include="System.Core" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingFrustum.cs" />
     <Compile Include="BoundingSphere.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="ContainmentType.cs" />
     <Compile Include="Curve.cs" />
     <Compile Include="CurveContinuity.cs" />
@@ -71,7 +73,6 @@
     <Compile Include="CurveLoopType.cs" />
     <Compile Include="CurveTangent.cs" />
     <Compile Include="FrameworkDispatcher.cs" />
-    <Compile Include="Complex.cs" />
     <Compile Include="ICurveEvaluator.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Matrix.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Vector4.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="GameTime.cs" />
     <Compile Include="PlayerIndex.cs" />
   </ItemGroup>
