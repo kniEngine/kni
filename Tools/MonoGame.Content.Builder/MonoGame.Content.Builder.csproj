@@ -38,11 +38,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Audio.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Media.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj" />
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj" />
   </ItemGroup>
 
 </Project>
