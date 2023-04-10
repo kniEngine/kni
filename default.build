@@ -22,19 +22,16 @@
     
     <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Debug" />
     <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
     
     <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Debug" />
     
     <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
     <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Debug" />
     <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
     
   </target>
@@ -82,7 +79,6 @@
 
       <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
       <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release /m" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Debug /m" />
 
       <call target="build_portable"/>
       
@@ -110,7 +106,6 @@
 
       <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
       <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Debug" />
       
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
       <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
@@ -130,7 +125,6 @@
     -->
 
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Debug" />
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
 
   </target>
@@ -171,7 +165,7 @@
   <target name="run_tests" description="Run all the tests" >
 
     <if test="${os == 'Win32NT' and '$rununittests'=='true'  }">
-      <exec program="MonoGame.Tests.exe" workingdir="Tests/bin/Windows/AnyCPU/Debug/" basedir="Test/bin/Windows/AnyCPU/Debug/"/>
+      <exec program="MonoGame.Tests.exe" workingdir="Tests/bin/Windows/AnyCPU/Release/" basedir="Test/bin/Windows/AnyCPU/Release/"/>
     </if>
 
   </target>
