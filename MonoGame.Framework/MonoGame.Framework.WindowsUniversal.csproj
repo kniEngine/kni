@@ -17,7 +17,7 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>WINDOWS_UAP;DIRECTX11_1;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime for UWP (Universal Windows Platform) which supports Windows 10 and Xbox One.</Description>
@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <Import Project="Xna.Framework.props" />
-	<Import Project="Xna.Framework.Audio.props" />
+  <Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 
   <ItemGroup>

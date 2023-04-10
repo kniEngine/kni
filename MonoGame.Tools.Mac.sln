@@ -17,15 +17,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Templates.VSMacExt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework.Content.Pipeline", "Framework.Content.Pipeline", "{7B3AE3AC-511B-4835-B677-B7F9BB22A296}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Content.Pipeline", "P:\tainicom\Pinball_League\EspressoRub\trunk\Monogame\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.csproj", "{8B99D4DB-7944-4176-B508-AE70D488CBA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline", "src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj", "{D6FC6C8F-3CB7-495B-BB2E-879A18095434}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Content.Pipeline.Audio", "P:\tainicom\Pinball_League\EspressoRub\trunk\Monogame\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Audio.csproj", "{D8D46A0E-0A82-4C81-8A25-EB7C8170F227}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Audio", "src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj", "{309F4626-65AB-4033-82CE-C8B4CBDB7566}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Content.Pipeline.Graphics", "P:\tainicom\Pinball_League\EspressoRub\trunk\Monogame\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.csproj", "{BE9A6E0C-242B-436B-AB06-8F632A981F95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Media", "src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj", "{B15F9E7C-1410-4B9F-845E-D0238B9E982F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Content.Pipeline.Graphics.MojoProcessor", "P:\tainicom\Pinball_League\EspressoRub\trunk\Monogame\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj", "{D6545053-0010-4166-BFE0-4002F6E7DA19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Graphics", "src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj", "{329846B8-2E99-4DA0-A5AC-8E070B0A9A2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Content.Pipeline.Media", "P:\tainicom\Pinball_League\EspressoRub\trunk\Monogame\MonoGame.Framework.Content.Pipeline\XNA.Framework.Content.Pipeline.Media.csproj", "{3714938E-9772-4609-8952-E3A9B97999BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Graphics.MojoProcessor", "src\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj", "{FF5743FA-F88B-4874-96D5-1E2BCCE7A8BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
