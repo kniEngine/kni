@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace Microsoft.Xna.Framework.Design
 {
-    public class Vector3TypeConverter : TypeConverter
+    public class Vector3Converter : TypeConverter
     {
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {

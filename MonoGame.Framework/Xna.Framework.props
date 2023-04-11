@@ -1,9 +1,9 @@
 <Project>
 
   <ItemGroup>
-    <Compile Include="Design\Vector2TypeConverter.cs" />
-    <Compile Include="Design\Vector3TypeConverter.cs" />
-    <Compile Include="Design\Vector4TypeConverter.cs" />
+    <Compile Include="Design\Vector2Converter.cs" />
+    <Compile Include="Design\Vector3Converter.cs" />
+    <Compile Include="Design\Vector4Converter.cs" />
   </ItemGroup>
 
   <ItemGroup>

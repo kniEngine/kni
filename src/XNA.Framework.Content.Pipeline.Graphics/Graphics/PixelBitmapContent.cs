@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
             else
             {
-                var converter = new Vector4Converter() as IVector4Converter<T>;
+                var converter = new VectorConverterEx() as VectorConverterEx<T>;
                 // If no converter could be created, converting from this format is not supported
                 if (converter == null)
                     return false;
@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
             else
             {
-                var converter = new Vector4Converter() as IVector4Converter<T>;
+                var converter = new VectorConverterEx() as VectorConverterEx<T>;
                 // If no converter could be created, converting from this format is not supported
                 if (converter == null)
                     return false;
