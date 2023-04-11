@@ -16,7 +16,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>OPENGL;OPENAL;XNADESIGNPROVIDED;LINUX;DESKTOPGL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>OPENGL;OPENAL;LINUX;DESKTOPGL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime supporting Windows, Linux and macOS using SDL2 and OpenGL.</Description>
@@ -33,7 +33,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <Import Project="Xna.Framework.props" />
+  <ItemGroup>
+    <ProjectReference Include="Xna.Framework.csproj" />
+  </ItemGroup>
+
   <Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
   

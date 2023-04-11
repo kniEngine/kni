@@ -28,7 +28,10 @@
     <PackageOutputPath>..\Artifacts\NuGet</PackageOutputPath>
   </PropertyGroup>
 
-  <Import Project="Xna.Framework.props" />
+  <ItemGroup>
+    <ProjectReference Include="Xna.Framework.csproj" />
+  </ItemGroup>
+
   <Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 

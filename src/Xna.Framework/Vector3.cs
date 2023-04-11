@@ -12,9 +12,7 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// Describes a 3D-vector.
     /// </summary>
-#if XNADESIGNPROVIDED
     [System.ComponentModel.TypeConverter(typeof(Microsoft.Xna.Framework.Design.Vector3Converter))]
-#endif
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct Vector3 : IEquatable<Vector3>

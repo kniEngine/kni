@@ -15,22 +15,26 @@
     <summary><summary>
     <copyright>Copyright ©2022 Kastellanos Nikos</copyright>
     <language>en-US</language>
+
     <dependencies>
-        <group targetFramework=".NETFramework4.0">        
-            <dependency id="MonoGame.Framework.WindowsDX.9000" version="3.8.9102" />
+        <group targetFramework=".NETFramework4.0">
+            <dependency id="nkast.Xna.Framework" version="$version$" />
+            <dependency id="MonoGame.Framework.WindowsDX.9000" version="$version$" />
             <dependency id="nkast.LibOVR" version="1.0.0" />
             <dependency id="SharpDX" version="4.0.1" />
             <dependency id="SharpDX.DXGI" version="4.0.1" />
             <dependency id="SharpDX.Direct3D11" version="4.0.1" />
         </group>
         <group targetFramework="net6.0-windows7.0">
-            <dependency id="MonoGame.Framework.WindowsDX.9000" version="3.8.9102" />
+            <dependency id="nkast.Xna.Framework" version="$version$" />
+            <dependency id="MonoGame.Framework.WindowsDX.9000" version="$version$" />
             <dependency id="nkast.LibOVR" version="1.0.0" />
             <dependency id="SharpDX" version="4.0.1" exclude="Build,Analyzers" />
             <dependency id="SharpDX.DXGI" version="4.0.1" exclude="Build,Analyzers" />
             <dependency id="SharpDX.Direct3D11" version="4.0.1" exclude="Build,Analyzers" />
         </group>
     </dependencies>
+
   </metadata>
   <files>
   

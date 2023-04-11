@@ -17,8 +17,10 @@
         <summary>This package provides you with MonoGame Framework that works on Windows 10, Windows Phone 10 and Xbox One using UWP(Universal Windows Platform).</summary>
         <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
         <language>en-US</language>
+
         <dependencies>
             <group targetFramework=".NETCore0.0">
+                <dependency id="nkast.Xna.Framework" version="$version$" />
                 <dependency id="SharpDX" version="4.0.1" />
                 <dependency id="SharpDX.Direct2D1" version="4.0.1" />
                 <dependency id="SharpDX.Direct3D11" version="4.0.1" />
@@ -28,6 +30,7 @@
                 <dependency id="SharpDX.XInput" version="4.0.1" />
             </group>
         </dependencies>
+
     </metadata>
     <files>
         <file src="NuGetPackages\build\WindowsUniversal\MonoGame.Framework.WindowsUniversal.9000.targets" target="build\MonoGame.Framework.WindowsUniversal.9000.targets" />

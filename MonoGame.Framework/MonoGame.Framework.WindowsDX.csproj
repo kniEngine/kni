@@ -16,7 +16,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>WINDOWS;XNADESIGNPROVIDED;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>WINDOWS;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -25,7 +25,10 @@
     <PackageId>MonoGame.Framework.WindowsDX</PackageId>
   </PropertyGroup>
 
-  <Import Project="Xna.Framework.props" />
+  <ItemGroup>
+    <ProjectReference Include="Xna.Framework.csproj" />
+  </ItemGroup>
+
   <Import Project="Xna.Framework.Audio.props" />
   <Import Project="MonoGame.Framework.Common.props" />
 

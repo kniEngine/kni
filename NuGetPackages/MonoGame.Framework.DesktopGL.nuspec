@@ -17,13 +17,21 @@
     <summary>This package provides you with MonoGame Framework that uses OpenGL for rendering and works on Windows, Linux and MacOS.</summary>
     <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
     <language>en-US</language>
+    
+    <dependencies>
+        <dependency id="nkast.Xna.Framework" version="$version$" />
+    </dependencies>
+    
   </metadata>
   <files>
     <file src="NuGetPackages\build\DesktopGL\MonoGame.Framework.DesktopGL.9000.targets" target="build\MonoGame.Framework.DesktopGL.9000.targets" />
     
     <!-- C# Assemblies -->
-    <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.dll" target="lib\net45\MonoGame.Framework.dll" />
-    <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml" target="lib\net45\MonoGame.Framework.xml" />
+    <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.dll" target="lib\net40\MonoGame.Framework.dll" />
+    <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml" target="lib\net40\MonoGame.Framework.xml" />
+    
+    <file src="Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\MonoGame.Framework.dll" target="lib\netstandard2.0\MonoGame.Framework.dll" />
+    <file src="Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\MonoGame.Framework.xml" target="lib\netstandard2.0\MonoGame.Framework.xml" />
     
     <!-- Native Libs -->
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.dll.config" target="build\native\MonoGame.Framework.dll.config" />
@@ -36,13 +44,6 @@
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\x86\libopenal.so.1" target="build\native\x86\libopenal.so.1" />
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\x86\SDL2.dll" target="build\native\x86\SDL2.dll" />
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\x86\soft_oal.dll" target="build\native\x86\soft_oal.dll" />
-    
-    
-    <!-- C# Assemblies -->
-    <file src="Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\MonoGame.Framework.dll" target="lib\netstandard2.0\MonoGame.Framework.dll" />
-    <file src="Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\MonoGame.Framework.xml" target="lib\netstandard2.0\MonoGame.Framework.xml" />
-    
-    <!-- Native Libs -->
     
   </files>
 </package>
