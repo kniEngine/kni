@@ -71,13 +71,11 @@
       <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.XInput.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
-    <Compile Include="Design\Vector2TypeConverter.cs" />
-    <Compile Include="Design\Vector3TypeConverter.cs" />
-    <Compile Include="Design\Vector4TypeConverter.cs" />
+    <Compile Include="Design\Vector2Converter.cs" />
+    <Compile Include="Design\Vector3Converter.cs" />
+    <Compile Include="Design\Vector4Converter.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingFrustum.cs" />
@@ -105,12 +103,10 @@
     <Compile Include="Vector3.cs" />
     <Compile Include="Vector4.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="GameTime.cs" />
     <Compile Include="PlayerIndex.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
@@ -162,7 +158,6 @@
     <Compile Include="Audio\XAudio\ConcreteSoundEffect.cs" />
     <Compile Include="Audio\XAudio\ConcreteSoundEffectInstance.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
@@ -186,7 +181,6 @@
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.Desktop.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentLoadException.cs" />
@@ -389,7 +383,7 @@
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
@@ -448,7 +442,6 @@
     <Compile Include="Graphics\Vertices\VertexPositionNormalTexture.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
-
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -478,7 +471,7 @@
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursor.Windows.cs" />
     <Compile Include="Input\MouseState.cs" />
-	<Compile Include="Input\TextInputEventArgs.cs" />
+    <Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />
     <Compile Include="Input\Oculus\TouchButtons.cs" />
     <Compile Include="Input\Oculus\TouchButtonState.cs" />
@@ -535,11 +528,9 @@
     <Compile Include="Platform\Windows\ConcreteGame.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Media\VideoSampleGrabber.cs" />
-
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
     <Compile Include="Storage\StorageDeviceHelper.cs" />
-
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
     </Compile>
