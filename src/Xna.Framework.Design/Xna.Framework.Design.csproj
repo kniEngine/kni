@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Design\</BaseOutputPath>
+    
+    <Version>3.8.9102.0</Version>
+    <AssemblyVersion>3.8.9102.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <ProjectGuid>{E37F98D7-C4E8-4556-B322-AEF99638ECE1}</ProjectGuid>
+    <AssemblyName>Xna.Framework.Design</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Design</RootNamespace>
+    <DefineConstants></DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The Design Converters.</Description>
+    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework.Design</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Design\Vector2Converter.cs" />
+    <Compile Include="Design\Vector3Converter.cs" />
+    <Compile Include="Design\Vector4Converter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

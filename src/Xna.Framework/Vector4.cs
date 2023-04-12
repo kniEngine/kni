@@ -3,17 +3,18 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Runtime.Serialization;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
     /// Describes a 4D-vector.
     /// </summary>
-    [System.ComponentModel.TypeConverter(typeof(Microsoft.Xna.Framework.Design.Vector4Converter))]
-    [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
+    [DataContract]
+    [TypeConverter("Microsoft.Xna.Framework.Design.Vector4Converter, Xna.Framework.Design")]
     public struct Vector4 : IEquatable<Vector4>
     {
         #region Private Fields
@@ -1261,7 +1262,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>A <see cref="String"/> representation of this <see cref="Vector4"/>.</returns>
         public override string ToString()
         {
-            return "{X:" + X + " Y:" + Y + " Z:" + Z + " W:" + W + "}";
+            return String.Format("{{X: {0}, Y: {1}, Z: {2}, W: {3} }}", X, Y, Z, W);
         }
 
         /// <summary>
