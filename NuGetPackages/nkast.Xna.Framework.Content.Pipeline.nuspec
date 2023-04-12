@@ -18,8 +18,10 @@
     
     <dependencies>
         <group targetFramework=".NETFramework4.0">
+            <dependency id="nkast.Xna.Framework" version="$version$" />
         </group>
         <group targetFramework="netstandard2.0">
+            <dependency id="nkast.Xna.Framework" version="$version$" />
         </group>
     </dependencies>
     

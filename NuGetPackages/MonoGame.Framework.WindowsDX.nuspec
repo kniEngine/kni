@@ -19,6 +19,7 @@
     <language>en-US</language>
     <dependencies>
         <group targetFramework=".NETFramework4.0">
+            <dependency id="nkast.Xna.Framework" version="$version$" />
             <dependency id="SharpDX" version="4.0.1" />
             <dependency id="SharpDX.Direct2D1" version="4.0.1" />
             <dependency id="SharpDX.Direct3D11" version="4.0.1" />
@@ -29,6 +30,7 @@
             <dependency id="SharpDX.Direct3D9" version="4.0.1" />
         </group>        
         <group targetFramework="net6.0-windows7.0">
+          <dependency id="nkast.Xna.Framework" version="$version$" />
           <dependency id="SharpDX" version="4.0.1" exclude="Build,Analyzers" />
           <dependency id="SharpDX.DXGI" version="4.0.1" exclude="Build,Analyzers" />
           <dependency id="SharpDX.Direct2D1" version="4.0.1" exclude="Build,Analyzers" />

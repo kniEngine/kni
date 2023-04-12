@@ -16,6 +16,11 @@
     <summary>This package provides you with MonoGame Framework that works on Android.</summary>
     <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
     <language>en-US</language>
+    
+    <dependencies>
+        <dependency id="nkast.Xna.Framework" version="$version$" />
+    </dependencies>
+    
   </metadata>
   <files>
     <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />

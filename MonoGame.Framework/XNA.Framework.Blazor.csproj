@@ -17,7 +17,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>Monogame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>XNADESIGNPROVIDED;</DefineConstants>
+    <DefineConstants></DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>XNA framework for the WebAssembly.</Description>

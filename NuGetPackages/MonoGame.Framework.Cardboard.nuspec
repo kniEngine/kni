@@ -28,6 +28,11 @@
     <summary>This package provides you with MonoGame/XNA Framework that works on Android-Cardboard.</summary>
     <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2020-2023 Kastellanos Nikos</copyright>
     <language>en-US</language>
+    
+    <dependencies>
+        <dependency id="nkast.Xna.Framework" version="$version$" />
+    </dependencies>
+    
   </metadata>
   <files>
     <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
