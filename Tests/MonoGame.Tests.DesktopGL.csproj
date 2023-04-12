@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Framework\Xna.Framework.csproj" />
+    <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj" />
     <ProjectReference Include="..\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
   </ItemGroup>
 
