@@ -12,8 +12,9 @@
     <Icon>Images\Icon.png</Icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ovr Oculus library for the KNI Framework (DirectX 11).</description>
-    <summary><summary>
-    <copyright>Copyright ©2022 Kastellanos Nikos</copyright>
+    <summary></summary>
+    <copyright>©2022-2023 Kastellanos Nikos,
+	            ©2009-2022 The MonoGame Team</copyright>
     <language>en-US</language>
 
     <dependencies>

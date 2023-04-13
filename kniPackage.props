@@ -1,9 +1,11 @@
-<Project>
+﻿<Project>
   <PropertyGroup>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/kniengine/kni/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kniengine/kni/</RepositoryUrl>
-    <Authors>MonoGame Team, Kastellanos Nikos</Authors>
+    <Authors>Kastellanos Nikos, MonoGame Team</Authors>
+    <copyright>©2013-2023 Kastellanos Nikos,
+                ©2009-2022 The MonoGame Team</copyright>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
   </PropertyGroup>
 
