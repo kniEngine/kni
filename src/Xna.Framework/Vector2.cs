@@ -3,8 +3,8 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// Describes a 2D-vector.
     /// </summary>
-    [System.ComponentModel.TypeConverter(typeof(Microsoft.Xna.Framework.Design.Vector2Converter))]
-    [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
+    [DataContract]
+    [TypeConverter("Microsoft.Xna.Framework.Design.Vector2Converter, Xna.Framework.Design")]
     public struct Vector2 : IEquatable<Vector2>
     {
         #region Private Fields
@@ -975,7 +975,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>A <see cref="String"/> representation of this <see cref="Vector2"/>.</returns>
         public override string ToString()
         {
-            return "{X:" + X + " Y:" + Y + "}";
+            return String.Format("{{X: {0}, Y: {1} }}", X, Y);
         }
 
         /// <summary>

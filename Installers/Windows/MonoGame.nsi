@@ -89,6 +89,7 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.exe'  
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.exe.config'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net4\PipelineEditor.xml'
+  File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
 
   ; Associate .mgcb files open in the Pipeline tool.
   !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '10.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
@@ -104,8 +105,10 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   ; Install framework Assemblies
   SetOutPath '$INSTDIR\Assemblies\Framework\net40'
   File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
+  File '..\..\Artifacts\Xna.Framework.Design\Release\net40\*.*'
   SetOutPath '$INSTDIR\Assemblies\Framework\netstandard2.0'
   File '..\..\Artifacts\Xna.Framework\Release\netstandard2.0\*.*'
+  File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
   
   ; Install Reference Assemblies
   SetOutPath '$INSTDIR\Assemblies\Ref\net40'
