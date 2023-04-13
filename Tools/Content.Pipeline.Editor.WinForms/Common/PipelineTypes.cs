@@ -398,14 +398,19 @@ namespace Content.Pipeline.Editor
             _importers = new List<ImporterInfo>();
             _processors = new List<ProcessorInfo>();
             
-            var assemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
+            var assemblies = new List<Assembly>();
+            assemblies.Add(typeof(Microsoft.Xna.Framework.Content.Pipeline.IContentProcessor).Assembly); // Common
+            assemblies.Add(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.SoundEffectProcessor).Assembly); // Audio
+            assemblies.Add(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.VideoProcessor).Assembly); // Media
+            assemblies.Add(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.TextureProcessor).Assembly); // Graphics
+            assemblies.Add(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.EffectProcessor).Assembly); // Graphics Effects
 
             foreach (var asm in assemblies)
             {
                 //try
                 {
-                    var types = asm.GetTypes();
-                    ProcessTypes(types);
+                    var exportedTypes = asm.GetTypes();
+                    ProcessTypes(exportedTypes);
                 }
                 //catch (Exception e) { }
             }
