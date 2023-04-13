@@ -82,6 +82,7 @@ Documentation/Output/
 #Zip files
 *.zip
 
+Installers/Windows/header.nsh
 Installers/MacOS/Scripts/Framework/postinstall
 IDE/MonoDevelop/MonoDevelop.MonoGame/templates/Common/MonoGame.Framework.dll.config
 
