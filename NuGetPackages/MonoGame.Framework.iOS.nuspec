@@ -6,8 +6,8 @@
     <title>MonoGame.Framework.iOS.9000</title>
     <authors>Kastellanos Nikos, MonoGame Team</authors>
     <owners>Kastellanos Nikos</owners>
-    <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
-    <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+    <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/kniEngine/kni</projectUrl>
     <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
@@ -15,7 +15,8 @@
 
       This package provides you with MonoGame Framework that works on iOS.</description>
     <summary>This package provides you with MonoGame Framework that works on iOS.</summary>
-    <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2013-2022 Kastellanos Nikos</copyright>
+    <copyright>©2013-2023 Kastellanos Nikos,
+	            ©2009-2022 The MonoGame Team</copyright>
     <language>en-US</language>
         
     <dependencies>

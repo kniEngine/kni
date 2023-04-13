@@ -6,8 +6,8 @@
     <title>MonoGame.Framework.Cardboard.9000</title>
     <authors>Kastellanos Nikos, MonoGame Team</authors>
     <owners>Kastellanos Nikos</owners>
-    <licenseUrl>https://github.com/nkast/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
-    <projectUrl>https://github.com/nkast/MonoGame</projectUrl>
+    <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/kniEngine/kni</projectUrl>
     <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is an experiment port of Google Cardboard on MonoGame/XNA framework.
@@ -26,7 +26,8 @@
 
              This package provides you with MonoGame/XNA Framework that works on Android-Cardboard.</description>
     <summary>This package provides you with MonoGame/XNA Framework that works on Android-Cardboard.</summary>
-    <copyright>Copyright © 2009-2022 The MonoGame Team, Copyright © 2020-2023 Kastellanos Nikos</copyright>
+    <copyright>©2013-2023 Kastellanos Nikos,
+                ©2009-2022 The MonoGame Team</copyright>
     <language>en-US</language>
     
     <dependencies>

@@ -20,7 +20,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The Design Converters.</Description>
-    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageTags>KNI;.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Design</PackageId>
   </PropertyGroup>
 

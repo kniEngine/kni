@@ -20,7 +20,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Reference XNA framework for libraries.</Description>
-    <PackageTags>monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
+    <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
     <PackageId>nkast.Xna.Framework.Ref</PackageId>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
