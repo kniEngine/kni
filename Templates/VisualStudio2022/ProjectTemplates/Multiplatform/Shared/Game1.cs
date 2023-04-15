@@ -63,6 +63,17 @@ namespace $ext_safeprojectname$
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState keyboardState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+
+            if (keyboardState.IsKeyDown(Keys.Escape) ||
+                keyboardState.IsKeyDown(Keys.Back) ||
+                gamePadState.Buttons.Back == ButtonState.Pressed)
+            {
+                try { Exit(); }
+                catch (PlatformNotSupportedException ex) { }
+            }
+            
             // TODO: Add your update logic here
 
             base.Update(gameTime);
