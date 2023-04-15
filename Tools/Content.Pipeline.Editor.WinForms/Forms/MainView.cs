@@ -245,20 +245,36 @@ namespace Content.Pipeline.Editor
 
         public void UpdateRecentProjectList()
         {
-            _openRecentMenuItem.DropDownItems.Clear();
-
-            foreach (var project in PipelineSettings.Default.ProjectHistory)
+            try
             {
-                var recentItem = new ToolStripMenuItem(project);
+                _mainMenu.SuspendLayout();
 
-                // We need a local to make the delegate work correctly.
-                var localProject = project;
-                recentItem.Click += (sender, args) => _controller.OpenProject(localProject);
+                // TODO: clear removed projects from DropDownItems
 
-                _openRecentMenuItem.DropDownItems.Insert(0, recentItem);
+                // attach added projects to DropDownItems
+                foreach (string project in PipelineSettings.Default.ProjectHistory)
+                {
+                    if (_openRecentMenuItem.DropDownItems.ContainsKey(project))
+                        continue;
+
+                    ToolStripMenuItem recentItem = new ToolStripMenuItem(project);
+                    recentItem.Name = project;
+                    _openRecentMenuItem.DropDownItems.Insert(0, recentItem);
+
+                    // We need a local to make the delegate work correctly.
+                    string localProject = project;
+                    recentItem.Click += (sender, args) =>
+                    {
+                        _controller.OpenProject(localProject);
+                    };
+                }
+
+                _openRecentMenuItem.Enabled = (_openRecentMenuItem.DropDownItems.Count >= 1);
             }
-
-            _openRecentMenuItem.Enabled = (_openRecentMenuItem.DropDownItems.Count >= 1);
+            finally
+            {
+                _mainMenu.ResumeLayout();
+            }
         }
 
         public AskResult AskSaveOrCancel()
@@ -813,6 +829,7 @@ namespace Content.Pipeline.Editor
             _cancelBuildMenuItem.Visible = !notBuilding;
       
             UpdateUndoRedo(_controller.CanUndo, _controller.CanRedo);
+
             UpdateRecentProjectList();
         }
         
