@@ -66,7 +66,7 @@ namespace $safeprojectname$
             if (keyboardState.IsKeyDown(Keys.Escape) ||
                 keyboardState.IsKeyDown(Keys.Back))
             {
-                try { Game.Exit(); }
+                try { Exit(); }
                 catch (PlatformNotSupportedException ex) { }
             }
 

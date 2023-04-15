@@ -68,7 +68,7 @@ namespace $safeprojectname$
                 keyboardState.IsKeyDown(Keys.Back) ||
                 gamePadState.Buttons.Back == ButtonState.Pressed)
             {
-                try { Game.Exit(); }
+                try { Exit(); }
                 catch (PlatformNotSupportedException ex) { }
             }
 
