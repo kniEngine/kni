@@ -1,109 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}</ProjectGuid>
-    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <AssemblyName>MonoGame.Framework</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkProfile />
-    <LangVersion>Default</LangVersion>
-    <SynchReleaseVersion>False</SynchReleaseVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\iOS\iPhone\Debug</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchDebug>True</MtouchDebug>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\Release</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\iOS\iPhoneSimulator\Debug</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhoneSimulator\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhoneSimulator\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchDebug>True</MtouchDebug>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhoneSimulator\Release</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhoneSimulator\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\Ad-Hoc</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Ad-Hoc</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Ad-Hoc\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\AppStore</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\AppStore</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\AppStore\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>  
+
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);XAMARINIOS</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>xamarinios10</TargetFramework>
+    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
+    <LangVersion>Default</LangVersion>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <DefineConstants>IOS;GLES;OPENGL;OPENAL;STBSHARP_INTERNAL;XAMARINIOS</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -637,8 +562,9 @@
   </ItemGroup>  
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.iOS.cs" />  
+    <Compile Include="Properties\AssemblyInfo.iOS.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo" />
@@ -647,24 +573,10 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <UsingTask TaskName="LocalTouch" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
-    <ParameterGroup>
-      <Path ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Code Type="Fragment" Language="cs">
-              
-                  if (!File.Exists(Path))
-                  {
-                    var stream = File.Create(Path);
-                    stream.Dispose();
-                  }
-                  File.SetLastAccessTime(Path, DateTime.Now);
-                  
-            </Code>
-    </Task>
-  </UsingTask>
+
+  <ItemGroup>
+    <None Remove="Properties\AssemblyInfo.Android.cs" />
+  </ItemGroup>
+
 </Project>
+
