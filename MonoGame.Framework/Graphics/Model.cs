@@ -95,7 +95,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 foreach (Effect effect in mesh.Effects)
                 {
-					IEffectMatrices effectMatricies = (IEffectMatrices)effect;
+					IEffectMatrices effectMatricies = effect as IEffectMatrices;
+					if (effectMatricies == null) {
+						throw new InvalidOperationException();
+					}
                     effectMatricies.World = sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
                     effectMatricies.View = view;
                     effectMatricies.Projection = projection;
