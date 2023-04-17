@@ -15,17 +15,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public sealed class VertexChannel<T> : VertexChannel, IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable
     {
-        List<T> items;
+        List<T> _items;
 
         /// <summary>
         /// Gets the strongly-typed list for the base class to access.
         /// </summary>
         internal override IList Items
         {
-            get
-            {
-                return items;
-            }
+            get { return _items; }
         }
 
         /// <summary>
@@ -33,10 +30,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public override Type ElementType
         {
-            get
-            {
-                return typeof(T);
-            }
+            get { return typeof(T); }
         }
 
         /// <summary>
@@ -44,14 +38,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public new T this[int index]
         {
-            get
-            {
-                return items[index];
-            }
-            set
-            {
-                items[index] = value;
-            }
+            get { return _items[index]; }
+            set { _items[index] = value; }
         }
 
         /// <summary>
@@ -59,10 +47,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         bool ICollection<T>.IsReadOnly
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
@@ -72,7 +57,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         internal VertexChannel(string name)
             : base(name)
         {
-            items = new List<T>();
+            _items = new List<T>();
         }
 
         /// <summary>
@@ -82,7 +67,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>true if the element is present; false otherwise.</returns>
         public bool Contains(T item)
         {
-            return items.Contains(item);
+            return _items.Contains(item);
         }
 
         /// <summary>
@@ -92,7 +77,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="arrayIndex">Starting index for copy operation.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            items.CopyTo(array, arrayIndex);
+            _items.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -101,7 +86,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Enumeration of the channel content.</returns>
         public new IEnumerator<T> GetEnumerator()
         {
-            return items.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         /// <summary>
@@ -111,7 +96,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Index of specified item.</returns>
         public int IndexOf(T item)
         {
-            return items.IndexOf(item);
+            return _items.IndexOf(item);
         }
 
         /// <summary>
@@ -121,13 +106,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="data">The data to insert into the channel.</param>
         internal override void InsertRange(int index, IEnumerable data)
         {
-            if ((index < 0) || (index > items.Count))
+            if ((index < 0) || (index > _items.Count))
                 throw new ArgumentOutOfRangeException("index");
             if (data == null)
                 throw new ArgumentNullException("data");
             if (!(data is IEnumerable<T>))
                 throw new ArgumentException("data");
-            items.InsertRange(index, (IEnumerable<T>)data);
+            _items.InsertRange(index, (IEnumerable<T>)data);
         }
 
         /// <summary>
@@ -138,9 +123,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public override IEnumerable<TargetType> ReadConvertedContent<TargetType>()
         {
             if (typeof(TargetType).IsAssignableFrom(typeof(T)))
-                return items.Cast<TargetType>();
+                return _items.Cast<TargetType>();
 
-            return Convert<TargetType>(items);
+            return Convert<TargetType>(_items);
         }
 
         private static IEnumerable<TargetType> Convert<TargetType>(List<T> items)
@@ -152,8 +137,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // - Vector4 Structure
             // - Any implementation of IPackedVector Interface.
 
-            var vconverter4 = VectorConverter.GetConverter<T, Vector4>();
-            var converter = VectorConverter.GetConverter<Vector4, TargetType>();
+            Converter<T, Vector4> vconverter4 = VectorConverter.GetConverter<T, Vector4>();
+            Converter<Vector4, TargetType> converter = VectorConverter.GetConverter<Vector4, TargetType>();
 
             foreach (T item in items)
             {
@@ -215,7 +200,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="count"> The number of elements to remove.</param>
         internal override void RemoveRange(int index, int count)
         {
-            items.RemoveRange(index, count);
+            _items.RemoveRange(index, count);
         }
     }
 }

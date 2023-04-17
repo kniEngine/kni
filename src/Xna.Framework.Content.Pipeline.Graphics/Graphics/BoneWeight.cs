@@ -9,18 +9,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public struct BoneWeight
     {
-        string boneName;
-        float weight;
+        string _boneName;
+        float _weight;
 
         /// <summary>
         /// Gets the name of the bone.
         /// </summary>
         public string BoneName
         {
-            get
-            {
-                return boneName;
-            }
+            get { return _boneName; }
         }
 
         /// <summary>
@@ -28,14 +25,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public float Weight
         {
-            get
-            {
-                return weight;
-            }
-            internal set
-            {
-                weight = value;
-            }
+            get { return _weight; }
+            internal set { _weight = value; }
         }
 
         /// <summary>
@@ -45,8 +36,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="weight">Amount of influence, ranging from zero to one.</param>
         public BoneWeight(string boneName, float weight)
         {
-            this.boneName = boneName;
-            this.weight = weight;
+            this._boneName = boneName;
+            this._weight = weight;
         }
     }
 }

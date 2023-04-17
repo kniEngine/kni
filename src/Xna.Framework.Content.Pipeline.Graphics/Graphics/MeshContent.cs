@@ -9,18 +9,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public class MeshContent : NodeContent
     {
-        GeometryContentCollection geometry;
-        PositionCollection positions;
+        GeometryContentCollection _geometry;
+        PositionCollection _positions;
 
         /// <summary>
         /// Gets the list of geometry batches for the mesh.
         /// </summary>
         public GeometryContentCollection Geometry
         {
-            get
-            {
-                return geometry;
-            }
+            get { return _geometry; }
         }
 
         /// <summary>
@@ -28,10 +25,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public PositionCollection Positions
         {
-            get
-            {
-                return positions;
-            }
+            get { return _positions; }
         }
 
         /// <summary>
@@ -39,8 +33,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public MeshContent()
         {
-            geometry = new GeometryContentCollection(this);
-            positions = new PositionCollection();
+            _geometry = new GeometryContentCollection(this);
+            _positions = new PositionCollection();
         }
 
         /// <summary>
@@ -49,18 +43,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         internal void TransformContents(ref Matrix xform)
         {
             // Transform positions
-            for (int i = 0; i < positions.Count; i++)
-                positions[i] = Vector3.Transform(positions[i], xform);
+            for (int i = 0; i < _positions.Count; i++)
+                _positions[i] = Vector3.Transform(_positions[i], xform);
 
             // Transform all vectors too:
             // Normals are "tangent covectors", which need to be transformed using the
             // transpose of the inverse matrix!
             Matrix inverseTranspose = Matrix.Transpose(Matrix.Invert(xform));
-            foreach (var geom in geometry)
+            foreach (GeometryContent geom in _geometry)
             {
-                foreach (var channel in geom.Vertices.Channels)
+                foreach (VertexChannel channel in geom.Vertices.Channels)
                 {
-                    var vector3Channel = channel as VertexChannel<Vector3>;
+                    VertexChannel<Vector3> vector3Channel = channel as VertexChannel<Vector3>;
                     if (vector3Channel == null)
                         continue;
 

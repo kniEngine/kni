@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -60,23 +58,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 channel = geom.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
             }
 
-            var positionIndices = geom.Vertices.PositionIndices;
+            VertexChannel<int> positionIndices = geom.Vertices.PositionIndices;
             Debug.Assert(positionIndices.Count == channel.Count, "The position and channel sizes were different!");
 
             // Accumulate all the triangle face normals for each vertex.
-            var normals = new Vector3[positionIndices.Count];
-            for (var i = 0; i < geom.Indices.Count; i += 3)
+            Vector3[] normals = new Vector3[positionIndices.Count];
+            for (int i = 0; i < geom.Indices.Count; i += 3)
             {
-                var ia = geom.Indices[i + 0];
-                var ib = geom.Indices[i + 1];
-                var ic = geom.Indices[i + 2];
+                int ia = geom.Indices[i + 0];
+                int ib = geom.Indices[i + 1];
+                int ic = geom.Indices[i + 2];
 
-                var aa = geom.Vertices.Positions[ia];
-                var bb = geom.Vertices.Positions[ib];
-                var cc = geom.Vertices.Positions[ic];                
-                
-                var faceNormal = Vector3.Cross(cc - bb, bb - aa);
-                var len = faceNormal.Length();
+                Vector3 aa = geom.Vertices.Positions[ia];
+                Vector3 bb = geom.Vertices.Positions[ib];
+                Vector3 cc = geom.Vertices.Positions[ic];
+
+                Vector3 faceNormal = Vector3.Cross(cc - bb, bb - aa);
+                float len = faceNormal.Length();
                 if (len > 0.0f)
                 {
                     faceNormal = faceNormal / len;
@@ -104,10 +102,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Normalize the gathered vertex normals.
-            for (var i = 0; i < normals.Length; i++)
+            for (int i = 0; i < normals.Length; i++)
             {
-                var normal = normals[i];
-                var len = normal.Length();
+                Vector3 normal = normals[i];
+                float len = normal.Length();
                 if (len > 0.0f)
                     normals[i] = normal / len;
                 else
@@ -126,7 +124,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Set the new normals on the vertex channel.
-            for (var i = 0; i < channel.Count; i++)
+            for (int i = 0; i < channel.Count; i++)
                 channel[i] = normals[geom.Indices[i]];
         }
 
@@ -145,12 +143,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public static void CalculateTangentFrames(GeometryContent geom, string textureCoordinateChannelName, string tangentChannelName, string binormalChannelName)
         {
-            var verts = geom.Vertices;
-            var indices = geom.Indices;
-            var channels = geom.Vertices.Channels;
+            VertexContent verts = geom.Vertices;
+            IndexCollection indices = geom.Indices;
+            VertexChannelCollection channels = geom.Vertices.Channels;
 
-            var normals = channels.Get<Vector3>(VertexChannelNames.Normal(0));
-            var uvs = channels.Get<Vector2>(textureCoordinateChannelName);
+            VertexChannel<Vector3> normals = channels.Get<Vector3>(VertexChannelNames.Normal(0));
+            VertexChannel<Vector2> uvs = channels.Get<Vector2>(textureCoordinateChannelName);
 
             Vector3[] tangents, bitangents;
             CalculateTangentFrames(verts.Positions, indices, normals, uvs, out tangents, out bitangents);
@@ -179,28 +177,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Hegde, Siddharth. "Messing with Tangent Space". Gamasutra, 2007. 
             // http://www.gamasutra.com/view/feature/129939/messing_with_tangent_space.php
 
-            var numVerts = positions.Count;
-            var numIndices = indices.Count;
+            int numVerts = positions.Count;
+            int numIndices = indices.Count;
 
-            var tan1 = new Vector3[numVerts];
-            var tan2 = new Vector3[numVerts];
+            Vector3[] tan1 = new Vector3[numVerts];
+            Vector3[] tan2 = new Vector3[numVerts];
 
-            for (var index = 0; index < numIndices; index += 3)
+            for (int index = 0; index < numIndices; index += 3)
             {
-                var i1 = indices[index + 0];
-                var i2 = indices[index + 1];
-                var i3 = indices[index + 2];
+                int i1 = indices[index + 0];
+                int i2 = indices[index + 1];
+                int i3 = indices[index + 2];
 
-                var w1 = textureCoords[i1];
-                var w2 = textureCoords[i2];
-                var w3 = textureCoords[i3];
+                Vector2 w1 = textureCoords[i1];
+                Vector2 w2 = textureCoords[i2];
+                Vector2 w3 = textureCoords[i3];
 
-                var s1 = w2.X - w1.X;
-                var s2 = w3.X - w1.X;
-                var t1 = w2.Y - w1.Y;
-                var t2 = w3.Y - w1.Y;
+                float s1 = w2.X - w1.X;
+                float s2 = w3.X - w1.X;
+                float t1 = w2.Y - w1.Y;
+                float t2 = w3.Y - w1.Y;
 
-                var denom = s1 * t2 - s2 * t1;
+                float denom = s1 * t2 - s2 * t1;
                 if (Math.Abs(denom) < float.Epsilon)
                 {
                     // The triangle UVs are zero sized one dimension.
@@ -210,33 +208,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     continue;
                 }
 
-                var r = 1.0f / denom;
+                float r = 1.0f / denom;
                 Debug.Assert(IsFinite(r), "Bad r!");
 
-                var v1 = positions[i1];
-                var v2 = positions[i2];
-                var v3 = positions[i3];
+                Vector3 v1 = positions[i1];
+                Vector3 v2 = positions[i2];
+                Vector3 v3 = positions[i3];
 
-                var x1 = v2.X - v1.X;
-                var x2 = v3.X - v1.X;
-                var y1 = v2.Y - v1.Y;
-                var y2 = v3.Y - v1.Y;
-                var z1 = v2.Z - v1.Z;
-                var z2 = v3.Z - v1.Z;
+                float x1 = v2.X - v1.X;
+                float x2 = v3.X - v1.X;
+                float y1 = v2.Y - v1.Y;
+                float y2 = v3.Y - v1.Y;
+                float z1 = v2.Z - v1.Z;
+                float z2 = v3.Z - v1.Z;
 
-                var sdir = new Vector3()
-                {
-                    X = (t2 * x1 - t1 * x2) * r,
-                    Y = (t2 * y1 - t1 * y2) * r,
-                    Z = (t2 * z1 - t1 * z2) * r,
-                };
+                Vector3 sdir;
+                sdir.X = (t2 * x1 - t1 * x2) * r;
+                sdir.Y = (t2 * y1 - t1 * y2) * r;
+                sdir.Z = (t2 * z1 - t1 * z2) * r;
 
-                var tdir = new Vector3()
-                {
-                    X = (s1 * x2 - s2 * x1) * r,
-                    Y = (s1 * y2 - s2 * y1) * r,
-                    Z = (s1 * z2 - s2 * z1) * r,
-                };
+                Vector3 tdir;
+                tdir.X = (s1 * x2 - s2 * x1) * r;
+                tdir.Y = (s1 * y2 - s2 * y1) * r;
+                tdir.Z = (s1 * z2 - s2 * z1) * r;
 
                 tan1[i1] += sdir;
                 Debug.Assert(tan1[i1].IsFinite(), "Bad tan1[i1]!");
@@ -259,13 +253,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // At this point we have all the vectors accumulated, but we need to average
             // them all out. So we loop through all the final verts and do a Gram-Schmidt
             // orthonormalize, then make sure they're all unit length.
-            for (var i = 0; i < numVerts; i++)
+            for (int i = 0; i < numVerts; i++)
             {
-                var n = normals[i];
+                Vector3 n = normals[i];
                 Debug.Assert(n.IsFinite(), "Bad normal!");
                 Debug.Assert(n.Length() >= 0.9999f, "Bad normal!");
 
-                var t = tan1[i];
+                Vector3 t = tan1[i];
                 if (t.LengthSquared() < float.Epsilon)
                 {
                     // TODO: Ideally we could spit out a warning to the
@@ -289,17 +283,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // Gram-Schmidt orthogonalize
                 // TODO: This can be zero can cause NaNs on 
                 // normalize... how do we fix this?
-                var tangent = t - n * Vector3.Dot(n, t);
+                Vector3 tangent = t - n * Vector3.Dot(n, t);
                 tangent = Vector3.Normalize(tangent);
                 Debug.Assert(tangent.IsFinite(), "Bad tangent!");
                 tangents[i] = tangent;
 
                 // Calculate handedness
-                var w = (Vector3.Dot(Vector3.Cross(n, t), tan2[i]) < 0.0F) ? -1.0F : 1.0F;
+                float w = (Vector3.Dot(Vector3.Cross(n, t), tan2[i]) < 0.0F) ? -1.0F : 1.0F;
                 Debug.Assert(IsFinite(w), "Bad handedness!");
 
                 // Calculate the bitangent
-                var bitangent = Vector3.Cross(n, tangent) * w;
+                Vector3 bitangent = Vector3.Cross(n, tangent) * w;
                 Debug.Assert(bitangent.IsFinite(), "Bad bitangent!");
                 bitangents[i] = bitangent;
             }
@@ -320,7 +314,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             for (; node != null; node = node.Parent)
             {
                 // First if this node is a bone then search up for the root.
-                var root = node as BoneContent;
+                BoneContent root = node as BoneContent;
                 if (root != null)
                 {
                     while (root.Parent is BoneContent)
@@ -329,9 +323,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 }
 
                 // Next try searching the children for a root bone.
-                foreach (var nodeContent in node.Children)
+                foreach (NodeContent nodeContent in node.Children)
                 {
-                    var bone = nodeContent as BoneContent;
+                    BoneContent bone = nodeContent as BoneContent;
                     if (bone == null) 
                         continue;
 
@@ -361,16 +355,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (skeleton == null)
                 throw new ArgumentNullException("skeleton");
 
-            var results = new List<BoneContent>();
-            var work = new Stack<NodeContent>(new[] { skeleton });
+            List<BoneContent> results = new List<BoneContent>();
+            Stack<NodeContent> work = new Stack<NodeContent>(new[] { skeleton });
             while (work.Count > 0)
             {
-                var top = work.Pop();
-                var bone = top as BoneContent;
+                NodeContent top = work.Pop();
+                BoneContent bone = top as BoneContent;
                 if (bone != null)
                     results.Add(bone);
 
-                for (var i = top.Children.Count - 1; i >= 0; i--)
+                for (int i = top.Children.Count - 1; i >= 0; i--)
                     work.Push(top.Children[i]);
             }
 
@@ -395,22 +389,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 throw new ArgumentNullException("mesh");
 
             // TODO Improve performance with spatial partitioning scheme
-            var indexLists = new List<IndexUpdateList>();
-            foreach (var geom in mesh.Geometry)
+            List<IndexUpdateList> indexLists = new List<IndexUpdateList>();
+            foreach (GeometryContent geom in mesh.Geometry)
             {
-                var list = new IndexUpdateList(geom.Vertices.PositionIndices);
+                IndexUpdateList list = new IndexUpdateList(geom.Vertices.PositionIndices);
                 indexLists.Add(list);
             }
 
-            for (var i = mesh.Positions.Count - 1; i >= 1; i--)
+            for (int i = mesh.Positions.Count - 1; i >= 1; i--)
             {
-                var pi = mesh.Positions[i];
-                for (var j = i - 1; j >= 0; j--)
+                Vector3 pi = mesh.Positions[i];
+                for (int j = i - 1; j >= 0; j--)
                 {
-                    var pj = mesh.Positions[j];
+                    Vector3 pj = mesh.Positions[j];
                     if (Vector3.Distance(pi, pj) <= tolerance)
                     {
-                        foreach (var list in indexLists)
+                        foreach (IndexUpdateList list in indexLists)
                             list.Update(i, j);
                         mesh.Positions.RemoveAt(i);
                     }
@@ -429,34 +423,34 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var verts = geometry.Vertices;
+            VertexContent verts = geometry.Vertices;
             var hashMap = new Dictionary<int, List<VertexData>>();
 
-            var indices = new IndexUpdateList(geometry.Indices);
-            var vIndex = 0;
+            IndexUpdateList indices = new IndexUpdateList(geometry.Indices);
+            int vIndex = 0;
 
-            for (var i = 0; i < geometry.Indices.Count; i++)
+            for (int i = 0; i < geometry.Indices.Count; i++)
             {
-                var iIndex = geometry.Indices[i];
-                var iData = new VertexData
+                int iIndex = geometry.Indices[i];
+                VertexData iData = new VertexData
                 {
                     Index = iIndex,
                     PositionIndex = verts.PositionIndices[vIndex],
                     ChannelData = new object[verts.Channels.Count]
                 };
                 
-                for (var channel = 0; channel < verts.Channels.Count; channel++)
+                for (int channel = 0; channel < verts.Channels.Count; channel++)
                     iData.ChannelData[channel] = verts.Channels[channel][vIndex];
 
-                var hash = iData.ComputeHash();
+                int hash = iData.ComputeHash();
 
-                var merged = false;
+                bool merged = false;
                 List<VertexData> candidates;
                 if (hashMap.TryGetValue(hash, out candidates))
                 {
-                    for (var candidateIndex = 0; candidateIndex < candidates.Count; candidateIndex++)
+                    for (int candidateIndex = 0; candidateIndex < candidates.Count; candidateIndex++)
                     {
-                        var c = candidates[candidateIndex];
+                        VertexData c = candidates[candidateIndex];
                         if (!iData.ContentEquals(c))
                             continue;
 
@@ -516,12 +510,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (mesh == null)
                 throw new ArgumentNullException("mesh");
 
-            foreach (var geom in mesh.Geometry)
+            foreach (GeometryContent geom in mesh.Geometry)
             {
-                for (var i = 0; i < geom.Indices.Count; i += 3)
+                for (int i = 0; i < geom.Indices.Count; i += 3)
                 {
-                    var first = geom.Indices[i];
-                    var last = geom.Indices[i+2];
+                    int first = geom.Indices[i];
+                    int last = geom.Indices[i+2];
                     geom.Indices[i] = last;
                     geom.Indices[i+2] = first;
                 }
@@ -544,19 +538,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (transform == Matrix.Identity)
                 return;
 
-            var inverseTransform = Matrix.Invert(transform);
+            Matrix inverseTransform = Matrix.Invert(transform);
 
-            var work = new Stack<NodeContent>();
+            Stack<NodeContent> work = new Stack<NodeContent>();
             work.Push(scene);
 
             while (work.Count > 0)
             {
-                var node = work.Pop();
-                foreach (var child in node.Children)
+                NodeContent node = work.Pop();
+                foreach (NodeContent child in node.Children)
                     work.Push(child);
 
                 // Transform the mesh content.
-                var mesh = node as MeshContent;
+                MeshContent mesh = node as MeshContent;
                 if (mesh != null)
                     mesh.TransformContents(ref transform);
 
@@ -598,9 +592,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             foreach (var geom in mesh.Geometry)
             {
-                for (var i = 0; i < geom.Vertices.PositionIndices.Count; i++)
+                for (int i = 0; i < geom.Vertices.PositionIndices.Count; i++)
                 {
-                    var index = geom.Vertices.PositionIndices[i];
+                    int index = geom.Vertices.PositionIndices[i];
                     if (index == from)
                         geom.Vertices.PositionIndices[i] = to;
                 }
@@ -616,8 +610,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Compute a hash based on PositionIndex and ChannelData
             public int ComputeHash()
             {
-                var hash = PositionIndex;
-                foreach (var channel in ChannelData)
+                int hash = PositionIndex;
+                foreach (object channel in ChannelData)
                     hash ^= channel.GetHashCode();
 
                 return hash;
@@ -632,7 +626,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 if (ChannelData.Length != other.ChannelData.Length)
                     return false;
 
-                for (var i = 0; i < ChannelData.Length; i++)
+                for (int i = 0; i < ChannelData.Length; i++)
                 {
                         if (!Equals(ChannelData[i], other.ChannelData[i]))
                         return false;
@@ -658,9 +652,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             private void Initialize()
             {
-                for (var pos = 0; pos < _collectionToUpdate.Count; pos++)
+                for (int pos = 0; pos < _collectionToUpdate.Count; pos++)
                 {
-                    var v = _collectionToUpdate[pos];
+                    int v = _collectionToUpdate[pos];
                     if (_indexPositions.ContainsKey(v))
                         _indexPositions[v].Add(pos);
                     else
@@ -673,7 +667,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 if (from == to || !_indexPositions.ContainsKey(from))
                     return;
 
-                foreach (var pos in _indexPositions[from])
+                foreach (int pos in _indexPositions[from])
                     _collectionToUpdate[pos] = to;
 
                 if (_indexPositions.ContainsKey(to))
@@ -692,12 +686,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 if (_collectionToUpdate.Count == 0)
                     return;
 
-                var sorted = new SortedSet<int>(_collectionToUpdate);
+                SortedSet<int> sorted = new SortedSet<int>(_collectionToUpdate);
 
-                var newIndex = 0;
-                foreach (var value in sorted)
+                int newIndex = 0;
+                foreach (int value in sorted)
                 {
-                    foreach (var pos in _indexPositions[value])
+                    foreach (int pos in _indexPositions[value])
                         _collectionToUpdate[pos] = newIndex;
 
                     newIndex++;

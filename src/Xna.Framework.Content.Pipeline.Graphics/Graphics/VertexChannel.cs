@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public abstract class VertexChannel : IList, ICollection, IEnumerable
     {
-        string name;
+        string _name;
 
         /// <summary>
         /// Allows overriding classes to implement the list, and for properties/methods in this class to access it.
@@ -29,10 +29,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public int Count
         {
-            get
-            {
-                return Items.Count;
-            }
+            get { return Items.Count; }
         }
 
         /// <summary>
@@ -45,14 +42,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public Object this[int index]
         {
-            get
-            {
-                return Items[index];
-            }
-            set
-            {
-                Items[index] = value;
-            }
+            get { return Items[index]; }
+            set { Items[index] = value; }
         }
 
         /// <summary>
@@ -60,58 +51,40 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public string Name
         {
-            get
-            {
-                return name;
-            }
-            internal set
-            {
-                name = value;
-            }
+            get { return _name; }
+            internal set { _name = value; }
         }
 
         /// <summary>
         /// Gets a value indicating whether access to the collection is synchronized (thread safe).
         /// </summary>
-        bool System.Collections.ICollection.IsSynchronized
+        bool ICollection.IsSynchronized
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
         /// Gets an object that can be used to synchronize access to the collection.
         /// </summary>
-        Object System.Collections.ICollection.SyncRoot
+        Object ICollection.SyncRoot
         {
-            get
-            {
-                return this;
-            }
+            get { return this; }
         }
 
         /// <summary>
         /// Gets a value indicating whether this list has a fixed size.
         /// </summary>
-        bool System.Collections.IList.IsFixedSize
+        bool IList.IsFixedSize
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
         /// Gets a value indicating whether this object is read-only.
         /// </summary>
-        bool System.Collections.IList.IsReadOnly
+        bool IList.IsReadOnly
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
