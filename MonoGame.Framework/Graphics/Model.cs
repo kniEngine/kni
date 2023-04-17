@@ -77,6 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="world">The world transform.</param>
         /// <param name="view">The view transform.</param>
         /// <param name="projection">The projection transform.</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public void Draw(Matrix world, Matrix view, Matrix projection) 
 		{       
             int boneCount = this.Bones.Count;
@@ -95,10 +96,15 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 foreach (Effect effect in mesh.Effects)
                 {
-					IEffectMatrices effectMatricies = (IEffectMatrices)effect;
-                    effectMatricies.World = sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
-                    effectMatricies.View = view;
-                    effectMatricies.Projection = projection;
+					IEffectMatrices effectMatricies = effect as IEffectMatrices;
+					if (effectMatricies != null)
+                    {						
+                        effectMatricies.World = sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
+                        effectMatricies.View = view;
+                        effectMatricies.Projection = projection;
+                    }
+                    else
+                        throw new InvalidOperationException("Effect does not implement IEffectMatrices.");
                 }
 
                 mesh.Draw();
