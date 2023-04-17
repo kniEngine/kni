@@ -10,10 +10,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     [System.Diagnostics.DebuggerDisplay("Node '{Name}'")]
     public class NodeContent : ContentItem
     {
-        Matrix transform;
-        NodeContent parent;
-        NodeContentCollection children;
-        AnimationContentDictionary animations;
+        Matrix _transform;
+        NodeContent _parent;
+        NodeContentCollection _children;
+        AnimationContentDictionary _animations;
 
         /// <summary>
         /// Gets the value of the local Transform property, multiplied by the AbsoluteTransform of the parent.
@@ -22,9 +22,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             get
             {
-                if (parent != null)
-                    return transform * parent.AbsoluteTransform;
-                return transform;
+                if (_parent != null)
+                    return _transform * _parent.AbsoluteTransform;
+                return _transform;
             }
         }
 
@@ -33,10 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public AnimationContentDictionary Animations
         {
-            get
-            {
-                return animations;
-            }
+            get { return _animations; }
         }
 
         /// <summary>
@@ -44,10 +41,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public NodeContentCollection Children
         {
-            get
-            {
-                return children;
-            }
+            get { return _children; }
         }
 
         /// <summary>
@@ -55,14 +49,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public NodeContent Parent
         {
-            get
-            {
-                return parent;
-            }
-            set
-            {
-                parent = value;
-            }
+            get { return _parent; }
+            set { _parent = value; }
         }
 
         /// <summary>
@@ -71,14 +59,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public Matrix Transform
         {
-            get
-            {
-                return transform;
-            }
-            set
-            {
-                transform = value;
-            }
+            get { return _transform; }
+            set { _transform = value; }
         }
 
         /// <summary>
@@ -86,8 +68,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public NodeContent()
         {
-            children = new NodeContentCollection(this);
-            animations = new AnimationContentDictionary();
+            _children = new NodeContentCollection(this);
+            _animations = new AnimationContentDictionary();
             Transform = Matrix.Identity;
         }
     }

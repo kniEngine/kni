@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -50,7 +49,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             //
             // Throws InvalidContentException if all weights are zero.
 
-            var weights = (List<BoneWeight>)Items;
+            List<BoneWeight> weights = (List<BoneWeight>)Items;
 
             // Sort into descending order
             weights.Sort((b1, b2) => b2.Weight.CompareTo(b1.Weight));
@@ -78,7 +77,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 throw new InvalidContentException("Total bone weights in a collection must not be zero");
 
             // Normalize each weight
-            int count = weights.Count();
+            int count = weights.Count;
             // Old-school trick. Multiplication is faster than division, so multiply by the inverse.
             float invSum = 1.0f / sum;
             for (index = 0; index < count; ++index)

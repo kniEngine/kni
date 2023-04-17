@@ -16,15 +16,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// <remarks>This class combines a collection of arbitrarily named data channels with a list of position indices that reference the Positions collection of the parent MeshContent.</remarks>
     public sealed class VertexContent
     {
-        VertexChannelCollection channels;
-        VertexChannel<int> positionIndices;
-        IndirectPositionCollection positions;
+        VertexChannelCollection _channels;
+        VertexChannel<int> _positionIndices;
+        IndirectPositionCollection _positions;
 
         /// <summary>
         /// Gets the list of named vertex data channels in the VertexContent.
         /// </summary>
         /// <value>Collection of vertex data channels.</value>
-        public VertexChannelCollection Channels { get { return channels; } }
+        public VertexChannelCollection Channels { get { return _channels; } }
 
         /// <summary>
         /// Gets the list of position indices.
@@ -33,29 +33,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <remarks>This list adds a level of indirection between the actual triangle indices and the Positions member of the parent. This indirection preserves the topological vertex identity in cases where a single vertex position is used by triangles that straddle a discontinuity in some other data channel.
         /// For example, the following code gets the position of the first vertex of the first triangle in a GeometryContent object:
         /// parent.Positions[Vertices.PositionIndices[Indices[0]]]</remarks>
-        public VertexChannel<int> PositionIndices { get { return positionIndices; } }
+        public VertexChannel<int> PositionIndices { get { return _positionIndices; } }
 
         /// <summary>
         /// Gets position data from the parent mesh object.
         /// </summary>
         /// <value>Collection of vertex positions for the mesh.</value>
         /// <remarks>The collection returned from this call provides a virtualized view of the vertex positions for this batch. The collection uses the contents of the PositionIndices property to index into the parent Positions. This collection is read-only. If you need to modify any contained values, edit the PositionIndices or Positions members directly.</remarks>
-        public IndirectPositionCollection Positions { get { return positions; } }
+        public IndirectPositionCollection Positions { get { return _positions; } }
 
         /// <summary>
         /// Number of vertices for the content.
         /// </summary>
         /// <value>Number of vertices.</value>
-        public int VertexCount { get { return positionIndices.Count; } }
+        public int VertexCount { get { return _positionIndices.Count; } }
 
         /// <summary>
         /// Constructs a VertexContent instance.
         /// </summary>
         internal VertexContent(GeometryContent geom)
         {
-            positionIndices = new VertexChannel<int>("PositionIndices");
-            positions = new IndirectPositionCollection(geom, positionIndices);
-            channels = new VertexChannelCollection(this);
+            _positionIndices = new VertexChannel<int>("PositionIndices");
+            _positions = new IndirectPositionCollection(geom, _positionIndices);
+            _channels = new VertexChannelCollection(this);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Index of the new entry. This can be added to the Indices member of the parent.</returns>
         public int Add(int positionIndex)
         {
-            return positionIndices.Items.Add(positionIndex);
+            return _positionIndices.Items.Add(positionIndex);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="positionIndexCollection">Index into the Positions member of the parent.</param>
         public void AddRange(IEnumerable<int> positionIndexCollection)
         {
-            positionIndices.InsertRange(positionIndices.Items.Count, positionIndexCollection);
+            _positionIndices.InsertRange(_positionIndices.Items.Count, positionIndexCollection);
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <exception cref="InvalidContentException">One or more of the vertex channel types are invalid or an unrecognized name was passed to VertexElementUsage.</exception>
         public VertexBufferContent CreateVertexBuffer()
         {
-            var vertexBuffer = new VertexBufferContent(positions.Count);
-            var stride = SetupVertexDeclaration(vertexBuffer);
+            VertexBufferContent vertexBuffer = new VertexBufferContent(_positions.Count);
+            int stride = SetupVertexDeclaration(vertexBuffer);
 
             // TODO: Verify enough elements in channels to match positions?
 
@@ -100,13 +100,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // #2 |111111111111|111111111111|11111111|111111111111|111111111111|
 
             // #0: Write position vertices using stride to skip over the other channels:
-            vertexBuffer.Write(0, stride, positions);
+            vertexBuffer.Write(0, stride, _positions);
 
-            var channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
-            foreach (var channel in Channels)
+            int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
+            foreach (VertexChannel channel in Channels)
             {
                 // #N: Fill in the channel within each vertex
-                var channelType = channel.ElementType;
+                Type channelType = channel.ElementType;
                 vertexBuffer.Write(channelOffset, stride, channelType, channel);
                 channelOffset += VertexBufferContent.SizeOf(channelType);
             }
@@ -116,15 +116,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private int SetupVertexDeclaration(VertexBufferContent result)
         {
-            var offset = 0;
+            int offset = 0;
 
             // We always have a position channel
-            result.VertexDeclaration.VertexElements.Add(new VertexElement(offset, VertexElementFormat.Vector3,
-                                                                           VertexElementUsage.Position, 0));
+            result.VertexDeclaration.VertexElements.Add(
+                    new VertexElement(offset, VertexElementFormat.Vector3, VertexElementUsage.Position, 0));
             offset += VertexElementFormat.Vector3.GetSize();
 
             // Optional channels
-            foreach (var channel in Channels)
+            foreach (VertexChannel channel in Channels)
             {
                 VertexElementFormat format;
                 VertexElementUsage usage;
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidContentException(string.Format("Unknown vertex element usage for channel '{0}'", channel.Name));
 
                 // Try getting the usage index
-                var usageIndex = VertexChannelNames.DecodeUsageIndex(channel.Name);
+                int usageIndex = VertexChannelNames.DecodeUsageIndex(channel.Name);
 
                 result.VertexDeclaration.VertexElements.Add(new VertexElement(offset, format, usage, usageIndex));
                 offset += format.GetSize();
@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="positionIndex">Position of new vertex index in the collection.</param>
         public void Insert(int index, int positionIndex)
         {
-            positionIndices.Items.Insert(index, positionIndex);
+            _positionIndices.Items.Insert(index, positionIndex);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="positionIndexCollection">Position of the first element of the inserted range in the collection.</param>
         public void InsertRange(int index, IEnumerable<int> positionIndexCollection)
         {
-            positionIndices.InsertRange(index, positionIndexCollection);
+            _positionIndices.InsertRange(index, positionIndexCollection);
         }
 
         /// <summary>
@@ -203,9 +203,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (index < 0 || index >= VertexCount)
                 throw new ArgumentOutOfRangeException("index");
 
-            positionIndices.Items.RemoveAt(index);
+            _positionIndices.Items.RemoveAt(index);
 
-            foreach (var channel in channels)
+            foreach (var channel in _channels)
                 channel.Items.RemoveAt(index);
         }
 
@@ -221,9 +221,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (count < 0 || (index+count) > VertexCount)
                 throw new ArgumentOutOfRangeException("count");
 
-            positionIndices.RemoveRange(index, count);
+            _positionIndices.RemoveRange(index, count);
 
-            foreach (var channel in channels)
+            foreach (VertexChannel channel in _channels)
                 channel.RemoveRange(index, count);
         }
     }

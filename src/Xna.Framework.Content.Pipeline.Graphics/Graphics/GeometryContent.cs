@@ -9,20 +9,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public class GeometryContent : ContentItem
     {
-        IndexCollection indices;
-        MaterialContent material;
-        MeshContent parent;
-        VertexContent vertices;
+        IndexCollection _indices;
+        MaterialContent _material;
+        MeshContent _parent;
+        VertexContent _vertices;
 
         /// <summary>
         /// Gets the list of triangle indices for this geometry batch. Geometry is stored as an indexed triangle list, where each group of three indices defines a single triangle.
         /// </summary>
         public IndexCollection Indices
         {
-            get
-            {
-                return indices;
-            }
+            get { return _indices; }
         }
 
         /// <summary>
@@ -30,14 +27,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public MaterialContent Material
         {
-            get
-            {
-                return material;
-            }
-            set
-            {
-                material = value;
-            }
+            get { return _material; }
+            set { _material = value; }
         }
 
         /// <summary>
@@ -45,14 +36,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public MeshContent Parent
         {
-            get
-            {
-                return parent;
-            }
-            set
-            {
-                parent = value;
-            }
+            get { return _parent; }
+            set { _parent = value; }
         }
 
         /// <summary>
@@ -60,10 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public VertexContent Vertices
         {
-            get
-            {
-                return vertices;
-            }
+            get { return _vertices; }
         }
 
         /// <summary>
@@ -71,8 +53,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public GeometryContent()
         {
-            indices = new IndexCollection();
-            vertices = new VertexContent(this);
+            _indices = new IndexCollection();
+            _vertices = new VertexContent(this);
         }
     }
 }

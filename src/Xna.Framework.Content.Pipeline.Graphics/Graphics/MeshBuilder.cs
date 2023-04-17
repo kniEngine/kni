@@ -33,14 +33,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public string Name
         {
-            get
-            {
-                return _meshContent.Name;
-            }
-            set
-            {
-                _meshContent.Name = value;
-            }
+            get { return _meshContent.Name; }
+            set { _meshContent.Name = value; }
         }
 
         /// <summary>
@@ -80,7 +74,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     _currentGeometryContent.OpaqueData.Add(kvp.Key, kvp.Value);
 
                 // we have to copy our vertex channels to the new geometry
-                foreach (var channel in _vertexChannels)
+                foreach (VertexChannel channel in _vertexChannels)
                 {
                     _currentGeometryContent.Vertices.Channels.Add(channel.Name, channel.ElementType, null);
                 }
@@ -89,13 +83,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             }
             // Add the vertex to the mesh and then add the vertex position to the indices list
-            var pos = _currentGeometryContent.Vertices.Add(indexIntoVertexCollection);
+            int pos = _currentGeometryContent.Vertices.Add(indexIntoVertexCollection);
 
             // Then add the data for the other channels
-            for (var i = 0; i < _vertexChannels.Count; i++)
+            for (int i = 0; i < _vertexChannels.Count; i++)
             {
-                var channel = _currentGeometryContent.Vertices.Channels[i];
-                var data = _vertexChannelData[i];
+                VertexChannel channel = _currentGeometryContent.Vertices.Channels[i];
+                object data = _vertexChannelData[i];
                 if (data == null)
                     throw new InvalidOperationException(string.Format("Missing vertex channel data for channel {0}", channel.Name));
 
@@ -112,7 +106,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (_finishedCreation)
                 throw new InvalidOperationException("Functions starting with 'Create' must be called before calling AddTriangleVertex");
 
-            var channel = new VertexChannel<T>(usage);
+            VertexChannel<T> channel = new VertexChannel<T>(usage);
             _vertexChannels.Add(channel);
             _vertexChannelData.Add(default(T));
 
