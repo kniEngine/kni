@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Framework;
 
+
 namespace Microsoft.Xna.Framework.Windows
 {
     internal static class MessageExtensions
@@ -69,7 +70,7 @@ namespace Microsoft.Xna.Framework.Windows
                  (Screen.PrimaryScreen.WorkingArea.Width  - Width ) / 2,
                  (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2);
         }
-        
+
         // TNC: handle keyboard messages internally to avoid garbage from EventArgs
         // we need to handle those early in a IMessageFilter to skip OnPreviewKeyDown(PreviewKeyDownEventArgs)
         bool IMessageFilter.PreFilterMessage(ref Message m)
@@ -92,7 +93,7 @@ namespace Microsoft.Xna.Framework.Windows
                     return false;
             }
         }
-        
+
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
@@ -244,16 +245,16 @@ namespace Microsoft.Xna.Framework.Windows
         void HandleDropMessage(ref Message m)
         {
             IntPtr hdrop = m.WParam;
-            StringBuilder builder = new StringBuilder();
 
             uint count = DragQueryFile(hdrop, uint.MaxValue, null, 0);
 
             string[] files = new string[count];
             for (uint i = 0; i < count; i++)
             {
-                DragQueryFile(hdrop, i, builder, int.MaxValue);
+                uint buffSize = DragQueryFile(hdrop, i, null, int.MaxValue);
+                StringBuilder builder = new StringBuilder((int)buffSize);
+                DragQueryFile(hdrop, i, builder, buffSize);
                 files[i] = builder.ToString();
-                builder.Clear();
             }
 
             _window.OnFileDrop(new FileDropEventArgs(files));
