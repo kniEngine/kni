@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         effectMatricies.Projection = projection;
                     }
                     else
-                        throw new InvalidOperationException("Effect does not implement IEffectMatrices.");
+                        throw new InvalidOperationException("This model contains a custom effect which does not implement the IEffectMatrices interface, so it cannot be drawn using Model.Draw(...). Instead, call ModelMesh.Draw() after setting the appropriate effect parameters.");
                 }
 
                 mesh.Draw();
