@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>MonoGame.Framework.iOS.9000</id>
-    <version>0.0.0.0</version>
+    <version>$version$</version>
     <title>MonoGame.Framework.iOS.9000</title>
     <authors>Kastellanos Nikos, MonoGame Team</authors>
     <owners>Kastellanos Nikos</owners>
@@ -28,7 +28,7 @@
     <file src="NuGetPackages\build\iOS\MonoGame.Framework.iOS.9000.targets" target="build\MonoGame.Framework.iOS.9000.targets" />
     
     <!-- C# Assemblies -->
-    <file src="MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.dll" target="lib\XamariniOS\MonoGame.Framework.dll" />
-    <file src="MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.xml" target="lib\XamariniOS\MonoGame.Framework.xml" />
+    <file src="Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\MonoGame.Framework.dll" target="lib\XamariniOS\MonoGame.Framework.dll" />
+    <file src="Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\MonoGame.Framework.xml" target="lib\XamariniOS\MonoGame.Framework.xml" />
   </files>
 </package>
