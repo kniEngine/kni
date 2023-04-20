@@ -182,8 +182,8 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   IfFileExists `$PROGRAMFILES\MSBuild\Xamarin\iOS\*.*` InstalliOSAssemblies SkipiOSAssemblies
   InstalliOSAssemblies:
   ;SetOutPath '$INSTDIR\Assemblies\iOS'
-  ;File '..\..\MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\*.dll'
-  ;File '..\..\MonoGame.Framework\bin\iOS\iPhoneSimulator\Release\*.xml'
+  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.dll'
+  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.xml'
   SkipiOSAssemblies:
 
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows' '' '$INSTDIR\Assemblies\Windows'
