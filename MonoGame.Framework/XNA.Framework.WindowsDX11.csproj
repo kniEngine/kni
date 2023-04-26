@@ -418,6 +418,7 @@
     <Compile Include="Graphics\Vertices\VertexPositionNormalTexture.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
+    <Compile Include="Color.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />

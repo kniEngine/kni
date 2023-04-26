@@ -378,6 +378,7 @@
     <Compile Include="Graphics\Vertices\VertexPositionNormalTexture.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
+    <Compile Include="Color.cs" />
 
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
