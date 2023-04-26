@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             int formatSize = _format.GetSize();
             int rowSize = Width * formatSize;
 
-            for (int y = 0; y < Height; y++)
+            Parallel.For(0, Height, (y) =>
             {
                 T[] row = _pixelData[y];
                 GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 Marshal.Copy(sourceData, (y * rowSize), dataPtr, rowSize);
 
                 dataHandle.Free();
-            }
+            });
         }
 
         public T[] GetRow(int y)
