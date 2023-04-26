@@ -6,6 +6,7 @@ using System;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 
 namespace Microsoft.Xna.Framework
@@ -15,7 +16,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct Color : IEquatable<Color>
+    public struct Color : IPackedVector<UInt32>, IEquatable<Color>
     {
         static Color()
         {
@@ -176,6 +177,24 @@ namespace Microsoft.Xna.Framework
         {
             get { return _packedValue; }
             set { _packedValue = value; }
+        }
+
+        void IPackedVector.PackFromVector4(Vector4 vector)
+        {
+            int r = (int)(vector.X * 255);
+            int g = (int)(vector.Y * 255);
+            int b = (int)(vector.Z * 255);
+            int a = (int)(vector.W * 255);
+
+            if (((r | g | b | a) & 0xFFFFFF00) != 0)
+            {
+                r = MathHelper.Clamp(r, Byte.MinValue, Byte.MaxValue);
+                g = MathHelper.Clamp(g, Byte.MinValue, Byte.MaxValue);
+                b = MathHelper.Clamp(b, Byte.MinValue, Byte.MaxValue);
+                a = MathHelper.Clamp(a, Byte.MinValue, Byte.MaxValue);
+            }
+
+            _packedValue = ((uint)a << 24) | ((uint)b << 16) | ((uint)g << 8) | ((uint)r);
         }
 
         /// <summary>
