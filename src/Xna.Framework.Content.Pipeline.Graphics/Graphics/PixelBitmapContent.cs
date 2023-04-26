@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public void ReplaceColor(T originalColor, T newColor)
         {
-            for (int y = 0; y < Height; y++)
+            Parallel.For(0, Height, (y) =>
             {
                 T[] row = _pixelData[y];
                 for (int x = 0; x < Width; x++)
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     if (row[x].Equals(originalColor))
                         row[x] = newColor;
                 }
-            }
+            });
         }
 
         protected override bool TryCopyFrom(BitmapContent sourceBitmap, Rectangle sourceRegion, Rectangle destinationRegion)
