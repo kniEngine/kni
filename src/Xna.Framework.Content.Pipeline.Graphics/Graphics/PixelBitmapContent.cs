@@ -35,14 +35,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public override byte[] GetPixelData()
         {
-            var formatSize = _format.GetSize();
-            var dataSize = Width * Height * formatSize;
-            var outputData = new byte[dataSize];
+            int formatSize = _format.GetSize();
+            int dataSize = Width * Height * formatSize;
+            byte[] outputData = new byte[dataSize];
 
             Parallel.For(0, Height, (y) =>
             {
-                var dataHandle = GCHandle.Alloc(_pixelData[y], GCHandleType.Pinned);
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64());
+                T[] row = _pixelData[y];
+                GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
+                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64());
 
                 Marshal.Copy(dataPtr, outputData, (formatSize * y * Width), (Width * formatSize));
 
@@ -54,14 +55,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public override void SetPixelData(byte[] sourceData)
         {
-            var size = _format.GetSize();
+            int formatSize = _format.GetSize();
+            int rowSize = Width * formatSize;
 
-            for (var y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
             {
-                var dataHandle = GCHandle.Alloc(_pixelData[y], GCHandleType.Pinned);
-                var dataPtr = (IntPtr)dataHandle.AddrOfPinnedObject().ToInt64();
+                T[] row = _pixelData[y];
+                GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
+                IntPtr dataPtr = (IntPtr)dataHandle.AddrOfPinnedObject().ToInt64();
 
-                Marshal.Copy(sourceData, (y * Width * size), dataPtr, Width * size);
+                Marshal.Copy(sourceData, (y * rowSize), dataPtr, rowSize);
 
                 dataHandle.Free();
             }
@@ -149,12 +152,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public void ReplaceColor(T originalColor, T newColor)
         {
-            for (var y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
             {
-                for (var x = 0; x < Width; x++)
+                T[] row = _pixelData[y];
+                for (int x = 0; x < Width; x++)
                 {
-                    if (_pixelData[y][x].Equals(originalColor))
-                        _pixelData[y][x] = newColor;
+                    if (row[x].Equals(originalColor))
+                        row[x] = newColor;
                 }
             }
         }
@@ -192,30 +196,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 Parallel.For(0, sourceRegion.Height, (y) =>
                 {
-                    var pixel = default(T);
-                    var p = (IPackedVector)pixel;
-                    var row = src.GetRow(sourceRegion.Top + y);
+                    T pixel = default(T);
+                    IPackedVector p = (IPackedVector)pixel;
+                    Vector4[] row = src.GetRow(sourceRegion.Top + y);
                     for (int x = 0; x < sourceRegion.Width; x++)
                     {
                         p.PackFromVector4(row[sourceRegion.Left + x]);
                         pixel = (T)p;
-                        SetPixel(destinationRegion.Left + x, destinationRegion.Top + y, pixel);
+
+                        SetPixel(destinationRegion.Left + x, destinationRegion.Top + y,
+                                 pixel);
                     }
                 });
             }
             else
             {
-                var converter = new VectorConverterEx() as VectorConverterEx<T>;
+                VectorConverterEx<T> converter = new VectorConverterEx() as VectorConverterEx<T>;
                 // If no converter could be created, converting from this format is not supported
                 if (converter == null)
                     return false;
 
                 Parallel.For(0, sourceRegion.Height, (y) =>
                 {
-                    var row = src.GetRow(sourceRegion.Top + y);
+                    Vector4[] row = src.GetRow(sourceRegion.Top + y);
                     for (int x = 0; x < sourceRegion.Width; x++)
                     {
-                        SetPixel(destinationRegion.Left + x, destinationRegion.Top + y, converter.FromVector4(row[sourceRegion.Left + x]));
+                        SetPixel(destinationRegion.Left + x, destinationRegion.Top + y,
+                                 converter.FromVector4(row[sourceRegion.Left + x]));
                     }
                 });
             }
@@ -256,23 +263,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 Parallel.For(0, sourceRegion.Height, (y) =>
                 {
-                    var row = GetRow(sourceRegion.Top + y);
+                    T[] row = GetRow(sourceRegion.Top + y);
                     for (int x = 0; x < sourceRegion.Width; x++)
-                        dest.SetPixel(destinationRegion.Left + x, destinationRegion.Top + y, ((IPackedVector)row[sourceRegion.Left + x]).ToVector4());
+                    {
+                        dest.SetPixel(destinationRegion.Left + x, destinationRegion.Top + y,
+                                      ((IPackedVector)row[sourceRegion.Left + x]).ToVector4());
+                    }
                 });
             }
             else
             {
-                var converter = new VectorConverterEx() as VectorConverterEx<T>;
+                VectorConverterEx<T> converter = new VectorConverterEx() as VectorConverterEx<T>;
                 // If no converter could be created, converting from this format is not supported
                 if (converter == null)
                     return false;
 
                 Parallel.For(0, sourceRegion.Height, (y) =>
                 {
-                    var row = GetRow(sourceRegion.Top + y);
+                    T[] row = GetRow(sourceRegion.Top + y);
                     for (int x = 0; x < sourceRegion.Width; x++)
-                        dest.SetPixel(destinationRegion.Left + x, destinationRegion.Top + y, converter.ToVector4(row[sourceRegion.Left + x]));
+                    {
+                        dest.SetPixel(destinationRegion.Left + x, destinationRegion.Top + y,
+                                      converter.ToVector4(row[sourceRegion.Left + x]));
+                    }
                 });
             }
 
