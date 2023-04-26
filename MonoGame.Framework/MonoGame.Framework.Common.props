@@ -228,6 +228,7 @@
     <Compile Include="Graphics\TextureCollection.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Viewport.cs" />
+    <Compile Include="Color.cs" />
   </ItemGroup>
   
   <ItemGroup>
