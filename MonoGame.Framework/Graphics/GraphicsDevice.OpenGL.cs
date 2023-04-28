@@ -488,7 +488,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
                 GraphicsExtensions.CheckGLError();
                 if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
                 else
                     GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
                 GraphicsExtensions.CheckGLError();
@@ -544,7 +544,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
                     GraphicsExtensions.CheckGLError();
                     if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
-                        GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, depthInternalFormat, width, height);
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, depthInternalFormat, width, height);
                     else
                         GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
                     GraphicsExtensions.CheckGLError();
@@ -558,7 +558,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
                             GraphicsExtensions.CheckGLError();
                             if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
-                                GL.RenderbufferStorageMultisample(RenderbufferTarget.RenderbufferExt, preferredMultiSampleCount, stencilInternalFormat, width, height);
+                                GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, stencilInternalFormat, width, height);
                             else
                                 GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
                             GraphicsExtensions.CheckGLError();
