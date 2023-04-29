@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal WebGLBuffer ibo { get; private set; }
 
-        private void PlatformConstruct(IndexElementSize indexElementSize, int indexCount)
+        private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
 
             GenerateIfRequired();

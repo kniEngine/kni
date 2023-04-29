@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			
             _isDynamic = dynamic;
 
-            PlatformConstruct(indexElementSize, indexCount);
+            PlatformConstructIndexBuffer(indexElementSize, indexCount);
 		}
 
 		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :

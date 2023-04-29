@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
         //internal uint vao;
         internal int vbo;
 
-        private void PlatformConstruct()
+        private void PlatformConstructVertexBuffer()
         {
             Threading.EnsureUIThread();
             GenerateIfRequired();

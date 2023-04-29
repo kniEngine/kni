@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget2D
     {
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
             throw new PlatformNotSupportedException();

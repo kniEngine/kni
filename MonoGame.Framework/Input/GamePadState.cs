@@ -69,8 +69,6 @@ namespace Microsoft.Xna.Framework.Input
             Buttons = buttons;
             DPad = dPad;
             IsConnected = true;
-
-            PlatformConstruct();
         }
 
         /// <summary>
@@ -88,15 +86,9 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
-        /// Define this method in platform partial classes to initialize default
-        /// values for platform-specific fields.
-        /// </summary>
-        partial void PlatformConstruct();
-
-        /// <summary>
         /// Gets the button mask along with 'virtual buttons' like LeftThumbstickLeft.
         /// </summary>
-        private Buttons GetVirtualButtons ()
+        private Buttons GetVirtualButtons()
         {
             var result = Buttons._buttons;
 

@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return ShaderProfileType.OpenGL_Mojo;
         }
 
-        private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)
+        private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
         {
             _glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 

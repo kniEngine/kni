@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	public partial class Texture3D : Texture
 	{
 
-        private void PlatformConstruct(
+        private void PlatformConstructTexture3D(
             GraphicsDevice graphicsDevice, 
             int width,
             int height, 

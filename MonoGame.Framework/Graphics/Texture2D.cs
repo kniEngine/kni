@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    if (surfaceType == SurfaceType.SwapChainRenderTarget)
 		        return;
 
-            PlatformConstruct(width, height, mipmap, format, surfaceType, shared);
+            PlatformConstructTexture2D(width, height, mipmap, format, surfaceType, shared);
         }
 
 

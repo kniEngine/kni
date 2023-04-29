@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private Query _query;
 
-        private void PlatformConstruct()
+        private void PlatformConstructOcclusionQuery()
         {
             //if (graphicsDevice.D3DDevice.FeatureLevel == SharpDX.Direct3D.FeatureLevel.Level_9_1)
             //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");

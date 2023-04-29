@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return ShaderProfileType.DirectX_11;
         }
 
-        private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)
+        private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
         {
             // We need the bytecode later for allocating the
             // input layout from the vertex declaration.

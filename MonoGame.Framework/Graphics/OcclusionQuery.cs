@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GraphicsDevice = graphicsDevice;
 
-            PlatformConstruct();
+            PlatformConstructOcclusionQuery();
         }
 
         /// <summary>

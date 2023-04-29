@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal int ibo;
 
-        private void PlatformConstruct(IndexElementSize indexElementSize, int indexCount)
+        private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
             Threading.EnsureUIThread();
             GenerateIfRequired();
