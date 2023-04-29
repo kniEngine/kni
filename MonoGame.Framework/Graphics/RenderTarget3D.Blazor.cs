@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = preferredMultiSampleCount;
+            MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
             throw new NotImplementedException();

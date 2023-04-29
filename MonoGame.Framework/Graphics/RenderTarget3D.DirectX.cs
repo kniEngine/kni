@@ -18,14 +18,14 @@ namespace Microsoft.Xna.Framework.Graphics
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = preferredMultiSampleCount;
+            MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
             // Setup the multisampling description.
             var multisampleDesc = new SharpDX.DXGI.SampleDescription(1, 0);
-            if (preferredMultiSampleCount > 1)
+            if (MultiSampleCount > 1)
             {
-                multisampleDesc.Count = preferredMultiSampleCount;
+                multisampleDesc.Count = MultiSampleCount;
                 multisampleDesc.Quality = (int)StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 
