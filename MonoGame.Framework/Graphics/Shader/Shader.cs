@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.CBuffers = cBuffers;
             this.Attributes = attributes;
 
-            PlatformConstruct(Stage, shaderBytecode);
+            PlatformConstructShader(Stage, shaderBytecode);
         }
 
         internal protected override void GraphicsDeviceResetting()

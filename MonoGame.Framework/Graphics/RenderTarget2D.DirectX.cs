@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private SampleDescription _msSampleDescription;
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
             _msSampleDescription = GraphicsDevice.GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);

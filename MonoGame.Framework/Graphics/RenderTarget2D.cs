@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
-            PlatformConstruct(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
+            PlatformConstructRenderTarget2D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
 	    }
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool renderTarget;
         private bool mipMap;
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+        private void PlatformConstructTexture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
             this.renderTarget = renderTarget;
             this.mipMap = mipMap;

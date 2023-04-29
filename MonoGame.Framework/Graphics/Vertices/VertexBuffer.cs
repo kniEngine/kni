@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _isDynamic = dynamic;
 
-            PlatformConstruct();
+            PlatformConstructVertexBuffer();
 		}
 
         public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :

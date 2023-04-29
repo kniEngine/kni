@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _mipmap;
         private SampleDescription _sampleDescription;
 
-        private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             _shared = shared;
             _mipmap = mipmap;

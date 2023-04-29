@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._format = format;
             this._levelCount = mipMap ? CalculateMipLevels(size) : 1;
 
-            PlatformConstruct(graphicsDevice, size, mipMap, format, renderTarget);
+            PlatformConstructTextureCube(graphicsDevice, size, mipMap, format, renderTarget);
         }
 
         /// <summary>

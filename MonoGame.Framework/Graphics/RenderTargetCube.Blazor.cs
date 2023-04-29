@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             throw new NotImplementedException();
         }

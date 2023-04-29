@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._levelCount = 1;
 		    this._format = format;
 
-            PlatformConstruct(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
+            PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }
 
         public void SetData<T>(T[] data) where T : struct

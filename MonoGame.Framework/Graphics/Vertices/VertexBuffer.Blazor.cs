@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal WebGLBuffer vbo { get; private set; }
 
-        private void PlatformConstruct()
+        private void PlatformConstructVertexBuffer()
         {
 
             GenerateIfRequired();

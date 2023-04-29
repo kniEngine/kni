@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
     partial class OcclusionQuery
     {
 
-        private void PlatformConstruct()
+        private void PlatformConstructOcclusionQuery()
         {
             throw new PlatformNotSupportedException();
         }

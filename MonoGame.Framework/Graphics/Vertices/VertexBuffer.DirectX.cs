@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformConstruct()
+        private void PlatformConstructVertexBuffer()
         {
             GenerateIfRequired();
         }

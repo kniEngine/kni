@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = preferredMultiSampleCount;
             RenderTargetUsage = usage;
 
-            PlatformConstruct(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
+            PlatformConstructRenderTargetCube(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
         }
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

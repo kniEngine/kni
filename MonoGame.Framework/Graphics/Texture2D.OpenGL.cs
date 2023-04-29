@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             this.glTarget = TextureTarget.Texture2D;
             ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);

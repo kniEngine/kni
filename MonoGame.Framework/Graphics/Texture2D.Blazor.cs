@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
 
-        private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             this.glTarget = WebGLTextureTarget.TEXTURE_2D;
             ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType, out _glIsCompressedTexture);

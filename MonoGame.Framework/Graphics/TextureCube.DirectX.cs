@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _renderTarget;
         private bool _mipMap;
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
             _renderTarget = renderTarget;
             _mipMap = mipMap;

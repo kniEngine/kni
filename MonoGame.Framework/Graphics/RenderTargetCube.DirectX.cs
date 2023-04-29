@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private RenderTargetView[] _renderTargetViews;
         private DepthStencilView[] _depthStencilViews;
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             _renderTargetViews = new RenderTargetView[6];
             _depthStencilViews = new DepthStencilView[6];

@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return glTarget;
         }
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
 

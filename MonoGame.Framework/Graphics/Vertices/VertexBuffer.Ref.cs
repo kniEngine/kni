@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class VertexBuffer
     {
 
-        private void PlatformConstruct()
+        private void PlatformConstructVertexBuffer()
         {
             throw new PlatformNotSupportedException();
         }

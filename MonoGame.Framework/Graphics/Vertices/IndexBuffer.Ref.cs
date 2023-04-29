@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class IndexBuffer
     {
 
-        private void PlatformConstruct(IndexElementSize indexElementSize, int indexCount)
+        private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
             throw new PlatformNotSupportedException();
         }

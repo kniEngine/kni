@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformConstruct(IndexElementSize indexElementSize, int indexCount)
+        private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
             GenerateIfRequired();
         }

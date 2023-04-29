@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class Texture3D : Texture
     {
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+        private void PlatformConstructTexture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
             this.glTarget = TextureTarget.Texture3D;
 

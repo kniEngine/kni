@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)
+        private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
         {
             throw new PlatformNotSupportedException();
         }
