@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = preferredMultiSampleCount;
+            MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
             _renderTargetViews = new RenderTargetView[6];
@@ -45,9 +45,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
 
             var sampleDescription = new SampleDescription(1, 0);
-            if (preferredMultiSampleCount > 1)
+            if (MultiSampleCount > 1)
             {
-                sampleDescription.Count = preferredMultiSampleCount;
+                sampleDescription.Count = MultiSampleCount;
                 sampleDescription.Quality = (int)StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 
