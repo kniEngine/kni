@@ -1595,7 +1595,7 @@ namespace MonoGame.OpenGL
                 {
                     for (i = 0; i < strings.Length; i++)
                     {
-                        IntPtr val = MarshalStringToPtr(strings [i]);
+                        IntPtr val = MarshalStringToPtr(strings[i]);
                         Marshal.WriteIntPtr(intPtr, i * IntPtr.Size, val);
                     }
                 }
@@ -1614,7 +1614,7 @@ namespace MonoGame.OpenGL
 
         protected unsafe static IntPtr MarshalStringToPtr(string str)
         {
-            if (string.IsNullOrEmpty (str))
+            if (string.IsNullOrEmpty(str))
             {
                 return IntPtr.Zero;
             }
