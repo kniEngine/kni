@@ -25,10 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
 		{
-			DepthStencilFormat = preferredDepthFormat;
-			MultiSampleCount = preferredMultiSampleCount;
-			RenderTargetUsage = usage;
-
             // If we don't need a depth buffer then we're done.
             if (preferredDepthFormat == DepthFormat.None)
                 return;

@@ -17,6 +17,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
+            DepthStencilFormat = preferredDepthFormat;
+            MultiSampleCount = preferredMultiSampleCount;
+            RenderTargetUsage = usage;
+
             // Setup the multisampling description.
             var multisampleDesc = new SharpDX.DXGI.SampleDescription(1, 0);
             if (preferredMultiSampleCount > 1)

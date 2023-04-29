@@ -73,10 +73,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
             : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
         {
-            DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = preferredMultiSampleCount;
-            RenderTargetUsage = usage;
-
             PlatformConstructRenderTargetCube(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
         }
         

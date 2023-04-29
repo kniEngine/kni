@@ -27,6 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
+            DepthStencilFormat = preferredDepthFormat;
+            MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
+            RenderTargetUsage = usage;
+
             Threading.EnsureUIThread();
             {
                 graphicsDevice.PlatformCreateRenderTarget(
