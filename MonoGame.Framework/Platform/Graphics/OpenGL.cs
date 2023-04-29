@@ -128,7 +128,6 @@ namespace MonoGame.OpenGL
     internal enum RenderbufferTarget
     {
         Renderbuffer = 0x8D41,
-        RenderbufferExt = 0x8D41,
     }
 
     internal enum FramebufferTarget
