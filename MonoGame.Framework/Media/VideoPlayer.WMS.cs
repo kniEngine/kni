@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformResume()
         {
-            _session.Start(null, null);
+            _session.Start(null, _positionCurrent);
         }
 
         private void PlatformStop()
