@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
+
 using SharpDX.MediaFoundation;
 
 namespace Microsoft.Xna.Framework.Media
@@ -64,6 +65,7 @@ namespace Microsoft.Xna.Framework.Media
             // the video hasn't started playing yet
             // or the last frame if the video is stopped
             // as per XNA's behavior.
+
             if (_state != MediaState.Playing)
                 return _lastFrame;
 
@@ -77,8 +79,8 @@ namespace Microsoft.Xna.Framework.Media
                                        SurfaceFormat.Bgra32,
                                        Texture2D.SurfaceType.RenderTarget);
 
-			var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
-            SharpDX.ComObject dstSurfRef = _lastFrame.GetTexture();
+            var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
+            SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;
             _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
 
             return _lastFrame;

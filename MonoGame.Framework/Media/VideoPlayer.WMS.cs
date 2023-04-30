@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
-using System;
-using System.Runtime.InteropServices;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -19,6 +20,9 @@ namespace Microsoft.Xna.Framework.Media
         private static Guid AudioStreamVolumeGuid;
 
         private Texture2D _lastFrame;
+
+        private readonly Variant _positionCurrent = new Variant();
+        private readonly Variant _positionBeginning = new Variant { ElementType = VariantElementType.Long, Value = 0L };
 
         private static Callback _callback;
 
@@ -38,12 +42,22 @@ namespace Microsoft.Xna.Framework.Media
             public IDisposable Shadow { get; set; }
             public void Invoke(AsyncResult asyncResultRef)
             {
-                var ev = _session.EndGetEvent(asyncResultRef);
+                MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef);
 
-                // Trigger an "on Video Ended" event here if needed
+                switch (mediaEvent.TypeInfo)
+                {
+                    case MediaEventTypes.SessionTopologyStatus:
+                        // Trigger an "on Video Ended" event here if needed
+                        if (mediaEvent.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
+                            _player.OnTopologyReady();
+                        break;
 
-                if (ev.TypeInfo == MediaEventTypes.SessionTopologyStatus && ev.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
-                    _player.OnTopologyReady();
+                    case MediaEventTypes.SessionEnded:
+                        break;
+
+                    case MediaEventTypes.SessionStopped:
+                        break;
+                }
 
                 _session.BeginGetEvent(this, null);
             }
@@ -65,10 +79,8 @@ namespace Microsoft.Xna.Framework.Media
 
         private Texture2D PlatformGetTexture()
         {
-            var sampleGrabber = _currentVideo.SampleGrabber;
-
-            var texData = sampleGrabber.TextureData;
-
+            VideoSampleGrabber sampleGrabber = _currentVideo.SampleGrabber;
+            byte[] texData = sampleGrabber.TextureData;
             if (texData == null)
                 return null;
 
@@ -139,8 +151,7 @@ namespace Microsoft.Xna.Framework.Media
             _clock = _session.Clock.QueryInterface<PresentationClock>();
 
             // Start playing.
-            var varStart = new Variant();
-            _session.Start(null, varStart);
+            _session.Start(null, _positionCurrent);
 
             // we need to dispose of the old texture if we have one
             if (_lastFrame != null)
