@@ -4,10 +4,11 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
 using MediaPlayer;
 using Foundation;
-using Microsoft.Xna.Framework.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -40,7 +41,7 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformInitialize()
         {
-            var url = NSUrl.FromFilename(Path.GetFullPath(FileName));
+            NSUrl url = NSUrl.FromFilename(Path.GetFullPath(FileName));
 
             MovieView = new MPMoviePlayerViewController(url);
             MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;

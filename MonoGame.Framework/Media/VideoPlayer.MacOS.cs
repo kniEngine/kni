@@ -3,12 +3,13 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework.Graphics;
 using Foundation;
 using AVFoundation;
 using RectF = CoreGraphics.CGRect;
-using Microsoft.Xna.Framework.Graphics;
 using AppKit;
 using CoreAnimation;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -55,7 +56,7 @@ namespace Microsoft.Xna.Framework.Media
             nsWindow.ContentView.AddSubview(view);
            
             NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification,
-                                                               notification =>
+                                                           notification =>
             {
                 Stop();
 

@@ -5,10 +5,12 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Xna.Framework.Graphics;
+
 #if WINDOWS_UAP
 using System.Threading.Tasks;
 #endif
-using Microsoft.Xna.Framework.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -138,7 +140,6 @@ namespace Microsoft.Xna.Framework.Media
             if (_currentVideo == null)
                 throw new InvalidOperationException("Operation is not valid due to the current state of the object");
 
-            //XNA never returns a null texture
             const int retries = 5;
             const int sleepTimeFactor = 50;
             Texture2D texture=null;
@@ -149,7 +150,7 @@ namespace Microsoft.Xna.Framework.Media
                 if (texture != null)
                     break;
 
-                var sleepTime = i*sleepTimeFactor;
+                int sleepTime = i*sleepTimeFactor;
                 Debug.WriteLine("PlatformGetTexture returned null ({0}) sleeping for {1} ms", i + 1, sleepTime);
 #if WINDOWS_UAP
                 Task.Delay(sleepTime).Wait();
@@ -158,8 +159,7 @@ namespace Microsoft.Xna.Framework.Media
 #endif
             }
 
-            if (texture == null)
-                throw new InvalidOperationException("Platform returned a null texture");
+            System.Diagnostics.Debug.Assert(texture != null);
 
             return texture;
         }
@@ -188,8 +188,8 @@ namespace Microsoft.Xna.Framework.Media
 
             if (_currentVideo == video)
             {
-                var state = State;
-							
+                MediaState state = State;
+
                 // No work to do if we're already
                 // playing this video.
                 if (state == MediaState.Playing)
@@ -216,11 +216,10 @@ namespace Microsoft.Xna.Framework.Media
 
             for (int i = 0; i < retries; i++)
             {
-                if (State == MediaState.Playing )
-                {
+                if (State == MediaState.Playing)
                     break;
-                }
-                var sleepTime = i*sleepTimeFactor;
+
+                int sleepTime = i*sleepTimeFactor;
                 Debug.WriteLine("State != MediaState.Playing ({0}) sleeping for {1} ms", i + 1, sleepTime);
 #if WINDOWS_UAP
                 Task.Delay(sleepTime).Wait();
@@ -228,7 +227,8 @@ namespace Microsoft.Xna.Framework.Media
                 Thread.Sleep(sleepTime); //Sleep for longer and longer times
 #endif
             }
-            if (State != MediaState.Playing )
+
+            if (State != MediaState.Playing)
             {
                 //We timed out - attempt to stop to fix any bad state
                 Stop();
@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Framework.Media
             if (_currentVideo == null)
                 return;
 
-            var state = State;
+            MediaState state = State;
 
             // No work to do if we're already playing
             if (state == MediaState.Playing)

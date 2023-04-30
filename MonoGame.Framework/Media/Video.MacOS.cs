@@ -9,6 +9,7 @@ using ObjCRuntime;
 using Foundation;
 using AVFoundation;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
     /// <summary>
@@ -36,7 +37,7 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformInitialize()
         {
-            var err = new NSError();
+            NSError err = new NSError();
 
             movie = AVPlayerItem.FromUrl(NSUrl.FromFilename(FileName));
             Player = new AVPlayer(movie);

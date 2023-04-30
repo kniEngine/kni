@@ -57,24 +57,26 @@ namespace Microsoft.Xna.Platform.Media
 
         public void Invoke(AsyncResult asyncResultRef)
         {
-            using (var mediaEvent = _session.EndGetEvent(asyncResultRef))
+            using (MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef))
             {
                 switch (mediaEvent.TypeInfo)
                 {
-                    case MediaEventTypes.SessionEnded:
-                        _sessionState = SessionState.Ended;
-                        OnSongFinishedPlaying(null, null);
-                        break;
                     case MediaEventTypes.SessionTopologyStatus:
                         if (mediaEvent.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
                             OnTopologyReady();
                         break;
+
+                    case MediaEventTypes.SessionEnded:
+                        _sessionState = SessionState.Ended;
+                        OnSongFinishedPlaying(null, null);
+                        break;
+
                     case MediaEventTypes.SessionStopped:
                         OnSessionStopped();
                         break;
                 }
 
-                var evValue = mediaEvent.Value.Value as IDisposable;
+                IDisposable evValue = mediaEvent.Value.Value as IDisposable;
                 if (evValue != null)
                     evValue.Dispose();
             }

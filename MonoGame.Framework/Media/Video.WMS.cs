@@ -1,6 +1,7 @@
-﻿using SharpDX;
+﻿using System;
+using SharpDX;
 using SharpDX.MediaFoundation;
-using System;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -36,7 +37,7 @@ namespace Microsoft.Xna.Framework.Media
             PresentationDescriptor presDesc;
             mediaSource.CreatePresentationDescriptor(out presDesc);
 
-            for (var i = 0; i < presDesc.StreamDescriptorCount; i++)
+            for (int i = 0; i < presDesc.StreamDescriptorCount; i++)
             {
                 SharpDX.Mathematics.Interop.RawBool selected;
                 StreamDescriptor desc;
@@ -54,7 +55,7 @@ namespace Microsoft.Xna.Framework.Media
                     TopologyNode outputNode;
                     MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
 
-                    var majorType = desc.MediaTypeHandler.MajorType;
+                    Guid majorType = desc.MediaTypeHandler.MajorType;
                     if (majorType == MediaTypeGuids.Video)
                     {
                         Activate activate;
