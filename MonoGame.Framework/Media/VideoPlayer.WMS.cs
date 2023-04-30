@@ -44,21 +44,26 @@ namespace Microsoft.Xna.Framework.Media
             public IDisposable Shadow { get; set; }
             public void Invoke(AsyncResult asyncResultRef)
             {
-                MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef);
-
-                switch (mediaEvent.TypeInfo)
+                using (MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef))
                 {
-                    case MediaEventTypes.SessionTopologyStatus:
-                        // Trigger an "on Video Ended" event here if needed
-                        if (mediaEvent.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
-                            _player.OnTopologyReady();
-                        break;
+                    switch (mediaEvent.TypeInfo)
+                    {
+                        case MediaEventTypes.SessionTopologyStatus:
+                            // Trigger an "on Video Ended" event here if needed
+                            if (mediaEvent.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
+                                _player.OnTopologyReady();
+                            break;
 
-                    case MediaEventTypes.SessionEnded:
-                        break;
+                        case MediaEventTypes.SessionEnded:
+                            break;
 
-                    case MediaEventTypes.SessionStopped:
-                        break;
+                        case MediaEventTypes.SessionStopped:
+                            break;
+                    }
+
+                    IDisposable evValue = mediaEvent.Value.Value as IDisposable;
+                    if (evValue != null)
+                        evValue.Dispose();
                 }
 
                 _session.BeginGetEvent(this, null);
