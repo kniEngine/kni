@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (C)2023 Nick Kastellanos
+
+using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
@@ -79,17 +81,21 @@ namespace Microsoft.Xna.Framework.Media
 
         private Texture2D PlatformGetTexture()
         {
-            VideoSampleGrabber sampleGrabber = _currentVideo.SampleGrabber;
-            byte[] texData = sampleGrabber.TextureData;
-            if (texData == null)
-                return null;
-
-            // It's entirely possible that we could lose the d3d context and therefore lose this texture, 
-            // but it's better than allocating a new texture each call!
+            if (_lastFrame != null)
+            {
+                if (_lastFrame.Width != _currentVideo.Width || _lastFrame.Height != _currentVideo.Height)
+                {
+                    _lastFrame.Dispose();
+                    _lastFrame = null;
+                }
+            }
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
 
-            _lastFrame.SetData(texData);
+            VideoSampleGrabber sampleGrabber = _currentVideo.SampleGrabber;
+            byte[] texData = sampleGrabber.TextureData;
+            if (texData != null)
+                _lastFrame.SetData(texData);
             
             return _lastFrame;
         }
@@ -152,13 +158,6 @@ namespace Microsoft.Xna.Framework.Media
 
             // Start playing.
             _session.Start(null, _positionCurrent);
-
-            // we need to dispose of the old texture if we have one
-            if (_lastFrame != null)
-                _lastFrame.Dispose();
-
-            // Create cached texture
-            _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
         }
 
         private void PlatformResume()

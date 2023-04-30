@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -140,25 +142,7 @@ namespace Microsoft.Xna.Framework.Media
             if (_currentVideo == null)
                 throw new InvalidOperationException("Operation is not valid due to the current state of the object");
 
-            const int retries = 5;
-            const int sleepTimeFactor = 50;
-            Texture2D texture=null;
-
-            for (int i = 0; i < retries; i++)
-            {
-                texture = PlatformGetTexture();
-                if (texture != null)
-                    break;
-
-                int sleepTime = i*sleepTimeFactor;
-                Debug.WriteLine("PlatformGetTexture returned null ({0}) sleeping for {1} ms", i + 1, sleepTime);
-#if WINDOWS_UAP
-                Task.Delay(sleepTime).Wait();
-#else
-                Thread.Sleep(sleepTime); //Sleep for longer and longer times
-#endif
-            }
-
+            Texture2D texture = PlatformGetTexture();
             System.Diagnostics.Debug.Assert(texture != null);
 
             return texture;
