@@ -72,14 +72,13 @@ namespace Microsoft.Xna.Framework.Media
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgra32,
-                                           Texture2D.SurfaceType.RenderTarget);
+                _lastFrame = new RenderTarget2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgra32, DepthFormat.None);
 
 
             if (_state == MediaState.Playing)
             {
                 long pts;
-                if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts))
+                if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts) && _mediaEngine.ReadyState >= 2)
                 {
                     var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
                     SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;

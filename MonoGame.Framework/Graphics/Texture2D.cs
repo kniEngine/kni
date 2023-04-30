@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="mipmap"></param>
         /// <param name="format"></param>
         /// <param name="surfaceType"></param>
-        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType surfaceType)
+        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType surfaceType)
             : this(graphicsDevice, width, height, mipmap, format, false, 1, surfaceType)
         {
         }
