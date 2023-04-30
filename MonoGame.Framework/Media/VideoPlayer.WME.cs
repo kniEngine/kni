@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -61,27 +63,29 @@ namespace Microsoft.Xna.Framework.Media
 
         private Texture2D PlatformGetTexture()
         {
-            // This will return a null texture if
-            // the video hasn't started playing yet
-            // or the last frame if the video is stopped
-            // as per XNA's behavior.
+            if (_lastFrame != null)
+            {
+                if (_lastFrame.Width != _currentVideo.Width || _lastFrame.Height != _currentVideo.Height)
+                {
+                    _lastFrame.Dispose();
+                    _lastFrame = null;
+                }
+            }
+            if (_lastFrame == null)
+                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgra32,
+                                           Texture2D.SurfaceType.RenderTarget);
 
-            if (_state != MediaState.Playing)
-                return _lastFrame;
 
-            long pts;
-            if (!_mediaEngine.HasVideo() || !_mediaEngine.OnVideoStreamTick(out pts))
-                return _lastFrame;
-
-            _lastFrame = new Texture2D(_currentVideo.GraphicsDevice,
-                                       _currentVideo.Width, _currentVideo.Height,
-                                       false,
-                                       SurfaceFormat.Bgra32,
-                                       Texture2D.SurfaceType.RenderTarget);
-
-            var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
-            SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;
-            _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
+            if (_state == MediaState.Playing)
+            {
+                long pts;
+                if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts))
+                {
+                    var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
+                    SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;
+                    _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
+                }
+            }
 
             return _lastFrame;
         }
@@ -92,11 +96,6 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformPause()
         {
-            // Calling PlatformGetTexture() manually will save the last frame
-            // so we can return the same one without doing unnecessary copies
-            // if GetTexture() keeps getting called while paused
-            PlatformGetTexture();
-
             _mediaEngine.Pause();
         }
 
@@ -113,11 +112,6 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformStop()
         {
-            // Calling PlatformGetTexture() manually will save the last frame
-            // so we can return the same one without doing unnecessary copies
-            // if GetTexture() keeps getting called while stopped
-            PlatformGetTexture();
-
             _mediaEngine.Pause();
             _mediaEngine.CurrentTime = 0.0;
         }
