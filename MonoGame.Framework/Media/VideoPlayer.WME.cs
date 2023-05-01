@@ -45,7 +45,6 @@ namespace Microsoft.Xna.Framework.Media
             switch (mediaEvent)
             {
                 case MediaEngineEvent.Play:
-                    _lastFrame = null;
                     break;
                 
                 case MediaEngineEvent.Ended:
