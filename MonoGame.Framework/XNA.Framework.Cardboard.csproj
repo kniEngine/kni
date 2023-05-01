@@ -461,6 +461,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
@@ -484,7 +485,6 @@
     <Compile Include="Media\Video.Android.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayerStrategy.cs" />
-    <Compile Include="Media\VideoPlayer.Android.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerReading.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\CalibrationEventArgs.cs" />

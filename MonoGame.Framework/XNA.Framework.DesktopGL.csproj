@@ -447,6 +447,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
@@ -470,7 +471,6 @@
     <Compile Include="Media\Video.SDL.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayerStrategy.cs" />
-    <Compile Include="Media\VideoPlayer.SDL.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Utilities\Hash.cs" />
