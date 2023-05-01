@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Media;
 
 
 namespace Microsoft.Xna.Framework.Media
@@ -16,15 +17,17 @@ namespace Microsoft.Xna.Framework.Media
     {
         #region Fields
 
-        private MediaState _state;
-        private Video _currentVideo;
-        private float _volume = 1.0f;
-        private bool _isLooped = false;
-        private bool _isMuted = false;
+        private static VideoPlayerStrategy _strategy;
 
         #endregion
 
         #region Properties
+
+        internal static VideoPlayerStrategy Strategy
+        {
+            get { return _strategy; }
+        }
+
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
@@ -36,13 +39,13 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public bool IsLooped
         {
-            get { return _isLooped; }
+            get { return Strategy.IsLooped; }
             set
             {
-                if (_isLooped == value)
+                if (Strategy.IsLooped == value)
                     return;
 
-                _isLooped = value;
+                Strategy.IsLooped = value;
                 PlatformSetIsLooped();
             }
         }
@@ -52,13 +55,13 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public bool IsMuted
         {
-            get { return _isMuted; }
+            get { return Strategy.IsMuted; }
             set
             {
-                if (_isMuted == value)
+                if (Strategy.IsMuted == value)
                     return;
 
-                _isMuted = value;
+                Strategy.IsMuted = value;
                 PlatformSetIsMuted();
             }
         }
@@ -70,7 +73,10 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-                if (_currentVideo == null || State == MediaState.Stopped)
+                if (Strategy.Video == null)
+                    return TimeSpan.Zero;
+
+                if (State == MediaState.Stopped)
                     return TimeSpan.Zero;
 
                 return PlatformGetPlayPosition();
@@ -84,33 +90,36 @@ namespace Microsoft.Xna.Framework.Media
         { 
             get
             {
-                // Give the platform code a chance to update 
+                // Give the platform code a chance to update
                 // the playback state before we return the result.
-                PlatformGetState(ref _state);
-                return _state;
+                Strategy.State = PlatformUpdateState(Strategy.State);
+
+                return Strategy.State;
             }
         }
 
         /// <summary>
         /// Gets the Video that is currently playing.
         /// </summary>
-        public Video Video { get { return _currentVideo; } }
+        public Video Video
+        {
+            get { return Strategy.Video; }
+        }
 
         /// <summary>
         /// Video player volume, from 0.0f (silence) to 1.0f (full volume relative to the current device volume).
         /// </summary>
         public float Volume
         {
-            get { return _volume; }
-            
+            get { return Strategy.Volume; }            
             set
             {
                 if (value < 0.0f || value > 1.0f)
                     throw new ArgumentOutOfRangeException();
 
-                _volume = value;
+                Strategy.Volume = value;
 
-                if (_currentVideo != null)
+                if (Strategy.Video != null)
                     PlatformSetVolume();
             }
         }
@@ -121,7 +130,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public VideoPlayer()
         {
-            _state = MediaState.Stopped;
+            _strategy = new VideoPlayerStrategy();
 
             PlatformInitialize();
         }
@@ -135,7 +144,7 @@ namespace Microsoft.Xna.Framework.Media
         /// in a different thread or process. Note: This may be a change from XNA behaviour</exception>
         public Texture2D GetTexture()
         {
-            if (_currentVideo == null)
+            if (Strategy.Video == null)
                 throw new InvalidOperationException("Operation is not valid due to the current state of the object");
 
             Texture2D texture = PlatformGetTexture();
@@ -149,12 +158,11 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Pause()
         {
-            if (_currentVideo == null)
+            if (Strategy.Video == null)
                 return;
 
             PlatformPause();
-
-            _state = MediaState.Paused;
+            Strategy.State = MediaState.Paused;
         }
 
         /// <summary>
@@ -166,29 +174,24 @@ namespace Microsoft.Xna.Framework.Media
             if (video == null)
                 throw new ArgumentNullException("video is null.");
 
-            if (_currentVideo == video)
+            if (Strategy.Video == video)
             {
                 MediaState state = State;
-
-                // No work to do if we're already
-                // playing this video.
-                if (state == MediaState.Playing)
-                    return;
-
-                // If we try to Play the same video
-                // from a paused state, just resume it instead.
-                if (state == MediaState.Paused)
+                switch (state)
                 {
-                    PlatformResume();
-                    return;
+                    case MediaState.Stopped:
+                        break;
+                    case MediaState.Playing:
+                        return;
+                    case MediaState.Paused:
+                        PlatformResume();
+                        return;
                 }
             }
-            
-            _currentVideo = video;
 
-            PlatformPlay();
-
-            _state = MediaState.Playing;
+            Strategy.Video = video;
+            PlatformPlay(video);
+            Strategy.State = MediaState.Playing;
 
 #if WINDOWS
             // XNA doesn't return until the video is playing
@@ -214,24 +217,24 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Resume()
         {
-            if (_currentVideo == null)
+            if (Strategy.Video == null)
                 return;
 
             MediaState state = State;
-
-            // No work to do if we're already playing
-            if (state == MediaState.Playing)
-                return;
-
-            if (state == MediaState.Stopped)
+            switch (state)
             {
-                PlatformPlay();
-                return;
+                case MediaState.Stopped:
+                    PlatformPlay(Strategy.Video);
+                    return;
+                case MediaState.Playing:
+                    return;
+                case MediaState.Paused:
+                    PlatformResume();
+                    Strategy.State = MediaState.Playing;
+                    break;
             }
 
-            PlatformResume();
-
-            _state = MediaState.Playing;
+            return;
         }
 
         /// <summary>
@@ -239,12 +242,11 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Stop()
         {
-            if (_currentVideo == null)
+            if (Strategy.Video == null)
                 return;
 
             PlatformStop();
-
-            _state = MediaState.Stopped;
+            Strategy.State = MediaState.Stopped;
         }
 
         #endregion
@@ -265,6 +267,12 @@ namespace Microsoft.Xna.Framework.Media
             if (!IsDisposed)
             {
                 PlatformDispose(disposing);
+
+                if (disposing)
+                {
+                    Strategy.Dispose();
+                }
+
                 IsDisposed = true;
             }
         }

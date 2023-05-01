@@ -88,16 +88,17 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_lastFrame != null)
             {
-                if (_lastFrame.Width != _currentVideo.Width || _lastFrame.Height != _currentVideo.Height)
+                if (_lastFrame.Width != Strategy.Video.Width || _lastFrame.Height != Strategy.Video.Height)
                 {
                     _lastFrame.Dispose();
                     _lastFrame = null;
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+                _lastFrame = new Texture2D(Strategy.Video.GraphicsDevice, Strategy.Video.Width, Strategy.Video.Height, false, SurfaceFormat.Bgr32);
 
-            VideoSampleGrabber sampleGrabber = _currentVideo.SampleGrabber;
+
+            VideoSampleGrabber sampleGrabber = Strategy.Video.SampleGrabber;
             byte[] texData = sampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
@@ -105,26 +106,24 @@ namespace Microsoft.Xna.Framework.Media
             return _lastFrame;
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
             if (_clock != null)
             {
-                ClockState state;
-                _clock.GetState(0, out state);
+                ClockState clockState;
+                _clock.GetState(0, out clockState);
 
-                switch (state)
+                switch (clockState)
                 {
                     case ClockState.Running:
-                        result = MediaState.Playing;
-                        return;
+                        return MediaState.Playing;
 
                     case ClockState.Paused:
-                        result = MediaState.Paused;
-                        return;
+                        return MediaState.Paused;
                 }
             }
 
-            result = MediaState.Stopped;
+            return MediaState.Stopped;
         }
 
         private void PlatformPause()
@@ -132,7 +131,7 @@ namespace Microsoft.Xna.Framework.Media
             _session.Pause();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
             // Cleanup the last song first.
             if (State != MediaState.Stopped)
@@ -156,7 +155,7 @@ namespace Microsoft.Xna.Framework.Media
             }
 
             // Set the new song.
-            _session.SetTopology(SessionSetTopologyFlags.Immediate, _currentVideo.Topology);
+            _session.SetTopology(SessionSetTopologyFlags.Immediate, Strategy.Video.Topology);
 
             // Get the clock.
             _clock = _session.Clock.QueryInterface<PresentationClock>();
@@ -191,7 +190,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_volumeController != null && !_volumeController.IsDisposed)
             {
-                float volume = _volume;
+                float volume = Strategy.Volume;
                 if (IsMuted)
                     volume = 0.0f;
 

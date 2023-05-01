@@ -25,8 +25,9 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
+            return currentState;
         }
 
         private void PlatformPause()
@@ -36,10 +37,10 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformResume()
         {
-            _currentVideo.MovieView.MoviePlayer.Play();
+            Strategy.Video.MovieView.MoviePlayer.Play();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
             ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
             if (concreteGame == null)
@@ -50,10 +51,10 @@ namespace Microsoft.Xna.Framework.Media
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
-            _currentVideo.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
+            Strategy.Video.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            concreteGame.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
-            _currentVideo.MovieView.MoviePlayer.Play();
+            concreteGame.ViewController.PresentViewController(Strategy.Video.MovieView, false, null);
+            Strategy.Video.MovieView.MoviePlayer.Play();
         }
 
         private void PlatformStop()
@@ -68,7 +69,7 @@ namespace Microsoft.Xna.Framework.Media
                 _playbackDidFinishObserver = null;
             }
 
-            _currentVideo.MovieView.MoviePlayer.Stop();
+            Strategy.Video.MovieView.MoviePlayer.Stop();
             concreteGame.IsPlayingVideo = false;
             concreteGame.ViewController.DismissViewController(false, null);
         }

@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
             throw new NotImplementedException();
         }

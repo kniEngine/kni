@@ -23,34 +23,35 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
+            return currentState;
         }
 
         private void PlatformPause()
         {
-            _currentVideo.Player.Pause();
+            Strategy.Video.Player.Pause();
         }
 
         private void PlatformResume()
         {
-            _currentVideo.Player.Start();
+            Strategy.Video.Player.Start();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
-            _currentVideo.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
-            _currentVideo.Player.Start();
+            Strategy.Video.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
+            Strategy.Video.Player.Start();
 
             ConcreteGame.IsPlayingVideo = true;
         }
 
         private void PlatformStop()
         {
-            _currentVideo.Player.Stop();
+            Strategy.Video.Player.Stop();
 
             ConcreteGame.IsPlayingVideo = false;
-            _currentVideo.Player.SetDisplay(null);
+            Strategy.Video.Player.SetDisplay(null);
         }
 
         private void PlatformSetIsLooped()

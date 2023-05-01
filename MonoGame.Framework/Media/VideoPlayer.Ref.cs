@@ -10,57 +10,57 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformInitialize()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private Texture2D PlatformGetTexture()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformPause()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformResume()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformStop()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformSetIsLooped()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformSetIsMuted()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private TimeSpan PlatformGetPlayPosition()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private TimeSpan PlatformSetVolume()
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
         }
 
         private void PlatformDispose(bool disposing)

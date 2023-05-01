@@ -48,14 +48,12 @@ namespace Microsoft.Xna.Framework.Media
                     break;
                 
                 case MediaEngineEvent.Ended:
-
                     if (IsLooped)
                     {
-                        PlatformPlay();
+                        PlatformPlay(Strategy.Video);
                         return;
-                    }   
-                    
-                    _state = MediaState.Stopped;
+                    }                    
+                    Strategy.State = MediaState.Stopped;
                     break;
             }
         }
@@ -64,22 +62,22 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_lastFrame != null)
             {
-                if (_lastFrame.Width != _currentVideo.Width || _lastFrame.Height != _currentVideo.Height)
+                if (_lastFrame.Width != Strategy.Video.Width || _lastFrame.Height != Strategy.Video.Height)
                 {
                     _lastFrame.Dispose();
                     _lastFrame = null;
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new RenderTarget2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgra32, DepthFormat.None);
+                _lastFrame = new RenderTarget2D(Strategy.Video.GraphicsDevice, Strategy.Video.Width, Strategy.Video.Height, false, SurfaceFormat.Bgra32, DepthFormat.None);
 
 
-            if (_state == MediaState.Playing)
+            if (Strategy.State == MediaState.Playing)
             {
                 long pts;
                 if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts) && _mediaEngine.ReadyState >= 2)
                 {
-                    var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, _currentVideo.Width, _currentVideo.Height);
+                    var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, Strategy.Video.Width, Strategy.Video.Height);
                     SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;
                     _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
                 }
@@ -88,8 +86,9 @@ namespace Microsoft.Xna.Framework.Media
             return _lastFrame;
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
+            return currentState;
         }
 
         private void PlatformPause()
@@ -102,9 +101,9 @@ namespace Microsoft.Xna.Framework.Media
             _mediaEngine.Play();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
-            _mediaEngine.Source = System.IO.Path.Combine(TitleContainer.Location, _currentVideo.FileName);
+            _mediaEngine.Source = System.IO.Path.Combine(TitleContainer.Location, Strategy.Video.FileName);
             _mediaEngine.Play();
         }
 
@@ -131,7 +130,7 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformSetVolume()
         {
-            _mediaEngine.Volume = _volume;
+            _mediaEngine.Volume = Strategy.Volume;
         }
 
         private void PlatformDispose(bool disposing)

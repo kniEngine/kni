@@ -31,8 +31,9 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        private MediaState PlatformUpdateState(MediaState currentState)
         {
+            return currentState;
         }
 
         private void PlatformPause()
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.Media
             _currentVideo.Player.Play();
         }
 
-        private void PlatformPlay()
+        private void PlatformPlay(Video video)
         {
             layer = AVPlayerLayer.FromPlayer(_currentVideo.Player);
             view = new NSView(nsWindow.ContentView.Frame);
