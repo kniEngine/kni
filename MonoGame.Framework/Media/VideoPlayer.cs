@@ -37,11 +37,7 @@ namespace Microsoft.Xna.Framework.Media
         public bool IsLooped
         {
             get { return Strategy.IsLooped; }
-            set
-            {
-                if (Strategy.IsLooped != value)
-                    Strategy.IsLooped = value;
-            }
+            set { Strategy.IsLooped = value; }
         }
 
         /// <summary>
