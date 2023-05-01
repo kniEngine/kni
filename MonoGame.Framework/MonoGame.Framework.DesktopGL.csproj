@@ -65,7 +65,7 @@
     <Compile Include="Media\MediaLibrary.Default.cs" />
     <Compile Include="Media\Song.SDL.cs" />
     <Compile Include="Media\Video.SDL.cs" />
-    <Compile Include="Media\VideoPlayer.SDL.cs" />
+    <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
     <Compile Include="Input\GamePad.SDL.cs" />
     <Compile Include="Input\Joystick.SDL.cs" />
     <Compile Include="Input\Keyboard.SDL.cs" />
