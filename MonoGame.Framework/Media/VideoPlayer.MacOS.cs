@@ -40,11 +40,7 @@ namespace Microsoft.Xna.Framework.Media
         public override bool IsLooped
         {
             get { return base.IsLooped; }
-            set
-            {
-                base.IsLooped = value;
-                throw new NotImplementedException();
-            }
+            set { base.IsLooped = value; }
         }
 
         public override float Volume

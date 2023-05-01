@@ -56,9 +56,11 @@ namespace Microsoft.Xna.Framework.Media
                             break;
 
                         case MediaEventTypes.SessionEnded:
+                            _player.OnMediaEngineEvent(mediaEvent);
                             break;
 
                         case MediaEventTypes.SessionStopped:
+                            _player.OnMediaEngineEvent(mediaEvent);
                             break;
                     }
 
@@ -94,11 +96,7 @@ namespace Microsoft.Xna.Framework.Media
         public override bool IsLooped
         {
             get { return base.IsLooped; }
-            set
-            {
-                base.IsLooped = value;
-                throw new NotImplementedException();
-            }
+            set { base.IsLooped = value; }
         }
 
         public override float Volume
@@ -120,6 +118,27 @@ namespace Microsoft.Xna.Framework.Media
 
             MediaManagerState.CheckStartup();
             MediaFactory.CreateMediaSession(null, out _session);
+        }
+
+
+        private void OnMediaEngineEvent(MediaEvent mediaEvent)
+        {
+            switch (mediaEvent.TypeInfo)
+            {
+                case MediaEventTypes.SessionTopologyStatus:
+                    break;
+
+                case MediaEventTypes.SessionEnded:
+                    if (IsLooped)
+                    {
+                        _session.Start(null, _positionBeginning);
+                        return;
+                    }
+                    break;
+
+                case MediaEventTypes.SessionStopped:
+                    break;
+            }
         }
 
         public override Texture2D PlatformGetTexture()
