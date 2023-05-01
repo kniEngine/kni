@@ -13,17 +13,14 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class VideoPlayer : IDisposable
     {
-        #region Fields
-
         private static VideoPlayerStrategy _strategy;
 
-        #endregion
 
         #region Properties
 
-        internal static VideoPlayerStrategy Strategy
+        private static VideoPlayerStrategy Strategy
         {
             get { return _strategy; }
         }
@@ -42,11 +39,8 @@ namespace Microsoft.Xna.Framework.Media
             get { return Strategy.IsLooped; }
             set
             {
-                if (Strategy.IsLooped == value)
-                    return;
-
-                Strategy.IsLooped = value;
-                PlatformSetIsLooped();
+                if (Strategy.IsLooped != value)
+                    Strategy.IsLooped = value;
             }
         }
 
@@ -58,11 +52,8 @@ namespace Microsoft.Xna.Framework.Media
             get { return Strategy.IsMuted; }
             set
             {
-                if (Strategy.IsMuted == value)
-                    return;
-
-                Strategy.IsMuted = value;
-                PlatformSetIsMuted();
+                if (Strategy.IsMuted != value)
+                    Strategy.IsMuted = value;
             }
         }
 
@@ -79,7 +70,7 @@ namespace Microsoft.Xna.Framework.Media
                 if (State == MediaState.Stopped)
                     return TimeSpan.Zero;
 
-                return PlatformGetPlayPosition();
+                return Strategy.PlatformGetPlayPosition();
             }
         }
 
@@ -88,14 +79,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public MediaState State
         { 
-            get
-            {
-                // Give the platform code a chance to update
-                // the playback state before we return the result.
-                Strategy.State = PlatformUpdateState(Strategy.State);
-
-                return Strategy.State;
-            }
+            get { return Strategy.State; }
         }
 
         /// <summary>
@@ -112,16 +96,7 @@ namespace Microsoft.Xna.Framework.Media
         public float Volume
         {
             get { return Strategy.Volume; }            
-            set
-            {
-                if (value < 0.0f || value > 1.0f)
-                    throw new ArgumentOutOfRangeException();
-
-                Strategy.Volume = value;
-
-                if (Strategy.Video != null)
-                    PlatformSetVolume();
-            }
+            set { Strategy.Volume = value; }
         }
 
         #endregion
@@ -130,9 +105,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public VideoPlayer()
         {
-            _strategy = new VideoPlayerStrategy();
-
-            PlatformInitialize();
+            _strategy = new ConcreteVideoPlayerStrategy();
         }
 
         /// <summary>
@@ -147,7 +120,7 @@ namespace Microsoft.Xna.Framework.Media
             if (Strategy.Video == null)
                 throw new InvalidOperationException("Operation is not valid due to the current state of the object");
 
-            Texture2D texture = PlatformGetTexture();
+            Texture2D texture = Strategy.PlatformGetTexture();
             System.Diagnostics.Debug.Assert(texture != null);
 
             return texture;
@@ -161,8 +134,7 @@ namespace Microsoft.Xna.Framework.Media
             if (Strategy.Video == null)
                 return;
 
-            PlatformPause();
-            Strategy.State = MediaState.Paused;
+            Strategy.PlatformPause();
         }
 
         /// <summary>
@@ -180,36 +152,17 @@ namespace Microsoft.Xna.Framework.Media
                 switch (state)
                 {
                     case MediaState.Stopped:
-                        break;
+                        Strategy.PlatformPlay(video);
+                        return;
                     case MediaState.Playing:
                         return;
                     case MediaState.Paused:
-                        PlatformResume();
+                        Strategy.PlatformResume();
                         return;
                 }
             }
 
-            Strategy.Video = video;
-            PlatformPlay(video);
-            Strategy.State = MediaState.Playing;
-
-#if WINDOWS
-            // XNA doesn't return until the video is playing
-            const int timeOutMs = 500;
-            Stopwatch timer = Stopwatch.StartNew();
-            while (State != MediaState.Playing)
-            {
-                Thread.Sleep(0);
-                if (timer.ElapsedMilliseconds > timeOutMs)
-                {
-                    timer.Stop();
-                    Stop(); // attempt to stop to fix any bad state
-                    throw new InvalidOperationException("cannot start video"); 
-                }
-            }
-            timer.Stop();
-#endif // WINDOWS
-
+            Strategy.PlatformPlay(video);
         }
 
         /// <summary>
@@ -224,13 +177,12 @@ namespace Microsoft.Xna.Framework.Media
             switch (state)
             {
                 case MediaState.Stopped:
-                    PlatformPlay(Strategy.Video);
+                    Strategy.PlatformPlay(Strategy.Video);
                     return;
                 case MediaState.Playing:
                     return;
                 case MediaState.Paused:
-                    PlatformResume();
-                    Strategy.State = MediaState.Playing;
+                    Strategy.PlatformResume();
                     break;
             }
 
@@ -242,11 +194,8 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Stop()
         {
-            if (Strategy.Video == null)
-                return;
-
-            PlatformStop();
-            Strategy.State = MediaState.Stopped;
+            if (Strategy.Video != null)
+                Strategy.PlatformStop();
         }
 
         #endregion
@@ -266,8 +215,6 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (!IsDisposed)
             {
-                PlatformDispose(disposing);
-
                 if (disposing)
                 {
                     Strategy.Dispose();

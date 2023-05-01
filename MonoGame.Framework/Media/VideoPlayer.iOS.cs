@@ -5,43 +5,84 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Media;
 using MediaPlayer;
 using Foundation;
 using UIKit;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         private NSObject _playbackDidFinishObserver;
 
-        private void PlatformInitialize()
+        public override MediaState State
+        {
+            get { return base.State; }
+            protected set { base.State = value; }
+        }
+
+        public override bool IsMuted
+        {
+            get { return base.IsMuted; }
+            set
+            {
+                base.IsMuted = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set
+            {
+                base.IsLooped = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+                if (base.Video != null)
+                    PlatformSetVolume();
+            }
+        }
+
+        public ConcreteVideoPlayerStrategy()
         {
 
         }
 
-        private Texture2D PlatformGetTexture()
+        public override Texture2D PlatformGetTexture()
         {
             throw new NotImplementedException();
         }
 
-        private MediaState PlatformUpdateState(MediaState currentState)
+        protected override void PlatformUpdateState(ref MediaState state)
         {
-            return currentState;
         }
 
-        private void PlatformPause()
+        public override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
-        private void PlatformResume()
+        public override void PlatformResume()
         {
-            Strategy.Video.MovieView.MoviePlayer.Play();
+            base.Video.MovieView.MoviePlayer.Play();
+            State = MediaState.Playing;
         }
 
-        private void PlatformPlay(Video video)
+        public override void PlatformPlay(Video video)
         {
+            base.Video = video;
+
             ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
             if (concreteGame == null)
                 throw new InvalidOperationException("No iOS GameStrategy instance was available");
@@ -51,13 +92,15 @@ namespace Microsoft.Xna.Framework.Media
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
-            Strategy.Video.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
+            base.Video.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            concreteGame.ViewController.PresentViewController(Strategy.Video.MovieView, false, null);
-            Strategy.Video.MovieView.MoviePlayer.Play();
+            concreteGame.ViewController.PresentViewController(base.Video.MovieView, false, null);
+            base.Video.MovieView.MoviePlayer.Play();
+
+            State = MediaState.Playing;
         }
 
-        private void PlatformStop()
+        public override void PlatformStop()
         {
             ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
             if (concreteGame == null)
@@ -69,38 +112,36 @@ namespace Microsoft.Xna.Framework.Media
                 _playbackDidFinishObserver = null;
             }
 
-            Strategy.Video.MovieView.MoviePlayer.Stop();
+            base.Video.MovieView.MoviePlayer.Stop();
             concreteGame.IsPlayingVideo = false;
             concreteGame.ViewController.DismissViewController(false, null);
+
+            State = MediaState.Stopped;
+        }
+
+        public override TimeSpan PlatformGetPlayPosition()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PlatformSetVolume()
+        {
+            throw new NotImplementedException();
         }
 
         private void OnStop(NSNotification e)
         {
-            Stop();
+            if (base.Video != null)
+                PlatformStop();
         }
 
-        private TimeSpan PlatformGetPlayPosition()
+        protected override void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
-        }
+            if (disposing)
+            {
+            }
 
-        private void PlatformSetIsLooped()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlatformSetIsMuted()
-        {
-            throw new NotImplementedException();
-        }
-
-        private TimeSpan PlatformSetVolume()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlatformDispose(bool disposing)
-        {
+            base.Dispose(disposing);
         }
     }
 }

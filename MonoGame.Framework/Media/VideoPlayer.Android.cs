@@ -5,77 +5,115 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Media;
 using Android.Widget;
-
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
+        public override MediaState State
+        {
+            get { return base.State; }
+            protected set { base.State = value; }
+        }
 
-        private void PlatformInitialize()
+        public override bool IsMuted
+        {
+            get { return base.IsMuted; }
+            set
+            {
+                base.IsMuted = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set
+            {
+                base.IsLooped = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+                if (base.Video != null)
+                    PlatformSetVolume();
+            }
+        }
+
+        public ConcreteVideoPlayerStrategy()
         {
             
         }
 
-        private Texture2D PlatformGetTexture()
+        public override Texture2D PlatformGetTexture()
         {
             throw new NotImplementedException();
         }
 
-        private MediaState PlatformUpdateState(MediaState currentState)
+        protected override void PlatformUpdateState(ref MediaState state)
         {
-            return currentState;
         }
 
-        private void PlatformPause()
+        public override void PlatformPause()
         {
-            Strategy.Video.Player.Pause();
+            base.Video.Player.Pause();
+            State = MediaState.Paused;
         }
 
-        private void PlatformResume()
+        public override void PlatformResume()
         {
-            Strategy.Video.Player.Start();
+            base.Video.Player.Start();
+            State = MediaState.Playing;
         }
 
-        private void PlatformPlay(Video video)
+        public override void PlatformPlay(Video video)
         {
-            Strategy.Video.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
-            Strategy.Video.Player.Start();
+            base.Video = video;
+
+            base.Video.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
+            base.Video.Player.Start();
 
             ConcreteGame.IsPlayingVideo = true;
+
+            State = MediaState.Playing;
         }
 
-        private void PlatformStop()
+        public override void PlatformStop()
         {
-            Strategy.Video.Player.Stop();
+            base.Video.Player.Stop();
 
             ConcreteGame.IsPlayingVideo = false;
-            Strategy.Video.Player.SetDisplay(null);
+            base.Video.Player.SetDisplay(null);
+
+            State = MediaState.Stopped;
         }
 
-        private void PlatformSetIsLooped()
+        public override TimeSpan PlatformGetPlayPosition()
         {
             throw new NotImplementedException();
         }
 
-        private void PlatformSetIsMuted()
+        private void PlatformSetVolume()
         {
             throw new NotImplementedException();
         }
 
-        private TimeSpan PlatformGetPlayPosition()
+        protected override void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
-        }
+            if (disposing)
+            {
+            }
 
-        private TimeSpan PlatformSetVolume()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlatformDispose(bool disposing)
-        {
+            base.Dispose(disposing);
         }
     }
 }

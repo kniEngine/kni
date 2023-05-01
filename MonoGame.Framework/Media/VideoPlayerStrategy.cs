@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    /*abstract*/ public class VideoPlayerStrategy : IDisposable
+    abstract public class VideoPlayerStrategy : IDisposable
     {
         private MediaState _state = MediaState.Stopped;
 
@@ -19,20 +19,30 @@ namespace Microsoft.Xna.Platform.Media
 
         public virtual MediaState State
         {
-            get { return _state; }
-            set { _state = value; }
+            get
+            {
+                PlatformUpdateState(ref _state);
+                return _state;
+            }
+            protected set { _state = value; }
         }
 
         public virtual Video Video
         {
             get { return _currentVideo; }
-            set { _currentVideo = value; }
+            protected set { _currentVideo = value; }
         }
 
         public virtual float Volume
         {
             get { return _volume; }
-            set { _volume = value; }
+            set
+            {
+                if (value < 0.0f || value > 1.0f)
+                    throw new ArgumentOutOfRangeException();
+
+                _volume = value;
+            }
         }
 
         public virtual bool IsLooped
@@ -52,6 +62,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             Dispose(false);
         }
+
+        protected abstract void PlatformUpdateState(ref MediaState state);
 
         virtual public TimeSpan PlatformGetPlayPosition()
         {

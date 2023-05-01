@@ -2,73 +2,104 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
 
-        private void PlatformInitialize()
+        public override MediaState State
+        {
+            get { return base.State; }
+            protected set { base.State = value; }
+        }
+
+        public override bool IsMuted
+        {
+            get { return base.IsMuted; }
+            set
+            {
+                base.IsMuted = value;
+                throw new PlatformNotSupportedException();
+            }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set
+            {
+                base.IsLooped = value;
+                throw new PlatformNotSupportedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+                if (base.Video != null)
+                    PlatformSetVolume();
+            }
+        }
+
+        public ConcreteVideoPlayerStrategy()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private Texture2D PlatformGetTexture()
+        public override Texture2D PlatformGetTexture()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private MediaState PlatformUpdateState(MediaState currentState)
+        protected override void PlatformUpdateState(ref MediaState state)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformPause()
+        public override void PlatformPause()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformResume()
+        public override void PlatformResume()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformPlay(Video video)
+        public override void PlatformPlay(Video video)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformStop()
+        public override void PlatformStop()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformSetIsLooped()
+        public override TimeSpan PlatformGetPlayPosition()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformSetIsMuted()
+        private void PlatformSetVolume()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private TimeSpan PlatformGetPlayPosition()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private TimeSpan PlatformSetVolume()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
             }
 
+            base.Dispose(disposing);
         }
     }
 }
