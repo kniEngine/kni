@@ -453,6 +453,7 @@
     <Compile Include="Media\Video.cs" />
     <Compile Include="Media\Video.IOS.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
+    <Compile Include="Media\VideoPlayerStrategy.cs" />
     <Compile Include="Media\VideoPlayer.IOS.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerReading.cs" />

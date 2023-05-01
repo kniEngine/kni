@@ -489,6 +489,7 @@
     <Compile Include="Media\Video.cs" />
     <Compile Include="Media\Video.WME.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
+    <Compile Include="Media\VideoPlayerStrategy.cs" />
     <Compile Include="Media\VideoPlayer.WME.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\FileHelpers.cs" />

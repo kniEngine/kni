@@ -4,7 +4,7 @@
 
 using System;
 using System.IO;
-using System.Linq;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -13,7 +13,8 @@ namespace Microsoft.Xna.Framework.Media
     /// </summary>
     public sealed partial class Video : IDisposable
     {
-        internal Android.Media.MediaPlayer Player;
+        internal Android.Media.MediaPlayer Player { get; private set; }
+
 
         private void PlatformInitialize()
         {

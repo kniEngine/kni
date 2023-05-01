@@ -4,6 +4,8 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Media;
 using Foundation;
 using AVFoundation;
 using RectF = CoreGraphics.CGRect;
@@ -13,42 +15,83 @@ using CoreAnimation;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         NSSDLWindow nsWindow;
         AVPlayerLayer layer;
         NSView view;
 
-        private void PlatformInitialize()
+        public override MediaState State
+        {
+            get { return base.State; }
+            protected set { base.State = value; }
+        }
+
+        public override bool IsMuted
+        {
+            get { return base.IsMuted; }
+            set
+            {
+                base.IsMuted = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set
+            {
+                base.IsLooped = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+                if (base.Video != null)
+                    PlatformSetVolume();
+            }
+        }
+
+        public ConcreteVideoPlayerStrategy()
         {
             Sdl.Window.SDL_SysWMinfo sys = new Sdl.Window.SDL_SysWMinfo();
             Sdl.Window.GetWindowWMInfo(Game.Instance.Window.Handle, ref sys);
             nsWindow = new NSSDLWindow(sys.window);
         }
 
-        private Texture2D PlatformGetTexture()
+        public override Texture2D PlatformGetTexture()
         {
             throw new NotImplementedException();
         }
 
-        private void PlatformGetState(ref MediaState result)
+        protected override void PlatformUpdateState(ref MediaState state)
         {
         }
 
-        private void PlatformPause()
+        public override void PlatformPause()
         {
-            _currentVideo.Player.Pause();
+            base.Video.Player.Pause();
+            State = MediaState.Paused;
         }
 
-        private void PlatformResume()
+        public override void PlatformResume()
         {
-            _currentVideo.Volume = _volume;
-            _currentVideo.Player.Play();
+            base.Video.Volume = _volume;
+            base.Video.Player.Play();
+            State = MediaState.Playing;
         }
 
-        private void PlatformPlay()
+        public override void PlatformPlay(Video video)
         {
-            layer = AVPlayerLayer.FromPlayer(_currentVideo.Player);
+            base.Video = video;
+
+            layer = AVPlayerLayer.FromPlayer(base.Video.Player);
             view = new NSView(nsWindow.ContentView.Frame);
             view.WantsLayer = true;
             view.Layer = layer;
@@ -65,14 +108,15 @@ namespace Microsoft.Xna.Framework.Media
 
             });
 
-            _currentVideo.Volume = _volume;
-            _currentVideo.Player.Play();
+            base.Video.Volume = _volume;
+            base.Video.Player.Play();
 
+            State = MediaState.Playing;
         }
 
-        private void PlatformStop()
+        public override void PlatformStop()
         {
-            var movieView = _currentVideo.Player;
+            var movieView = base.Video.Player;
             movieView.Pause();
             movieView.Seek(CoreMedia.CMTime.Zero);
 
@@ -82,30 +126,27 @@ namespace Microsoft.Xna.Framework.Media
             view = null;
             layer.Dispose();
             layer = null;
+
+            State = MediaState.Stopped;
+        }
+
+        public override TimeSpan PlatformGetPlayPosition()
+        {
+            return base.Video.CurrentPosition;
         }
 
         private void PlatformSetVolume()
         {
-            _currentVideo.Volume = _volume;
+            base.Video.Volume = _volume;
         }
 
-        private void PlatformSetIsLooped()
+        protected override void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
-        }
+            if (disposing)
+            {
+            }
 
-        private void PlatformSetIsMuted()
-        {
-            throw new NotImplementedException();
-        }
-
-        private TimeSpan PlatformGetPlayPosition()
-        {
-            return _currentVideo.CurrentPosition;
-        }
-
-        private void PlatformDispose(bool disposing)
-        {
+            base.Dispose(disposing);
         }
     }
 

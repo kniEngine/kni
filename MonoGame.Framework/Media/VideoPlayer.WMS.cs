@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
@@ -12,7 +13,7 @@ using SharpDX.Win32;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class VideoPlayer : IDisposable
+    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         private static MediaSession _session;
         private static AudioStreamVolume _volumeController;
@@ -30,9 +31,9 @@ namespace Microsoft.Xna.Framework.Media
 
         private class Callback : IAsyncCallback
         {
-            private VideoPlayer _player;
+            private ConcreteVideoPlayerStrategy _player;
 
-            public Callback(VideoPlayer player)
+            public Callback(ConcreteVideoPlayerStrategy player)
             {
                 _player = player;
             }
@@ -73,31 +74,69 @@ namespace Microsoft.Xna.Framework.Media
             public WorkQueueId WorkQueueId { get; private set; }
         }
 
+        public override MediaState State
+        {
+            get { return base.State; }
+            protected set { base.State = value; }
+        }
 
-        private void PlatformInitialize()
+        public override bool IsMuted
+        {
+            get { return base.IsMuted; }
+            set
+            {
+                base.IsMuted = value;
+                if (_volumeController != null)
+                    SetChannelVolumes();
+            }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set
+            {
+                base.IsLooped = value;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+                if (base.Video != null)
+                    if (_volumeController != null)
+                        SetChannelVolumes();
+            }
+        }
+
+        public ConcreteVideoPlayerStrategy()
         {
             // The GUID is specified in a GuidAttribute attached to the class
             AudioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
 
             MediaManagerState.CheckStartup();
             MediaFactory.CreateMediaSession(null, out _session);
-
         }
 
-        private Texture2D PlatformGetTexture()
+        public override Texture2D PlatformGetTexture()
         {
             if (_lastFrame != null)
             {
-                if (_lastFrame.Width != _currentVideo.Width || _lastFrame.Height != _currentVideo.Height)
+                if (_lastFrame.Width != base.Video.Width || _lastFrame.Height != base.Video.Height)
                 {
                     _lastFrame.Dispose();
                     _lastFrame = null;
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(_currentVideo.GraphicsDevice, _currentVideo.Width, _currentVideo.Height, false, SurfaceFormat.Bgr32);
+                _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
-            VideoSampleGrabber sampleGrabber = _currentVideo.SampleGrabber;
+
+            VideoSampleGrabber sampleGrabber = base.Video.SampleGrabber;
             byte[] texData = sampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
@@ -105,35 +144,44 @@ namespace Microsoft.Xna.Framework.Media
             return _lastFrame;
         }
 
-        private void PlatformGetState(ref MediaState result)
+        protected override void PlatformUpdateState(ref MediaState state)
         {
             if (_clock != null)
             {
-                ClockState state;
-                _clock.GetState(0, out state);
+                ClockState clockState;
+                _clock.GetState(0, out clockState);
 
-                switch (state)
+                switch (clockState)
                 {
                     case ClockState.Running:
-                        result = MediaState.Playing;
+                        state = MediaState.Playing;
                         return;
 
                     case ClockState.Paused:
-                        result = MediaState.Paused;
+                        state = MediaState.Paused;
                         return;
                 }
             }
 
-            result = MediaState.Stopped;
+            state = MediaState.Stopped;
         }
 
-        private void PlatformPause()
+        public override void PlatformPause()
         {
             _session.Pause();
+            State = MediaState.Paused;
         }
 
-        private void PlatformPlay()
+        public override void PlatformResume()
         {
+            _session.Start(null, _positionCurrent);
+            State = MediaState.Playing;
+        }
+
+        public override void PlatformPlay(Video video)
+        {
+            base.Video = video;
+
             // Cleanup the last song first.
             if (State != MediaState.Stopped)
             {
@@ -156,21 +204,39 @@ namespace Microsoft.Xna.Framework.Media
             }
 
             // Set the new song.
-            _session.SetTopology(SessionSetTopologyFlags.Immediate, _currentVideo.Topology);
+            _session.SetTopology(SessionSetTopologyFlags.Immediate, base.Video.Topology);
 
             // Get the clock.
             _clock = _session.Clock.QueryInterface<PresentationClock>();
 
             // Start playing.
             _session.Start(null, _positionCurrent);
+
+            State = MediaState.Playing;
+
+
+            // XNA doesn't return until the video is playing
+            const int timeOutMs = 500;
+            Stopwatch timer = Stopwatch.StartNew();
+            while (State != MediaState.Playing)
+            {
+                Thread.Sleep(0);
+                if (timer.ElapsedMilliseconds > timeOutMs)
+                {
+                    timer.Stop();
+
+                    // attempt to stop to fix any bad state
+                    if (base.Video != null)
+                        PlatformStop();
+
+                    throw new InvalidOperationException("cannot start video");
+                }
+            }
+            timer.Stop();
+
         }
 
-        private void PlatformResume()
-        {
-            _session.Start(null, _positionCurrent);
-        }
-
-        private void PlatformStop()
+        public override void PlatformStop()
         {
             _session.ClearTopologies();
             _session.Stop();
@@ -185,13 +251,15 @@ namespace Microsoft.Xna.Framework.Media
                 _clock.Dispose();
             }
             _clock = null;
+
+            State = MediaState.Stopped;
         }
 
         private void SetChannelVolumes()
         {
             if (_volumeController != null && !_volumeController.IsDisposed)
             {
-                float volume = _volume;
+                float volume = base.Volume;
                 if (IsMuted)
                     volume = 0.0f;
 
@@ -202,41 +270,9 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        private void PlatformSetVolume()
-        {
-            if (_volumeController == null)
-                return;
-
-            SetChannelVolumes();
-        }
-
-        private void PlatformSetIsLooped()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlatformSetIsMuted()
-        {
-            if (_volumeController == null)
-                return;
-
-            SetChannelVolumes();
-        }
-
-        private TimeSpan PlatformGetPlayPosition()
+        public override TimeSpan PlatformGetPlayPosition()
         {
             return TimeSpan.FromTicks(_clock.Time);
-        }
-
-        private void PlatformDispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_lastFrame != null)
-                    _lastFrame.Dispose();
-                _lastFrame = null;
-            }
-
         }
 
         private void OnTopologyReady()
@@ -250,6 +286,18 @@ namespace Microsoft.Xna.Framework.Media
             _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
 
             SetChannelVolumes();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_lastFrame != null)
+                    _lastFrame.Dispose();
+                _lastFrame = null;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
