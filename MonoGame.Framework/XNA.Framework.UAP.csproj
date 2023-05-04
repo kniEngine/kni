@@ -467,6 +467,7 @@
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
     <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
+    <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
@@ -489,7 +490,6 @@
     <Compile Include="Media\VideoSoundtrackType.cs" />
     <Compile Include="Media\Video.cs" />
     <Compile Include="Media\VideoStrategy.cs" />
-    <Compile Include="Media\Video.WME.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayerStrategy.cs" />
     <Compile Include="Utilities\Hash.cs" />
