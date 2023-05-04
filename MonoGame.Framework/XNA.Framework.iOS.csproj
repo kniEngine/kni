@@ -452,6 +452,7 @@
     <Compile Include="Media\SongStrategy.cs" />
     <Compile Include="Media\VideoSoundtrackType.cs" />
     <Compile Include="Media\Video.cs" />
+    <Compile Include="Media\VideoStrategy.cs" />
     <Compile Include="Media\Video.IOS.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayerStrategy.cs" />
