@@ -5,13 +5,14 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 
 
 using SharpDX.MediaFoundation;
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {

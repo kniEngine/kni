@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {

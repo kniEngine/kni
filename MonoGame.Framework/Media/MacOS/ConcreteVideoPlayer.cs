@@ -2,10 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 using Foundation;
 using AVFoundation;
 using RectF = CoreGraphics.CGRect;
@@ -13,7 +15,7 @@ using AppKit;
 using CoreAnimation;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
