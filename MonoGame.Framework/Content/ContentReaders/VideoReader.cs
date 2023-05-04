@@ -15,20 +15,20 @@ namespace Microsoft.Xna.Framework.Content
         {
             string path = input.ReadObject<string>();
 
-            if (!string.IsNullOrEmpty(path))
+            if (!String.IsNullOrEmpty(path))
             {
                 // Add the ContentManager's RootDirectory
-                var dirPath = Path.Combine(input.ContentManager.RootDirectoryFullPath, input.AssetName);
+                string dirPath = Path.Combine(input.ContentManager.RootDirectoryFullPath, input.AssetName);
 
                 // Resolve the relative path
                 path = FileHelpers.ResolveRelativePath(dirPath, path);
             }
 
-            var durationMS = input.ReadObject<int>();
-            var width = input.ReadObject<int>();
-            var height = input.ReadObject<int>();
-            var framesPerSecond = input.ReadObject<float>();
-            var soundTrackType = input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
+            int durationMS = input.ReadObject<int>();
+            int width = input.ReadObject<int>();
+            int height = input.ReadObject<int>();
+            float framesPerSecond = input.ReadObject<float>();
+            int soundTrackType = input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
 
             return new Video(input.GetGraphicsDevice(), path, durationMS)
             {
