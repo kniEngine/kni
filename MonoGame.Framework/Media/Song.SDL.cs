@@ -7,9 +7,10 @@ using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Media;
 using NVorbis;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : SongStrategy
+    public sealed class ConcreteSongStrategy : SongStrategy
     {
         DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
         VorbisReader _reader;
@@ -19,59 +20,54 @@ namespace Microsoft.Xna.Framework.Media
         private float _volume = 1f;
 
 
-        internal override Album PlatformGetAlbum()
+        public override Album Album
         {
-            return null;
+            get { return null; }
         }
 
-        internal override void PlatformSetAlbum(Album album)
+        public override Artist Artist
         {
-
+            get { return null; }
         }
 
-        internal override Artist PlatformGetArtist()
+        public override Genre Genre
         {
-            return null;
+            get { return null; }
         }
 
-        internal override Genre PlatformGetGenre()
+        public override TimeSpan Duration
         {
-            return null;
+            get { return base.Duration; }
         }
 
-        internal override TimeSpan PlatformGetDuration()
+        public override bool IsProtected
         {
-            return _duration;
+            get { return base.IsProtected; }
         }
 
-        internal override bool PlatformIsProtected()
+        public override bool IsRated
         {
-            return false;
+            get { return base.IsRated; }
         }
 
-        internal override bool PlatformIsRated()
+        public override string Name
         {
-            return false;
+            get { return Path.GetFileNameWithoutExtension(base.Name); }
         }
 
-        internal override string PlatformGetName()
+        public override int PlayCount
         {
-            return Path.GetFileNameWithoutExtension(_name);
+            get { return base.PlayCount; }
         }
 
-        internal override int PlatformGetPlayCount()
+        public override int Rating
         {
-            return _playCount;
+            get { return base.Rating; }
         }
 
-        internal override int PlatformGetRating()
+        public override int TrackNumber
         {
-            return 0;
-        }
-
-        internal override int PlatformGetTrackNumber()
-        {
-            return 0;
+            get { return base.TrackNumber; }
         }
 
 
@@ -86,14 +82,6 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (DonePlaying == null)
                 DonePlaying += handler;
-        }
-
-        internal override void PlatformDispose(bool disposing)
-        {
-            if (disposing)
-            {
-                DestroyPlayer();
-            }
         }
 
         internal void Play()
@@ -111,7 +99,7 @@ namespace Microsoft.Xna.Framework.Media
                 case SoundState.Stopped:
                     _player.Volume = _volume;
                     _player.Play();
-                    _playCount++;
+                    PlayCount++;
                     return;
             }
         }
@@ -163,8 +151,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_player == null)
             {
-                _reader = new VorbisReader(_name);
-                _duration = _reader.TotalTime;
+                _reader = new VorbisReader(Name);
+                Duration = _reader.TotalTime;
 
                 int samples = (_reader.SampleRate * _reader.Channels) / 2;
                 _sampleBuffer = new float[samples];
@@ -175,22 +163,6 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        private void DestroyPlayer()
-        {
-            if (_player != null)
-            {
-                _player.BufferNeeded -= sfxi_BufferNeeded;
-                _player.Dispose();
-            }
-            _player = null;
-
-            if (_reader != null)
-                _reader.Dispose();
-            _reader = null;
-
-            _sampleBuffer = null;
-            _dataBuffer = null;
-        }
 
         private void sfxi_BufferNeeded(object sender, EventArgs e)
         {
@@ -239,6 +211,32 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
+        private void DestroyPlayer()
+        {
+            if (_player != null)
+            {
+                _player.BufferNeeded -= sfxi_BufferNeeded;
+                _player.Dispose();
+            }
+            _player = null;
+
+            if (_reader != null)
+                _reader.Dispose();
+            _reader = null;
+
+            _sampleBuffer = null;
+            _dataBuffer = null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DestroyPlayer();
+            }
+
+            //base.Dispose(disposing);
+        }
     }
 }
 

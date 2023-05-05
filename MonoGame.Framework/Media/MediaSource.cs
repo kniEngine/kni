@@ -12,38 +12,34 @@ namespace Microsoft.Xna.Framework.Media
 {
 	public sealed class MediaSource
     {
-		private MediaSourceType _type;
 		private string _name;
-		internal MediaSource (string name, MediaSourceType type)
+		private MediaSourceType _type;
+
+		internal MediaSource(string name, MediaSourceType type)
 		{
 			_name = name;
 			_type = type;
 		}
-				
-        public Microsoft.Xna.Framework.Media.MediaSourceType MediaSourceType
-        {
-            get
-            {
-				return _type;
-            }
-        }
 
         public string Name
         {
-            get
-            {
-				return _name;
-            }
+            get { return _name; }
+        }
+				
+        public MediaSourceType MediaSourceType
+        {
+            get { return _type; }
         }
 	
 		public static IList<MediaSource> GetAvailableMediaSources()
         {
 #if IOS || TVOS
 			MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
-#else
-			MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
-#endif
 			return result;
+#else
+            MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
+			return result;
+#endif
         }
     }
 }

@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Media
             
             foreach (Song queuedSong in Queue.Songs)
             {
-                queuedSong.Volume = innerVolume;
+                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
             }
         }
 

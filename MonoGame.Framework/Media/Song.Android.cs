@@ -11,18 +11,31 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : SongStrategy
+    public sealed partial class Song
+    {
+        internal Song(Album album, Artist artist, Genre genre, string name, TimeSpan duration, Android.Net.Uri assetUri)
+        {
+            _strategy = new ConcreteSongStrategy();
+
+            _strategy.Album = album;
+            _strategy.Artist = artist;
+            _strategy.Genre = genre;
+            ((ConcreteSongStrategy)_strategy)._name2 = name;
+            ((ConcreteSongStrategy)_strategy)._duration2 = duration;
+            ((ConcreteSongStrategy)_strategy)._assetUri = assetUri;
+        }
+    }
+
+    public sealed class ConcreteSongStrategy : SongStrategy
     {
         static Android.Media.MediaPlayer _androidPlayer;
-        static Song _playingSong;
+        static ConcreteSongStrategy _playingSong;
 
-        private Album _album;
-        private Artist _artist;
-        private Genre _genre;
-        private string _name2;
-        private TimeSpan _duration2;
+        internal string _name2;
+        internal TimeSpan _duration2;
+
+        internal Android.Net.Uri _assetUri;
         private TimeSpan _position;
-        private Android.Net.Uri _assetUri;
 
         [CLSCompliant(false)]
         public Android.Net.Uri AssetUri
@@ -30,27 +43,16 @@ namespace Microsoft.Xna.Framework.Media
             get { return this._assetUri; }
         }
 
-        static Song()
+        static ConcreteSongStrategy()
         {
             // TODO: Move _androidPlayer to MediaPlayer
             _androidPlayer = new Android.Media.MediaPlayer();
             _androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
-        internal Song(Album album, Artist artist, Genre genre, string name, TimeSpan duration, Android.Net.Uri assetUri)
-        {
-            _strategy = this;
-            this._album = album;
-            this._artist = artist;
-            this._genre = genre;
-            this._name2 = name;
-            this._duration2 = duration;
-            this._assetUri = assetUri;
-        }
 
         internal override void PlatformInitialize(string fileName)
         {
-            // Nothing to do here
         }
 
         static void AndroidPlayer_Completion(object sender, EventArgs e)
@@ -60,7 +62,7 @@ namespace Microsoft.Xna.Framework.Media
 
             if (playingSong != null)
             {
-                var handler = playingSong.DonePlaying;
+                var handler = ((ConcreteSongStrategy)playingSong).DonePlaying;
                 if (handler != null)
                     handler(playingSong, EventArgs.Empty);
             }
@@ -78,15 +80,6 @@ namespace Microsoft.Xna.Framework.Media
                 DonePlaying += handler;
         }
 
-        internal override void PlatformDispose(bool disposing)
-        {
-            // Appears to be a noOp on Android
-
-            if (disposing)
-            {
-            }
-        }
-
         internal void Play()
         {
             // Prepare the player
@@ -98,7 +91,7 @@ namespace Microsoft.Xna.Framework.Media
             }
             else
             {
-                var afd = AndroidGameWindow.Activity.Assets.OpenFd(_name);
+                var afd = AndroidGameWindow.Activity.Assets.OpenFd(Name);
                 if (afd == null)
                     return;
 
@@ -111,7 +104,7 @@ namespace Microsoft.Xna.Framework.Media
             _playingSong = this;
 
             _androidPlayer.Start();
-            _playCount++;
+            PlayCount++;
         }
 
         internal void Pause()
@@ -128,7 +121,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             _androidPlayer.Stop();
             _playingSong = null;
-            _playCount = 0;
+            PlayCount = 0;
             _position = TimeSpan.Zero;
         }
 
@@ -156,59 +149,75 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        internal override Album PlatformGetAlbum()
+        public override Album Album
         {
-            return this._album;
+            get { return base.Album; }
         }
 
-        internal override void PlatformSetAlbum(Album album)
+        public override Artist Artist
         {
-            this._album = album;
+            get { return base.Artist; }
         }
 
-        internal override Artist PlatformGetArtist()
+        public override Genre Genre
         {
-            return this._artist;
+            get { return base.Genre; }
         }
 
-        internal override Genre PlatformGetGenre()
+        public override TimeSpan Duration
         {
-            return this._genre;
+            get
+            {
+                if (this._assetUri != null)
+                    return this._duration2;
+
+                return base.Duration;
+            }
         }
 
-        internal override TimeSpan PlatformGetDuration()
+        public override bool IsProtected
         {
-            return this._assetUri != null ? this._duration2 : _duration;
+            get { return base.IsProtected; }
         }
 
-        internal override bool PlatformIsProtected()
+        public override bool IsRated
         {
-            return false;
+            get { return base.IsRated; }
         }
 
-        internal override bool PlatformIsRated()
+        public override string Name
         {
-            return false;
+            get
+            {
+                if (this._assetUri != null)
+                    return this._name2;
+
+                return Path.GetFileNameWithoutExtension(base.Name);
+            }
         }
 
-        internal override string PlatformGetName()
+        public override int PlayCount
         {
-            return this._assetUri != null ? this._name2 : Path.GetFileNameWithoutExtension(_name);
+            get { return base.PlayCount; }
         }
 
-        internal override int PlatformGetPlayCount()
+        public override int Rating
         {
-            return _playCount;
+            get { return base.Rating; }
         }
 
-        internal override int PlatformGetRating()
+        public override int TrackNumber
         {
-            return 0;
+            get { return base.TrackNumber; }
         }
 
-        internal override int PlatformGetTrackNumber()
+        protected override void Dispose(bool disposing)
         {
-            return 0;
+            if (disposing)
+            {
+            }
+
+            //base.Dispose(disposing);
         }
     }
 }

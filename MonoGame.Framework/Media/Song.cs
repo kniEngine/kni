@@ -2,64 +2,63 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed partial class Song : IEquatable<Song>, IDisposable
     {
-        internal SongStrategy _strategy;
-        private string _name;
-		private int _playCount = 0;
-        private TimeSpan _duration = TimeSpan.Zero;
+        private SongStrategy _strategy;
         bool _isDisposed;
+
+        public SongStrategy Strategy { get { return _strategy; } }
+
+        public bool IsDisposed { get { return _isDisposed; } }
 
         /// <summary>
         /// Gets the Album on which the Song appears.
         /// </summary>
-        public Album Album
-        {
-            get { return _strategy.PlatformGetAlbum(); }
-#if WINDOWS_UAP
-            internal set { _strategy.PlatformSetAlbum(value); }
-#endif
-        }
+        public Album Album { get { return _strategy.Album; } }
 
         /// <summary>
         /// Gets the Artist of the Song.
         /// </summary>
-        public Artist Artist
-        {
-            get { return _strategy.PlatformGetArtist(); }
-        }
+        public Artist Artist { get { return _strategy.Artist; } }
 
         /// <summary>
         /// Gets the Genre of the Song.
         /// </summary>
-        public Genre Genre
-        {
-            get { return _strategy.PlatformGetGenre(); }
-        }
-        
-        public bool IsDisposed
-        {
-            get { return _isDisposed; }
-        }
+        public Genre Genre { get { return _strategy.Genre; } }
+		
+        public TimeSpan Duration { get { return _strategy.Duration; } }
+
+        public bool IsProtected { get { return _strategy.IsProtected; } }
+
+        public bool IsRated { get { return _strategy.IsRated; } }
+
+        public string Name { get { return _strategy.Name; } }
+
+        public int PlayCount { get { return _strategy.PlayCount; } }
+
+        public int Rating { get { return _strategy.Rating; } }
+
+        public int TrackNumber { get { return _strategy.TrackNumber; } }
 
         internal Song(string fileName, int durationMS)
             : this(fileName)
         {
-            _strategy = this;
-            _duration = TimeSpan.FromMilliseconds(durationMS);
+            _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
 		internal Song(string fileName)
 		{
-            _strategy = this;
-			_name = fileName;
-
+            _strategy = new ConcreteSongStrategy();
+			_strategy.Name = fileName;
             _strategy.PlatformInitialize(fileName);
         }
 
@@ -68,10 +67,6 @@ namespace Microsoft.Xna.Framework.Media
             Dispose(false);
         }
 
-        internal string FilePath
-		{
-			get { return _name; }
-		}
 
         /// <summary>
         /// Returns a song that can be played via <see cref="MediaPlayer"/>.
@@ -82,99 +77,66 @@ namespace Microsoft.Xna.Framework.Media
         public static Song FromUri(string name, Uri uri)
         {
             var song = new Song(uri.OriginalString);
-            song._name = name;
+            song.Strategy.Name = name;
             return song;
         }
-		
-		public void Dispose()
+
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public bool Equals(Song other)
+        {
+#if DIRECTX
+            return (other != null && _strategy.Name == other._strategy.Name);
+#else
+            return ((object)other != null) && (Name == other.Name);
+#endif
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            return Equals(obj as Song);
+        }
+
+        public static bool operator ==(Song left, Song right)
+        {
+            if ((object)left == null)
+            {
+                return (object)right == null;
+            }
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Song left, Song right)
+        {
+            return !(left == right);
+        }
+
+
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         void Dispose(bool disposing)
         {
             if (!_isDisposed)
             {
-                _strategy.PlatformDispose(disposing);
+                if (disposing)
+                    _strategy.Dispose();
 
                 _isDisposed = true;
             }
-        }
-
-        public override int GetHashCode ()
-		{
-			return base.GetHashCode ();
-		}
-
-        public bool Equals(Song song)
-        {
-#if DIRECTX
-            return song != null && song.FilePath == FilePath;
-#else
-			return ((object)song != null) && (Name == song.Name);
-#endif
-		}
-		
-		
-		public override bool Equals(Object obj)
-		{
-			if(obj == null)
-			{
-				return false;
-			}
-			
-			return Equals(obj as Song);  
-		}
-		
-		public static bool operator ==(Song left, Song right)
-		{
-			if((object)left == null)
-			{
-				return (object)right == null;
-			}
-
-			return left.Equals(right);
-		}
-		
-		public static bool operator !=(Song left, Song right)
-		{
-		  return ! (left == right);
-		}
-
-        public TimeSpan Duration
-        {
-            get { return _strategy.PlatformGetDuration(); }
-        }	
-
-        public bool IsProtected
-        {
-            get { return _strategy.PlatformIsProtected(); }
-        }
-
-        public bool IsRated
-        {
-            get { return _strategy.PlatformIsRated(); }
-        }
-
-        public string Name
-        {
-            get { return _strategy.PlatformGetName(); }
-        }
-
-        public int PlayCount
-        {
-            get { return _strategy.PlatformGetPlayCount(); }
-        }
-
-        public int Rating
-        {
-            get { return _strategy.PlatformGetRating(); }
-        }
-
-        public int TrackNumber
-        {
-            get { return _strategy.PlatformGetTrackNumber(); }
         }
     }
 }

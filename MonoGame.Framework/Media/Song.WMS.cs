@@ -2,15 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.IO;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using Microsoft.Xna.Platform.Media;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : SongStrategy
+    public sealed class ConcreteSongStrategy : SongStrategy
     {
         private Topology _topology;
 
@@ -29,7 +32,7 @@ namespace Microsoft.Xna.Framework.Media
             {
                 SourceResolver resolver = new SourceResolver();
 
-                ComObject source = resolver.CreateObjectFromURL(FilePath, SourceResolverFlags.MediaSource);
+                ComObject source = resolver.CreateObjectFromURL(Name, SourceResolverFlags.MediaSource);
                 mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();
@@ -82,7 +85,57 @@ namespace Microsoft.Xna.Framework.Media
             mediaSource.Dispose();
         }
 
-        internal override void PlatformDispose(bool disposing)
+        public override Album Album
+        {
+            get { return null; }
+        }
+
+        public override Artist Artist
+        {
+            get { return null; }
+        }
+
+        public override Genre Genre
+        {
+            get { return null; }
+        }
+
+        public override TimeSpan Duration
+        {
+            get { return base.Duration; }
+        }
+
+        public override bool IsProtected
+        {
+            get { return base.IsProtected; }
+        }
+
+        public override bool IsRated
+        {
+            get { return base.IsRated; }
+        }
+
+        public override string Name
+        {
+            get { return Path.GetFileNameWithoutExtension(base.Name); }
+        }
+
+        public override int PlayCount
+        {
+            get { return base.PlayCount; }
+        }
+
+        public override int Rating
+        {
+            get { return base.Rating; }
+        }
+
+        public override int TrackNumber
+        {
+            get { return base.TrackNumber; }
+        }
+
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -92,61 +145,9 @@ namespace Microsoft.Xna.Framework.Media
                     _topology = null;
                 }
             }
-        }
 
-        internal override Album PlatformGetAlbum()
-        {
-            return null;
-        }
+            //base.Dispose(disposing);
 
-        internal override void PlatformSetAlbum(Album album)
-        {
-            
-        }
-
-        internal override Artist PlatformGetArtist()
-        {
-            return null;
-        }
-
-        internal override Genre PlatformGetGenre()
-        {
-            return null;
-        }
-
-        internal override TimeSpan PlatformGetDuration()
-        {
-            return _duration;
-        }
-
-        internal override bool PlatformIsProtected()
-        {
-            return false;
-        }
-
-        internal override bool PlatformIsRated()
-        {
-            return false;
-        }
-
-        internal override string PlatformGetName()
-        {
-            return Path.GetFileNameWithoutExtension(_name);
-        }
-
-        internal override int PlatformGetPlayCount()
-        {
-            return _playCount;
-        }
-
-        internal override int PlatformGetRating()
-        {
-            return 0;
-        }
-
-        internal override int PlatformGetTrackNumber()
-        {
-            return 0;
         }
     }
 }

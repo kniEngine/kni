@@ -4,9 +4,10 @@ using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : SongStrategy
+    public sealed class ConcreteSongStrategy : SongStrategy
     {
         internal override void PlatformInitialize(string fileName)
         {
@@ -19,74 +20,69 @@ namespace Microsoft.Xna.Framework.Media
 			set { throw new PlatformNotSupportedException(); }			
 		}
 
-		internal TimeSpan Position
+        internal TimeSpan Position
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override Album PlatformGetAlbum()
+        public override Album Album
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override void PlatformSetAlbum(Album album)
+        public override Artist Artist
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override Artist PlatformGetArtist()
+        public override Genre Genre
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override Genre PlatformGetGenre()
+        public override TimeSpan Duration
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override TimeSpan PlatformGetDuration()
+        public override bool IsProtected
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformIsProtected()
+        public override bool IsRated
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformIsRated()
+        public override string Name
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override string PlatformGetName()
+        public override int PlayCount
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override int PlatformGetPlayCount()
+        public override int Rating
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override int PlatformGetRating()
+        public override int TrackNumber
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override int PlatformGetTrackNumber()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
             }
-
+            
+            //base.Dispose(disposing);
         }
-
     }
 }
 

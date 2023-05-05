@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Media
                     string genre = nsGenre == null ? "Unknown Genre" : nsGenre.ToString();
                     TimeSpan duration = TimeSpan.FromSeconds(((NSNumber)item.ValueForProperty(MPMediaItem.PlaybackDurationProperty)).FloatValue);
 
-                    var song = new Song(album, new Artist(artist), new Genre(genre), title, duration, item, assetUrl);
+                    var song = new Song(album, new Artist(artist), new Genre(genre), title, duration, assetUrl, item);
                     albumSongs.Add(song);
                     songList.Add(song);
                 }

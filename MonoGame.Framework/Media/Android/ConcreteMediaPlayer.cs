@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Media
             if (activeSong == null)
                 return TimeSpan.Zero;
 
-            return activeSong.Position;
+            return ((ConcreteSongStrategy)activeSong.Strategy).Position;
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Media
 
             foreach (Song queuedSong in Queue.Songs)
             {
-                queuedSong.Volume = innerVolume;
+                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
             }
         }
         protected override void PlatformPlaySong(Song song)
@@ -74,12 +74,12 @@ namespace Microsoft.Xna.Platform.Media
             if (Queue.ActiveSong == null)
                 return;
 
-            song.SetEventHandler(OnSongFinishedPlaying);
+            ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
 
             float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-            song.Volume = innerVolume;
-            song.Play();
+            ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
+            ((ConcreteSongStrategy)song.Strategy).Play();
         }
 
         protected override void PlatformPause()
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Media
             if (activeSong == null)
                 return;
 
-            activeSong.Pause();
+            ((ConcreteSongStrategy)activeSong.Strategy).Pause();
         }
 
         protected override void PlatformResume()
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Media
             if (activeSong == null)
                 return;
 
-            activeSong.Resume();
+            ((ConcreteSongStrategy)activeSong.Strategy).Resume();
         }
 
         protected override void PlatformStop()
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
             foreach (Song queuedSong in Queue.Songs)
             {
                 var activeSong = Queue.ActiveSong;
-                activeSong.Stop();
+                ((ConcreteSongStrategy)activeSong.Strategy).Stop();
             }
         }
 
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
-                song.Stop();
+                ((ConcreteSongStrategy)song.Strategy).Stop();
                 Queue.Remove(song);
             }
 
