@@ -432,6 +432,7 @@
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
+    <Compile Include="Media\iOS\ConcreteVideo.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
@@ -453,7 +454,6 @@
     <Compile Include="Media\VideoSoundtrackType.cs" />
     <Compile Include="Media\Video.cs" />
     <Compile Include="Media\VideoStrategy.cs" />
-    <Compile Include="Media\Video.IOS.cs" />
     <Compile Include="Media\VideoPlayer.cs" />
     <Compile Include="Media\VideoPlayerStrategy.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerFailedException.cs" />
