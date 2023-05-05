@@ -1,12 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Platform.Media;
+﻿// Copyright (C)2023 Nick Kastellanos
+
+using System;
+using Microsoft.Xna.Framework.Graphics;
 using SharpDX;
 using SharpDX.MediaFoundation;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
-    public sealed partial class Video : IDisposable
+    public sealed class ConcreteVideoStrategy : VideoStrategy
     {
         private Topology _topology;
         internal Topology Topology { get { return _topology; } }
@@ -15,7 +17,8 @@ namespace Microsoft.Xna.Framework.Media
 
         MediaType _mediaType;
 
-        private void PlatformInitialize()
+        internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
+            : base(graphicsDevice, fileName, duration)
         {
             if (Topology != null)
                 return;
@@ -97,8 +100,9 @@ namespace Microsoft.Xna.Framework.Media
             mediaSource.Dispose();
         }
 
-        private void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
+            /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
             if (_topology != null)
             {
                 _topology.Dispose();
@@ -110,6 +114,14 @@ namespace Microsoft.Xna.Framework.Media
                 SampleGrabber.Dispose();
                 SampleGrabber = null;
             }
+            */
+
+            if (disposing)
+            {
+
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

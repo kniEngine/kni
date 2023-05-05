@@ -3,20 +3,19 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
-    /// <summary>
-    /// Represents a video.
-    /// </summary>
-    public sealed partial class Video : IDisposable
+    public sealed class ConcreteVideoStrategy : VideoStrategy
     {
         internal Android.Media.MediaPlayer Player { get; private set; }
 
 
-        private void PlatformInitialize()
+        internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
+            : base(graphicsDevice, fileName, duration)
         {
             Player = new Android.Media.MediaPlayer();
             if (Player != null)
@@ -30,13 +29,22 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        private void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            if (Player == null)
-                return;
+            /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
+            if (Player != null)
+            {
+                Player.Dispose();
+                Player = null;
+            }
+            */
 
-            Player.Dispose();
-            Player = null;
+            if (disposing)
+            {
+
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

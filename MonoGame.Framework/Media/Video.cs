@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Media
     /// <summary>
     /// Represents a video.
     /// </summary>
-    public sealed partial class Video : IDisposable
+    public sealed class Video : IDisposable
     {
         private bool _disposed;
         private VideoStrategy _strategy;
@@ -75,9 +75,8 @@ namespace Microsoft.Xna.Framework.Media
 
         internal Video(GraphicsDevice graphicsDevice, string fileName, float durationMS)
         {
-            _strategy = new VideoStrategy(graphicsDevice, fileName, TimeSpan.FromMilliseconds(durationMS));
+            _strategy = new ConcreteVideoStrategy(graphicsDevice, fileName, TimeSpan.FromMilliseconds(durationMS));
 
-            PlatformInitialize();
         }
 
         ~Video()
@@ -99,8 +98,6 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (!_disposed)
             {
-                //PlatformDispose(disposing);
-
                 if (disposing)
                 {
                     _strategy.Dispose();
