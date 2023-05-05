@@ -466,13 +466,14 @@
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\WMS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
+    <Compile Include="Media\WMS\MediaManagerState.cs" />
+    <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
     <Compile Include="Media\MediaLibrary.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
-    <Compile Include="Platform\Media\MediaManagerState.cs" />
     <Compile Include="Media\MediaPlayer.cs" />
     <Compile Include="Media\MediaPlayerStrategy.cs" />
     <Compile Include="Media\MediaQueue.cs" />
@@ -506,7 +507,6 @@
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include="Platform\Windows\ConcreteGame.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
-    <Compile Include="Platform\Media\VideoSampleGrabber.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
