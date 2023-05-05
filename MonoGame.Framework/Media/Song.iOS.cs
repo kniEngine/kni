@@ -15,19 +15,42 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : SongStrategy
+    public sealed partial class Song
     {
-        private Album _album;
-        private Artist _artist;
-        private Genre _genre;
-        private string _title;
-        private TimeSpan duration;
-        #if !TVOS
-        private MPMediaItem _mediaItem;
+
+        #if TVOS
+        internal Song(Album album, Artist artist, Genre genre, string title, TimeSpan duration, NSUrl assetUrl, object mediaItem)
+        #else
+        internal Song(Album album, Artist artist, Genre genre, string title, TimeSpan duration, NSUrl assetUrl, MPMediaItem mediaItem)
         #endif
+        {
+            _strategy = new ConcreteSongStrategy();
+
+            _strategy.Album = album;
+            _strategy.Artist = artist;
+            _strategy.Genre = genre;
+            ((ConcreteSongStrategy)_strategy)._name2 = title;
+            ((ConcreteSongStrategy)_strategy)._duration2 = duration;
+
+            #if TVOS
+            ((ConcreteSongStrategy)_strategy)._assetUrl = assetUrl;
+            #endif
+            ((ConcreteSongStrategy)_strategy)._mediaItem = mediaItem;
+        }
+    }
+
+    public sealed class ConcreteSongStrategy : SongStrategy
+    {
+        internal string _name2;
+        internal TimeSpan _duration2;
+
+        #if !TVOS
+        internal MPMediaItem _mediaItem;
+        #endif
+        internal NSUrl _assetUrl;
+
         private AVPlayerItem _sound;
         private AVPlayer _player; // TODO: Move _player to MediaPlayer
-        private NSUrl _assetUrl;
         private NSObject _playToEndObserver;
 
         [CLSCompliant(false)]
@@ -36,23 +59,6 @@ namespace Microsoft.Xna.Framework.Media
             get { return this._assetUrl; }
         }
 
-        #if !TVOS
-        internal Song(Album album, Artist artist, Genre genre, string title, TimeSpan duration, MPMediaItem mediaItem, NSUrl assetUrl)
-        #else
-        internal Song(Album album, Artist artist, Genre genre, string title, TimeSpan duration, object mediaItem, NSUrl assetUrl)
-        #endif
-        {
-            _strategy = this;
-            this._album = album;
-            this._artist = artist;
-            this._genre = genre;
-            this._title = title;
-            this.duration = duration;
-            #if !TVOS
-            this._mediaItem = mediaItem;
-            #endif
-            this._assetUrl = assetUrl;
-        }
 
         internal override void PlatformInitialize(string fileName)
         {
@@ -64,23 +70,6 @@ namespace Microsoft.Xna.Framework.Media
             _sound = AVPlayerItem.FromUrl(url);
             _player = AVPlayer.FromPlayerItem(_sound);
             _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
-        }
-
-        internal override void PlatformDispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_sound != null)
-                {
-                    _playToEndObserver.Dispose();
-                    _sound.Dispose();
-                    _player.Dispose();
-                }
-
-                _playToEndObserver = null;
-                _sound = null;
-                _player = null;
-            }
         }
 
         private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
@@ -116,7 +105,7 @@ namespace Microsoft.Xna.Framework.Media
             _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
             _player.Play();
 
-            _playCount++;
+            PlayCount++;
         }
 		
 		internal void Pause()
@@ -141,7 +130,7 @@ namespace Microsoft.Xna.Framework.Media
 				return;
 			
             _player.Pause();
-			_playCount = 0;
+            PlayCount = 0;
 		}
 
 		internal float Volume
@@ -173,63 +162,87 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        internal override Album PlatformGetAlbum()
+        public override Album Album
         {
-            return this._album;
+            get { return base.Album; }
         }
 
-        internal override void PlatformSetAlbum(Album album)
+        public override Artist Artist
         {
-            this._album = album;
+            get { return base.Artist; }
         }
 
-        internal override Artist PlatformGetArtist()
+        public override Genre Genre
         {
-            return this._artist;
+            get { return base.Genre; }
         }
 
-        internal override Genre PlatformGetGenre()
+        public override TimeSpan Duration
         {
-            return this._genre;
+            get
+            {
+                #if !TVOS
+                if (this._mediaItem != null)
+                    return this._duration2;
+                #endif
+
+                return base.Duration;
+            }
         }
 
-        internal override TimeSpan PlatformGetDuration()
+        public override bool IsProtected
         {
-            #if !TVOS
-            if (this._mediaItem != null)
-                return this.duration;
-            #endif
-            return _duration;
+            get { return base.IsProtected; }
         }
 
-        internal override bool PlatformIsProtected()
+        public override bool IsRated
         {
-            return false;
+            get { return base.IsRated; }
         }
 
-        internal override bool PlatformIsRated()
+        public override string Name
         {
-            return false;
+            get
+            {
+                if (this._name2 != null)
+                    return this._name2;
+
+                return Path.GetFileNameWithoutExtension(base.Name);
+            }
         }
 
-        internal override string PlatformGetName()
+        public override int PlayCount
         {
-            return this._title ?? Path.GetFileNameWithoutExtension(_name);
+            get { return base.PlayCount; }
         }
 
-        internal override int PlatformGetPlayCount()
+        public override int Rating
         {
-            return _playCount;
+            get { return base.Rating; }
         }
 
-        internal override int PlatformGetRating()
+        public override int TrackNumber
         {
-            return 0;
+            get { return base.TrackNumber; }
         }
 
-        internal override int PlatformGetTrackNumber()
+        protected override void Dispose(bool disposing)
         {
-            return 0;
+            if (disposing)
+            {
+                if (_sound != null)
+                {
+                    _playToEndObserver.Dispose();
+                    _sound.Dispose();
+                    _player.Dispose();
+                }
+
+                _playToEndObserver = null;
+                _sound = null;
+                _player = null;
+            }
+
+            //base.Dispose(disposing);
         }
     }
 }

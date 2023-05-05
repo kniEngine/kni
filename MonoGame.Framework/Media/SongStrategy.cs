@@ -10,41 +10,100 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    abstract public class SongStrategy // : IDisposable
+    abstract public class SongStrategy : IDisposable
     {
-        internal SongStrategy() { }
+        private string _name;
+        private TimeSpan _duration = TimeSpan.Zero;
+        private int _playCount = 0;
+
+        private Album _album;
+        private Artist _artist;
+        private Genre _genre;
+        private bool _isProtected;
+        private bool _isRated;
+        private int _rating;
+        private int _trackNumber;
+
+        public virtual string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        public virtual TimeSpan Duration
+        {
+            get { return _duration; }
+            set { _duration = value; }
+        }
+
+        public virtual int PlayCount
+        {
+            get { return _playCount; }
+            set { _playCount = value; }
+        }
+
+        public virtual Album Album
+        {
+            get { return _album; }
+            set { _album = value; }
+        }
+
+        public virtual Genre Genre
+        {
+            get { return _genre; }
+            set { _genre = value; }
+        }
+
+        public virtual Artist Artist
+        {
+            get { return _artist; }
+            set { _artist = value; }
+        }
+
+        public virtual bool IsProtected
+        {
+            get { return _isProtected; }
+            set { _isProtected = value; }
+        }
+
+        public virtual bool IsRated
+        {
+            get { return _isRated; }
+            set { _isRated = value; }
+        }
+
+        public virtual int Rating
+        {
+            get { return _rating; }
+            set { _rating = value; }
+        }
+
+        public virtual int TrackNumber
+        {
+            get { return _trackNumber; }
+            set { _trackNumber = value; }
+        }
+
+
+        internal SongStrategy()
+        {
+        }
 
         internal abstract void PlatformInitialize(string fileName);
 
-        internal abstract Album PlatformGetAlbum();
-        internal abstract void PlatformSetAlbum(Album album);
-        internal abstract Artist PlatformGetArtist();
-        internal abstract Genre PlatformGetGenre();
-
-        internal abstract TimeSpan PlatformGetDuration();
-        internal abstract bool PlatformIsProtected();
-        internal abstract bool PlatformIsRated();
-        
-        internal abstract string PlatformGetName();
-        internal abstract int PlatformGetPlayCount();
-        internal abstract int PlatformGetRating();
-        internal abstract int PlatformGetTrackNumber();
-        
-        internal abstract void PlatformDispose(bool disposing);
-
         #region IDisposable
-        //~SongStrategy()
-        //{
-        //    Dispose(false);
-        //}
+        ~SongStrategy()
+        {
+            Dispose(false);
+        }
 
-        //public void Dispose()
-        //{
-        //    Dispose(true);
-        //    GC.SuppressFinalize(this);
-        //}
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-        //protected abstract void Dispose(bool disposing);
+        protected abstract void Dispose(bool disposing);
         #endregion
     }
 }
