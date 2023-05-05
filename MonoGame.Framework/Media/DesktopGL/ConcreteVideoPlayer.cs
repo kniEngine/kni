@@ -3,10 +3,10 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {

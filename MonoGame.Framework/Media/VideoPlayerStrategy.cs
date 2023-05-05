@@ -97,7 +97,6 @@ namespace Microsoft.Xna.Platform.Media
 
         #region IDisposable Members
 
-        /// <summary>Releases the resources held by this <see cref="Microsoft.Xna.Framework.Audio.SoundEffect"/>.</summary>
         public void Dispose()
         {
             Dispose(true);
