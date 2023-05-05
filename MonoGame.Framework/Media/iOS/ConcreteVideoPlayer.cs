@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformResume()
         {
-            base.Video.MovieView.MoviePlayer.Play();
+            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
             State = MediaState.Playing;
         }
 
@@ -89,10 +89,10 @@ namespace Microsoft.Xna.Platform.Media
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
-            base.Video.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
+            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            concreteGame.ViewController.PresentViewController(base.Video.MovieView, false, null);
-            base.Video.MovieView.MoviePlayer.Play();
+            concreteGame.ViewController.PresentViewController(((ConcreteVideoStrategy)base.Video.Strategy).MovieView, false, null);
+            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
 
             State = MediaState.Playing;
         }
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Media
                 _playbackDidFinishObserver = null;
             }
 
-            base.Video.MovieView.MoviePlayer.Stop();
+            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Stop();
             concreteGame.IsPlayingVideo = false;
             concreteGame.ViewController.DismissViewController(false, null);
 

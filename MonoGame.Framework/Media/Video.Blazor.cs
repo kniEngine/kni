@@ -1,23 +1,31 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
+﻿// Copyright (C)2023 Nick Kastellanos
+
+// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Media
+
+namespace Microsoft.Xna.Platform.Media
 {
-    /// <summary>
-    /// Represents a video.
-    /// </summary>
-    public sealed partial class Video : IDisposable
+    public sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        private void PlatformInitialize()
+
+        internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
+            : base(graphicsDevice, fileName, duration)
         {
         }
 
-        private void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -63,13 +63,13 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPause()
         {
-            base.Video.Player.Pause();
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Pause();
             State = MediaState.Paused;
         }
 
         public override void PlatformResume()
         {
-            base.Video.Player.Start();
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Start();
             State = MediaState.Playing;
         }
 
@@ -77,8 +77,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            base.Video.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
-            base.Video.Player.Start();
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Start();
 
             ConcreteGame.IsPlayingVideo = true;
 
@@ -87,10 +87,10 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            base.Video.Player.Stop();
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Stop();
 
             ConcreteGame.IsPlayingVideo = false;
-            base.Video.Player.SetDisplay(null);
+            ((ConcreteVideoStrategy)base.Video.Strategy).Player.SetDisplay(null);
 
             State = MediaState.Stopped;
         }

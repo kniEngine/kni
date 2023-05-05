@@ -1,26 +1,28 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
 using System;
-using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Media
+
+namespace Microsoft.Xna.Platform.Media
 {
-    /// <summary>
-    /// Represents a video.
-    /// </summary>
-    public sealed partial class Video : IDisposable
+    public sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        private void PlatformInitialize()
+
+        internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
+            : base(graphicsDevice, fileName, duration)
         {
             
         }
 
-        private void PlatformDispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+
             }
 
+            base.Dispose(disposing);
         }
     }
 }

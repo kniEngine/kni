@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Platform.Media
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
 
-            VideoSampleGrabber sampleGrabber = base.Video.SampleGrabber;
+            VideoSampleGrabber sampleGrabber = ((ConcreteVideoStrategy)base.Video.Strategy).SampleGrabber;
             byte[] texData = sampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             // Set the new song.
-            _session.SetTopology(SessionSetTopologyFlags.Immediate, base.Video.Topology);
+            _session.SetTopology(SessionSetTopologyFlags.Immediate, ((ConcreteVideoStrategy)base.Video.Strategy).Topology);
 
             // Get the clock.
             _clock = _session.Clock.QueryInterface<PresentationClock>();
