@@ -61,12 +61,12 @@
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
     <Compile Include="Media\WMS\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\WMS\ConcreteSong.cs" />
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WMS\MediaManagerState.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="Media\MediaLibrary.Default.cs" />
-    <Compile Include="Media\Song.WMS.cs" />
     <Compile Include="TitleContainer.Desktop.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />

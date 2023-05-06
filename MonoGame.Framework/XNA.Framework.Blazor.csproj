@@ -61,11 +61,11 @@
     <Compile Include="Input\Keyboard.Blazor.cs" />
     <Compile Include="Input\Mouse.Blazor.cs" />
     <Compile Include="Input\MouseCursor.Blazor.cs" />
-    <Compile Include="Media\Blazor\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\Blazor\ConcreteSong.cs" />
+    <Compile Include="Media\Blazor\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Blazor\ConcreteVideo.cs" />
     <Compile Include="Media\MediaLibrary.Blazor.cs" />
-    <Compile Include="Media\Song.Blazor.cs" />
     <Compile Include="TitleContainer.Blazor.cs" />
   </ItemGroup>
   
