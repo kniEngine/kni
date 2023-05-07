@@ -4,10 +4,10 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
-using Microsoft.Xna.Framework.Media;
 
 
 namespace Microsoft.Xna.Platform.Media

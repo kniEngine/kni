@@ -5,9 +5,9 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework.Media;
 using AudioToolbox;
 using AVFoundation;
-using Microsoft.Xna.Framework.Media;
 
 
 namespace Microsoft.Xna.Platform.Media

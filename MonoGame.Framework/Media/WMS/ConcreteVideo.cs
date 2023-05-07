@@ -11,11 +11,12 @@ namespace Microsoft.Xna.Platform.Media
     public sealed class ConcreteVideoStrategy : VideoStrategy
     {
         private Topology _topology;
-        internal Topology Topology { get { return _topology; } }
-
-        internal VideoSampleGrabber SampleGrabber { get; private set; }
-
+        private VideoSampleGrabber _sampleGrabber;
         MediaType _mediaType;
+
+        internal Topology Topology { get { return _topology; } }
+        internal VideoSampleGrabber SampleGrabber { get { return _sampleGrabber; } }
+
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
             : base(graphicsDevice, fileName, duration)
@@ -27,13 +28,13 @@ namespace Microsoft.Xna.Platform.Media
 
             MediaFactory.CreateTopology(out _topology);
 
-            SharpDX.MediaFoundation.MediaSource mediaSource;
+            MediaSource mediaSource;
             {
                 SourceResolver resolver = new SourceResolver();
 
                 ObjectType otype;
                 ComObject source = resolver.CreateObjectFromURL(FileName, SourceResolverFlags.MediaSource, null, out otype);
-                mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
+                mediaSource = source.QueryInterface<MediaSource>();
                 resolver.Dispose();
                 source.Dispose();
             }
@@ -62,18 +63,14 @@ namespace Microsoft.Xna.Platform.Media
                     Guid majorType = desc.MediaTypeHandler.MajorType;
                     if (majorType == MediaTypeGuids.Video)
                     {
-                        Activate activate;
-
-                        SampleGrabber = new VideoSampleGrabber();
-
                         _mediaType = new MediaType();
-
                         _mediaType.Set(MediaTypeAttributeKeys.MajorType, MediaTypeGuids.Video);
-
                         // Specify that we want the data to come in as RGB32.
                         _mediaType.Set(MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
 
-                        MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, SampleGrabber, out activate);
+                        _sampleGrabber = new VideoSampleGrabber();
+                        Activate activate;
+                        MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
                         outputNode.Object = activate;
                     }
 
@@ -81,7 +78,6 @@ namespace Microsoft.Xna.Platform.Media
                     {
                         Activate activate;
                         MediaFactory.CreateAudioRendererActivate(out activate);
-
                         outputNode.Object = activate;
                     }
 
@@ -109,10 +105,10 @@ namespace Microsoft.Xna.Platform.Media
                 _topology = null;
             }
 
-            if (SampleGrabber != null)
+            if (_sampleGrabber != null)
             {
-                SampleGrabber.Dispose();
-                SampleGrabber = null;
+                _sampleGrabber.Dispose();
+                _sampleGrabber = null;
             }
             */
 

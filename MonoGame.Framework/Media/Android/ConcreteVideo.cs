@@ -11,31 +11,31 @@ namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        internal Android.Media.MediaPlayer Player { get; private set; }
+        private Android.Media.MediaPlayer _player;
+
+        internal Android.Media.MediaPlayer Player { get { return _player; } }
 
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
             : base(graphicsDevice, fileName, duration)
         {
-            Player = new Android.Media.MediaPlayer();
-            if (Player != null)
+            _player = new Android.Media.MediaPlayer();
+
+            var afd = AndroidGameWindow.Activity.Assets.OpenFd(FileName);
+            if (afd != null)
             {
-                var afd = AndroidGameWindow.Activity.Assets.OpenFd(FileName);
-                if (afd != null)
-                {
-                    Player.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
-                    Player.Prepare();
-                }
+                _player.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                _player.Prepare();
             }
         }
 
         protected override void Dispose(bool disposing)
         {
             /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
-            if (Player != null)
+            if (_player != null)
             {
-                Player.Dispose();
-                Player = null;
+                _player.Dispose();
+                _player = null;
             }
             */
 

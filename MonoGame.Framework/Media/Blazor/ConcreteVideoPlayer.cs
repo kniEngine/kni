@@ -6,8 +6,8 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform;
 
 
 namespace Microsoft.Xna.Platform.Media

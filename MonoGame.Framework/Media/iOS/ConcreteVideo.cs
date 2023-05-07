@@ -15,7 +15,9 @@ namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        internal MPMoviePlayerViewController MovieView { get; private set; }
+        private MPMoviePlayerViewController _movieView;
+
+        internal MPMoviePlayerViewController MovieView { get { return _movieView; } }
 
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
@@ -23,23 +25,20 @@ namespace Microsoft.Xna.Platform.Media
         {
             NSUrl url = NSUrl.FromFilename(Path.GetFullPath(FileName));
 
-            MovieView = new MPMoviePlayerViewController(url);
+            _movieView = new MPMoviePlayerViewController(url);
             MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
             MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
             MovieView.MoviePlayer.PrepareToPlay();
         }
 
-        private void PlatformDispose(bool disposing)
-        {
-        }
 
         protected override void Dispose(bool disposing)
         {
             /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
-            if (MovieView != null)
+            if (_movieView != null)
             {
-                MovieView.Dispose();
-                MovieView = null;
+                _movieView.Dispose();
+                _movieView = null;
             }
             */
             
