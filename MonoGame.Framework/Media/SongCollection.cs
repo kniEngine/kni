@@ -39,26 +39,17 @@ namespace Microsoft.Xna.Framework.Media
 
         public int Count
         {
-            get
-            {
-				return innerlist.Count;
-            }
+            get { return innerlist.Count; }
         }
 		
 		public bool IsReadOnly
         {
-		    get
-		    {
-		        return this.isReadOnly;
-		    }
+		    get { return this.isReadOnly; }
         }
 
         public Song this[int index]
         {
-            get
-            {
-				return this.innerlist[index];
-            }
+            get { return this.innerlist[index]; }
         }
 		
 		public void Add(Song item)

@@ -1,21 +1,70 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Microsoft.Xna.Framework.Media;
 using Foundation;
 using MediaPlayer;
 
-namespace Microsoft.Xna.Framework.Media
-{
-    public partial class MediaLibrary
-    {
-        private static AlbumCollection albumCollection;
-        private static SongCollection songCollection;
 
-        private void PlatformLoad(Action<int> progressCallback)
+namespace Microsoft.Xna.Platform.Media
+{
+    internal class ConcreteMediaLibraryStrategy : MediaLibraryStrategy
+    {
+        private static AlbumCollection _albumCollection;
+        private static SongCollection _songCollection;
+
+        //private static readonly NSString MPMediaPlaylistPropertyName = new NSString(MPMediaPlaylistProperty.Name);
+
+
+        public override MediaSource MediaSource
         {
+            get { return base.MediaSource; }
+        }
+
+        public override AlbumCollection Albums
+        {
+            get { return _albumCollection; }
+        }
+
+        public override SongCollection Songs
+        {
+            get { return _songCollection; }
+        }
+
+        public override PlaylistCollection Playlists
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        //public override ArtistCollection Artists
+        //{
+        //    get { return base.Artists; }
+        //}
+
+        //public override GenreCollection Genres
+        //{
+        //    get { return base.Genres; }
+        //}
+
+
+        public ConcreteMediaLibraryStrategy()
+            : base()
+        {
+        }
+
+        public ConcreteMediaLibraryStrategy(MediaSource mediaSource)
+            : base(mediaSource)
+        {
+            throw new NotSupportedException("Initializing from MediaSource is not supported");
+        }
+
+        public override void Load(Action<int> progressCallback = null)
+        {
+            
             var songList = new List<Song>();
             var albumList = new List<Album>();
 
@@ -54,8 +103,8 @@ namespace Microsoft.Xna.Framework.Media
                 }
             }
 
-            albumCollection = new AlbumCollection(albumList);
-            songCollection = new SongCollection(songList);
+            _albumCollection = new AlbumCollection(albumList);
+            _songCollection = new SongCollection(songList);
 
             /*_playLists = new PlaylistCollection();
 					
@@ -75,21 +124,26 @@ namespace Microsoft.Xna.Framework.Media
             }*/
         }
 
-        //private static readonly NSString MPMediaPlaylistPropertyName = new NSString(MPMediaPlaylistProperty.Name);
-
-        private AlbumCollection PlatformGetAlbums()
+        public override void SavePicture(string name, byte[] imageBuffer)
         {
-            return albumCollection;
+            throw new NotImplementedException();
         }
 
-        private SongCollection PlatformGetSongs()
+        public override void SavePicture(string name, Stream source)
         {
-            return songCollection;
+            throw new NotImplementedException();
         }
 
-        private void PlatformDispose()
+        
+
+        protected override void Dispose(bool disposing)
         {
-            
+            if (disposing)
+            {
+
+            }
+
+            //base.Dispose(disposing);
         }
     }
 }

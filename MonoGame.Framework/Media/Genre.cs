@@ -15,10 +15,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public AlbumCollection Albums
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -26,10 +23,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public bool IsDisposed
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         /// <summary>
@@ -37,10 +31,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public string Name
         {
-            get
-            {
-                return this.genre;
-            }
+            get { return this.genre; }
         }
 
         /// <summary>
@@ -48,10 +39,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public SongCollection Songs
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public Genre(string genre)

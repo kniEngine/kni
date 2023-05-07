@@ -54,11 +54,11 @@
     <Compile Include="Input\Keyboard.Ref.cs" />
     <Compile Include="Input\Mouse.Ref.cs" />
     <Compile Include="Input\MouseCursor.Ref.cs" />
+    <Compile Include="Media\Ref\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\Ref\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteSong.cs" />
     <Compile Include="Media\Ref\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
-    <Compile Include="Media\MediaLibrary.Ref.cs" />
     <Compile Include="TitleContainer.Ref.cs" />
   </ItemGroup>
   

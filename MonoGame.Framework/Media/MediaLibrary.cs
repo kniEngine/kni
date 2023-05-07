@@ -4,21 +4,34 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
 	public partial class MediaLibrary : IDisposable
 	{
-        public AlbumCollection Albums { get { return PlatformGetAlbums();  } }
+        private MediaLibraryStrategy _strategy;
+        bool _isDisposed;
+
+        public MediaLibraryStrategy Strategy { get { return _strategy; } }
+        public bool IsDisposed { get { return _isDisposed; } }
+
+        public MediaSource MediaSource { get { return Strategy.MediaSource; } }
+        public AlbumCollection Albums { get { return Strategy.Albums;  } }
+        public SongCollection Songs { get { return Strategy.Songs; } }
         //public ArtistCollection Artists { get; private set; }
         //public GenreCollection Genres { get; private set; }
-        public bool IsDisposed { get; private set; }
-        public MediaSource MediaSource { get { return null; } }
-		//public PlaylistCollection Playlists { get; private set; }
-        public SongCollection Songs { get { return PlatformGetSongs(); } }
+        //public PlaylistCollection Playlists { get; private set; }
 
-		public MediaLibrary()
+
+        public MediaLibrary()
 		{
+            _strategy = new ConcreteMediaLibraryStrategy();
+        }
+
+		public MediaLibrary(MediaSource mediaSource)
+        {
+            _strategy = new ConcreteMediaLibraryStrategy(mediaSource);
 		}
 
         /// <summary>
@@ -27,29 +40,49 @@ namespace Microsoft.Xna.Framework.Media
         /// <param name="progressCallback">Callback that reports back the progress of the music library loading in percents (0-100).</param>
         public void Load(Action<int> progressCallback = null)
 	    {
-	        PlatformLoad(progressCallback);
-	    }
+            Strategy.Load(progressCallback);
+        }
 		
-		public MediaLibrary(MediaSource mediaSource)
-		{
-            throw new NotSupportedException("Initializing from MediaSource is not supported");
-		}
 		
         public void SavePicture(string name, byte[] imageBuffer)
         {
-            throw new NotSupportedException();
+            _strategy.SavePicture(name, imageBuffer);
         }
 
         public void SavePicture(string name, Stream source)
         {
- 			throw new NotImplementedException();
+            _strategy.SavePicture(name, source);
         }
 
-		public void Dispose()
-		{
-		    PlatformDispose();
-		    this.IsDisposed = true;
-		}
-	}
+
+
+        #region IDisposable Implementation
+
+        ~MediaLibrary()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                if (disposing)
+                {
+                    _strategy.Dispose();
+                }
+
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
+    }
 }
 

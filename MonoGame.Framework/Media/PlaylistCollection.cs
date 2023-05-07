@@ -30,10 +30,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public int Count
         {
-            get
-            {
-				return innerlist.Count;
-            }
+            get { return innerlist.Count; }
         }
 		
 		public bool IsReadOnly
@@ -43,10 +40,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public Playlist this[int index]
         {
-            get
-            {
-				return this.innerlist[index];
-            }
+            get { return this.innerlist[index]; }
         }
 		
 		public void Add(Playlist item)

@@ -4,6 +4,8 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
+
 #if WINDOWS_UAP
 using Windows.Storage.FileProperties;
 #elif IOS || TVOS
@@ -34,10 +36,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public Artist Artist
         {
-            get
-            {
-                return this.artist;
-            }
+            get { return this.artist; }
         }
 
         /// <summary>
@@ -56,10 +55,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Genre Genre
         {
-            get
-            {
-                return this.genre;
-            }
+            get { return this.genre; }
         }
 
         /// <summary>
@@ -87,10 +83,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public bool IsDisposed
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
@@ -98,10 +91,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public string Name
         {
-            get
-            {
-                return this.album;
-            }
+            get { return this.album; }
         }
 
         /// <summary>
@@ -109,10 +99,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public SongCollection Songs
         {
-            get
-            {
-                return this.songCollection;
-            }
+            get { return this.songCollection; }
         }
 
        private Album(SongCollection songCollection, string name, Artist artist, Genre genre)
@@ -122,6 +109,7 @@ namespace Microsoft.Xna.Framework.Media
             this.artist = artist;
             this.genre = genre;
         }
+
 #if WINDOWS_UAP
         internal Album(SongCollection songCollection, string name, Artist artist, Genre genre, StorageItemThumbnail thumbnail)
             : this(songCollection, name, artist, genre)
@@ -168,7 +156,7 @@ namespace Microsoft.Xna.Framework.Media
         [CLSCompliant(false)]
         public Bitmap GetAlbumArt(int width = 0, int height = 0)
         {
-            var albumArt = MediaStore.Images.Media.GetBitmap(MediaLibrary.Context.ContentResolver, this.thumbnail);
+            var albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this.thumbnail);
             if (width == 0 || height == 0)
                 return albumArt;
 

@@ -430,6 +430,7 @@
     <Compile Include="Input\Touch\TouchPanel.cs" />
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
+    <Compile Include="Media\iOS\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
@@ -439,7 +440,7 @@
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
     <Compile Include="Media\MediaLibrary.cs" />
-    <Compile Include="Media\MediaLibrary.IOS.cs" />
+    <Compile Include="Media\MediaLibraryStrategy.cs" />
     <Compile Include="Media\MediaPlayer.cs" />
     <Compile Include="Media\MediaPlayerStrategy.cs" />
     <Compile Include="Media\MediaQueue.cs" />

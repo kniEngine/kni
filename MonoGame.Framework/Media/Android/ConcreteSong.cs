@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Media
 
             if (_assetUri != null)
             {
-                _androidPlayer.SetDataSource(MediaLibrary.Context, this._assetUri);
+                _androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context, this._assetUri);
             }
             else
             {
