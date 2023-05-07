@@ -466,6 +466,7 @@
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
     <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\WME\ConcreteSong.cs" />
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />

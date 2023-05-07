@@ -431,6 +431,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
     <Compile Include="Media\Album.cs" />

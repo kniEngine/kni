@@ -461,6 +461,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\Android\ConcreteSong.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
     <Compile Include="Media\Album.cs" />

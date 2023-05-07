@@ -69,6 +69,7 @@
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
     <Compile Include="Media\MediaLibrary.iOS.cs" />
