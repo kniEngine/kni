@@ -6,9 +6,9 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
-using Microsoft.Xna.Platform.Media;
 
 
 namespace Microsoft.Xna.Framework.Media

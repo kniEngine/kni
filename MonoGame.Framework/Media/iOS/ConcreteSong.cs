@@ -6,11 +6,11 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Media;
 using Foundation;
 using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
-using Microsoft.Xna.Platform.Media;
 
 
 namespace Microsoft.Xna.Framework.Media

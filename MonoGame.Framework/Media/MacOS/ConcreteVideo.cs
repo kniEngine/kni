@@ -15,9 +15,10 @@ namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        AVPlayerItem movie;
+        private AVPlayer _player;
+        private AVPlayerItem _movie;
 
-        internal AVPlayer Player { get; private set; }
+        internal AVPlayer Player { get { return _player; } }
 
         internal float Volume
         {
@@ -30,7 +31,7 @@ namespace Microsoft.Xna.Platform.Media
 
         internal TimeSpan CurrentPosition
         {
-            get { return new TimeSpan(movie.CurrentTime.Value); }
+            get { return new TimeSpan(_movie.CurrentTime.Value); }
         }
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
@@ -38,23 +39,23 @@ namespace Microsoft.Xna.Platform.Media
         {
             NSError err = new NSError();
 
-            movie = AVPlayerItem.FromUrl(NSUrl.FromFilename(FileName));
-            Player = new AVPlayer(movie);
+            _movie = AVPlayerItem.FromUrl(NSUrl.FromFilename(FileName));
+            _player = new AVPlayer(_movie);
         }
 
         protected override void Dispose(bool disposing)
         {
             /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
-            if (Player != null)
+            if (_player != null)
             {
-                Player.Dispose();
-                Player = null;
+                _player.Dispose();
+                _player = null;
             }
 
-            if (movie != null)
+            if (_movie != null)
             {
-                movie.Dispose();
-                movie = null;
+                _movie.Dispose();
+                _movie = null;
             }
             */
 
