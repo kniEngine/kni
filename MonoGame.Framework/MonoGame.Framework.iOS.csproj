@@ -68,11 +68,11 @@
     <Compile Include="Input\MessageBox.iOS.cs" />
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\iOS\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-    <Compile Include="Media\MediaLibrary.iOS.cs" />
     <Compile Include="Media\Song.iOS.cs" />
     <Compile Include="TitleContainer.MacOS.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.iOS.cs" />

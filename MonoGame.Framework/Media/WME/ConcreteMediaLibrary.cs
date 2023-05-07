@@ -1,47 +1,91 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Windows.Storage;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage.FileProperties;
+using Windows.Storage;
+using WinFileProperties = Windows.Storage.FileProperties;
+using Microsoft.Xna.Framework.Media;
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
-    public partial class MediaLibrary
+    internal class ConcreteMediaLibraryStrategy : MediaLibraryStrategy
     {
+        private static AlbumCollection _albumCollection;
+        private static SongCollection _songCollection;
+
         private const string CacheFile = "MediaLibrary.cache";
 
-        private static StorageFolder musicFolder;
-        private static AlbumCollection albumCollection;
-        private static SongCollection songCollection;
+        private static StorageFolder _musicFolder;
 
-        private void PlatformLoad(Action<int> progressCallback)
+        public override MediaSource MediaSource
+        {
+            get { return base.MediaSource; }
+        }
+
+        public override AlbumCollection Albums
+        {
+            get { return _albumCollection; }
+        }
+
+        public override SongCollection Songs
+        {
+            get { return _songCollection; }
+        }
+
+        public override PlaylistCollection Playlists
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        //public override ArtistCollection Artists
+        //{
+        //    get { return base.Artists; }
+        //}
+
+        //public override GenreCollection Genres
+        //{
+        //    get { return base.Genres; }
+        //}
+
+
+        public ConcreteMediaLibraryStrategy()
+            : base()
+        {
+        }
+
+        public ConcreteMediaLibraryStrategy(MediaSource mediaSource)
+            : base(mediaSource)
+        {
+            throw new NotSupportedException("Initializing from MediaSource is not supported");
+        }
+
+        public override void Load(Action<int> progressCallback = null)
         {
             Task.Run(async () =>
             {
-                if (musicFolder == null)
+                if (_musicFolder == null)
                 {
                     try
                     {
-                        musicFolder = KnownFolders.MusicLibrary;
+                        _musicFolder = KnownFolders.MusicLibrary;
                     }
                     catch (Exception e)
                     {
                         Debug.WriteLine("Failed to access Music Library: " + e.Message);
-                        albumCollection = new AlbumCollection(new List<Album>());
-                        songCollection = new SongCollection(new List<Song>());
+                        _albumCollection = new AlbumCollection(new List<Album>());
+                        _songCollection = new SongCollection(new List<Song>());
                         return;
                     }
                 }
-                    
-            
+
+
                 var files = new List<StorageFile>();
-                await this.GetAllFiles(musicFolder, files);
+                await this.GetAllFiles(_musicFolder, files);
 
                 var songList = new List<Song>();
                 var albumList = new List<Album>();
@@ -58,7 +102,7 @@ namespace Microsoft.Xna.Framework.Media
                 using (var stream = new BinaryReader(baseStream))
                     try
                     {
-                        for (; baseStream.Position < baseStream.Length; )
+                        for (; baseStream.Position < baseStream.Length;)
                         {
                             var entry = MusicProperties.Deserialize(stream);
                             cache.Add(entry.Path, entry);
@@ -109,8 +153,8 @@ namespace Microsoft.Xna.Framework.Media
                             Album album;
                             if (!albums.TryGetValue(properties.Album, out album))
                             {
-                                var thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(ThumbnailMode.MusicView, 300, ThumbnailOptions.ResizeThumbnail)).Result;
-                                album = new Album(new SongCollection(), properties.Album, albumArtist, genre, thumbnail.Type == ThumbnailType.Image ? thumbnail : null);
+                                var thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
+                                album = new Album(new SongCollection(), properties.Album, albumArtist, genre, thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }
@@ -137,10 +181,21 @@ namespace Microsoft.Xna.Framework.Media
                 if (progressCallback != null)
                     progressCallback.Invoke(100);
 
-                albumCollection = new AlbumCollection(albumList);
-                songCollection = new SongCollection(songList);
+                _albumCollection = new AlbumCollection(albumList);
+                _songCollection = new SongCollection(songList);
             }).Wait();
         }
+
+        public override void SavePicture(string name, byte[] imageBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SavePicture(string name, Stream source)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private async Task GetAllFiles(StorageFolder storageFolder, List<StorageFile> musicFiles)
         {
@@ -158,19 +213,15 @@ namespace Microsoft.Xna.Framework.Media
                 }
         }
 
-        private AlbumCollection PlatformGetAlbums()
-        {
-            return albumCollection;
-        }
 
-        private SongCollection PlatformGetSongs()
+        protected override void Dispose(bool disposing)
         {
-            return songCollection;
-        }
+            if (disposing)
+            {
 
-        private void PlatformDispose()
-        {
-            
+            }
+
+            //base.Dispose(disposing);
         }
     }
 }

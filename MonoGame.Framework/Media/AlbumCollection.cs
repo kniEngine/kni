@@ -13,26 +13,18 @@ namespace Microsoft.Xna.Framework.Media
         private List<Album> albumCollection;
 
         /// <summary>
+        /// Gets a value indicating whether the object is disposed.
+        /// </summary>
+        public bool IsDisposed { get { return false; } }
+
+        /// <summary>
         /// Gets the number of Album objects in the AlbumCollection.
         /// </summary>
         public int Count
         {
-            get
-            {
-                return this.albumCollection.Count;
-            }
+            get { return this.albumCollection.Count; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the object is disposed.
-        /// </summary>
-        public bool IsDisposed
-        {
-            get
-            {
-                return false;
-            }
-        }
 
         public AlbumCollection(List<Album> albums)
         {
@@ -45,10 +37,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <param name="index">Index of the Album to get.</param>
         public Album this[int index]
         {
-            get
-            {
-                return this.albumCollection[index];
-            }
+            get { return this.albumCollection[index]; }
         }
 
         /// <summary>

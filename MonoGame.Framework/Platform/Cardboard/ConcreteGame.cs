@@ -10,6 +10,7 @@ using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Media;
 
 
 namespace Microsoft.Xna.Platform
@@ -27,7 +28,7 @@ namespace Microsoft.Xna.Platform
             Window = _gameWindow;
             Services.AddService(typeof(View), _gameWindow.GameView);
 
-            MediaLibrary.Context = AndroidGameWindow.Activity;
+            ConcreteMediaLibraryStrategy.Context = AndroidGameWindow.Activity;
         }
 
         protected override void Dispose(bool disposing)

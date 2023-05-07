@@ -75,10 +75,10 @@
     <Compile Include="Input\MessageBox.Android.cs" />
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\Android\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Android\ConcreteSong.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
-    <Compile Include="Media\MediaLibrary.Android.cs" />
     <Compile Include="Media\Song.Android.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />

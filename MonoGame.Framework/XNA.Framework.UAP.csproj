@@ -465,6 +465,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
+    <Compile Include="Media\WME\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WME\ConcreteSong.cs" />
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
@@ -475,7 +476,7 @@
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
     <Compile Include="Media\MediaLibrary.cs" />
-    <Compile Include="Media\MediaLibrary.WinRT.cs" />
+    <Compile Include="Media\MediaLibraryStrategy.cs" />
     <Compile Include="Media\MediaPlayer.cs" />
     <Compile Include="Media\MediaPlayerStrategy.cs" />
     <Compile Include="Media\MediaQueue.cs" />
