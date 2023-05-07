@@ -31,16 +31,13 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
-            /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
-            if (_player != null)
-            {
-                _player.Dispose();
-                _player = null;
-            }
-            */
-
             if (disposing)
             {
+                if (_player != null)
+                {
+                    _player.Dispose();
+                    _player = null;
+                }
 
             }
 
