@@ -98,22 +98,19 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
-            /* PlatformDispose(...) disabled in https://github.com/MonoGame/MonoGame/pull/2406
-            if (_topology != null)
-            {
-                _topology.Dispose();
-                _topology = null;
-            }
-
-            if (_sampleGrabber != null)
-            {
-                _sampleGrabber.Dispose();
-                _sampleGrabber = null;
-            }
-            */
-
             if (disposing)
             {
+                if (_topology != null)
+                {
+                    _topology.Dispose();
+                    _topology = null;
+                }
+
+                if (_sampleGrabber != null)
+                {
+                    _sampleGrabber.Dispose();
+                    _sampleGrabber = null;
+                }
 
             }
 
