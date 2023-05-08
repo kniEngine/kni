@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Media
             // The GUID is specified in a GuidAttribute attached to the class
             AudioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
 
-            MediaManagerState.CheckStartup();
+            MediaManager.Startup(true);
             MediaFactory.CreateMediaSession(null, out _session);
         }
 
@@ -315,6 +315,8 @@ namespace Microsoft.Xna.Platform.Media
                     _lastFrame.Dispose();
                 _lastFrame = null;
             }
+
+            MediaManager.Shutdown();
 
             base.Dispose(disposing);
         }

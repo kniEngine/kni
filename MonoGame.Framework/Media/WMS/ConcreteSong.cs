@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Media
             if (_topology != null)
                 return;
 
-            MediaManagerState.CheckStartup();
+            MediaManager.Startup(true);
 
             MediaFactory.CreateTopology(out _topology);
 
@@ -145,6 +145,8 @@ namespace Microsoft.Xna.Framework.Media
                     _topology = null;
                 }
             }
+
+            MediaManager.Shutdown();
 
             //base.Dispose(disposing);
 
