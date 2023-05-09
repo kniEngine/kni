@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Media;
@@ -37,7 +39,7 @@ namespace Microsoft.Xna.Platform.Media
             // The GUID is specified in a GuidAttribute attached to the class
             _audioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
 
-            MediaManagerState.CheckStartup();
+            MediaManager.Startup(true);
             MediaFactory.CreateMediaSession(null, out _session);
 
             _session.BeginGetEvent(this, null);
@@ -49,6 +51,8 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
+
+            MediaManager.Shutdown();
 
             base.Dispose(disposing);
         }

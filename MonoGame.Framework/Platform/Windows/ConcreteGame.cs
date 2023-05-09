@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Platform
                     _window = null;
                     Window = null;
                 }
-                Microsoft.Xna.Platform.Media.MediaManagerState.CheckShutdown();
+                
             }
 
             base.Dispose(disposing);
