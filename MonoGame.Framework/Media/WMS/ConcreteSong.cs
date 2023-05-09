@@ -21,9 +21,6 @@ namespace Microsoft.Xna.Framework.Media
 
         internal override void PlatformInitialize(string fileName)
         {
-            if (_topology != null)
-                return;
-
             MediaManager.Startup(true);
 
             MediaFactory.CreateTopology(out _topology);

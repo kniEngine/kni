@@ -21,9 +21,6 @@ namespace Microsoft.Xna.Platform.Media
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
             : base(graphicsDevice, fileName, duration)
         {
-            if (Topology != null)
-                return;
-
             MediaManager.Startup(true);
 
             MediaFactory.CreateTopology(out _topology);
