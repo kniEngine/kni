@@ -79,7 +79,6 @@
     <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Android\ConcreteSong.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
-    <Compile Include="Media\Song.Android.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include="TitleContainer.Android.cs" />
