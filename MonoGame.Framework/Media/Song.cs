@@ -11,7 +11,7 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : IEquatable<Song>, IDisposable
+    public sealed class Song : IEquatable<Song>, IDisposable
     {
         private SongStrategy _strategy;
         bool _isDisposed;
@@ -49,17 +49,29 @@ namespace Microsoft.Xna.Framework.Media
 
         public int TrackNumber { get { return _strategy.TrackNumber; } }
 
-        internal Song(string fileName, int durationMS)
-            : this(fileName)
+        internal Song(string filename, int durationMS)
         {
+            _strategy = new ConcreteSongStrategy();
+			_strategy.Name = filename;
+            _strategy.PlatformInitialize(filename);
+
             _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		internal Song(string fileName)
+		internal Song(string name, Uri uri)
 		{
+            string filename = uri.OriginalString;
+
             _strategy = new ConcreteSongStrategy();
-			_strategy.Name = fileName;
-            _strategy.PlatformInitialize(fileName);
+			_strategy.Name = filename;
+            _strategy.PlatformInitialize(filename);
+
+            _strategy.Name = name;
+        }
+
+        internal Song(SongStrategy strategy)
+        {
+            _strategy = strategy;
         }
 
         ~Song()
@@ -76,8 +88,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <returns></returns>
         public static Song FromUri(string name, Uri uri)
         {
-            var song = new Song(uri.OriginalString);
-            song.Strategy.Name = name;
+            Song song = new Song(name, uri);
             return song;
         }
 

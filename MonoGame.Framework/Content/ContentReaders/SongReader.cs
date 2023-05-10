@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework.Content
         protected internal override Song Read(ContentReader input, Song existingInstance)
         {
             string path = input.ReadString();
+            int durationMs = input.ReadObject<int>();
 
             if (!String.IsNullOrEmpty(path))
             {
@@ -23,8 +24,6 @@ namespace Microsoft.Xna.Framework.Content
                 // Resolve the relative path
                 path = FileHelpers.ResolveRelativePath(dirPath, path);
             }
-
-            int durationMs = input.ReadObject<int>();
 
             return existingInstance ?? new Song(path, durationMs);
         }

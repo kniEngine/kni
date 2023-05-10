@@ -97,7 +97,18 @@ namespace Microsoft.Xna.Platform.Media
                     string genre = nsGenre == null ? "Unknown Genre" : nsGenre.ToString();
                     TimeSpan duration = TimeSpan.FromSeconds(((NSNumber)item.ValueForProperty(MPMediaItem.PlaybackDurationProperty)).FloatValue);
 
-                    var song = new Song(album, new Artist(artist), new Genre(genre), title, duration, assetUrl, item);
+                    var songStrategy = new ConcreteSongStrategy();
+                    songStrategy.Album = album;
+                    songStrategy.Artist = new Artist(artist);
+                    songStrategy.Genre = new Genre(genre);
+                    songStrategy._name2 = title;
+                    songStrategy._duration2 = duration;
+#if TVOS
+                    ((ConcreteSongStrategy)songStrategy)._assetUrl = assetUrl;
+#endif
+                    ((ConcreteSongStrategy)songStrategy)._mediaItem = item;
+                    Song song = new Song(songStrategy);
+
                     albumSongs.Add(song);
                     songList.Add(song);
                 }

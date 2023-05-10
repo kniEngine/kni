@@ -38,7 +38,13 @@ namespace Microsoft.Xna.Framework.Media
 
         internal override void PlatformInitialize(string fileName)
         {
-            this.PlatformInitialize(NSUrl.FromFilename(fileName));
+            NSUrl nsUrl = NSUrl.FromFilename(fileName);
+            this.PlatformInitialize(nsUrl);
+        }
+
+        private void PlatformLazyInitialize(NSUrl url)
+        {
+            this.PlatformInitialize(url);
         }
 
         private void PlatformInitialize(NSUrl url)
@@ -73,7 +79,7 @@ namespace Microsoft.Xna.Framework.Media
             {
                 // MediaLibrary items are lazy loaded
                 if (_assetUrl != null)
-                    this.PlatformInitialize(_assetUrl);
+                    this.PlatformLazyInitialize(_assetUrl);
                 else
                     return;
             }

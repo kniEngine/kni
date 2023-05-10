@@ -159,7 +159,13 @@ namespace Microsoft.Xna.Platform.Media
                                 albumList.Add(album);
                             }
 
-                            var song = new Song(album, artist, genre, properties);
+                            var songStrategy = new ConcreteSongStrategy();
+                            songStrategy.Album = album;
+                            songStrategy.Artist = artist;
+                            songStrategy.Genre = genre;
+                            songStrategy._musicProperties = properties;
+                            Song song = new Song(songStrategy);
+
                             song.Album.Songs.Add(song);
                             songList.Add(song);
                         }

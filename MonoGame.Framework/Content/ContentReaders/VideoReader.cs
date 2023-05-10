@@ -14,6 +14,11 @@ namespace Microsoft.Xna.Framework.Content
         protected internal override Video Read(ContentReader input, Video existingInstance)
         {
             string path = input.ReadObject<string>();
+            int durationMS = input.ReadObject<int>();
+            int width = input.ReadObject<int>();
+            int height = input.ReadObject<int>();
+            float framesPerSecond = input.ReadObject<float>();
+            int soundTrackType = input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
 
             if (!String.IsNullOrEmpty(path))
             {
@@ -23,12 +28,6 @@ namespace Microsoft.Xna.Framework.Content
                 // Resolve the relative path
                 path = FileHelpers.ResolveRelativePath(dirPath, path);
             }
-
-            int durationMS = input.ReadObject<int>();
-            int width = input.ReadObject<int>();
-            int height = input.ReadObject<int>();
-            float framesPerSecond = input.ReadObject<float>();
-            int soundTrackType = input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
 
             return new Video(input.GetGraphicsDevice(), path, durationMS)
             {
