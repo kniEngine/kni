@@ -58,11 +58,15 @@ namespace Microsoft.Xna.Framework.Media
             _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		internal Song(string filename)
+		internal Song(string name, Uri uri)
 		{
+            string filename = uri.OriginalString;
+
             _strategy = new ConcreteSongStrategy();
 			_strategy.Name = filename;
             _strategy.PlatformInitialize(filename);
+
+            _strategy.Name = name;
         }
 
         internal Song(SongStrategy strategy)
@@ -84,8 +88,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <returns></returns>
         public static Song FromUri(string name, Uri uri)
         {
-            Song song = new Song(uri.OriginalString);
-            song.Strategy.Name = name;
+            Song song = new Song(name, uri);
             return song;
         }
 
