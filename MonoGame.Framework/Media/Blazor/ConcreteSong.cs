@@ -13,7 +13,21 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
-        internal override void PlatformInitialize(string fileName)
+        public ConcreteSongStrategy(string name, Uri uri)
+        {
+            string filename = uri.OriginalString;
+            this.Name = filename;
+            this.PlatformInitialize(filename);
+            this.Name = name;
+        }
+
+        public ConcreteSongStrategy(string filename)
+        {
+            this.Name = filename;
+            this.PlatformInitialize(filename);
+        }
+
+        protected void PlatformInitialize(string fileName)
         {
 
         }

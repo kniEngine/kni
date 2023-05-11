@@ -70,9 +70,16 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.TrackNumber; }
         }
 
-
-        internal override void PlatformInitialize(string fileName)
+        public ConcreteSongStrategy(string name, Uri uri)
         {
+            string filename = uri.OriginalString;
+            this.Name = filename;
+            this.Name = name;
+        }
+
+        public ConcreteSongStrategy(string filename)
+        {
+            this.Name = filename;
         }
 
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);

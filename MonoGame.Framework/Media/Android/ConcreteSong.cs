@@ -35,9 +35,20 @@ namespace Microsoft.Xna.Framework.Media
             _androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
-
-        internal override void PlatformInitialize(string fileName)
+        public ConcreteSongStrategy()
         {
+        }
+
+        public ConcreteSongStrategy(string name, Uri uri)
+        {
+            string filename = uri.OriginalString;
+            this.Name = filename;
+            this.Name = name;
+        }
+
+        public ConcreteSongStrategy(string filename)
+        {
+            this.Name = filename;
         }
 
         static void AndroidPlayer_Completion(object sender, EventArgs e)

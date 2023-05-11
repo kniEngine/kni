@@ -9,7 +9,13 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
-        internal override void PlatformInitialize(string fileName)
+
+        public ConcreteSongStrategy(string name, Uri uri)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public ConcreteSongStrategy(string filename)
         {
             throw new PlatformNotSupportedException();
         }

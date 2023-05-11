@@ -22,10 +22,20 @@ namespace Microsoft.Xna.Framework.Media
             get { return this._musicProperties.File; }
         }
 
-
-        internal override void PlatformInitialize(string fileName)
+        public ConcreteSongStrategy()
         {
+        }
 
+        public ConcreteSongStrategy(string name, Uri uri)
+        {
+            string filename = uri.OriginalString;
+            this.Name = filename;
+            this.Name = name;
+        }
+
+        public ConcreteSongStrategy(string filename)
+        {
+            this.Name = filename;
         }
 
         public override Album Album

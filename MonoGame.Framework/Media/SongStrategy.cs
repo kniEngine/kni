@@ -89,8 +89,6 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        internal abstract void PlatformInitialize(string filename);
-
         #region IDisposable
         ~SongStrategy()
         {

@@ -51,22 +51,13 @@ namespace Microsoft.Xna.Framework.Media
 
         internal Song(string filename, int durationMS)
         {
-            _strategy = new ConcreteSongStrategy();
-			_strategy.Name = filename;
-            _strategy.PlatformInitialize(filename);
-
+            _strategy = new ConcreteSongStrategy(filename);
             _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
 		internal Song(string name, Uri uri)
 		{
-            string filename = uri.OriginalString;
-
-            _strategy = new ConcreteSongStrategy();
-			_strategy.Name = filename;
-            _strategy.PlatformInitialize(filename);
-
-            _strategy.Name = name;
+            _strategy = new ConcreteSongStrategy(name, uri);
         }
 
         internal Song(SongStrategy strategy)
