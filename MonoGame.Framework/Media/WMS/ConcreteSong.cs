@@ -15,25 +15,21 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
+        private Uri _streamSource;
         private Topology _topology;
 
+        internal Uri StreamSource { get { return _streamSource; } }
         internal Topology Topology { get { return _topology; } }
 
-        public ConcreteSongStrategy(string name, Uri uri)
+
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
-            this.PlatformInitialize(filename);
             this.Name = name;
+            this._streamSource = streamSource;
+            this.PlatformInitialize(streamSource);
         }
 
-        public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        private void PlatformInitialize(string fileName)
+        private void PlatformInitialize(Uri streamSource)
         {
             MediaManager.Startup(true);
 
@@ -41,9 +37,10 @@ namespace Microsoft.Xna.Framework.Media
 
             SharpDX.MediaFoundation.MediaSource mediaSource;
             {
-                SourceResolver resolver = new SourceResolver();
+                string filename = streamSource.OriginalString;
 
-                ComObject source = resolver.CreateObjectFromURL(Name, SourceResolverFlags.MediaSource);
+                SourceResolver resolver = new SourceResolver();
+                ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource);
                 mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();
@@ -126,9 +123,14 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.IsRated; }
         }
 
+        internal override string Filename
+        {
+            get { return StreamSource.OriginalString; }
+        }
+
         public override string Name
         {
-            get { return Path.GetFileNameWithoutExtension(base.Name); }
+            get { return base.Name; }
         }
 
         public override int PlayCount

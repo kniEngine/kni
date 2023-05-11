@@ -17,8 +17,7 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
-        internal string _name2;
-        internal TimeSpan _duration2;
+        private Uri _streamSource;
 
         #if !TVOS
         internal MPMediaItem _mediaItem;
@@ -28,6 +27,8 @@ namespace Microsoft.Xna.Framework.Media
         private AVPlayerItem _sound;
         private AVPlayer _player; // TODO: Move _player to MediaPlayer
         private NSObject _playToEndObserver;
+
+        internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
         public NSUrl AssetUrl
@@ -39,23 +40,16 @@ namespace Microsoft.Xna.Framework.Media
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri uri)
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
-            this.PlatformInitialize(filename);
             this.Name = name;
+            this._streamSource = streamSource;
+            this.PlatformInitialize(streamSource);
         }
 
-        public ConcreteSongStrategy(string filename)
+        private void PlatformInitialize(Uri streamSource)
         {
-            this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        private void PlatformInitialize(string fileName)
-        {
-            NSUrl nsUrl = NSUrl.FromFilename(fileName);
+            NSUrl nsUrl = NSUrl.FromFilename(streamSource.OriginalString);
             this.PlatformInitialize(nsUrl);
         }
 
@@ -178,15 +172,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public override TimeSpan Duration
         {
-            get
-            {
-                #if !TVOS
-                if (this._mediaItem != null)
-                    return this._duration2;
-                #endif
-
-                return base.Duration;
-            }
+            get { return base.Duration; }
         }
 
         public override bool IsProtected
@@ -199,15 +185,20 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.IsRated; }
         }
 
-        public override string Name
+        internal override string Filename
         {
             get
             {
-                if (this._name2 != null)
-                    return this._name2;
+                if (this.StreamSource == null)
+                    return this.Name;
 
-                return Path.GetFileNameWithoutExtension(base.Name);
+                return StreamSource.OriginalString;
             }
+        }
+
+        public override string Name
+        {
+            get { return base.Name; }
         }
 
         public override int PlayCount

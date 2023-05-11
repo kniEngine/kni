@@ -10,12 +10,7 @@ namespace Microsoft.Xna.Framework.Media
     public sealed class ConcreteSongStrategy : SongStrategy
     {
 
-        public ConcreteSongStrategy(string name, Uri uri)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public ConcreteSongStrategy(string filename)
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
             throw new PlatformNotSupportedException();
         }
@@ -57,6 +52,11 @@ namespace Microsoft.Xna.Framework.Media
         }
 
         public override bool IsRated
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
+        internal override string Filename
         {
             get { throw new PlatformNotSupportedException(); }
         }

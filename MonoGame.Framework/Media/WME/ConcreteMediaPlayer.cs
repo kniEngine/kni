@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void PlatformPlaySong(Song song)
         {
-            _mediaEngineEx.Source = song.Strategy.Name;
+            _mediaEngineEx.Source = ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString;
             _mediaEngineEx.Load();
             _sessionState = SessionState.Started;
 
