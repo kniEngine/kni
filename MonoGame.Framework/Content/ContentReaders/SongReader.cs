@@ -25,7 +25,9 @@ namespace Microsoft.Xna.Framework.Content
                 path = FileHelpers.ResolveRelativePath(dirPath, path);
             }
 
-            return existingInstance ?? new Song(path, durationMs);
+            string name = Path.GetFileNameWithoutExtension(path);
+            Uri streamSource = new Uri(path);
+            return existingInstance ?? new Song(name, streamSource, durationMs);
         }
     }
 }

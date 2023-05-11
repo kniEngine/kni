@@ -16,17 +16,19 @@ namespace Microsoft.Xna.Framework.Media
         static Android.Media.MediaPlayer _androidPlayer;
         static ConcreteSongStrategy _playingSong;
 
-        internal string _name2;
-        internal TimeSpan _duration2;
-
+        private Uri _streamSource;
         internal Android.Net.Uri _assetUri;
+
         private TimeSpan _position;
+
+        internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
         public Android.Net.Uri AssetUri
         {
             get { return this._assetUri; }
         }
+
 
         static ConcreteSongStrategy()
         {
@@ -39,16 +41,10 @@ namespace Microsoft.Xna.Framework.Media
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri uri)
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
             this.Name = name;
-        }
-
-        public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
+            this._streamSource = streamSource;
         }
 
         static void AndroidPlayer_Completion(object sender, EventArgs e)
@@ -87,7 +83,7 @@ namespace Microsoft.Xna.Framework.Media
             }
             else
             {
-                var afd = AndroidGameWindow.Activity.Assets.OpenFd(Name);
+                var afd = AndroidGameWindow.Activity.Assets.OpenFd(_streamSource.OriginalString);
                 if (afd == null)
                     return;
 
@@ -162,13 +158,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public override TimeSpan Duration
         {
-            get
-            {
-                if (this._assetUri != null)
-                    return this._duration2;
-
-                return base.Duration;
-            }
+            get { return base.Duration; }
         }
 
         public override bool IsProtected
@@ -181,15 +171,20 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.IsRated; }
         }
 
-        public override string Name
+        internal override string Filename
         {
             get
             {
                 if (this._assetUri != null)
-                    return this._name2;
+                    return this.Name;
 
-                return Path.GetFileNameWithoutExtension(base.Name);
+                return StreamSource.OriginalString;
             }
+        }
+
+        public override string Name
+        {
+            get { return base.Name; }
         }
 
         public override int PlayCount

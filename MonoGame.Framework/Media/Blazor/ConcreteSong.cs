@@ -13,23 +13,14 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
-        public ConcreteSongStrategy(string name, Uri uri)
+        private Uri _streamSource;
+
+        internal Uri StreamSource { get { return _streamSource; } }
+
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
-            this.PlatformInitialize(filename);
             this.Name = name;
-        }
-
-        public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        protected void PlatformInitialize(string fileName)
-        {
-
+            this._streamSource = streamSource;
         }
 
 		internal float Volume
@@ -79,6 +70,11 @@ namespace Microsoft.Xna.Framework.Media
         }
 
         public override bool IsRated
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        internal override string Filename
         {
             get { throw new NotImplementedException(); }
         }

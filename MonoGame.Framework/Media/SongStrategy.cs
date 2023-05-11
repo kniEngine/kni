@@ -24,6 +24,8 @@ namespace Microsoft.Xna.Platform.Media
         private int _rating;
         private int _trackNumber;
 
+        abstract internal string Filename { get; }
+
         public virtual string Name
         {
             get { return _name; }
@@ -83,7 +85,6 @@ namespace Microsoft.Xna.Platform.Media
             get { return _trackNumber; }
             set { _trackNumber = value; }
         }
-
 
         internal SongStrategy()
         {

@@ -156,8 +156,8 @@ namespace Microsoft.Xna.Platform.Media
                             songStrategy.Album = album;
                             songStrategy.Artist = artist;
                             songStrategy.Genre = genre;
-                            songStrategy._name2 = titleProperty;
-                            songStrategy._duration2 = duration;
+                            songStrategy.Name = titleProperty;
+                            songStrategy.Duration = duration;
                             songStrategy._assetUri = assetUri;
                             Song song = new Song(songStrategy);
 

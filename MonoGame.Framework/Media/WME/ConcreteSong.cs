@@ -14,7 +14,10 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
+        private Uri _streamSource;
         internal MusicProperties _musicProperties;
+
+        internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
         public StorageFile StorageFile
@@ -26,16 +29,10 @@ namespace Microsoft.Xna.Framework.Media
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri uri)
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
             this.Name = name;
-        }
-
-        public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
+            this._streamSource = streamSource;
         }
 
         public override Album Album
@@ -86,6 +83,17 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
+        internal override string Filename
+        {
+            get
+            {
+                if (this._musicProperties != null)
+                    return this._musicProperties.Title;
+
+                return StreamSource.OriginalString;
+            }
+        }
+
         public override string Name
         {
             get
@@ -93,7 +101,7 @@ namespace Microsoft.Xna.Framework.Media
                 if (this._musicProperties != null)
                     return this._musicProperties.Title;
 
-                return Path.GetFileNameWithoutExtension(base.Name);
+                return base.Name;
             }
         }
 

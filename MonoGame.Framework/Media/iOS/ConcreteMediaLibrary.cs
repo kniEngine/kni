@@ -101,8 +101,8 @@ namespace Microsoft.Xna.Platform.Media
                     songStrategy.Album = album;
                     songStrategy.Artist = new Artist(artist);
                     songStrategy.Genre = new Genre(genre);
-                    songStrategy._name2 = title;
-                    songStrategy._duration2 = duration;
+                    songStrategy.Name = title;
+                    songStrategy.Duration = duration;
 #if TVOS
                     ((ConcreteSongStrategy)songStrategy)._assetUrl = assetUrl;
 #endif

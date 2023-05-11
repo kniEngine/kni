@@ -12,12 +12,16 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
+        private Uri _streamSource;
+
         DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
         VorbisReader _reader;
         float[] _sampleBuffer;
         byte[] _dataBuffer;
 
         private float _volume = 1f;
+
+        internal Uri StreamSource { get { return _streamSource; } }
 
 
         public override Album Album
@@ -50,9 +54,14 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.IsRated; }
         }
 
+        internal override string Filename
+        {
+            get { return StreamSource.OriginalString; }
+        }
+
         public override string Name
         {
-            get { return Path.GetFileNameWithoutExtension(base.Name); }
+            get { return base.Name; }
         }
 
         public override int PlayCount
@@ -70,16 +79,10 @@ namespace Microsoft.Xna.Framework.Media
             get { return base.TrackNumber; }
         }
 
-        public ConcreteSongStrategy(string name, Uri uri)
+        public ConcreteSongStrategy(string name, Uri streamSource)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
             this.Name = name;
-        }
-
-        public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
+            this._streamSource = streamSource;
         }
 
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
@@ -158,7 +161,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_player == null)
             {
-                _reader = new VorbisReader(Name);
+                _reader = new VorbisReader(Filename);
                 Duration = _reader.TotalTime;
 
                 int samples = (_reader.SampleRate * _reader.Channels) / 2;

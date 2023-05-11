@@ -49,15 +49,15 @@ namespace Microsoft.Xna.Framework.Media
 
         public int TrackNumber { get { return _strategy.TrackNumber; } }
 
-        internal Song(string filename, int durationMS)
+        internal Song(string name, Uri streamSource, int durationMS)
         {
-            _strategy = new ConcreteSongStrategy(filename);
+            _strategy = new ConcreteSongStrategy(name, streamSource);
             _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		internal Song(string name, Uri uri)
+		internal Song(string name, Uri streamSource)
 		{
-            _strategy = new ConcreteSongStrategy(name, uri);
+            _strategy = new ConcreteSongStrategy(name, streamSource);
         }
 
         internal Song(SongStrategy strategy)
@@ -90,12 +90,8 @@ namespace Microsoft.Xna.Framework.Media
         }
 
         public bool Equals(Song other)
-        {
-#if DIRECTX
-            return (other != null && _strategy.Name == other._strategy.Name);
-#else
-            return ((object)other != null) && (Name == other.Name);
-#endif
+        {   
+            return (other != null && this.Strategy.Filename == other.Strategy.Filename);
         }
 
         public override bool Equals(Object obj)
