@@ -30,19 +30,12 @@ namespace Microsoft.Xna.Framework.Media
         {
             string filename = uri.OriginalString;
             this.Name = filename;
-            this.PlatformInitialize(filename);
             this.Name = name;
         }
 
         public ConcreteSongStrategy(string filename)
         {
             this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        private void PlatformInitialize(string fileName)
-        {
-
         }
 
         public override Album Album

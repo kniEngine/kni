@@ -12,19 +12,10 @@ namespace Microsoft.Xna.Framework.Media
 
         public ConcreteSongStrategy(string name, Uri uri)
         {
-            string filename = uri.OriginalString;
-            this.Name = filename;
-            this.PlatformInitialize(filename);
-            this.Name = name;
+            throw new PlatformNotSupportedException();
         }
 
         public ConcreteSongStrategy(string filename)
-        {
-            this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        private void PlatformInitialize(string fileName)
         {
             throw new PlatformNotSupportedException();
         }

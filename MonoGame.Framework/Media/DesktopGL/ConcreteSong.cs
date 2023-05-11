@@ -74,18 +74,12 @@ namespace Microsoft.Xna.Framework.Media
         {
             string filename = uri.OriginalString;
             this.Name = filename;
-            this.PlatformInitialize(filename);
             this.Name = name;
         }
 
         public ConcreteSongStrategy(string filename)
         {
             this.Name = filename;
-            this.PlatformInitialize(filename);
-        }
-
-        private void PlatformInitialize(string fileName)
-        {
         }
 
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
