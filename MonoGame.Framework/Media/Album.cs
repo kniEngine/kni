@@ -6,9 +6,6 @@ using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
 
-#if WINDOWS_UAP
-using Windows.Storage.FileProperties;
-#endif
 #if IOS || TVOS
 using System.Drawing;
 using CoreGraphics;
@@ -30,9 +27,6 @@ namespace Microsoft.Xna.Framework.Media
         public AlbumStrategy Strategy { get { return _strategy; } }
 
 
-#if WINDOWS_UAP
-        private StorageItemThumbnail _thumbnail;
-#endif
 #if IOS
         private MPMediaItemArtwork _thumbnail;
 #endif
@@ -68,9 +62,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WINDOWS_UAP
-                return this._thumbnail != null;
-#elif IOS
+#if IOS
                 // If album art is missing the bounds will be: Infinity, Infinity, 0, 0
                 return this._thumbnail != null && this._thumbnail.Bounds.Width != 0;
 #elif ANDROID
@@ -110,13 +102,6 @@ namespace Microsoft.Xna.Framework.Media
             _strategy = strategy;
         }
 
-#if WINDOWS_UAP
-        internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, StorageItemThumbnail thumbnail)
-        {
-            _strategy = new ConcreteAlbumStrategy(name, artist, genre, songCollection);
-            this._thumbnail = thumbnail;
-        }
-#endif
 #if IOS
         internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, MPMediaItemArtwork thumbnail)
         {
@@ -137,11 +122,6 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Dispose()
         {
-#if WINDOWS_UAP
-            if (this._thumbnail != null)
-                this._thumbnail.Dispose();
-#endif
-
             _strategy.Dispose();
         }
 
@@ -176,13 +156,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Stream GetAlbumArt()
         {
-#if WINDOWS_UAP
-            if (this.HasArt)
-                return this._thumbnail.AsStream();
-            return null;
-#else
             return _strategy.GetAlbumArt();
-#endif
         }
 
 #if IOS
@@ -205,14 +179,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Stream GetThumbnail()
         {
-#if WINDOWS_UAP
-            if (this.HasArt)
-                return this._thumbnail.AsStream();
-
-            return null;
-#else
             return _strategy.GetThumbnail();
-#endif
         }
 
         /// <summary>

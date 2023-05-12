@@ -1,8 +1,13 @@
-﻿// Copyright (C)2023 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Media;
+using WinFileProperties = Windows.Storage.FileProperties;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -13,6 +18,8 @@ namespace Microsoft.Xna.Platform.Media
         private Artist _artist;
         private Genre _genre;
         private SongCollection _songs;
+
+        private WinFileProperties.StorageItemThumbnail _thumbnail;
 
 
         public override string Name
@@ -37,7 +44,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override bool HasArt
         {
-            get { throw new NotImplementedException(); }
+            get { return this._thumbnail != null; }
         }
 
         public override SongCollection Songs
@@ -46,30 +53,39 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        public ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection)
+        public ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection,
+                                     WinFileProperties.StorageItemThumbnail thumbnail)
         {
             this._name = name;
             this._artist = artist;
             this._genre = genre;
             this._songs = songCollection;
+
+            this._thumbnail = thumbnail;
         }
 
 
         public override Stream GetAlbumArt()
         {
-            throw new NotImplementedException();
+            if (this.HasArt)
+                return this._thumbnail.AsStream();
+            return null;
         }
 
         public override Stream GetThumbnail()
         {
-            throw new NotImplementedException();
+            if (this.HasArt)
+                return this._thumbnail.AsStream();
+
+            return null;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-
+                if (this._thumbnail != null)
+                    this._thumbnail.Dispose();
             }
 
             //base.Dispose(disposing);
