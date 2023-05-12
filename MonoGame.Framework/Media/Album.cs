@@ -25,10 +25,16 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Album : IDisposable
     {
+        private AlbumStrategy _strategy;
+
         private string _name;
         private Artist _artist;
         private Genre _genre;
         private SongCollection _songCollection;
+
+
+        public AlbumStrategy Strategy { get { return _strategy; } }
+
 
 #if WINDOWS_UAP
         private StorageItemThumbnail _thumbnail;
@@ -108,8 +114,14 @@ namespace Microsoft.Xna.Framework.Media
             get { return this._songCollection; }
         }
 
+        internal Album(AlbumStrategy strategy)
+        {
+            _strategy = strategy;
+        }
+
         private Album(string name, Artist artist, Genre genre, SongCollection songCollection)
         {
+            //_strategy = new ConcreteAlbumStrategy();
             this._name = name;
             this._artist = artist;
             this._genre = genre;
