@@ -27,12 +27,6 @@ namespace Microsoft.Xna.Framework.Media
     {
         private AlbumStrategy _strategy;
 
-        private string _name;
-        private Artist _artist;
-        private Genre _genre;
-        private SongCollection _songCollection;
-
-
         public AlbumStrategy Strategy { get { return _strategy; } }
 
 
@@ -48,7 +42,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public Artist Artist
         {
-            get { return this._artist; }
+            get { return _strategy.Artist; }
         }
 
         /// <summary>
@@ -56,10 +50,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public TimeSpan Duration
         {
-            get
-            {
-                return TimeSpan.Zero; // Not implemented
-            }
+            get { return _strategy.Duration; }
         }
 
         /// <summary>
@@ -67,7 +58,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Genre Genre
         {
-            get { return this._genre; }
+            get { return _strategy.Genre; }
         }
 
         /// <summary>
@@ -85,7 +76,7 @@ namespace Microsoft.Xna.Framework.Media
 #elif ANDROID
                 return this._thumbnail != null;
 #else
-                return false;
+                return _strategy.HasArt;
 #endif
             }
         }
@@ -103,7 +94,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public string Name
         {
-            get { return this._name; }
+            get { return _strategy.Name; }
         }
 
         /// <summary>
@@ -111,7 +102,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public SongCollection Songs
         {
-            get { return this._songCollection; }
+            get { return _strategy.Songs; }
         }
 
         internal Album(AlbumStrategy strategy)
@@ -119,42 +110,24 @@ namespace Microsoft.Xna.Framework.Media
             _strategy = strategy;
         }
 
-        private Album(string name, Artist artist, Genre genre, SongCollection songCollection)
-        {
-            //_strategy = new ConcreteAlbumStrategy();
-            this._name = name;
-            this._artist = artist;
-            this._genre = genre;
-            this._songCollection = songCollection;
-        }
-
 #if WINDOWS_UAP
         internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, StorageItemThumbnail thumbnail)
         {
-            this._name = name;
-            this._artist = artist;
-            this._genre = genre;
-            this._songCollection = songCollection;
+            _strategy = new ConcreteAlbumStrategy(name, artist, genre, songCollection);
             this._thumbnail = thumbnail;
         }
 #endif
 #if IOS
         internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, MPMediaItemArtwork thumbnail)
         {
-            this._name = name;
-            this._artist = artist;
-            this._genre = genre;
-            this._songCollection = songCollection;
+            _strategy = new ConcreteAlbumStrategy(name, artist, genre, songCollection);
             this._thumbnail = thumbnail;
         }
 #endif
 #if ANDROID
         internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, Android.Net.Uri thumbnail)
         {
-            this._name = name;
-            this._artist = artist;
-            this._genre = genre;
-            this._songCollection = songCollection;
+            _strategy = new ConcreteAlbumStrategy(name, artist, genre, songCollection);
             this._thumbnail = thumbnail;
         }
 #endif
@@ -168,6 +141,8 @@ namespace Microsoft.Xna.Framework.Media
             if (this._thumbnail != null)
                 this._thumbnail.Dispose();
 #endif
+
+            _strategy.Dispose();
         }
 
 #if IOS
@@ -206,7 +181,7 @@ namespace Microsoft.Xna.Framework.Media
                 return this._thumbnail.AsStream();
             return null;
 #else
-            throw new NotImplementedException();
+            return _strategy.GetAlbumArt();
 #endif
         }
 
@@ -236,7 +211,7 @@ namespace Microsoft.Xna.Framework.Media
 
             return null;
 #else
-            throw new NotImplementedException();
+            return _strategy.GetThumbnail();
 #endif
         }
 
@@ -245,7 +220,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override string ToString()
         {
-            return this._name;
+            return _strategy.Name;
         }
 
         /// <summary>
@@ -253,7 +228,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override int GetHashCode()
         {
-            return this._name.GetHashCode();
+            return _strategy.Name.GetHashCode();
         }
     }
 }

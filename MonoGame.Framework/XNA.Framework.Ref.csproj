@@ -54,6 +54,7 @@
     <Compile Include="Input\Keyboard.Ref.cs" />
     <Compile Include="Input\Mouse.Ref.cs" />
     <Compile Include="Input\MouseCursor.Ref.cs" />
+    <Compile Include="Media\Ref\ConcreteAlbum.cs" />
     <Compile Include="Media\Ref\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\Ref\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteSong.cs" />

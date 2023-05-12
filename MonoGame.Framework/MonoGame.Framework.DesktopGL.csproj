@@ -61,6 +61,7 @@
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
+    <Compile Include="Media\DesktopGL\ConcreteAlbum.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />

@@ -70,6 +70,7 @@
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
+    <Compile Include="Media\WME\ConcreteAlbum.cs" />
     <Compile Include="Media\WME\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WME\ConcreteSong.cs" />

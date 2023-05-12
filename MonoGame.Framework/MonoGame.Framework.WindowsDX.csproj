@@ -60,6 +60,7 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
+    <Compile Include="Media\WMS\ConcreteAlbum.cs" />
     <Compile Include="Media\WMS\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\WMS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WMS\ConcreteSong.cs" />

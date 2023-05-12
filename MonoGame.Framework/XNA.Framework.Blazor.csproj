@@ -61,6 +61,7 @@
     <Compile Include="Input\Keyboard.Blazor.cs" />
     <Compile Include="Input\Mouse.Blazor.cs" />
     <Compile Include="Input\MouseCursor.Blazor.cs" />
+    <Compile Include="Media\Blazor\ConcreteAlbum.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Blazor\ConcreteSong.cs" />
