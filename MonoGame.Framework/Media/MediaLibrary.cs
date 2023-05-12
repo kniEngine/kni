@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Platform.Media;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
 	public partial class MediaLibrary : IDisposable

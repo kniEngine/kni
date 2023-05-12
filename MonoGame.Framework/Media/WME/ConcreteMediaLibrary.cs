@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Platform.Media
                             if (!albums.TryGetValue(properties.Album, out album))
                             {
                                 var thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
-                                album = new Album(new SongCollection(), properties.Album, albumArtist, genre, thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
+                                album = new Album(properties.Album, albumArtist, genre, new SongCollection(), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }

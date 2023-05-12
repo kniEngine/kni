@@ -6,29 +6,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class AlbumCollection : IDisposable
     {
-        private List<Album> albumCollection;
+        private List<Album> _innerList;
 
         /// <summary>
         /// Gets a value indicating whether the object is disposed.
         /// </summary>
-        public bool IsDisposed { get { return false; } }
+        public bool IsDisposed
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// Gets the number of Album objects in the AlbumCollection.
         /// </summary>
         public int Count
         {
-            get { return this.albumCollection.Count; }
+            get { return this._innerList.Count; }
         }
 
 
         public AlbumCollection(List<Album> albums)
         {
-            this.albumCollection = albums;
+            this._innerList = albums;
         }
 
         /// <summary>
@@ -37,7 +41,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <param name="index">Index of the Album to get.</param>
         public Album this[int index]
         {
-            get { return this.albumCollection[index]; }
+            get { return this._innerList[index]; }
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Dispose()
         {
-            foreach (var album in this.albumCollection)
+            foreach (var album in this._innerList)
                 album.Dispose();
         }
     }

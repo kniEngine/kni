@@ -6,12 +6,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
 	public class SongCollection : ICollection<Song>, IEnumerable<Song>, IEnumerable, IDisposable
 	{
-		private bool isReadOnly = false;
-		private List<Song> innerlist = new List<Song>();
+		private bool _isReadOnly = false;
+		private List<Song> _innerList = new List<Song>();
 
         internal SongCollection()
         {
@@ -20,7 +21,7 @@ namespace Microsoft.Xna.Framework.Media
 
         internal SongCollection(List<Song> songs)
         {
-            this.innerlist = songs;
+            this._innerList = songs;
         }
 
 		public void Dispose()
@@ -29,27 +30,27 @@ namespace Microsoft.Xna.Framework.Media
 		
 		public IEnumerator<Song> GetEnumerator()
         {
-            return innerlist.GetEnumerator();
+            return _innerList.GetEnumerator();
         }
 		
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return innerlist.GetEnumerator();
+            return _innerList.GetEnumerator();
         }
 
         public int Count
         {
-            get { return innerlist.Count; }
+            get { return _innerList.Count; }
         }
 		
 		public bool IsReadOnly
         {
-		    get { return this.isReadOnly; }
+		    get { return this._isReadOnly; }
         }
 
         public Song this[int index]
         {
-            get { return this.innerlist[index]; }
+            get { return this._innerList[index]; }
         }
 		
 		public void Add(Song item)
@@ -58,55 +59,55 @@ namespace Microsoft.Xna.Framework.Media
             if (item == null)
                 throw new ArgumentNullException();
 
-            if (innerlist.Count == 0)
+            if (_innerList.Count == 0)
             {
-                this.innerlist.Add(item);
+                this._innerList.Add(item);
                 return;
             }
 
-            for (int i = 0; i < this.innerlist.Count; i++)
+            for (int i = 0; i < this._innerList.Count; i++)
             {
-                if (item.TrackNumber < this.innerlist[i].TrackNumber)
+                if (item.TrackNumber < this._innerList[i].TrackNumber)
                 {
-                    this.innerlist.Insert(i, item);
+                    this._innerList.Insert(i, item);
                     return;
                 }
             }
 
-            this.innerlist.Add(item);
+            this._innerList.Add(item);
         }
 		
 		public void Clear()
         {
-            innerlist.Clear();
+            _innerList.Clear();
         }
         
         public SongCollection Clone()
         {
             SongCollection sc = new SongCollection();
-            foreach (Song song in this.innerlist)
+            foreach (Song song in this._innerList)
                 sc.Add(song);
             return sc;
         }
         
         public bool Contains(Song item)
         {
-            return innerlist.Contains(item);
+            return _innerList.Contains(item);
         }
         
         public void CopyTo(Song[] array, int arrayIndex)
         {
-            innerlist.CopyTo(array, arrayIndex);
+            _innerList.CopyTo(array, arrayIndex);
         }
 		
 		public int IndexOf(Song item)
         {
-            return innerlist.IndexOf(item);
+            return _innerList.IndexOf(item);
         }
         
         public bool Remove(Song item)
         {
-            return innerlist.Remove(item);
+            return _innerList.Remove(item);
         }
 	}
 }

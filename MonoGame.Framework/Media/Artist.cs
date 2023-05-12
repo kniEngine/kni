@@ -4,11 +4,12 @@
 
 using System;
 
+
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Artist : IDisposable
     {
-        private string artist;
+        private string _name;
 
         /// <summary>
         /// Gets the AlbumCollection for the Artist.
@@ -31,7 +32,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public string Name
         {
-            get { return this.artist; }
+            get { return this._name; }
         }
 
         /// <summary>
@@ -42,9 +43,9 @@ namespace Microsoft.Xna.Framework.Media
             get { throw new NotImplementedException(); }
         }
 
-        public Artist(string artist)
+        public Artist(string name)
         {
-            this.artist = artist;
+            this._name = name;
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override string ToString()
         {
-            return this.artist.ToString();
+            return this._name;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public override int GetHashCode()
         {
-            return this.artist.GetHashCode();
+            return this._name.GetHashCode();
         }
     }
 }
