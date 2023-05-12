@@ -79,7 +79,8 @@ namespace Microsoft.Xna.Platform.Media
                 MPMediaItemArtwork thumbnail = collection.RepresentativeItem.ValueForProperty(MPMediaItem.ArtworkProperty) as MPMediaItemArtwork;
 
                 var albumSongs = new List<Song>((int)collection.Count);
-                var album = new Album(albumName, new Artist(albumArtist), new Genre(albumGenre), new SongCollection(albumSongs), thumbnail);
+                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumName, new Artist(albumArtist), new Genre(albumGenre), new SongCollection(albumSongs), thumbnail);
+                var album = new Album(albumStrategy);
                 albumList.Add(album);
 
                 foreach (var item in collection.Items)
