@@ -12,10 +12,6 @@ using CoreGraphics;
 using MediaPlayer;
 using UIKit;
 #endif
-#if ANDROID
-using Android.Graphics;
-using Android.Provider;
-#endif
 
 
 namespace Microsoft.Xna.Framework.Media
@@ -29,9 +25,6 @@ namespace Microsoft.Xna.Framework.Media
 
 #if IOS
         private MPMediaItemArtwork _thumbnail;
-#endif
-#if ANDROID
-        private Android.Net.Uri _thumbnail;
 #endif
 
         public Artist Artist
@@ -65,8 +58,6 @@ namespace Microsoft.Xna.Framework.Media
 #if IOS
                 // If album art is missing the bounds will be: Infinity, Infinity, 0, 0
                 return this._thumbnail != null && this._thumbnail.Bounds.Width != 0;
-#elif ANDROID
-                return this._thumbnail != null;
 #else
                 return _strategy.HasArt;
 #endif
@@ -109,13 +100,6 @@ namespace Microsoft.Xna.Framework.Media
             this._thumbnail = thumbnail;
         }
 #endif
-#if ANDROID
-        internal Album(string name, Artist artist, Genre genre, SongCollection songCollection, Android.Net.Uri thumbnail)
-        {
-            _strategy = new ConcreteAlbumStrategy(name, artist, genre, songCollection);
-            this._thumbnail = thumbnail;
-        }
-#endif
 
         /// <summary>
         /// Immediately releases the unmanaged resources used by this object.
@@ -137,19 +121,6 @@ namespace Microsoft.Xna.Framework.Media
 			return this._thumbnail.ImageWithSize(new CGSize(width, height));
         }
 #endif
-#if ANDROID
-        [CLSCompliant(false)]
-        public Bitmap Platform_GetAlbumArt(int width = 0, int height = 0)
-        {
-            var albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this._thumbnail);
-            if (width == 0 || height == 0)
-                return albumArt;
-
-            var scaledAlbumArt = Bitmap.CreateScaledBitmap(albumArt, width, height, true);
-            albumArt.Dispose();
-            return scaledAlbumArt;
-        }
-#endif
 
         /// <summary>
         /// Returns the stream that contains the album art image data.
@@ -162,13 +133,6 @@ namespace Microsoft.Xna.Framework.Media
 #if IOS
         [CLSCompliant(false)]
         public UIImage Platform_GetThumbnail()
-        {
-            return this.Platform_GetAlbumArt(220, 220);
-        }
-#endif
-#if ANDROID
-        [CLSCompliant(false)]
-        public Bitmap Platform_GetThumbnail()
         {
             return this.Platform_GetAlbumArt(220, 220);
         }
