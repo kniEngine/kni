@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Media
 
 #if IOS
         [CLSCompliant(false)]
-        public UIImage GetAlbumArt(int width = 0, int height = 0)
+        public UIImage Platform_GetAlbumArt(int width = 0, int height = 0)
         {
             if (width == 0)
                 width = (int)this._thumbnail.Bounds.Width;
@@ -169,9 +169,10 @@ namespace Microsoft.Xna.Framework.Media
 
 			return this._thumbnail.ImageWithSize(new CGSize(width, height));
         }
-#elif ANDROID
+#endif
+#if ANDROID
         [CLSCompliant(false)]
-        public Bitmap GetAlbumArt(int width = 0, int height = 0)
+        public Bitmap Platform_GetAlbumArt(int width = 0, int height = 0)
         {
             var albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this._thumbnail);
             if (width == 0 || height == 0)
@@ -181,7 +182,8 @@ namespace Microsoft.Xna.Framework.Media
             albumArt.Dispose();
             return scaledAlbumArt;
         }
-#else
+#endif
+
         /// <summary>
         /// Returns the stream that contains the album art image data.
         /// </summary>
@@ -195,21 +197,22 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
 #endif
         }
-#endif
 
 #if IOS
         [CLSCompliant(false)]
-        public UIImage GetThumbnail()
+        public UIImage Platform_GetThumbnail()
         {
-            return this.GetAlbumArt(220, 220);
+            return this.Platform_GetAlbumArt(220, 220);
         }
-#elif ANDROID
+#endif
+#if ANDROID
         [CLSCompliant(false)]
-        public Bitmap GetThumbnail()
+        public Bitmap Platform_GetThumbnail()
         {
-            return this.GetAlbumArt(220, 220);
+            return this.Platform_GetAlbumArt(220, 220);
         }
-#else
+#endif
+
         /// <summary>
         /// Returns the stream that contains the album thumbnail image data.
         /// </summary>
@@ -224,7 +227,6 @@ namespace Microsoft.Xna.Framework.Media
             throw new NotImplementedException();
 #endif
         }
-#endif
 
         /// <summary>
         /// Returns a String representation of this Album.
