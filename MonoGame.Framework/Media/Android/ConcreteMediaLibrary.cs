@@ -147,7 +147,8 @@ namespace Microsoft.Xna.Platform.Media
                             Album album;
                             if (!albums.TryGetValue(albumNameProperty, out album))
                             {
-                                album = new Album(albumNameProperty, albumArtist, genre, new SongCollection(), albumArtUri);
+                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumNameProperty, albumArtist, genre, new SongCollection(), albumArtUri);
+                                album = new Album(albumStrategy);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }

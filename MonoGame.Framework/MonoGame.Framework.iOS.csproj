@@ -68,6 +68,7 @@
     <Compile Include="Input\MessageBox.iOS.cs" />
     <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\iOS\ConcreteAlbum.cs" />
     <Compile Include="Media\iOS\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteSong.cs" />

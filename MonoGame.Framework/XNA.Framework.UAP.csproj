@@ -465,6 +465,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
+    <Compile Include="Media\WME\ConcreteAlbum.cs" />
     <Compile Include="Media\WME\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\WME\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\WME\ConcreteSong.cs" />
@@ -472,6 +473,7 @@
     <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
     <Compile Include="Media\Album.cs" />
+    <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
