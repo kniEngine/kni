@@ -2,13 +2,13 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 using NVorbis;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {

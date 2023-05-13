@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Android.Widget;
 
+
 namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy

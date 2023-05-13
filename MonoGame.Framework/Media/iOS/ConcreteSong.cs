@@ -6,14 +6,14 @@
 
 using System;
 using System.IO;
-using Microsoft.Xna.Platform.Media;
+using Microsoft.Xna.Framework.Media;
 using Foundation;
 using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
 
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
