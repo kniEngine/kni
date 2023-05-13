@@ -26,14 +26,15 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
-            this.PlatformInitialize(streamSource);
+
+            MediaManager.Startup(true);
+            this._topology = CreateTopology(streamSource);
         }
 
-        private void PlatformInitialize(Uri streamSource)
+        private Topology CreateTopology(Uri streamSource)
         {
-            MediaManager.Startup(true);
-
-            MediaFactory.CreateTopology(out _topology);
+            Topology topology;
+            MediaFactory.CreateTopology(out topology);
 
             SharpDX.MediaFoundation.MediaSource mediaSource;
             {
@@ -76,8 +77,8 @@ namespace Microsoft.Xna.Platform.Media
                     MediaFactory.CreateAudioRendererActivate(out activate);
                     outputNode.Object = activate;
 
-                    _topology.AddNode(sourceNode);
-                    _topology.AddNode(outputNode);
+                    topology.AddNode(sourceNode);
+                    topology.AddNode(outputNode);
                     sourceNode.ConnectOutput(0, outputNode, 0);
 
                     sourceNode.Dispose();
@@ -91,6 +92,8 @@ namespace Microsoft.Xna.Platform.Media
 
             presDesc.Dispose();
             mediaSource.Dispose();
+
+            return topology;
         }
 
         public override Album Album

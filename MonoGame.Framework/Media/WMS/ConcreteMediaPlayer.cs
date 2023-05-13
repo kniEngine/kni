@@ -197,7 +197,6 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             _currentSong = song;
-
            _session.SetTopology(SessionSetTopologyFlags.Immediate, ((ConcreteSongStrategy)song.Strategy).Topology);
 
             StartSession(_positionBeginning);
