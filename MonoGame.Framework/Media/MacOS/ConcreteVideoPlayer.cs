@@ -72,19 +72,6 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        public override void PlatformPause()
-        {
-            base.Video.Player.Pause();
-            State = MediaState.Paused;
-        }
-
-        public override void PlatformResume()
-        {
-            base.Video.Volume = _volume;
-            base.Video.Player.Play();
-            State = MediaState.Playing;
-        }
-
         public override void PlatformPlay(Video video)
         {
             base.Video = video;
@@ -112,6 +99,19 @@ namespace Microsoft.Xna.Platform.Media
             State = MediaState.Playing;
         }
 
+        public override void PlatformPause()
+        {
+            base.Video.Player.Pause();
+            State = MediaState.Paused;
+        }
+
+        public override void PlatformResume()
+        {
+            base.Video.Volume = _volume;
+            base.Video.Player.Play();
+            State = MediaState.Playing;
+        }
+        
         public override void PlatformStop()
         {
             var movieView = base.Video.Player;
