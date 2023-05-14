@@ -5,6 +5,7 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 
 
@@ -34,8 +35,11 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong == null)
                 return TimeSpan.Zero;
+            
+            if (ConcreteSongStrategy._playingSong == activeSong.Strategy && ConcreteSongStrategy._androidPlayer.IsPlaying)
+                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(ConcreteSongStrategy._androidPlayer.CurrentPosition);
 
-            return ((ConcreteSongStrategy)activeSong.Strategy).Position;
+            return ((ConcreteSongStrategy)activeSong.Strategy)._position;
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -64,7 +68,7 @@ namespace Microsoft.Xna.Platform.Media
 
             foreach (Song queuedSong in Queue.Songs)
             {
-                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
+                ConcreteSongStrategy._androidPlayer.SetVolume(innerVolume, innerVolume);
             }
         }
         
@@ -76,8 +80,32 @@ namespace Microsoft.Xna.Platform.Media
 
                 float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-                ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
-                ((ConcreteSongStrategy)song.Strategy).Play();
+                ConcreteSongStrategy._androidPlayer.SetVolume(innerVolume, innerVolume);
+                                             
+                // Prepare the player
+                ConcreteSongStrategy._androidPlayer.Reset();
+
+                if (((ConcreteSongStrategy)song.Strategy).AssetUri != null)
+                {
+                    ConcreteSongStrategy._androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context,
+                                                                      ((ConcreteSongStrategy)song.Strategy).AssetUri);
+                }
+                else
+                {
+                    var afd = AndroidGameWindow.Activity.Assets.OpenFd(
+                        ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString);
+                    if (afd == null)
+                        return;
+
+                    ConcreteSongStrategy._androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                }
+
+                ConcreteSongStrategy._androidPlayer.Prepare();
+                ConcreteSongStrategy._androidPlayer.Looping = MediaPlayer.IsRepeating;
+                ConcreteSongStrategy._playingSong = ((ConcreteSongStrategy)song.Strategy);
+
+                ConcreteSongStrategy._androidPlayer.Start();
+                song.Strategy.PlayCount++;
             }
         }
 
@@ -85,14 +113,18 @@ namespace Microsoft.Xna.Platform.Media
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
-                ((ConcreteSongStrategy)activeSong.Strategy).Pause();
+            {
+                ConcreteSongStrategy._androidPlayer.Pause();
+            }
         }
 
         protected override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
-                ((ConcreteSongStrategy)activeSong.Strategy).Resume();
+            {
+                ConcreteSongStrategy._androidPlayer.Start();
+            }
         }
 
         protected override void PlatformStop()
@@ -100,7 +132,12 @@ namespace Microsoft.Xna.Platform.Media
             foreach (Song queuedSong in Queue.Songs)
             {
                 var activeSong = Queue.ActiveSong;
-                ((ConcreteSongStrategy)activeSong.Strategy).Stop();
+                ConcreteSongStrategy._androidPlayer.Stop();
+                ConcreteSongStrategy._playingSong = null;
+                activeSong.Strategy.PlayCount = 0;
+                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.Zero;
+
+
             }
         }
 
@@ -109,7 +146,11 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
-                ((ConcreteSongStrategy)song.Strategy).Stop();
+                ConcreteSongStrategy._androidPlayer.Stop();
+                ConcreteSongStrategy._playingSong = null;
+                song.Strategy.PlayCount = 0;
+                ((ConcreteSongStrategy)song.Strategy)._position = TimeSpan.Zero;
+                
                 Queue.Remove(song);
             }
 
