@@ -106,24 +106,27 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void PlatformPause()
         {
-            if (_sessionState != SessionState.Started)
-                return;
-            _sessionState = SessionState.Paused;
-            _mediaEngineEx.Pause();
+            if (_sessionState == SessionState.Started)
+            {
+                _sessionState = SessionState.Paused;
+                _mediaEngineEx.Pause();
+            }
         }
 
         protected override void PlatformResume()
         {
-            if (_sessionState != SessionState.Paused)
-                return;
-            _mediaEngineEx.Play();
+            if (_sessionState == SessionState.Paused)
+            {
+                _mediaEngineEx.Play();
+            }
         }
 
         protected override void PlatformStop()
         {
-            if (_sessionState == SessionState.Stopped)
-                return;
-            _mediaEngineEx.Source = null;
+            if (_sessionState != SessionState.Stopped)
+            {
+                _mediaEngineEx.Source = null;
+            }
         }
 
     }

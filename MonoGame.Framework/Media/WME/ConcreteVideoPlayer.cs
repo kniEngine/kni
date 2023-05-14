@@ -124,6 +124,16 @@ namespace Microsoft.Xna.Platform.Media
         protected override void PlatformUpdateState(ref MediaState state)
         {
         }
+        
+        public override void PlatformPlay(Video video)
+        {
+            base.Video = video;
+
+            _mediaEngine.Source = System.IO.Path.Combine(TitleContainer.Location, base.Video.FileName);
+            _mediaEngine.Play();
+
+            State = MediaState.Playing;
+        }
 
         public override void PlatformPause()
         {
@@ -137,15 +147,6 @@ namespace Microsoft.Xna.Platform.Media
             State = MediaState.Playing;
         }
 
-        public override void PlatformPlay(Video video)
-        {
-            base.Video = video;
-
-            _mediaEngine.Source = System.IO.Path.Combine(TitleContainer.Location, base.Video.FileName);
-            _mediaEngine.Play();
-
-            State = MediaState.Playing;
-        }
 
         public override void PlatformStop()
         {
