@@ -71,10 +71,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.PlatformSetVolume(volume);
 
-            if (Queue.ActiveSong == null)
-                return;
-
-            SetChannelVolumes();
+            if (Queue.ActiveSong != null)
+                SetChannelVolumes();
         }
 
         internal override bool PlatformGetGameHasControl()
@@ -96,18 +94,22 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void PlatformPlaySong(Song song)
         {
+            throw new NotImplementedException();
         }
 
         protected override void PlatformPause()
         {
+            throw new NotImplementedException();
         }
 
         protected override void PlatformResume()
         {
+            throw new NotImplementedException();
         }
 
         protected override void PlatformStop()
         {
+            throw new NotImplementedException();
         }
 
     }

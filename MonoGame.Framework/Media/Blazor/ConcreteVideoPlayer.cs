@@ -61,6 +61,14 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
+        public override void PlatformPlay(Video video)
+        {
+            base.Video = video;
+
+            State = MediaState.Playing;
+        }
+
+
         public override void PlatformPause()
         {
             State = MediaState.Paused;
@@ -70,14 +78,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             State = MediaState.Playing;
         }
-
-        public override void PlatformPlay(Video video)
-        {
-            base.Video = video;
-
-            State = MediaState.Playing;
-        }
-
+        
         public override void PlatformStop()
         {
             State = MediaState.Stopped;
