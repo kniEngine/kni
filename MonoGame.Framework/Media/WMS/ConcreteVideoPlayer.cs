@@ -185,18 +185,6 @@ namespace Microsoft.Xna.Platform.Media
             state = MediaState.Stopped;
         }
 
-        public override void PlatformPause()
-        {
-            _session.Pause();
-            State = MediaState.Paused;
-        }
-
-        public override void PlatformResume()
-        {
-            _session.Start(null, _positionCurrent);
-            State = MediaState.Playing;
-        }
-
         public override void PlatformPlay(Video video)
         {
             base.Video = video;
@@ -253,6 +241,18 @@ namespace Microsoft.Xna.Platform.Media
             }
             timer.Stop();
 
+        }
+
+        public override void PlatformPause()
+        {
+            _session.Pause();
+            State = MediaState.Paused;
+        }
+
+        public override void PlatformResume()
+        {
+            _session.Start(null, _positionCurrent);
+            State = MediaState.Playing;
         }
 
         public override void PlatformStop()
