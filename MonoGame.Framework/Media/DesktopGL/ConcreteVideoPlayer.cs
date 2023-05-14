@@ -58,17 +58,17 @@ namespace Microsoft.Xna.Platform.Media
             throw new NotImplementedException();
         }
 
+        public override void PlatformPlay(Video video)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
         public override void PlatformResume()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void PlatformPlay(Video video)
         {
             throw new NotImplementedException();
         }
