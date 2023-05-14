@@ -5,6 +5,7 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 
 
@@ -35,7 +36,10 @@ namespace Microsoft.Xna.Platform.Media
             if (activeSong == null)
                 return TimeSpan.Zero;
 
-            return ((ConcreteSongStrategy)activeSong.Strategy).Position;
+            if (((ConcreteSongStrategy)activeSong.Strategy).Reader != null)
+                return ((ConcreteSongStrategy)activeSong.Strategy).Reader.DecodedTime;
+            else
+                return TimeSpan.Zero;
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -64,7 +68,8 @@ namespace Microsoft.Xna.Platform.Media
             
             foreach (Song queuedSong in Queue.Songs)
             {
-                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
+                if (((ConcreteSongStrategy)queuedSong.Strategy).Player != null)
+                    ((ConcreteSongStrategy)queuedSong.Strategy).Player.Volume = innerVolume;
             }
         }
 
@@ -76,23 +81,49 @@ namespace Microsoft.Xna.Platform.Media
 
                 float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-                ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
-                ((ConcreteSongStrategy)song.Strategy).Play();
+                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                    ((ConcreteSongStrategy)song.Strategy).Player.Volume = innerVolume;
+
+                ((ConcreteSongStrategy)song.Strategy).CreatePlayer();
+
+                var player = ((ConcreteSongStrategy)song.Strategy).Player;
+
+                var state = player.State;
+                switch (state)
+                {
+                    case SoundState.Playing:
+                        return;
+                    case SoundState.Paused:
+                        player.Resume();
+                        return;
+                    case SoundState.Stopped:
+                        player.Volume = innerVolume;
+                        player.Play();
+                        song.Strategy.PlayCount++;
+                        return;
+                }
             }
+
         }
 
         protected override void PlatformPause()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
-                ((ConcreteSongStrategy)activeSong.Strategy).Pause();
+            {
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                    ((ConcreteSongStrategy)activeSong.Strategy).Player.Pause();
+            }
         }
 
         protected override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
-                ((ConcreteSongStrategy)activeSong.Strategy).Resume();
+            {
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                    ((ConcreteSongStrategy)activeSong.Strategy).Player.Resume();
+            }
         }
 
         protected override void PlatformStop()
@@ -100,7 +131,11 @@ namespace Microsoft.Xna.Platform.Media
             foreach (Song queuedSong in Queue.Songs)
             {
                 var activeSong = Queue.ActiveSong;
-                ((ConcreteSongStrategy)activeSong.Strategy).Stop();
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                {
+                    ((ConcreteSongStrategy)activeSong.Strategy).Player.Stop();
+                    ((ConcreteSongStrategy)activeSong.Strategy).DestroyPlayer();
+                }
             }
         }
 
@@ -109,7 +144,12 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
-                ((ConcreteSongStrategy)song.Strategy).Stop();
+                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                {
+                    ((ConcreteSongStrategy)song.Strategy).Player.Stop();
+                    ((ConcreteSongStrategy)song.Strategy).DestroyPlayer();
+                }
+
                 Queue.Remove(song);
             }
 

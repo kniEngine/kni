@@ -19,9 +19,9 @@ namespace Microsoft.Xna.Platform.Media
         float[] _sampleBuffer;
         byte[] _dataBuffer;
 
-        private float _volume = 1f;
-
         internal Uri StreamSource { get { return _streamSource; } }
+        internal DynamicSoundEffectInstance Player { get { return _player; } }
+        internal VorbisReader Reader { get { return _reader; } }
 
 
         public override Album Album
@@ -88,76 +88,16 @@ namespace Microsoft.Xna.Platform.Media
         internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
         event FinishedPlayingHandler DonePlaying;
 
+        /// <summary>
+        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+        /// </summary>
         internal void SetEventHandler(FinishedPlayingHandler handler)
         {
             if (DonePlaying == null)
                 DonePlaying += handler;
         }
 
-        internal void Play()
-        {
-            CreatePlayer();
-
-            var state = _player.State;
-            switch (_player.State)
-            {
-                case SoundState.Playing:
-                    return;
-                case SoundState.Paused:
-                    _player.Resume();
-                    return;
-                case SoundState.Stopped:
-                    _player.Volume = _volume;
-                    _player.Play();
-                    PlayCount++;
-                    return;
-            }
-        }
-
-        internal void Pause()
-        {
-            if (_player != null)
-                _player.Pause();
-        }
-
-        internal void Resume()
-        {
-            if (_player != null)
-                _player.Resume();
-        }
-
-        internal void Stop()
-        {
-            if (_player != null)
-            {
-                _player.Stop();
-                DestroyPlayer();
-            }
-        }
-
-        internal float Volume
-        {
-            get { return _volume; }
-            set
-            {
-                _volume = value;
-                if (_player != null)
-                    _player.Volume = _volume;
-            }
-        }
-
-        internal TimeSpan Position
-        {
-            get
-            {
-                if (_reader != null)
-                    return _reader.DecodedTime;
-
-                return TimeSpan.Zero;
-            }
-        }
-
-        private void CreatePlayer()
+        internal void CreatePlayer()
         {
             if (_player == null)
             {
@@ -221,7 +161,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        private void DestroyPlayer()
+        internal void DestroyPlayer()
         {
             if (_player != null)
             {
