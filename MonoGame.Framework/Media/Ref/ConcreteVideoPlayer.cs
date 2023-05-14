@@ -63,17 +63,17 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
+        public override void PlatformPlay(Video video)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public override void PlatformPause()
         {
             throw new PlatformNotSupportedException();
         }
 
         public override void PlatformResume()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformPlay(Video video)
         {
             throw new PlatformNotSupportedException();
         }

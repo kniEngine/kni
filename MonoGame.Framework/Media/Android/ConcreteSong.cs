@@ -5,7 +5,6 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 
 
@@ -13,28 +12,25 @@ namespace Microsoft.Xna.Platform.Media
 {
     public sealed class ConcreteSongStrategy : SongStrategy
     {
-        static Android.Media.MediaPlayer _androidPlayer;
-        static ConcreteSongStrategy _playingSong;
+        static internal Android.Media.MediaPlayer _androidPlayer;
+        static internal ConcreteSongStrategy _playingSong;
 
         private Uri _streamSource;
         internal Android.Net.Uri _assetUri;
 
-        private TimeSpan _position;
+        internal TimeSpan _position;
 
         internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
-        public Android.Net.Uri AssetUri
-        {
-            get { return this._assetUri; }
-        }
+        public Android.Net.Uri AssetUri { get { return this._assetUri; } }
 
 
         static ConcreteSongStrategy()
         {
             // TODO: Move _androidPlayer to MediaPlayer
-            _androidPlayer = new Android.Media.MediaPlayer();
-            _androidPlayer.Completion += AndroidPlayer_Completion;
+            ConcreteSongStrategy._androidPlayer = new Android.Media.MediaPlayer();
+            ConcreteSongStrategy._androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
         public ConcreteSongStrategy()
@@ -49,12 +45,12 @@ namespace Microsoft.Xna.Platform.Media
 
         static void AndroidPlayer_Completion(object sender, EventArgs e)
         {
-            var playingSong = _playingSong;
-            _playingSong = null;
+            ConcreteSongStrategy playingSong = _playingSong;
+            ConcreteSongStrategy._playingSong = null;
 
             if (playingSong != null)
             {
-                var handler = ((ConcreteSongStrategy)playingSong).DonePlaying;
+                var handler = playingSong.DonePlaying;
                 if (handler != null)
                     handler(playingSong, EventArgs.Empty);
             }
@@ -70,75 +66,6 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (DonePlaying == null)
                 DonePlaying += handler;
-        }
-
-        internal void Play()
-        {
-            // Prepare the player
-            _androidPlayer.Reset();
-
-            if (_assetUri != null)
-            {
-                _androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context, this._assetUri);
-            }
-            else
-            {
-                var afd = AndroidGameWindow.Activity.Assets.OpenFd(_streamSource.OriginalString);
-                if (afd == null)
-                    return;
-
-                _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
-            }
-
-
-            _androidPlayer.Prepare();
-            _androidPlayer.Looping = MediaPlayer.IsRepeating;
-            _playingSong = this;
-
-            _androidPlayer.Start();
-            PlayCount++;
-        }
-
-        internal void Pause()
-        {
-            _androidPlayer.Pause();
-        }
-
-        internal void Resume()
-        {
-            _androidPlayer.Start();
-        }
-
-        internal void Stop()
-        {
-            _androidPlayer.Stop();
-            _playingSong = null;
-            PlayCount = 0;
-            _position = TimeSpan.Zero;
-        }
-
-        internal float Volume
-        {
-            get
-            {
-                return 0.0f;
-            }
-
-            set
-            {
-                _androidPlayer.SetVolume(value, value);
-            }
-        }
-
-        internal TimeSpan Position
-        {
-            get
-            {
-                if (_playingSong == this && _androidPlayer.IsPlaying)
-                    _position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
-
-                return _position;
-            }
         }
 
         public override Album Album

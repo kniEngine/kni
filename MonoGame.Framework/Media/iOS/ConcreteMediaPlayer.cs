@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using AudioToolbox;
 using AVFoundation;
+using CoreMedia;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -35,9 +36,22 @@ namespace Microsoft.Xna.Platform.Media
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
-                return ((ConcreteSongStrategy)activeSong.Strategy).Position;
+            {
+                AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                return TimeSpan.FromSeconds(player.CurrentTime.Seconds);
+            }
 
             return TimeSpan.Zero;
+        }
+
+        internal void PlatformSetPlayPosition(TimeSpan value)
+        {
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong != null)
+            {
+                AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                player.Seek(CMTime.FromSeconds(value.TotalSeconds, 1000));
+            }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -49,10 +63,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.PlatformSetVolume(volume);
 
-            if (Queue.ActiveSong == null)
-                return;
-
-            SetChannelVolumes();
+            if (Queue.ActiveSong != null)
+                SetChannelVolumes();
         }
 
         internal override bool PlatformGetGameHasControl()
@@ -68,39 +80,71 @@ namespace Microsoft.Xna.Platform.Media
             
             foreach (Song queuedSong in Queue.Songs)
             {
-                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
+                if (((ConcreteSongStrategy)queuedSong.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)queuedSong.Strategy).Player;
+                    if (player.Volume != innerVolume)
+                        player.Volume = innerVolume;
+                }
             }
         }
 
         protected override void PlatformPlaySong(Song song)
         {
-            if (Queue.ActiveSong == null)
-                return;
+            if (Queue.ActiveSong != null)
+            {
+                ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
 
-            ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
+                float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)song.Strategy).Player;
+                    if (player.Volume != innerVolume)
+                        player.Volume = innerVolume;
+                }
 
-            ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
-            ((ConcreteSongStrategy)song.Strategy).Play();
+                if (((ConcreteSongStrategy)song.Strategy).Player == null)
+                {
+                    // MediaLibrary items are lazy loaded
+                    if (((ConcreteSongStrategy)song.Strategy).AssetUrl != null)
+                        ((ConcreteSongStrategy)song.Strategy).CreatePlayer(((ConcreteSongStrategy)song.Strategy).AssetUrl);
+                    else
+                        return;
+                }
+
+                AVPlayer player2 = ((ConcreteSongStrategy)song.Strategy).Player;
+                player2.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
+                player2.Play();
+
+                song.Strategy.PlayCount++;
+            }
         }
 
         protected override void PlatformPause()
         {
             Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return;
-
-            ((ConcreteSongStrategy)activeSong.Strategy).Pause();
+            if (activeSong != null)
+            {
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    player.Pause();
+                }
+            }
         }
 
         protected override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return;
-
-            ((ConcreteSongStrategy)activeSong.Strategy).Resume();
+            if (activeSong != null)
+            {
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    player.Play();
+                }
+            }
         }
 
         protected override void PlatformStop()
@@ -108,7 +152,13 @@ namespace Microsoft.Xna.Platform.Media
             foreach (Song queuedSong in Queue.Songs)
             {
                 var activeSong = Queue.ActiveSong;
-                ((ConcreteSongStrategy)activeSong.Strategy).Stop();
+
+                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    player.Pause();
+                    activeSong.Strategy.PlayCount = 0;
+                }
             }
         }
 
@@ -117,7 +167,14 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
-                ((ConcreteSongStrategy)song.Strategy).Stop();
+
+                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                {
+                    AVPlayer player = ((ConcreteSongStrategy)song.Strategy).Player;
+                    player.Pause();
+                    song.Strategy.PlayCount = 0;
+                }
+
                 Queue.Remove(song);
             }
 

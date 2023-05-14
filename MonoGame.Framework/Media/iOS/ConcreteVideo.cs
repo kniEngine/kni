@@ -24,11 +24,16 @@ namespace Microsoft.Xna.Platform.Media
             : base(graphicsDevice, fileName, duration)
         {
             NSUrl url = NSUrl.FromFilename(Path.GetFullPath(FileName));
+            _movieView = CreateMovieView(url);
+        }
 
-            _movieView = new MPMoviePlayerViewController(url);
+        private MPMoviePlayerViewController CreateMovieView(NSUrl url)
+        {
+            var movieView = new MPMoviePlayerViewController(url);
             MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
             MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
             MovieView.MoviePlayer.PrepareToPlay();
+            return movieView;
         }
 
 

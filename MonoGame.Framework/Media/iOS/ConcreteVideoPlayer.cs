@@ -66,17 +66,6 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        public override void PlatformPause()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void PlatformResume()
-        {
-            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
-            State = MediaState.Playing;
-        }
-
         public override void PlatformPlay(Video video)
         {
             base.Video = video;
@@ -95,6 +84,17 @@ namespace Microsoft.Xna.Platform.Media
             concreteGame.ViewController.PresentViewController(((ConcreteVideoStrategy)base.Video.Strategy).MovieView, false, null);
             ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
 
+            State = MediaState.Playing;
+        }
+        
+        public override void PlatformPause()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlatformResume()
+        {
+            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
             State = MediaState.Playing;
         }
 

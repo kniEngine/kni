@@ -104,16 +104,34 @@ namespace Microsoft.Xna.Platform.Media
 
         internal override TimeSpan PlatformGetPlayPosition()
         {
-            if ((_sessionState == SessionState.Stopped) || (_sessionState == SessionState.Stopping))
-                return TimeSpan.Zero;
-            try
+            SessionState sessionState = _sessionState;
+            switch (sessionState)
             {
-                return TimeSpan.FromTicks(_clock.Time);
-            }
-            catch (SharpDXException)
-            {
-                // The presentation clock is most likely not quite ready yet
-                return TimeSpan.Zero;
+                case SessionState.Started:
+                    return TimeSpan.Zero;
+
+                case SessionState.Paused:
+                    return TimeSpan.Zero;
+
+                case SessionState.Stopping:
+                case SessionState.Stopped:
+                    {
+                        try
+                        {
+                            return TimeSpan.FromTicks(_clock.Time);
+                        }
+                        catch (SharpDXException)
+                        {
+                            // The presentation clock is most likely not quite ready yet
+                            return TimeSpan.Zero;
+                        }
+                    }
+
+                case SessionState.Ended:
+                    return TimeSpan.Zero;
+
+                default:
+                    throw new InvalidOperationException();
             }
         }
 
@@ -153,36 +171,185 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void PlatformPlaySong(Song song)
         {
-            if (_currentSong == song)
-                ReplayCurrentSong(song);
-            else
-                PlayNewSong(song);
+            SessionState sessionState = _sessionState;
+            switch (sessionState)
+            {
+                case SessionState.Started:
+                    {
+                        if (_currentSong == song)
+                        {
+                            _sessionState = SessionState.Started;
+                            _session.Start(null, _positionBeginning);
+                        }
+                        else
+                        {
+                            // The new song will be started after the SessionStopped event is received
+                            _nextSong = song;
+                            // The session needs to be stopped to reset the play position
+                            _sessionState = SessionState.Stopping;
+                            _session.Stop();
+                        }
+                    }
+                    break;
+
+                case SessionState.Paused:
+                    {
+                        if (_currentSong == song)
+                        {
+                            _sessionState = SessionState.Started;
+                            _session.Start(null, _positionBeginning);
+                        }
+                        else
+                        {
+                            // The new song will be started after the SessionStopped event is received
+                            _nextSong = song;
+                            // The session needs to be stopped to reset the play position
+                            _sessionState = SessionState.Stopping;
+                            _session.Stop();
+                        }
+                    }
+                    break;
+
+                case SessionState.Stopping:
+                    {
+                        // The song will be started after the SessionStopped event is received
+                        _nextSong = song;
+                    }
+                    break;
+
+                case SessionState.Stopped:
+                    {
+                        if (_currentSong != song)
+                            StartNewSong(song);
+                        _sessionState = SessionState.Started;
+                        _session.Start(null, _positionBeginning);
+                    }
+                    break;
+
+                case SessionState.Ended:
+                    {
+                        if (_currentSong == song)
+                        {
+                            _sessionState = SessionState.Started;
+                            _session.Start(null, _positionBeginning);
+                        }
+                        else
+                        {
+                            // The new song will be started after the SessionStopped event is received
+                            _nextSong = song;
+                            // The session needs to be stopped to reset the play position
+                            _sessionState = SessionState.Stopping;
+                            // The play position needs to be reset before stopping otherwise the next song may not start playing
+                            _session.Start(null, _positionBeginning);
+                            _session.Stop();
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
-        private void ReplayCurrentSong(Song song)
+        protected override void PlatformPause()
         {
-            if (_sessionState == SessionState.Stopping)
+            SessionState sessionState = _sessionState;
+            switch (sessionState)
             {
-                // The song will be started after the SessionStopped event is received
-                _nextSong = song;
-                return;
-            }
+                case SessionState.Started:
+                    {
+                        _sessionState = SessionState.Paused;
+                        _session.Pause();
+                    }
+                    break;
 
-            StartSession(_positionBeginning);
+                case SessionState.Paused:
+                    break;
+
+                case SessionState.Stopping:
+                    break;
+
+                case SessionState.Stopped:
+                    break;
+
+                case SessionState.Ended:
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
-        private void PlayNewSong(Song song)
+        protected override void PlatformResume()
         {
-            if (_sessionState != SessionState.Stopped)
+            SessionState sessionState = _sessionState;
+            switch (sessionState)
             {
-                // The session needs to be stopped to reset the play position
-                // The new song will be started after the SessionStopped event is received
-                _nextSong = song;
-                PlatformStop();
-                return;
-            }
+                case SessionState.Started:
+                    break;
 
-            StartNewSong(song);
+                case SessionState.Paused:
+                    {
+                        _sessionState = SessionState.Started;
+                        _session.Start(null, _positionCurrent);
+                    }
+                    break;
+
+                case SessionState.Stopping:
+                    break;
+
+                case SessionState.Stopped:
+                    break;
+
+                case SessionState.Ended:
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        protected override void PlatformStop()
+        {
+            SessionState sessionState = _sessionState;
+            switch (sessionState)
+            {
+                case SessionState.Started:
+                    {
+                        _sessionState = SessionState.Stopping;
+                        _session.Stop();
+                    }
+                    break;
+
+                case SessionState.Paused:
+                    {
+                        _sessionState = SessionState.Stopping;
+                        _session.Stop();
+                    }
+                    break;
+
+                case SessionState.Stopping:
+                    {
+                    }
+                    break;
+
+                case SessionState.Stopped:
+                    {
+                    }
+                    break;
+
+                case SessionState.Ended:
+                    {
+                        _sessionState = SessionState.Stopping;
+                        // The play position needs to be reset before stopping otherwise the next song may not start playing
+                        _session.Start(null, _positionBeginning);
+                        _session.Stop();
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         private void StartNewSong(Song song)
@@ -197,19 +364,10 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             _currentSong = song;
-
            _session.SetTopology(SessionSetTopologyFlags.Immediate, ((ConcreteSongStrategy)song.Strategy).Topology);
-
-            StartSession(_positionBeginning);
 
             // The volume service won't be available until the session topology
             // is ready, so we now need to wait for the event indicating this
-        }
-
-        private void StartSession(Variant startPosition)
-        {
-            _sessionState = SessionState.Started;
-            _session.Start(null, startPosition);
         }
 
         private void OnTopologyReady()
@@ -224,35 +382,6 @@ namespace Microsoft.Xna.Platform.Media
             SetChannelVolumes();
         }
 
-        protected override void PlatformPause()
-        {
-            if (_sessionState != SessionState.Started)
-                return;
-            _sessionState = SessionState.Paused;
-            _session.Pause();
-        }
-
-        protected override void PlatformResume()
-        {
-            if (_sessionState != SessionState.Paused)
-                return;
-            StartSession(_positionCurrent);
-        }
-
-        protected override void PlatformStop()
-        {
-            if ((_sessionState == SessionState.Stopped) || (_sessionState == SessionState.Stopping))
-                return;
-            bool hasFinishedPlaying = (_sessionState == SessionState.Ended);
-            _sessionState = SessionState.Stopping;
-            if (hasFinishedPlaying)
-            {
-                // The play position needs to be reset before stopping otherwise the next song may not start playing
-                _session.Start(null, _positionBeginning);
-            }
-            _session.Stop();
-        }
-
         private void OnSessionStopped()
         {
             _sessionState = SessionState.Stopped;
@@ -260,8 +389,9 @@ namespace Microsoft.Xna.Platform.Media
             {
                 if (_nextSong != _currentSong)
                     StartNewSong(_nextSong);
-                else
-                    StartSession(_positionBeginning);
+                _sessionState = SessionState.Started;
+                _session.Start(null, _positionBeginning);
+
                 _nextSong = null;
             }
         }
