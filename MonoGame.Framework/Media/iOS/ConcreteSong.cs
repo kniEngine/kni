@@ -5,12 +5,10 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
-using System.IO;
 using Microsoft.Xna.Framework.Media;
-using Foundation;
 using AVFoundation;
+using Foundation;
 using MediaPlayer;
-using CoreMedia;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -30,13 +28,9 @@ namespace Microsoft.Xna.Platform.Media
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        internal AVPlayer Player { get { return _player; } }
-
         [CLSCompliant(false)]
-        public NSUrl AssetUrl
-        {
-            get { return this._assetUrl; }
-        }
+        public NSUrl AssetUrl { get { return this._assetUrl; } }
+        internal AVPlayer Player { get { return _player; } }
 
         public ConcreteSongStrategy()
         {
@@ -51,12 +45,15 @@ namespace Microsoft.Xna.Platform.Media
             this.CreatePlayer(nsUrl);
         }
 
-        private void CreatePlayer(NSUrl url)
+        internal void CreatePlayer(NSUrl url)
         {
             _sound = AVPlayerItem.FromUrl(url);
             _player = AVPlayer.FromPlayerItem(_sound);
             _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
         }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
 
         private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
 		{
@@ -64,9 +61,6 @@ namespace Microsoft.Xna.Platform.Media
             if (handler != null)
                 handler(this, EventArgs.Empty);
 		}
-
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
-        event FinishedPlayingHandler DonePlaying;
 
 		/// <summary>
 		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
@@ -76,78 +70,6 @@ namespace Microsoft.Xna.Platform.Media
 			if (DonePlaying == null)
 			    DonePlaying += handler;
 		}
-
-        internal void Play()
-        {
-            if (Player == null)
-            {
-                // MediaLibrary items are lazy loaded
-                if (_assetUrl != null)
-                    this.CreatePlayer(_assetUrl);
-                else
-                    return;
-            }
-
-            Player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
-            Player.Play();
-
-            PlayCount++;
-        }
-
-        internal void Pause()
-        {
-            if (Player != null)
-            {
-                Player.Pause();
-            }
-        }
-
-        internal void Resume()
-        {
-            if (Player != null)
-            {
-                Player.Play();
-            }
-        }
-
-        internal void Stop()
-        {
-            if (Player != null)
-            {
-                Player.Pause();
-
-                PlayCount = 0;
-            }
-        }
-
-		internal float Volume
-		{
-			get
-			{
-                if (Player != null)
-                    return Player.Volume;
-				else
-					return 0.0f;
-			}
-			
-			set
-			{
-                if (Player != null && Player.Volume != value )
-                    Player.Volume = value;
-			}			
-		}
-
-		internal TimeSpan Position
-        {
-            get
-            {
-                return TimeSpan.FromSeconds(_player.CurrentTime.Seconds);		
-            }
-            set
-            {
-                _player.Seek(CMTime.FromSeconds(value.TotalSeconds, 1000));
-            }
-        }
 
         public override Album Album
         {
