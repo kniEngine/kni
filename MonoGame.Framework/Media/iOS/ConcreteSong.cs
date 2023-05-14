@@ -24,11 +24,13 @@ namespace Microsoft.Xna.Platform.Media
         #endif
         internal NSUrl _assetUrl;
 
-        private AVPlayerItem _sound;
         private AVPlayer _player; // TODO: Move _player to MediaPlayer
         private NSObject _playToEndObserver;
+        private AVPlayerItem _sound;
 
         internal Uri StreamSource { get { return _streamSource; } }
+
+        internal AVPlayer Player { get { return _player; } }
 
         [CLSCompliant(false)]
         public NSUrl AssetUrl
@@ -44,21 +46,12 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
-            this.PlatformInitialize(streamSource);
-        }
 
-        private void PlatformInitialize(Uri streamSource)
-        {
             NSUrl nsUrl = NSUrl.FromFilename(streamSource.OriginalString);
-            this.PlatformInitialize(nsUrl);
+            this.CreatePlayer(nsUrl);
         }
 
-        private void PlatformLazyInitialize(NSUrl url)
-        {
-            this.PlatformInitialize(url);
-        }
-
-        private void PlatformInitialize(NSUrl url)
+        private void CreatePlayer(NSUrl url)
         {
             _sound = AVPlayerItem.FromUrl(url);
             _player = AVPlayer.FromPlayerItem(_sound);
@@ -86,60 +79,61 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void Play()
         {
-            if (_player == null)
+            if (Player == null)
             {
                 // MediaLibrary items are lazy loaded
                 if (_assetUrl != null)
-                    this.PlatformLazyInitialize(_assetUrl);
+                    this.CreatePlayer(_assetUrl);
                 else
                     return;
             }
 
-            _player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
-            _player.Play();
+            Player.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
+            Player.Play();
 
             PlayCount++;
         }
-		
-		internal void Pause()
-		{			            
-            if (_player == null)
-				return;
-			
-            _player.Pause();
+
+        internal void Pause()
+        {
+            if (Player != null)
+            {
+                Player.Pause();
+            }
         }
 
-		internal void Resume()
-		{
-            if (_player == null)
-				return;
+        internal void Resume()
+        {
+            if (Player != null)
+            {
+                Player.Play();
+            }
+        }
 
-            _player.Play();
-		}
-		
-		internal void Stop()
-		{
-            if (_player == null)
-				return;
-			
-            _player.Pause();
-            PlayCount = 0;
-		}
+        internal void Stop()
+        {
+            if (Player != null)
+            {
+                Player.Pause();
+
+                PlayCount = 0;
+            }
+        }
 
 		internal float Volume
 		{
 			get
 			{
-                if (_player != null)
-                    return _player.Volume;
+                if (Player != null)
+                    return Player.Volume;
 				else
 					return 0.0f;
 			}
 			
 			set
 			{
-                if ( _player != null && _player.Volume != value )
-                    _player.Volume = value;
+                if (Player != null && Player.Volume != value )
+                    Player.Volume = value;
 			}			
 		}
 

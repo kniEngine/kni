@@ -87,14 +87,18 @@ namespace Microsoft.Xna.Platform.Media
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
+            {
                 ((ConcreteSongStrategy)activeSong.Strategy).Pause();
+            }
         }
 
         protected override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
+            {
                 ((ConcreteSongStrategy)activeSong.Strategy).Resume();
+            }
         }
 
         protected override void PlatformStop()
