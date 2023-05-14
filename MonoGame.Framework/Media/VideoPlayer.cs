@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public VideoPlayer()
         {
-            _strategy = new ConcreteVideoPlayerStrategy();
+            _strategy = MediaFactory.Current.CreateVideoPlayerStrategy();
         }
 
         /// <summary>

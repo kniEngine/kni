@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         static internal Android.Media.MediaPlayer _androidPlayer;
         static internal ConcreteSongStrategy _playingSong;
@@ -33,11 +33,11 @@ namespace Microsoft.Xna.Platform.Media
             ConcreteSongStrategy._androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
-        public ConcreteSongStrategy()
+        internal ConcreteSongStrategy()
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;

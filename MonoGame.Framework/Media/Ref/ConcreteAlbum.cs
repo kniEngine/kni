@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        public ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection)
+        internal ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection)
         {
             throw new PlatformNotSupportedException();
         }

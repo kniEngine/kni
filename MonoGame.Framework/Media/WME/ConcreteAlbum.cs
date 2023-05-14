@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        public ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection,
+        internal ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection,
                                      WinFileProperties.StorageItemThumbnail thumbnail)
         {
             this._name = name;

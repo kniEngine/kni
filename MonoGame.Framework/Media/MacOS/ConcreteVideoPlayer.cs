@@ -17,7 +17,7 @@ using RectF = CoreGraphics.CGRect;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
+    internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         NSSDLWindow nsWindow;
         AVPlayerLayer layer;
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public ConcreteVideoPlayerStrategy()
+        internal ConcreteVideoPlayerStrategy()
         {
             Sdl.Window.SDL_SysWMinfo sys = new Sdl.Window.SDL_SysWMinfo();
             Sdl.Window.GetWindowWMInfo(Game.Instance.Window.Handle, ref sys);

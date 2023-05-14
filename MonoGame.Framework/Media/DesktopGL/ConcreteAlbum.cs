@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        public ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection)
+        internal ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection)
         {
             this._name = name;
             this._artist = artist;

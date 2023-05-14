@@ -4,11 +4,12 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX;
 using SharpDX.MediaFoundation;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoStrategy : VideoStrategy
+    internal sealed class ConcreteVideoStrategy : VideoStrategy
     {
         private Topology _topology;
         private VideoSampleGrabber _sampleGrabber;
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             MediaManager.Startup(true);
 
-            MediaFactory.CreateTopology(out _topology);
+            MediaFoundation.MediaFactory.CreateTopology(out _topology);
 
             MediaSource mediaSource;
             {
@@ -48,14 +49,14 @@ namespace Microsoft.Xna.Platform.Media
                 if (selected)
                 {
                     TopologyNode sourceNode;
-                    MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
 
                     sourceNode.Set(TopologyNodeAttributeKeys.Source, mediaSource);
                     sourceNode.Set(TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
                     sourceNode.Set(TopologyNodeAttributeKeys.StreamDescriptor, desc);
 
                     TopologyNode outputNode;
-                    MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
 
                     Guid majorType = desc.MediaTypeHandler.MajorType;
                     if (majorType == MediaTypeGuids.Video)
@@ -67,14 +68,14 @@ namespace Microsoft.Xna.Platform.Media
 
                         _sampleGrabber = new VideoSampleGrabber();
                         Activate activate;
-                        MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
+                        MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
                         outputNode.Object = activate;
                     }
 
                     if (majorType == MediaTypeGuids.Audio)
                     {
                         Activate activate;
-                        MediaFactory.CreateAudioRendererActivate(out activate);
+                        MediaFoundation.MediaFactory.CreateAudioRendererActivate(out activate);
                         outputNode.Object = activate;
                     }
 

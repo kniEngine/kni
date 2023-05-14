@@ -2,44 +2,33 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
-#if IOS || TVOS
-using UIKit;
-#endif
+using Microsoft.Xna.Platform.Media;
+
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public sealed class MediaSource
+    public sealed class MediaSource
     {
-		private string _name;
-		private MediaSourceType _type;
+        private string _name;
+        private MediaSourceType _type;
 
-		internal MediaSource(string name, MediaSourceType type)
-		{
-			_name = name;
-			_type = type;
-		}
+        public string Name { get { return _name; } }
 
-        public string Name
+        public MediaSourceType MediaSourceType { get { return _type; } }
+
+        internal MediaSource(string name, MediaSourceType type)
         {
-            get { return _name; }
+            _name = name;
+            _type = type;
         }
-				
-        public MediaSourceType MediaSourceType
+
+        public static IList<MediaSource> GetAvailableMediaSources()
         {
-            get { return _type; }
-        }
-	
-		public static IList<MediaSource> GetAvailableMediaSources()
-        {
-#if IOS || TVOS
-			MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
-			return result;
-#else
-            MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
-			return result;
-#endif
+            return MediaFactory.Current.GetAvailableMediaSources();
         }
     }
 }

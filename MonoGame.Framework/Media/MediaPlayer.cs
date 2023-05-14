@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Media
                 {
                     if (_strategy == null)
                     {
-                        _strategy = new ConcreteMediaPlayerStrategy();
+                        _strategy = MediaFactory.Current.CreateMediaPlayerStrategy();
                         _strategy.PlatformActiveSongChanged += (sender, args) => OnActiveSongChanged(args);
                         _strategy.PlatformMediaStateChanged += (sender, args) => OnMediaStateChanged(args);
                     }

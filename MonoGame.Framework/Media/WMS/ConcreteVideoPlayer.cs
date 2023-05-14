@@ -9,11 +9,12 @@ using Microsoft.Xna.Framework.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
+    internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         private static MediaSession _session;
         private static AudioStreamVolume _volumeController;
@@ -111,13 +112,13 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public ConcreteVideoPlayerStrategy()
+        internal ConcreteVideoPlayerStrategy()
         {
             // The GUID is specified in a GuidAttribute attached to the class
             AudioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
 
             MediaManager.Startup(true);
-            MediaFactory.CreateMediaSession(null, out _session);
+            MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
         }
 
 
@@ -301,7 +302,7 @@ namespace Microsoft.Xna.Platform.Media
 
             // Get the volume interface.
             IntPtr volumeObjectPtr;
-            MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, AudioStreamVolumeGuid, out volumeObjectPtr);
+            MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, AudioStreamVolumeGuid, out volumeObjectPtr);
             _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
 
             SetChannelVolumes();

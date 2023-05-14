@@ -14,7 +14,7 @@ using SharpDX.MediaFoundation;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
+    internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         DXGIDeviceManager _devManager;
         private MediaEngine _mediaEngine;
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public ConcreteVideoPlayerStrategy()
+        internal ConcreteVideoPlayerStrategy()
         {
             MediaManager.Startup();
 
