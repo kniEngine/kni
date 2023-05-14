@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
         internal MusicProperties _musicProperties;
@@ -25,11 +25,11 @@ namespace Microsoft.Xna.Platform.Media
             get { return this._musicProperties.File; }
         }
 
-        public ConcreteSongStrategy()
+        internal ConcreteSongStrategy()
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;

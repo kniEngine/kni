@@ -13,7 +13,7 @@ using Foundation;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoStrategy : VideoStrategy
+    internal sealed class ConcreteVideoStrategy : VideoStrategy
     {
         private MPMoviePlayerViewController _movieView;
 

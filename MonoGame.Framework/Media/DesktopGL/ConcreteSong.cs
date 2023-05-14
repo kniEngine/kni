@@ -10,7 +10,7 @@ using NVorbis;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
 
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Media
             get { return base.TrackNumber; }
         }
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;

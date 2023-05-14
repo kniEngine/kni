@@ -27,12 +27,12 @@ namespace Microsoft.Xna.Framework.Media
 
         public MediaLibrary()
 		{
-            _strategy = new ConcreteMediaLibraryStrategy();
+            _strategy = MediaFactory.Current.CreateMediaLibraryStrategy();
         }
 
 		public MediaLibrary(MediaSource mediaSource)
         {
-            _strategy = new ConcreteMediaLibraryStrategy(mediaSource);
+            _strategy = MediaFactory.Current.CreateMediaLibraryStrategy(mediaSource);
 		}
 
         /// <summary>

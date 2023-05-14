@@ -459,6 +459,7 @@
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\Android\ConcreteAlbum.cs" />
+    <Compile Include="Media\Android\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Android\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
     <Compile Include="Media\Android\ConcreteSong.cs" />
@@ -469,6 +470,7 @@
     <Compile Include="Media\AlbumCollection.cs" />
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
+    <Compile Include="Media\MediaFactory.cs" />
     <Compile Include="Media\MediaLibrary.cs" />
     <Compile Include="Media\MediaLibraryStrategy.cs" />
     <Compile Include="Media\MediaPlayer.cs" />

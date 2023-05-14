@@ -9,11 +9,12 @@ using System.IO;
 using Microsoft.Xna.Framework.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
         private Topology _topology;
@@ -22,7 +23,7 @@ namespace Microsoft.Xna.Platform.Media
         internal Topology Topology { get { return _topology; } }
 
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;
@@ -34,7 +35,7 @@ namespace Microsoft.Xna.Platform.Media
         private Topology CreateTopology(Uri streamSource)
         {
             Topology topology;
-            MediaFactory.CreateTopology(out topology);
+            MediaFoundation.MediaFactory.CreateTopology(out topology);
 
             SharpDX.MediaFoundation.MediaSource mediaSource;
             {
@@ -59,14 +60,14 @@ namespace Microsoft.Xna.Platform.Media
                 if (selected)
                 {
                     TopologyNode sourceNode;
-                    MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
 
                     sourceNode.Set(TopologyNodeAttributeKeys.Source, mediaSource);
                     sourceNode.Set(TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
                     sourceNode.Set(TopologyNodeAttributeKeys.StreamDescriptor, desc);
 
                     TopologyNode outputNode;
-                    MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
 
                     var typeHandler = desc.MediaTypeHandler;
                     var majorType = typeHandler.MajorType;
@@ -74,7 +75,7 @@ namespace Microsoft.Xna.Platform.Media
                         throw new NotSupportedException("The song contains video data!");
 
                     Activate activate;
-                    MediaFactory.CreateAudioRendererActivate(out activate);
+                    MediaFoundation.MediaFactory.CreateAudioRendererActivate(out activate);
                     outputNode.Object = activate;
 
                     topology.AddNode(sourceNode);

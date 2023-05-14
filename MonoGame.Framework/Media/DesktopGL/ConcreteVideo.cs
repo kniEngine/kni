@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoStrategy : VideoStrategy
+    internal sealed class ConcreteVideoStrategy : VideoStrategy
     {
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)

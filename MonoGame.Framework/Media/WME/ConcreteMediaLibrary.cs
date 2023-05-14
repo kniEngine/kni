@@ -53,12 +53,12 @@ namespace Microsoft.Xna.Platform.Media
         //}
 
 
-        public ConcreteMediaLibraryStrategy()
+        internal ConcreteMediaLibraryStrategy()
             : base()
         {
         }
 
-        public ConcreteMediaLibraryStrategy(MediaSource mediaSource)
+        internal ConcreteMediaLibraryStrategy(MediaSource mediaSource)
             : base(mediaSource)
         {
             throw new NotSupportedException("Initializing from MediaSource is not supported");

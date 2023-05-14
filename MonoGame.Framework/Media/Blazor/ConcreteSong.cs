@@ -11,13 +11,13 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;

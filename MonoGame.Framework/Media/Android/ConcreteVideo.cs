@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoStrategy : VideoStrategy
+    internal sealed class ConcreteVideoStrategy : VideoStrategy
     {
         private Android.Media.MediaPlayer _player;
 

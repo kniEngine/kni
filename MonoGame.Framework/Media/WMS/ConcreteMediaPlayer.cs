@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Media;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -40,7 +41,7 @@ namespace Microsoft.Xna.Platform.Media
             _audioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
 
             MediaManager.Startup(true);
-            MediaFactory.CreateMediaSession(null, out _session);
+            MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
 
             _session.BeginGetEvent(this, null);
 
@@ -375,7 +376,7 @@ namespace Microsoft.Xna.Platform.Media
             lock (_volumeLock)
             {
                 IntPtr volumeObjectPtr;
-                MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, _audioStreamVolumeGuid, out volumeObjectPtr);
+                MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, _audioStreamVolumeGuid, out volumeObjectPtr);
                 _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
             }
 

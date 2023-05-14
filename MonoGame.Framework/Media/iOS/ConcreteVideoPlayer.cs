@@ -15,7 +15,7 @@ using UIKit;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
+    internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         private NSObject _playbackDidFinishObserver;
 
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public ConcreteVideoPlayerStrategy()
+        internal ConcreteVideoPlayerStrategy()
         {
 
         }

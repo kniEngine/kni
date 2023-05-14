@@ -8,7 +8,7 @@ using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
+    internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
 
         public override MediaState State
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public ConcreteVideoPlayerStrategy()
+        internal ConcreteVideoPlayerStrategy()
         {
             throw new PlatformNotSupportedException();
         }

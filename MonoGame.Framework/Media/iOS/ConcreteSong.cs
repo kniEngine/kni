@@ -13,7 +13,7 @@ using MediaPlayer;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    public sealed class ConcreteSongStrategy : SongStrategy
+    internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
 
@@ -32,11 +32,11 @@ namespace Microsoft.Xna.Platform.Media
         public NSUrl AssetUrl { get { return this._assetUrl; } }
         internal AVPlayer Player { get { return _player; } }
 
-        public ConcreteSongStrategy()
+        internal ConcreteSongStrategy()
         {
         }
 
-        public ConcreteSongStrategy(string name, Uri streamSource)
+        internal ConcreteSongStrategy(string name, Uri streamSource)
         {
             this.Name = name;
             this._streamSource = streamSource;
