@@ -49,10 +49,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.PlatformSetVolume(volume);
 
-            if (Queue.ActiveSong == null)
-                return;
-
-            SetChannelVolumes();
+            if (Queue.ActiveSong != null)
+                SetChannelVolumes();
         }
 
         internal override bool PlatformGetGameHasControl()
@@ -74,33 +72,29 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void PlatformPlaySong(Song song)
         {
-            if (Queue.ActiveSong == null)
-                return;
+            if (Queue.ActiveSong != null)
+            {
+                ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
 
-            ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
+                float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
-
-            ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
-            ((ConcreteSongStrategy)song.Strategy).Play();
+                ((ConcreteSongStrategy)song.Strategy).Volume = innerVolume;
+                ((ConcreteSongStrategy)song.Strategy).Play();
+            }
         }
 
         protected override void PlatformPause()
         {
             Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return;
-
-            ((ConcreteSongStrategy)activeSong.Strategy).Pause();
+            if (activeSong != null)
+                ((ConcreteSongStrategy)activeSong.Strategy).Pause();
         }
 
         protected override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return;
-
-            ((ConcreteSongStrategy)activeSong.Strategy).Resume();
+            if (activeSong != null)
+                ((ConcreteSongStrategy)activeSong.Strategy).Resume();
         }
 
         protected override void PlatformStop()
