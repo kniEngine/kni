@@ -1,7 +1,6 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
-using System.IO;
 using Microsoft.Xna.Framework.Media;
 
 

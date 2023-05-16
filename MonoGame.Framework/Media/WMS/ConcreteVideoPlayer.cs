@@ -155,8 +155,8 @@ namespace Microsoft.Xna.Platform.Media
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
-
-            VideoSampleGrabber sampleGrabber = ((ConcreteVideoStrategy)base.Video.Strategy).SampleGrabber;
+            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            VideoSampleGrabber sampleGrabber = _videoPlatformStream.SampleGrabber;
             byte[] texData = sampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
@@ -212,7 +212,8 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             // Set the new song.
-            _session.SetTopology(SessionSetTopologyFlags.Immediate, ((ConcreteVideoStrategy)base.Video.Strategy).Topology);
+            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            _session.SetTopology(SessionSetTopologyFlags.Immediate, _videoPlatformStream.Topology);
 
             // Get the clock.
             _clock = _session.Clock.QueryInterface<PresentationClock>();
@@ -321,5 +322,127 @@ namespace Microsoft.Xna.Platform.Media
 
             base.Dispose(disposing);
         }
+    }
+
+
+    internal sealed class VideoPlatformStream : IDisposable
+    {
+        private Topology _topology;
+        private VideoSampleGrabber _sampleGrabber;
+        MediaType _mediaType;
+
+        internal Topology Topology { get { return _topology; } }
+        internal VideoSampleGrabber SampleGrabber { get { return _sampleGrabber; } }
+
+        internal VideoPlatformStream(string filename)
+        {
+            MediaManager.Startup(true);
+
+            MediaFoundation.MediaFactory.CreateTopology(out _topology);
+
+            MediaFoundation.MediaSource mediaSource;
+            {
+                SourceResolver resolver = new SourceResolver();
+
+                ObjectType otype;
+                ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource, null, out otype);
+                mediaSource = source.QueryInterface<MediaFoundation.MediaSource>();
+                resolver.Dispose();
+                source.Dispose();
+            }
+
+            PresentationDescriptor presDesc;
+            mediaSource.CreatePresentationDescriptor(out presDesc);
+
+            for (int i = 0; i < presDesc.StreamDescriptorCount; i++)
+            {
+                SharpDX.Mathematics.Interop.RawBool selected;
+                StreamDescriptor desc;
+                presDesc.GetStreamDescriptorByIndex(i, out selected, out desc);
+
+                if (selected)
+                {
+                    TopologyNode sourceNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
+
+                    sourceNode.Set(TopologyNodeAttributeKeys.Source, mediaSource);
+                    sourceNode.Set(TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
+                    sourceNode.Set(TopologyNodeAttributeKeys.StreamDescriptor, desc);
+
+                    TopologyNode outputNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
+
+                    Guid majorType = desc.MediaTypeHandler.MajorType;
+                    if (majorType == MediaTypeGuids.Video)
+                    {
+                        _mediaType = new MediaType();
+                        _mediaType.Set(MediaTypeAttributeKeys.MajorType, MediaTypeGuids.Video);
+                        // Specify that we want the data to come in as RGB32.
+                        _mediaType.Set(MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
+
+                        _sampleGrabber = new VideoSampleGrabber();
+                        Activate activate;
+                        MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
+                        outputNode.Object = activate;
+                    }
+
+                    if (majorType == MediaTypeGuids.Audio)
+                    {
+                        Activate activate;
+                        MediaFoundation.MediaFactory.CreateAudioRendererActivate(out activate);
+                        outputNode.Object = activate;
+                    }
+
+                    _topology.AddNode(sourceNode);
+                    _topology.AddNode(outputNode);
+                    sourceNode.ConnectOutput(0, outputNode, 0);
+
+                    sourceNode.Dispose();
+                    outputNode.Dispose();
+                }
+
+                desc.Dispose();
+            }
+
+            presDesc.Dispose();
+            mediaSource.Dispose();
+        }
+
+
+        #region IDisposable
+        ~VideoPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_topology != null)
+                {
+                    _topology.Dispose();
+                    _topology = null;
+                }
+
+                if (_sampleGrabber != null)
+                {
+                    _sampleGrabber.Dispose();
+                    _sampleGrabber = null;
+                }
+
+            }
+
+            MediaManager.Shutdown();
+
+            //base.Dispose(disposing);
+        }
+        #endregion
     }
 }

@@ -1,27 +1,19 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-using NVorbis;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
+        internal MediaPlatformStream _mediaPlatformStream;
+
         private Uri _streamSource;
 
-        DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
-        VorbisReader _reader;
-        float[] _sampleBuffer;
-        byte[] _dataBuffer;
 
         internal Uri StreamSource { get { return _streamSource; } }
-        internal DynamicSoundEffectInstance Player { get { return _player; } }
-        internal VorbisReader Reader { get { return _reader; } }
 
 
         public override Album Album
@@ -83,106 +75,26 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
+
+            this._mediaPlatformStream = new MediaPlatformStream(this._streamSource);
         }
 
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
-        event FinishedPlayingHandler DonePlaying;
-
-        /// <summary>
-        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-        /// </summary>
-        internal void SetEventHandler(FinishedPlayingHandler handler)
+        internal MediaPlatformStream GetMediaPlatformStream()
         {
-            if (DonePlaying == null)
-                DonePlaying += handler;
+            return _mediaPlatformStream;
         }
 
-        internal void CreatePlayer()
-        {
-            if (_player == null)
-            {
-                _reader = new VorbisReader(Filename);
-                Duration = _reader.TotalTime;
-
-                int samples = (_reader.SampleRate * _reader.Channels) / 2;
-                _sampleBuffer = new float[samples];
-                _dataBuffer = new byte[samples * sizeof(short)];
-
-                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
-                _player.BufferNeeded += sfxi_BufferNeeded;
-            }
-        }
-
-
-        private void sfxi_BufferNeeded(object sender, EventArgs e)
-        {
-            var sfxi = (DynamicSoundEffectInstance)sender;
-            int count = SubmitBuffer(sfxi, _reader);
-
-            if (count == 0 && sfxi.PendingBufferCount <= 0)
-            {
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
-            }
-        }
-
-        private void Song_OnUpdate()
-        {
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
-
-            var handler = DonePlaying;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
-
-        private unsafe int SubmitBuffer(DynamicSoundEffectInstance sfxi, VorbisReader reader)
-        {
-            int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
-            if (count > 0)
-            {
-                fixed (float* pSampleBuffer = _sampleBuffer)
-                fixed (byte* pDataBuffer = _dataBuffer)
-                {
-                    ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
-                }
-                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
-            }
-
-            return count;
-        }
-
-        static unsafe void ConvertFloat32ToInt16(float* fbuffer, short* outBuffer, int samples)
-        {
-            for (int i = 0; i < samples; i++)
-            {
-                int val = (int)(fbuffer[i] * short.MaxValue);
-                val = Math.Min(val, +short.MaxValue);
-                val = Math.Max(val, -short.MaxValue);
-                outBuffer[i] = (short)val;
-            }
-        }
-
-        internal void DestroyPlayer()
-        {
-            if (_player != null)
-            {
-                _player.BufferNeeded -= sfxi_BufferNeeded;
-                _player.Dispose();
-            }
-            _player = null;
-
-            if (_reader != null)
-                _reader.Dispose();
-            _reader = null;
-
-            _sampleBuffer = null;
-            _dataBuffer = null;
-        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                DestroyPlayer();
+                if (_mediaPlatformStream != null)
+                {
+                    _mediaPlatformStream.Dispose();
+                    _mediaPlatformStream = null;
+                }
+
             }
 
             //base.Dispose(disposing);

@@ -36,8 +36,8 @@ namespace Microsoft.Xna.Platform.Media
             if (activeSong == null)
                 return TimeSpan.Zero;
             
-            if (ConcreteSongStrategy._playingSong == activeSong.Strategy && ConcreteSongStrategy._androidPlayer.IsPlaying)
-                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(ConcreteSongStrategy._androidPlayer.CurrentPosition);
+            if (MediaPlatformStream._playingSong == activeSong.Strategy && MediaPlatformStream._androidPlayer.IsPlaying)
+                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(MediaPlatformStream._androidPlayer.CurrentPosition);
 
             return ((ConcreteSongStrategy)activeSong.Strategy)._position;
         }
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Media
 
             foreach (Song queuedSong in Queue.Songs)
             {
-                ConcreteSongStrategy._androidPlayer.SetVolume(innerVolume, innerVolume);
+                MediaPlatformStream._androidPlayer.SetVolume(innerVolume, innerVolume);
             }
         }
         
@@ -76,18 +76,19 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (Queue.ActiveSong != null)
            {
-                ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+                mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
                 float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-                ConcreteSongStrategy._androidPlayer.SetVolume(innerVolume, innerVolume);
-                                             
+                MediaPlatformStream._androidPlayer.SetVolume(innerVolume, innerVolume);
+
                 // Prepare the player
-                ConcreteSongStrategy._androidPlayer.Reset();
+                MediaPlatformStream._androidPlayer.Reset();
 
                 if (((ConcreteSongStrategy)song.Strategy).AssetUri != null)
                 {
-                    ConcreteSongStrategy._androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context,
+                    MediaPlatformStream._androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context,
                                                                       ((ConcreteSongStrategy)song.Strategy).AssetUri);
                 }
                 else
@@ -97,14 +98,14 @@ namespace Microsoft.Xna.Platform.Media
                     if (afd == null)
                         return;
 
-                    ConcreteSongStrategy._androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                    MediaPlatformStream._androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
                 }
 
-                ConcreteSongStrategy._androidPlayer.Prepare();
-                ConcreteSongStrategy._androidPlayer.Looping = MediaPlayer.IsRepeating;
-                ConcreteSongStrategy._playingSong = ((ConcreteSongStrategy)song.Strategy);
+                MediaPlatformStream._androidPlayer.Prepare();
+                MediaPlatformStream._androidPlayer.Looping = MediaPlayer.IsRepeating;
+                MediaPlatformStream._playingSong = ((ConcreteSongStrategy)song.Strategy);
 
-                ConcreteSongStrategy._androidPlayer.Start();
+                MediaPlatformStream._androidPlayer.Start();
                 song.Strategy.PlayCount++;
             }
         }
@@ -114,7 +115,7 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                ConcreteSongStrategy._androidPlayer.Pause();
+                MediaPlatformStream._androidPlayer.Pause();
             }
         }
 
@@ -123,7 +124,7 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                ConcreteSongStrategy._androidPlayer.Start();
+                MediaPlatformStream._androidPlayer.Start();
             }
         }
 
@@ -132,8 +133,8 @@ namespace Microsoft.Xna.Platform.Media
             foreach (Song queuedSong in Queue.Songs)
             {
                 var activeSong = Queue.ActiveSong;
-                ConcreteSongStrategy._androidPlayer.Stop();
-                ConcreteSongStrategy._playingSong = null;
+                MediaPlatformStream._androidPlayer.Stop();
+                MediaPlatformStream._playingSong = null;
                 activeSong.Strategy.PlayCount = 0;
                 ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.Zero;
 
@@ -146,8 +147,8 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
-                ConcreteSongStrategy._androidPlayer.Stop();
-                ConcreteSongStrategy._playingSong = null;
+                MediaPlatformStream._androidPlayer.Stop();
+                MediaPlatformStream._playingSong = null;
                 song.Strategy.PlayCount = 0;
                 ((ConcreteSongStrategy)song.Strategy)._position = TimeSpan.Zero;
                 
@@ -158,5 +159,74 @@ namespace Microsoft.Xna.Platform.Media
         }
 
     }
-}
+    
+    
+    internal sealed class MediaPlatformStream : IDisposable
+    {
+        static internal Android.Media.MediaPlayer _androidPlayer;
+        static internal ConcreteSongStrategy _playingSong;
 
+
+        static MediaPlatformStream()
+        {
+            MediaPlatformStream._androidPlayer = new Android.Media.MediaPlayer();
+            MediaPlatformStream._androidPlayer.Completion += AndroidPlayer_Completion;
+        }
+
+        internal MediaPlatformStream(Uri streamSource)
+        {
+        }
+        
+        static void AndroidPlayer_Completion(object sender, EventArgs e)
+        {
+            ConcreteSongStrategy playingSong = _playingSong;
+            MediaPlatformStream._playingSong = null;
+
+            MediaPlatformStream mediaPlatformStream = playingSong.GetMediaPlatformStream();
+
+            if (playingSong != null)
+            {
+                var handler = mediaPlatformStream.DonePlaying;
+                if (handler != null)
+                    handler(playingSong, EventArgs.Empty);
+            }
+        }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
+
+        /// <summary>
+        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+        /// </summary>
+        internal void SetEventHandler(FinishedPlayingHandler handler)
+        {
+            if (DonePlaying == null)
+                DonePlaying += handler;
+        }
+
+
+        #region IDisposable
+        ~MediaPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+            //base.Dispose(disposing);
+
+        }
+        #endregion
+    }
+}

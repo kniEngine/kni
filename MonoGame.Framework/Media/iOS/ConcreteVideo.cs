@@ -5,35 +5,27 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using MediaPlayer;
-using Foundation;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoStrategy : VideoStrategy
     {
-        private MPMoviePlayerViewController _movieView;
-
-        internal MPMoviePlayerViewController MovieView { get { return _movieView; } }
+        internal VideoPlatformStream _videoPlatformStream;
 
 
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
             : base(graphicsDevice, fileName, duration)
         {
-            NSUrl url = NSUrl.FromFilename(Path.GetFullPath(FileName));
-            _movieView = CreateMovieView(url);
+            this._videoPlatformStream = new VideoPlatformStream(this.FileName);
+
         }
 
-        private MPMoviePlayerViewController CreateMovieView(NSUrl url)
+
+        internal VideoPlatformStream GetVideoPlatformStream()
         {
-            var movieView = new MPMoviePlayerViewController(url);
-            MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
-            MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
-            MovieView.MoviePlayer.PrepareToPlay();
-            return movieView;
+            return _videoPlatformStream;
         }
 
 
@@ -41,10 +33,10 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                if (_movieView != null)
+                if (_videoPlatformStream != null)
                 {
-                    _movieView.Dispose();
-                    _movieView = null;
+                    _videoPlatformStream.Dispose();
+                    _videoPlatformStream = null;
                 }
 
             }
@@ -52,4 +44,5 @@ namespace Microsoft.Xna.Platform.Media
             base.Dispose(disposing);
         }
     }
+
 }

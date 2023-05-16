@@ -66,8 +66,9 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Start();
+            VideoPlatformStream videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            videoPlatformStream.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
+            videoPlatformStream.Player.Start();
 
             ConcreteGame.IsPlayingVideo = true;
             State = MediaState.Playing;
@@ -75,20 +76,23 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPause()
         {
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Pause();
+            VideoPlatformStream videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            videoPlatformStream.Player.Pause();
             State = MediaState.Paused;
         }
 
         public override void PlatformResume()
         {
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Start();
+            VideoPlatformStream videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            videoPlatformStream.Player.Start();
             State = MediaState.Playing;
         }
 
         public override void PlatformStop()
         {
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.Stop();
-            ((ConcreteVideoStrategy)base.Video.Strategy).Player.SetDisplay(null);
+            VideoPlatformStream videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            videoPlatformStream.Player.Stop();
+            videoPlatformStream.Player.SetDisplay(null);
 
             ConcreteGame.IsPlayingVideo = false;
             State = MediaState.Stopped;
@@ -112,5 +116,56 @@ namespace Microsoft.Xna.Platform.Media
 
             base.Dispose(disposing);
         }
+    }
+    
+    internal sealed class VideoPlatformStream : IDisposable
+    {
+        private Android.Media.MediaPlayer _player;
+
+        internal Android.Media.MediaPlayer Player { get { return _player; } }
+
+
+        internal VideoPlatformStream(string filename)
+        {
+            _player = new Android.Media.MediaPlayer();
+
+            var afd = AndroidGameWindow.Activity.Assets.OpenFd(filename);
+            if (afd != null)
+            {
+                _player.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                _player.Prepare();
+            }
+
+        }
+
+
+        #region IDisposable
+        ~VideoPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_player != null)
+                {
+                    _player.Dispose();
+                    _player = null;
+                }
+
+            }
+
+            //base.Dispose(disposing);
+
+        }
+        #endregion
     }
 }

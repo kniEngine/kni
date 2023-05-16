@@ -12,8 +12,7 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
-        static internal Android.Media.MediaPlayer _androidPlayer;
-        static internal ConcreteSongStrategy _playingSong;
+        internal MediaPlatformStream _mediaPlatformStream;
 
         private Uri _streamSource;
         internal Android.Net.Uri _assetUri;
@@ -26,13 +25,6 @@ namespace Microsoft.Xna.Platform.Media
         public Android.Net.Uri AssetUri { get { return this._assetUri; } }
 
 
-        static ConcreteSongStrategy()
-        {
-            // TODO: Move _androidPlayer to MediaPlayer
-            ConcreteSongStrategy._androidPlayer = new Android.Media.MediaPlayer();
-            ConcreteSongStrategy._androidPlayer.Completion += AndroidPlayer_Completion;
-        }
-
         internal ConcreteSongStrategy()
         {
         }
@@ -41,31 +33,13 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
+
+            this._mediaPlatformStream = new MediaPlatformStream(this._streamSource);
         }
 
-        static void AndroidPlayer_Completion(object sender, EventArgs e)
+        internal MediaPlatformStream GetMediaPlatformStream()
         {
-            ConcreteSongStrategy playingSong = _playingSong;
-            ConcreteSongStrategy._playingSong = null;
-
-            if (playingSong != null)
-            {
-                var handler = playingSong.DonePlaying;
-                if (handler != null)
-                    handler(playingSong, EventArgs.Empty);
-            }
-        }
-
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
-        event FinishedPlayingHandler DonePlaying;
-
-        /// <summary>
-        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-        /// </summary>
-        internal void SetEventHandler(FinishedPlayingHandler handler)
-        {
-            if (DonePlaying == null)
-                DonePlaying += handler;
+            return _mediaPlatformStream;
         }
 
         public override Album Album
@@ -133,10 +107,16 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
+                if (_mediaPlatformStream != null)
+                {
+                    _mediaPlatformStream.Dispose();
+                    _mediaPlatformStream = null;
+                }
+
             }
 
             //base.Dispose(disposing);
         }
     }
+    
 }
-
