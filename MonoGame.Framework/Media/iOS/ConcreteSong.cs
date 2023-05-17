@@ -6,15 +6,15 @@
 
 using System;
 using Microsoft.Xna.Framework.Media;
-using AVFoundation;
 using Foundation;
 using MediaPlayer;
-
 
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
+        internal MediaPlatformStream _mediaPlatformStream;
+
         private Uri _streamSource;
 
         #if !TVOS
@@ -22,15 +22,11 @@ namespace Microsoft.Xna.Platform.Media
         #endif
         internal NSUrl _assetUrl;
 
-        private AVPlayer _player; // TODO: Move _player to MediaPlayer
-        private NSObject _playToEndObserver;
-        private AVPlayerItem _sound;
 
         internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
         public NSUrl AssetUrl { get { return this._assetUrl; } }
-        internal AVPlayer Player { get { return _player; } }
 
         internal ConcreteSongStrategy()
         {
@@ -41,35 +37,15 @@ namespace Microsoft.Xna.Platform.Media
             this.Name = name;
             this._streamSource = streamSource;
 
-            NSUrl nsUrl = NSUrl.FromFilename(streamSource.OriginalString);
-            this.CreatePlayer(nsUrl);
+            this._mediaPlatformStream = new MediaPlatformStream(this._streamSource);
+
         }
 
-        internal void CreatePlayer(NSUrl url)
+        internal MediaPlatformStream GetMediaPlatformStream()
         {
-            _sound = AVPlayerItem.FromUrl(url);
-            _player = AVPlayer.FromPlayerItem(_sound);
-            _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
+            return _mediaPlatformStream;
         }
 
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
-        event FinishedPlayingHandler DonePlaying;
-
-        private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
-		{
-            var handler = DonePlaying;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-		/// </summary>
-		internal void SetEventHandler(FinishedPlayingHandler handler)
-		{
-			if (DonePlaying == null)
-			    DonePlaying += handler;
-		}
 
         public override Album Album
         {
@@ -136,20 +112,16 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                if (_sound != null)
+                if (_mediaPlatformStream != null)
                 {
-                    _playToEndObserver.Dispose();
-                    _sound.Dispose();
-                    _player.Dispose();
+                    _mediaPlatformStream.Dispose();
+                    _mediaPlatformStream = null;
                 }
-
-                _playToEndObserver = null;
-                _sound = null;
-                _player = null;
             }
 
             //base.Dispose(disposing);
         }
     }
+    
 }
 

@@ -365,7 +365,8 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             _currentSong = song;
-           _session.SetTopology(SessionSetTopologyFlags.Immediate, ((ConcreteSongStrategy)song.Strategy).Topology);
+            MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+           _session.SetTopology(SessionSetTopologyFlags.Immediate, mediaPlatformStream.Topology);
 
             // The volume service won't be available until the session topology
             // is ready, so we now need to wait for the event indicating this
@@ -396,6 +397,115 @@ namespace Microsoft.Xna.Platform.Media
                 _nextSong = null;
             }
         }
+    }
+
+    internal sealed class MediaPlatformStream : IDisposable
+    {
+        private Topology _topology;
+
+        internal Topology Topology { get { return _topology; } }
+
+        internal MediaPlatformStream(Uri streamSource)
+        {
+            MediaManager.Startup(true);
+            this._topology = CreateTopology(streamSource);
+        }
+
+        private Topology CreateTopology(Uri streamSource)
+        {
+            Topology topology;
+            MediaFoundation.MediaFactory.CreateTopology(out topology);
+
+            SharpDX.MediaFoundation.MediaSource mediaSource;
+            {
+                string filename = streamSource.OriginalString;
+
+                SourceResolver resolver = new SourceResolver();
+                ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource);
+                mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
+                resolver.Dispose();
+                source.Dispose();
+            }
+
+            PresentationDescriptor presDesc;
+            mediaSource.CreatePresentationDescriptor(out presDesc);
+
+            for (var i = 0; i < presDesc.StreamDescriptorCount; i++)
+            {
+                SharpDX.Mathematics.Interop.RawBool selected;
+                StreamDescriptor desc;
+                presDesc.GetStreamDescriptorByIndex(i, out selected, out desc);
+
+                if (selected)
+                {
+                    TopologyNode sourceNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
+
+                    sourceNode.Set(TopologyNodeAttributeKeys.Source, mediaSource);
+                    sourceNode.Set(TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
+                    sourceNode.Set(TopologyNodeAttributeKeys.StreamDescriptor, desc);
+
+                    TopologyNode outputNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
+
+                    var typeHandler = desc.MediaTypeHandler;
+                    var majorType = typeHandler.MajorType;
+                    if (majorType != MediaTypeGuids.Audio)
+                        throw new NotSupportedException("The song contains video data!");
+
+                    Activate activate;
+                    MediaFoundation.MediaFactory.CreateAudioRendererActivate(out activate);
+                    outputNode.Object = activate;
+
+                    topology.AddNode(sourceNode);
+                    topology.AddNode(outputNode);
+                    sourceNode.ConnectOutput(0, outputNode, 0);
+
+                    sourceNode.Dispose();
+                    outputNode.Dispose();
+                    typeHandler.Dispose();
+                    activate.Dispose();
+                }
+
+                desc.Dispose();
+            }
+
+            presDesc.Dispose();
+            mediaSource.Dispose();
+
+            return topology;
+        }
+
+
+        #region IDisposable
+        ~MediaPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_topology != null)
+                {
+                    _topology.Dispose();
+                    _topology = null;
+                }
+            }
+
+            MediaManager.Shutdown();
+
+            //base.Dispose(disposing);
+
+        }
+        #endregion
     }
 }
 

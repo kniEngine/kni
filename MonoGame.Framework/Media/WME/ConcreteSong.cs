@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
 using Windows.Storage;
 using Microsoft.Xna.Framework.Media;
 

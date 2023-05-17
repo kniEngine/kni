@@ -12,6 +12,7 @@ using Foundation;
 using AVFoundation;
 using AppKit;
 using CoreAnimation;
+using ObjCRuntime;
 using RectF = CoreGraphics.CGRect;
 
 
@@ -153,5 +154,66 @@ namespace Microsoft.Xna.Platform.Media
         public NSSDLWindow(IntPtr handle) : base(handle)
         {
         }
+    }
+
+    internal sealed class VideoPlatformStream : IDisposable
+    {
+        private AVPlayer _player;
+        private AVPlayerItem _movie;
+
+        internal AVPlayer Player { get { return _player; } }
+
+        internal float Volume
+        {
+            get { return Player.Volume; }
+            set
+            {
+                // TODO When Xamarain fix the set Volume mMovie.Volume = value;
+            }
+        }
+
+        internal VideoPlatformStream(string filename)
+        {
+            NSError err = new NSError();
+
+            _movie = AVPlayerItem.FromUrl(NSUrl.FromFilename(FileName));
+            _player = new AVPlayer(_movie);
+        }
+
+
+        #region IDisposable
+        ~VideoPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_player != null)
+                {
+                    _player.Dispose();
+                    _player = null;
+                }
+
+                if (_movie != null)
+                {
+                    _movie.Dispose();
+                    _movie = null;
+                }
+
+            }
+
+            //base.Dispose(disposing);
+
+        }
+        #endregion
     }
 }

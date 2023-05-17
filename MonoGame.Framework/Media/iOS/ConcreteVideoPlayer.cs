@@ -5,13 +5,13 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MediaPlayer;
 using Foundation;
 using UIKit;
-
 
 namespace Microsoft.Xna.Platform.Media
 {
@@ -79,10 +79,11 @@ namespace Microsoft.Xna.Platform.Media
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
-            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
+            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            _videoPlatformStream.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            concreteGame.ViewController.PresentViewController(((ConcreteVideoStrategy)base.Video.Strategy).MovieView, false, null);
-            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
+            concreteGame.ViewController.PresentViewController(_videoPlatformStream.MovieView, false, null);
+            _videoPlatformStream.MovieView.MoviePlayer.Play();
 
             State = MediaState.Playing;
         }
@@ -94,7 +95,8 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformResume()
         {
-            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Play();
+            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            _videoPlatformStream.MovieView.MoviePlayer.Play();
             State = MediaState.Playing;
         }
 
@@ -110,7 +112,8 @@ namespace Microsoft.Xna.Platform.Media
                 _playbackDidFinishObserver = null;
             }
 
-            ((ConcreteVideoStrategy)base.Video.Strategy).MovieView.MoviePlayer.Stop();
+            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            _videoPlatformStream.MovieView.MoviePlayer.Stop();
             concreteGame.IsPlayingVideo = false;
             concreteGame.ViewController.DismissViewController(false, null);
 
@@ -141,5 +144,58 @@ namespace Microsoft.Xna.Platform.Media
 
             base.Dispose(disposing);
         }
+    }
+
+
+    internal sealed class VideoPlatformStream : IDisposable
+    {
+        private MPMoviePlayerViewController _movieView;
+
+        internal MPMoviePlayerViewController MovieView { get { return _movieView; } }
+
+
+        internal VideoPlatformStream(string filename)
+        {
+            NSUrl url = NSUrl.FromFilename(Path.GetFullPath(filename));
+            _movieView = CreateMovieView(url);
+        }
+
+        private MPMoviePlayerViewController CreateMovieView(NSUrl url)
+        {
+            var movieView = new MPMoviePlayerViewController(url);
+            MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
+            MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
+            MovieView.MoviePlayer.PrepareToPlay();
+            return movieView;
+        }
+
+
+        #region IDisposable
+        ~VideoPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_movieView != null)
+                {
+                    _movieView.Dispose();
+                    _movieView = null;
+                }
+
+            }
+
+            //base.Dispose(disposing);
+        }
+        #endregion
     }
 }

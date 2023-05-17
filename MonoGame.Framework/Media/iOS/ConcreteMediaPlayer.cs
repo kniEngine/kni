@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Media;
 using AudioToolbox;
 using AVFoundation;
 using CoreMedia;
+using Foundation;
+using MediaPlayer;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -37,7 +39,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                AVPlayer player = mediaPlatformStream.Player;
                 return TimeSpan.FromSeconds(player.CurrentTime.Seconds);
             }
 
@@ -49,7 +52,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                AVPlayer player = mediaPlatformStream.Player;
                 player.Seek(CMTime.FromSeconds(value.TotalSeconds, 1000));
             }
         }
@@ -80,9 +84,10 @@ namespace Microsoft.Xna.Platform.Media
             
             foreach (Song queuedSong in Queue.Songs)
             {
-                if (((ConcreteSongStrategy)queuedSong.Strategy).Player != null)
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)queuedSong.Strategy).GetMediaPlatformStream();
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)queuedSong.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     if (player.Volume != innerVolume)
                         player.Volume = innerVolume;
                 }
@@ -93,27 +98,28 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (Queue.ActiveSong != null)
             {
-                ((ConcreteSongStrategy)song.Strategy).SetEventHandler(OnSongFinishedPlaying);
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+                mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
                 float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
 
-                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)song.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     if (player.Volume != innerVolume)
                         player.Volume = innerVolume;
                 }
 
-                if (((ConcreteSongStrategy)song.Strategy).Player == null)
+                if (mediaPlatformStream.Player == null)
                 {
                     // MediaLibrary items are lazy loaded
                     if (((ConcreteSongStrategy)song.Strategy).AssetUrl != null)
-                        ((ConcreteSongStrategy)song.Strategy).CreatePlayer(((ConcreteSongStrategy)song.Strategy).AssetUrl);
+                        mediaPlatformStream.CreatePlayer(((ConcreteSongStrategy)song.Strategy).AssetUrl);
                     else
                         return;
                 }
 
-                AVPlayer player2 = ((ConcreteSongStrategy)song.Strategy).Player;
+                AVPlayer player2 = mediaPlatformStream.Player;
                 player2.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
                 player2.Play();
 
@@ -126,9 +132,10 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     player.Pause();
                 }
             }
@@ -139,9 +146,10 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     player.Play();
                 }
             }
@@ -153,9 +161,10 @@ namespace Microsoft.Xna.Platform.Media
             {
                 var activeSong = Queue.ActiveSong;
 
-                if (((ConcreteSongStrategy)activeSong.Strategy).Player != null)
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)activeSong.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     player.Pause();
                     activeSong.Strategy.PlayCount = 0;
                 }
@@ -168,9 +177,10 @@ namespace Microsoft.Xna.Platform.Media
             {
                 Song song = Queue[0];
 
-                if (((ConcreteSongStrategy)song.Strategy).Player != null)
+                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+                if (mediaPlatformStream.Player != null)
                 {
-                    AVPlayer player = ((ConcreteSongStrategy)song.Strategy).Player;
+                    AVPlayer player = mediaPlatformStream.Player;
                     player.Pause();
                     song.Strategy.PlayCount = 0;
                 }
@@ -182,5 +192,83 @@ namespace Microsoft.Xna.Platform.Media
         }
 
     }
+
+    internal sealed class MediaPlatformStream : IDisposable
+    {
+        private AVPlayer _player; // TODO: Move _player to MediaPlayer
+        private NSObject _playToEndObserver;
+        private AVPlayerItem _sound;
+
+        internal AVPlayer Player { get { return _player; } }
+
+
+        internal MediaPlatformStream(Uri streamSource)
+        {
+            NSUrl nsUrl = NSUrl.FromFilename(streamSource.OriginalString);
+            this.CreatePlayer(nsUrl);
+        }
+
+        internal void CreatePlayer(NSUrl url)
+        {
+            _sound = AVPlayerItem.FromUrl(url);
+            _player = AVPlayer.FromPlayerItem(_sound);
+            _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
+        }
+
+        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        event FinishedPlayingHandler DonePlaying;
+
+        private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
+		{
+            var handler = DonePlaying;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+		/// </summary>
+		internal void SetEventHandler(FinishedPlayingHandler handler)
+		{
+			if (DonePlaying == null)
+			    DonePlaying += handler;
+		}
+
+
+        #region IDisposable
+        ~MediaPlatformStream()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_sound != null)
+                {
+                    _playToEndObserver.Dispose();
+                    _sound.Dispose();
+                    _player.Dispose();
+                }
+
+                _playToEndObserver = null;
+                _sound = null;
+                _player = null;
+
+            }
+
+            //base.Dispose(disposing);
+
+        }
+        #endregion
+    }
+
 }
 
