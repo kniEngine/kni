@@ -83,14 +83,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow.GameView.TouchEnabled = true;
         }
 
-        public override void EnterFullScreen()
-        {
-        }
-
-        public override void ExitFullScreen()
-        {
-        }
-
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         {
             // Force the Viewport to be correctly set

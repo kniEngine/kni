@@ -37,16 +37,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void EnterFullScreen()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void ExitFullScreen()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
             throw new PlatformNotSupportedException();

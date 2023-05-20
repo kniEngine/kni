@@ -240,26 +240,20 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override void EnterFullScreen()
-        {
-            if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())
-            {
-                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
-            }
-		}
-
-		public override void ExitFullScreen()
-        {
-            UAPGameWindow.Instance.AppView.ExitFullScreenMode();
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
-        }
-
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
             if (pp.IsFullScreen)
-                EnterFullScreen();
+            {
+                // Enter FullScreen
+                if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())
+                    ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+            }
             else
-                ExitFullScreen();
+            {
+                // Exit FullScreen
+                UAPGameWindow.Instance.AppView.ExitFullScreenMode();
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
+            }
         }
 
         public override bool IsMouseVisible

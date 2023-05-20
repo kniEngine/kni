@@ -360,18 +360,6 @@ namespace Microsoft.Xna.Platform
         public abstract bool BeforeUpdate();
 
         /// <summary>
-        /// When implemented in a derived class, causes the game to enter
-        /// full-screen mode.
-        /// </summary>
-        public abstract void EnterFullScreen();
-
-        /// <summary>
-        /// When implemented in a derived class, causes the game to exit
-        /// full-screen mode.
-        /// </summary>
-        public abstract void ExitFullScreen();
-
-        /// <summary>
         /// Completes a device transition.
         /// </summary>
         /// <param name='screenDeviceName'>

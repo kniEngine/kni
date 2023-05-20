@@ -265,16 +265,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override void EnterFullScreen()
-        {
-            // Do nothing: iOS games are always full screen
-        }
-
-        public override void ExitFullScreen()
-        {
-            // Do nothing: iOS games are always full screen
-        }
-
         public override void Exit()
         {
             throw new PlatformNotSupportedException("iOS platform does not allow programmatically closing.");
