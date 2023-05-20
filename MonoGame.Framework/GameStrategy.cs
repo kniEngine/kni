@@ -372,15 +372,6 @@ namespace Microsoft.Xna.Platform
         public abstract void ExitFullScreen();
 
         /// <summary>
-        /// Starts a device transition (windowed to full screen or vice versa).
-        /// </summary>
-        /// <param name='willBeFullScreen'>
-        /// Specifies whether the device will be in full-screen mode upon completion of the change.
-        /// </param>
-        public virtual void BeginScreenDeviceChange(bool willBeFullScreen)
-        { }
-
-        /// <summary>
         /// Completes a device transition.
         /// </summary>
         /// <param name='screenDeviceName'>
@@ -392,7 +383,10 @@ namespace Microsoft.Xna.Platform
         /// <param name='clientHeight'>
         /// The new height of the game's client window.
         /// </param>
-        public virtual void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        /// <param name='willBeFullScreen'>
+        /// Specifies whether the device will be in full-screen mode upon completion of the change.
+        /// </param>
+        public virtual void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         { }
 
         /// <summary>

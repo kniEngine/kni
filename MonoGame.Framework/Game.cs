@@ -389,7 +389,6 @@ namespace Microsoft.Xna.Framework
             // applyChanges
             {
                 var willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
-                Strategy.BeginScreenDeviceChange(willBeFullScreen);
 
                 if (GraphicsDevice.PresentationParameters.IsFullScreen)
                     Strategy.EnterFullScreen();
@@ -401,7 +400,7 @@ namespace Microsoft.Xna.Framework
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
                 GraphicsDevice.Viewport = viewport;
 
-                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
+                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height, willBeFullScreen);
             }
 #endif
 

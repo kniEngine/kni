@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework
         internal readonly Game _game;
         private IntPtr _handle, _icon;
         private bool _disposed;
-        private bool _resizable, _borderless, _willBeFullScreen, _mouseVisible, _hardwareSwitch;
+        private bool _resizable, _borderless, _mouseVisible, _hardwareSwitch;
         private string _screenDeviceName;
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
@@ -190,12 +190,7 @@ namespace Microsoft.Xna.Framework
             Sdl.Mouse.ShowCursor(visible ? 1 : 0);
         }
 
-        internal void BeginScreenDeviceChange(bool willBeFullScreen)
-        {
-            _willBeFullScreen = willBeFullScreen;
-        }
-
-        internal void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        internal void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         {
             _screenDeviceName = screenDeviceName;
 
@@ -206,19 +201,19 @@ namespace Microsoft.Xna.Framework
             Sdl.Display.GetBounds(displayIndex, out displayRect);
 
             var gdm = _game.Strategy.GraphicsDeviceManager;
-            if (_willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+            if (willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
             {
                 int fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
-                Sdl.Window.SetFullscreen(Handle, (_willBeFullScreen) ? fullscreenFlag : 0);
+                Sdl.Window.SetFullscreen(Handle, (willBeFullScreen) ? fullscreenFlag : 0);
                 _hardwareSwitch = gdm.HardwareModeSwitch;
             }
             // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
             if (CurrentPlatform.OS == OS.Windows)
             {
-                Sdl.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _willBeFullScreen && _hardwareSwitch ? "1" : "0");
+                Sdl.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeFullScreen && _hardwareSwitch ? "1" : "0");
             }
 
-            if (!_willBeFullScreen || gdm.HardwareModeSwitch)
+            if (!willBeFullScreen || gdm.HardwareModeSwitch)
             {
                 Sdl.Window.SetSize(Handle, clientWidth, clientHeight);
                 _width = clientWidth;
@@ -236,7 +231,7 @@ namespace Microsoft.Xna.Framework
             int centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
             int centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
 
-            if (IsFullScreen && !_willBeFullScreen)
+            if (IsFullScreen && !willBeFullScreen)
             {
                 // We need to get the display information again in case
                 // the resolution of it was changed.
@@ -256,10 +251,10 @@ namespace Microsoft.Xna.Framework
             if ((Sdl.version > nonResizeableVersion || !AllowUserResizing) && !_wasMoved)
                 Sdl.Window.SetPosition(Handle, centerX, centerY);
 
-            if (IsFullScreen != _willBeFullScreen)
+            if (IsFullScreen != willBeFullScreen)
                 OnClientSizeChanged();
 
-            IsFullScreen = _willBeFullScreen;
+            IsFullScreen = willBeFullScreen;
 
             _supressMoved = true;
         }
