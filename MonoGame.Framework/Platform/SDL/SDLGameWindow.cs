@@ -199,8 +199,8 @@ namespace Microsoft.Xna.Framework
         {
             _screenDeviceName = screenDeviceName;
 
-            var prevBounds = ClientBounds;
-            var displayIndex = Sdl.Window.GetDisplayIndex(Handle);
+            Rectangle prevBounds = ClientBounds;
+            int displayIndex = Sdl.Window.GetDisplayIndex(Handle);
 
             Sdl.Rectangle displayRect;
             Sdl.Display.GetBounds(displayIndex, out displayRect);
@@ -208,7 +208,7 @@ namespace Microsoft.Xna.Framework
             var gdm = _game.Strategy.GraphicsDeviceManager;
             if (_willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
             {
-                var fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
+                int fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
                 Sdl.Window.SetFullscreen(Handle, (_willBeFullScreen) ? fullscreenFlag : 0);
                 _hardwareSwitch = gdm.HardwareModeSwitch;
             }
@@ -233,8 +233,8 @@ namespace Microsoft.Xna.Framework
             int ignore, minx = 0, miny = 0;
             Sdl.Window.GetBorderSize(_handle, out miny, out minx, out ignore, out ignore);
 
-            var centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
-            var centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
+            int centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
+            int centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
 
             if (IsFullScreen && !_willBeFullScreen)
             {
@@ -252,7 +252,7 @@ namespace Microsoft.Xna.Framework
             // after the window gets resized, window position information
             // becomes wrong (for me it always returned 10 8). Solution is
             // to not try and set the window position because it will be wrong.
-            var nonResizeableVersion = new Sdl.Version(2, 0, 4);
+            Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
             if ((Sdl.version > nonResizeableVersion || !AllowUserResizing) && !_wasMoved)
                 Sdl.Window.SetPosition(Handle, centerX, centerY);
 

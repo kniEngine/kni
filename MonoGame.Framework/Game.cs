@@ -395,7 +395,7 @@ namespace Microsoft.Xna.Framework
                 else
                     Strategy.ExitFullScreen();
 
-                var viewport = new Viewport(0, 0,
+                Viewport viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
                 GraphicsDevice.Viewport = viewport;

@@ -104,8 +104,8 @@ namespace Microsoft.Xna.Platform
 
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
-            var displayIndex = Sdl.Window.GetDisplayIndex(Window.Handle);
-            var displayName = Sdl.Display.GetDisplayName(displayIndex);
+            int displayIndex = Sdl.Window.GetDisplayIndex(Window.Handle);
+            string displayName = Sdl.Display.GetDisplayName(displayIndex);
             BeginScreenDeviceChange(pp.IsFullScreen);
             EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight);
         }
