@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform
         {
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         {
             // Force the Viewport to be correctly set
             var gdm = this.GraphicsDeviceManager;

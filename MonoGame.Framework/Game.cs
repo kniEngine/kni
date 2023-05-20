@@ -388,19 +388,19 @@ namespace Microsoft.Xna.Framework
 #if DESKTOPGL || ANDROID || IOS || TVOS
             // applyChanges
             {
-                Strategy.BeginScreenDeviceChange(GraphicsDevice.PresentationParameters.IsFullScreen);
+                var willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
 
                 if (GraphicsDevice.PresentationParameters.IsFullScreen)
                     Strategy.EnterFullScreen();
                 else
                     Strategy.ExitFullScreen();
 
-                var viewport = new Viewport(0, 0,
+                Viewport viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
                 GraphicsDevice.Viewport = viewport;
 
-                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
+                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height, willBeFullScreen);
             }
 #endif
 
