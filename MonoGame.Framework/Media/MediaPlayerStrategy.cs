@@ -172,7 +172,8 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void Pause()
         {
-            switch (State)
+            MediaState state = State;
+            switch (state)
             {
                 case MediaState.Playing:
                     if (_queue.ActiveSong != null)
@@ -187,7 +188,8 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void Resume()
         {
-            switch (State)
+            MediaState state = State;
+            switch (state)
             {
                 case MediaState.Paused:
                     {
@@ -201,7 +203,8 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void Stop()
         {
-            switch (State)
+            MediaState state = State;
+            switch (state)
             {
                 case MediaState.Playing:
                 case MediaState.Paused:

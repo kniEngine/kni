@@ -127,10 +127,8 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Pause()
         {
-            if (Strategy.Video == null)
-                return;
-
-            Strategy.PlatformPause();
+            if (Strategy.Video != null)
+                Strategy.PlatformPause();
         }
 
         /// <summary>
