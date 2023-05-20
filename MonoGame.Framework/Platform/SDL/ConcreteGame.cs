@@ -106,7 +106,8 @@ namespace Microsoft.Xna.Platform
         {
             int displayIndex = Sdl.Window.GetDisplayIndex(Window.Handle);
             string displayName = Sdl.Display.GetDisplayName(displayIndex);
-            BeginScreenDeviceChange(pp.IsFullScreen);
+            bool willBeFullScreen = pp.IsFullScreen;
+            BeginScreenDeviceChange(willBeFullScreen);
             EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight);
         }
 
