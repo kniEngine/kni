@@ -97,14 +97,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override void EnterFullScreen()
-        {
-        }
-
-        public override void ExitFullScreen()
-        {
-        }
-
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
             _window.OnPresentationChanged(pp);

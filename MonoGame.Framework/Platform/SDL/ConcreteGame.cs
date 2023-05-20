@@ -313,14 +313,6 @@ namespace Microsoft.Xna.Platform
             return true;
         }
 
-        public override void EnterFullScreen()
-        {
-        }
-
-        public override void ExitFullScreen()
-        {
-        }
-
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         {
             _window.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight, willBeFullScreen);

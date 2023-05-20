@@ -390,11 +390,6 @@ namespace Microsoft.Xna.Framework
             {
                 var willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
 
-                if (GraphicsDevice.PresentationParameters.IsFullScreen)
-                    Strategy.EnterFullScreen();
-                else
-                    Strategy.ExitFullScreen();
-
                 Viewport viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
                                             GraphicsDevice.PresentationParameters.BackBufferHeight);
