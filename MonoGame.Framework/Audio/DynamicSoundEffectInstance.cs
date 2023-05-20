@@ -279,7 +279,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Stopped:

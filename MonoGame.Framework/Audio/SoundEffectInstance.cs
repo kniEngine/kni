@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Paused:
@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -274,7 +274,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Stopped:
@@ -306,7 +306,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = State;
+                SoundState state = State;
                 switch (state)
                 {
                     case SoundState.Stopped:
