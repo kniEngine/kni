@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // and release events.
             // 
             if (state == TouchLocationState.Pressed)
-            {     
+            {
                 _touchIds[id] = _nextTouchId++;
             }
 
