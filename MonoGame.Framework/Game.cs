@@ -106,11 +106,6 @@ namespace Microsoft.Xna.Framework
 
         #region Properties
 
-#if ANDROID
-        [CLSCompliant(false)]
-        [Obsolete]
-        public static AndroidGameActivity Activity { get { return AndroidGameWindow.Activity; } }
-#endif
         private static Game _instance = null;
         internal static Game Instance { get { return Game._instance; } }
 
