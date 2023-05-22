@@ -152,12 +152,12 @@ namespace Microsoft.Xna.Platform
         {
             if (_isFullScreen)
             {
-                Game.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
-                Game.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+                AndroidGameWindow.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
+                AndroidGameWindow.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
             }
             else
             {
-                Game.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+                AndroidGameWindow.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
             }
         }
 
@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeginDraw()
         {
-            // return base.BeginDraw();
+            //return base.BeginDraw();
 
             PrimaryThreadLoader.DoLoads();
             if (ConcreteGame.IsPlayingVideo)
