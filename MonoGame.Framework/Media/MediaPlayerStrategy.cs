@@ -275,7 +275,8 @@ namespace Microsoft.Xna.Platform.Media
                 }
             }
 
-            MoveNext();
+            Stop();
+            NextSong(1);
         }
 
 
