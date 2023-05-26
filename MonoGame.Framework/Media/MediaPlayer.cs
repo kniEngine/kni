@@ -10,33 +10,29 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public static class MediaPlayer
+    public sealed class MediaPlayer : IMediaPlayer
     {
-        private volatile static MediaPlayerStrategy _strategy;
-        internal readonly static object SyncHandle = new object();
+        private static MediaPlayer _current;
 
-        internal static MediaPlayerStrategy Strategy
+        /// <summary>
+        /// Returns the current FrameworkDispatcher instance.
+        /// </summary> 
+        internal static IMediaPlayer Current
         {
             get
             {
-                var strategy = _strategy;
-                if (strategy != null)
-                    return strategy;
-
-                // Create instance
-                lock (SyncHandle)
+                lock (typeof(MediaPlayer))
                 {
-                    if (_strategy == null)
+                    if (_current == null)
                     {
-                        _strategy = MediaFactory.Current.CreateMediaPlayerStrategy();
-                        _strategy.PlatformActiveSongChanged += (sender, args) => OnActiveSongChanged(args);
-                        _strategy.PlatformMediaStateChanged += (sender, args) => OnMediaStateChanged(args);
+                        _current = new MediaPlayer();
                     }
 
-                    return _strategy;
+                    return _current;
                 }
             }
         }
+
 
         public static event EventHandler<EventArgs> ActiveSongChanged;
         public static event EventHandler<EventArgs> MediaStateChanged;
@@ -46,50 +42,190 @@ namespace Microsoft.Xna.Framework.Media
 
         public static MediaQueue Queue
         {
-            get { return Strategy.Queue; }
+            get { return Current.Queue; }
         }
         
         public static bool IsMuted
+        {
+            get { return Current.IsMuted; }
+            set { Current.IsMuted = value; }
+        }
+
+        public static bool IsRepeating 
+        {
+            get { return Current.IsRepeating; }
+            set { Current.IsRepeating = value; }
+        }
+
+        public static bool IsShuffled
+        {
+            get { return Current.IsShuffled; }
+            set { Current.IsShuffled = value; }
+        }
+
+        public static bool IsVisualizationEnabled
+        {
+            get { return Current.IsVisualizationEnabled; }
+            set { Current.IsVisualizationEnabled = value; }
+        }
+
+        public static TimeSpan PlayPosition
+        {
+            get { return Current.PlayPosition; }
+        }
+
+        public static MediaState State
+        {
+            get { return Current.State; }
+        }
+        
+        public static bool GameHasControl
+        {
+            get { return Current.GameHasControl; }
+        }
+        
+        public static float Volume
+        {
+            get { return Current.Volume; }
+            set { Current.Volume = value; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Play clears the current playback queue, and then queues up the specified song for playback. 
+        /// Playback starts immediately at the beginning of the song.
+        /// </summary>
+        public static void Play(Song song)
+        {
+            MediaPlayer.Current.Play(song);
+        }
+
+        public static void Play(SongCollection collection)
+        {
+            MediaPlayer.Current.Play(collection);
+        }
+
+        public static void Play(SongCollection collection, int index)
+        {
+            MediaPlayer.Current.Play(collection, index);
+        }
+
+        public static void Pause()
+        {
+            MediaPlayer.Current.Pause();
+        }
+
+        public static void Resume()
+        {
+            MediaPlayer.Current.Resume();
+        }
+
+        public static void Stop()
+        {
+            MediaPlayer.Current.Stop();
+        }
+
+        public static void MoveNext()
+        {
+            MediaPlayer.Current.MoveNext();
+        }
+
+        public static void MovePrevious()
+        {
+            MediaPlayer.Current.MovePrevious();
+        }
+
+        private void OnActiveSongChanged(EventArgs args)
+        {
+            var handler = _activeSongChanged;
+            if (handler != null)
+                handler(this, args);
+
+            var staticHandler = MediaPlayer.ActiveSongChanged;
+            if (staticHandler != null)
+                staticHandler(null, args);
+        }
+
+        private void OnMediaStateChanged(EventArgs args)
+        {
+            var handler = _mediaStateChanged;
+            if (handler != null)
+                handler(this, args);
+
+            var staticHandler = MediaPlayer.MediaStateChanged;
+            if (staticHandler != null)
+                staticHandler(null, args);
+        }
+
+
+        private MediaPlayerStrategy _strategy;
+
+        private event EventHandler<EventArgs> _activeSongChanged;
+        private event EventHandler<EventArgs> _mediaStateChanged;
+
+
+        internal MediaPlayerStrategy Strategy { get { return _strategy; } }
+
+
+        event EventHandler<EventArgs> IMediaPlayer.ActiveSongChanged
+        {
+            add { _activeSongChanged += value; }
+            remove { ActiveSongChanged -= value; }
+        }
+
+        event EventHandler<EventArgs> IMediaPlayer.MediaStateChanged
+        {
+            add { _mediaStateChanged += value; }
+            remove { _mediaStateChanged -= value; }
+        }
+
+
+        MediaQueue IMediaPlayer.Queue
+        {
+            get { return Strategy.Queue; }
+        }
+
+        bool IMediaPlayer.IsMuted
         {
             get { return Strategy.PlatformGetIsMuted(); }
             set { Strategy.PlatformSetIsMuted(value); }
         }
 
-        public static bool IsRepeating 
+        bool IMediaPlayer.IsRepeating
         {
             get { return Strategy.PlatformGetIsRepeating(); }
             set { Strategy.PlatformSetIsRepeating(value); }
         }
 
-        public static bool IsShuffled
+        bool IMediaPlayer.IsShuffled
         {
             get { return Strategy.PlatformGetIsShuffled(); }
             set { Strategy.PlatformSetIsShuffled(value); }
         }
 
-        public static bool IsVisualizationEnabled
+        bool IMediaPlayer.IsVisualizationEnabled
         {
             get { return Strategy.PlatformGetIsVisualizationEnabled(); }
             set { Strategy.PlatformSetIsVisualizationEnabled(value); }
         }
 
-        public static TimeSpan PlayPosition
+        TimeSpan IMediaPlayer.PlayPosition
         {
             get { return Strategy.PlatformGetPlayPosition(); }
         }
 
-        public static MediaState State
+        MediaState IMediaPlayer.State
         {
             get { return Strategy.State; }
         }
-        
-        public static bool GameHasControl
+
+        bool IMediaPlayer.GameHasControl
         {
             get { return Strategy.PlatformGetGameHasControl(); }
         }
-        
 
-        public static float Volume
+        float IMediaPlayer.Volume
         {
             get { return Strategy.PlatformGetVolume(); }
             set
@@ -99,66 +235,90 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        #endregion
+
+        private MediaPlayer()
+        {
+            _strategy = MediaFactory.Current.CreateMediaPlayerStrategy();
+
+            _strategy.PlatformActiveSongChanged += Strategy_PlatformActiveSongChanged;
+            _strategy.PlatformMediaStateChanged += Strategy_PlatformMediaStateChanged;
+        }
         
-        /// <summary>
-        /// Play clears the current playback queue, and then queues up the specified song for playback. 
-        /// Playback starts immediately at the beginning of the song.
-        /// </summary>
-        public static void Play(Song song)
+
+        private void Strategy_PlatformActiveSongChanged(object sender, EventArgs e)
+        {
+            OnActiveSongChanged(e);
+        }
+
+        private void Strategy_PlatformMediaStateChanged(object sender, EventArgs e)
+        {
+            OnMediaStateChanged(e);
+        }
+
+        void IMediaPlayer.Play(Song song)
         {
             Strategy.Play(song);
-        }        
+        }
 
-        public static void Play(SongCollection collection)
+        void IMediaPlayer.Play(SongCollection collection)
         {
             Strategy.Play(collection);
         }
-        
-        public static void Play(SongCollection collection, int index)
+
+        void IMediaPlayer.Play(SongCollection collection, int index)
         {
             Strategy.Play(collection, index);
         }
-        
-        public static void Pause()
+
+        void IMediaPlayer.Pause()
         {
             Strategy.Pause();
         }
 
-        public static void Resume()
+        void IMediaPlayer.Resume()
         {
             Strategy.Resume();
         }
 
-        public static void Stop()
+        void IMediaPlayer.Stop()
         {
             Strategy.Stop();
         }
 
-        public static void MoveNext()
+        void IMediaPlayer.MoveNext()
         {
             Strategy.MoveNext();
         }
 
-        public static void MovePrevious()
+        void IMediaPlayer.MovePrevious()
         {
             Strategy.MovePrevious();
         }
+                
+    }
 
-        private static void OnActiveSongChanged(EventArgs args)
-        {
-            var handler = ActiveSongChanged;
-            if (handler != null)
-                handler(null, args);
-        }
+    internal interface IMediaPlayer
+    {
+        MediaQueue Queue { get; }
+        bool IsMuted { get; set; }
+        bool IsRepeating { get; set; }
+        bool IsShuffled { get; set; }
+        bool IsVisualizationEnabled { get; set; }
+        TimeSpan PlayPosition { get; }
+        MediaState State { get; }
+        bool GameHasControl { get; }
+        float Volume { get; set; }
 
-        private static void OnMediaStateChanged(EventArgs args)
-        {
-            var handler = MediaStateChanged;
-            if (handler != null)
-                handler(null, args);
-        }
+        event EventHandler<EventArgs> ActiveSongChanged;
+        event EventHandler<EventArgs> MediaStateChanged;
 
-        
+        void Play(Song song);
+        void Play(SongCollection collection);
+        void Play(SongCollection collection, int index);
+        void Pause();
+        void Resume();
+        void Stop();
+        void MoveNext();
+        void MovePrevious();
     }
 }
