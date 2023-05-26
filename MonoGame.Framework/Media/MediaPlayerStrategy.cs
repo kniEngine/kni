@@ -219,18 +219,18 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void MoveNext()
         {
+            Stop();
             NextSong(1);
         }
 
         internal void MovePrevious()
         {
+            Stop();
             NextSong(-1);
         }
 
         private void NextSong(int direction)
         {
-            Stop();
-
             if (PlatformGetIsRepeating() && _queue.ActiveSongIndex >= _queue.Count - 1)
             {
                 _queue.ActiveSongIndex = 0;
