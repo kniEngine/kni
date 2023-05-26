@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Media
         private readonly MediaQueue _queue = new MediaQueue();
         // Need to hold onto this to keep track of how many songs
         // have played when in shuffle mode
-        private int _numSongsInQueuePlayed = 0;
+        internal int _numSongsInQueuePlayed = 0;
         
 
         internal event EventHandler<EventArgs> PlatformActiveSongChanged;
