@@ -269,13 +269,41 @@ namespace Microsoft.Xna.Platform.Media
                 _numSongsInQueuePlayed = 0;
                 if (!PlatformGetIsRepeating())
                 {
-                    Stop();
+                    // Stop
+                    MediaState state = State;
+                    switch (state)
+                    {
+                        case MediaState.Playing:
+                        case MediaState.Paused:
+                            {
+                                PlatformStop();
+                                _state = MediaState.Stopped;
+                                OnPlatformMediaStateChanged(EventArgs.Empty);
+                            }
+                            break;
+                    }
+
                     OnPlatformActiveSongChanged(EventArgs.Empty);
                     return;
                 }
             }
 
-            Stop();
+            // Stop
+            {
+                MediaState state = State;
+                switch (state)
+                {
+                    case MediaState.Playing:
+                    case MediaState.Paused:
+                        {
+                            PlatformStop();
+                            _state = MediaState.Stopped;
+                            OnPlatformMediaStateChanged(EventArgs.Empty);
+                        }
+                        break;
+                }
+            }
+
             NextSong(1);
         }
 
