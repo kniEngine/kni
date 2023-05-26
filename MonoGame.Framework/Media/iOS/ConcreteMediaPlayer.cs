@@ -269,6 +269,5 @@ namespace Microsoft.Xna.Platform.Media
         }
         #endregion
     }
-
 }
 

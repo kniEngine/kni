@@ -152,6 +152,7 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
+
                 MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {

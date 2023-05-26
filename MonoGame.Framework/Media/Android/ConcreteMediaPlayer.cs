@@ -147,6 +147,7 @@ namespace Microsoft.Xna.Platform.Media
             while (Queue.Count > 0)
             {
                 Song song = Queue[0];
+
                 MediaPlatformStream._androidPlayer.Stop();
                 MediaPlatformStream._playingSong = null;
                 song.Strategy.PlayCount = 0;
