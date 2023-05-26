@@ -73,22 +73,22 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             throw new PlatformNotSupportedException();
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             throw new PlatformNotSupportedException();
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             throw new PlatformNotSupportedException();
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             throw new PlatformNotSupportedException();
         }

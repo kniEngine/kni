@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
         
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             if (Queue.ActiveSong != null)
            {
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             foreach (Song queuedSong in Queue.Songs)
             {
@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformClearQueue()
+        internal override void PlatformClearQueue()
         {
             while (Queue.Count > 0)
             {

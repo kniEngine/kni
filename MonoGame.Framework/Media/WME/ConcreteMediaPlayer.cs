@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             _mediaEngineEx.Source = ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString;
             _mediaEngineEx.Load();
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Platform.Media
             //We start playing when we get a LoadedData event in MediaEngineExOnPlaybackEvent
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             if (_sessionState == SessionState.Started)
             {
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             if (_sessionState == SessionState.Paused)
             {
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             if (_sessionState != SessionState.Stopped)
             {

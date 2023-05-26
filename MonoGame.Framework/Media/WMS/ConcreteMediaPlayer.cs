@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             SessionState sessionState = _sessionState;
             switch (sessionState)
@@ -252,7 +252,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             SessionState sessionState = _sessionState;
             switch (sessionState)
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             SessionState sessionState = _sessionState;
             switch (sessionState)
@@ -310,7 +310,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             SessionState sessionState = _sessionState;
             switch (sessionState)

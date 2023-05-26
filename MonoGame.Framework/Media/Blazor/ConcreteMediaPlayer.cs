@@ -92,22 +92,22 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             throw new NotImplementedException();
         }

@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Media
         private bool _isShuffled;
         private bool _isVisualizationEnabled;
 
-        private MediaState _state = MediaState.Stopped;
+        internal MediaState _state = MediaState.Stopped;
 
         private readonly MediaQueue _queue = new MediaQueue();
         // Need to hold onto this to keep track of how many songs
@@ -90,27 +90,27 @@ namespace Microsoft.Xna.Platform.Media
         internal abstract TimeSpan PlatformGetPlayPosition();
 
         protected abstract bool PlatformUpdateState(ref MediaState state);
-        protected abstract void PlatformPlaySong(Song song);
-        protected abstract void PlatformPause();
-        protected abstract void PlatformResume();
-        protected abstract void PlatformStop();
+        internal abstract void PlatformPlaySong(Song song);
+        internal abstract void PlatformPause();
+        internal abstract void PlatformResume();
+        internal abstract void PlatformStop();
 
 
-        protected virtual void OnPlatformActiveSongChanged(EventArgs args)
+        internal void OnPlatformActiveSongChanged(EventArgs args)
         {
             var handler = PlatformActiveSongChanged;
             if (handler != null)
                 handler(null, args);
         }
 
-        protected virtual void OnPlatformMediaStateChanged(EventArgs args)
+        internal void OnPlatformMediaStateChanged(EventArgs args)
         {
             var handler = PlatformMediaStateChanged;
             if (handler != null)
                 handler(null, args);
         }
 
-        protected virtual void PlatformClearQueue()
+        internal virtual void PlatformClearQueue()
         {
             while (_queue.Count > 0)
             {
