@@ -156,6 +156,7 @@ namespace Microsoft.Xna.Platform.Media
                 Queue.Remove(song);
             }
 
+            _numSongsInQueuePlayed = 0;
             //base.ClearQueue();
         }
 

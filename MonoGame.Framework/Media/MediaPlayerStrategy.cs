@@ -117,6 +117,8 @@ namespace Microsoft.Xna.Platform.Media
                 Song song = _queue[0];
                 _queue.Remove(song);
             }
+
+            _numSongsInQueuePlayed = 0;
         }
 
 
@@ -128,7 +130,6 @@ namespace Microsoft.Xna.Platform.Media
             var previousSong = _queue.Count > 0 ? _queue[0] : null;
 
             PlatformClearQueue();
-            _numSongsInQueuePlayed = 0;
             _queue.Add(song);
             _queue.ActiveSongIndex = 0;
 
@@ -149,7 +150,6 @@ namespace Microsoft.Xna.Platform.Media
                 throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
 
             PlatformClearQueue();
-            _numSongsInQueuePlayed = 0;
 
             foreach (var song in collection)
                 _queue.Add(song);
