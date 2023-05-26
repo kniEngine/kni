@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Framework.Media
 
         void IMediaPlayer.Play(SongCollection collection)
         {
-            Strategy.Play(collection);
+            ((IMediaPlayer)this).Play(collection, 0);
         }
 
         void IMediaPlayer.Play(SongCollection collection, int index)

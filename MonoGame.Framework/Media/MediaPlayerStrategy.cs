@@ -143,11 +143,6 @@ namespace Microsoft.Xna.Platform.Media
                 OnPlatformActiveSongChanged(EventArgs.Empty);
         }
 
-        internal void Play(SongCollection collection)
-        {
-            Play(collection, 0);
-        }
-
         internal void Play(SongCollection collection, int index)
         {
             if (collection == null)
