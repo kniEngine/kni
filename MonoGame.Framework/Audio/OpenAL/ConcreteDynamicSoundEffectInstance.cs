@@ -39,30 +39,30 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformPause()
         {
-            AL.SourcePause(_sourceId);
-            ALHelper.CheckError("Failed to pause the source.");
+            ConcreteAudioService.OpenAL.SourcePause(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to pause the source.");
         }
 
         internal override void PlatformPlay(bool isLooped)
         {
             // Ensure that the source is not looped (due to source recycling)
-            AL.Source(_sourceId, ALSourceb.Looping, false);
-            ALHelper.CheckError("Failed to set source loop state.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, false);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
 
-            AL.SourcePlay(_sourceId);
-            ALHelper.CheckError("Failed to play the source.");
+            ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to play the source.");
         }
 
         internal override void PlatformResume(bool isLooped)
         {
-            AL.SourcePlay(_sourceId);
-            ALHelper.CheckError("Failed to play the source.");
+            ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to play the source.");
         }
 
         internal override void PlatformStop()
         {
-            AL.SourceStop(_sourceId);
-            ALHelper.CheckError("Failed to stop the source.");
+            ConcreteAudioService.OpenAL.SourceStop(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to stop the source.");
 
             DynamicPlatformClearBuffers();
         }
@@ -78,39 +78,39 @@ namespace Microsoft.Xna.Platform.Audio
         public void DynamicPlatformSubmitBuffer(byte[] buffer, int offset, int count, SoundState state)
         {
             // Get a buffer
-            int alBuffer = AL.GenBuffer();
-            ALHelper.CheckError("Failed to generate OpenAL data buffer.");
+            int alBuffer = ConcreteAudioService.OpenAL.GenBuffer();
+            ConcreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             
             // Bind the data
-            AL.BufferData(alBuffer, _format, buffer, offset, count, _sampleRate, 0);
-            ALHelper.CheckError("Failed to fill buffer.");
+            ConcreteAudioService.OpenAL.BufferData(alBuffer, _format, buffer, offset, count, _sampleRate, 0);
+            ConcreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
 
             // Queue the buffer
             _queuedBuffers.Enqueue(alBuffer);
-            AL.SourceQueueBuffer(_sourceId, alBuffer);
-            ALHelper.CheckError("Failed to queue the buffer.");
+            ConcreteAudioService.OpenAL.SourceQueueBuffer(_sourceId, alBuffer);
+            ConcreteAudioService.OpenAL.CheckError("Failed to queue the buffer.");
 
             // If the source has run out of buffers, restart it
-            var sourceState = AL.GetSourceState(_sourceId);
+            var sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
             if (state == SoundState.Playing && sourceState == ALSourceState.Stopped)
             {
-                AL.SourcePlay(_sourceId);
-                ALHelper.CheckError("Failed to resume source playback.");
+                ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
+                ConcreteAudioService.OpenAL.CheckError("Failed to resume source playback.");
             }
         }
 
         public void DynamicPlatformClearBuffers()
         {
             // detach buffers
-            AL.Source(_sourceId, ALSourcei.Buffer, 0);
-            ALHelper.CheckError("Failed to unbind buffers from source.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, 0);
+            ConcreteAudioService.OpenAL.CheckError("Failed to unbind buffers from source.");
 
             // Remove all queued buffers
             while (_queuedBuffers.Count > 0)
             {
                 int buffer = _queuedBuffers.Dequeue();
-                AL.DeleteBuffer(buffer);
-                ALHelper.CheckError("Failed to delete buffer.");
+                ConcreteAudioService.OpenAL.DeleteBuffer(buffer);
+                ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
             }
         }
 
@@ -118,19 +118,19 @@ namespace Microsoft.Xna.Platform.Audio
         {
             // Get the processed buffers
             int processedBuffers;
-            AL.GetSource(_sourceId, ALGetSourcei.BuffersProcessed, out processedBuffers);
-            ALHelper.CheckError("Failed to get processed buffer count.");
+            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersProcessed, out processedBuffers);
+            ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
 
             // Unqueue and release buffers
             if (processedBuffers > 0)
             {
-                AL.SourceUnqueueBuffers(_sourceId, processedBuffers);
-                ALHelper.CheckError("Failed to unqueue buffers.");
+                ConcreteAudioService.OpenAL.SourceUnqueueBuffers(_sourceId, processedBuffers);
+                ConcreteAudioService.OpenAL.CheckError("Failed to unqueue buffers.");
                 for (int i = 0; i < processedBuffers; i++)
                 {
                     var buffer = _queuedBuffers.Dequeue();
-                    AL.DeleteBuffer(buffer);
-                    ALHelper.CheckError("Failed to delete buffer.");
+                    ConcreteAudioService.OpenAL.DeleteBuffer(buffer);
+                    ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
                 }
             }
 
@@ -150,24 +150,24 @@ namespace Microsoft.Xna.Platform.Audio
 
             }
 
-            var sourceState = AL.GetSourceState(_sourceId);
-            ALHelper.CheckError("Failed to get state.");
+            var sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to get state.");
             if (sourceState != ALSourceState.Stopped)
             {
-                AL.SourceStop(_sourceId);
-                ALHelper.CheckError("Failed to stop source.");
+                ConcreteAudioService.OpenAL.SourceStop(_sourceId);
+                ConcreteAudioService.OpenAL.CheckError("Failed to stop source.");
             }
 
             // detach buffers
-            AL.Source(_sourceId, ALSourcei.Buffer, 0);
-            ALHelper.CheckError("Failed to unbind buffer from source.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, 0);
+            ConcreteAudioService.OpenAL.CheckError("Failed to unbind buffer from source.");
 
             // Remove all queued buffers
             while (_queuedBuffers.Count > 0)
             {
                 var buffer = _queuedBuffers.Dequeue();
-                AL.DeleteBuffer(buffer);
-                ALHelper.CheckError("Failed to delete buffer.");
+                ConcreteAudioService.OpenAL.DeleteBuffer(buffer);
+                ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
             }
 
             ConcreteAudioService.RecycleSource(_sourceId);

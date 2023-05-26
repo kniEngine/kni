@@ -9,25 +9,27 @@ using Microsoft.Xna.Framework.Audio;
 
 #if OPENAL
 using Microsoft.Xna.Platform.Audio.OpenAL;
-#if IOS || TVOS
+#endif
+#if OPENAL && (IOS || TVOS)
 using AudioToolbox;
 using AudioUnit;
 using AVFoundation;
-#endif
 #endif
 
 namespace Microsoft.Xna.Platform.Audio
 {
     /// <summary>
-    /// Provides microphones capture features.  
+    /// Provides microphones capture features.
     /// </summary>
     public sealed class ConcreteMicrophone : MicrophoneStrategy
     {
         private IntPtr _captureDevice = IntPtr.Zero;
 
+        internal AL OpenAL { get { return AL.Current; } }
+
         private void CheckALCError(string operation)
         {
-            AlcError error = Alc.GetErrorForDevice(_captureDevice);
+            AlcError error = OpenAL.ALC.GetErrorForDevice(_captureDevice);
             if (error != AlcError.NoError)
             {
                 var msg = String.Format("{0} - OpenAL Error: {1}", operation, error);
@@ -37,25 +39,25 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformStart(string deviceName, int sampleRate, int sampleSizeInBytes)
         {
-            _captureDevice = Alc.CaptureOpenDevice(deviceName, checked((uint)sampleRate), ALFormat.Mono16, sampleSizeInBytes);
+            _captureDevice = OpenAL.ALC.CaptureOpenDevice(deviceName, checked((uint)sampleRate), ALFormat.Mono16, sampleSizeInBytes);
             CheckALCError("Failed to open capture device.");
-          
-            Alc.CaptureStart(_captureDevice);
+
+            OpenAL.ALC.CaptureStart(_captureDevice);
             CheckALCError("Failed to start capture.");
         }
 
         internal override void PlatformStop()
         {
-            Alc.CaptureStop(_captureDevice);
+            OpenAL.ALC.CaptureStop(_captureDevice);
             CheckALCError("Failed to stop capture.");
-            Alc.CaptureCloseDevice(_captureDevice);
+            OpenAL.ALC.CaptureCloseDevice(_captureDevice);
             CheckALCError("Failed to close capture device.");
             _captureDevice = IntPtr.Zero;
         }
 
         private int GetQueuedSampleCount()
         {
-            int sampleCount = Alc.GetInteger(_captureDevice, AlcGetInteger.CaptureSamples);
+            int sampleCount = OpenAL.ALC.GetInteger(_captureDevice, AlcGetInteger.CaptureSamples);
             CheckALCError("Failed to query capture samples.");
             return sampleCount;
         }
@@ -81,7 +83,7 @@ namespace Microsoft.Xna.Platform.Audio
                 var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
                 try
                 {
-                    Alc.CaptureSamples(_captureDevice, handle.AddrOfPinnedObject() + offset, sampleCount);
+                    OpenAL.ALC.CaptureSamples(_captureDevice, handle.AddrOfPinnedObject() + offset, sampleCount);
                     CheckALCError("Failed to capture samples.");
                 }
                 finally

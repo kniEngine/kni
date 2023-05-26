@@ -63,21 +63,21 @@ namespace Microsoft.Xna.Platform.Audio
             if (_sourceId != 0)
             {
                 // set the position based on relative position
-                AL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
-                ALHelper.CheckError("Failed to set source position.");
-                AL.Source(_sourceId, ALSource3f.Velocity, ref _relativeVelocity);
-                ALHelper.CheckError("Failed to set source velocity.");
-                AL.Source(_sourceId, ALSourcef.ReferenceDistance, SoundEffect.DistanceScale);
-                ALHelper.CheckError("Failed to set source distance scale.");
-                AL.DopplerFactor(SoundEffect.DopplerScale);
-                ALHelper.CheckError("Failed to set Doppler scale.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source position.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Velocity, ref _relativeVelocity);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source velocity.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.ReferenceDistance, SoundEffect.DistanceScale);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source distance scale.");
+                ConcreteAudioService.OpenAL.DopplerFactor(SoundEffect.DopplerScale);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set Doppler scale.");
             }
         }
 
         internal override void PlatformPause()
         {
-            AL.SourcePause(_sourceId);
-            ALHelper.CheckError("Failed to pause source.");
+            ConcreteAudioService.OpenAL.SourcePause(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to pause source.");
         }
 
         internal override void PlatformPlay(bool isLooped)
@@ -86,64 +86,64 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer to source
             int bufferId = _concreteSoundEffect.GetALSoundBuffer().Buffer;
-            AL.Source(_sourceId, ALSourcei.Buffer, bufferId);
-            ALHelper.CheckError("Failed to bind buffer to source.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, bufferId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to bind buffer to source.");
 
             // Send the position, gain, looping, pitch, and distance model to the OpenAL driver.
 
-            AL.Source(_sourceId, ALSourcei.SourceRelative, 1);
-            ALHelper.CheckError("Failed set source relative.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.SourceRelative, 1);
+            ConcreteAudioService.OpenAL.CheckError("Failed set source relative.");
             // Distance Model
-            AL.DistanceModel (ALDistanceModel.InverseDistanceClamped);
-            ALHelper.CheckError("Failed set source distance.");
+            ConcreteAudioService.OpenAL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
+            ConcreteAudioService.OpenAL.CheckError("Failed set source distance.");
             // Position/Pan
-            AL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
-            ALHelper.CheckError("Failed to set source position/pan.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source position/pan.");
             // Velocity
-            AL.Source(_sourceId, ALSource3f.Velocity, ref _relativeVelocity);
-            ALHelper.CheckError("Failed to set source pan.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Velocity, ref _relativeVelocity);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source pan.");
             // Distance Scale
-            AL.Source(_sourceId, ALSourcef.ReferenceDistance, SoundEffect.DistanceScale);
-            ALHelper.CheckError("Failed to set source distance scale.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.ReferenceDistance, SoundEffect.DistanceScale);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source distance scale.");
             // Doppler Scale
-            AL.DopplerFactor(SoundEffect.DopplerScale);
-            ALHelper.CheckError("Failed to set Doppler scale.");
+            ConcreteAudioService.OpenAL.DopplerFactor(SoundEffect.DopplerScale);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set Doppler scale.");
             // Volume
-            AL.Source(_sourceId, ALSourcef.Gain, _volume);
-            ALHelper.CheckError("Failed to set source volume.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, _volume);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
             // Looping
-            AL.Source(_sourceId, ALSourceb.Looping, isLooped);
-            ALHelper.CheckError("Failed to set source loop state.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
             // Pitch
-            AL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
-            ALHelper.CheckError("Failed to set source pitch.");
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
+            ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
 
             ApplyReverb();
             ApplyFilter();
 
-            AL.SourcePlay(_sourceId);
-            ALHelper.CheckError("Failed to play source.");
+            ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to play source.");
         }
 
         internal override void PlatformResume(bool isLooped)
         {
-            AL.SourcePlay(_sourceId);
-            ALHelper.CheckError("Failed to play source.");
+            ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to play source.");
         }
 
         internal override void PlatformStop()
         {
-            AL.SourceStop(_sourceId);
-            ALHelper.CheckError("Failed to stop source.");
+            ConcreteAudioService.OpenAL.SourceStop(_sourceId);
+            ConcreteAudioService.OpenAL.CheckError("Failed to stop source.");
 
             // Reset the SendFilter to 0 if we are NOT using reverb since
             // sources are recycled
             if (ConcreteAudioService.SupportsEfx)
             {
-                ConcreteAudioService.Efx.BindSourceToAuxiliarySlot(_sourceId, 0, 0, 0);
-                ALHelper.CheckError("Failed to unset reverb.");
-                AL.Source(_sourceId, ALSourcei.EfxDirectFilter, 0);
-                ALHelper.CheckError("Failed to unset filter.");
+                ConcreteAudioService.OpenAL.Efx.BindSourceToAuxiliarySlot(_sourceId, 0, 0, 0);
+                ConcreteAudioService.OpenAL.CheckError("Failed to unset reverb.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.EfxDirectFilter, 0);
+                ConcreteAudioService.OpenAL.CheckError("Failed to unset filter.");
             }
 
             ConcreteAudioService.RecycleSource(_sourceId);
@@ -154,8 +154,8 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (isLooped)
             {
-                AL.Source(_sourceId, ALSourceb.Looping, false);
-                ALHelper.CheckError("Failed to set source loop state.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, false);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
             }
         }
 
@@ -164,8 +164,8 @@ namespace Microsoft.Xna.Platform.Audio
             // check if the sound has stopped
             if (state == SoundState.Playing)
             {
-                var alState = AL.GetSourceState(_sourceId);
-                ALHelper.CheckError("Failed to get source state.");
+                var alState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
+                ConcreteAudioService.OpenAL.CheckError("Failed to get source state.");
 
                 if (alState == ALSourceState.Stopped)
                 {
@@ -183,8 +183,8 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (_sourceId != 0)
             {
-                AL.Source(_sourceId, ALSourceb.Looping, isLooped);
-                ALHelper.CheckError("Failed to set source loop state.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
             }
         }
 
@@ -198,8 +198,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (_sourceId != 0)
             {
-                AL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
-                ALHelper.CheckError("Failed to set source pan.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source pan.");
             }
         }
 
@@ -209,8 +209,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (_sourceId != 0)
             {
-                AL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
-                ALHelper.CheckError("Failed to set source pitch.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
             }
         }
 
@@ -220,14 +220,14 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (_sourceId != 0)
             {
-                AL.Source(_sourceId, ALSourcef.Gain, _volume);
-                ALHelper.CheckError("Failed to set source volume.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, _volume);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
             }
         }
 
         internal override void PlatformSetReverbMix(SoundState state, float mix, float pan)
         {
-            if (!ConcreteAudioService.Efx.IsInitialized)
+            if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;
 
             reverb = mix;
@@ -243,8 +243,8 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (reverb > 0f && ConcreteAudioService.ReverbSlot != 0)
             {
-                ConcreteAudioService.Efx.BindSourceToAuxiliarySlot(_sourceId, ConcreteAudioService.ReverbSlot, 0, 0);
-                ALHelper.CheckError("Failed to set reverb.");
+                ConcreteAudioService.OpenAL.Efx.BindSourceToAuxiliarySlot(_sourceId, ConcreteAudioService.ReverbSlot, 0, 0);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set reverb.");
             }
         }
 
@@ -254,34 +254,34 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 var freq = frequency / 20000f;
                 var lf = 1.0f - freq;
-                var efx = ConcreteAudioService.Efx;
+                var efx = ConcreteAudioService.OpenAL.Efx;
                 efx.Filter(ConcreteAudioService.Filter, EfxFilteri.FilterType, (int)filterType);
-                ALHelper.CheckError("Failed to set filter.");
+                ConcreteAudioService.OpenAL.CheckError("Failed to set filter.");
                 switch (filterType)
                 {
                 case EfxFilterType.Lowpass:
                     efx.Filter(ConcreteAudioService.Filter, EfxFilterf.LowpassGainHF, freq);
-                    ALHelper.CheckError("Failed to set LowpassGainHF.");
+                        ConcreteAudioService.OpenAL.CheckError("Failed to set LowpassGainHF.");
                     break;
                 case EfxFilterType.Highpass:
                     efx.Filter(ConcreteAudioService.Filter, EfxFilterf.HighpassGainLF, freq);
-                    ALHelper.CheckError("Failed to set HighpassGainLF.");
+                        ConcreteAudioService.OpenAL.CheckError("Failed to set HighpassGainLF.");
                     break;
                 case EfxFilterType.Bandpass:
                     efx.Filter(ConcreteAudioService.Filter, EfxFilterf.BandpassGainHF, freq);
-                    ALHelper.CheckError("Failed to set BandpassGainHF.");
+                        ConcreteAudioService.OpenAL.CheckError("Failed to set BandpassGainHF.");
                     efx.Filter(ConcreteAudioService.Filter, EfxFilterf.BandpassGainLF, lf);
-                    ALHelper.CheckError("Failed to set BandpassGainLF.");
+                        ConcreteAudioService.OpenAL.CheckError("Failed to set BandpassGainLF.");
                     break;
                 }
-                AL.Source(_sourceId, ALSourcei.EfxDirectFilter, ConcreteAudioService.Filter);
-                ALHelper.CheckError("Failed to set DirectFilter.");
+                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.EfxDirectFilter, ConcreteAudioService.Filter);
+                ConcreteAudioService.OpenAL.CheckError("Failed to set DirectFilter.");
             }
         }
 
         internal override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
         {
-            if (!ConcreteAudioService.Efx.IsInitialized)
+            if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;
 
             applyFilter = true;
@@ -310,7 +310,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformClearFilter()
         {
-            if (!ConcreteAudioService.Efx.IsInitialized)
+            if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;
 
             applyFilter = false;
