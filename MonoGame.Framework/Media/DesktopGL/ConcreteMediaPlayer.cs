@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        internal delegate void FinishedPlayingHandler();
         event FinishedPlayingHandler DonePlaying;
 
         /// <summary>
@@ -235,9 +235,9 @@ namespace Microsoft.Xna.Platform.Media
         {
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
 
-            var handler = DonePlaying;
+            FinishedPlayingHandler handler = DonePlaying;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler();
         }
 
         private unsafe int SubmitBuffer(DynamicSoundEffectInstance sfxi, VorbisReader reader)

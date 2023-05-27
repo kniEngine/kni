@@ -195,13 +195,13 @@ namespace Microsoft.Xna.Platform.Media
 
             if (playingSong != null)
             {
-                var handler = mediaPlatformStream.DonePlaying;
+                FinishedPlayingHandler handler = mediaPlatformStream.DonePlaying;
                 if (handler != null)
-                    handler(playingSong, EventArgs.Empty);
+                    handler();
             }
         }
 
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        internal delegate void FinishedPlayingHandler();
         event FinishedPlayingHandler DonePlaying;
 
         /// <summary>

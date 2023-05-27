@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Media
 
                     case MediaEventTypes.SessionEnded:
                         _sessionState = SessionState.Ended;
-                        OnSongFinishedPlaying(null, null);
+                        base.OnSongFinishedPlaying();
                         break;
 
                     case MediaEventTypes.SessionStopped:
