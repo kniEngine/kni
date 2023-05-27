@@ -12,8 +12,6 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
-        internal MediaPlatformStream _mediaPlatformStream;
-
         private Uri _streamSource;
         internal Android.Net.Uri _assetUri;
 
@@ -33,13 +31,6 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
-
-            this._mediaPlatformStream = new MediaPlatformStream(this._streamSource);
-        }
-
-        internal MediaPlatformStream GetMediaPlatformStream()
-        {
-            return _mediaPlatformStream;
         }
 
         public override Album Album
@@ -107,11 +98,6 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                if (_mediaPlatformStream != null)
-                {
-                    _mediaPlatformStream.Dispose();
-                    _mediaPlatformStream = null;
-                }
 
             }
 
