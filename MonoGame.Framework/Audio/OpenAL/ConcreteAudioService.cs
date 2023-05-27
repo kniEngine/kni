@@ -30,7 +30,6 @@ namespace Microsoft.Xna.Platform.Audio
 {
     internal class ConcreteAudioService : AudioServiceStrategy
     {
-        private EffectsExtension _efx = null;
         private IntPtr _device;
         private IntPtr _context;
         IntPtr NullContext = IntPtr.Zero;
@@ -51,20 +50,12 @@ namespace Microsoft.Xna.Platform.Audio
         internal int ReverbEffect = 0;
         
         public int Filter { get; private set; }
-        
-        public EffectsExtension Efx
-        {
-            get
-            {
-                if (_efx == null)
-                    _efx = new EffectsExtension();
-                return _efx;
-            }
-        }
+
+        internal AL OpenAL { get { return AL.Current; } }
 
         internal ConcreteAudioService()
         {
-            if (AL.NativeLibrary == IntPtr.Zero)
+            if (OpenAL.NativeLibrary == IntPtr.Zero)
                 throw new DllNotFoundException("Couldn't initialize OpenAL because the native binaries couldn't be found.");
 
             if (!OpenSoundDevice())
@@ -72,9 +63,9 @@ namespace Microsoft.Xna.Platform.Audio
 
             // We have hardware here and it is ready
             Filter = 0;
-            if (Efx.IsInitialized)
+            if (OpenAL.Efx.IsInitialized)
             {
-                Filter = Efx.GenFilter();
+                Filter = OpenAL.Efx.GenFilter();
             }
         }
 
@@ -101,15 +92,15 @@ namespace Microsoft.Xna.Platform.Audio
         {
             try
             {
-                _device = Alc.OpenDevice(string.Empty);
-                EffectsExtension.device = _device;
+                _device = OpenAL.ALC.OpenDevice(string.Empty);
+                OpenAL.Efx.Initialize(_device);
             }
             catch (Exception ex)
             {
                 throw new NoAudioHardwareException("OpenAL device could not be initialized.", ex);
             }
 
-            AlcHelper.CheckError("Could not open OpenAL device");
+            OpenAL.ALC.CheckError("Could not open OpenAL device");
 
             if (_device != IntPtr.Zero)
             {
@@ -197,13 +188,13 @@ namespace Microsoft.Xna.Platform.Audio
                     {
                         case AVAudioSessionInterruptionType.Began:
                             AVAudioSession.SharedInstance().SetActive(false);
-                            Alc.MakeContextCurrent(IntPtr.Zero);
-                            Alc.SuspendContext(_context);
+                            OpenAL.ALC.MakeContextCurrent(IntPtr.Zero);
+                            OpenAL.ALC.SuspendContext(_context);
                             break;
                         case AVAudioSessionInterruptionType.Ended:
                             AVAudioSession.SharedInstance().SetActive(true);
-                            Alc.MakeContextCurrent(_context);
-                            Alc.ProcessContext(_context);
+                            OpenAL.ALC.MakeContextCurrent(_context);
+                            OpenAL.ALC.ProcessContext(_context);
                             break;
                     }
                 };
@@ -218,18 +209,18 @@ namespace Microsoft.Xna.Platform.Audio
                 int[] attribute = new int[0];
 #endif
 
-                _context = Alc.CreateContext(_device, attribute);
+                _context = OpenAL.ALC.CreateContext(_device, attribute);
 
-                AlcHelper.CheckError("Could not create OpenAL context");
+                OpenAL.ALC.CheckError("Could not create OpenAL context");
 
                 if (_context != NullContext)
                 {
-                    Alc.MakeContextCurrent(_context);
-                    AlcHelper.CheckError("Could not make OpenAL context current");
-                    SupportsIma4 = AL.IsExtensionPresent("AL_EXT_IMA4");
-                    SupportsAdpcm = AL.IsExtensionPresent("AL_SOFT_MSADPCM");
-                    SupportsEfx = AL.IsExtensionPresent("AL_EXT_EFX");
-                    SupportsIeee = AL.IsExtensionPresent("AL_EXT_float32");
+                    OpenAL.ALC.MakeContextCurrent(_context);
+                    OpenAL.ALC.CheckError("Could not make OpenAL context current");
+                    SupportsIma4 = OpenAL.IsExtensionPresent("AL_EXT_IMA4");
+                    SupportsAdpcm = OpenAL.IsExtensionPresent("AL_SOFT_MSADPCM");
+                    SupportsEfx = OpenAL.IsExtensionPresent("AL_EXT_EFX");
+                    SupportsIeee = OpenAL.IsExtensionPresent("AL_EXT_float32");
                     return true;
                 }
             }
@@ -238,15 +229,15 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
-            if (!Alc.IsExtensionPresent(_device, "ALC_EXT_CAPTURE"))
+            if (!OpenAL.ALC.IsExtensionPresent(_device, "ALC_EXT_CAPTURE"))
                 return;
 
             // default device
-            string defaultDevice = Alc.GetString(IntPtr.Zero, AlcGetString.CaptureDefaultDeviceSpecifier);
+            string defaultDevice = OpenAL.ALC.GetString(IntPtr.Zero, AlcGetString.CaptureDefaultDeviceSpecifier);
 
 #if true //DESKTOPGL
             // enumerating capture devices
-            IntPtr deviceList = Alc.alcGetString(IntPtr.Zero, (int)AlcGetString.CaptureDeviceSpecifier);
+            IntPtr deviceList = OpenAL.ALC.alcGetString(IntPtr.Zero, (int)AlcGetString.CaptureDeviceSpecifier);
 
             // Marshal native UTF-8 character array to .NET string
             // The native string is a null-char separated list of known capture device specifiers ending with an empty string
@@ -291,13 +282,13 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformSetReverbSettings(ReverbSettings reverbSettings)
         {
-            if (!Efx.IsInitialized)
+            if (!OpenAL.Efx.IsInitialized)
                 return;
 
             if (ReverbEffect != 0)
                 return;
 
-            var efx = Efx;
+            var efx = OpenAL.Efx;
             efx.GenAuxiliaryEffectSlots(1, out ReverbSlot);
             efx.GenEffect(out ReverbEffect);
             efx.Effect(ReverbEffect, EfxEffecti.EffectType, (int)EfxEffectType.Reverb);
@@ -345,15 +336,15 @@ namespace Microsoft.Xna.Platform.Audio
             if (_alSourcesPool.Count > 0)
                 return _alSourcesPool.Pop();
 
-            int src = AL.GenSource();
-            ALHelper.CheckError("Failed to generate source.");
+            int src = OpenAL.GenSource();
+            OpenAL.CheckError("Failed to generate source.");
             return src;
         }
 
         public void RecycleSource(int sourceId)
         {
-            AL.Source(sourceId, ALSourcei.Buffer, 0);
-            ALHelper.CheckError("Failed to free source from buffers.");
+            OpenAL.Source(sourceId, ALSourcei.Buffer, 0);
+            OpenAL.CheckError("Failed to free source from buffers.");
 
             _alSourcesPool.Push(sourceId);
         }
@@ -361,8 +352,8 @@ namespace Microsoft.Xna.Platform.Audio
         public double SourceCurrentPosition(int sourceId)
         {
             int pos;
-            AL.GetSource(sourceId, ALGetSourcei.SampleOffset, out pos);
-            ALHelper.CheckError("Failed to set source offset.");
+            OpenAL.GetSource(sourceId, ALGetSourcei.SampleOffset, out pos);
+            OpenAL.CheckError("Failed to set source offset.");
             return pos;
         }
 
@@ -370,13 +361,13 @@ namespace Microsoft.Xna.Platform.Audio
         void Activity_Paused(object sender, EventArgs e)
         {
             // Pause all currently playing sounds by pausing the mixer
-            Alc.DevicePause(_device);
+            OpenAL.ALC.DevicePause(_device);
         }
 
         void Activity_Resumed(object sender, EventArgs e)
         {
             // Resume all sounds that were playing when the activity was paused
-            Alc.DeviceResume(_device);
+            OpenAL.ALC.DeviceResume(_device);
         }
 #endif
 
@@ -388,32 +379,32 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (ReverbEffect != 0)
             {
-                Efx.DeleteAuxiliaryEffectSlot(ReverbSlot);
-                Efx.DeleteEffect((int)ReverbEffect);
+                OpenAL.Efx.DeleteAuxiliaryEffectSlot(ReverbSlot);
+                OpenAL.Efx.DeleteEffect((int)ReverbEffect);
             }
 
             while (_alSourcesPool.Count > 0)
             {
-                AL.DeleteSource(_alSourcesPool.Pop());
-                ALHelper.CheckError("Failed to delete source.");
+                OpenAL.DeleteSource(_alSourcesPool.Pop());
+                OpenAL.CheckError("Failed to delete source.");
             }
 
-            if (Filter != 0 && Efx.IsInitialized)
+            if (Filter != 0 && OpenAL.Efx.IsInitialized)
             {
-                Efx.DeleteFilter(Filter);
+                OpenAL.Efx.DeleteFilter(Filter);
             }
             
             // CleanUpOpenAL
-            Alc.MakeContextCurrent(NullContext);
+            OpenAL.ALC.MakeContextCurrent(NullContext);
 
             if (_context != NullContext)
             {
-                Alc.DestroyContext(_context);
+                OpenAL.ALC.DestroyContext(_context);
             }
 
             if (_device != IntPtr.Zero)
             {
-                Alc.CloseDevice(_device);
+                OpenAL.ALC.CloseDevice(_device);
             }
 
             _context = NullContext;

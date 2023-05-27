@@ -3,13 +3,14 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 // Copyright (C)2021 Nick Kastellanos
-
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using MonoGame.Framework.Utilities;
+#if ANDROID
+using System.IO;
+#endif
+
 
 namespace Microsoft.Xna.Platform.Audio.OpenAL
 {
@@ -194,9 +195,36 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
     internal class AL
     {
-        public static IntPtr NativeLibrary = GetNativeLibrary();
+        public IntPtr NativeLibrary { get; private set; }
+        public Alc ALC { get; private set; }
+        public EffectsExtension Efx { get; private set; }
 
-        private static IntPtr GetNativeLibrary()
+    private static AL _current;
+
+        public static AL Current
+        {
+            get
+            {
+                if (_current != null)
+                    return _current;
+
+                if (_current == null)
+                    _current = new AL();
+
+                return _current;
+            }
+        }
+
+        public AL()
+        {
+            NativeLibrary = GetNativeLibrary();
+            LoadEntryPoints(NativeLibrary);
+
+            ALC = new Alc(NativeLibrary);
+            Efx = new EffectsExtension(this);
+        }
+
+        private IntPtr GetNativeLibrary()
         {
 #if DESKTOPGL
             if (CurrentPlatform.OS == OS.Windows)
@@ -225,20 +253,21 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 #endif
         }
 
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alenable(int cap);
-        internal static d_alenable Enable = FuncLoader.LoadFunctionOrNull<d_alenable>(NativeLibrary, "alEnable");
+        internal d_alenable Enable;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_albufferdata(int buffer, int format, byte* data, int size, int freq);
-        internal static d_albufferdata alBufferData = FuncLoader.LoadFunctionOrNull<d_albufferdata>(NativeLibrary, "alBufferData");
+        internal d_albufferdata alBufferData;
 
-        internal unsafe static void BufferData(int buffer, ALFormat format, byte[] data, int index, int count, int freq, int sampleAlignment)
+        internal unsafe void BufferData(int buffer, ALFormat format, byte[] data, int index, int count, int freq, int sampleAlignment)
         {
             if (sampleAlignment > 0)
             {
-                AL.Bufferi(buffer, ALBufferi.UnpackBlockAlignmentSoft, sampleAlignment);
-                ALHelper.CheckError("Failed to fill buffer.");
+                Bufferi(buffer, ALBufferi.UnpackBlockAlignmentSoft, sampleAlignment);
+                this.CheckError("Failed to fill buffer.");
             }
 
             fixed(byte* pData = data)
@@ -247,7 +276,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        internal unsafe static void BufferData(int buffer, ALFormat format, short[] data, int count, int freq)
+        internal unsafe void BufferData(int buffer, ALFormat format, short[] data, int count, int freq)
         {
             fixed (void* pData = data)
             {
@@ -257,9 +286,9 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_aldeletebuffers(int n, int* pbuffers);
-        internal static d_aldeletebuffers alDeleteBuffers = FuncLoader.LoadFunctionOrNull<d_aldeletebuffers>(NativeLibrary, "alDeleteBuffers");
+        internal d_aldeletebuffers alDeleteBuffers;
 
-        internal unsafe static void DeleteBuffers(int[] buffers)
+        internal unsafe void DeleteBuffers(int[] buffers)
         {
             fixed (int* pbuffers = buffers)
             {
@@ -267,33 +296,33 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        internal unsafe static void DeleteBuffer(int buffer)
+        internal unsafe void DeleteBuffer(int buffer)
         {
             alDeleteBuffers(1, &buffer);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_albufferi(int buffer, ALBufferi param, int value);
-        internal static d_albufferi Bufferi = FuncLoader.LoadFunctionOrNull<d_albufferi>(NativeLibrary, "alBufferi");
+        internal d_albufferi Bufferi;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_algetbufferi(int buffer, ALGetBufferi param, out int value);
-        internal static d_algetbufferi GetBufferi = FuncLoader.LoadFunctionOrNull<d_algetbufferi>(NativeLibrary, "alGetBufferi");
+        internal d_algetbufferi GetBufferi;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_albufferiv(int buffer, ALBufferi param, int[] values);
-        internal static d_albufferiv Bufferiv = FuncLoader.LoadFunctionOrNull<d_albufferiv>(NativeLibrary, "alBufferiv");
+        internal d_albufferiv Bufferiv;
 
-        internal static void GetBuffer(int buffer, ALGetBufferi param, out int value)
+        internal void GetBuffer(int buffer, ALGetBufferi param, out int value)
         {
             GetBufferi(buffer, param, out value);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_algenbuffers(int count, int* pbuffers);
-        internal static d_algenbuffers alGenBuffers = FuncLoader.LoadFunctionOrNull<d_algenbuffers>(NativeLibrary, "alGenBuffers");
+        internal d_algenbuffers alGenBuffers;
 
-        internal unsafe static void GenBuffers(int[] buffers)
+        internal unsafe void GenBuffers(int[] buffers)
         {
             fixed (int* pbuffers = buffers)
             {
@@ -301,38 +330,36 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        internal unsafe static int GenBuffer()
+        internal unsafe int GenBuffer()
         {
             int buffer;
             alGenBuffers(1, &buffer);
             return buffer;
         }
 
-        internal static float GetDuration(int buffer, int sampleRate)
+        internal float GetDuration(int buffer, int sampleRate)
         {
             int samples = GetSamples(buffer);
             return (float)samples / (float)sampleRate;
         }
 
-        internal static int GetSamples(int buffer)
+        internal int GetSamples(int buffer)
         {
             int bits, channels, unpackedSize;
-            AL.GetBuffer(buffer, ALGetBufferi.Bits, out bits);
-            ALHelper.CheckError("Failed to get buffer bits");
-            AL.GetBuffer(buffer, ALGetBufferi.Channels, out channels);
-            ALHelper.CheckError("Failed to get buffer channels");
-            AL.GetBuffer(buffer, ALGetBufferi.Size, out unpackedSize);
-            ALHelper.CheckError("Failed to get buffer size");
+            GetBuffer(buffer, ALGetBufferi.Bits, out bits);
+            this.CheckError("Failed to get buffer bits");
+            GetBuffer(buffer, ALGetBufferi.Channels, out channels);
+            this.CheckError("Failed to get buffer channels");
+            GetBuffer(buffer, ALGetBufferi.Size, out unpackedSize);
+            this.CheckError("Failed to get buffer size");
             return (unpackedSize / ((bits / 8) * channels));
         }
 
-
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_algensources(int n, int* sources);
-        internal static d_algensources alGenSources = FuncLoader.LoadFunctionOrNull<d_algensources>(NativeLibrary, "alGenSources");
+        internal d_algensources alGenSources;
 
-
-        internal unsafe static void GenSources(int[] sources)
+        internal unsafe void GenSources(int[] sources)
         {
             fixed (int* psources = sources)
             {
@@ -340,7 +367,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        internal unsafe static int GenSource()
+        internal unsafe int GenSource()
         {
             int source;
             alGenSources(1, &source);
@@ -349,31 +376,31 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate ALError d_algeterror();
-        internal static d_algeterror GetError = FuncLoader.LoadFunctionOrNull<d_algeterror>(NativeLibrary, "alGetError");
+        internal d_algeterror GetError;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool d_alisbuffer(int buffer);
-        internal static d_alisbuffer alIsBuffer = FuncLoader.LoadFunctionOrNull<d_alisbuffer>(NativeLibrary, "alIsBuffer");
+        internal d_alisbuffer alIsBuffer;
 
-        internal static bool IsBuffer(int buffer)
+        internal bool IsBuffer(int buffer)
         {
             return alIsBuffer(buffer);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsourcepause(int source);
-        internal static d_alsourcepause alSourcePause = FuncLoader.LoadFunctionOrNull<d_alsourcepause>(NativeLibrary, "alSourcePause");
+        internal d_alsourcepause alSourcePause;
 
-        internal static void SourcePause(int source)
+        internal void SourcePause(int source)
         {
             alSourcePause(source);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsourceplay(int source);
-        internal static d_alsourceplay alSourcePlay = FuncLoader.LoadFunctionOrNull<d_alsourceplay>(NativeLibrary, "alSourcePlay");
+        internal d_alsourceplay alSourcePlay;
 
-        internal static void SourcePlay(int source)
+        internal void SourcePlay(int source)
         {
             alSourcePlay(source);
         }
@@ -385,67 +412,67 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool d_alissource(int source);
-        internal static d_alissource IsSource = FuncLoader.LoadFunctionOrNull<d_alissource>(NativeLibrary, "alIsSource");
+        internal d_alissource IsSource;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_aldeletesources(int n, int* psources);
-        internal static d_aldeletesources alDeleteSources = FuncLoader.LoadFunctionOrNull<d_aldeletesources>(NativeLibrary, "alDeleteSources");
+        internal d_aldeletesources alDeleteSources;
 
-        internal unsafe static void DeleteSource(int source)
+        internal unsafe void DeleteSource(int source)
         {
             alDeleteSources(1, &source);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsourcestop(int source);
-        internal static d_alsourcestop SourceStop = FuncLoader.LoadFunctionOrNull<d_alsourcestop>(NativeLibrary, "alSourceStop");
+        internal d_alsourcestop SourceStop;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsourcei(int source, int param, int value);
-        internal static d_alsourcei alSourcei = FuncLoader.LoadFunctionOrNull<d_alsourcei>(NativeLibrary, "alSourcei");
+        internal d_alsourcei alSourcei;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsource3i(int source, ALSourcei param, int a, int b, int c);
-        internal static d_alsource3i alSource3i = FuncLoader.LoadFunctionOrNull<d_alsource3i>(NativeLibrary, "alSource3i");
+        internal d_alsource3i alSource3i;
 
-        internal static void Source(int source, ALSourcei param, int value)
+        internal void Source(int source, ALSourcei param, int value)
         {
             alSourcei(source, (int)param, value);
         }
 
-        internal static void Source(int source, ALSourceb param, bool value)
+        internal void Source(int source, ALSourceb param, bool value)
         {
             alSourcei(source, (int)param, value ? 1 : 0);
         }
 
-        internal static void Source(int source, ALSource3f param, float x, float y, float z)
+        internal void Source(int source, ALSource3f param, float x, float y, float z)
         {
             alSource3f(source, param, x, y, z);
         }
 
-        internal static void Source(int source, ALSource3f param, ref Vector3 value)
+        internal void Source(int source, ALSource3f param, ref Vector3 value)
         {
             alSource3f(source, param, value.X, value.Y, value.Z);
         }
 
-        internal static void Source(int source, ALSourcef param, float value)
+        internal void Source(int source, ALSourcef param, float value)
         {
             alSourcef(source, param, value);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsourcef(int source, ALSourcef param, float value);
-        internal static d_alsourcef alSourcef = FuncLoader.LoadFunctionOrNull<d_alsourcef>(NativeLibrary, "alSourcef");
+        internal d_alsourcef alSourcef;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alsource3f(int source, ALSource3f param, float x, float y, float z);
-        internal static d_alsource3f alSource3f = FuncLoader.LoadFunctionOrNull<d_alsource3f>(NativeLibrary, "alSource3f");
+        internal d_alsource3f alSource3f;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_algetsourcei(int source, ALGetSourcei param, out int value);
-        internal static d_algetsourcei GetSource = FuncLoader.LoadFunctionOrNull<d_algetsourcei>(NativeLibrary, "alGetSourcei");
+        internal d_algetsourcei GetSource;
 
-        internal static ALSourceState GetSourceState(int source)
+        internal ALSourceState GetSourceState(int source)
         {
             int state;
             GetSource(source, ALGetSourcei.SourceState, out state);
@@ -454,38 +481,38 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_algetlistener3f(ALListener3f param, out float value1, out float value2, out float value3);
-        internal static d_algetlistener3f GetListener = FuncLoader.LoadFunctionOrNull<d_algetlistener3f>(NativeLibrary, "alGetListener3f");
+        internal d_algetlistener3f GetListener;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_aldistancemodel(ALDistanceModel model);
-        internal static d_aldistancemodel DistanceModel = FuncLoader.LoadFunctionOrNull<d_aldistancemodel>(NativeLibrary, "alDistanceModel");
+        internal d_aldistancemodel DistanceModel;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_aldopplerfactor(float value);
-        internal static d_aldopplerfactor DopplerFactor = FuncLoader.LoadFunctionOrNull<d_aldopplerfactor>(NativeLibrary, "alDopplerFactor");
+        internal d_aldopplerfactor DopplerFactor;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_alsourcequeuebuffers(int source, int numEntries, int* pbuffers);
-        internal static d_alsourcequeuebuffers alSourceQueueBuffers = FuncLoader.LoadFunctionOrNull<d_alsourcequeuebuffers>(NativeLibrary, "alSourceQueueBuffers");
+        internal d_alsourcequeuebuffers alSourceQueueBuffers;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_alsourceunqueuebuffers(int source, int numEntries, int* pbuffers);
-        internal static d_alsourceunqueuebuffers alSourceUnqueueBuffers = FuncLoader.LoadFunctionOrNull<d_alsourceunqueuebuffers>(NativeLibrary, "alSourceUnqueueBuffers");
+        internal d_alsourceunqueuebuffers alSourceUnqueueBuffers;
 
-        internal static unsafe void SourceQueueBuffers(int source, int numEntries, int[] buffers)
+        internal unsafe void SourceQueueBuffers(int source, int numEntries, int[] buffers)
         {
             fixed (int* pbuffers = buffers)
             {
-                AL.alSourceQueueBuffers(source, numEntries, pbuffers);
+                alSourceQueueBuffers(source, numEntries, pbuffers);
             }
         }
 
-        internal unsafe static void SourceQueueBuffer(int source, int buffer)
+        internal unsafe void SourceQueueBuffer(int source, int buffer)
         {
-            AL.alSourceQueueBuffers(source, 1, &buffer);
+            alSourceQueueBuffers(source, 1, &buffer);
         }
 
-        internal static unsafe int[] SourceUnqueueBuffers(int source, int numEntries)
+        internal unsafe int[] SourceUnqueueBuffers(int source, int numEntries)
         {
             if (numEntries <= 0)
                 throw new ArgumentOutOfRangeException("numEntries", "Must be greater than zero.");
@@ -498,7 +525,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             return buffers;
         }
 
-        internal unsafe static void SourceUnqueueBuffers(int source, int numEntries, int[] buffers)
+        internal unsafe void SourceUnqueueBuffers(int source, int numEntries, int[] buffers)
         {
             fixed (int* pbuffers = buffers)
             {
@@ -508,51 +535,90 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int d_algetenumvalue(string enumName);
-        internal static d_algetenumvalue alGetEnumValue = FuncLoader.LoadFunctionOrNull<d_algetenumvalue>(NativeLibrary, "alGetEnumValue");
+        internal d_algetenumvalue alGetEnumValue;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool d_alisextensionpresent(string extensionName);
-        internal static d_alisextensionpresent IsExtensionPresent = FuncLoader.LoadFunctionOrNull<d_alisextensionpresent>(NativeLibrary, "alIsExtensionPresent");
+        internal d_alisextensionpresent IsExtensionPresent;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_algetprocaddress(string functionName);
-        internal static d_algetprocaddress alGetProcAddress = FuncLoader.LoadFunctionOrNull<d_algetprocaddress>(NativeLibrary, "alGetProcAddress");
+        internal d_algetprocaddress alGetProcAddress;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr d_algetstring(int p);
-        private static d_algetstring alGetString = FuncLoader.LoadFunctionOrNull<d_algetstring>(NativeLibrary, "alGetString");
+        private d_algetstring alGetString;
 
-        internal static string GetString(int p)
+        internal string GetString(int p)
         {
             return Marshal.PtrToStringAnsi(alGetString(p));
         }
 
-        internal static string Get(ALGetString p)
+        internal string Get(ALGetString p)
         {
             return GetString((int)p);
         }
+
+
+        private void LoadEntryPoints(IntPtr library)
+        {
+            Enable = FuncLoader.LoadFunctionOrNull<d_alenable>(library, "alEnable");
+            alBufferData = FuncLoader.LoadFunctionOrNull<d_albufferdata>(library, "alBufferData");
+            alDeleteBuffers = FuncLoader.LoadFunctionOrNull<d_aldeletebuffers>(library, "alDeleteBuffers");
+            Bufferi = FuncLoader.LoadFunctionOrNull<d_albufferi>(library, "alBufferi");
+            GetBufferi = FuncLoader.LoadFunctionOrNull<d_algetbufferi>(library, "alGetBufferi");
+            Bufferiv = FuncLoader.LoadFunctionOrNull<d_albufferiv>(library, "alBufferiv");
+            alGenBuffers = FuncLoader.LoadFunctionOrNull<d_algenbuffers>(library, "alGenBuffers");
+            alGenSources = FuncLoader.LoadFunctionOrNull<d_algensources>(library, "alGenSources");
+            GetError = FuncLoader.LoadFunctionOrNull<d_algeterror>(library, "alGetError");
+            alIsBuffer = FuncLoader.LoadFunctionOrNull<d_alisbuffer>(library, "alIsBuffer");
+            alSourcePause = FuncLoader.LoadFunctionOrNull<d_alsourcepause>(library, "alSourcePause");
+            alSourcePlay = FuncLoader.LoadFunctionOrNull<d_alsourceplay>(library, "alSourcePlay");
+            IsSource = FuncLoader.LoadFunctionOrNull<d_alissource>(library, "alIsSource");
+            alDeleteSources = FuncLoader.LoadFunctionOrNull<d_aldeletesources>(library, "alDeleteSources");
+            SourceStop = FuncLoader.LoadFunctionOrNull<d_alsourcestop>(library, "alSourceStop");
+            alSourcei = FuncLoader.LoadFunctionOrNull<d_alsourcei>(library, "alSourcei");
+            alSource3i = FuncLoader.LoadFunctionOrNull<d_alsource3i>(library, "alSource3i");
+            alSourcef = FuncLoader.LoadFunctionOrNull<d_alsourcef>(library, "alSourcef");
+            alSource3f = FuncLoader.LoadFunctionOrNull<d_alsource3f>(library, "alSource3f");
+            GetSource = FuncLoader.LoadFunctionOrNull<d_algetsourcei>(library, "alGetSourcei");
+            GetListener = FuncLoader.LoadFunctionOrNull<d_algetlistener3f>(library, "alGetListener3f");
+            DistanceModel = FuncLoader.LoadFunctionOrNull<d_aldistancemodel>(library, "alDistanceModel");
+            DopplerFactor = FuncLoader.LoadFunctionOrNull<d_aldopplerfactor>(library, "alDopplerFactor");
+            alSourceQueueBuffers = FuncLoader.LoadFunctionOrNull<d_alsourcequeuebuffers>(library, "alSourceQueueBuffers");
+            alSourceUnqueueBuffers = FuncLoader.LoadFunctionOrNull<d_alsourceunqueuebuffers>(library, "alSourceUnqueueBuffers");
+            alGetEnumValue = FuncLoader.LoadFunctionOrNull<d_algetenumvalue>(library, "alGetEnumValue");
+            IsExtensionPresent = FuncLoader.LoadFunctionOrNull<d_alisextensionpresent>(library, "alIsExtensionPresent");
+            alGetProcAddress = FuncLoader.LoadFunctionOrNull<d_algetprocaddress>(library, "alGetProcAddress");
+            alGetString = FuncLoader.LoadFunctionOrNull<d_algetstring>(library, "alGetString");
+        }
     }
 
-    internal partial class Alc
+    internal class Alc
     {
+        public Alc(IntPtr library)
+        {
+            LoadEntryPoints(library);
+        }
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccreatecontext(IntPtr device, int[] attributes);
-        internal static d_alccreatecontext CreateContext = FuncLoader.LoadFunctionOrNull<d_alccreatecontext>(AL.NativeLibrary, "alcCreateContext");
+        internal d_alccreatecontext CreateContext;
 
-        internal static AlcError GetError()
+        internal AlcError GetError()
         {
             return GetErrorForDevice(IntPtr.Zero);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate AlcError d_alcgeterror(IntPtr device);
-        internal static d_alcgeterror GetErrorForDevice = FuncLoader.LoadFunctionOrNull<d_alcgeterror>(AL.NativeLibrary, "alcGetError");
+        internal d_alcgeterror GetErrorForDevice;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal unsafe delegate void d_alcgetintegerv(IntPtr device, int param, int size, int* value);
-        internal static d_alcgetintegerv alcGetIntegerv = FuncLoader.LoadFunctionOrNull<d_alcgetintegerv>(AL.NativeLibrary, "alcGetIntegerv");
+        internal d_alcgetintegerv alcGetIntegerv;
 
-        internal unsafe static int GetInteger(IntPtr device, AlcGetInteger param)
+        internal unsafe int GetInteger(IntPtr device, AlcGetInteger param)
         {
             int value;
             alcGetIntegerv(device, (int)param, 1, &value);
@@ -561,63 +627,92 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alcgetcurrentcontext();
-        internal static d_alcgetcurrentcontext GetCurrentContext = FuncLoader.LoadFunctionOrNull<d_alcgetcurrentcontext>(AL.NativeLibrary, "alcGetCurrentContext");
+        internal d_alcgetcurrentcontext GetCurrentContext;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcmakecontextcurrent(IntPtr context);
-        internal static d_alcmakecontextcurrent MakeContextCurrent = FuncLoader.LoadFunctionOrNull<d_alcmakecontextcurrent>(AL.NativeLibrary, "alcMakeContextCurrent");
+        internal d_alcmakecontextcurrent MakeContextCurrent;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcdestroycontext(IntPtr context);
-        internal static d_alcdestroycontext DestroyContext = FuncLoader.LoadFunctionOrNull<d_alcdestroycontext>(AL.NativeLibrary, "alcDestroyContext");
+        internal d_alcdestroycontext DestroyContext;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcclosedevice(IntPtr device);
-        internal static d_alcclosedevice CloseDevice = FuncLoader.LoadFunctionOrNull<d_alcclosedevice>(AL.NativeLibrary, "alcCloseDevice");
+        internal d_alcclosedevice CloseDevice;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alcopendevice(string device);
-        internal static d_alcopendevice OpenDevice = FuncLoader.LoadFunctionOrNull<d_alcopendevice>(AL.NativeLibrary, "alcOpenDevice");
+        internal d_alcopendevice OpenDevice;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccaptureopendevice(string device, uint sampleRate, int format, int sampleSize);
-        internal static d_alccaptureopendevice alcCaptureOpenDevice = FuncLoader.LoadFunctionOrNull<d_alccaptureopendevice>(AL.NativeLibrary, "alcCaptureOpenDevice");
+        internal d_alccaptureopendevice alcCaptureOpenDevice;
 
-        internal static IntPtr CaptureOpenDevice(string device, uint sampleRate, ALFormat format, int sampleSize)
+        internal IntPtr CaptureOpenDevice(string device, uint sampleRate, ALFormat format, int sampleSize)
         {
             return alcCaptureOpenDevice(device, sampleRate, (int)format, sampleSize);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccapturestart(IntPtr device);
-        internal static d_alccapturestart CaptureStart = FuncLoader.LoadFunctionOrNull<d_alccapturestart>(AL.NativeLibrary, "alcCaptureStart");
+        internal d_alccapturestart CaptureStart;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alccapturesamples(IntPtr device, IntPtr buffer, int samples);
-        internal static d_alccapturesamples CaptureSamples = FuncLoader.LoadFunctionOrNull<d_alccapturesamples>(AL.NativeLibrary, "alcCaptureSamples");
+        internal d_alccapturesamples CaptureSamples;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccapturestop(IntPtr device);
-        internal static d_alccapturestop CaptureStop = FuncLoader.LoadFunctionOrNull<d_alccapturestop>(AL.NativeLibrary, "alcCaptureStop");
+        internal d_alccapturestop CaptureStop;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccaptureclosedevice(IntPtr device);
-        internal static d_alccaptureclosedevice CaptureCloseDevice = FuncLoader.LoadFunctionOrNull<d_alccaptureclosedevice>(AL.NativeLibrary, "alcCaptureCloseDevice");
+        internal d_alccaptureclosedevice CaptureCloseDevice;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool d_alcisextensionpresent(IntPtr device, string extensionName);
-        internal static d_alcisextensionpresent IsExtensionPresent = FuncLoader.LoadFunctionOrNull<d_alcisextensionpresent>(AL.NativeLibrary, "alcIsExtensionPresent");
+        internal d_alcisextensionpresent IsExtensionPresent;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alcgetstring(IntPtr device, int p);
-        internal static d_alcgetstring alcGetString = FuncLoader.LoadFunctionOrNull<d_alcgetstring>(AL.NativeLibrary, "alcGetString");
+        internal d_alcgetstring alcGetString;
 
-        internal static string GetString(IntPtr device, int p)
+        private void LoadEntryPoints(IntPtr library)
+        {
+            CreateContext = FuncLoader.LoadFunctionOrNull<d_alccreatecontext>(library, "alcCreateContext");
+            GetErrorForDevice = FuncLoader.LoadFunctionOrNull<d_alcgeterror>(library, "alcGetError");
+            alcGetIntegerv = FuncLoader.LoadFunctionOrNull<d_alcgetintegerv>(library, "alcGetIntegerv");
+            GetCurrentContext = FuncLoader.LoadFunctionOrNull<d_alcgetcurrentcontext>(library, "alcGetCurrentContext");
+            MakeContextCurrent = FuncLoader.LoadFunctionOrNull<d_alcmakecontextcurrent>(library, "alcMakeContextCurrent");
+            DestroyContext = FuncLoader.LoadFunctionOrNull<d_alcdestroycontext>(library, "alcDestroyContext");
+            CloseDevice = FuncLoader.LoadFunctionOrNull<d_alcclosedevice>(library, "alcCloseDevice");
+            OpenDevice = FuncLoader.LoadFunctionOrNull<d_alcopendevice>(library, "alcOpenDevice");
+            alcCaptureOpenDevice = FuncLoader.LoadFunctionOrNull<d_alccaptureopendevice>(library, "alcCaptureOpenDevice");
+            CaptureStart = FuncLoader.LoadFunctionOrNull<d_alccapturestart>(library, "alcCaptureStart");
+            CaptureSamples = FuncLoader.LoadFunctionOrNull<d_alccapturesamples>(library, "alcCaptureSamples");
+            CaptureStop = FuncLoader.LoadFunctionOrNull<d_alccapturestop>(library, "alcCaptureStop");
+            CaptureCloseDevice = FuncLoader.LoadFunctionOrNull<d_alccaptureclosedevice>(library, "alcCaptureCloseDevice");
+            IsExtensionPresent = FuncLoader.LoadFunctionOrNull<d_alcisextensionpresent>(library, "alcIsExtensionPresent");
+            alcGetString = FuncLoader.LoadFunctionOrNull<d_alcgetstring>(library, "alcGetString");
+
+#if IOS || TVOS
+            SuspendContext = FuncLoader.LoadFunctionOrNull<d_alcsuspendcontext>(AL.Current.NativeLibrary, "alcSuspendContext");
+            ProcessContext = FuncLoader.LoadFunctionOrNull<d_alcprocesscontext>(AL.Current.NativeLibrary, "alcProcessContext");
+#endif
+
+#if ANDROID
+            DevicePause = FuncLoader.LoadFunctionOrNull<d_alcdevicepausesoft>(AL.Current.NativeLibrary, "alcDevicePauseSOFT");
+            DeviceResume = FuncLoader.LoadFunctionOrNull<d_alcdeviceresumesoft>(AL.Current.NativeLibrary, "alcDeviceResumeSOFT");
+#endif
+        }
+
+        internal string GetString(IntPtr device, int p)
         {
             return Marshal.PtrToStringAnsi(alcGetString(device, p));
         }
 
-        internal static string GetString(IntPtr device, AlcGetString p)
+        internal string GetString(IntPtr device, AlcGetString p)
         {
             return GetString(device, (int)p);
         }
@@ -625,21 +720,21 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 #if IOS || TVOS
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcsuspendcontext(IntPtr context);
-        internal static d_alcsuspendcontext SuspendContext = FuncLoader.LoadFunctionOrNull<d_alcsuspendcontext>(AL.NativeLibrary, "alcSuspendContext");
+        internal d_alcsuspendcontext SuspendContext;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcprocesscontext(IntPtr context);
-        internal static d_alcprocesscontext ProcessContext = FuncLoader.LoadFunctionOrNull<d_alcprocesscontext>(AL.NativeLibrary, "alcProcessContext");
+        internal d_alcprocesscontext ProcessContext;
 #endif
 
 #if ANDROID
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcdevicepausesoft(IntPtr device);
-        internal static d_alcdevicepausesoft DevicePause = FuncLoader.LoadFunctionOrNull<d_alcdevicepausesoft>(AL.NativeLibrary, "alcDevicePauseSOFT");
+        internal d_alcdevicepausesoft DevicePause;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alcdeviceresumesoft(IntPtr device);
-        internal static d_alcdeviceresumesoft DeviceResume = FuncLoader.LoadFunctionOrNull<d_alcdeviceresumesoft>(AL.NativeLibrary, "alcDeviceResumeSOFT");
+        internal d_alcdeviceresumesoft DeviceResume;
 #endif
     }
 
@@ -660,37 +755,51 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool SetBufferModeDelegate(int n, ref int buffers, int value);
-
         private SetBufferModeDelegate setBufferMode;
 
-        internal XRamExtension()
+        internal bool IsInitialized { get; private set; }
+        private AL _openAL;
+
+        internal XRamExtension(AL openAL)
         {
-            IsInitialized = false;
-            if (!AL.IsExtensionPresent("EAX-RAM"))
-            {
-                return;
-            }
-            RamSize = AL.alGetEnumValue("AL_EAX_RAM_SIZE");
-            RamFree = AL.alGetEnumValue("AL_EAX_RAM_FREE");
-            StorageAuto = AL.alGetEnumValue("AL_STORAGE_AUTOMATIC");
-            StorageHardware = AL.alGetEnumValue("AL_STORAGE_HARDWARE");
-            StorageAccessible = AL.alGetEnumValue("AL_STORAGE_ACCESSIBLE");
-            if (RamSize == 0 || RamFree == 0 || StorageAuto == 0 || StorageHardware == 0 || StorageAccessible == 0)
-            {
-                return;
-            }
-            try
-            {
-                setBufferMode = (XRamExtension.SetBufferModeDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("EAXSetBufferMode"), typeof(XRamExtension.SetBufferModeDelegate));
-            }
-            catch (Exception)
-            {
-                return;
-            }
-            IsInitialized = true;
+            _openAL = openAL;
+            Initialize();
         }
 
-        internal bool IsInitialized { get; private set; }
+        private void Initialize()
+        {
+            IsInitialized = false;
+
+            if (_openAL.IsExtensionPresent("EAX-RAM"))
+            {
+                RamSize = _openAL.alGetEnumValue("AL_EAX_RAM_SIZE");
+                RamFree = _openAL.alGetEnumValue("AL_EAX_RAM_FREE");
+                StorageAuto = _openAL.alGetEnumValue("AL_STORAGE_AUTOMATIC");
+                StorageHardware = _openAL.alGetEnumValue("AL_STORAGE_HARDWARE");
+                StorageAccessible = _openAL.alGetEnumValue("AL_STORAGE_ACCESSIBLE");
+
+                if (RamSize == 0 || RamFree == 0 || StorageAuto == 0 || StorageHardware == 0 || StorageAccessible == 0)
+                {
+                    return;
+                }
+
+                try
+                {
+                    LoadEntryPoints();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                IsInitialized = true;
+            }
+        }
+
+        private void LoadEntryPoints()
+        {
+            setBufferMode = ReflectionHelpers.GetDelegateForFunctionPointer<XRamExtension.SetBufferModeDelegate>(_openAL.alGetProcAddress("EAXSetBufferMode"));
+        }
 
         internal bool SetBufferMode(int n, ref int buffer, XRamStorage storage)
         {
@@ -712,104 +821,111 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alGenEffectsDelegate(int n, out int effect);
+        private alGenEffectsDelegate alGenEffects;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alDeleteEffectsDelegate(int n, ref int effect);
+        private alDeleteEffectsDelegate alDeleteEffects;
+
         //[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
         //private delegate bool alIsEffectDelegate (int effect);
+        //private alIsEffectDelegate alIsEffect;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alEffectfDelegate(int effect, EfxEffectf param, float value);
+        private alEffectfDelegate alEffectf;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alEffectiDelegate(int effect, EfxEffecti param, int value);
+        private alEffectiDelegate alEffecti;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alGenAuxiliaryEffectSlotsDelegate(int n, out int effectslots);
+        private alGenAuxiliaryEffectSlotsDelegate alGenAuxiliaryEffectSlots;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alDeleteAuxiliaryEffectSlotsDelegate(int n, ref int effectslots);
+        private alDeleteAuxiliaryEffectSlotsDelegate alDeleteAuxiliaryEffectSlots;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alAuxiliaryEffectSlotiDelegate(int slot, EfxEffecti type, int effect);
+        private alAuxiliaryEffectSlotiDelegate alAuxiliaryEffectSloti;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alAuxiliaryEffectSlotfDelegate(int slot, EfxEffectSlotf param, float value);
+        private alAuxiliaryEffectSlotfDelegate alAuxiliaryEffectSlotf;
 
         /* Filter API */
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private unsafe delegate void alGenFiltersDelegate(int n, [Out] int* pfilters);
+        private alGenFiltersDelegate alGenFilters;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alFilteriDelegate(int filter, EfxFilteri param, int value);
+        private alFilteriDelegate alFilteri;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void alFilterfDelegate(int filter, EfxFilterf param, float value);
+        private alFilterfDelegate alFilterf;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private unsafe delegate void alDeleteFiltersDelegate(int n, [In] int* pfilters);
-
-
-        private alGenEffectsDelegate alGenEffects;
-        private alDeleteEffectsDelegate alDeleteEffects;
-        //private alIsEffectDelegate alIsEffect;
-        private alEffectfDelegate alEffectf;
-        private alEffectiDelegate alEffecti;
-        private alGenAuxiliaryEffectSlotsDelegate alGenAuxiliaryEffectSlots;
-        private alDeleteAuxiliaryEffectSlotsDelegate alDeleteAuxiliaryEffectSlots;
-        private alAuxiliaryEffectSlotiDelegate alAuxiliaryEffectSloti;
-        private alAuxiliaryEffectSlotfDelegate alAuxiliaryEffectSlotf;
-        private alGenFiltersDelegate alGenFilters;
-        private alFilteriDelegate alFilteri;
-        private alFilterfDelegate alFilterf;
         private alDeleteFiltersDelegate alDeleteFilters;
 
-        internal static IntPtr device;
-        static EffectsExtension _instance;
-        internal static EffectsExtension Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new EffectsExtension();
-                return _instance;
-            }
-        }
-
-        internal EffectsExtension()
-        {
-            IsInitialized = false;
-            if (!Alc.IsExtensionPresent(device, "ALC_EXT_EFX"))
-            {
-                return;
-            }
-
-            alGenEffects = (alGenEffectsDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenEffects"), typeof(alGenEffectsDelegate));
-            alDeleteEffects = (alDeleteEffectsDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteEffects"), typeof(alDeleteEffectsDelegate));
-            alEffectf = (alEffectfDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alEffectf"), typeof(alEffectfDelegate));
-            alEffecti = (alEffectiDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alEffecti"), typeof(alEffectiDelegate));
-            alGenAuxiliaryEffectSlots = (alGenAuxiliaryEffectSlotsDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenAuxiliaryEffectSlots"), typeof(alGenAuxiliaryEffectSlotsDelegate));
-            alDeleteAuxiliaryEffectSlots = (alDeleteAuxiliaryEffectSlotsDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteAuxiliaryEffectSlots"), typeof(alDeleteAuxiliaryEffectSlotsDelegate));
-            alAuxiliaryEffectSloti = (alAuxiliaryEffectSlotiDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alAuxiliaryEffectSloti"), typeof(alAuxiliaryEffectSlotiDelegate));
-            alAuxiliaryEffectSlotf = (alAuxiliaryEffectSlotfDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alAuxiliaryEffectSlotf"), typeof(alAuxiliaryEffectSlotfDelegate));
-
-            alGenFilters = (alGenFiltersDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenFilters"), typeof(alGenFiltersDelegate));
-            alFilteri = (alFilteriDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alFilteri"), typeof(alFilteriDelegate));
-            alFilterf = (alFilterfDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alFilterf"), typeof(alFilterfDelegate));
-            alDeleteFilters = (alDeleteFiltersDelegate)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteFilters"), typeof(alDeleteFiltersDelegate));
-
-            IsInitialized = true;
-        }
 
         internal bool IsInitialized { get; private set; }
+        private AL _openAL;
+
+
+        public EffectsExtension(AL openAL)
+        {
+            _openAL = openAL;
+        }
+
+        internal void Initialize(IntPtr device)
+        {
+            IsInitialized = false;
+
+            if (_openAL.ALC.IsExtensionPresent(device, "ALC_EXT_EFX"))
+            {
+                LoadEntryPoints();
+                IsInitialized = true;
+            }
+        }
+
+        private void LoadEntryPoints()
+        {
+            alGenEffects = ReflectionHelpers.GetDelegateForFunctionPointer<alGenEffectsDelegate>(_openAL.alGetProcAddress("alGenEffects"));
+            alDeleteEffects = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteEffectsDelegate>(_openAL.alGetProcAddress("alDeleteEffects"));
+            alEffectf = ReflectionHelpers.GetDelegateForFunctionPointer<alEffectfDelegate>(_openAL.alGetProcAddress("alEffectf"));
+            alEffecti = ReflectionHelpers.GetDelegateForFunctionPointer<alEffectiDelegate>(_openAL.alGetProcAddress("alEffecti"));
+            alGenAuxiliaryEffectSlots = ReflectionHelpers.GetDelegateForFunctionPointer<alGenAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alGenAuxiliaryEffectSlots"));
+            alDeleteAuxiliaryEffectSlots = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alDeleteAuxiliaryEffectSlots"));
+            alAuxiliaryEffectSloti = ReflectionHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotiDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSloti"));
+            alAuxiliaryEffectSlotf = ReflectionHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotfDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSlotf"));
+
+            alGenFilters = ReflectionHelpers.GetDelegateForFunctionPointer<alGenFiltersDelegate>(_openAL.alGetProcAddress("alGenFilters"));
+            alFilteri = ReflectionHelpers.GetDelegateForFunctionPointer<alFilteriDelegate>(_openAL.alGetProcAddress("alFilteri"));
+            alFilterf = ReflectionHelpers.GetDelegateForFunctionPointer<alFilterfDelegate>(_openAL.alGetProcAddress("alFilterf"));
+            alDeleteFilters = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteFiltersDelegate>(_openAL.alGetProcAddress("alDeleteFilters"));
+        }
 
         /*
-
-alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
+            alEffecti(effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
             ALHelper.CheckError ("Failed to set Filter Type.");
-
         */
 
         internal void GenAuxiliaryEffectSlots(int count, out int slot)
         {
             this.alGenAuxiliaryEffectSlots(count, out slot);
-            ALHelper.CheckError("Failed to Genereate Aux slot");
+            _openAL.CheckError("Failed to Genereate Aux slot");
         }
 
         internal void GenEffect(out int effect)
         {
             this.alGenEffects(1, out effect);
-            ALHelper.CheckError("Failed to Generate Effect.");
+            _openAL.CheckError("Failed to Generate Effect.");
         }
 
         internal void DeleteAuxiliaryEffectSlot(int slot)
@@ -825,30 +941,30 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
         internal void BindEffectToAuxiliarySlot(int slot, int effect)
         {
             alAuxiliaryEffectSloti(slot, EfxEffecti.SlotEffect, effect);
-            ALHelper.CheckError("Failed to bind Effect");
+            _openAL.CheckError("Failed to bind Effect");
         }
 
         internal void AuxiliaryEffectSlot(int slot, EfxEffectSlotf param, float value)
         {
             alAuxiliaryEffectSlotf(slot, param, value);
-            ALHelper.CheckError("Failes to set " + param + " " + value);
+            _openAL.CheckError("Failes to set " + param + " " + value);
         }
 
         internal void BindSourceToAuxiliarySlot(int source, int slot, int slotnumber, int filter)
         {
-            AL.alSource3i(source, ALSourcei.EfxAuxilarySendFilter, slot, slotnumber, filter);
+            _openAL.alSource3i(source, ALSourcei.EfxAuxilarySendFilter, slot, slotnumber, filter);
         }
 
         internal void Effect(int effect, EfxEffectf param, float value)
         {
             alEffectf(effect, param, value);
-            ALHelper.CheckError("Failed to set " + param + " " + value);
+            _openAL.CheckError("Failed to set " + param + " " + value);
         }
 
         internal void Effect(int effect, EfxEffecti param, int value)
         {
             alEffecti(effect, param, value);
-            ALHelper.CheckError("Failed to set " + param + " " + value);
+            _openAL.CheckError("Failed to set " + param + " " + value);
         }
 
         internal unsafe int GenFilter()
@@ -867,7 +983,7 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
         }
         internal void BindFilterToSource(int source, int filter)
         {
-            AL.Source(source, ALSourcei.EfxDirectFilter, filter);
+            _openAL.Source(source, ALSourcei.EfxDirectFilter, filter);
         }
         internal unsafe void DeleteFilter(int filter)
         {
@@ -875,16 +991,15 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
         }
     }
 
-
     internal static class ALHelper
     {
         [System.Diagnostics.Conditional("DEBUG")]
         [System.Diagnostics.DebuggerHidden]
-        internal static void CheckError(string message)
+        internal static void CheckError(this AL openAL, string message)
         {
             System.Diagnostics.Debug.Assert(!String.IsNullOrEmpty(message));
 
-            ALError error = AL.GetError();
+            ALError error = openAL.GetError();
             if (error != ALError.NoError)
             {
                 throw new InvalidOperationException(message + " (Reason: " + AL.GetErrorString(error) + ")");
@@ -893,11 +1008,11 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
 
         [System.Diagnostics.Conditional("DEBUG")]
         [System.Diagnostics.DebuggerHidden]
-        internal static void CheckError(string message, params object[] args)
+        internal static void CheckError(this AL openAL, string message, params object[] args)
         {
             System.Diagnostics.Debug.Assert(!String.IsNullOrEmpty(message));
 
-            ALError error = AL.GetError();
+            ALError error = openAL.GetError();
             if (error != ALError.NoError)
             {
                 message = String.Format(message, args);
@@ -919,11 +1034,11 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
     {
         [System.Diagnostics.Conditional("DEBUG")]
         [System.Diagnostics.DebuggerHidden]
-        internal static void CheckError(string message)
+        internal static void CheckError(this Alc alc, string message)
         {
             System.Diagnostics.Debug.Assert(!String.IsNullOrEmpty(message));
 
-            AlcError error = Alc.GetError();
+            AlcError error = alc.GetError();
             if (error != AlcError.NoError)
             {
                 throw new InvalidOperationException(message + " (Reason: " + error.ToString() + ")");
@@ -932,11 +1047,11 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
 
         [System.Diagnostics.Conditional("DEBUG")]
         [System.Diagnostics.DebuggerHidden]
-        internal static void CheckError(string message, params object[] args)
+        internal static void CheckError(this Alc alc, string message, params object[] args)
         {
             System.Diagnostics.Debug.Assert(!String.IsNullOrEmpty(message));
 
-            AlcError error = Alc.GetError();
+            AlcError error = alc.GetError();
             if (error != AlcError.NoError)
             {
                 message = String.Format(message, args);
@@ -944,4 +1059,5 @@ alEffecti (effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
             }
         }
     }
+
 }
