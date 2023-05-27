@@ -257,7 +257,26 @@ namespace Microsoft.Xna.Framework.Media
 
         void IMediaPlayer.Play(Song song)
         {
-            Strategy.Play(song);
+            if (song == null)
+                throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
+
+            var previousSong = Strategy.Queue.Count > 0
+                             ? Strategy.Queue[0]
+                             : null;
+
+            Strategy.PlatformClearQueue();
+            Strategy.Queue.Add(song);
+            Strategy.Queue.ActiveSongIndex = 0;
+
+            if (song.IsDisposed)
+                throw new ObjectDisposedException("song");
+
+            Strategy.PlatformPlaySong(song);
+            Strategy._state = MediaState.Playing;
+            Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+
+            if (previousSong != song)
+                Strategy.OnPlatformActiveSongChanged(EventArgs.Empty);
         }
 
         void IMediaPlayer.Play(SongCollection collection)
@@ -267,32 +286,82 @@ namespace Microsoft.Xna.Framework.Media
 
         void IMediaPlayer.Play(SongCollection collection, int index)
         {
-            Strategy.Play(collection, index);
+            if (collection == null)
+                throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
+
+            Strategy.PlatformClearQueue();
+
+            foreach (var song in collection)
+                Strategy.Queue.Add(song);
+
+            Strategy.Queue.ActiveSongIndex = index;
+
+            Song activeSong = Strategy.Queue.ActiveSong;
+            if (activeSong.IsDisposed)
+                throw new ObjectDisposedException("activeSong");
+
+            Strategy.PlatformPlaySong(activeSong);
+            Strategy._state = MediaState.Playing;
+            Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
         }
 
         void IMediaPlayer.Pause()
         {
-            Strategy.Pause();
+            MediaState state = State;
+            switch (state)
+            {
+                case MediaState.Playing:
+                    if (Strategy.Queue.ActiveSong != null)
+                    {
+                        Strategy.PlatformPause();
+                        Strategy._state =  MediaState.Paused;
+                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                    }
+                    break;
+            }
         }
 
         void IMediaPlayer.Resume()
         {
-            Strategy.Resume();
+            MediaState state = State;
+            switch (state)
+            {
+                case MediaState.Paused:
+                    {
+                        Strategy.PlatformResume();
+                        Strategy._state = MediaState.Playing;
+                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                    }
+                    break;
+            }
         }
 
         void IMediaPlayer.Stop()
         {
-            Strategy.Stop();
+            MediaState state = State;
+            switch (state)
+            {
+                case MediaState.Playing:
+                case MediaState.Paused:
+                    {
+                        Strategy.PlatformStop();
+                        Strategy._state = MediaState.Stopped;
+                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                    }
+                    break;
+            }
         }
 
         void IMediaPlayer.MoveNext()
         {
-            Strategy.MoveNext();
+            Stop();
+            Strategy.PlatformMoveNext();
         }
 
         void IMediaPlayer.MovePrevious()
         {
-            Strategy.MovePrevious();
+            Stop();
+            Strategy.PlatformMovePrevious();
         }
                 
     }

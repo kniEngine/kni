@@ -107,106 +107,13 @@ namespace Microsoft.Xna.Platform.Media
             _numSongsInQueuePlayed = 0;
         }
 
-
-        internal void Play(Song song)
+        internal void PlatformMoveNext()
         {
-            if (song == null)
-                throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
-
-            var previousSong = _queue.Count > 0 ? _queue[0] : null;
-
-            PlatformClearQueue();
-            _queue.Add(song);
-            _queue.ActiveSongIndex = 0;
-
-            if (song.IsDisposed)
-                throw new ObjectDisposedException("song");
-
-            PlatformPlaySong(song);
-            _state = MediaState.Playing;
-            OnPlatformMediaStateChanged(EventArgs.Empty);
-
-            if (previousSong != song)
-                OnPlatformActiveSongChanged(EventArgs.Empty);
-        }
-
-        internal void Play(SongCollection collection, int index)
-        {
-            if (collection == null)
-                throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
-
-            PlatformClearQueue();
-
-            foreach (var song in collection)
-                _queue.Add(song);
-
-            _queue.ActiveSongIndex = index;
-
-            Song activeSong = _queue.ActiveSong;
-            if (activeSong.IsDisposed)
-                throw new ObjectDisposedException("activeSong");
-
-            PlatformPlaySong(activeSong);
-            _state = MediaState.Playing;
-            OnPlatformMediaStateChanged(EventArgs.Empty);
-        }
-
-        internal void Pause()
-        {
-            MediaState state = State;
-            switch (state)
-            {
-                case MediaState.Playing:
-                    if (_queue.ActiveSong != null)
-                    {
-                        PlatformPause();
-                        _state =  MediaState.Paused;
-                        OnPlatformMediaStateChanged(EventArgs.Empty);
-                    }
-                    break;
-            }
-        }
-
-        internal void Resume()
-        {
-            MediaState state = State;
-            switch (state)
-            {
-                case MediaState.Paused:
-                    {
-                        PlatformResume();
-                        _state = MediaState.Playing;
-                        OnPlatformMediaStateChanged(EventArgs.Empty);
-                    }
-                    break;
-            }
-        }
-
-        internal void Stop()
-        {
-            MediaState state = State;
-            switch (state)
-            {
-                case MediaState.Playing:
-                case MediaState.Paused:
-                    {
-                        PlatformStop();
-                        _state = MediaState.Stopped;
-                        OnPlatformMediaStateChanged(EventArgs.Empty);
-                    }
-                    break;
-            }
-        }
-
-        internal void MoveNext()
-        {
-            Stop();
             NextSong(1);
         }
 
-        internal void MovePrevious()
+        internal void PlatformMovePrevious()
         {
-            Stop();
             NextSong(-1);
         }
 
