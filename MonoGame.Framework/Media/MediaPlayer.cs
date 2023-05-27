@@ -188,31 +188,31 @@ namespace Microsoft.Xna.Framework.Media
 
         bool IMediaPlayer.IsMuted
         {
-            get { return Strategy.PlatformGetIsMuted(); }
-            set { Strategy.PlatformSetIsMuted(value); }
+            get { return Strategy.PlatformIsMuted; }
+            set { Strategy.PlatformIsMuted = value; }
         }
 
         bool IMediaPlayer.IsRepeating
         {
-            get { return Strategy.PlatformGetIsRepeating(); }
-            set { Strategy.PlatformSetIsRepeating(value); }
+            get { return Strategy.PlatformIsRepeating; }
+            set { Strategy.PlatformIsRepeating = value; }
         }
 
         bool IMediaPlayer.IsShuffled
         {
-            get { return Strategy.PlatformGetIsShuffled(); }
-            set { Strategy.PlatformSetIsShuffled(value); }
+            get { return Strategy.PlatformIsShuffled; }
+            set { Strategy.PlatformIsShuffled=value; }
         }
 
         bool IMediaPlayer.IsVisualizationEnabled
         {
-            get { return Strategy.PlatformGetIsVisualizationEnabled(); }
-            set { Strategy.PlatformSetIsVisualizationEnabled(value); }
+            get { return Strategy.PlatformIsVisualizationEnabled; }
+            set { Strategy.PlatformIsVisualizationEnabled = value; }
         }
 
         TimeSpan IMediaPlayer.PlayPosition
         {
-            get { return Strategy.PlatformGetPlayPosition(); }
+            get { return Strategy.PlatformPlayPosition; }
         }
 
         MediaState IMediaPlayer.State
@@ -222,16 +222,16 @@ namespace Microsoft.Xna.Framework.Media
 
         bool IMediaPlayer.GameHasControl
         {
-            get { return Strategy.PlatformGetGameHasControl(); }
+            get { return Strategy.PlatformGameHasControl; }
         }
 
         float IMediaPlayer.Volume
         {
-            get { return Strategy.PlatformGetVolume(); }
+            get { return Strategy.PlatformVolume; }
             set
             {
                 var volume = MathHelper.Clamp(value, 0, 1);
-                Strategy.PlatformSetVolume(volume);
+                Strategy.PlatformVolume = volume;
             }
         }
 

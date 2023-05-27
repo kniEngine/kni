@@ -45,49 +45,35 @@ namespace Microsoft.Xna.Platform.Media
 
         internal MediaQueue Queue { get {return _queue; }}
 
-        internal virtual float PlatformGetVolume()
+        internal virtual float PlatformVolume
         {
-            return _volume;
+            get { return _volume; }
+            set { _volume = value; }
         }
-        internal virtual void  PlatformSetVolume(float volume)
+        internal virtual bool PlatformIsMuted
         {
-            _volume = volume;
+            get { return _isMuted; }
+            set { _isMuted = value; }
         }
-        internal virtual bool PlatformGetIsMuted()
+        internal virtual bool PlatformIsRepeating
         {
-            return _isMuted;
-        }
-        internal virtual void PlatformSetIsMuted(bool muted)
-        {
-            _isMuted = muted;
-        }
-        internal virtual bool PlatformGetIsRepeating()
-        {
-            return _isRepeating;
-        }
-        internal virtual void PlatformSetIsRepeating(bool repeating)
-        {
-            _isRepeating = repeating;
-        }
-        internal virtual bool PlatformGetIsShuffled()
-        {
-            return _isShuffled;
-        }
-        internal virtual void PlatformSetIsShuffled(bool shuffled)
-        {
-            _isShuffled = shuffled;
-        }
-        internal virtual bool PlatformGetIsVisualizationEnabled()
-        {
-            return _isVisualizationEnabled;
-        }
-        internal virtual void PlatformSetIsVisualizationEnabled(bool enabled)
-        {
-            _isVisualizationEnabled = enabled;
+            get { return _isRepeating; }
+            set { _isRepeating = value; }
         }
 
-        internal abstract bool PlatformGetGameHasControl();
-        internal abstract TimeSpan PlatformGetPlayPosition();
+        internal virtual bool PlatformIsShuffled
+        {
+            get { return _isShuffled; }
+            set { _isShuffled = value; }
+        }
+        internal virtual bool PlatformIsVisualizationEnabled
+        {
+            get { return _isVisualizationEnabled; }
+            set { _isVisualizationEnabled = value; }
+        }
+
+        internal abstract bool PlatformGameHasControl { get; }
+        internal abstract TimeSpan PlatformPlayPosition { get; }
 
         protected abstract bool PlatformUpdateState(ref MediaState state);
         internal abstract void PlatformPlaySong(Song song);
@@ -226,7 +212,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private void NextSong(int direction)
         {
-            if (PlatformGetIsRepeating() && _queue.ActiveSongIndex >= _queue.Count - 1)
+            if (PlatformIsRepeating && _queue.ActiveSongIndex >= _queue.Count - 1)
             {
                 _queue.ActiveSongIndex = 0;
                 
@@ -237,7 +223,7 @@ namespace Microsoft.Xna.Platform.Media
                 direction = 0;
             }
 
-            var nextSong = _queue.GetNextSong(direction, PlatformGetIsShuffled());
+            var nextSong = _queue.GetNextSong(direction, PlatformIsShuffled);
             if (nextSong != null)
             {
                 if (nextSong.IsDisposed)
@@ -262,7 +248,7 @@ namespace Microsoft.Xna.Platform.Media
             if (_numSongsInQueuePlayed >= _queue.Count)
             {
                 _numSongsInQueuePlayed = 0;
-                if (!PlatformGetIsRepeating())
+                if (!PlatformIsRepeating)
                 {
                     // Stop
                     MediaState state = State;

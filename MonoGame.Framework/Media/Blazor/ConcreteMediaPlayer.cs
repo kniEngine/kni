@@ -19,44 +19,33 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override bool PlatformGetIsMuted()
+        internal override bool PlatformIsMuted
         {
-            return base.PlatformGetIsMuted();
+            get { return base.PlatformIsMuted; }
+            set
+            {
+                base.PlatformIsMuted = value;
+
+                if (Queue.Count > 0)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsRepeating
         {
-            base.PlatformSetIsMuted(muted);
-
-            if (Queue.Count == 0)
-                return;
-
-            SetChannelVolumes();
+            get { return base.PlatformIsRepeating; }
+            set { base.PlatformIsRepeating = value; }
         }
 
-        internal override bool PlatformGetIsRepeating()
+        internal override bool PlatformIsShuffled
         {
-            return base.PlatformGetIsRepeating();
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
         }
 
-        internal override void PlatformSetIsRepeating(bool repeating)
+        internal override TimeSpan PlatformPlayPosition
         {
-            base.PlatformSetIsRepeating(repeating);
-        }
-
-        internal override bool PlatformGetIsShuffled()
-        {
-            return base.PlatformGetIsShuffled();
-        }
-
-        internal override void PlatformSetIsShuffled(bool shuffled)
-        {
-            base.PlatformSetIsShuffled(shuffled);
-        }
-
-        internal override TimeSpan PlatformGetPlayPosition()
-        {
-            throw new NotImplementedException();
+            get { throw new NotImplementedException(); }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -64,29 +53,28 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override float PlatformGetVolume()
+        internal override float PlatformVolume
         {
-            return base.PlatformGetVolume();
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                if (Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override void PlatformSetVolume(float volume)
+        internal override bool PlatformGameHasControl
         {
-            base.PlatformSetVolume(volume);
-
-            if (Queue.ActiveSong != null)
-                SetChannelVolumes();
-        }
-
-        internal override bool PlatformGetGameHasControl()
-        {
-            return true;
+            get { return true; }
         }
 
         #endregion
 
         private void SetChannelVolumes()
         {
-            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
             
             foreach (Song queuedSong in Queue.Songs)
             {

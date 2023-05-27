@@ -24,27 +24,31 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsMuted
         {
-            base.PlatformSetIsMuted(muted);
+            set
+            {
+                base.PlatformIsMuted = value;
 
-            if (Queue.Count == 0)
-                return;
-
-            SetChannelVolumes();
+                if (Queue.Count > 0)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override TimeSpan PlatformGetPlayPosition()
+        internal override TimeSpan PlatformPlayPosition
         {
-            Song activeSong = Queue.ActiveSong;
-            if (activeSong != null)
+            get
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
-                AVPlayer player = mediaPlatformStream.Player;
-                return TimeSpan.FromSeconds(player.CurrentTime.Seconds);
-            }
+                Song activeSong = Queue.ActiveSong;
+                if (activeSong != null)
+                {
+                    MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                    AVPlayer player = mediaPlatformStream.Player;
+                    return TimeSpan.FromSeconds(player.CurrentTime.Seconds);
+                }
 
-            return TimeSpan.Zero;
+                return TimeSpan.Zero;
+            }
         }
 
         internal void PlatformSetPlayPosition(TimeSpan value)
@@ -63,24 +67,27 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override void PlatformSetVolume(float volume)
+        internal override float PlatformVolume
         {
-            base.PlatformSetVolume(volume);
+            set
+            {
+                base.PlatformVolume = value;
 
-            if (Queue.ActiveSong != null)
-                SetChannelVolumes();
+                if (Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override bool PlatformGetGameHasControl()
+        internal override bool PlatformGameHasControl
         {
-            return !AVAudioSession.SharedInstance().OtherAudioPlaying;
+            get { return !AVAudioSession.SharedInstance().OtherAudioPlaying; }
         }
 
         #endregion
 
         private void SetChannelVolumes()
         {
-            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
             
             foreach (Song queuedSong in Queue.Songs)
             {
@@ -101,7 +108,7 @@ namespace Microsoft.Xna.Platform.Media
                 MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
                 mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
-                float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+                float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
                 if (mediaPlatformStream.Player != null)
                 {

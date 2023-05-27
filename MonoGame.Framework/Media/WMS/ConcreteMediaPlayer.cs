@@ -96,49 +96,55 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsMuted
         {
-            base.PlatformSetIsMuted(muted);
-
-            SetChannelVolumes();
-        }
-
-        internal override TimeSpan PlatformGetPlayPosition()
-        {
-            SessionState sessionState = _sessionState;
-            switch (sessionState)
+            set
             {
-                case SessionState.Started:
-                    return TimeSpan.Zero;
+                base.PlatformIsMuted = value;
 
-                case SessionState.Paused:
-                    return TimeSpan.Zero;
-
-                case SessionState.Stopping:
-                case SessionState.Stopped:
-                    {
-                        try
-                        {
-                            return TimeSpan.FromTicks(_clock.Time);
-                        }
-                        catch (SharpDXException)
-                        {
-                            // The presentation clock is most likely not quite ready yet
-                            return TimeSpan.Zero;
-                        }
-                    }
-
-                case SessionState.Ended:
-                    return TimeSpan.Zero;
-
-                default:
-                    throw new InvalidOperationException();
+                SetChannelVolumes();
             }
         }
 
-        internal override bool PlatformGetGameHasControl()
+        internal override TimeSpan PlatformPlayPosition
         {
-            return true;
+            get
+            {
+                SessionState sessionState = _sessionState;
+                switch (sessionState)
+                {
+                    case SessionState.Started:
+                        return TimeSpan.Zero;
+
+                    case SessionState.Paused:
+                        return TimeSpan.Zero;
+
+                    case SessionState.Stopping:
+                    case SessionState.Stopped:
+                        {
+                            try
+                            {
+                                return TimeSpan.FromTicks(_clock.Time);
+                            }
+                            catch (SharpDXException)
+                            {
+                                // The presentation clock is most likely not quite ready yet
+                                return TimeSpan.Zero;
+                            }
+                        }
+
+                    case SessionState.Ended:
+                        return TimeSpan.Zero;
+
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+        }
+
+        internal override bool PlatformGameHasControl
+        {
+            get { return true; }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -146,11 +152,13 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override void PlatformSetVolume(float volume)
+        internal override float PlatformVolume
         {
-            base.PlatformSetVolume(volume);
-
-            SetChannelVolumes();
+            set
+            {
+                base.PlatformVolume = value;
+                SetChannelVolumes();
+            }
         }
 
         #endregion
@@ -162,7 +170,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_volumeController == null)
                     return;
 
-                float volume = base.PlatformGetIsMuted() ? 0f : base.PlatformGetVolume();
+                float volume = base.PlatformIsMuted ? 0f : base.PlatformVolume;
                 for (int i = 0; i < _volumeController.ChannelCount; i++)
                 {
                     _volumeController.SetChannelVolume(i, volume);

@@ -16,39 +16,27 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override bool PlatformGetIsMuted()
+        internal override bool PlatformIsMuted
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
+            set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsRepeating
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
+            set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformGetIsRepeating()
+        internal override bool PlatformIsShuffled
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
+            set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override void PlatformSetIsRepeating(bool repeating)
+        internal override TimeSpan PlatformPlayPosition
         {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override bool PlatformGetIsShuffled()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override void PlatformSetIsShuffled(bool shuffled)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override TimeSpan PlatformGetPlayPosition()
-        {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -56,19 +44,15 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
-        internal override float PlatformGetVolume()
+        internal override float PlatformVolume
         {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
+            set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override void PlatformSetVolume(float volume)
+        internal override bool PlatformGameHasControl
         {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override bool PlatformGetGameHasControl()
-        {
-            throw new PlatformNotSupportedException();
+            get { throw new PlatformNotSupportedException(); }
         }
 
         #endregion
