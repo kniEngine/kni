@@ -52,28 +52,34 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsMuted
         {
-            base.PlatformSetIsMuted(muted);
+            set
+            {
+                base.PlatformIsMuted = value;
 
-            _mediaEngineEx.Muted = muted;
+                _mediaEngineEx.Muted = value;
+            }
         }
 
-        internal override void PlatformSetIsRepeating(bool repeating)
+        internal override bool PlatformIsRepeating
         {
-            base.PlatformSetIsRepeating(repeating);
+            set
+            {
+                base.PlatformIsRepeating = value;
 
-            _mediaEngineEx.Loop = repeating;
+                _mediaEngineEx.Loop = value;
+            }
         }
 
-        internal override TimeSpan PlatformGetPlayPosition()
+        internal override TimeSpan PlatformPlayPosition
         {
-            return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime);
+            get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
         }
 
-        internal override bool PlatformGetGameHasControl()
+        internal override bool PlatformGameHasControl
         {
-            return true;
+            get { return true; }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -81,16 +87,14 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override float PlatformGetVolume()
+        internal override float PlatformVolume
         {
-            return base.PlatformGetVolume();
-        }
-
-        internal override void PlatformSetVolume(float volume)
-        {
-            base.PlatformSetVolume(volume);
-
-            _mediaEngineEx.Volume = volume;
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+                _mediaEngineEx.Volume = value;
+            }
         }
 
         #endregion

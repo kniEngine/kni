@@ -20,26 +20,30 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override void PlatformSetIsMuted(bool muted)
+        internal override bool PlatformIsMuted
         {
-            base.PlatformSetIsMuted(muted);
+            set
+            {
+                base.PlatformIsMuted = value;
 
-            if (Queue.Count == 0)
-                return;
-
-            SetChannelVolumes();
+                if (Queue.Count > 0)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override TimeSpan PlatformGetPlayPosition()
+        internal override TimeSpan PlatformPlayPosition
         {
-            Song activeSong = Queue.ActiveSong;
-            if (activeSong == null)
-                return TimeSpan.Zero;
-            
-            if (MediaPlatformStream._playingSong == activeSong.Strategy && MediaPlatformStream._androidPlayer.IsPlaying)
-                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(MediaPlatformStream._androidPlayer.CurrentPosition);
+            get
+            {
+                Song activeSong = Queue.ActiveSong;
+                if (activeSong == null)
+                    return TimeSpan.Zero;
 
-            return ((ConcreteSongStrategy)activeSong.Strategy)._position;
+                if (MediaPlatformStream._playingSong == activeSong.Strategy && MediaPlatformStream._androidPlayer.IsPlaying)
+                    ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(MediaPlatformStream._androidPlayer.CurrentPosition);
+
+                return ((ConcreteSongStrategy)activeSong.Strategy)._position;
+            }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
@@ -47,24 +51,27 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override void PlatformSetVolume(float volume)
+        internal override float PlatformVolume
         {
-            base.PlatformSetVolume(volume);
+            set
+            {
+                base.PlatformVolume = value;
 
-            if (Queue.ActiveSong != null)
-                SetChannelVolumes();
+                if (Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
         }
 
-        internal override bool PlatformGetGameHasControl()
+        internal override bool PlatformGameHasControl
         {
-            return true;
+            get { return true; }
         }
 
         #endregion
 
         private void SetChannelVolumes()
         {
-            float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+            float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
             foreach (Song queuedSong in Queue.Songs)
             {
@@ -79,7 +86,7 @@ namespace Microsoft.Xna.Platform.Media
                 MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
                 mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
-                float innerVolume = base.PlatformGetIsMuted() ? 0.0f : base.PlatformGetVolume();
+                float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
                 MediaPlatformStream._androidPlayer.SetVolume(innerVolume, innerVolume);
 
