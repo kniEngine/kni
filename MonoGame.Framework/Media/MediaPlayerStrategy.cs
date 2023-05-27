@@ -18,12 +18,12 @@ namespace Microsoft.Xna.Platform.Media
         private bool _isShuffled;
         private bool _isVisualizationEnabled;
 
-        private MediaState _state = MediaState.Stopped;
+        internal MediaState _state = MediaState.Stopped;
 
         private readonly MediaQueue _queue = new MediaQueue();
         // Need to hold onto this to keep track of how many songs
         // have played when in shuffle mode
-        private int _numSongsInQueuePlayed = 0;
+        internal int _numSongsInQueuePlayed = 0;
         
 
         internal event EventHandler<EventArgs> PlatformActiveSongChanged;
@@ -90,33 +90,35 @@ namespace Microsoft.Xna.Platform.Media
         internal abstract TimeSpan PlatformGetPlayPosition();
 
         protected abstract bool PlatformUpdateState(ref MediaState state);
-        protected abstract void PlatformPlaySong(Song song);
-        protected abstract void PlatformPause();
-        protected abstract void PlatformResume();
-        protected abstract void PlatformStop();
+        internal abstract void PlatformPlaySong(Song song);
+        internal abstract void PlatformPause();
+        internal abstract void PlatformResume();
+        internal abstract void PlatformStop();
 
 
-        protected virtual void OnPlatformActiveSongChanged(EventArgs args)
+        internal void OnPlatformActiveSongChanged(EventArgs args)
         {
             var handler = PlatformActiveSongChanged;
             if (handler != null)
                 handler(null, args);
         }
 
-        protected virtual void OnPlatformMediaStateChanged(EventArgs args)
+        internal void OnPlatformMediaStateChanged(EventArgs args)
         {
             var handler = PlatformMediaStateChanged;
             if (handler != null)
                 handler(null, args);
         }
 
-        protected virtual void PlatformClearQueue()
+        internal virtual void PlatformClearQueue()
         {
             while (_queue.Count > 0)
             {
                 Song song = _queue[0];
                 _queue.Remove(song);
             }
+
+            _numSongsInQueuePlayed = 0;
         }
 
 
@@ -128,7 +130,6 @@ namespace Microsoft.Xna.Platform.Media
             var previousSong = _queue.Count > 0 ? _queue[0] : null;
 
             PlatformClearQueue();
-            _numSongsInQueuePlayed = 0;
             _queue.Add(song);
             _queue.ActiveSongIndex = 0;
 
@@ -143,18 +144,12 @@ namespace Microsoft.Xna.Platform.Media
                 OnPlatformActiveSongChanged(EventArgs.Empty);
         }
 
-        internal void Play(SongCollection collection)
-        {
-            Play(collection, 0);
-        }
-
         internal void Play(SongCollection collection, int index)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
 
             PlatformClearQueue();
-            _numSongsInQueuePlayed = 0;
 
             foreach (var song in collection)
                 _queue.Add(song);
@@ -219,18 +214,18 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void MoveNext()
         {
+            Stop();
             NextSong(1);
         }
 
         internal void MovePrevious()
         {
+            Stop();
             NextSong(-1);
         }
 
         private void NextSong(int direction)
         {
-            Stop();
-
             if (PlatformGetIsRepeating() && _queue.ActiveSongIndex >= _queue.Count - 1)
             {
                 _queue.ActiveSongIndex = 0;
@@ -269,13 +264,42 @@ namespace Microsoft.Xna.Platform.Media
                 _numSongsInQueuePlayed = 0;
                 if (!PlatformGetIsRepeating())
                 {
-                    Stop();
+                    // Stop
+                    MediaState state = State;
+                    switch (state)
+                    {
+                        case MediaState.Playing:
+                        case MediaState.Paused:
+                            {
+                                PlatformStop();
+                                _state = MediaState.Stopped;
+                                OnPlatformMediaStateChanged(EventArgs.Empty);
+                            }
+                            break;
+                    }
+
                     OnPlatformActiveSongChanged(EventArgs.Empty);
                     return;
                 }
             }
 
-            MoveNext();
+            // Stop
+            {
+                MediaState state = State;
+                switch (state)
+                {
+                    case MediaState.Playing:
+                    case MediaState.Paused:
+                        {
+                            PlatformStop();
+                            _state = MediaState.Stopped;
+                            OnPlatformMediaStateChanged(EventArgs.Empty);
+                        }
+                        break;
+                }
+            }
+
+            NextSong(1);
         }
 
 

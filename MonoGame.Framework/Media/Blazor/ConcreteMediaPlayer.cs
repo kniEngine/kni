@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Media;
 
@@ -92,26 +94,25 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override void PlatformPlaySong(Song song)
+        internal override void PlatformPlaySong(Song song)
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformPause()
+        internal override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformResume()
+        internal override void PlatformResume()
         {
             throw new NotImplementedException();
         }
 
-        protected override void PlatformStop()
+        internal override void PlatformStop()
         {
             throw new NotImplementedException();
         }
 
     }
 }
-
