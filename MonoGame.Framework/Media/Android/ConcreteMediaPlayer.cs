@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Media
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
         private Android.Media.MediaPlayer _androidPlayer;
-        private ConcreteSongStrategy _playingSong;
+        private Song _playingSong;
 
         internal ConcreteMediaPlayerStrategy()
         {
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (activeSong == null)
                     return TimeSpan.Zero;
 
-                if (_playingSong == activeSong.Strategy && _androidPlayer.IsPlaying)
+                if (_playingSong == activeSong && _androidPlayer.IsPlaying)
                     ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
                 return ((ConcreteSongStrategy)activeSong.Strategy)._position;
@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Media
 
                 _androidPlayer.Prepare();
                 _androidPlayer.Looping = MediaPlayer.IsRepeating;
-                _playingSong = ((ConcreteSongStrategy)song.Strategy);
+                _playingSong = song;
 
                 _androidPlayer.Start();
                 song.Strategy.PlayCount++;
