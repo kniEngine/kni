@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Media
             if (mediaEvent == MediaEngineEvent.Ended)
             {
                 _sessionState = SessionState.Stopped;
-                _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => OnSongFinishedPlaying(null, null)).AsTask();
+                _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => base.OnSongFinishedPlaying()).AsTask();
             }
         }
 

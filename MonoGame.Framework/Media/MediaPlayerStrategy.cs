@@ -144,11 +144,9 @@ namespace Microsoft.Xna.Platform.Media
             OnPlatformActiveSongChanged(EventArgs.Empty);
         }
 
-        internal void OnSongFinishedPlaying(object sender, EventArgs args)
+        internal void OnSongFinishedPlaying()
         {
-            Song song = (Song)sender;
             Song activeSong = Queue.ActiveSong;
-            System.Diagnostics.Debug.Assert(song == activeSong);
 
             _numSongsInQueuePlayed++;
             

@@ -223,14 +223,14 @@ namespace Microsoft.Xna.Platform.Media
             _playToEndObserver = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnFinishedPlaying);
         }
 
-        internal delegate void FinishedPlayingHandler(object sender, EventArgs args);
+        internal delegate void FinishedPlayingHandler();
         event FinishedPlayingHandler DonePlaying;
 
         private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
 		{
-            var handler = DonePlaying;
+            FinishedPlayingHandler handler = DonePlaying;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler();
 		}
 
 		/// <summary>
