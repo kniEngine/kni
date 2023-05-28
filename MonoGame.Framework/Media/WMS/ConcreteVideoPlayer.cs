@@ -16,19 +16,16 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
-        private static MediaSession _session;
-        private static AudioStreamVolume _volumeController;
-        private static PresentationClock _clock;
-
-        // HACK: Need SharpDX to fix this.
-        private static Guid AudioStreamVolumeGuid;
+        private MediaSession _session;
+        private AudioStreamVolume _volumeController;
+        private PresentationClock _clock;
 
         private Texture2D _lastFrame;
 
         private readonly Variant _positionCurrent = new Variant();
         private readonly Variant _positionBeginning = new Variant { ElementType = VariantElementType.Long, Value = 0L };
 
-        private static Callback _callback;
+        private Callback _callback;
 
         private class Callback : IAsyncCallback
         {
@@ -46,7 +43,7 @@ namespace Microsoft.Xna.Platform.Media
             public IDisposable Shadow { get; set; }
             public void Invoke(AsyncResult asyncResultRef)
             {
-                using (MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef))
+                using (MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
                 {
                     switch (mediaEvent.TypeInfo)
                     {
@@ -70,7 +67,7 @@ namespace Microsoft.Xna.Platform.Media
                         evValue.Dispose();
                 }
 
-                _session.BeginGetEvent(this, null);
+                _player._session.BeginGetEvent(this, null);
             }
 
             public AsyncCallbackFlags Flags { get; private set; }
@@ -114,9 +111,6 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
-            // The GUID is specified in a GuidAttribute attached to the class
-            AudioStreamVolumeGuid = Guid.Parse(((GuidAttribute)typeof(AudioStreamVolume).GetCustomAttributes(typeof(GuidAttribute), false)[0]).Value);
-
             MediaManager.Startup(true);
             MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
         }
@@ -156,8 +150,7 @@ namespace Microsoft.Xna.Platform.Media
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
             VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
-            VideoSampleGrabber sampleGrabber = _videoPlatformStream.SampleGrabber;
-            byte[] texData = sampleGrabber.TextureData;
+            byte[] texData = _videoPlatformStream.SampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
             
@@ -211,7 +204,7 @@ namespace Microsoft.Xna.Platform.Media
                 _session.BeginGetEvent(_callback, null);
             }
 
-            // Set the new song.
+            // Set the new video.
             VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
             _session.SetTopology(SessionSetTopologyFlags.Immediate, _videoPlatformStream.Topology);
 
@@ -301,9 +294,15 @@ namespace Microsoft.Xna.Platform.Media
             if (_session.IsDisposed)
                 return;
 
+            // HACK: Need SharpDX to fix this.
+            // The GUID is specified in a GuidAttribute attached to the class
+            Type audioStreamVolumeType = typeof(AudioStreamVolume);
+            GuidAttribute audioStreamVolumeGuidAttrib = (GuidAttribute)audioStreamVolumeType.GetCustomAttributes(typeof(GuidAttribute), false)[0];
+            Guid audioStreamVolumeGuid = Guid.Parse(audioStreamVolumeGuidAttrib.Value); 
+
             // Get the volume interface.
             IntPtr volumeObjectPtr;
-            MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, AudioStreamVolumeGuid, out volumeObjectPtr);
+            MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, audioStreamVolumeGuid, out volumeObjectPtr);
             _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
 
             SetChannelVolumes();
