@@ -15,12 +15,12 @@ namespace Microsoft.Xna.Framework.Media
 {
     public sealed class VideoPlayer : IDisposable
     {
-        private static VideoPlayerStrategy _strategy;
+        private VideoPlayerStrategy _strategy;
 
 
         #region Properties
 
-        private static VideoPlayerStrategy Strategy
+        private VideoPlayerStrategy Strategy
         {
             get { return _strategy; }
         }
