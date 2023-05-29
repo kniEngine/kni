@@ -70,7 +70,6 @@ namespace Microsoft.Xna.Platform.Media
             videoPlatformStream.Player.SetDisplay(((AndroidGameWindow)Game.Instance.Window).GameView.Holder);
             videoPlatformStream.Player.Start();
 
-            ConcreteGame.IsPlayingVideo = true;
             State = MediaState.Playing;
         }
 
@@ -94,7 +93,6 @@ namespace Microsoft.Xna.Platform.Media
             videoPlatformStream.Player.Stop();
             videoPlatformStream.Player.SetDisplay(null);
 
-            ConcreteGame.IsPlayingVideo = false;
             State = MediaState.Stopped;
         }
 

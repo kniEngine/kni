@@ -177,10 +177,6 @@ namespace Microsoft.Xna.Platform
             base.Tick();
         }
 
-        [Obsolete("ConcreteGame.IsPlayingVideo must be removed when MonoGame " +
-                  "fully implements the XNA VideoPlayer contract.")]
-        public bool IsPlayingVideo { get; set; }
-
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
         //        controller.
         public iOSGameViewController ViewController
@@ -237,9 +233,6 @@ namespace Microsoft.Xna.Platform
             if (!Game.IsActive)
                 return;
 
-            if (this.IsPlayingVideo)
-                return;
-
             // FIXME: Remove this call, and the whole Tick method, once
             //        GraphicsDevice is where platform-specific Present
             //        functionality is actually implemented.  At that
@@ -247,9 +240,6 @@ namespace Microsoft.Xna.Platform
             //        directly to NSTimer.CreateRepeatingTimer.
             _viewController.View.MakeCurrent();
             Game.Tick();
-
-            if (this.IsPlayingVideo)
-                return;
 
             if (this.GraphicsDevice != null)
                 this.GraphicsDevice.Present();
@@ -259,9 +249,6 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeUpdate()
         {
-            if (this.IsPlayingVideo)
-                return false;
-
             return true;
         }
 

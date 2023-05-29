@@ -74,8 +74,6 @@ namespace Microsoft.Xna.Platform.Media
             if (concreteGame == null)
                 throw new InvalidOperationException("No iOS GameStrategy instance was available");
 
-            concreteGame.IsPlayingVideo = true;
-
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
@@ -114,7 +112,6 @@ namespace Microsoft.Xna.Platform.Media
 
             VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
             _videoPlatformStream.MovieView.MoviePlayer.Stop();
-            concreteGame.IsPlayingVideo = false;
             concreteGame.ViewController.DismissViewController(false, null);
 
             State = MediaState.Stopped;

@@ -146,9 +146,6 @@ namespace Microsoft.Xna.Platform
         {
             //return base.BeginDraw();
 
-            if (((ConcreteGame)Game.Strategy).IsPlayingVideo)
-                return false;
-            
             return true;
         }
 
