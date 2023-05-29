@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                GL.GenBuffers(1, out ibo);
+                ibo = GL.GenBuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
                 GraphicsExtensions.CheckGLError();

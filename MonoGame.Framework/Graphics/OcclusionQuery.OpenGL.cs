@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructOcclusionQuery()
         {
-            GL.GenQueries(1, out glQueryId);
+            glQueryId = GL.GenQuery();
             GraphicsExtensions.CheckGLError();
         }
 

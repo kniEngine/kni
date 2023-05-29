@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Framework.Graphics
             
             if (preferredMultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
-                GL.GenRenderbuffers(1, out color);
+                color = GL.GenRenderbuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
                 GraphicsExtensions.CheckGLError();
@@ -539,7 +539,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (depthInternalFormat != 0)
                 {
-                    GL.GenRenderbuffers(1, out depth);
+                    depth = GL.GenRenderbuffer();
                     GraphicsExtensions.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
                     GraphicsExtensions.CheckGLError();
@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         stencil = depth;
                         if (stencilInternalFormat != 0)
                         {
-                            GL.GenRenderbuffers(1, out stencil);
+                            stencil = GL.GenRenderbuffer();
                             GraphicsExtensions.CheckGLError();
                             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
                             GraphicsExtensions.CheckGLError();
@@ -657,7 +657,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
                 {
-                    GL.GenFramebuffers(1, out glResolveFramebuffer);
+                    glResolveFramebuffer = GL.GenFramebuffer();
                     GraphicsExtensions.CheckGLError();
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
                     GraphicsExtensions.CheckGLError();
@@ -733,7 +733,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var glFramebuffer = 0;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
-                GL.GenFramebuffers(1, out glFramebuffer);
+                glFramebuffer = GL.GenFramebuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
