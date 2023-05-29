@@ -41,7 +41,6 @@ namespace Microsoft.Xna.Platform
             base.Dispose(disposing);
         }
 
-        public static bool IsPlayingVideo { get; set; }
         private AndroidGameWindow _gameWindow;
 
         public override void Exit()
