@@ -763,8 +763,13 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DeleteRenderbuffersDelegate(int count, [In] [Out] ref int buffer);
+        internal unsafe delegate void DeleteRenderbuffersDelegate(int count, int* pbuffers);
         internal static DeleteRenderbuffersDelegate DeleteRenderbuffers;
+
+        internal static unsafe void DeleteRenderbuffer(int renderBuffer)
+        {
+            DeleteRenderbuffers(1, &renderBuffer);
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -795,8 +800,13 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DeleteFramebuffersDelegate(int count, ref int buffer);
+        internal unsafe delegate void DeleteFramebuffersDelegate(int count, int* pbuffers);
         internal static DeleteFramebuffersDelegate DeleteFramebuffers;
+
+        internal static unsafe void DeleteFramebuffer(int frameBuffer)
+        {
+            DeleteBuffers(1, &frameBuffer);
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -922,8 +932,13 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DeleteQueriesDelegate(int count, [In] [Out] ref int queryId);
+        internal unsafe delegate void DeleteQueriesDelegate(int count, int* pqueries);
         internal static DeleteQueriesDelegate DeleteQueries;
+
+        internal static unsafe void DeleteQuery(int query)
+        {
+            DeleteQueries(1, &query);
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1182,8 +1197,13 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DeleteTexturesDelegate(int count, ref int id);
+        internal unsafe delegate void DeleteTexturesDelegate(int count, int* ptextures);
         internal static DeleteTexturesDelegate DeleteTextures;
+
+        internal static unsafe void DeleteTexture(int texture)
+        {
+            DeleteTextures(1, &texture);
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1225,8 +1245,14 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DeleteBuffersDelegate(int count, [In] [Out] ref int buffer);
+        internal unsafe delegate void DeleteBuffersDelegate(int count, int* pbuffers);
         internal static DeleteBuffersDelegate DeleteBuffers;
+
+        internal static unsafe void DeleteBuffer(int buffer)
+        {
+            DeleteBuffers(1, &buffer);
+
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]

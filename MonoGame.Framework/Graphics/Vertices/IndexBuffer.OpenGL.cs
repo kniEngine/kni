@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteBuffers(1, ref ibo);
+                        GL.DeleteBuffer(ibo);
                         GraphicsExtensions.CheckGLError();
                     }
                 }

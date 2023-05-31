@@ -307,15 +307,15 @@ namespace Microsoft.Xna.Framework
 
             _glContext.MakeCurrent();
 
-			_glapi.DeleteFramebuffers(1, ref _framebuffer);
+			_glapi.DeleteFramebuffer(_framebuffer);
 			_framebuffer = 0;
 
-			_glapi.DeleteRenderbuffers(1, ref _colorbuffer);
+			_glapi.DeleteRenderbuffer(_colorbuffer);
 			_colorbuffer = 0;
 			
             if (_depthbuffer != 0)
             {
-			    _glapi.DeleteRenderbuffers(1, ref _depthbuffer);
+			    _glapi.DeleteRenderbuffer(_depthbuffer);
 			    _depthbuffer = 0;
             }
 		}

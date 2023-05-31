@@ -592,17 +592,17 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (colorIsRenderbuffer)
                 {
-                    GL.DeleteRenderbuffers(1, ref color);
+                    GL.DeleteRenderbuffer(color);
                     GraphicsExtensions.CheckGLError();
                 }
                 if (stencil != 0 && stencil != depth)
                 {
-                    GL.DeleteRenderbuffers(1, ref stencil);
+                    GL.DeleteRenderbuffer(stencil);
                     GraphicsExtensions.CheckGLError();
                 }
                 if (depth != 0)
                 {
-                    GL.DeleteRenderbuffers(1, ref depth);
+                    GL.DeleteRenderbuffer(depth);
                     GraphicsExtensions.CheckGLError();
                 }
 
@@ -624,13 +624,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     var fbo = 0;
                     if (_glFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        GL.DeleteFramebuffers(1, ref fbo);
+                        GL.DeleteFramebuffer(fbo);
                         GraphicsExtensions.CheckGLError();
                         _glFramebuffers.Remove(bindings);
                     }
                     if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        GL.DeleteFramebuffers(1, ref fbo);
+                        GL.DeleteFramebuffer(fbo);
                         GraphicsExtensions.CheckGLError();
                         _glResolveFramebuffers.Remove(bindings);
                     }

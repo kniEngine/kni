@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteQueries(1, ref glQueryId);
+                        GL.DeleteQuery(glQueryId);
                         GraphicsExtensions.CheckGLError();
                     }
                     glQueryId = -1;

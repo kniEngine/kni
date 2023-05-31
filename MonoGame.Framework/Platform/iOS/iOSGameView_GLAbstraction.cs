@@ -78,8 +78,8 @@ namespace Microsoft.Xna.Framework
             FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget target);
             void BindFramebuffer(FramebufferTarget target, int framebuffer);
             void BindRenderbuffer(RenderbufferTarget target, int renderbuffer);
-            void DeleteFramebuffers(int n, ref int framebuffers);
-            void DeleteRenderbuffers(int n, ref int renderbuffers);
+            void DeleteFramebuffer(int framebuffers);
+            void DeleteRenderbuffer(int renderbuffers);
             void FramebufferRenderbuffer(FramebufferTarget target, FramebufferAttachment attachment, RenderbufferTarget renderbuffertarget, int renderbuffer);
             int GenFramebuffer();
             int GenRenderbuffer();
@@ -111,14 +111,14 @@ namespace Microsoft.Xna.Framework
                 GL.BindRenderbuffer(target, renderbuffer);
             }
 
-            public void DeleteFramebuffers(int n, ref int framebuffers)
+            public void DeleteFramebuffer(int framebuffers)
             {
-                GL.DeleteFramebuffers(n, ref framebuffers);
+                GL.DeleteFramebuffer(framebuffers);
             }
 
-            public void DeleteRenderbuffers(int n, ref int renderbuffers)
+            public void DeleteRenderbuffer(int renderbuffers)
             {
-                GL.DeleteRenderbuffers(n, ref renderbuffers);
+                GL.DeleteRenderbuffer(renderbuffers);
             }
 
             public void FramebufferRenderbuffer(
