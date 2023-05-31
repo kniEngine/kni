@@ -11,8 +11,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexBuffer
     {
-        //internal uint vao;
-        internal int vbo;
+        //internal uint _vao;
+        internal int _vbo;
 
         private void PlatformConstructVertexBuffer()
         {
@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            vbo = 0;
+            _vbo = 0;
         }
 
         /// <summary>
@@ -30,13 +30,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         void GenerateIfRequired()
         {
-            if (vbo == 0)
+            if (_vbo == 0)
             {
-                //this.vao = GLExt.Oes.GenVertexArray();
-                //GLExt.Oes.BindVertexArray(this.vao);
-                this.vbo = GL.GenBuffer();
+                //this._vao = GLExt.Oes.GenVertexArray();
+                //GLExt.Oes.BindVertexArray(this._vao);
+                this._vbo = GL.GenBuffer();
                 GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(BufferTarget.ArrayBuffer, this.vbo);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
                 GraphicsExtensions.CheckGLError();
                 GL.BufferData(BufferTarget.ArrayBuffer,
                               new IntPtr(VertexDeclaration.VertexStride * VertexCount), IntPtr.Zero,
@@ -64,11 +64,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private void GetBufferData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
             where T : struct
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GraphicsExtensions.CheckGLError();
 
             // Pointer to the start of data in the vertex buffer
-            var ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
+            IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
             GraphicsExtensions.CheckGLError();
 
             ptr = (IntPtr)(ptr.ToInt64() + offsetInBytes);
@@ -76,22 +76,22 @@ namespace Microsoft.Xna.Framework.Graphics
             if (typeof(T) == typeof(byte) && vertexStride == 1)
             {
                 // If data is already a byte[] and stride is 1 we can skip the temporary buffer
-                var buffer = data as byte[];
+                byte[] buffer = data as byte[];
                 Marshal.Copy(ptr, buffer, startIndex * vertexStride, elementCount * vertexStride);
             }
             else
             {
                 // Temporary buffer to store the copied section of data
-                var tmp = new byte[elementCount * vertexStride];
+                byte[] tmp = new byte[elementCount * vertexStride];
                 // Copy from the vertex buffer to the temporary buffer
                 Marshal.Copy(ptr, tmp, 0, tmp.Length);
 
                 // Copy from the temporary buffer to the destination array
-                var tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
+                GCHandle tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
                 try
                 {
-                    var tmpPtr = tmpHandle.AddrOfPinnedObject();
-                    for (var i = 0; i < elementCount; i++)
+                    IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
+                    for (int i = 0; i < elementCount; i++)
                     {
                         data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
                         tmpPtr = (IntPtr)(tmpPtr.ToInt64() + vertexStride);
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GenerateIfRequired();
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GraphicsExtensions.CheckGLError();
 
             if (options == SetDataOptions.Discard)
@@ -132,14 +132,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
             }
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             if (elementSizeInByte == vertexStride || elementSizeInByte % vertexStride == 0)
             {
                 // there are no gaps so we can copy in one go
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInBytes);
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInBytes);
 
                     GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)(elementSizeInBytes * elementCount), dataPtr);
                     GraphicsExtensions.CheckGLError();
@@ -152,11 +152,11 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 // else we must copy each element separately
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
                     int dstOffset = offsetInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
                     for (int i = 0; i < elementCount; i++)
                     {
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteBuffer(vbo);
+                        GL.DeleteBuffer(_vbo);
                         GraphicsExtensions.CheckGLError();
                     }
                 }

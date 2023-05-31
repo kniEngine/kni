@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void SetVertexAttributeArray(bool[] attrs)
         {
-            for (var x = 0; x < attrs.Length; x++)
+            for (int x = 0; x < attrs.Length; x++)
             {
                 if (attrs[x])
                 {
@@ -108,29 +108,29 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
         {
-            var programHash = ShaderProgramHash;
-            var bindingsChanged = false;
+            int programHash = ShaderProgramHash;
+            bool bindingsChanged = false;
 
-            for (var slot = 0; slot < _vertexBuffers.Count; slot++)
+            for (int slot = 0; slot < _vertexBuffers.Count; slot++)
             {
                 var vertexBufferBinding = _vertexBuffers.Get(slot);
                 var vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
 
-                var vertexStride = vertexDeclaration.VertexStride;
-                var offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
+                int vertexStride = vertexDeclaration.VertexStride;
+                IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (!_attribsDirty &&
                     slot < _activeBufferBindingInfosCount &&
                     _bufferBindingInfos[slot].VertexOffset == offset &&
                     ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
                     _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
-                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.vbo)
+                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer._vbo)
                     continue;
 
                 bindingsChanged = true;
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer.vbo);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer._vbo);
                 GraphicsExtensions.CheckGLError();
 
                 for (int e = 0; e < attrInfo.Elements.Count; e++)
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _bufferBindingInfos[slot].VertexOffset = offset;
                 _bufferBindingInfos[slot].AttributeInfo = attrInfo;
                 _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.vbo;
+                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer._vbo;
             }
 
             _attribsDirty = false;
@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
                     _newEnabledVertexAttributes[eva] = false;
-                for (var slot = 0; slot < _vertexBuffers.Count; slot++)
+                for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
                     for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, IntPtr baseVertex)
         {
-            var programHash = ShaderProgramHash;
+            int programHash = ShaderProgramHash;
             var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
 
             // Apply the vertex attribute info
@@ -333,9 +333,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // So overwrite these states with what is needed to perform
             // the clear correctly and restore it afterwards.
             //
-		    var prevScissorRect = ScissorRectangle;
-		    var prevDepthStencilState = DepthStencilState;
-            var prevBlendState = BlendState;
+            Rectangle prevScissorRect = ScissorRectangle;
+            DepthStencilState prevDepthStencilState = DepthStencilState;
+            BlendState prevBlendState = BlendState;
             ScissorRectangle = _viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
@@ -439,7 +439,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (first.Length != second.Length)
                     return false;
 
-                for (var i = 0; i < first.Length; i++)
+                for (int i = 0; i < first.Length; i++)
                 {
                     if ((first[i].RenderTarget != second[i].RenderTarget) || (first[i].ArraySlice != second[i].ArraySlice))
                     {
@@ -477,9 +477,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformCreateRenderTarget(IRenderTarget renderTarget, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
-            var color = 0;
-            var depth = 0;
-            var stencil = 0;
+            int color = 0;
+            int depth = 0;
+            int stencil = 0;
             
             if (preferredMultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
@@ -621,7 +621,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 foreach (var bindings in bindingsToDelete)
                 {
-                    var fbo = 0;
+                    int fbo = 0;
                     if (_glFramebuffers.TryGetValue(bindings, out fbo))
                     {
                         GL.DeleteFramebuffer(fbo);
@@ -654,7 +654,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
             if (renderTarget.MultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
-                var glResolveFramebuffer = 0;
+                int glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
                 {
                     glResolveFramebuffer = GL.GenFramebuffer();
@@ -662,7 +662,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
                     GraphicsExtensions.CheckGLError();
 
-                    for (var i = 0; i < _currentRenderTargetCount; i++)
+                    for (int i = 0; i < _currentRenderTargetCount; i++)
                     {
                         var renderTargetGL = (IRenderTargetGL)_currentRenderTargetBindings[i].RenderTarget;
                         TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);                       
@@ -684,11 +684,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                var glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
+                int glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
 
-                for (var i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
@@ -714,7 +714,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            for (var i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < _currentRenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
@@ -730,7 +730,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private IRenderTarget PlatformApplyRenderTargets()
         {
-            var glFramebuffer = 0;
+            int glFramebuffer = 0;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
                 glFramebuffer = GL.GenFramebuffer();
@@ -744,7 +744,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
                 GraphicsExtensions.CheckGLError();
 
-                for (var i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
@@ -812,7 +812,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            var shaderProgram = _programCache.GetProgram(VertexShader, PixelShader, ShaderProgramHash2);
+            ShaderProgram shaderProgram = _programCache.GetProgram(VertexShader, PixelShader, ShaderProgramHash2);
             if (shaderProgram.Program == -1)
                 return;
 
@@ -824,7 +824,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _shaderProgram = shaderProgram;
             }
 
-            var posFixupLoc = shaderProgram.GetUniformLocation("posFixup");
+            int posFixupLoc = shaderProgram.GetUniformLocation("posFixup");
             if (posFixupLoc == -1)
                 return;
 
@@ -929,7 +929,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyScissorRectangle()
         {
-            var scissorRect = _scissorRectangle;
+            Rectangle scissorRect = _scissorRectangle;
             if (!IsRenderTargetBound)
                 scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
@@ -959,7 +959,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_indexBuffer != null)
                 {
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer.ibo);
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer._ibo);
                     GraphicsExtensions.CheckGLError();
                 }
                 _indexBufferDirty = false;
@@ -1011,12 +1011,12 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
 			var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
-            var indexElementSize = shortIndices ? 2 : 4;
-			var indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
-			var indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
+            int indexElementSize = shortIndices ? 2 : 4;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            int indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
 			var target = PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
@@ -1046,7 +1046,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _vertexBuffersDirty = true;
 
             // Pin the buffers.
-            var vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             try
             {
                 // Setup the vertex declaration to point at the VB data.
@@ -1102,11 +1102,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _indexBufferDirty = true;
 
             // Pin the buffers.
-            var vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            var ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
             {
-                var vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
                 vertexDeclaration.GraphicsDevice = this;
@@ -1146,11 +1146,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _indexBufferDirty = true;
 
             // Pin the buffers.
-            var vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            var ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
             {
-                var vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
                 vertexDeclaration.GraphicsDevice = this;
@@ -1182,12 +1182,12 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
             var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
-            var indexElementSize = shortIndices ? 2 : 4;
-            var indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
-            var indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
+            int indexElementSize = shortIndices ? 2 : 4;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            int indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
             var target = PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
@@ -1216,18 +1216,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGetBackBufferData<T>(Rectangle? rectangle, T[] data, int startIndex, int count) where T : struct
         {
-            var rect = rectangle ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            var tSize = ReflectionHelpers.SizeOf<T>();
-            var flippedY = PresentationParameters.BackBufferHeight - rect.Y - rect.Height;
+            Rectangle rect = rectangle ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int flippedY = PresentationParameters.BackBufferHeight - rect.Y - rect.Height;
             GL.ReadPixels(rect.X, flippedY, rect.Width, rect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, data);
 
             // buffer is returned upside down, so we swap the rows around when copying over
-            var rowSize = rect.Width*PresentationParameters.BackBufferFormat.GetSize() / tSize;
-            var row = new T[rowSize];
-            for (var dy = 0; dy < rect.Height/2; dy++)
+            int rowSize = rect.Width * PresentationParameters.BackBufferFormat.GetSize() / tSize;
+            T[] row = new T[rowSize];
+            for (int dy = 0; dy < rect.Height/2; dy++)
             {
-                var topRow = startIndex + dy*rowSize;
-                var bottomRow = startIndex + (rect.Height - dy - 1)*rowSize;
+                int topRow = startIndex + dy*rowSize;
+                int bottomRow = startIndex + (rect.Height - dy - 1)*rowSize;
                 // copy the bottom row to buffer
                 Array.Copy(data, bottomRow, row, 0, rowSize);
                 // copy top row to bottom row

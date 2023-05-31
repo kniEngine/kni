@@ -26,12 +26,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApply()
         {
-            for (var i = 0; i < _actualSamplers.Length; i++)
+            for (int i = 0; i < _actualSamplers.Length; i++)
             {
-                var sampler = _actualSamplers[i];
-                var texture = _device.Textures[i];
+                SamplerState sampler = _actualSamplers[i];
+                Texture texture = _device.Textures[i];
 
-                if (sampler != null && texture != null && sampler != texture.glLastSamplerState)
+                if (sampler != null && texture != null && sampler != texture._glLastSamplerState)
                 {
                     // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
                     // However, I suspect that rendering from the same texture with different sampling modes
@@ -45,8 +45,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     // GL.BindTexture(texture.glTarget, texture.glTexture);
                     // GraphicsExtensions.CheckGLError();
 
-                    sampler.Activate(_device, texture.glTarget, texture.LevelCount > 1);
-                    texture.glLastSamplerState = sampler;
+                    sampler.Activate(_device, texture._glTarget, texture.LevelCount > 1);
+                    texture._glLastSamplerState = sampler;
                 }
             }
         }

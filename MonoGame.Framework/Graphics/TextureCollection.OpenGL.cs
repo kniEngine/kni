@@ -20,26 +20,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void PlatformClear()
         {
-            for (var i = 0; i < _targets.Length; i++)
+            for (int i = 0; i < _targets.Length; i++)
                 _targets[i] = 0;
         }
 
         internal void PlatformApply()
         {
-            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
                 if ((_dirty & mask) == 0)
                     continue;
 
-                var tex = _textures[i];
+                Texture tex = _textures[i];
 
                 GL.ActiveTexture(TextureUnit.Texture0 + i);
                 GraphicsExtensions.CheckGLError();
 
                 // Clear the previous binding if the 
                 // target is different from the new one.
-                if (_targets[i] != 0 && (tex == null || _targets[i] != tex.glTarget))
+                if (_targets[i] != 0 && (tex == null || _targets[i] != tex._glTarget))
                 {
                     GL.BindTexture(_targets[i], 0);
                     _targets[i] = 0;
@@ -48,8 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (tex != null)
                 {
-                    _targets[i] = tex.glTarget;
-                    GL.BindTexture(tex.glTarget, tex.glTexture);
+                    _targets[i] = tex._glTarget;
+                    GL.BindTexture(tex._glTarget, tex._glTexture);
                     GraphicsExtensions.CheckGLError();
 
                     unchecked { _device.CurrentContext._graphicsMetrics._textureCount++; }
