@@ -90,21 +90,23 @@ namespace Microsoft.Xna.Framework
             Sdl.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
             Sdl.SetHint("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1");
 
+            // load app icon
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
             // when running NUnit tests entry assembly can be null
             if (Assembly.GetEntryAssembly() != null)
             {
                 using (
-                    var stream =
-                        Assembly.GetEntryAssembly().GetManifestResourceStream(Assembly.GetEntryAssembly().EntryPoint.DeclaringType.Namespace + ".Icon.bmp") ??
-                        Assembly.GetEntryAssembly().GetManifestResourceStream("Icon.bmp") ??
+                    Stream stream =
+                        entryAssembly.GetManifestResourceStream(entryAssembly.EntryPoint.DeclaringType.Namespace + ".Icon.bmp") ??
+                        entryAssembly.GetManifestResourceStream("Icon.bmp") ??
                         Assembly.GetExecutingAssembly().GetManifestResourceStream("MonoGame.bmp"))
                 {
                     if (stream != null)
-                        using (var br = new BinaryReader(stream))
+                        using (BinaryReader br = new BinaryReader(stream))
                         {
                             try
                             {
-                                var src = Sdl.RwFromMem(br.ReadBytes((int)stream.Length), (int)stream.Length);
+                                IntPtr src = Sdl.RwFromMem(br.ReadBytes((int)stream.Length), (int)stream.Length);
                                 _icon = Sdl.LoadBMP_RW(src, 1);
                             }
                             catch { }
@@ -119,7 +121,7 @@ namespace Microsoft.Xna.Framework
 
         internal void CreateWindow()
         {
-            var initflags =
+            int initflags =
                 Sdl.Window.State.OpenGL |
                 Sdl.Window.State.Hidden |
                 Sdl.Window.State.InputFocus |
@@ -128,8 +130,8 @@ namespace Microsoft.Xna.Framework
             if (_handle != IntPtr.Zero)
                 Sdl.Window.Destroy(_handle);
 
-            var winx = Sdl.Window.PosCentered;
-            var winy = Sdl.Window.PosCentered;
+            int winx = Sdl.Window.PosCentered;
+            int winy = Sdl.Window.PosCentered;
 
             // if we are on Linux, start on the current screen
             if (CurrentPlatform.OS == OS.Linux)
@@ -164,13 +166,13 @@ namespace Microsoft.Xna.Framework
 
         private static int GetMouseDisplay()
         {
-            var rect = new Sdl.Rectangle();
+            Sdl.Rectangle rect = new Sdl.Rectangle();
 
             int x, y;
             Sdl.Mouse.GetGlobalState(out x, out y);
 
-            var displayCount = Sdl.Display.GetNumVideoDisplays();
-            for (var i = 0; i < displayCount; i++)
+            int displayCount = Sdl.Display.GetNumVideoDisplays();
+            for (int i = 0; i < displayCount; i++)
             {
                 Sdl.Display.GetBounds(i, out rect);
 
@@ -272,7 +274,7 @@ namespace Microsoft.Xna.Framework
 
         public void ClientResize(int width, int height)
         {
-            var device = _game.Strategy.GraphicsDevice;
+            GraphicsDevice device = _game.Strategy.GraphicsDevice;
 
             // SDL reports many resize events even if the Size didn't change.
             // Only call the code below if it actually changed.
