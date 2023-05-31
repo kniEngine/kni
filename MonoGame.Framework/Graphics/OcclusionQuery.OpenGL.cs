@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructOcclusionQuery()
         {
-            GL.GenQueries(1, out glQueryId);
+            glQueryId = GL.GenQuery();
             GraphicsExtensions.CheckGLError();
         }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteQueries(1, ref glQueryId);
+                        GL.DeleteQuery(glQueryId);
                         GraphicsExtensions.CheckGLError();
                     }
                     glQueryId = -1;

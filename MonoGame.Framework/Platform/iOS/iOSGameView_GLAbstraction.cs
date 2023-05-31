@@ -78,11 +78,11 @@ namespace Microsoft.Xna.Framework
             FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget target);
             void BindFramebuffer(FramebufferTarget target, int framebuffer);
             void BindRenderbuffer(RenderbufferTarget target, int renderbuffer);
-            void DeleteFramebuffers(int n, ref int framebuffers);
-            void DeleteRenderbuffers(int n, ref int renderbuffers);
+            void DeleteFramebuffer(int framebuffers);
+            void DeleteRenderbuffer(int renderbuffers);
             void FramebufferRenderbuffer(FramebufferTarget target, FramebufferAttachment attachment, RenderbufferTarget renderbuffertarget, int renderbuffer);
-            void GenFramebuffers(int n, ref int framebuffers);
-            void GenRenderbuffers(int n, ref int renderbuffers);
+            int GenFramebuffer();
+            int GenRenderbuffer();
             void GetInteger(GetPName name, ref int value);
             void Scissor(int x, int y, int width, int height);
             void Viewport(int x, int y, int width, int height);
@@ -111,14 +111,14 @@ namespace Microsoft.Xna.Framework
                 GL.BindRenderbuffer(target, renderbuffer);
             }
 
-            public void DeleteFramebuffers(int n, ref int framebuffers)
+            public void DeleteFramebuffer(int framebuffers)
             {
-                GL.DeleteFramebuffers(n, ref framebuffers);
+                GL.DeleteFramebuffer(framebuffers);
             }
 
-            public void DeleteRenderbuffers(int n, ref int renderbuffers)
+            public void DeleteRenderbuffer(int renderbuffers)
             {
-                GL.DeleteRenderbuffers(n, ref renderbuffers);
+                GL.DeleteRenderbuffer(renderbuffers);
             }
 
             public void FramebufferRenderbuffer(
@@ -127,14 +127,14 @@ namespace Microsoft.Xna.Framework
                 GL.FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
             }
 
-            public void GenFramebuffers(int n, ref int framebuffers)
+            public int GenFramebuffer()
             {
-                GL.GenFramebuffers(n, out framebuffers);
+                return GL.GenFramebuffer();
             }
 
-            public void GenRenderbuffers(int n, ref int renderbuffers)
+            public int GenRenderbuffer()
             {
-                GL.GenRenderbuffers(n, out renderbuffers);
+                return GL.GenRenderbuffer();
             }
 
             public void GetInteger(GetPName name, ref int value)

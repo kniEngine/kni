@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
 
             var framebufferId = 0;
-            GL.GenFramebuffers(1, out framebufferId);
+            framebufferId = GL.GenFramebuffer();
             GraphicsExtensions.CheckGLError();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
             GraphicsExtensions.CheckGLError();
@@ -219,7 +219,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.ReadPixels(rect.X, rect.Y, rect.Width, rect.Height, this.glFormat, this.glType, data);
             GraphicsExtensions.CheckGLError();
-            GL.DeleteFramebuffers(1, ref framebufferId);
+            GL.DeleteFramebuffer(framebufferId);
 #else
             var tSizeInByte = ReflectionHelpers.SizeOf<T>();
             GL.BindTexture(TextureTarget.Texture2D, this.glTexture);
@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (this.glTexture < 0)
             {
-                GL.GenTextures(1, out this.glTexture);
+                this.glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either

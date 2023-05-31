@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Framework.Graphics
             
             if (preferredMultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
-                GL.GenRenderbuffers(1, out color);
+                color = GL.GenRenderbuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
                 GraphicsExtensions.CheckGLError();
@@ -539,7 +539,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (depthInternalFormat != 0)
                 {
-                    GL.GenRenderbuffers(1, out depth);
+                    depth = GL.GenRenderbuffer();
                     GraphicsExtensions.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
                     GraphicsExtensions.CheckGLError();
@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         stencil = depth;
                         if (stencilInternalFormat != 0)
                         {
-                            GL.GenRenderbuffers(1, out stencil);
+                            stencil = GL.GenRenderbuffer();
                             GraphicsExtensions.CheckGLError();
                             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
                             GraphicsExtensions.CheckGLError();
@@ -592,17 +592,17 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (colorIsRenderbuffer)
                 {
-                    GL.DeleteRenderbuffers(1, ref color);
+                    GL.DeleteRenderbuffer(color);
                     GraphicsExtensions.CheckGLError();
                 }
                 if (stencil != 0 && stencil != depth)
                 {
-                    GL.DeleteRenderbuffers(1, ref stencil);
+                    GL.DeleteRenderbuffer(stencil);
                     GraphicsExtensions.CheckGLError();
                 }
                 if (depth != 0)
                 {
-                    GL.DeleteRenderbuffers(1, ref depth);
+                    GL.DeleteRenderbuffer(depth);
                     GraphicsExtensions.CheckGLError();
                 }
 
@@ -624,13 +624,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     var fbo = 0;
                     if (_glFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        GL.DeleteFramebuffers(1, ref fbo);
+                        GL.DeleteFramebuffer(fbo);
                         GraphicsExtensions.CheckGLError();
                         _glFramebuffers.Remove(bindings);
                     }
                     if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
                     {
-                        GL.DeleteFramebuffers(1, ref fbo);
+                        GL.DeleteFramebuffer(fbo);
                         GraphicsExtensions.CheckGLError();
                         _glResolveFramebuffers.Remove(bindings);
                     }
@@ -657,7 +657,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
                 {
-                    GL.GenFramebuffers(1, out glResolveFramebuffer);
+                    glResolveFramebuffer = GL.GenFramebuffer();
                     GraphicsExtensions.CheckGLError();
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
                     GraphicsExtensions.CheckGLError();
@@ -733,7 +733,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var glFramebuffer = 0;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
-                GL.GenFramebuffers(1, out glFramebuffer);
+                glFramebuffer = GL.GenFramebuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();

@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Framework
             int viewportHeight = (int)Math.Round(Layer.Bounds.Size.Height * Layer.ContentsScale);
             int viewportWidth = (int)Math.Round(Layer.Bounds.Size.Width * Layer.ContentsScale);
 
-			_glapi.GenFramebuffers(1, ref _framebuffer);
+            _framebuffer = _glapi.GenFramebuffer();
             _glapi.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
 			// Create our Depth buffer. Color buffer must be the last one bound
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework
                 var preferredDepthFormat = gdm.PreferredDepthStencilFormat;
                 if (preferredDepthFormat != DepthFormat.None)
                 {
-                    GL.GenRenderbuffers(1, out _depthbuffer);
+                    _depthbuffer = GL.GenRenderbuffer();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _depthbuffer);
                     var internalFormat = RenderbufferStorage.DepthComponent16;
                     if (preferredDepthFormat == DepthFormat.Depth24)
@@ -248,7 +248,7 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-			_glapi.GenRenderbuffers(1, ref _colorbuffer);
+            _colorbuffer = _glapi.GenRenderbuffer();
             _glapi.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _colorbuffer);
 
 			// TODO: EAGLContext.RenderBufferStorage returns false
@@ -307,15 +307,15 @@ namespace Microsoft.Xna.Framework
 
             _glContext.MakeCurrent();
 
-			_glapi.DeleteFramebuffers(1, ref _framebuffer);
+			_glapi.DeleteFramebuffer(_framebuffer);
 			_framebuffer = 0;
 
-			_glapi.DeleteRenderbuffers(1, ref _colorbuffer);
+			_glapi.DeleteRenderbuffer(_colorbuffer);
 			_colorbuffer = 0;
 			
             if (_depthbuffer != 0)
             {
-			    _glapi.DeleteRenderbuffers(1, ref _depthbuffer);
+			    _glapi.DeleteRenderbuffer(_depthbuffer);
 			    _depthbuffer = 0;
             }
 		}

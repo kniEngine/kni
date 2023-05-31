@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    GL.DeleteTextures(1, ref glTexture);
+                    GL.DeleteTexture(glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
             }
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteTextures(1, ref glTexture);
+                        GL.DeleteTexture(glTexture);
                         GraphicsExtensions.CheckGLError();
                     }
                 }

@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vbo == 0)
             {
-                //GLExt.Oes.GenVertexArrays(1, out this.vao);
+                //this.vao = GLExt.Oes.GenVertexArray();
                 //GLExt.Oes.BindVertexArray(this.vao);
-                GL.GenBuffers(1, out this.vbo);
+                this.vbo = GL.GenBuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(BufferTarget.ArrayBuffer, this.vbo);
                 GraphicsExtensions.CheckGLError();
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteBuffers(1, ref vbo);
+                        GL.DeleteBuffer(vbo);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
