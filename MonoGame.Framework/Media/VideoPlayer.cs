@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Media
                 if (State == MediaState.Stopped)
                     return TimeSpan.Zero;
 
-                return Strategy.PlatformGetPlayPosition();
+                return Strategy.PlayPosition;
             }
         }
 

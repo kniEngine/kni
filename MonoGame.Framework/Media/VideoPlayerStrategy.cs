@@ -57,6 +57,10 @@ namespace Microsoft.Xna.Platform.Media
             set { _isMuted = value; }
         }
 
+        virtual public TimeSpan PlayPosition
+        {
+            get { throw new NotImplementedException(); }
+        }
 
         ~VideoPlayerStrategy()
         {
@@ -65,10 +69,6 @@ namespace Microsoft.Xna.Platform.Media
 
         protected abstract void PlatformUpdateState(ref MediaState state);
 
-        virtual public TimeSpan PlatformGetPlayPosition()
-        {
-            throw new NotImplementedException();
-        }
 
         virtual public Texture2D PlatformGetTexture()
         {
