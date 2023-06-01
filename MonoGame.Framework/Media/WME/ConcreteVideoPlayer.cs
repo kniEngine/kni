@@ -27,6 +27,12 @@ namespace Microsoft.Xna.Platform.Media
             protected set { base.State = value; }
         }
 
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
         public override bool IsMuted
         {
             get { return base.IsMuted; }
@@ -37,10 +43,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public override bool IsLooped
+        public override TimeSpan PlayPosition
         {
-            get { return base.IsLooped; }
-            set { base.IsLooped = value; }
+            get { return TimeSpan.FromSeconds(_mediaEngine.CurrentTime); }
         }
 
         public override float Volume
@@ -154,11 +159,6 @@ namespace Microsoft.Xna.Platform.Media
             _mediaEngine.CurrentTime = 0.0;
 
             State = MediaState.Stopped;
-        }
-
-        public override TimeSpan PlatformGetPlayPosition()
-        {
-            return TimeSpan.FromSeconds(_mediaEngine.CurrentTime);
         }
 
         private void PlatformSetVolume()
