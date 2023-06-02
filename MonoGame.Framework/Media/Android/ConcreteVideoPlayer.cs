@@ -37,7 +37,12 @@ namespace Microsoft.Xna.Platform.Media
         public override bool IsLooped
         {
             get { return base.IsLooped; }
-            set { base.IsLooped = value; }
+            set
+            {
+                base.IsLooped = value;
+
+                _player.Looping = true;
+            }
         }
 
         public override bool IsMuted
