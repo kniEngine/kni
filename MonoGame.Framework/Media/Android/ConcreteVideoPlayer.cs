@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override TimeSpan PlayPosition
         {
-            get { throw new NotImplementedException(); }
+            get { return TimeSpan.FromMilliseconds(_player.CurrentPosition); }
         }
 
         public override float Volume
