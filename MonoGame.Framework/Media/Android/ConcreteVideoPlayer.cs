@@ -61,8 +61,8 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.Volume = value;
-                if (base.Video != null)
-                    PlatformSetVolume();
+                
+                PlatformSetVolume();
             }
         }
 
@@ -206,7 +206,8 @@ namespace Microsoft.Xna.Platform.Media
 
         private void PlatformSetVolume()
         {
-            throw new NotImplementedException();
+            float logVolume = (float)Math.Pow(Volume, 2);
+            _player.SetVolume(logVolume, logVolume);
         }
 
         protected override void Dispose(bool disposing)
