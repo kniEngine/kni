@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Platform.Media
 
             base.Video = video;
             
-            var afd = AndroidGameWindow.Activity.Assets.OpenFd(base.Video.FileName);
+            var afd = Android.App.Application.Context.Assets.OpenFd(base.Video.FileName);
             if (afd == null)
                 return;
 
