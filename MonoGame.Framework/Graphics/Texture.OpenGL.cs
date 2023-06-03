@@ -9,44 +9,44 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        internal int glTexture = -1;
-        internal TextureTarget glTarget;
-        internal TextureUnit glTextureUnit = TextureUnit.Texture0;
-        internal PixelInternalFormat glInternalFormat;
-        internal PixelFormat glFormat;
-        internal PixelType glType;
-        internal SamplerState glLastSamplerState;
+        internal int _glTexture = -1;
+        internal TextureTarget _glTarget;
+        internal TextureUnit _glTextureUnit = TextureUnit.Texture0;
+        internal PixelInternalFormat _glInternalFormat;
+        internal PixelFormat _glFormat;
+        internal PixelType _glType;
+        internal SamplerState _glLastSamplerState;
 
         private void PlatformGraphicsDeviceResetting()
         {
-            if (glTexture > 0)
+            if (_glTexture > 0)
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    GL.DeleteTexture(glTexture);
+                    GL.DeleteTexture(_glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
             }
-            glTexture = -1;
+            _glTexture = -1;
 
-            glLastSamplerState = null;
+            _glLastSamplerState = null;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
-                if (glTexture > 0)
+                if (_glTexture > 0)
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteTexture(glTexture);
+                        GL.DeleteTexture(_glTexture);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
-                glTexture = -1;
+                _glTexture = -1;
 
-                glLastSamplerState = null;
+                _glLastSamplerState = null;
             }
 
             base.Dispose(disposing);
@@ -63,16 +63,16 @@ namespace Microsoft.Xna.Framework.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            var supportsSRgb = graphicsDevice.GraphicsCapabilities.SupportsSRgb;
-            var supportsS3tc = graphicsDevice.GraphicsCapabilities.SupportsS3tc;
-            var supportsPvrtc = graphicsDevice.GraphicsCapabilities.SupportsPvrtc;
-            var supportsEtc1 = graphicsDevice.GraphicsCapabilities.SupportsEtc1;
-            var supportsEtc2 = graphicsDevice.GraphicsCapabilities.SupportsEtc2;
-            var supportsAtitc = graphicsDevice.GraphicsCapabilities.SupportsAtitc;
-            var supportsFloat = graphicsDevice.GraphicsCapabilities.SupportsFloatTextures;
-            var supportsHalfFloat = graphicsDevice.GraphicsCapabilities.SupportsHalfFloatTextures;
-            var supportsNormalized = graphicsDevice.GraphicsCapabilities.SupportsNormalized;
-            var isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.glMajorVersion == 2;
+            bool supportsSRgb = graphicsDevice.GraphicsCapabilities.SupportsSRgb;
+            bool supportsS3tc = graphicsDevice.GraphicsCapabilities.SupportsS3tc;
+            bool supportsPvrtc = graphicsDevice.GraphicsCapabilities.SupportsPvrtc;
+            bool supportsEtc1 = graphicsDevice.GraphicsCapabilities.SupportsEtc1;
+            bool supportsEtc2 = graphicsDevice.GraphicsCapabilities.SupportsEtc2;
+            bool supportsAtitc = graphicsDevice.GraphicsCapabilities.SupportsAtitc;
+            bool supportsFloat = graphicsDevice.GraphicsCapabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = graphicsDevice.GraphicsCapabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = graphicsDevice.GraphicsCapabilities.SupportsNormalized;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.glMajorVersion == 2;
 
             switch (format)
             {

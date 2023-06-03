@@ -14,19 +14,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructTexture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-            this.glTarget = TextureTarget.Texture3D;
+            this._glTarget = TextureTarget.Texture3D;
 
             Threading.EnsureUIThread();
             {
-                this.glTexture = GL.GenTexture();
+                this._glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 
-                GL.BindTexture(glTarget, glTexture);
+                GL.BindTexture(_glTarget, _glTexture);
                 GraphicsExtensions.CheckGLError();
 
-                ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
+                ToGLSurfaceFormat(format, GraphicsDevice, out _glInternalFormat, out _glFormat, out _glType);
 
-                GL.TexImage3D(glTarget, 0, glInternalFormat, width, height, depth, 0, glFormat, glType, IntPtr.Zero);
+                GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
                 GraphicsExtensions.CheckGLError();
             }
 
@@ -43,16 +43,16 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
             {
-                var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
-                    GL.BindTexture(glTarget, glTexture);
+                    GL.BindTexture(_glTarget, _glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    GL.TexSubImage3D(glTarget, level, left, top, front, width, height, depth, glFormat, glType, dataPtr);
+                    GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
                     GraphicsExtensions.CheckGLError();
                 }
                 finally

@@ -17,14 +17,14 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-            this.glTarget = TextureTarget.TextureCubeMap;
+            this._glTarget = TextureTarget.TextureCubeMap;
 
             Threading.EnsureUIThread();
             {
-                this.glTexture = GL.GenTexture();
+                this._glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 
-                GL.BindTexture(TextureTarget.TextureCubeMap, this.glTexture);
+                GL.BindTexture(TextureTarget.TextureCubeMap, this._glTexture);
                 GraphicsExtensions.CheckGLError();
 
                 GL.TexParameter(
@@ -41,15 +41,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
                 GraphicsExtensions.CheckGLError();
 
-                ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType);
+                ToGLSurfaceFormat(format, GraphicsDevice, out _glInternalFormat, out _glFormat, out _glType);
 
-                for (var i = 0; i < 6; i++)
+                for (int i = 0; i < 6; i++)
                 {
-                    var target = GetGLCubeFace((CubeMapFace)i);
+                    TextureTarget target = GetGLCubeFace((CubeMapFace)i);
 
-                    if (glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                     {
-                        var imageSize = 0;
+                        int imageSize = 0;
                         switch (format)
                         {
                             case SurfaceFormat.RgbPvrtc2Bpp:
@@ -81,24 +81,24 @@ namespace Microsoft.Xna.Framework.Graphics
                             default:
                                 throw new NotSupportedException();
                         }
-                        GL.CompressedTexImage2D(target, 0, glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
+                        GL.CompressedTexImage2D(target, 0, _glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
                         GraphicsExtensions.CheckGLError();
                     }
                     else
                     {
-                        GL.TexImage2D(target, 0, glInternalFormat, size, size, 0, glFormat, glType, IntPtr.Zero);
+                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, 0, _glFormat, _glType, IntPtr.Zero);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
 
                 if (mipMap)
                 {
-                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == glTarget);
+                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == _glTarget);
 #if IOS || TVOS || ANDROID
                     GL.GenerateMipmap(TextureTarget.TextureCubeMap);
                     GraphicsExtensions.CheckGLError();
 #else
-                    GL.GenerateMipmap(glTarget);
+                    GL.GenerateMipmap(_glTarget);
                     GraphicsExtensions.CheckGLError();
                     // This updates the mipmaps after a change in the base texture
                     GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
@@ -114,43 +114,43 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
 #if OPENGL && DESKTOPGL
-            var target = GetGLCubeFace(cubeMapFace);
-            var tSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GL.BindTexture(TextureTarget.TextureCubeMap, this.glTexture);
+            TextureTarget target = GetGLCubeFace(cubeMapFace);
+            int tSizeInByte = ReflectionHelpers.SizeOf<T>();
+            GL.BindTexture(TextureTarget.TextureCubeMap, this._glTexture);
 
-            if (glFormat == GLPixelFormat.CompressedTextureFormats)
+            if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-                var pixelToT = Format.GetSize() / tSizeInByte;
-                var tFullWidth = Math.Max(this._size >> level, 1) / 4 * pixelToT;
-                var temp = new T[Math.Max(this._size >> level, 1) / 4 * tFullWidth];
+                int pixelToT = Format.GetSize() / tSizeInByte;
+                int tFullWidth = Math.Max(this._size >> level, 1) / 4 * pixelToT;
+                T[] temp = new T[Math.Max(this._size >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(target, level, temp);
                 GraphicsExtensions.CheckGLError();
 
-                var rowCount = rect.Height / 4;
-                var tRectWidth = rect.Width / 4 * Format.GetSize() / tSizeInByte;
-                for (var r = 0; r < rowCount; r++)
+                int rowCount = rect.Height / 4;
+                int tRectWidth = rect.Width / 4 * Format.GetSize() / tSizeInByte;
+                for (int r = 0; r < rowCount; r++)
                 {
-                    var tempStart = rect.X / 4 * pixelToT + (rect.Top / 4 + r) * tFullWidth;
-                    var dataStart = startIndex + r * tRectWidth;
+                    int tempStart = rect.X / 4 * pixelToT + (rect.Top / 4 + r) * tFullWidth;
+                    int dataStart = startIndex + r * tRectWidth;
                     Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
             }
             else
             {
                 // we need to convert from our format size to the size of T here
-                var tFullWidth = Math.Max(this._size >> level, 1) * Format.GetSize() / tSizeInByte;
-                var temp = new T[Math.Max(this._size >> level, 1) * tFullWidth];
-                GL.GetTexImage(target, level, glFormat, glType, temp);
+                int tFullWidth = Math.Max(this._size >> level, 1) * Format.GetSize() / tSizeInByte;
+                T[] temp = new T[Math.Max(this._size >> level, 1) * tFullWidth];
+                GL.GetTexImage(target, level, _glFormat, _glType, temp);
                 GraphicsExtensions.CheckGLError();
 
-                var pixelToT = Format.GetSize() / tSizeInByte;
-                var rowCount = rect.Height;
-                var tRectWidth = rect.Width * pixelToT;
-                for (var r = 0; r < rowCount; r++)
+                int pixelToT = Format.GetSize() / tSizeInByte;
+                int rowCount = rect.Height;
+                int tRectWidth = rect.Width * pixelToT;
+                for (int r = 0; r < rowCount; r++)
                 {
-                    var tempStart = rect.X * pixelToT + (r + rect.Top) * tFullWidth;
-                    var dataStart = startIndex + r * tRectWidth;
+                    int tempStart = rect.X * pixelToT + (r + rect.Top) * tFullWidth;
+                    int dataStart = startIndex + r * tRectWidth;
                     Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
             }
@@ -164,29 +164,29 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
             {
-                var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 // Use try..finally to make sure dataHandle is freed in case of an error
                 try
                 {
-                    var startBytes = startIndex * elementSizeInByte;
-                    var dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * elementSizeInByte;
+                    IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                    GL.BindTexture(TextureTarget.TextureCubeMap, this.glTexture);
+                    GL.BindTexture(TextureTarget.TextureCubeMap, this._glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    var target = GetGLCubeFace(face);
-                    if (glFormat == GLPixelFormat.CompressedTextureFormats)
+                    TextureTarget target = GetGLCubeFace(face);
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                     {
                         GL.CompressedTexSubImage2D(
                             target, level, rect.X, rect.Y, rect.Width, rect.Height,
-                            glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                            _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
                         GraphicsExtensions.CheckGLError();
                     }
                     else
                     {
                         GL.TexSubImage2D(
-                            target, level, rect.X, rect.Y, rect.Width, rect.Height, glFormat, glType, dataPtr);
+                            target, level, rect.X, rect.Y, rect.Width, rect.Height, _glFormat, _glType, dataPtr);
                         GraphicsExtensions.CheckGLError();
                     }
                 }

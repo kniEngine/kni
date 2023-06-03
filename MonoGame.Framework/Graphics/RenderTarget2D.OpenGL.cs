@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget2D : IRenderTargetGL
     {
-        int IRenderTargetGL.GLTexture { get { return glTexture; } }
-        TextureTarget IRenderTargetGL.GLTarget { get { return glTarget; } }
+        int IRenderTargetGL.GLTexture { get { return _glTexture; } }
+        TextureTarget IRenderTargetGL.GLTarget { get { return _glTarget; } }
         int IRenderTargetGL.GLColorBuffer { get; set; }
         int IRenderTargetGL.GLDepthBuffer { get; set; }
         int IRenderTargetGL.GLStencilBuffer { get; set; }
@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySlice != 0)
                 throw new NotImplementedException("arraySlice is not implemented for Texture2D");
 
-            return glTarget;
+            return _glTarget;
         }
 
         private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,

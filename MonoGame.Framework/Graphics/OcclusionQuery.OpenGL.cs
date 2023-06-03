@@ -8,17 +8,17 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class OcclusionQuery
     {
-        private int glQueryId = -1;
+        private int _glQueryId = -1;
 
         private void PlatformConstructOcclusionQuery()
         {
-            glQueryId = GL.GenQuery();
+            _glQueryId = GL.GenQuery();
             GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformBegin()
         {
-            GL.BeginQuery(QueryTarget.SamplesPassed, glQueryId);
+            GL.BeginQuery(QueryTarget.SamplesPassed, _glQueryId);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool PlatformGetResult(out int pixelCount)
         {
             int resultReady = 0;
-            GL.GetQueryObject(glQueryId, GetQueryObjectParam.QueryResultAvailable, out resultReady);
+            GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResultAvailable, out resultReady);
             GraphicsExtensions.CheckGLError();
 
             if (resultReady == 0)
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return false;
             }
 
-            GL.GetQueryObject(glQueryId, GetQueryObjectParam.QueryResult, out pixelCount);
+            GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out pixelCount);
             GraphicsExtensions.CheckGLError();
 
             return true;
@@ -50,14 +50,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed)
             {
-                if (glQueryId > -1)
+                if (_glQueryId > -1)
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteQuery(glQueryId);
+                        GL.DeleteQuery(_glQueryId);
                         GraphicsExtensions.CheckGLError();
                     }
-                    glQueryId = -1;
+                    _glQueryId = -1;
                 }
             }
 

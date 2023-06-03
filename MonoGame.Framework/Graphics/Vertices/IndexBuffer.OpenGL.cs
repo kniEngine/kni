@@ -4,8 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 using MonoGame.OpenGL;
 using MonoGame.Framework.Utilities;
@@ -14,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class IndexBuffer
     {
-        internal int ibo;
+        internal int _ibo;
 
         private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
@@ -24,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            ibo = 0;
+            _ibo = 0;
         }
 
         /// <summary>
@@ -32,13 +30,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         void GenerateIfRequired()
         {
-            if (ibo == 0)
+            if (_ibo == 0)
             {
-                var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+                int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                ibo = GL.GenBuffer();
+                _ibo = GL.GenBuffer();
                 GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GraphicsExtensions.CheckGLError();
                 GL.BufferData(BufferTarget.ElementArrayBuffer,
                               (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.StreamDraw : BufferUsageHint.StaticDraw);
@@ -63,9 +61,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GetBufferData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
             GraphicsExtensions.CheckGLError();
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             // Pointer to the start of data to read in the index buffer
             ptr = new IntPtr(ptr.ToInt64() + offsetInBytes);
@@ -97,15 +95,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GenerateIfRequired();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var sizeInBytes = elementSizeInByte * elementCount;
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int sizeInBytes = elementSizeInByte * elementCount;
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
-                var bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, ibo);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GraphicsExtensions.CheckGLError();
 
                 if (options == SetDataOptions.Discard)
@@ -137,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteBuffer(ibo);
+                        GL.DeleteBuffer(_ibo);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
