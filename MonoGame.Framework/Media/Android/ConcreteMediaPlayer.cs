@@ -96,12 +96,12 @@ namespace Microsoft.Xna.Platform.Media
 
                 if (((ConcreteSongStrategy)song.Strategy).AssetUri != null)
                 {
-                    _androidPlayer.SetDataSource(ConcreteMediaLibraryStrategy.Context,
+                    _androidPlayer.SetDataSource(Android.App.Application.Context,
                                                  ((ConcreteSongStrategy)song.Strategy).AssetUri);
                 }
                 else
                 {
-                    var afd = AndroidGameWindow.Activity.Assets.OpenFd(
+                    var afd = Android.App.Application.Context.Assets.OpenFd(
                         ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString);
                     if (afd == null)
                         return;
