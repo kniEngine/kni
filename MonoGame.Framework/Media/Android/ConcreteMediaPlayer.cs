@@ -107,6 +107,7 @@ namespace Microsoft.Xna.Platform.Media
                         return;
 
                     _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                    afd.Close();
                 }
 
                 _androidPlayer.Prepare();
