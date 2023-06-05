@@ -222,13 +222,10 @@ namespace Microsoft.Xna.Framework.Graphics
             // create debug context, so we get better error messages (glDebugMessageCallback)
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
+#endif
 
             var contextStrategy = new ConcreteGraphicsContext(this);
-             _mainContext = new GraphicsContext(this, contextStrategy);
-#elif GLES
-            var contextStrategy = new ConcreteGraphicsContext(this);
             _mainContext = new GraphicsContext(this, contextStrategy);
-#endif
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
