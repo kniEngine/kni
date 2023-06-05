@@ -19,7 +19,7 @@ RequestExecutionLevel admin
 ;Interface Configuration
 
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "${FrameworkPath}\monogame.bmp"
+!define MUI_HEADERIMAGE_BITMAP "${FrameworkPath}\Kni.bmp"
 !define MUI_ABORTWARNING
 
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${FrameworkPath}\panel.bmp"
