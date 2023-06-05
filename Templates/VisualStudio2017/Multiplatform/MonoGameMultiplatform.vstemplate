@@ -9,7 +9,7 @@
     <SortOrder>43100</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
 		<DefaultName>Game</DefaultName>
-		<Icon>__TemplateIcon.png</Icon>
+    <Icon>TemplateIcon.png</Icon>
     <PreviewImage>TemplatePreviewImage.png</PreviewImage>
 		<ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>

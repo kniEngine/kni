@@ -3,7 +3,7 @@
   <TemplateData>
     <Name>KNI Windows 10 Universal (Core) Project (Universal Windows)</Name>
     <Description>A KNI game project for Windows 10 UWP.</Description>
-    <Icon>__TemplateIcon.png</Icon>
+    <Icon>TemplateIcon.png</Icon>
     <TemplateID>MonoGame.CS.WinRT.UAPGame</TemplateID>
     <TemplateGroupID>WinRT-Native-UAP</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>

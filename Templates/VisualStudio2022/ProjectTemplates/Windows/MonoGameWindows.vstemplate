@@ -16,7 +16,7 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>__TemplateIcon.png</Icon>
+    <Icon>TemplateIcon.png</Icon>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="KniWindowsApplication.csproj" File="MonoGameWindowsApplication.csproj" ReplaceParameters="true">

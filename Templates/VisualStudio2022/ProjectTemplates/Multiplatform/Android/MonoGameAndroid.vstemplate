@@ -12,7 +12,6 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>__TemplateIcon.png</Icon>
 	<Hidden>true</Hidden>		
 	<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
