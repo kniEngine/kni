@@ -175,8 +175,8 @@ namespace Microsoft.Xna.Platform
                 Sdl.GL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
             }
 
-            ((SdlGameWindow)SdlGameWindow.Instance).CreateWindow();
-            presentationParameters.DeviceWindowHandle = SdlGameWindow.Instance.Handle;
+            ((SdlGameWindow)Game.Window).CreateWindow();
+            presentationParameters.DeviceWindowHandle = Game.Window.Handle;
         }
 
         /// <summary>
