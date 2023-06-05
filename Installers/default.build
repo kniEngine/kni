@@ -31,7 +31,7 @@
 !define INSTALLERVERSION "${buildNumber}"
       </echo>
       <exec program="makensis" workingdir="Windows" basedir="C:\Program Files (x86)\NSIS">
-		    <arg value="MonoGame.nsi"/>
+		    <arg value="KniSdkSetup.nsi"/>
       </exec>
     </if>
   </target>
