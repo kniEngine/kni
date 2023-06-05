@@ -227,7 +227,7 @@ namespace Microsoft.Xna.Framework.Graphics
              _mainContext = new GraphicsContext(this, contextStrategy);
 
             contextStrategy.MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #elif GLES
             var contextStrategy = new ConcreteGraphicsContext(this);
@@ -1250,7 +1250,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
 #if DESKTOPGL
             CurrentConcreteContext.MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
 
@@ -1341,34 +1341,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if DESKTOPGL
-        /// <summary>
-        /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
-        /// </summary>
-        /// <returns>A value according to EXT_swap_control</returns>
-        /// <param name="interval">The <see cref="PresentInterval"/> to convert.</param>
-        private static int ToGLSwapInterval(PresentInterval interval)
-        {
-            // See http://www.opengl.org/registry/specs/EXT/swap_control.txt
-            // and https://www.opengl.org/registry/specs/EXT/glx_swap_control_tear.txt
-            // OpenTK checks for EXT_swap_control_tear:
-            // if supported, a swap interval of -1 enables adaptive vsync;
-            // otherwise -1 is converted to 1 (vsync enabled.)
-
-            switch (interval)
-            {
-                case PresentInterval.Immediate:
-                    return 0;
-                case PresentInterval.One:
-                    return 1;
-                case PresentInterval.Two:
-                    return 2;
-                case PresentInterval.Default:
-
-                default:
-                    return -1;
-            }
-        }
-
         private void GetModeSwitchedSize(out int width, out int height)
         {
             var mode = new Sdl.Display.Mode
