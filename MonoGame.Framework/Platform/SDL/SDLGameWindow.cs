@@ -128,7 +128,10 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.MouseFocus;
 
             if (_handle != IntPtr.Zero)
+            {
                 Sdl.Window.Destroy(_handle);
+                _handle = IntPtr.Zero;
+            }
 
             int winx = Sdl.Window.PosCentered;
             int winy = Sdl.Window.PosCentered;
