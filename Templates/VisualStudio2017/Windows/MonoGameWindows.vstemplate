@@ -12,7 +12,7 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
+    <PreviewImage>TemplatePreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="KniWindowsApplication.csproj" File="MonoGameWindowsApplication.csproj" ReplaceParameters="true">

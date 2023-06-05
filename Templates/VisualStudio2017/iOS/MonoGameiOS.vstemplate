@@ -12,7 +12,7 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
+    <PreviewImage>TemplatePreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
     <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Game1.csproj">

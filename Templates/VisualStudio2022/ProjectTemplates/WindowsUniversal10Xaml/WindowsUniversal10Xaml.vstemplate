@@ -4,7 +4,6 @@
     <Name>KNI Windows 10 Universal (XAML) Project (Universal Windows)</Name>
     <Description>A KNI game project for Windows 10 UWP using XAML controls.</Description>
     <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
     <TemplateID>MonoGame.CS.WinRT.UAPGame</TemplateID>
     <TemplateGroupID>WinRT-Native-UAP</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>

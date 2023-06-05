@@ -19,7 +19,6 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
 	<CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
