@@ -176,6 +176,7 @@ namespace Microsoft.Xna.Platform
             }
 
             ((SdlGameWindow)SdlGameWindow.Instance).CreateWindow();
+            presentationParameters.DeviceWindowHandle = SdlGameWindow.Instance.Handle;
         }
 
         /// <summary>
