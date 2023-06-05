@@ -39,16 +39,16 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "English"
 
 Name '${APPNAME} SDK ${INSTALLERVERSION}'
-OutFile 'MonoGameSetup.exe'
+OutFile 'KniSdkSetup.exe'
 InstallDir '$PROGRAMFILES\${APPNAME}\v${VERSION}'
 !define MSBuildInstallDir '$PROGRAMFILES32\MSBuild\${APPNAME}\v${VERSION}'
 VIProductVersion "${INSTALLERVERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${APPNAME} SDK"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "The MonoGame Team"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Kni framework"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${INSTALLERVERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${INSTALLERVERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${APPNAME} SDK Installer"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © The MonoGame Team"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © Kni framework"
 
 !macro VS_ASSOCIATE_EDITOR TOOLNAME VSVERSION EXT TOOLPATH
   WriteRegStr   HKCU 'Software\Microsoft\VisualStudio\${VSVERSION}\Default Editors\${EXT}' 'Custom' '${TOOLNAME}'
@@ -69,7 +69,7 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © The MonoGam
 ;--------------------------------
 
 ; The stuff to install
-Section "MonoGame Core Components" CoreComponents ;No components page, name is not important
+Section "Kni Core Components" CoreComponents ;No components page, name is not important
   SectionIn RO
   
   ; Install the VS support files.
@@ -79,7 +79,7 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   File '..\..\Tools\Build.Targets\MonoGame.Common.props'
   File '..\..\Tools\MonoGame.Build.Tasks\bin\Windows\AnyCPU\Release\MonoGame.Build.Tasks.dll'
 
-  ; Install the MonoGame tools to a single shared folder.
+  ; Install the Kni tools to a single shared folder.
   SetOutPath ${MSBuildInstallDir}\Tools
   File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\*.exe'
   File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\*.dll'
@@ -203,7 +203,7 @@ Section "MonoGame Core Components" CoreComponents ;No components page, name is n
   WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'DisplayVersion' '${INSTALLERVERSION}'
   WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'DisplayIcon' '$INSTDIR\monogame.ico'
   WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'InstallLocation' '$INSTDIR\'
-  WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'Publisher' 'The MonoGame Team'
+  WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'Publisher' 'Kni framework'
   WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'UninstallString' '$INSTDIR\uninstall.exe'
 
 
@@ -281,7 +281,7 @@ Section "Start Menu Shortcuts" Menu
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Support.url" "InternetShortcut" "URL" "http://community.monogame.net/"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Support.url" "InternetShortcut" "IconFile" "$INSTDIR\monogame.ico"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Support.url" "InternetShortcut" "IconIndex" "0"
-	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Bug Reports.url" "InternetShortcut" "URL" "https://github.com/mono/MonoGame/issues"
+	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Bug Reports.url" "InternetShortcut" "URL" "https://github.com/kniEngine/kni/issues"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Bug Reports.url" "InternetShortcut" "IconFile" "$INSTDIR\monogame.ico"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Bug Reports.url" "InternetShortcut" "IconIndex" "0"
 
