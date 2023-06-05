@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 #if DESKTOPGL
-        private IntPtr _currentWindowHandle;
         internal IntPtr CurrentGlContext
         {
             get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).GlContext; }
@@ -224,11 +223,10 @@ namespace Microsoft.Xna.Framework.Graphics
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-            _currentWindowHandle = SdlGameWindow.Instance.Handle;
-            var contextStrategy = new ConcreteGraphicsContext(this, _currentWindowHandle);
+            var contextStrategy = new ConcreteGraphicsContext(this, this.PresentationParameters.DeviceWindowHandle);
              _mainContext = new GraphicsContext(this, contextStrategy);
 
-            contextStrategy.MakeCurrent(_currentWindowHandle);
+            contextStrategy.MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #elif GLES
@@ -401,14 +399,13 @@ namespace Microsoft.Xna.Framework.Graphics
 #if DESKTOPGL
             _mainContext.Dispose();
             _mainContext = null;
-            _currentWindowHandle = IntPtr.Zero;
 #endif
         }
 
         private void PlatformPresent()
         {
 #if DESKTOPGL
-            Sdl.GL.SwapWindow(_currentWindowHandle);
+            Sdl.GL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
             GraphicsExtensions.CheckGLError();
 #endif
         }
@@ -1252,9 +1249,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            _currentWindowHandle = SdlGameWindow.Instance.Handle;
-
-            CurrentConcreteContext.MakeCurrent(_currentWindowHandle);
+            CurrentConcreteContext.MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
