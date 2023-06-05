@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Media
         internal ConcreteVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
             : base(graphicsDevice, fileName, duration)
         {
-            throw new PlatformNotSupportedException();
+
         }
 
         protected override void Dispose(bool disposing)
