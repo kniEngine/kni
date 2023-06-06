@@ -20,8 +20,7 @@
     <SortOrder>43100</SortOrder>
 		<CreateNewFolder>true</CreateNewFolder>
 		<DefaultName>Game</DefaultName>
-		<Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
+    <Icon>TemplateIcon.png</Icon>
 		<ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
 		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>

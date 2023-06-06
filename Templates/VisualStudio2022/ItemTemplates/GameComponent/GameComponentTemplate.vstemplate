@@ -5,7 +5,7 @@
     <Description>GameComponent for KNI</Description>
     <ProjectType>CSharp</ProjectType>
     <SortOrder>40020</SortOrder>
-    <Icon>TemplateIcon.ico</Icon>
+    <Icon>TemplateIcon.png</Icon>
   </TemplateData>
   <TemplateContent>
     <!--

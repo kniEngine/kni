@@ -16,8 +16,7 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
+    <Icon>TemplateIcon.png</Icon>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="AndroidApplication1.csproj" File="AndroidApplication1.csproj" ReplaceParameters="true">

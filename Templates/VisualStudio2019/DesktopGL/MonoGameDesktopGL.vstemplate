@@ -16,8 +16,7 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>__TemplateIcon.png</Icon>
-    <PreviewImage>__PreviewImage.png</PreviewImage>
+    <Icon>TemplateIcon.png</Icon>
 	<CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
