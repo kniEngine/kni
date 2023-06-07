@@ -41,8 +41,9 @@ namespace MonoGame.OpenGL
     }
     internal enum DrawBuffersEnum
     {
-        UnsignedShort,
-        UnsignedInt,
+        None             = 0x0000,
+        Back             = 0x0405,
+        ColorAttachment0 = 0x8CE0,
     }
 
     internal enum ShaderType
@@ -278,7 +279,6 @@ namespace MonoGame.OpenGL
     internal enum FramebufferAttachment
     {
         ColorAttachment0 = 0x8CE0,
-        ColorAttachment0Ext = 0x8CE0,
         DepthAttachment = 0x8D00,
         StencilAttachment = 0x8D20,
         ColorAttachmentExt = 0x1800,

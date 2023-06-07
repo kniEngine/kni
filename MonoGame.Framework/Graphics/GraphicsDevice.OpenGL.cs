@@ -261,12 +261,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if DESKTOPGL
 			// Initialize draw buffer attachment array
-			int maxDrawBuffers;
-            GL.GetInteger(GetPName.MaxDrawBuffers, out maxDrawBuffers);
-            GraphicsExtensions.CheckGLError();
-			_drawBuffers = new DrawBuffersEnum[maxDrawBuffers];
-			for (int i = 0; i < maxDrawBuffers; i++)
-				_drawBuffers[i] = (DrawBuffersEnum)(FramebufferAttachment.ColorAttachment0Ext + i);
+			_drawBuffers = new DrawBuffersEnum[GraphicsCapabilities.MaxDrawBuffers];
+			for (int i = 0; i < _drawBuffers.Length; i++)
+				_drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
 
             _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
