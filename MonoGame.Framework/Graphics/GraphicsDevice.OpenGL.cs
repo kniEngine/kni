@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			// Initialize draw buffer attachment array
 			_drawBuffers = new DrawBuffersEnum[GraphicsCapabilities.MaxDrawBuffers];
 			for (int i = 0; i < _drawBuffers.Length; i++)
-				_drawBuffers[i] = (DrawBuffersEnum)(FramebufferAttachment.ColorAttachment0Ext + i);
+				_drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
 
             _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
