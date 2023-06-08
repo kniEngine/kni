@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// The cache of effects from unique byte streams.
         /// </summary>
-        internal Dictionary<int, Effect> EffectCache;
+        internal readonly Dictionary<int, Effect> EffectCache = new Dictionary<int, Effect>();
 
         // Resources may be added to and removed from the list from many threads.
         private readonly object _resourcesLock = new object();
@@ -270,8 +270,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
             }
 #endif
-
-            EffectCache = new Dictionary<int, Effect>();
 
             // Initialize the main viewport
             _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
