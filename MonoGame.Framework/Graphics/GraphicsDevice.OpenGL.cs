@@ -1003,7 +1003,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
-            int indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 			var target = PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
@@ -1102,7 +1102,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 //Draw
                 GL.DrawElements(
                     PrimitiveTypeGL(primitiveType),
-                    GetElementCountArray(primitiveType, primitiveCount),
+                    GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedShort,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
                 GraphicsExtensions.CheckGLError();
@@ -1146,7 +1146,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 //Draw
                 GL.DrawElements(
                     PrimitiveTypeGL(primitiveType),
-                    GetElementCountArray(primitiveType, primitiveCount),
+                    GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedInt,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
                 GraphicsExtensions.CheckGLError();
@@ -1174,7 +1174,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
-            int indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);

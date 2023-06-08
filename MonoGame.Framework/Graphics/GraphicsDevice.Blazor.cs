@@ -516,13 +516,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal static readonly WebGLFramebufferAttachmentPoint[] InvalidateFramebufferAttachements =
-        {
-            WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
-            WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT,
-            WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
-        };
-
         private void PlatformResolveRenderTargets()
         {
             if (!this.IsRenderTargetBound)
@@ -604,25 +597,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Textures.Dirty();
 
             return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
-        }
-
-        private static WebGLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
-        {
-            switch (primitiveType)
-            {
-                case PrimitiveType.PointList:
-                    throw new NotSupportedException();
-                case PrimitiveType.LineList:
-                    return WebGLPrimitiveType.LINES;
-                case PrimitiveType.LineStrip:
-                    return WebGLPrimitiveType.LINE_STRIP;
-                case PrimitiveType.TriangleList:
-                    return WebGLPrimitiveType.TRIANGLES;
-                case PrimitiveType.TriangleStrip:
-                    return WebGLPrimitiveType.TRIANGLE_STRIP;
-                default:
-                    throw new ArgumentException();
-            }
         }
 
         /// <summary>
@@ -833,8 +807,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
             var indexElementSize = shortIndices ? 2 : 4;
 			var indexOffsetInBytes = (startIndex * indexElementSize);
-			var indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
-			var target = PrimitiveTypeGL(primitiveType);
+			var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
 
@@ -874,9 +848,9 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexDeclaration.GraphicsDevice = this;
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
 
-            var target = PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+            GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                           vertexOffset,
                           vertexCount);
             GraphicsExtensions.CheckGLError();
@@ -901,7 +875,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexStart < 0)
                 vertexStart = 0;
 
-            GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+            GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
 			              vertexStart,
 			              vertexCount);
             GraphicsExtensions.CheckGLError();
@@ -953,9 +927,9 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
 
 
-            var indexElementCount = GetElementCountArray(primitiveType, primitiveCount);
+            var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var indexOffsetInBytes = (indexOffset * sizeof(short));
-            var target = PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             GL.DrawElements(target,
                                      indexElementCount,

@@ -21,6 +21,25 @@ namespace Microsoft.Xna.Platform.Graphics
             
         }
 
+        internal static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)
+        {
+            switch (primitiveType)
+            {
+                case PrimitiveType.LineList:
+                    return primitiveCount * 2;
+                case PrimitiveType.LineStrip:
+                    return primitiveCount + 1;
+                case PrimitiveType.TriangleList:
+                    return primitiveCount * 3;
+                case PrimitiveType.TriangleStrip:
+                    return primitiveCount + 2;
+                case PrimitiveType.PointList:
+                    return primitiveCount;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         #region IDisposable Members
 
         ~GraphicsContextStrategy()

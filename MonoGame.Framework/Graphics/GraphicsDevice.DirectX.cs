@@ -1046,25 +1046,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
         }
 
-        private static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
-        {
-            switch (primitiveType)
-            {
-                case PrimitiveType.LineList:
-                    return PrimitiveTopology.LineList;
-                case PrimitiveType.LineStrip:
-                    return PrimitiveTopology.LineStrip;
-                case PrimitiveType.TriangleList:
-                    return PrimitiveTopology.TriangleList;
-                case PrimitiveType.TriangleStrip:
-                    return PrimitiveTopology.TriangleStrip;
-                case PrimitiveType.PointList:
-                    return PrimitiveTopology.PointList;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
         private void PlatformApplyState()
         {
             Debug.Assert(CurrentD3DContext != null, "The d3d context is null!");
@@ -1097,21 +1078,12 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_blendStateDirty || _blendFactorDirty)
             {
                 var state = _actualBlendState.GetDxState(this);
-                var factor = ToDXColor(BlendFactor);
+                var factor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
                 CurrentD3DContext.OutputMerger.SetBlendState(state, factor);
 
                 _blendStateDirty = false;
                 _blendFactorDirty = false;
             }
-        }
-
-        private SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
-        {
-			return new SharpDX.Mathematics.Interop.RawColor4(
-                    blendFactor.R / 255.0f,
-                    blendFactor.G / 255.0f,
-                    blendFactor.B / 255.0f,
-                    blendFactor.A / 255.0f);
         }
 
         private void PlatformApplyScissorRectangle()
@@ -1329,7 +1301,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_lastPrimitiveType == primitiveType)
                 return;
 
-            CurrentD3DContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+            CurrentD3DContext.InputAssembler.PrimitiveTopology = ConcreteGraphicsContext.ToPrimitiveTopology(primitiveType);
             _lastPrimitiveType = primitiveType;
         }
 
@@ -1343,7 +1315,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyShaders();
 
                 PlatformApplyPrimitiveType(primitiveType);
-                var indexCount = GetElementCountArray(primitiveType, primitiveCount);
+                var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
                 CurrentD3DContext.DrawIndexed(indexCount, startIndex, baseVertex);
             }
         }
@@ -1384,7 +1356,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GetElementCountArray(primitiveType, primitiveCount);
+            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -1404,7 +1376,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GetElementCountArray(primitiveType, primitiveCount);
+            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -1431,7 +1403,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyShaders();
 
                 PlatformApplyPrimitiveType(primitiveType);
-                int indexCount = GetElementCountArray(primitiveType, primitiveCount);
+                int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
                 if (baseInstance > 0)
                 {
