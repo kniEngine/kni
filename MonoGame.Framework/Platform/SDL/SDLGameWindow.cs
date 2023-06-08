@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework
             {
                 using (
                     Stream stream =
-                        entryAssembly.GetManifestResourceStream(entryAssembly.EntryPoint.DeclaringType.Namespace + ".Icon.bmp") ??
+                        entryAssembly.GetManifestResourceStream(entryAssembly.GetName().Name + ".Icon.bmp") ??
                         entryAssembly.GetManifestResourceStream("Icon.bmp") ??
                         Assembly.GetExecutingAssembly().GetManifestResourceStream("MonoGame.bmp"))
                 {
