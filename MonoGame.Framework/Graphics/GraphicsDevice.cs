@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
@@ -82,39 +83,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
 
-        public TextureCollection VertexTextures
-        {
-            get;
-            private set;
-        }
-
-        public SamplerStateCollection VertexSamplerStates
-        {
-            get;
-            private set;
-        }
-
-        public TextureCollection Textures
-        {
-            get;
-            private set;
-        }
-
-        public SamplerStateCollection SamplerStates
-        {
-            get; 
-            private set;
-        }
-
-        /// <summary>
-        /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
-        /// </summary>
-        public Color DiscardColor
-        {
-			get { return _discardColor; }
-			set { _discardColor = value; }
-		}
-
         /// <summary>
         /// The active vertex shader.
         /// </summary>
@@ -143,28 +111,30 @@ namespace Microsoft.Xna.Framework.Graphics
         // collected by holding a strong reference to it in this list.
         private readonly List<WeakReference> _resources = new List<WeakReference>();
 
-		// TODO Graphics Device events need implementing
-		public event EventHandler<EventArgs> DeviceLost;
-		public event EventHandler<EventArgs> DeviceReset;
-		public event EventHandler<EventArgs> DeviceResetting;
-		public event EventHandler<ResourceCreatedEventArgs> ResourceCreated;
-		public event EventHandler<ResourceDestroyedEventArgs> ResourceDestroyed;
+        // TODO Graphics Device events need implementing
+        public event EventHandler<EventArgs> DeviceLost;
+        public event EventHandler<EventArgs> DeviceReset;
+        public event EventHandler<EventArgs> DeviceResetting;
+        public event EventHandler<ResourceCreatedEventArgs> ResourceCreated;
+        public event EventHandler<ResourceDestroyedEventArgs> ResourceDestroyed;
         public event EventHandler<EventArgs> Disposing;
 
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
-        public bool IsDisposed 
+        public bool IsDisposed
         { 
             get { return _isDisposed; } 
         }
 
-		public bool IsContentLost {
-			get {
-				// We will just return IsDisposed for now
-				// as that is the only case I can see for now
-				return IsDisposed;
-			}
-		}
+        public bool IsContentLost
+        {
+            get
+            {
+                // We will just return IsDisposed for now
+                // as that is the only case I can see for now
+                return IsDisposed;
+            }
+        }
 
         internal bool IsRenderTargetBound
         {
@@ -515,6 +485,39 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        public SamplerStateCollection SamplerStates
+        {
+            get;
+            private set;
+        }
+
+        public SamplerStateCollection VertexSamplerStates
+        {
+            get;
+            private set;
+        }
+
+        public TextureCollection Textures
+        {
+            get;
+            private set;
+        }
+
+        public TextureCollection VertexTextures
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
+        /// </summary>
+        public Color DiscardColor
+        {
+			get { return _discardColor; }
+			set { _discardColor = value; }
+		}
+
         public void Clear(Color color)
         {
             var options = ClearOptions.Target;
@@ -682,23 +685,19 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _graphicsProfile; }
         }
 
-        public int RenderTargetCount
-        {
-            get { return _currentRenderTargetCount; }
-        }
 
-		public void SetRenderTarget(RenderTarget2D renderTarget)
-		{
-			if (renderTarget == null)
-		    {
+        public void SetRenderTarget(RenderTarget2D renderTarget)
+        {
+            if (renderTarget == null)
+            {
                 SetRenderTargets(null);
-		    }
-			else
-			{
-				_singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-				SetRenderTargets(_singleRenderTargetBinding);
-			}
-		}
+            }
+            else
+            {
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+                SetRenderTargets(_singleRenderTargetBinding);
+            }
+        }
 
         public void SetRenderTarget(RenderTargetCube renderTarget, CubeMapFace cubeMapFace)
         {
@@ -792,6 +791,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 unchecked { CurrentContext._graphicsMetrics._targetCount += renderTargetCount; }
             }
+        }
+
+        public int RenderTargetCount
+        {
+            get { return _currentRenderTargetCount; }
         }
 
         internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
@@ -1076,7 +1080,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            var vertexCount = GetElementCountArray(primitiveType, primitiveCount);
+            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
             if (vertexOffset + vertexCount > vertexData.Length)
                 throw new ArgumentOutOfRangeException("primitiveCount");
@@ -1125,7 +1129,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            var vertexCount = GetElementCountArray(primitiveType, primitiveCount);
+            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
             PlatformDrawPrimitives(primitiveType, vertexStart, vertexCount);
 
@@ -1214,7 +1218,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            if (indexOffset + GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
+            if (indexOffset + GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
             if (vertexDeclaration == null)
@@ -1313,7 +1317,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            if (indexOffset + GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
+            if (indexOffset + GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
             if (vertexDeclaration == null)
@@ -1340,8 +1344,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="instanceCount">The number of instances to render.</param>
         /// <remarks>Note that minVertexIndex and numVertices are unused in MonoGame and will be ignored.</remarks>
         [Obsolete("Use DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int instanceCount) instead. In future versions this method can be removed.")]
-        public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex,
-                                            int numVertices, int startIndex, int primitiveCount, int instanceCount)
+        public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount, int instanceCount)
         {
             DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, 0, instanceCount);
         }
@@ -1449,25 +1452,6 @@ namespace Microsoft.Xna.Framework.Graphics
                                             elementCount * tSize, dataByteSize), "elementCount");
 
             PlatformGetBackBufferData(rect, data, startIndex, elementCount);
-        }
-
-        private static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)
-        {
-            switch (primitiveType)
-            {
-                case PrimitiveType.LineList:
-                    return primitiveCount * 2;
-                case PrimitiveType.LineStrip:
-                    return primitiveCount + 1;
-                case PrimitiveType.TriangleList:
-                    return primitiveCount * 3;
-                case PrimitiveType.TriangleStrip:
-                    return primitiveCount + 2;
-                case PrimitiveType.PointList:
-                    return primitiveCount;
-                default:
-                    throw new NotSupportedException();                        
-            }
         }
 
         // uniformly scales down the given rectangle by 10%
