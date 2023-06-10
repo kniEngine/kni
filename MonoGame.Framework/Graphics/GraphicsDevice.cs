@@ -331,7 +331,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _scissorRectangleDirty = true;
-            ScissorRectangle = _viewport.Bounds;
+            _scissorRectangle = _viewport.Bounds;
 
             // Set the default render target.
             ApplyRenderTargets(null);
