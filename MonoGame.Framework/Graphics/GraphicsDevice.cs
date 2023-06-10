@@ -30,50 +30,68 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public bool UseHalfPixelOffset { get; private set; }
 
-        private Viewport _viewport;
-
         private bool _isDisposed;
 
         private GraphicsContext _mainContext;
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
+        private Rectangle _scissorRectangle;
+        private bool _scissorRectangleDirty;
+        private Viewport _viewport;
+
+        // states
         private BlendState _blendState;
-        private BlendState _actualBlendState;
-        private bool _blendStateDirty;
-
         private Color _blendFactor = Color.White;
-        private bool _blendFactorDirty;
+        private DepthStencilState _depthStencilState;
+        private RasterizerState _rasterizerState;
+        internal SamplerStateCollection _samplerStates;
+        internal SamplerStateCollection _vertexSamplerStates;
 
+        // states dirty flags
+        private bool _blendStateDirty;
+        private bool _blendFactorDirty;
+        private bool _depthStencilStateDirty;
+        private bool _rasterizerStateDirty;
+
+        // actual states
+        private BlendState _actualBlendState;
+        private DepthStencilState _actualDepthStencilState;
+        private RasterizerState _actualRasterizerState;
+
+        // predefined states
         private BlendState _blendStateAdditive;
         private BlendState _blendStateAlphaBlend;
         private BlendState _blendStateNonPremultiplied;
         private BlendState _blendStateOpaque;
-
-        private DepthStencilState _depthStencilState;
-        private DepthStencilState _actualDepthStencilState;
-        private bool _depthStencilStateDirty;
-
         private DepthStencilState _depthStencilStateDefault;
         private DepthStencilState _depthStencilStateDepthRead;
         private DepthStencilState _depthStencilStateNone;
-
-        private RasterizerState _rasterizerState;
-        private RasterizerState _actualRasterizerState;
-        private bool _rasterizerStateDirty;
-
         private RasterizerState _rasterizerStateCullClockwise;
         private RasterizerState _rasterizerStateCullCounterClockwise;
         private RasterizerState _rasterizerStateCullNone;
 
-        private Rectangle _scissorRectangle;
-        private bool _scissorRectangleDirty;
+        // shaders
+        private Shader _vertexShader;
+        private Shader _pixelShader;
+        private readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
+        private readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
+        // shaders dirty flags
+        private bool _vertexShaderDirty;
+        private bool _pixelShaderDirty;
+
+        // buffers
+        private IndexBuffer _indexBuffer;
         private VertexBufferBindings _vertexBuffers;
+
+        // buffers dirty flags
+        private bool _indexBufferDirty;
         private bool _vertexBuffersDirty;
 
-        private IndexBuffer _indexBuffer;
-        private bool _indexBufferDirty;
+        // textures
+        internal TextureCollection _textures;
+        internal TextureCollection _vertexTextures;
 
         internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         private int _currentRenderTargetCount;
@@ -83,20 +101,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
 
-        /// <summary>
-        /// The active vertex shader.
-        /// </summary>
-        private Shader _vertexShader;
-        private bool _vertexShaderDirty;
-
-        /// <summary>
-        /// The active pixel shader.
-        /// </summary>
-        private Shader _pixelShader;
-        private bool _pixelShaderDirty;
-
-        private readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
-        private readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
         /// <summary>
         /// The cache of effects from unique byte streams.
@@ -276,11 +280,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            Textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            VertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            _vertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
-            SamplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            VertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _samplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            _vertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -327,7 +331,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _scissorRectangleDirty = true;
-            ScissorRectangle = _viewport.Bounds;
+            _scissorRectangle = _viewport.Bounds;
 
             // Set the default render target.
             ApplyRenderTargets(null);
@@ -485,26 +489,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public SamplerStateCollection SamplerStates
         {
-            get;
-            private set;
+            get { return _samplerStates; }
         }
 
         public SamplerStateCollection VertexSamplerStates
         {
-            get;
-            private set;
+            get { return _vertexSamplerStates; }
         }
 
         public TextureCollection Textures
         {
-            get;
-            private set;
+            get { return _textures; }
         }
 
         public TextureCollection VertexTextures
         {
-            get;
-            private set;
+            get { return _vertexTextures; }
         }
 
         /// <summary>
