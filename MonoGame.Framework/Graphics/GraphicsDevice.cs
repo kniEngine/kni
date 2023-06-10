@@ -66,6 +66,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private RasterizerState _rasterizerStateCullCounterClockwise;
         private RasterizerState _rasterizerStateCullNone;
 
+        internal SamplerStateCollection _samplerStates;
+        internal SamplerStateCollection _vertexSamplerStates;
+
         private Rectangle _scissorRectangle;
         private bool _scissorRectangleDirty;
 
@@ -74,6 +77,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private IndexBuffer _indexBuffer;
         private bool _indexBufferDirty;
+
+        internal TextureCollection _textures;
+        internal TextureCollection _vertexTextures;
 
         internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         private int _currentRenderTargetCount;
@@ -276,11 +282,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            Textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            VertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            _vertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
-            SamplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            VertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _samplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
+            _vertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -485,26 +491,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public SamplerStateCollection SamplerStates
         {
-            get;
-            private set;
+            get { return _samplerStates; }
         }
 
         public SamplerStateCollection VertexSamplerStates
         {
-            get;
-            private set;
+            get { return _vertexSamplerStates; }
         }
 
         public TextureCollection Textures
         {
-            get;
-            private set;
+            get { return _textures; }
         }
 
         public TextureCollection VertexTextures
         {
-            get;
-            private set;
+            get { return _vertexTextures; }
         }
 
         /// <summary>
