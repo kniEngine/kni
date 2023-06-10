@@ -29,9 +29,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _textures = new Texture[capacity];
 
-            PlatformInit();
-            PlatformClear();
             Dirty();
+
+            PlatformInit(capacity);
+            PlatformClear();
         }
 
         public Texture this[int index]
@@ -53,8 +54,9 @@ namespace Microsoft.Xna.Framework.Graphics
             for (var i = 0; i < _textures.Length; i++)
                 _textures[i] = null;
 
-            PlatformClear();
             Dirty();
+
+            PlatformClear();
         }
 
         /// <summary>
