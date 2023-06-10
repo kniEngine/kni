@@ -16,9 +16,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private WebGLTextureTarget[] _targets;
 
-        void PlatformInit()
+        void PlatformInit(int capacity)
         {
-            _targets = new WebGLTextureTarget[_textures.Length];
+            _targets = new WebGLTextureTarget[capacity];
         }
 
         void PlatformClear()

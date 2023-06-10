@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public sealed partial class TextureCollection
     {
 
-        void PlatformInit()
+        void PlatformInit(int capacity)
         {
             throw new PlatformNotSupportedException();
         }

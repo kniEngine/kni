@@ -13,9 +13,9 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private TextureTarget[] _targets;
 
-        void PlatformInit()
+        void PlatformInit(int capacity)
         {
-            _targets = new TextureTarget[_textures.Length];
+            _targets = new TextureTarget[capacity];
         }
 
         void PlatformClear()
