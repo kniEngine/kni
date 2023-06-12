@@ -282,9 +282,9 @@ namespace Microsoft.Xna.Framework
             // SDL reports many resize events even if the Size didn't change.
             // Only call the code below if it actually changed.
             if (device.PresentationParameters.BackBufferWidth == width &&
-                device.PresentationParameters.BackBufferHeight == height) {
+                device.PresentationParameters.BackBufferHeight == height)
                 return;
-            }
+
             device.PresentationParameters.BackBufferWidth = width;
             device.PresentationParameters.BackBufferHeight = height;
             device.Viewport = new Viewport(0, 0, width, height);

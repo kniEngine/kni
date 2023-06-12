@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Input
             foreach (var entry in Joysticks)
                 Sdl.Joystick.Close(entry.Value);
 
-            Joysticks.Clear ();
+            Joysticks.Clear();
         }
 
         private static void RecalculateLastConnectedIndex()

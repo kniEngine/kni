@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Initializes the lights to the standard key/fill/back lighting rig.
         /// </summary>
-		void EnableDefaultLighting ();
+		void EnableDefaultLighting();
 	}
 }
 

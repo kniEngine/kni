@@ -1647,7 +1647,7 @@ namespace MonoGame.OpenGL
             IntPtr intPtr = IntPtr.Zero;
             if (strings != null && strings.Length != 0)
             {
-                intPtr = Marshal.AllocHGlobal (strings.Length * IntPtr.Size);
+                intPtr = Marshal.AllocHGlobal(strings.Length * IntPtr.Size);
                 if (intPtr == IntPtr.Zero)
                 {
                     throw new OutOfMemoryException();
@@ -1665,7 +1665,7 @@ namespace MonoGame.OpenGL
                 {
                     for (i--; i >= 0; i--)
                     {
-                        Marshal.FreeHGlobal(Marshal.ReadIntPtr (intPtr, i * IntPtr.Size));
+                        Marshal.FreeHGlobal(Marshal.ReadIntPtr(intPtr, i * IntPtr.Size));
                     }
                     Marshal.FreeHGlobal(intPtr);
                     throw;

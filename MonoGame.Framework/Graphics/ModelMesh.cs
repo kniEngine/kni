@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     
                     for (int j = 0; j < effect.CurrentTechnique.Passes.Count; j++)
                     {
-						effect.CurrentTechnique.Passes[j].Apply ();
+						effect.CurrentTechnique.Passes[j].Apply();
 						graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);
 					}
 				}

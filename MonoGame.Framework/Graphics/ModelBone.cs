@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			set { this.transform = value; }
 		}
 		
-		internal ModelBone ()	
+		internal ModelBone()	
 		{
 			Children = new ModelBoneCollection(new List<ModelBone>());
 		}

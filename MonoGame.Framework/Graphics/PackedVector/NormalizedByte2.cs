@@ -9,60 +9,54 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     public struct NormalizedByte2 : IPackedVector<ushort>, IEquatable<NormalizedByte2>
     {
-        private ushort _packed;
+        private ushort _packedValue;
 
         public NormalizedByte2(Vector2 vector)
         {
-            _packed = Pack(vector.X, vector.Y);
+            _packedValue = Pack(vector.X, vector.Y);
         }
 
         public NormalizedByte2(float x, float y)
         {
-            _packed = Pack(x, y);
+            _packedValue = Pack(x, y);
         }
 
         public static bool operator !=(NormalizedByte2 left, NormalizedByte2 right)
         {
-            return left._packed != right._packed;
+            return left._packedValue != right._packedValue;
         }
 
         public static bool operator ==(NormalizedByte2 left, NormalizedByte2 right)
         {
-            return left._packed == right._packed;
+            return left._packedValue == right._packedValue;
         }
 
         [CLSCompliant(false)]
         public ushort PackedValue
         {
-            get
-            {
-                return _packed;
-            }
-            set
-            {
-                _packed = value;
-            }
+            get { return _packedValue; }
+            set { _packedValue = value; }
         }
 
         public override bool Equals(object obj)
         {
             return (obj is NormalizedByte2) &&
-                    ((NormalizedByte2)obj)._packed == _packed;
+                    ((NormalizedByte2)obj)._packedValue == _packedValue;
         }
 
         public bool Equals(NormalizedByte2 other)
         {
-            return _packed == other._packed;
+            return _packedValue == other._packedValue;
         }
 
         public override int GetHashCode()
         {
-            return _packed.GetHashCode();
+            return _packedValue.GetHashCode();
         }
 
         public override string ToString()
         {
-            return _packed.ToString("X");
+            return _packedValue.ToString("X");
         }
 
         private static ushort Pack(float x, float y)
@@ -75,7 +69,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            _packed = Pack(vector.X, vector.Y);
+            _packedValue = Pack(vector.X, vector.Y);
         }
 
         /// <summary>
@@ -90,8 +84,8 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
         public Vector2 ToVector2()
         {
             return new Vector2(
-                ((sbyte) ((_packed >> 0) & 0xFF)) / 127.0f,
-                ((sbyte) ((_packed >> 8) & 0xFF)) / 127.0f);
+                ((sbyte) ((_packedValue >> 0) & 0xFF)) / 127.0f,
+                ((sbyte) ((_packedValue >> 8) & 0xFF)) / 127.0f);
         }
     }
 }

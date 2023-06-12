@@ -22,11 +22,11 @@ namespace Microsoft.Xna.Framework.Graphics
 		//ModelMeshPart needs to be able to add to ModelMesh's effects list
 		internal void Add(Effect item)
 		{
-			Items.Add (item);
+			Items.Add(item);
 		}
 		internal void Remove(Effect item)
 		{
-			Items.Remove (item);
+			Items.Remove(item);
 		}
 
 	    // Summary:
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        void IEnumerator.Reset()
 	        {
 				IEnumerator resetEnumerator = enumerator;
-				resetEnumerator.Reset ();
+				resetEnumerator.Reset();
 				enumerator = (List<Effect>.Enumerator)resetEnumerator;
 	        }
 

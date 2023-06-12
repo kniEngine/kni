@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <param name="spacing">The spacing (tracking) between characters in the font.</param>
 		/// <param name="kerning">The letters kernings (X - left side bearing, Y - width and Z - right side bearing).</param>
 		/// <param name="defaultCharacter">The character that will be substituted when a given character is not included in the font.</param>
-		public SpriteFont (
+		public SpriteFont(
 			Texture2D texture, List<Rectangle> glyphBounds, List<Rectangle> cropping, List<char> characters,
 			int lineSpacing, float spacing, List<Vector3> kerning, char? defaultCharacter)
 		{
@@ -241,10 +241,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 // The first character on a line might have a negative left side bearing.
                 // In this scenario, SpriteBatch/SpriteFont normally offset the text to the right,
                 //  so that text does not hang off the left side of its rectangle.
-                if (firstGlyphOfLine) {
+                if (firstGlyphOfLine)
+                {
                     offset.X = Math.Max(pCurrentGlyph->LeftSideBearing, 0);
                     firstGlyphOfLine = false;
-                } else {
+                }
+                else
+                {
                     offset.X += Spacing + pCurrentGlyph->LeftSideBearing;
                 }
 

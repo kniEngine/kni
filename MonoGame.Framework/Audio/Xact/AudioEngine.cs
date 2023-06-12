@@ -71,62 +71,62 @@ namespace Microsoft.Xna.Framework.Audio
             using (var stream = TitleContainer.OpenStream(settingsFile))
             using (var reader = new BinaryReader(stream)) 
             {
-                uint magic = reader.ReadUInt32 ();
+                uint magic = reader.ReadUInt32();
                 if (magic != 0x46534758) //'XGFS'
-                    throw new ArgumentException ("XGS format not recognized");
+                    throw new ArgumentException("XGS format not recognized");
 
-                reader.ReadUInt16 (); // toolVersion
+                reader.ReadUInt16(); // toolVersion
                 uint formatVersion = reader.ReadUInt16();
                 if (formatVersion != 42)
                     Debug.WriteLine("Warning: XGS format " + formatVersion + " not supported!");
 
-                reader.ReadUInt16 (); // crc
-                reader.ReadUInt32 (); // lastModifiedLow
-                reader.ReadUInt32 (); // lastModifiedHigh
-                reader.ReadByte (); //unkn, 0x03. Platform?
+                reader.ReadUInt16(); // crc
+                reader.ReadUInt32(); // lastModifiedLow
+                reader.ReadUInt32(); // lastModifiedHigh
+                reader.ReadByte(); //unkn, 0x03. Platform?
 
-                uint numCats = reader.ReadUInt16 ();
-                uint numVars = reader.ReadUInt16 ();
+                uint numCats = reader.ReadUInt16();
+                uint numVars = reader.ReadUInt16();
 
-                reader.ReadUInt16 (); //unkn, 0x16
-                reader.ReadUInt16 (); //unkn, 0x16
+                reader.ReadUInt16(); //unkn, 0x16
+                reader.ReadUInt16(); //unkn, 0x16
 
-                uint numRpc = reader.ReadUInt16 ();
-                uint numDspPresets = reader.ReadUInt16 (); 
-                uint numDspParams = reader.ReadUInt16 (); 
+                uint numRpc = reader.ReadUInt16();
+                uint numDspPresets = reader.ReadUInt16(); 
+                uint numDspParams = reader.ReadUInt16(); 
 
-                uint catsOffset = reader.ReadUInt32 ();
-                uint varsOffset = reader.ReadUInt32 ();
+                uint catsOffset = reader.ReadUInt32();
+                uint varsOffset = reader.ReadUInt32();
 
-                reader.ReadUInt32 (); //unknown, leads to a short with value of 1?
-                reader.ReadUInt32 (); // catNameIndexOffset
-                reader.ReadUInt32 (); //unknown, two shorts of values 2 and 3?
-                reader.ReadUInt32 (); // varNameIndexOffset
+                reader.ReadUInt32(); //unknown, leads to a short with value of 1?
+                reader.ReadUInt32(); // catNameIndexOffset
+                reader.ReadUInt32(); //unknown, two shorts of values 2 and 3?
+                reader.ReadUInt32(); // varNameIndexOffset
 
-                uint catNamesOffset = reader.ReadUInt32 ();
-                uint varNamesOffset = reader.ReadUInt32 ();
-                uint rpcOffset = reader.ReadUInt32 ();
+                uint catNamesOffset = reader.ReadUInt32();
+                uint varNamesOffset = reader.ReadUInt32();
+                uint rpcOffset = reader.ReadUInt32();
                 reader.ReadUInt32(); // dspPresetsOffset
-                uint dspParamsOffset = reader.ReadUInt32 (); 
+                uint dspParamsOffset = reader.ReadUInt32(); 
 
-                reader.BaseStream.Seek (catNamesOffset, SeekOrigin.Begin);
+                reader.BaseStream.Seek(catNamesOffset, SeekOrigin.Begin);
                 string[] categoryNames = ReadNullTerminatedStrings(numCats, reader);
 
                 _categories = new AudioCategory[numCats];
-                reader.BaseStream.Seek (catsOffset, SeekOrigin.Begin);
+                reader.BaseStream.Seek(catsOffset, SeekOrigin.Begin);
                 for (int i=0; i<numCats; i++) 
                 {
-                    _categories [i] = new AudioCategory (this, categoryNames [i], reader);
-                    _categoryLookup.Add (categoryNames [i], i);
+                    _categories [i] = new AudioCategory(this, categoryNames [i], reader);
+                    _categoryLookup.Add(categoryNames [i], i);
                 }
 
-                reader.BaseStream.Seek (varNamesOffset, SeekOrigin.Begin);
+                reader.BaseStream.Seek(varNamesOffset, SeekOrigin.Begin);
                 string[] varNames = ReadNullTerminatedStrings(numVars, reader);
 
                 var variables = new List<RpcVariable>();
                 var cueVariables = new List<RpcVariable>();
                 var globalVariables = new List<RpcVariable>();
-                reader.BaseStream.Seek (varsOffset, SeekOrigin.Begin);
+                reader.BaseStream.Seek(varsOffset, SeekOrigin.Begin);
                 for (var i=0; i < numVars; i++)
                 {
                     var v = new RpcVariable();

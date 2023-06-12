@@ -39,7 +39,7 @@ namespace Microsoft.Devices.Sensors
 
 		}
 
-        protected override void Dispose (bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {

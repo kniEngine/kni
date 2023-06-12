@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        _depthClipEnable = cloneSource._depthClipEnable;
 	    }
 
-		static RasterizerState ()
+		static RasterizerState()
 		{
 		    CullClockwise = new RasterizerState("RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
 		    CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);

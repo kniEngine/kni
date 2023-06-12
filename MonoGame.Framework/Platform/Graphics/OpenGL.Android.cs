@@ -14,7 +14,7 @@ namespace MonoGame.OpenGL
     {
 		// internal for Android is not used on other platforms
 		// it allows us to use either GLES or Full GL (if the GPU supports it)
-		internal delegate bool BindAPIDelegate (RenderApi api);
+		internal delegate bool BindAPIDelegate(RenderApi api);
 		internal static BindAPIDelegate BindAPI;
 
         public static IntPtr Library;

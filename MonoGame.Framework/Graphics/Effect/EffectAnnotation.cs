@@ -6,7 +6,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	public class EffectAnnotation
 	{
-		internal EffectAnnotation (
+		internal EffectAnnotation(
 			EffectParameterClass class_,
 			EffectParameterType type,
 			string name,
@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			Semantic = semantic;
 		}
 
-		internal EffectAnnotation (EffectParameter parameter)
+		internal EffectAnnotation(EffectParameter parameter)
 		{
 			ParameterClass = parameter.ParameterClass;
 			ParameterType = parameter.ParameterType;

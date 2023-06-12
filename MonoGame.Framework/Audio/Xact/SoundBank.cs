@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         readonly float [] defaultProbability = new float [1] { 1.0f };
         readonly Dictionary<string, XactSound[]> _sounds = new Dictionary<string, XactSound[]>();
-        readonly Dictionary<string, float []> _probabilities = new Dictionary<string, float []> ();
+        readonly Dictionary<string, float []> _probabilities = new Dictionary<string, float []>();
 
         /// <summary>
         /// Is true if the SoundBank has any live Cues in use.
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Audio
 
                 uint magic = reader.ReadUInt32();
                 if (magic != 0x4B424453) //"SDBK"
-                    throw new Exception ("Bad soundbank format");
+                    throw new Exception("Bad soundbank format");
 
                 reader.ReadUInt16(); // toolVersion
 
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Framework.Audio
                         stream.Seek(oldPosition, SeekOrigin.Begin);
 
                         _sounds.Add(cueNames [i], new XactSound [] { sound } );
-                        _probabilities.Add (cueNames [i], defaultProbability);  
+                        _probabilities.Add(cueNames [i], defaultProbability);  
                     }
                 }
                     
@@ -126,8 +126,8 @@ namespace Microsoft.Xna.Framework.Audio
                             XactSound sound = new XactSound(audioEngine, this, reader);
                             stream.Seek(oldPosition, SeekOrigin.Begin);
 
-                            _sounds.Add (cueNames [numSimpleCues + i], new XactSound [] { sound });
-                            _probabilities.Add (cueNames [numSimpleCues + i], defaultProbability);
+                            _sounds.Add(cueNames [numSimpleCues + i], new XactSound [] { sound });
+                            _probabilities.Add(cueNames [numSimpleCues + i], defaultProbability);
                         }
                         else
                         {
@@ -201,8 +201,8 @@ namespace Microsoft.Xna.Framework.Audio
 
                             stream.Seek(savepos, SeekOrigin.Begin);
 
-                            _sounds.Add (cueNames [numSimpleCues + i], cueSounds);
-                            _probabilities.Add (cueNames [numSimpleCues + i], probs);
+                            _sounds.Add(cueNames [numSimpleCues + i], cueSounds);
+                            _probabilities.Add(cueNames [numSimpleCues + i], probs);
                         }
 
                         // Instance limiting
@@ -263,12 +263,12 @@ namespace Microsoft.Xna.Framework.Audio
                 throw new ArgumentException();
 
             float [] probs;
-            if (!_probabilities.TryGetValue (name, out probs))
-                throw new ArgumentException ();
+            if (!_probabilities.TryGetValue(name, out probs))
+                throw new ArgumentException();
 
             IsInUse = true;
 
-            var cue = new Cue (_audioengine, name, sounds, probs);
+            var cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             return cue;
         }
@@ -287,11 +287,11 @@ namespace Microsoft.Xna.Framework.Audio
                 throw new ArgumentException();
 
             float [] probs;
-            if (!_probabilities.TryGetValue (name, out probs))
-                throw new ArgumentException ();
+            if (!_probabilities.TryGetValue(name, out probs))
+                throw new ArgumentException();
 
             IsInUse = true;
-            var cue = new Cue (_audioengine, name, sounds, probs);
+            var cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             cue.Play();
         }
@@ -315,12 +315,12 @@ namespace Microsoft.Xna.Framework.Audio
                 throw new InvalidOperationException();
 
             float [] probs;
-            if (!_probabilities.TryGetValue (name, out probs))
-                throw new ArgumentException ();
+            if (!_probabilities.TryGetValue(name, out probs))
+                throw new ArgumentException();
 
             IsInUse = true;
 
-            var cue = new Cue (_audioengine, name, sounds, probs);
+            var cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             cue.Apply3D(listener, emitter);
             cue.Play();
@@ -363,7 +363,7 @@ namespace Microsoft.Xna.Framework.Audio
 
                 var handler = Disposing;
                 if (handler != null)
-                    handler (this, EventArgs.Empty);
+                    handler(this, EventArgs.Empty);
             }
         }
     }

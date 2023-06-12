@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Audio
 	    /// <summary>
 	    /// Create an <see cref="AudioListener"/> instance.
 	    /// </summary>
-		public AudioListener ()
+		public AudioListener()
 		{
 			Forward = Vector3.Forward;
 			Position = Vector3.Zero;
