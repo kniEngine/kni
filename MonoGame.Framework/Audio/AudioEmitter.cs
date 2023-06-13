@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Audio
 	public class AudioEmitter
 	{
         /// <summary>Initializes a new AudioEmitter instance.</summary>
-		public AudioEmitter ()
+		public AudioEmitter()
 		{
             _dopplerScale = 1.0f;
 			Forward = Vector3.Forward;

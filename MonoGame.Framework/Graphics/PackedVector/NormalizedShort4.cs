@@ -9,39 +9,33 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
     public struct NormalizedShort4 : IPackedVector<ulong>, IEquatable<NormalizedShort4>
 	{
-		private ulong short4Packed;
+		private ulong _packedValue;
 
         public NormalizedShort4(Vector4 vector)
 		{
-            short4Packed = PackInFour(vector.X, vector.Y, vector.Z, vector.W);
+            _packedValue = PackInFour(vector.X, vector.Y, vector.Z, vector.W);
 		}
 
         public NormalizedShort4(float x, float y, float z, float w)
 		{
-            short4Packed = PackInFour(x, y, z, w);
+            _packedValue = PackInFour(x, y, z, w);
 		}
 
         public static bool operator !=(NormalizedShort4 left, NormalizedShort4 right)
 		{
-			return !left.Equals (right);
+			return !left.Equals(right);
 		}
 
         public static bool operator ==(NormalizedShort4 left, NormalizedShort4 right)
 		{
-			return left.Equals (right);
+			return left.Equals(right);
 		}
 
         [CLSCompliant(false)]
         public ulong PackedValue
         {
-            get
-            {
-                return short4Packed;
-            }
-            set
-            {
-                short4Packed = value;
-            }
+            get { return _packedValue; }
+            set { _packedValue = value; }
 		}
 
         public override bool Equals(object obj)
@@ -51,17 +45,17 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
         public bool Equals(NormalizedShort4 other)
         {
-            return short4Packed.Equals(other.short4Packed);
+            return _packedValue.Equals(other._packedValue);
         }
 
-		public override int GetHashCode ()
+		public override int GetHashCode()
 		{
-			return short4Packed.GetHashCode();
+			return _packedValue.GetHashCode();
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
-            return short4Packed.ToString("X");
+            return _packedValue.ToString("X");
 		}
 
         private static ulong PackInFour(float vectorX, float vectorY, float vectorZ, float vectorW)
@@ -79,20 +73,20 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 			return (word4 | word3 | word2 | word1);
 		}
 
-		void IPackedVector.PackFromVector4 (Vector4 vector)
+		void IPackedVector.PackFromVector4(Vector4 vector)
 		{
-            short4Packed = PackInFour(vector.X, vector.Y, vector.Z, vector.W);
+            _packedValue = PackInFour(vector.X, vector.Y, vector.Z, vector.W);
 		}
 
-		public Vector4 ToVector4 ()
+		public Vector4 ToVector4()
 		{
             const float maxVal = 0x7FFF;
 
-			var v4 = new Vector4 ();
-            v4.X = ((short)((short4Packed >> 0x00) & 0xFFFF)) / maxVal;
-            v4.Y = ((short)((short4Packed >> 0x10) & 0xFFFF)) / maxVal;
-            v4.Z = ((short)((short4Packed >> 0x20) & 0xFFFF)) / maxVal;
-            v4.W = ((short)((short4Packed >> 0x30) & 0xFFFF)) / maxVal;
+			var v4 = new Vector4();
+            v4.X = ((short)((_packedValue >> 0x00) & 0xFFFF)) / maxVal;
+            v4.Y = ((short)((_packedValue >> 0x10) & 0xFFFF)) / maxVal;
+            v4.Z = ((short)((_packedValue >> 0x20) & 0xFFFF)) / maxVal;
+            v4.W = ((short)((_packedValue >> 0x30) & 0xFFFF)) / maxVal;
 			return v4;
 		}
 	}

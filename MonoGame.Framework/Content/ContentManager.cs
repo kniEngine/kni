@@ -216,12 +216,15 @@ namespace Microsoft.Xna.Framework.Content
             // Look first for a specialized language-country version of the asset,
             // then if that fails, loop back around to see if we can find one that
             // specifies just the language without the country part.
-            foreach (string cultureName in cultureNames) {
+            foreach (string cultureName in cultureNames)
+            {
                 string localizedAssetName = assetName + '.' + cultureName;
 
-                try {
+                try
+                {
                     return Load<T> (localizedAssetName);
-                } catch (ContentLoadException) { }
+                }
+                catch (ContentLoadException) { }
             }
 
             // If we didn't find any localized asset, fall back to the default name.

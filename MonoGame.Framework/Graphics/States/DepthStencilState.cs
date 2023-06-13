@@ -204,7 +204,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
         }
 
-        public DepthStencilState ()
+        public DepthStencilState()
 		{
             DepthBufferEnable = true;
             DepthBufferWriteEnable = true;
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly DepthStencilState DepthRead;
         public static readonly DepthStencilState None;
 
-		static DepthStencilState ()
+		static DepthStencilState()
 		{
 		    Default = new DepthStencilState("DepthStencilState.Default", true, true);
 			DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);

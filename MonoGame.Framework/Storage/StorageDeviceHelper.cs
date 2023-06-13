@@ -14,19 +14,18 @@ namespace Microsoft.Xna.Framework.Storage
 	{
 		static string path = string.Empty;
 		
-		static StorageDeviceHelper () { }
+		static StorageDeviceHelper() { }
 
         /// <summary>
         /// Gets or sets path for root of the <see cref="StorageDevice"/>.
         /// </summary>
 		internal static string Path 
 		{
-			get {
-				return path;
-			}
-			
-			set {
-				if (path != value ) {
+			get { return path; }
+			set
+            {
+				if (path != value )
+                {
 					path = value;
 				}
 			}
@@ -34,7 +33,8 @@ namespace Microsoft.Xna.Framework.Storage
 		
 		internal static long FreeSpace 
 		{
-			get {
+			get
+            {
 				long free = 0;
 				return free;
 			}
@@ -42,7 +42,8 @@ namespace Microsoft.Xna.Framework.Storage
 
 		internal static long TotalSpace 
 		{
-			get {
+			get
+            {
 				long space = 0;
 				return space;				
 			}

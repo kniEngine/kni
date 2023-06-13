@@ -110,16 +110,16 @@ namespace Microsoft.Xna.Platform
             #endif
 
             // Create a full-screen window
-            _mainWindow = new UIWindow (UIScreen.MainScreen.Bounds);
+            _mainWindow = new UIWindow(UIScreen.MainScreen.Bounds);
 			//_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
 			
-            game.Services.AddService (typeof(UIWindow), _mainWindow);
+            game.Services.AddService(typeof(UIWindow), _mainWindow);
 
             _viewController = new iOSGameViewController(this);
-            game.Services.AddService (typeof(UIViewController), _viewController);
-            Window = new iOSGameWindow (_viewController);
+            game.Services.AddService(typeof(UIViewController), _viewController);
+            Window = new iOSGameWindow(_viewController);
 
-            _mainWindow.Add (_viewController.View);
+            _mainWindow.Add(_viewController.View);
 
             _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 

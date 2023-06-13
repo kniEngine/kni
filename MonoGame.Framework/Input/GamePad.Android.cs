@@ -158,7 +158,8 @@ namespace Microsoft.Xna.Framework.Input
             }
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
-            else {
+            else
+            {
                 if (index == 0 && Back)
                 {
                     // Consume state

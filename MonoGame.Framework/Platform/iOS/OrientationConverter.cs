@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework
         }
 
         [CLSCompliant(false)]
-        public static UIInterfaceOrientationMask ToUIInterfaceOrientationMask (DisplayOrientation orientation)
+        public static UIInterfaceOrientationMask ToUIInterfaceOrientationMask(DisplayOrientation orientation)
         {
             switch (Normalize(orientation))
             {

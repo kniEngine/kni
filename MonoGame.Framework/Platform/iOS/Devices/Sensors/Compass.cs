@@ -41,7 +41,7 @@ namespace Microsoft.Devices.Sensors
             readingChanged += ReadingChangedHandler;
         }
 
-        protected override void Dispose (bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {

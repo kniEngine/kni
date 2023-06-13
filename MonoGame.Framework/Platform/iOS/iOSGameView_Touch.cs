@@ -77,8 +77,10 @@ using UIKit;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace Microsoft.Xna.Framework {
-	partial class iOSGameView {
+namespace Microsoft.Xna.Framework
+{
+	partial class iOSGameView
+    {
 		
 		static GestureType EnabledGestures
 		{
@@ -87,43 +89,44 @@ namespace Microsoft.Xna.Framework {
 		
 		#region Touches
 
-		public override void TouchesBegan (NSSet touches, UIEvent evt)
+		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
-			base.TouchesBegan (touches, evt);
-			FillTouchCollection (touches);
+			base.TouchesBegan(touches, evt);
+			FillTouchCollection(touches);
 		}
 
-		public override void TouchesEnded (NSSet touches, UIEvent evt)
+		public override void TouchesEnded(NSSet touches, UIEvent evt)
 		{
-			base.TouchesEnded (touches, evt);
-			FillTouchCollection (touches);
+			base.TouchesEnded(touches, evt);
+			FillTouchCollection(touches);
 		}
 
-		public override void TouchesMoved (NSSet touches, UIEvent evt)
+		public override void TouchesMoved(NSSet touches, UIEvent evt)
 		{
-			base.TouchesMoved (touches, evt);
-			FillTouchCollection (touches);
+			base.TouchesMoved(touches, evt);
+			FillTouchCollection(touches);
 		}
 
-		public override void TouchesCancelled (NSSet touches, UIEvent evt)
+		public override void TouchesCancelled(NSSet touches, UIEvent evt)
 		{
-			base.TouchesCancelled (touches, evt);
-			FillTouchCollection (touches);
+			base.TouchesCancelled(touches, evt);
+			FillTouchCollection(touches);
 		}
 		
 		// TODO: Review FillTouchCollection
-		private void FillTouchCollection (NSSet touches)
+		private void FillTouchCollection(NSSet touches)
 		{
 			if ((long)touches.Count == 0)
 				return;
 
-			var touchesArray = touches.ToArray<UITouch> ();
-			for (int i = 0; i < touchesArray.Length; ++i) {
+			var touchesArray = touches.ToArray<UITouch>();
+			for (int i = 0; i < touchesArray.Length; ++i)
+            {
 				var touch = touchesArray [i];
 
 				//Get position touch
-				var location = touch.LocationInView (touch.View);
-				var position = GetOffsetPosition (new Vector2 ((float)location.X, (float)location.Y), true);
+				var location = touch.LocationInView(touch.View);
+				var position = GetOffsetPosition(new Vector2 ((float)location.X, (float)location.Y), true);
 				var id = (int)(long)(IntPtr)touch.Handle;
 
 				switch (touch.Phase) 
@@ -148,7 +151,7 @@ namespace Microsoft.Xna.Framework {
 		}
 		
 		// TODO: Review GetOffsetPosition, hopefully it can be removed now.
-		public Vector2 GetOffsetPosition (Vector2 position, bool useScale)
+		public Vector2 GetOffsetPosition(Vector2 position, bool useScale)
 		{
 			if (useScale)
 				return position * (float)Layer.ContentsScale;

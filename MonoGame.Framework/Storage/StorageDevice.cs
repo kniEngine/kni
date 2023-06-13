@@ -45,15 +45,15 @@ namespace Microsoft.Xna.Framework.Storage
 	
 	// The delegate must have the same signature as the method
 	// it will call asynchronously.
-	public delegate StorageDevice ShowSelectorAsynchronousShow (PlayerIndex player, int sizeInBytes, int directoryCount);
+	public delegate StorageDevice ShowSelectorAsynchronousShow(PlayerIndex player, int sizeInBytes, int directoryCount);
 	// The MonoTouch AOT cannot deal with nullable types in a delegate (or
 	// at least not the straightforward implementation), so we define two
 	// delegate types.
-	public delegate StorageDevice ShowSelectorAsynchronousShowNoPlayer (int sizeInBytes, int directoryCount);
+	public delegate StorageDevice ShowSelectorAsynchronousShowNoPlayer(int sizeInBytes, int directoryCount);
 
 	// The delegate must have the same signature as the method
 	// it will call asynchronously.
-	public delegate StorageContainer OpenContainerAsynchronous (string displayName);
+	public delegate StorageContainer OpenContainerAsynchronous(string displayName);
 	
     /// <summary>
     /// Exposes a storage device for storing user data.
@@ -84,18 +84,22 @@ namespace Microsoft.Xna.Framework.Storage
         /// <summary>
         /// Returns the amount of free space.
         /// </summary>
-		public long FreeSpace { 
-			get { 
+		public long FreeSpace
+        {
+			get
+            { 
 				// I do not know if the DriveInfo is is implemented on Mac or not
 				// thus the try catch
-				try {
+				try
+                {
 #if WINDOWS_UAP
 					return long.MaxValue;
 #else
                     return new DriveInfo(GetDevicePath).AvailableFreeSpace;
 #endif
                 }
-				catch (Exception) {
+				catch (Exception)
+                {
 					StorageDeviceHelper.Path = StorageRoot;
 					return StorageDeviceHelper.FreeSpace;
 				}
@@ -105,18 +109,22 @@ namespace Microsoft.Xna.Framework.Storage
         /// <summary>
         /// Returns true if device is connected, false otherwise.
         /// </summary>
-		public bool IsConnected { 
-			get { 
+		public bool IsConnected
+        {
+			get
+            {
 				// I do not know if the DriveInfo is is implemented on Mac or not
 				// thus the try catch
-				try {
+				try
+                {
 #if WINDOWS_UAP
 					return true;
 #else
 					return new DriveInfo(GetDevicePath).IsReady;
 #endif
                 }
-				catch (Exception) {
+				catch (Exception)
+                {
 					return true;
 				}
 			} 
@@ -125,12 +133,15 @@ namespace Microsoft.Xna.Framework.Storage
         /// <summary>
         /// Returns the total size of device.
         /// </summary>
-		public long TotalSpace { 
-			get { 
+		public long TotalSpace
+        {
+			get
+            {
 				
 				// I do not know if the DriveInfo is is implemented on Mac or not
 				// thus the try catch
-				try {
+				try
+                {
 #if WINDOWS_UAP
 					return long.MaxValue;
 #else
@@ -139,7 +150,8 @@ namespace Microsoft.Xna.Framework.Storage
 					return new DriveInfo(GetDevicePath).TotalSize;
 #endif
                 }
-				catch (Exception) {
+				catch (Exception)
+                {
 					StorageDeviceHelper.Path = StorageRoot;
 					return StorageDeviceHelper.TotalSpace;
 				}
@@ -149,13 +161,16 @@ namespace Microsoft.Xna.Framework.Storage
 		
 		string GetDevicePath
 		{
-			get {
+			get
+            {
 				// We may not need to store the StorageContainer in the future
 				// when we get DeviceChanged events working.
-				if (storageContainer == null) {
+				if (storageContainer == null)
+                {
 					return StorageRoot;
 				}
-				else {
+				else
+                {
 					return storageContainer._storagePath;
 				}				
 			}
@@ -193,13 +208,13 @@ namespace Microsoft.Xna.Framework.Storage
 		//
 		//   state:
 		//     A user-created object used to uniquely identify the request, or null.
-		public IAsyncResult BeginOpenContainer (string displayName, AsyncCallback callback, object state)
+		public IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
 		{
 			return OpenContainer(displayName, callback, state);
 
 		}
 		
-		private IAsyncResult OpenContainer (string displayName, AsyncCallback callback, object state)
+		private IAsyncResult OpenContainer(string displayName, AsyncCallback callback, object state)
 		{
 
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
@@ -236,7 +251,7 @@ namespace Microsoft.Xna.Framework.Storage
 		}
 	
 		// Private method to handle the creation of the StorageDevice
-		private StorageContainer Open (string displayName) 
+		private StorageContainer Open(string displayName) 
 		{
 			storageContainer = new StorageContainer(this, displayName, this.player);
 			return storageContainer;
@@ -255,9 +270,9 @@ namespace Microsoft.Xna.Framework.Storage
 		//
 		//   state:
 		//     A user-created object used to uniquely identify the request, or null.
-		public static IAsyncResult BeginShowSelector (AsyncCallback callback, object state)
+		public static IAsyncResult BeginShowSelector(AsyncCallback callback, object state)
 		{
-			return BeginShowSelector (0, 0, callback, state);
+			return BeginShowSelector(0, 0, callback, state);
 		}
 
 		//
@@ -277,9 +292,9 @@ namespace Microsoft.Xna.Framework.Storage
 		//
 		//   state:
 		//     A user-created object used to uniquely identify the request, or null.
-		public static IAsyncResult BeginShowSelector (PlayerIndex player, AsyncCallback callback, object state)
+		public static IAsyncResult BeginShowSelector(PlayerIndex player, AsyncCallback callback, object state)
 		{
-			return BeginShowSelector (player, 0, 0, callback, state);
+			return BeginShowSelector(player, 0, 0, callback, state);
 		}
 		//
 		// Summary:
@@ -301,10 +316,10 @@ namespace Microsoft.Xna.Framework.Storage
 		//
 		//   state:
 		//     A user-created object used to uniquely identify the request, or null.
-		public static IAsyncResult BeginShowSelector (int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
+		public static IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
 		{
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-			var del = new ShowSelectorAsynchronousShowNoPlayer (Show);
+			var del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
 #if WINDOWS_UAP
             showDelegate = del;
@@ -312,7 +327,7 @@ namespace Microsoft.Xna.Framework.Storage
 			return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
 #else
 			var tcs = new TaskCompletionSource<StorageDevice>(state);
-            var task = Task.Run<StorageDevice>(() => Show (sizeInBytes, directoryCount));
+            var task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
             task.ContinueWith(t =>
             {
                 // Copy the task result into the returned task.
@@ -357,10 +372,10 @@ namespace Microsoft.Xna.Framework.Storage
 		//
 		//   state:
 		//     A user-created object used to uniquely identify the request, or null.
-		public static IAsyncResult BeginShowSelector (PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
+		public static IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
 		{
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-			var del = new ShowSelectorAsynchronousShow (Show);
+			var del = new ShowSelectorAsynchronousShow(Show);
 #if WINDOWS_UA
             showDelegate = del;
 #endif
@@ -387,14 +402,14 @@ namespace Microsoft.Xna.Framework.Storage
         }
 	
 		// Private method to handle the creation of the StorageDevice
-		private static StorageDevice Show (PlayerIndex player, int sizeInBytes, int directoryCount)
+		private static StorageDevice Show(PlayerIndex player, int sizeInBytes, int directoryCount)
 		{
 			return new StorageDevice(player, sizeInBytes, directoryCount);
 		}
 
-		private static StorageDevice Show (int sizeInBytes, int directoryCount)
+		private static StorageDevice Show(int sizeInBytes, int directoryCount)
 		{
-			return new StorageDevice (null, sizeInBytes, directoryCount);
+			return new StorageDevice(null, sizeInBytes, directoryCount);
 		}
 		
 		//
@@ -402,9 +417,9 @@ namespace Microsoft.Xna.Framework.Storage
 		// Parameters:
 		//   titleName:
 		//     The name of the storage container to delete.
-		public void DeleteContainer (string titleName)
+		public void DeleteContainer(string titleName)
 		{
-			throw new NotImplementedException ();
+			throw new NotImplementedException();
 		}			
 
 		//
@@ -414,7 +429,7 @@ namespace Microsoft.Xna.Framework.Storage
 		// Parameters:
 		//   result:
 		//     The IAsyncResult returned from BeginOpenContainer.
-		public StorageContainer EndOpenContainer (IAsyncResult result)
+		public StorageContainer EndOpenContainer(IAsyncResult result)
 		{
 
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
@@ -477,7 +492,7 @@ namespace Microsoft.Xna.Framework.Storage
 		// Parameters:
 		//   result:
 		//     The IAsyncResult returned from BeginShowSelector.
-		public static StorageDevice EndShowSelector (IAsyncResult result) 
+		public static StorageDevice EndShowSelector(IAsyncResult result) 
 		{
 
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
@@ -526,7 +541,8 @@ namespace Microsoft.Xna.Framework.Storage
 		
 		internal static string StorageRoot
 		{
-			get {
+			get
+            {
 #if WINDOWS_UAP
 				return ApplicationData.Current.LocalFolder.Path; 
 #elif DESKTOPGL

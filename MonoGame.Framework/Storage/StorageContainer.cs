@@ -64,9 +64,8 @@ namespace Microsoft.Xna.Framework.Storage
             _storagePath = Path.Combine(saved, name);
 			
 			var playerSave = string.Empty;
-			if (playerIndex.HasValue) {
+			if (playerIndex.HasValue)
 				playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
-			}
 			
 			if (!string.IsNullOrEmpty(playerSave))
 				_storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
@@ -111,7 +110,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// Creates a new directory in the storage-container.
         /// </summary>
         /// <param name="directory">Relative path of the directory to be created.</param>
-		public void CreateDirectory (string directory)
+		public void CreateDirectory(string directory)
 		{
 			if (string.IsNullOrEmpty(directory))
 				throw new ArgumentNullException("Parameter directory must contain a value.");
@@ -143,7 +142,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="file">Relative path of the file to be created.</param>
         /// <returns>Returns <see cref="Stream"/> for the created file.</returns>
-		public Stream CreateFile (string file)
+		public Stream CreateFile(string file)
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
@@ -165,7 +164,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// Deletes specified directory for the storage-container.
         /// </summary>
         /// <param name="directory">The relative path of the directory to be deleted.</param>
-		public void DeleteDirectory (string directory)
+		public void DeleteDirectory(string directory)
 		{
 			if (string.IsNullOrEmpty(directory))
 				throw new ArgumentNullException("Parameter directory must contain a value.");
@@ -187,7 +186,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// Deletes a file from the storage-container.
         /// </summary>
         /// <param name="file">The relative path of the file to be deleted.</param>
-		public void DeleteFile (string file)
+		public void DeleteFile(string file)
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
@@ -211,7 +210,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="directory">The relative path of directory to query for.</param>
         /// <returns>True if queried directory exists, false otherwise.</returns>
-		public bool DirectoryExists (string directory)
+		public bool DirectoryExists(string directory)
 		{
 			if (string.IsNullOrEmpty(directory))
 				throw new ArgumentNullException("Parameter directory must contain a value.");
@@ -239,7 +238,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <summary>
         /// Disposes un-managed objects referenced by this object.
         /// </summary>
-		public void Dispose ()
+		public void Dispose()
 		{
 
 			// Fill this in when we figure out what we should be disposing
@@ -251,7 +250,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="file">The relative path of file to query for.</param>
         /// <returns>True if queried file exists, false otherwise.</returns>
-		public bool FileExists (string file)
+		public bool FileExists(string file)
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
@@ -281,7 +280,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// Returns list of directory names in the storage-container.
         /// </summary>
         /// <returns>List of directory names.</returns>
-		public string[] GetDirectoryNames ()
+		public string[] GetDirectoryNames()
         {
 #if WINDOWS_UAP
             var folder = ApplicationData.Current.LocalFolder;
@@ -297,16 +296,16 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="searchPattern">A search pattern that supports single-character ("?") and multicharacter ("*") wildcards.</param>
         /// <returns>List of matched directory names.</returns>
-		public string[] GetDirectoryNames (string searchPattern)
+		public string[] GetDirectoryNames(string searchPattern)
 		{
-			throw new NotImplementedException ();
+			throw new NotImplementedException();
 		}
 
         /// <summary>
         /// Returns list of file names in the storage-container.
         /// </summary>
         /// <returns>List of file names.</returns>
-		public string[] GetFileNames ()
+		public string[] GetFileNames()
         {
 #if WINDOWS_UAP
             var folder = ApplicationData.Current.LocalFolder;
@@ -322,7 +321,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="searchPattern">A search pattern that supports single-character ("?") and multicharacter ("*") wildcards.</param>
         /// <returns>List of matched file names.</returns>
-		public string[] GetFileNames (string searchPattern)
+		public string[] GetFileNames(string searchPattern)
 		{
 			if (string.IsNullOrEmpty(searchPattern))
 				throw new ArgumentNullException("Parameter searchPattern must contain a value.");
@@ -345,7 +344,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="file">Relative path of the file.</param>
         /// <param name="fileMode"><see cref="FileMode"/> that specifies how the file is opened.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-		public Stream OpenFile (string file, FileMode fileMode)
+		public Stream OpenFile(string file, FileMode fileMode)
 		{
 			return OpenFile(file, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
 		}				
@@ -357,7 +356,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="fileMode"><see cref="FileMode"/> that specifies how the file is opened.</param>
         /// <param name="fileAccess"><see cref="FileAccess"/> that specifies access mode.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-        public Stream OpenFile (string file, FileMode fileMode, FileAccess fileAccess)
+        public Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess)
 		{
 			return OpenFile(file, fileMode, fileAccess, FileShare.ReadWrite);
 		}				
@@ -370,7 +369,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="fileAccess"><see cref="FileAccess"/> that specifies access mode.</param>
         /// <param name="fileShare">A bitwise combination of <see cref="FileShare"/> enumeration values that specifies access modes for other stream objects.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-        public Stream OpenFile (string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
+        public Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");

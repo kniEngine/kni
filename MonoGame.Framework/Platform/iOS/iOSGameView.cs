@@ -178,14 +178,14 @@ namespace Microsoft.Xna.Framework
 
 			Layer.ContentsScale = Window.Screen.Scale;
 
-			//var strVersion = OpenTK.Graphics.ES11.GL.GetString (OpenTK.Graphics.ES11.All.Version);
-			//strVersion = OpenTK.Graphics.ES20.GL.GetString (OpenTK.Graphics.ES20.All.Version);
-			//var version = Version.Parse (strVersion);
+			//var strVersion = OpenTK.Graphics.ES11.GL.GetString(OpenTK.Graphics.ES11.All.Version);
+			//strVersion = OpenTK.Graphics.ES20.GL.GetString(OpenTK.Graphics.ES20.All.Version);
+			//var version = Version.Parse(strVersion);
 
 			try 
             {
                 _glContext = new GLGraphicsContext();
-                //new GraphicsContext (null, null, 2, 0, GraphicsContextFlags.Embedded)
+                //new GraphicsContext(null, null, 2, 0, GraphicsContextFlags.Embedded)
             } 
             catch (Exception ex)
             {

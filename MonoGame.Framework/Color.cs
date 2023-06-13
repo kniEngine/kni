@@ -1804,7 +1804,7 @@ namespace Microsoft.Xna.Framework
         /// {R:[red] G:[green] B:[blue] A:[alpha]}
         /// </summary>
         /// <returns><see cref="String"/> representation of this <see cref="Color"/>.</returns>
-	public override string ToString ()
+	public override string ToString()
 	{
         StringBuilder sb = new StringBuilder(25);
         sb.Append("{R:");

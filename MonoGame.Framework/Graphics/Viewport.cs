@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// {X:[<see cref="X"/>] Y:[<see cref="Y"/>] Width:[<see cref="Width"/>] Height:[<see cref="Height"/>] MinDepth:[<see cref="MinDepth"/>] MaxDepth:[<see cref="MaxDepth"/>]}
         /// </summary>
         /// <returns>A <see cref="String"/> representation of this <see cref="Viewport"/>.</returns>
-        public override string ToString ()
+        public override string ToString()
 	    {
 	        return "{X:" + x + ", Y:" + y + ", Width:" + w + ", Height:" + h + ", MinDepth:" + minDepth + ", MaxDepth:" + maxDepth + "}";
 	    }

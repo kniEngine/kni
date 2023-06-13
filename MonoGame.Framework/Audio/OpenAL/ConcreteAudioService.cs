@@ -310,16 +310,16 @@ namespace Microsoft.Xna.Platform.Audio
 
             // Dont know what to do with these EFX has no mapping for them. Just ignore for now
             // we can enable them as we go. 
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.PositionLeft, reverbSettings.PositionLeft);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.PositionRight, reverbSettings.PositionRight);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.PositionLeftMatrix, reverbSettings.PositionLeftMatrix);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.PositionRightMatrix, reverbSettings.PositionRightMatrix);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RearDelayMs);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterFrequencyHz);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterMainDb);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterHighFrequencyDb);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.DecayTimeSec);
-            //efx.SetEffectParam (ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomSizeFeet);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.PositionLeft, reverbSettings.PositionLeft);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.PositionRight, reverbSettings.PositionRight);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.PositionLeftMatrix, reverbSettings.PositionLeftMatrix);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.PositionRightMatrix, reverbSettings.PositionRightMatrix);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RearDelayMs);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterFrequencyHz);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterMainDb);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomFilterHighFrequencyDb);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.DecayTimeSec);
+            //efx.SetEffectParam(ReverbEffect, EfxEffectf.LowFrequencyReference, reverbSettings.RoomSizeFeet);
 
             efx.BindEffectToAuxiliarySlot(ReverbSlot, ReverbEffect);
         }

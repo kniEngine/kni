@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
 		}
 
-        void HandleInterfaceOrientationChanged (object sender, EventArgs e)
+        void HandleInterfaceOrientationChanged(object sender, EventArgs e)
         {
             OnOrientationChanged();
         }

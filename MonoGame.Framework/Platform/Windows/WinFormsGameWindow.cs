@@ -455,7 +455,9 @@ namespace MonoGame.Framework
                 {
 					// stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
 					_concreteGame.GraphicsDevice.ResizeTargets();
-				} else {
+				}
+                else
+                {
 					// This needs to be called in case the user presses the Windows key while the focus is on the second monitor,
 					//	which (sometimes) causes the window to exit fullscreen mode, but still keeps it visible
 					MinimizeFullScreen();

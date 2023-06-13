@@ -827,8 +827,8 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
         private delegate void alDeleteEffectsDelegate(int n, ref int effect);
         private alDeleteEffectsDelegate alDeleteEffects;
 
-        //[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-        //private delegate bool alIsEffectDelegate (int effect);
+        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        //private delegate bool alIsEffectDelegate(int effect);
         //private alIsEffectDelegate alIsEffect;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -913,7 +913,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         /*
             alEffecti(effect, EfxEffecti.FilterType, (int)EfxEffectType.Reverb);
-            ALHelper.CheckError ("Failed to set Filter Type.");
+            ALHelper.CheckError("Failed to set Filter Type.");
         */
 
         internal void GenAuxiliaryEffectSlots(int count, out int slot)
