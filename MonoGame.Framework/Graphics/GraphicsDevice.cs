@@ -910,16 +910,18 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void SetIndexBuffer(IndexBuffer indexBuffer)
+        public IndexBuffer Indices
         {
-            if (_indexBuffer == indexBuffer)
-                return;
+            get { return _indexBuffer; }
+            set
+            {
+                if (_indexBuffer == value)
+                    return;
 
-            _indexBuffer = indexBuffer;
-            _indexBufferDirty = true;
+                _indexBuffer = value;
+                _indexBufferDirty = true;
+            }
         }
-
-        public IndexBuffer Indices { set { SetIndexBuffer(value); } get { return _indexBuffer; } }
 
         internal Shader VertexShader
         {
