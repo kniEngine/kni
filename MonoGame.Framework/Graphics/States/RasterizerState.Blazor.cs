@@ -13,43 +13,48 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var GL = device._glContext;
 
-            // When rendering offscreen the faces change order.
-            var offscreen = device.IsRenderTargetBound;
-
             if (force)
             {
                 // Turn off dithering to make sure data returned by Texture.GetData is accurate
                 GL.Disable(WebGLCapability.DITHER);
             }
 
-            if (CullMode == CullMode.None)
-            {
-                GL.Disable(WebGLCapability.CULL_FACE);
-                GraphicsExtensions.CheckGLError();
-            }
-            else
-            {
-                GL.Enable(WebGLCapability.CULL_FACE);
-                GraphicsExtensions.CheckGLError();
-                GL.CullFace(WebGLCullFaceMode.BACK);
-                GraphicsExtensions.CheckGLError();
+            // When rendering offscreen the faces change order.
+            bool offscreen = device.IsRenderTargetBound;
 
-                if (CullMode == CullMode.CullClockwiseFace)
-                {
+            switch (CullMode)
+            {
+                case CullMode.None:
+                    GL.Disable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    break;
+
+                case Graphics.CullMode.CullClockwiseFace:
+                    GL.Enable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    GL.CullFace(WebGLCullFaceMode.BACK);
+                    GraphicsExtensions.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CW);
                     else
                         GL.FrontFace(WebGLWinding.CCW);
                     GraphicsExtensions.CheckGLError();
-                }
-                else
-                {
+                    break;
+
+                case Graphics.CullMode.CullCounterClockwiseFace:
+                    GL.Enable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    GL.CullFace(WebGLCullFaceMode.BACK);
+                    GraphicsExtensions.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CCW);
                     else
                         GL.FrontFace(WebGLWinding.CW);
                     GraphicsExtensions.CheckGLError();
-                }
+                    break;
+
+                default:
+                    throw new InvalidOperationException("CullMode");
             }
 
             if (FillMode == FillMode.WireFrame)

@@ -24,8 +24,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Build the description.
                 var desc = new SharpDX.Direct3D11.RasterizerStateDescription();
 
-                switch ( CullMode )
+                switch (CullMode)
                 {
+                    case Graphics.CullMode.None:
+                        desc.CullMode = SharpDX.Direct3D11.CullMode.None;
+                        break;
+
                     case Graphics.CullMode.CullClockwiseFace:
                         desc.CullMode = SharpDX.Direct3D11.CullMode.Front;
                         break;
@@ -34,9 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         desc.CullMode = SharpDX.Direct3D11.CullMode.Back;
                         break;
 
-                    case Graphics.CullMode.None:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.None;
-                        break;
+                    default:
+                        throw new InvalidOperationException("CullMode");
                 }
 
                 desc.IsScissorEnabled = ScissorTestEnable;
