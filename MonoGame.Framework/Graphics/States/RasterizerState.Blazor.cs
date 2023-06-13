@@ -13,46 +13,51 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var GL = device._glContext;
 
-            // When rendering offscreen the faces change order.
-            var offscreen = device.IsRenderTargetBound;
-
             if (force)
             {
                 // Turn off dithering to make sure data returned by Texture.GetData is accurate
                 GL.Disable(WebGLCapability.DITHER);
             }
 
-            if (CullMode == CullMode.None)
-            {
-                GL.Disable(WebGLCapability.CULL_FACE);
-                GraphicsExtensions.CheckGLError();
-            }
-            else
-            {
-                GL.Enable(WebGLCapability.CULL_FACE);
-                GraphicsExtensions.CheckGLError();
-                GL.CullFace(WebGLCullFaceMode.BACK);
-                GraphicsExtensions.CheckGLError();
+            // When rendering offscreen the faces change order.
+            bool offscreen = device.IsRenderTargetBound;
 
-                if (CullMode == CullMode.CullClockwiseFace)
-                {
+            switch (CullMode)
+            {
+                case CullMode.None:
+                    GL.Disable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    break;
+
+                case Graphics.CullMode.CullClockwiseFace:
+                    GL.Enable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    GL.CullFace(WebGLCullFaceMode.BACK);
+                    GraphicsExtensions.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CW);
                     else
                         GL.FrontFace(WebGLWinding.CCW);
                     GraphicsExtensions.CheckGLError();
-                }
-                else
-                {
+                    break;
+
+                case Graphics.CullMode.CullCounterClockwiseFace:
+                    GL.Enable(WebGLCapability.CULL_FACE);
+                    GraphicsExtensions.CheckGLError();
+                    GL.CullFace(WebGLCullFaceMode.BACK);
+                    GraphicsExtensions.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CCW);
                     else
                         GL.FrontFace(WebGLWinding.CW);
                     GraphicsExtensions.CheckGLError();
-                }
+                    break;
+
+                default:
+                    throw new InvalidOperationException("CullMode");
             }
 
-            if (FillMode != FillMode.Solid)
+            if (FillMode == FillMode.WireFrame)
                 throw new PlatformNotSupportedException();
 
             if (force || this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
@@ -74,9 +79,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     // from the docs it seems this works the same as for Direct3D
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
-                    DepthFormat activeDepthFormat = device.IsRenderTargetBound
-                    ? device._currentRenderTargetBindings[0].DepthFormat
-                    : device.PresentationParameters.DepthStencilFormat;
+                    DepthFormat activeDepthFormat = (device.IsRenderTargetBound)
+                                                  ? device._currentRenderTargetBindings[0].DepthFormat
+                                                  : device.PresentationParameters.DepthStencilFormat;
                     int depthMul;
                     switch (activeDepthFormat)
                     {
@@ -90,6 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         case DepthFormat.Depth24Stencil8:
                             depthMul = 1 << 24 - 1;
                             break;
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
