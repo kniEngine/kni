@@ -37,6 +37,65 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _graphicsMetrics = value; }
         }
 
+        public Rectangle ScissorRectangle
+        {
+            get { return Strategy.ScissorRectangle; }
+            set { Strategy.ScissorRectangle = value; }
+        }
+
+        public BlendState BlendState
+        {
+            get { return Strategy.BlendState; }
+            set { Strategy.BlendState = value; }
+        }
+
+        public Color BlendFactor
+        {
+            get { return Strategy.BlendFactor; }
+            set { Strategy.BlendFactor = value; }
+        }
+
+        public DepthStencilState DepthStencilState
+        {
+            get { return Strategy.DepthStencilState; }
+            set { Strategy.DepthStencilState = value; }
+        }
+
+        public RasterizerState RasterizerState
+        {
+            get { return Strategy.RasterizerState; }
+            set { Strategy.RasterizerState = value; }
+        }
+
+        public SamplerStateCollection SamplerStates
+        {
+            get { return Strategy.SamplerStates; }
+        }
+
+        public SamplerStateCollection VertexSamplerStates
+        {
+            get { return Strategy.VertexSamplerStates; }
+        }
+
+        public TextureCollection Textures
+        {
+            get { return Strategy.Textures; }
+        }
+
+        public TextureCollection VertexTextures
+        {
+            get { return Strategy.VertexTextures; }
+        }
+
+        public IndexBuffer Indices
+        {
+            get { return Strategy.Indices; }
+            set { Strategy.Indices = value; }
+        }
+
+
+        public int RenderTargetCount { get { return Strategy.RenderTargetCount; } }
+
         #region IDisposable Members
 
         ~GraphicsContext()

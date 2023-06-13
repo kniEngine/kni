@@ -232,19 +232,19 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
             _mainContext.Strategy._blendStateOpaque = BlendState.Opaque.Clone();
 
-            BlendState = BlendState.Opaque;
+            _mainContext.Strategy.BlendState = BlendState.Opaque;
 
             _mainContext.Strategy._depthStencilStateDefault = DepthStencilState.Default.Clone();
             _mainContext.Strategy._depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
             _mainContext.Strategy._depthStencilStateNone = DepthStencilState.None.Clone();
 
-            DepthStencilState = DepthStencilState.Default;
+            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
 
             _mainContext.Strategy._rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
             _mainContext.Strategy._rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
             _mainContext.Strategy._rasterizerStateCullNone = RasterizerState.CullNone.Clone();
 
-            RasterizerState = RasterizerState.CullCounterClockwise;
+            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Setup end
 
@@ -255,9 +255,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._blendFactorDirty = true;
             _mainContext.Strategy._depthStencilStateDirty = true;
             _mainContext.Strategy._rasterizerStateDirty = true;
-            BlendState = BlendState.Opaque;
-            DepthStencilState = DepthStencilState.Default;
-            RasterizerState = RasterizerState.CullCounterClockwise;
+            _mainContext.Strategy.BlendState = BlendState.Opaque;
+            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
+            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Clear constant buffers
             _mainContext.Strategy._vertexConstantBuffers.Clear();
@@ -280,15 +280,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Rectangle ScissorRectangle
         {
-            get { return _mainContext.Strategy._scissorRectangle; }
-            set
-            {
-                if (_mainContext.Strategy._scissorRectangle == value)
-                    return;
-
-                _mainContext.Strategy._scissorRectangle = value;
-                _mainContext.Strategy._scissorRectangleDirty = true;
-            }
+            get { return CurrentContext.ScissorRectangle; }
+            set { CurrentContext.ScissorRectangle = value; }
         }
 
         public Viewport Viewport
@@ -303,43 +296,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BlendState BlendState
         {
-			get { return _mainContext.Strategy._blendState; }
-			set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                // Don't set the same state twice!
-                if (_mainContext.Strategy._blendState == value)
-                    return;
-
-                _mainContext.Strategy._blendState = value;
-
-                // Static state properties never actually get bound;
-                // instead we use our GraphicsDevice-specific version of them.
-                var newBlendState = _mainContext.Strategy._blendState;
-                if (ReferenceEquals(_mainContext.Strategy._blendState, BlendState.Additive))
-                    newBlendState = _mainContext.Strategy._blendStateAdditive;
-                else if (ReferenceEquals(_mainContext.Strategy._blendState, BlendState.AlphaBlend))
-                    newBlendState = _mainContext.Strategy._blendStateAlphaBlend;
-                else if (ReferenceEquals(_mainContext.Strategy._blendState, BlendState.NonPremultiplied))
-                    newBlendState = _mainContext.Strategy._blendStateNonPremultiplied;
-                else if (ReferenceEquals(_mainContext.Strategy._blendState, BlendState.Opaque))
-                    newBlendState = _mainContext.Strategy._blendStateOpaque;
-
-                if (newBlendState.IndependentBlendEnable && !GraphicsCapabilities.SupportsSeparateBlendStates)
-                    throw new PlatformNotSupportedException("Independent blend states requires at least OpenGL 4.0 or GL_ARB_draw_buffers_blend. Try upgrading your graphics drivers.");
-
-                // Blend state is now bound to a device... no one should
-                // be changing the state of the blend state object now!
-                newBlendState.BindToGraphicsDevice(this);
-
-                _mainContext.Strategy._actualBlendState = newBlendState;
-
-                BlendFactor = _mainContext.Strategy._actualBlendState.BlendFactor;
-
-                _mainContext.Strategy._blendStateDirty = true;
-            }
+			get { return CurrentContext.BlendState; }
+			set { CurrentContext.BlendState = value; }
 		}
 
         /// <summary>
@@ -351,101 +309,40 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public Color BlendFactor
         {
-            get { return _mainContext.Strategy._blendFactor; }
-            set
-            {
-                if (_mainContext.Strategy._blendFactor == value)
-                    return;
-                _mainContext.Strategy._blendFactor = value;
-                _mainContext.Strategy._blendFactorDirty = true;
-            }
+            get { return CurrentContext.BlendFactor; }
+            set { CurrentContext.BlendFactor = value; }
         }
 
         public DepthStencilState DepthStencilState
         {
-            get { return _mainContext.Strategy._depthStencilState; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                // Don't set the same state twice!
-                if (_mainContext.Strategy._depthStencilState == value)
-                    return;
-
-                _mainContext.Strategy._depthStencilState = value;
-
-                // Static state properties never actually get bound;
-                // instead we use our GraphicsDevice-specific version of them.
-                var newDepthStencilState = _mainContext.Strategy._depthStencilState;
-                if (ReferenceEquals(_mainContext.Strategy._depthStencilState, DepthStencilState.Default))
-                    newDepthStencilState = _mainContext.Strategy._depthStencilStateDefault;
-                else if (ReferenceEquals(_mainContext.Strategy._depthStencilState, DepthStencilState.DepthRead))
-                    newDepthStencilState = _mainContext.Strategy._depthStencilStateDepthRead;
-                else if (ReferenceEquals(_mainContext.Strategy._depthStencilState, DepthStencilState.None))
-                    newDepthStencilState = _mainContext.Strategy._depthStencilStateNone;
-
-                newDepthStencilState.BindToGraphicsDevice(this);
-
-                _mainContext.Strategy._actualDepthStencilState = newDepthStencilState;
-
-                _mainContext.Strategy._depthStencilStateDirty = true;
-            }
+            get { return CurrentContext.DepthStencilState; }
+            set { CurrentContext.DepthStencilState = value; }
         }
 
         public RasterizerState RasterizerState
         {
-            get { return _mainContext.Strategy._rasterizerState; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                // Don't set the same state twice!
-                if (_mainContext.Strategy._rasterizerState == value)
-                    return;
-
-                if (!value.DepthClipEnable && !GraphicsCapabilities.SupportsDepthClamp)
-                    throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
-
-                _mainContext.Strategy._rasterizerState = value;
-
-                // Static state properties never actually get bound;
-                // instead we use our GraphicsDevice-specific version of them.
-                var newRasterizerState = _mainContext.Strategy._rasterizerState;
-                if (ReferenceEquals(_mainContext.Strategy._rasterizerState, RasterizerState.CullClockwise))
-                    newRasterizerState = _mainContext.Strategy._rasterizerStateCullClockwise;
-                else if (ReferenceEquals(_mainContext.Strategy._rasterizerState, RasterizerState.CullCounterClockwise))
-                    newRasterizerState = _mainContext.Strategy._rasterizerStateCullCounterClockwise;
-                else if (ReferenceEquals(_mainContext.Strategy._rasterizerState, RasterizerState.CullNone))
-                    newRasterizerState = _mainContext.Strategy._rasterizerStateCullNone;
-
-                newRasterizerState.BindToGraphicsDevice(this);
-
-                _mainContext.Strategy._actualRasterizerState = newRasterizerState;
-
-                _mainContext.Strategy._rasterizerStateDirty = true;
-            }
+            get { return CurrentContext.RasterizerState; }
+            set { CurrentContext.RasterizerState = value; }
         }
 
         public SamplerStateCollection SamplerStates
         {
-            get { return _mainContext.Strategy._samplerStates; }
+            get { return CurrentContext.SamplerStates; }
         }
 
         public SamplerStateCollection VertexSamplerStates
         {
-            get { return _mainContext.Strategy._vertexSamplerStates; }
+            get { return CurrentContext.VertexSamplerStates; }
         }
 
         public TextureCollection Textures
         {
-            get { return _mainContext.Strategy._textures; }
+            get { return CurrentContext.Textures; }
         }
 
         public TextureCollection VertexTextures
         {
-            get { return _mainContext.Strategy._vertexTextures; }
+            get { return CurrentContext.VertexTextures; }
         }
 
         /// <summary>
@@ -734,7 +631,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public int RenderTargetCount
         {
-            get { return _mainContext.Strategy._currentRenderTargetCount; }
+            get { return CurrentContext.RenderTargetCount; }
         }
 
         internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
@@ -853,21 +750,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public IndexBuffer Indices
         {
-            get { return _mainContext.Strategy._indexBuffer; }
-            set
-            {
-                if (_mainContext.Strategy._indexBuffer == value)
-                    return;
-
-                _mainContext.Strategy._indexBuffer = value;
-                _mainContext.Strategy._indexBufferDirty = true;
-            }
+            get { return CurrentContext.Indices; }
+            set { CurrentContext.Indices = value; }
         }
 
         internal Shader VertexShader
         {
             get { return _mainContext.Strategy._vertexShader; }
-
             set
             {
                 if (_mainContext.Strategy._vertexShader == value)
@@ -882,7 +771,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Shader PixelShader
         {
             get { return _mainContext.Strategy._pixelShader; }
-
             set
             {
                 if (_mainContext.Strategy._pixelShader == value)
