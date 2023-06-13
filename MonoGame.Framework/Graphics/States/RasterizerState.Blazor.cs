@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            if (FillMode != FillMode.Solid)
+            if (FillMode == FillMode.WireFrame)
                 throw new PlatformNotSupportedException();
 
             if (force || this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)

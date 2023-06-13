@@ -50,13 +50,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-#if WINDOWS || DESKTOPGL
-			if (FillMode == FillMode.Solid) 
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            else
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+#if DESKTOPGL
+            if (FillMode == FillMode.WireFrame)
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            else // FillMode.Solid
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 #else
-            if (FillMode != FillMode.Solid)
+            if (FillMode == FillMode.WireFrame)
                 throw new NotImplementedException();
 #endif
 
