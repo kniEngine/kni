@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
     {
-        internal void PlatformApplyState(GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContext context, GraphicsDevice device, bool force = false)
         {
             var GL = device._glContext;
 
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
                     DepthFormat activeDepthFormat = (device.IsRenderTargetBound)
-                                                  ? device._currentRenderTargetBindings[0].DepthFormat
+                                                  ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
                                                   : device.PresentationParameters.DepthStencilFormat;
                     int depthMul;
                     switch (activeDepthFormat)
