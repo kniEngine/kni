@@ -178,6 +178,7 @@ namespace MonoGame.OpenGL
         SampleAlphaToOne = 0x809F,
         SampleCoverage = 0x80A0,
         DebugOutputSynchronous = 0x8242,
+        DepthClamp = 0x864F,
         DebugOutput = 0x92E0,
     }
 
