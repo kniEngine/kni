@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal void PlatformApplyState(GraphicsDevice device)
+        internal void PlatformApplyState(GraphicsContext context, GraphicsDevice device)
         {
             if (_state == null)
             {
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
                 DepthFormat activeDepthFormat = (device.IsRenderTargetBound)
-                                              ? device._currentRenderTargetBindings[0].DepthFormat
+                                              ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
                                               : device.PresentationParameters.DepthStencilFormat;
                 int depthMul;
                 switch (activeDepthFormat)

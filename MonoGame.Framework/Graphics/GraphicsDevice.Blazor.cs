@@ -53,19 +53,19 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-                if (_vertexShader == null && _pixelShader == null)
+                if (_mainContext.Strategy._vertexShader == null && _mainContext.Strategy._pixelShader == null)
                     throw new InvalidOperationException("There is no shader bound!");
-                if (_vertexShader == null)
-                    return _pixelShader.HashKey;
-                if (_pixelShader == null)
-                    return _vertexShader.HashKey;
-                return _vertexShader.HashKey ^ _pixelShader.HashKey;
+                if (_mainContext.Strategy._vertexShader == null)
+                    return _mainContext.Strategy._pixelShader.HashKey;
+                if (_mainContext.Strategy._pixelShader == null)
+                    return _mainContext.Strategy._vertexShader.HashKey;
+                return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey;
             }
         }
 
         private int ShaderProgramHash2
         {
-            get { return _vertexShader.HashKey ^ _pixelShader.HashKey; }
+            get { return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey; }
         }
 
         internal void SetVertexAttributeArray(bool[] attrs)
@@ -96,9 +96,9 @@ namespace Microsoft.Xna.Framework.Graphics
             var programHash = ShaderProgramHash;
             var bindingsChanged = false;
 
-            for (var slot = 0; slot < _vertexBuffers.Count; slot++)
+            for (var slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
             {
-                var vertexBufferBinding = _vertexBuffers.Get(slot);
+                var vertexBufferBinding = _mainContext.Strategy._vertexBuffers.Get(slot);
                 var vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
 
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
                     _newEnabledVertexAttributes[eva] = false;
-                for (var slot = 0; slot < _vertexBuffers.Count; slot++)
+                for (var slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
                 {
                     for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
                     }
                 }
-                _activeBufferBindingInfosCount = _vertexBuffers.Count;
+                _activeBufferBindingInfosCount = _mainContext.Strategy._vertexBuffers.Count;
             }
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
@@ -249,9 +249,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._actualBlendState.PlatformApplyState(this, true);
+            this._mainContext.Strategy._actualBlendState.PlatformApplyState(this, true);
             this.DepthStencilState.PlatformApplyState(this, true);
-            this.RasterizerState.PlatformApplyState(this, true);
+            this.RasterizerState.PlatformApplyState(_mainContext, this, true);
 
             _bufferBindingInfos = new BufferBindingInfo[GraphicsCapabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
@@ -331,7 +331,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
-            _rasterizerStateDirty = true;
+            _mainContext.Strategy._rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
             Textures.Dirty();
@@ -521,16 +521,16 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!this.IsRenderTargetBound)
                 return;
 
-            var renderTargetBinding = _currentRenderTargetBindings[0];
+            var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
             if (renderTarget.MultiSampleCount > 0 && _supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
 
-            for (var i = 0; i < _currentRenderTargetCount; i++)
+            for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
             {
-                renderTargetBinding = _currentRenderTargetBindings[i];
+                renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
@@ -545,22 +545,22 @@ namespace Microsoft.Xna.Framework.Graphics
         private IRenderTarget PlatformApplyRenderTargets()
         {
             WebGLFramebuffer glFramebuffer = null;
-            if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
+            if (!_glFramebuffers.TryGetValue(_mainContext.Strategy._currentRenderTargetBindings, out glFramebuffer))
             {
                 glFramebuffer = GL.CreateFramebuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
-                var renderTargetBinding = _currentRenderTargetBindings[0];
+                var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[0];
                 var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;             
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
                 GraphicsExtensions.CheckGLError();
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
                 GraphicsExtensions.CheckGLError();
 
-                for (var i = 0; i < _currentRenderTargetCount; i++)
+                for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
                 {
-                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
                     var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
                     renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
                     var attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
@@ -578,7 +578,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 GraphicsExtensions.CheckFramebufferStatus();
 
-                _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
+                _glFramebuffers.Add((RenderTargetBinding[])_mainContext.Strategy._currentRenderTargetBindings.Clone(), glFramebuffer);
             }
             else
             {
@@ -591,12 +591,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
-            _rasterizerStateDirty = true;
+            _mainContext.Strategy._rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
             Textures.Dirty();
 
-            return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
+            return _mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
         /// <summary>
@@ -680,34 +680,34 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyBlend();
             }
 
-            if (_depthStencilStateDirty)
+            if (_mainContext.Strategy._depthStencilStateDirty)
             {
-                _actualDepthStencilState.PlatformApplyState(this);
-                _depthStencilStateDirty = false;
+                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(this);
+                _mainContext.Strategy._depthStencilStateDirty = false;
             }
 
-            if (_rasterizerStateDirty)
+            if (_mainContext.Strategy._rasterizerStateDirty)
             {
-                _actualRasterizerState.PlatformApplyState(this);
-                _rasterizerStateDirty = false;
+                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext, this);
+                _mainContext.Strategy._rasterizerStateDirty = false;
             }
 
-            if (_scissorRectangleDirty)
+            if (_mainContext.Strategy._scissorRectangleDirty)
             {
                 PlatformApplyScissorRectangle();
-                _scissorRectangleDirty = false;
+                _mainContext.Strategy._scissorRectangleDirty = false;
             }
         }
 
         private void PlatformApplyBlend()
         {
-            if (_blendStateDirty)            
+            if (_mainContext.Strategy._blendStateDirty)            
             {
-                _actualBlendState.PlatformApplyState(this);
-                _blendStateDirty = false;
+                _mainContext.Strategy._actualBlendState.PlatformApplyState(this);
+                _mainContext.Strategy._blendStateDirty = false;
             }
 
-            if (_blendFactorDirty)
+            if (_mainContext.Strategy._blendFactorDirty)
             {
                 GL.BlendColor(
                     this.BlendFactor.R/255.0f,
@@ -715,13 +715,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.BlendFactor.B/255.0f,
                     this.BlendFactor.A/255.0f);
                 GraphicsExtensions.CheckGLError();
-                _blendFactorDirty = false;
+                _mainContext.Strategy._blendFactorDirty = false;
             }
         }
 
         private void PlatformApplyScissorRectangle()
         {
-            var scissorRect = _scissorRectangle;
+            var scissorRect = _mainContext.Strategy._scissorRectangle;
             if (!IsRenderTargetBound)
                 scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
@@ -738,22 +738,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
             //GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
-                
+
             // In OpenGL we have to re-apply the special "posFixup"
             // vertex shader uniform if the viewport changes.
-            _vertexShaderDirty = true;
+            _mainContext.Strategy._vertexShaderDirty = true;
         }
 
         private void PlatformApplyIndexBuffer()
         {
-            if (_indexBufferDirty)
+            if (_mainContext.Strategy._indexBufferDirty)
             {
-                if (_indexBuffer != null)
+                if (_mainContext.Strategy._indexBuffer != null)
                 {
-                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _indexBuffer.ibo);
+                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _mainContext.Strategy._indexBuffer.ibo);
                     GraphicsExtensions.CheckGLError();
                 }
-                _indexBufferDirty = false;
+                _mainContext.Strategy._indexBufferDirty = false;
             }
         }
 
@@ -763,31 +763,31 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyShaders()
         {
-            if (_vertexShader == null)
+            if (_mainContext.Strategy._vertexShader == null)
                 throw new InvalidOperationException("A vertex shader must be set!");
-            if (_pixelShader == null)
+            if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("A pixel shader must be set!");
 
-            if (_vertexShaderDirty || _pixelShaderDirty)
+            if (_mainContext.Strategy._vertexShaderDirty || _mainContext.Strategy._pixelShaderDirty)
             {
                 ActivateShaderProgram();
 
-                if (_vertexShaderDirty)
+                if (_mainContext.Strategy._vertexShaderDirty)
                 {
                     unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
                 }
 
-                if (_pixelShaderDirty)
+                if (_mainContext.Strategy._pixelShaderDirty)
                 {
                     unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
                 }
 
-                _vertexShaderDirty = false;
-                _pixelShaderDirty = false;
+                _mainContext.Strategy._vertexShaderDirty = false;
+                _mainContext.Strategy._pixelShaderDirty = false;
             }
 
-            _vertexConstantBuffers.Apply();
-            _pixelConstantBuffers.Apply();
+            _mainContext.Strategy._vertexConstantBuffers.Apply();
+            _mainContext.Strategy._pixelConstantBuffers.Apply();
 
             VertexTextures.PlatformApply();
             VertexSamplerStates.PlatformApply();
@@ -802,7 +802,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            var shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
 			var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
             var indexElementSize = shortIndices ? 2 : 4;
@@ -810,7 +810,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+            PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 
             GL.DrawElements(target,
                                      indexElementCount,
@@ -838,7 +838,7 @@ namespace Microsoft.Xna.Framework.Graphics
                           (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default Vertex buffers for rebinding
-            _vertexBuffersDirty = true;
+            _mainContext.Strategy._vertexBuffersDirty = true;
 
             //set vertex data
             GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
@@ -846,7 +846,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
 
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -870,7 +870,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, 0);
+            PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -900,7 +900,7 @@ namespace Microsoft.Xna.Framework.Graphics
                           (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default Vertex buffers for rebinding
-            _vertexBuffersDirty = true;
+            _mainContext.Strategy._vertexBuffersDirty = true;
 
             //set vertex data
             GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
@@ -916,7 +916,7 @@ namespace Microsoft.Xna.Framework.Graphics
                           (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default index buffer for rebinding
-            _indexBufferDirty = true;
+            _mainContext.Strategy._indexBufferDirty = true;
 
             // set index buffer
             GL.BufferSubData(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
@@ -924,7 +924,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
 
 
             var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);

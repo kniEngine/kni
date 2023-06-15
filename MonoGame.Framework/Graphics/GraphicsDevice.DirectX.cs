@@ -308,8 +308,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // Clear the current render targets.
             _currentDepthStencilView = null;
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            Array.Clear(_currentRenderTargetBindings, 0, _currentRenderTargetBindings.Length);
-            _currentRenderTargetCount = 0;
+            Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
+            _mainContext.Strategy._currentRenderTargetCount = 0;
 
             // Make sure all pending rendering commands are flushed.
             CurrentD3DContext.Flush();
@@ -972,14 +972,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Textures.Dirty();
             SamplerStates.Dirty();
-            _depthStencilStateDirty = true;
-            _blendStateDirty = true;
-            _indexBufferDirty = true;
-            _vertexBuffersDirty = true;
-            _pixelShaderDirty = true;
-            _vertexShaderDirty = true;
-            _rasterizerStateDirty = true;
-            _scissorRectangleDirty = true;            
+            _mainContext.Strategy._depthStencilStateDirty = true;
+            _mainContext.Strategy._blendStateDirty = true;
+            _mainContext.Strategy._indexBufferDirty = true;
+            _mainContext.Strategy._vertexBuffersDirty = true;
+            _mainContext.Strategy._pixelShaderDirty = true;
+            _mainContext.Strategy._vertexShaderDirty = true;
+            _mainContext.Strategy._rasterizerStateDirty = true;
+            _mainContext.Strategy._scissorRectangleDirty = true;
         }
 #endif
 
@@ -996,9 +996,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformResolveRenderTargets()
         {
-            for (var i = 0; i < _currentRenderTargetCount; i++)
+            for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
             {
-                var renderTargetBinding = _currentRenderTargetBindings[i];
+                var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
 
                 // Resolve MSAA render targets
                 var renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
@@ -1024,26 +1024,26 @@ namespace Microsoft.Xna.Framework.Graphics
             // to the device as a texture resource.
             lock (CurrentD3DContext)
             {
-                VertexTextures.ClearTargets(this, _currentRenderTargetBindings);
-                Textures.ClearTargets(this, _currentRenderTargetBindings);
+                VertexTextures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
+                Textures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
             }
 
-            for (var i = 0; i < _currentRenderTargetCount; i++)
+            for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
             {
-                var binding = _currentRenderTargetBindings[i];
+                var binding = _mainContext.Strategy._currentRenderTargetBindings[i];
                 var targetDX = (IRenderTargetDX11)binding.RenderTarget;
                 _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            var renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
-            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
+            var renderTargetDX = (IRenderTargetDX11)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_mainContext.Strategy._currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.
             lock (CurrentD3DContext)
                 CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
 
-            return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
+            return (IRenderTarget)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
         }
 
         private void PlatformApplyState()
@@ -1054,35 +1054,35 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyBlend();
             }
 
-            if (_depthStencilStateDirty)
+            if (_mainContext.Strategy._depthStencilStateDirty)
             {
-                _actualDepthStencilState.PlatformApplyState(this);
-                _depthStencilStateDirty = false;
+                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(this);
+                _mainContext.Strategy._depthStencilStateDirty = false;
             }
 
-            if (_rasterizerStateDirty)
+            if (_mainContext.Strategy._rasterizerStateDirty)
             {
-                _actualRasterizerState.PlatformApplyState(this);
-                _rasterizerStateDirty = false;
+                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext, this);
+                _mainContext.Strategy._rasterizerStateDirty = false;
             }
 
-            if (_scissorRectangleDirty)
+            if (_mainContext.Strategy._scissorRectangleDirty)
             {
                 PlatformApplyScissorRectangle();
-                _scissorRectangleDirty = false;
+                _mainContext.Strategy._scissorRectangleDirty = false;
             }
         }
 
         private void PlatformApplyBlend()
         {
-            if (_blendStateDirty || _blendFactorDirty)
+            if (_mainContext.Strategy._blendStateDirty || _mainContext.Strategy._blendFactorDirty)
             {
-                var state = _actualBlendState.GetDxState(this);
+                var state = _mainContext.Strategy._actualBlendState.GetDxState(this);
                 var factor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
                 CurrentD3DContext.OutputMerger.SetBlendState(state, factor);
 
-                _blendStateDirty = false;
-                _blendFactorDirty = false;
+                _mainContext.Strategy._blendStateDirty = false;
+                _mainContext.Strategy._blendFactorDirty = false;
             }
         }
 
@@ -1091,11 +1091,11 @@ namespace Microsoft.Xna.Framework.Graphics
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
             CurrentD3DContext.Rasterizer.SetScissorRectangle(
-                _scissorRectangle.X,
-                _scissorRectangle.Y,
-                _scissorRectangle.Right,
-                _scissorRectangle.Bottom);
-            _scissorRectangleDirty = false;
+                _mainContext.Strategy._scissorRectangle.X,
+                _mainContext.Strategy._scissorRectangle.Y,
+                _mainContext.Strategy._scissorRectangle.Right,
+                _mainContext.Strategy._scissorRectangle.Bottom);
+            _mainContext.Strategy._scissorRectangleDirty = false;
         }
 
         private void PlatformApplyViewport()
@@ -1122,17 +1122,17 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
-            if (_indexBufferDirty)
+            if (_mainContext.Strategy._indexBufferDirty)
             {
-                if (_indexBuffer != null)
+                if (_mainContext.Strategy._indexBuffer != null)
                 {
                     CurrentD3DContext.InputAssembler.SetIndexBuffer(
-                        _indexBuffer.Buffer,
-                        _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits ?
+                        _mainContext.Strategy._indexBuffer.Buffer,
+                        _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits ?
                             SharpDX.DXGI.Format.R16_UInt : SharpDX.DXGI.Format.R32_UInt,
                         0);
                 }
-                _indexBufferDirty = false;
+                _mainContext.Strategy._indexBufferDirty = false;
             }
         }
 
@@ -1140,13 +1140,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
-            if (_vertexBuffersDirty)
+            if (_mainContext.Strategy._vertexBuffersDirty)
             {
-                if (_vertexBuffers.Count > 0)
+                if (_mainContext.Strategy._vertexBuffers.Count > 0)
                 {
-                    for (int slot = 0; slot < _vertexBuffers.Count; slot++)
+                    for (int slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
                     {
-                        var vertexBufferBinding = _vertexBuffers.Get(slot);
+                        var vertexBufferBinding = _mainContext.Strategy._vertexBuffers.Get(slot);
                         var vertexBuffer = vertexBufferBinding.VertexBuffer;
                         var vertexDeclaration = vertexBuffer.VertexDeclaration;
                         int vertexStride = vertexDeclaration.VertexStride;
@@ -1154,7 +1154,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         CurrentD3DContext.InputAssembler.SetVertexBuffers(
                             slot, new SharpDX.Direct3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
                     }
-                    _vertexBufferSlotsUsed = _vertexBuffers.Count;
+                    _vertexBufferSlotsUsed = _mainContext.Strategy._vertexBuffers.Count;
                 }
                 else
                 {
@@ -1170,34 +1170,34 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
-            if (_vertexShader == null)
+            if (_mainContext.Strategy._vertexShader == null)
                 throw new InvalidOperationException("A vertex shader must be set!");
-            if (_pixelShader == null)
+            if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("A pixel shader must be set!");
 
-            if (_vertexShaderDirty)
+            if (_mainContext.Strategy._vertexShaderDirty)
             {
-                CurrentD3DContext.VertexShader.Set(_vertexShader.VertexShader);
+                CurrentD3DContext.VertexShader.Set(_mainContext.Strategy._vertexShader.VertexShader);
 
                 unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
             }
-            if (_vertexShaderDirty || _vertexBuffersDirty)
+            if (_mainContext.Strategy._vertexShaderDirty || _mainContext.Strategy._vertexBuffersDirty)
             {
-                CurrentD3DContext.InputAssembler.InputLayout = _vertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
-                _vertexShaderDirty = false;
-                _vertexBuffersDirty = false;
+                CurrentD3DContext.InputAssembler.InputLayout = _mainContext.Strategy._vertexShader.InputLayouts.GetOrCreate(_mainContext.Strategy._vertexBuffers);
+                _mainContext.Strategy._vertexShaderDirty = false;
+                _mainContext.Strategy._vertexBuffersDirty = false;
             }
 
-            if (_pixelShaderDirty)
+            if (_mainContext.Strategy._pixelShaderDirty)
             {
-                CurrentD3DContext.PixelShader.Set(_pixelShader.PixelShader);
-                _pixelShaderDirty = false;
+                CurrentD3DContext.PixelShader.Set(_mainContext.Strategy._pixelShader.PixelShader);
+                _mainContext.Strategy._pixelShaderDirty = false;
 
                 unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
             }
 
-            _vertexConstantBuffers.Apply();
-            _pixelConstantBuffers.Apply();
+            _mainContext.Strategy._vertexConstantBuffers.Apply();
+            _mainContext.Strategy._pixelConstantBuffers.Apply();
 
             VertexTextures.PlatformApply();
             VertexSamplerStates.PlatformApply();
