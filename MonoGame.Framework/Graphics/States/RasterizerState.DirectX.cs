@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.IsMultisampleEnabled = MultiSampleAntiAlias;
 
                 // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-                DepthFormat activeDepthFormat = (device.IsRenderTargetBound)
+                DepthFormat activeDepthFormat = (context.Strategy.IsRenderTargetBound)
                                               ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
                                               : device.PresentationParameters.DepthStencilFormat;
                 int depthMul;

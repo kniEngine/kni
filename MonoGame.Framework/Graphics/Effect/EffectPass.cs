@@ -70,47 +70,47 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_effect.CurrentTechnique != currentTechnique)
                 throw new InvalidOperationException("CurrentTechnique changed during Effect.OnApply().");
 
-            GraphicsDevice device = _effect.GraphicsDevice;
+            GraphicsContext context = _effect.GraphicsDevice.CurrentContext;
 
             if (_vertexShader != null)
             {
-                device.VertexShader = _vertexShader;
+                context.VertexShader = _vertexShader;
 
                 // Update the texture parameters.
-                SetShaderSamplers(_vertexShader, device.VertexTextures, device.VertexSamplerStates);
+                SetShaderSamplers(_vertexShader, context.VertexTextures, context.VertexSamplerStates);
 
                 // Update the constant buffers.
                 for (int c = 0; c < _vertexShader.CBuffers.Length; c++)
                 {
                     ConstantBuffer cb = _effect.ConstantBuffers[_vertexShader.CBuffers[c]];
                     cb.Update(_effect.Parameters);
-                    device.CurrentContext.Strategy._vertexConstantBuffers[c] = cb;
+                    context.Strategy._vertexConstantBuffers[c] = cb;
                 }
             }
 
             if (_pixelShader != null)
             {
-                device.PixelShader = _pixelShader;
+                context.PixelShader = _pixelShader;
 
                 // Update the texture parameters.
-                SetShaderSamplers(_pixelShader, device.Textures, device.SamplerStates);
+                SetShaderSamplers(_pixelShader, context.Textures, context.SamplerStates);
 
                 // Update the constant buffers.
                 for (int c = 0; c < _pixelShader.CBuffers.Length; c++)
                 {
                     ConstantBuffer cb = _effect.ConstantBuffers[_pixelShader.CBuffers[c]];
                     cb.Update(_effect.Parameters);
-                    device.CurrentContext.Strategy._pixelConstantBuffers[c] = cb;
+                    context.Strategy._pixelConstantBuffers[c] = cb;
                 }
             }
 
             // Set the render states if we have some.
             if (_rasterizerState != null)
-                device.RasterizerState = _rasterizerState;
+                context.RasterizerState = _rasterizerState;
             if (_blendState != null)
-                device.BlendState = _blendState;
+                context.BlendState = _blendState;
             if (_depthStencilState != null)
-                device.DepthStencilState = _depthStencilState;
+                context.DepthStencilState = _depthStencilState;
         }
 
         private void SetShaderSamplers(Shader shader, TextureCollection textures, SamplerStateCollection samplerStates)

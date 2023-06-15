@@ -76,6 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
 
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
+        internal bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
 
         public Rectangle ScissorRectangle
         {
@@ -247,6 +248,33 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal Shader VertexShader
+        {
+            get { return _vertexShader; }
+            set
+            {
+                if (_vertexShader == value)
+                    return;
+
+                _vertexShader = value;
+                _vertexConstantBuffers.Clear();
+                _vertexShaderDirty = true;
+            }
+        }
+
+        internal Shader PixelShader
+        {
+            get { return _pixelShader; }
+            set
+            {
+                if (_pixelShader == value)
+                    return;
+
+                _pixelShader = value;
+                _pixelConstantBuffers.Clear();
+                _pixelShaderDirty = true;
+            }
+        }
 
         protected GraphicsContextStrategy(GraphicsDevice device)
         {
