@@ -782,14 +782,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void SetConstantBuffer(ShaderStage stage, int slot, ConstantBuffer buffer)
-        {
-            if (stage == ShaderStage.Vertex)
-                _mainContext.Strategy._vertexConstantBuffers[slot] = buffer;
-            else
-                _mainContext.Strategy._pixelConstantBuffers[slot] = buffer;
-        }
-
         public bool ResourcesLost { get; set; }
 
         /// <summary>
