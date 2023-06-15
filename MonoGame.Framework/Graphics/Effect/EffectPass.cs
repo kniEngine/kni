@@ -63,18 +63,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Apply()
         {
-            var currentTechnique = _effect.CurrentTechnique;
+            EffectTechnique currentTechnique = _effect.CurrentTechnique;
 
             _effect.OnApply();
 
             if (_effect.CurrentTechnique != currentTechnique)
                 throw new InvalidOperationException("CurrentTechnique changed during Effect.OnApply().");
 
-            Apply(_effect.GraphicsDevice);
-        }
+            GraphicsDevice device = _effect.GraphicsDevice;
 
-        private void Apply(GraphicsDevice device)
-        {
             if (_vertexShader != null)
             {
                 device.VertexShader = _vertexShader;
@@ -83,11 +80,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 SetShaderSamplers(_vertexShader, device.VertexTextures, device.VertexSamplerStates);
 
                 // Update the constant buffers.
-                for (var c = 0; c < _vertexShader.CBuffers.Length; c++)
+                for (int c = 0; c < _vertexShader.CBuffers.Length; c++)
                 {
-                    var cb = _effect.ConstantBuffers[_vertexShader.CBuffers[c]];
+                    ConstantBuffer cb = _effect.ConstantBuffers[_vertexShader.CBuffers[c]];
                     cb.Update(_effect.Parameters);
-                    device.SetConstantBuffer(ShaderStage.Vertex, c, cb);
+                    device.CurrentContext.Strategy._vertexConstantBuffers[c] = cb;
                 }
             }
 
@@ -99,11 +96,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 SetShaderSamplers(_pixelShader, device.Textures, device.SamplerStates);
 
                 // Update the constant buffers.
-                for (var c = 0; c < _pixelShader.CBuffers.Length; c++)
+                for (int c = 0; c < _pixelShader.CBuffers.Length; c++)
                 {
-                    var cb = _effect.ConstantBuffers[_pixelShader.CBuffers[c]];
+                    ConstantBuffer cb = _effect.ConstantBuffers[_pixelShader.CBuffers[c]];
                     cb.Update(_effect.Parameters);
-                    device.SetConstantBuffer(ShaderStage.Pixel, c, cb);
+                    device.CurrentContext.Strategy._pixelConstantBuffers[c] = cb;
                 }
             }
 
