@@ -634,7 +634,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformResolveRenderTargets()
         {
-            if (!this.IsRenderTargetBound)
+            if (!this._mainContext.Strategy.IsRenderTargetBound)
                 return;
 
             var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[0];
@@ -799,7 +799,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            ShaderProgram shaderProgram = _programCache.GetProgram(VertexShader, PixelShader, ShaderProgramHash2);
+            ShaderProgram shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ShaderProgramHash2);
             if (shaderProgram.Program == -1)
                 return;
 
@@ -855,7 +855,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             //If we have a render target bound (rendering offscreen)
-            if (IsRenderTargetBound)
+            if (_mainContext.Strategy.IsRenderTargetBound)
             {
                 //flip vertically
                 _posFixup.Y = -_posFixup.Y;
@@ -917,7 +917,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformApplyScissorRectangle()
         {
             Rectangle scissorRect = _mainContext.Strategy._scissorRectangle;
-            if (!IsRenderTargetBound)
+            if (!_mainContext.Strategy.IsRenderTargetBound)
                 scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
             GraphicsExtensions.CheckGLError();
@@ -926,7 +926,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyViewport()
         {
-            if (IsRenderTargetBound)
+            if (_mainContext.Strategy.IsRenderTargetBound)
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
             else
                 GL.Viewport(_viewport.X, PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);

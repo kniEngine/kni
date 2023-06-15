@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // When rendering offscreen the faces change order.
-            bool offscreen = device.IsRenderTargetBound;
+            bool offscreen = context.Strategy.IsRenderTargetBound;
 
             switch (CullMode)
             {
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // from the docs it seems this works the same as for Direct3D
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
-                    DepthFormat activeDepthFormat = (device.IsRenderTargetBound)
+                    DepthFormat activeDepthFormat = (context.Strategy.IsRenderTargetBound)
                                                   ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
                                                   : device.PresentationParameters.DepthStencilFormat;
                     int depthMul;

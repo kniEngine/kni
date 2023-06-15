@@ -81,11 +81,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal bool IsRenderTargetBound
-        {
-            get { return _mainContext.Strategy._currentRenderTargetCount > 0; }
-        }
-
         public GraphicsAdapter Adapter
         {
             get;
@@ -454,11 +449,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present()
         {
             // We cannot present with a RT set on the device.
-            if (IsRenderTargetBound)
+            if (_mainContext.IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
             // reset _graphicsMetrics
-            CurrentContext._graphicsMetrics = new GraphicsMetrics();
+            _mainContext._graphicsMetrics = new GraphicsMetrics();
 
             PlatformPresent();
         }
@@ -752,34 +747,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return CurrentContext.Indices; }
             set { CurrentContext.Indices = value; }
-        }
-
-        internal Shader VertexShader
-        {
-            get { return _mainContext.Strategy._vertexShader; }
-            set
-            {
-                if (_mainContext.Strategy._vertexShader == value)
-                    return;
-
-                _mainContext.Strategy._vertexShader = value;
-                _mainContext.Strategy._vertexConstantBuffers.Clear();
-                _mainContext.Strategy._vertexShaderDirty = true;
-            }
-        }
-
-        internal Shader PixelShader
-        {
-            get { return _mainContext.Strategy._pixelShader; }
-            set
-            {
-                if (_mainContext.Strategy._pixelShader == value)
-                    return;
-
-                _mainContext.Strategy._pixelShader = value;
-                _mainContext.Strategy._pixelConstantBuffers.Clear();
-                _mainContext.Strategy._pixelShaderDirty = true;
-            }
         }
 
         public bool ResourcesLost { get; set; }

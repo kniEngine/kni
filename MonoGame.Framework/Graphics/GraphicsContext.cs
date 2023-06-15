@@ -95,6 +95,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         public int RenderTargetCount { get { return Strategy.RenderTargetCount; } }
+        internal bool IsRenderTargetBound { get { return Strategy.IsRenderTargetBound; } }
+
+        internal Shader VertexShader
+        {
+            get { return Strategy.VertexShader; }
+            set { Strategy.VertexShader = value; }
+        }
+
+        internal Shader PixelShader
+        {
+            get { return Strategy.PixelShader; }
+            set { Strategy.PixelShader = value; }
+        }
+
+
 
         #region IDisposable Members
 
