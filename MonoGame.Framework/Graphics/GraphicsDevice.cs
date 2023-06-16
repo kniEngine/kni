@@ -684,8 +684,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            Debug.Assert(bindings.Length == _mainContext.Strategy._currentRenderTargetCount, "Invalid outTargets array length!");
-            Array.Copy(_mainContext.Strategy._currentRenderTargetBindings, bindings, _mainContext.Strategy._currentRenderTargetCount);
+            CurrentContext.GetRenderTargets(bindings);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)

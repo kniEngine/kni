@@ -109,6 +109,11 @@ namespace Microsoft.Xna.Framework.Graphics
             set { Strategy.PixelShader = value; }
         }
 
+        internal void GetRenderTargets(RenderTargetBinding[] bindings)
+        {
+            Strategy.GetRenderTargets(bindings);
+        }
+
 
 
         #region IDisposable Members
