@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
-        internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
+        internal GraphicsCapabilities Capabilities { get; private set; }
 
 
         /// <summary>
@@ -189,8 +189,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 msc = msc | (msc >> 4);
                 msc -= (msc >> 1);
                 // and clamp it to what the device can handle
-                if (msc > GraphicsCapabilities.MaxMultiSampleCount)
-                    msc = GraphicsCapabilities.MaxMultiSampleCount;
+                if (msc > Capabilities.MaxMultiSampleCount)
+                    msc = Capabilities.MaxMultiSampleCount;
 
                 return msc;
             }
@@ -216,11 +216,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             PlatformSetup();
 
-            _mainContext.Strategy._textures = new TextureCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            _mainContext.Strategy._vertexTextures = new TextureCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _mainContext.Strategy._textures = new TextureCollection(this, ShaderStage.Pixel, Capabilities.MaxTextureSlots);
+            _mainContext.Strategy._vertexTextures = new TextureCollection(this, ShaderStage.Vertex, Capabilities.MaxVertexTextureSlots);
 
-            _mainContext.Strategy._samplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, GraphicsCapabilities.MaxTextureSlots);
-            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, GraphicsCapabilities.MaxVertexTextureSlots);
+            _mainContext.Strategy._samplerStates = new SamplerStateCollection(this, ShaderStage.Pixel, Capabilities.MaxTextureSlots);
+            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, ShaderStage.Vertex, Capabilities.MaxVertexTextureSlots);
 
             _mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
             _mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -259,7 +259,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(GraphicsCapabilities.MaxVertexBufferSlots);
+            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Capabilities.MaxVertexBufferSlots);
             _mainContext.Strategy._vertexBuffersDirty = true;
             _mainContext.Strategy._indexBufferDirty = true;
             _mainContext.Strategy._vertexShaderDirty = true;
@@ -546,7 +546,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Only implemented for DirectX </remarks>
         public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
         {
-            if (!GraphicsCapabilities.SupportsTextureArrays)
+            if (!Capabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
 
             if (renderTarget == null)
@@ -725,13 +725,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                if (vertexBuffers.Length <= GraphicsCapabilities.MaxVertexBufferSlots)
+                if (vertexBuffers.Length <= Capabilities.MaxVertexBufferSlots)
                 {
                     _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Set(vertexBuffers);
                 }
                 else
                 {
-                    var message = string.Format("Max number of vertex buffers is {0}.", GraphicsCapabilities.MaxVertexBufferSlots);
+                    var message = string.Format("Max number of vertex buffers is {0}.", Capabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }
@@ -789,7 +789,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -851,7 +851,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -900,7 +900,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -988,7 +988,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -1087,7 +1087,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < GraphicsCapabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Textures[i] as Texture2D;
                     if (tx2D != null)

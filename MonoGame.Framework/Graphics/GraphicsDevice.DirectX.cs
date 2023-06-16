@@ -94,8 +94,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			CreateDeviceIndependentResources();
 			CreateDeviceResources();
 
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.PlatformInitialize(this);
+            Capabilities = new GraphicsCapabilities();
+            Capabilities.PlatformInitialize(this);
 
 #if WINDOWS_UAP
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
@@ -1407,7 +1407,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (baseInstance > 0)
                 {
-                    if (!GraphicsCapabilities.SupportsBaseIndexInstancing)
+                    if (!Capabilities.SupportsBaseIndexInstancing)
                         throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
 
                     CurrentD3DContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);

@@ -63,16 +63,16 @@ namespace Microsoft.Xna.Framework.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = graphicsDevice.GraphicsCapabilities.SupportsSRgb;
-            bool supportsS3tc = graphicsDevice.GraphicsCapabilities.SupportsS3tc;
-            bool supportsPvrtc = graphicsDevice.GraphicsCapabilities.SupportsPvrtc;
-            bool supportsEtc1 = graphicsDevice.GraphicsCapabilities.SupportsEtc1;
-            bool supportsEtc2 = graphicsDevice.GraphicsCapabilities.SupportsEtc2;
-            bool supportsAtitc = graphicsDevice.GraphicsCapabilities.SupportsAtitc;
-            bool supportsFloat = graphicsDevice.GraphicsCapabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = graphicsDevice.GraphicsCapabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = graphicsDevice.GraphicsCapabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.glMajorVersion == 2;
+            bool supportsSRgb = graphicsDevice.Capabilities.SupportsSRgb;
+            bool supportsS3tc = graphicsDevice.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = graphicsDevice.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = graphicsDevice.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = graphicsDevice.Capabilities.SupportsEtc2;
+            bool supportsAtitc = graphicsDevice.Capabilities.SupportsAtitc;
+            bool supportsFloat = graphicsDevice.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = graphicsDevice.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = graphicsDevice.Capabilities.SupportsNormalized;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
 
             switch (format)
             {

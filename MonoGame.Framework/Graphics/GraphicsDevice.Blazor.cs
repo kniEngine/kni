@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (GraphicsCapabilities.SupportsInstancing)
+                    if (Capabilities.SupportsInstancing)
                     {
                         throw new NotImplementedException();
                         //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (baseVertex + element.Offset));
                 GraphicsExtensions.CheckGLError();
 
-                if (GraphicsCapabilities.SupportsInstancing)
+                if (Capabilities.SupportsInstancing)
                 {
                     throw new NotImplementedException();
                     //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
@@ -211,11 +211,11 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.PlatformInitialize(this);
+            Capabilities = new GraphicsCapabilities();
+            Capabilities.PlatformInitialize(this);
 
 
-            _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
+            _newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -234,8 +234,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
 
             // TODO: check for FramebufferObjectARB
-            //if (graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectARB
-            //|| graphicsDevice.GraphicsCapabilities.SupportsFramebufferObjectEXT)
+            //if (graphicsDevice.Capabilities.SupportsFramebufferObjectARB
+            //|| graphicsDevice.Capabilities.SupportsFramebufferObjectEXT)
             if (true)
             {
                 this._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(_mainContext, this, true);
 
-            _bufferBindingInfos = new BufferBindingInfo[GraphicsCapabilities.MaxVertexBufferSlots];
+            _bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
                 _bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
@@ -958,7 +958,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!GraphicsCapabilities.SupportsInstancing)
+            if (!Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();

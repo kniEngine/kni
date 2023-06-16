@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Set mipmap levels
                 //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
                 //GraphicsExtensions.CheckGLError();
-                if (GraphicsDevice.GraphicsCapabilities.SupportsTextureMaxLevel)
+                if (GraphicsDevice.Capabilities.SupportsTextureMaxLevel)
                 {
                     if (_levelCount > 0)
                     {

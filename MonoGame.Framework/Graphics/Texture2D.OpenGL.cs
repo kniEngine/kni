@@ -443,7 +443,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 #endif
                 GraphicsExtensions.CheckGLError();
-                if (GraphicsDevice.GraphicsCapabilities.SupportsTextureMaxLevel)
+                if (GraphicsDevice.Capabilities.SupportsTextureMaxLevel)
                 {
                     if (_levelCount > 0)
                     {
