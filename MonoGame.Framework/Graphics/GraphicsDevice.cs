@@ -675,13 +675,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 Clear(DiscardColor);
         }
 
-		public RenderTargetBinding[] GetRenderTargets()
-		{
-            // Return a correctly sized copy our internal array.
-            var bindings = new RenderTargetBinding[_mainContext.Strategy._currentRenderTargetCount];
-            Array.Copy(_mainContext.Strategy._currentRenderTargetBindings, bindings, _mainContext.Strategy._currentRenderTargetCount);
+        public RenderTargetBinding[] GetRenderTargets()
+        {
+            RenderTargetBinding[] bindings = new RenderTargetBinding[RenderTargetCount];
+            GetRenderTargets(bindings);
             return bindings;
-		}
+        }
 
         public void GetRenderTargets(RenderTargetBinding[] bindings)
         {
