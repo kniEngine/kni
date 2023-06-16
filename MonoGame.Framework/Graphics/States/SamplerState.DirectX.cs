@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				desc.BorderColor = BorderColor.ToDXColor4();
 #endif
 				desc.Filter = ToDXTextureFilter(Filter, FilterMode);
-                desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, device.GraphicsCapabilities.MaxTextureAnisotropy);
+                desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, device.Capabilities.MaxTextureAnisotropy);
                 desc.MipLodBias = MipMapLevelOfDetailBias;
                 desc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 

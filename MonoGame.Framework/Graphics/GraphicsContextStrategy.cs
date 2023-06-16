@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_blendState, BlendState.Opaque))
                     newBlendState = _blendStateOpaque;
 
-                if (newBlendState.IndependentBlendEnable && !Device.GraphicsCapabilities.SupportsSeparateBlendStates)
+                if (newBlendState.IndependentBlendEnable && !Device.Capabilities.SupportsSeparateBlendStates)
                     throw new PlatformNotSupportedException("Independent blend states requires at least OpenGL 4.0 or GL_ARB_draw_buffers_blend. Try upgrading your graphics drivers.");
 
                 // Blend state is now bound to a device... no one should
@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_rasterizerState == value)
                     return;
 
-                if (!value.DepthClipEnable && !Device.GraphicsCapabilities.SupportsDepthClamp)
+                if (!value.DepthClipEnable && !Device.Capabilities.SupportsDepthClamp)
                     throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
 
                 _rasterizerState = value;

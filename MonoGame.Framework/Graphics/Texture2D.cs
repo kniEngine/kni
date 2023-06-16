@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");
             if (height <= 0)
                 throw new ArgumentOutOfRangeException("height","Texture height must be greater than zero");
-            if (arraySize > 1 && !graphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+            if (arraySize > 1 && !graphicsDevice.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
             this.GraphicsDevice = graphicsDevice;
@@ -348,7 +348,7 @@ namespace Microsoft.Xna.Framework.Graphics
             checkedRect = rect ?? textureBounds;
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
-            if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+            if (arraySlice > 0 && !GraphicsDevice.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
             if (arraySlice < 0 || arraySlice >= _arraySize)
                 throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");

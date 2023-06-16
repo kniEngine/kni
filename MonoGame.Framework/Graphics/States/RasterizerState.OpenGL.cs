@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 device._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
-            if (device.GraphicsCapabilities.SupportsDepthClamp &&
+            if (device.Capabilities.SupportsDepthClamp &&
                 (force || this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
             {
                 if (!DepthClipEnable)

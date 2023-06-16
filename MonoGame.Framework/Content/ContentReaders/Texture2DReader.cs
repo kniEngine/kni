@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Content
 
             // If the system does not fully support Power of Two textures,
             // skip any mip maps supplied with any non PoT textures.
-            if (levelCount > 1 && !input.GetGraphicsDevice().GraphicsCapabilities.SupportsNonPowerOfTwo &&
+            if (levelCount > 1 && !input.GetGraphicsDevice().Capabilities.SupportsNonPowerOfTwo &&
                 (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
             {
                 levelCountOutput = 1;
@@ -36,21 +36,21 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				case SurfaceFormat.Dxt1:
 				case SurfaceFormat.Dxt1a:
-					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
+					if (!input.GetGraphicsDevice().Capabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt1SRgb:
-					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1)
+					if (!input.GetGraphicsDevice().Capabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.Dxt3:
 				case SurfaceFormat.Dxt5:
-					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+					if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt3SRgb:
 				case SurfaceFormat.Dxt5SRgb:
-					if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
+					if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.NormalizedByte4:
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework.Content
 					case SurfaceFormat.Dxt1:
                     case SurfaceFormat.Dxt1SRgb:
                     case SurfaceFormat.Dxt1a:
-				        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
+				        if (!input.GetGraphicsDevice().Capabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
 				        {
 				            levelData = DxtUtil.DecompressDxt1(levelData, levelWidth, levelHeight);
 				            levelDataSizeInBytes = levelData.Length;
@@ -85,8 +85,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt3:
 					case SurfaceFormat.Dxt3SRgb:
-                        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
-				            if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
+                        if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc)
+				            if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtUtil.DecompressDxt3(levelData, levelWidth, levelHeight);
@@ -95,8 +95,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt5:
 					case SurfaceFormat.Dxt5SRgb:
-                        if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc)
-				            if (!input.GetGraphicsDevice().GraphicsCapabilities.SupportsS3tc &&
+                        if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc)
+				            if (!input.GetGraphicsDevice().Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtUtil.DecompressDxt5(levelData, levelWidth, levelHeight);

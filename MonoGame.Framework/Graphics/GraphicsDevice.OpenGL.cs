@@ -46,8 +46,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _supportsInvalidateFramebuffer;
         private bool _supportsBlitFramebuffer;
 
-        internal int glMajorVersion = 0;
-        internal int glMinorVersion = 0;
+        internal int _glMajorVersion = 0;
+        internal int _glMinorVersion = 0;
         internal int _glDefaultFramebuffer = 0;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (GraphicsCapabilities.SupportsInstancing)
+                    if (Capabilities.SupportsInstancing)
                     {
                         GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
                         GraphicsExtensions.CheckGLError();
@@ -199,7 +199,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
 
 #if DESKTOPGL
-                if (GraphicsCapabilities.SupportsInstancing)
+                if (Capabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
                     GraphicsExtensions.CheckGLError();
@@ -245,28 +245,28 @@ namespace Microsoft.Xna.Framework.Graphics
                 else // if it fails, we assume to be on a 1.1 context
                     version = "1.1";
 #endif
-                glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
-                glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
+                _glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
+                _glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
             }
             catch (FormatException)
             {
                 // if it fails, we assume to be on a 1.1 context
-                glMajorVersion = 1;
-                glMinorVersion = 1;
+                _glMajorVersion = 1;
+                _glMinorVersion = 1;
             }
 
-            GraphicsCapabilities = new GraphicsCapabilities();
-            GraphicsCapabilities.PlatformInitialize(this, glMajorVersion, glMinorVersion);
+            Capabilities = new GraphicsCapabilities();
+            Capabilities.PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
 
 #if DESKTOPGL
 			// Initialize draw buffer attachment array
-			_drawBuffers = new DrawBuffersEnum[GraphicsCapabilities.MaxDrawBuffers];
+			_drawBuffers = new DrawBuffersEnum[Capabilities.MaxDrawBuffers];
 			for (int i = 0; i < _drawBuffers.Length; i++)
 				_drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
 
-            _newEnabledVertexAttributes = new bool[GraphicsCapabilities.MaxVertexBufferSlots];
+            _newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -280,8 +280,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _programCache.DisposePrograms();
             _shaderProgram = null;
 
-            if (GraphicsCapabilities.SupportsFramebufferObjectARB
-            || GraphicsCapabilities.SupportsFramebufferObjectEXT)
+            if (Capabilities.SupportsFramebufferObjectARB
+            || Capabilities.SupportsFramebufferObjectEXT)
             {
                 this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this.DepthStencilState.PlatformApplyState(this, true);
             this.RasterizerState.PlatformApplyState(_mainContext, this, true);
 
-            _bufferBindingInfos = new BufferBindingInfo[GraphicsCapabilities.MaxVertexBufferSlots];
+            _bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
                 _bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, -1);
         }
@@ -492,21 +492,21 @@ namespace Microsoft.Xna.Framework.Graphics
                         break;
 #if GLES
                     case DepthFormat.Depth24:
-                        if (GraphicsCapabilities.SupportsDepth24)
+                        if (Capabilities.SupportsDepth24)
                             depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                        else if (GraphicsCapabilities.SupportsDepthNonLinear)
+                        else if (Capabilities.SupportsDepthNonLinear)
                             depthInternalFormat = (RenderbufferStorage)0x8E2C;
                         else
                             depthInternalFormat = RenderbufferStorage.DepthComponent16;
                         break;
                     case DepthFormat.Depth24Stencil8:
-                        if (GraphicsCapabilities.SupportsPackedDepthStencil)
+                        if (Capabilities.SupportsPackedDepthStencil)
                             depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
                         else
                         {
-                            if (GraphicsCapabilities.SupportsDepth24)
+                            if (Capabilities.SupportsDepth24)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                            else if (GraphicsCapabilities.SupportsDepthNonLinear)
+                            else if (Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = (RenderbufferStorage)0x8E2C;
                             else
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16;
@@ -1161,7 +1161,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!GraphicsCapabilities.SupportsInstancing)
+            if (!Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();
@@ -1181,7 +1181,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (baseInstance > 0)
             {
-                if (!GraphicsCapabilities.SupportsBaseIndexInstancing)
+                if (!Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
                 GL.DrawElementsInstancedBaseInstance(target,
@@ -1316,7 +1316,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(GraphicsCapabilities.MaxVertexBufferSlots);
+            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Capabilities.MaxVertexBufferSlots);
             _mainContext.Strategy._vertexBuffersDirty = true;
             _mainContext.Strategy._indexBufferDirty = true;
             _mainContext.Strategy._vertexShaderDirty = true;
