@@ -689,56 +689,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
-            if (vertexBuffer != null)
-            {
-                _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Set(vertexBuffer, 0);
-            }
-            else
-            {
-                _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Clear();
-            }
+            CurrentContext.SetVertexBuffer(vertexBuffer);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
-            if (vertexBuffer != null)
-            {
-                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
-                {
-                    _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Set(vertexBuffer, vertexOffset);
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
-            else
-            {
-                if (vertexOffset == 0)
-                {
-                    _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Clear();
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
+            CurrentContext.SetVertexBuffer(vertexBuffer, vertexOffset);
         }
 
         public void SetVertexBuffers(params VertexBufferBinding[] vertexBuffers)
         {
-            if (vertexBuffers != null && vertexBuffers.Length > 0)
-            {
-                if (vertexBuffers.Length <= Capabilities.MaxVertexBufferSlots)
-                {
-                    _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Set(vertexBuffers);
-                }
-                else
-                {
-                    var message = string.Format("Max number of vertex buffers is {0}.", Capabilities.MaxVertexBufferSlots);
-                    throw new ArgumentOutOfRangeException("vertexBuffers", message);
-                }
-            }
-            else
-            {
-                _mainContext.Strategy._vertexBuffersDirty |= _mainContext.Strategy._vertexBuffers.Clear();
-            }
+            CurrentContext.SetVertexBuffers(vertexBuffers);
         }
 
         public IndexBuffer Indices

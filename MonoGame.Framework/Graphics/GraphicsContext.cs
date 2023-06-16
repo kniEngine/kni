@@ -97,6 +97,22 @@ namespace Microsoft.Xna.Framework.Graphics
         public int RenderTargetCount { get { return Strategy.RenderTargetCount; } }
         internal bool IsRenderTargetBound { get { return Strategy.IsRenderTargetBound; } }
 
+
+        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
+        {
+            Strategy.SetVertexBuffer(vertexBuffer);
+        }
+
+        public void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
+        {
+            Strategy.SetVertexBuffer(vertexBuffer, vertexOffset);
+        }
+
+        public void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
+        {
+            Strategy.SetVertexBuffers(vertexBuffers);
+        }
+
         internal Shader VertexShader
         {
             get { return Strategy.VertexShader; }
