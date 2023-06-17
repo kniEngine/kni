@@ -282,6 +282,60 @@ namespace Microsoft.Xna.Platform.Graphics
             
         }
 
+        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
+        {
+            if (vertexBuffer != null)
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, 0);
+            }
+            else
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Clear();
+            }
+        }
+
+        internal void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
+        {
+            if (vertexBuffer != null)
+            {
+                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, vertexOffset);
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
+            }
+            else
+            {
+                if (vertexOffset == 0)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Clear();
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
+            }
+        }
+
+        internal void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
+        {
+            if (vertexBuffers != null && vertexBuffers.Length > 0)
+            {
+                if (vertexBuffers.Length <= this.Device.Capabilities.MaxVertexBufferSlots)
+                {
+                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
+                }
+                else
+                {
+                    var message = string.Format("Max number of vertex buffers is {0}.", this.Device.Capabilities.MaxVertexBufferSlots);
+                    throw new ArgumentOutOfRangeException("vertexBuffers", message);
+                }
+            }
+            else
+            {
+                _vertexBuffersDirty |= _vertexBuffers.Clear();
+            }
+        }
+
         internal void GetRenderTargets(RenderTargetBinding[] bindings)
         {
             Debug.Assert(bindings.Length == _currentRenderTargetCount, "Invalid bindings array length!");
@@ -338,60 +392,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
 
             throw new ObjectDisposedException("Object is Disposed.");
-        }
-
-        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
-        {
-            if (vertexBuffer != null)
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, 0);
-            }
-            else
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Clear();
-            }
-        }
-
-        internal void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
-        {
-            if (vertexBuffer != null)
-            {
-                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, vertexOffset);
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
-            else
-            {
-                if (vertexOffset == 0)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Clear();
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
-        }
-
-        internal void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
-        {
-            if (vertexBuffers != null && vertexBuffers.Length > 0)
-            {
-                if (vertexBuffers.Length <= this.Device.Capabilities.MaxVertexBufferSlots)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
-                }
-                else
-                {
-                    var message = string.Format("Max number of vertex buffers is {0}.", this.Device.Capabilities.MaxVertexBufferSlots);
-                    throw new ArgumentOutOfRangeException("vertexBuffers", message);
-                }
-            }
-            else
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Clear();
-            }
         }
 
         #endregion IDisposable Members
