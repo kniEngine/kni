@@ -5,6 +5,7 @@
 using System;
 using nkast.Wasm.Canvas.WebGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState
@@ -13,7 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var GL = device._glContext;
 
-            if (force || this.DepthBufferEnable != device._lastDepthStencilState.DepthBufferEnable)
+            if (force ||
+                this.DepthBufferEnable != device._lastDepthStencilState.DepthBufferEnable)
             {
                 if (!DepthBufferEnable)
                 {
@@ -29,21 +31,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 device._lastDepthStencilState.DepthBufferEnable = this.DepthBufferEnable;
             }
 
-            if (force || this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
+            if (force ||
+                this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
             {
                 GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
 
-            if (force || this.DepthBufferWriteEnable != device._lastDepthStencilState.DepthBufferWriteEnable)
+            if (force ||
+                this.DepthBufferWriteEnable != device._lastDepthStencilState.DepthBufferWriteEnable)
             {
                 GL.DepthMask(DepthBufferWriteEnable);
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferWriteEnable = this.DepthBufferWriteEnable;
             }
 
-            if (force || this.StencilEnable != device._lastDepthStencilState.StencilEnable)
+            if (force ||
+                this.StencilEnable != device._lastDepthStencilState.StencilEnable)
             {
                 if (!StencilEnable)
                 {
@@ -97,7 +102,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             device._lastDepthStencilState.TwoSidedStencilMode = this.TwoSidedStencilMode;
 
-            if (force || this.StencilWriteMask != device._lastDepthStencilState.StencilWriteMask)
+            if (force ||
+                this.StencilWriteMask != device._lastDepthStencilState.StencilWriteMask)
             {
                 GL.StencilMask(this.StencilWriteMask);
                 GraphicsExtensions.CheckGLError();

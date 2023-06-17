@@ -4,13 +4,15 @@
 
 using MonoGame.OpenGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState
     {
         internal void PlatformApplyState(GraphicsDevice device, bool force = false)
         {
-            if (force || this.DepthBufferEnable != device._lastDepthStencilState.DepthBufferEnable)
+            if (force ||
+                this.DepthBufferEnable != device._lastDepthStencilState.DepthBufferEnable)
             {
                 if (!DepthBufferEnable)
                 {
@@ -26,21 +28,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 device._lastDepthStencilState.DepthBufferEnable = this.DepthBufferEnable;
             }
 
-            if (force || this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
+            if (force || 
+                this.DepthBufferFunction != device._lastDepthStencilState.DepthBufferFunction)
             {
                 GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
 
-            if (force || this.DepthBufferWriteEnable != device._lastDepthStencilState.DepthBufferWriteEnable)
+            if (force || 
+                this.DepthBufferWriteEnable != device._lastDepthStencilState.DepthBufferWriteEnable)
             {
                 GL.DepthMask(DepthBufferWriteEnable);
                 GraphicsExtensions.CheckGLError();
                 device._lastDepthStencilState.DepthBufferWriteEnable = this.DepthBufferWriteEnable;
             }
 
-            if (force || this.StencilEnable != device._lastDepthStencilState.StencilEnable)
+            if (force ||
+                this.StencilEnable != device._lastDepthStencilState.StencilEnable)
             {
                 if (!StencilEnable)
                 {
@@ -59,10 +64,10 @@ namespace Microsoft.Xna.Framework.Graphics
             // set function
             if (this.TwoSidedStencilMode)
             {
-                var cullFaceModeFront = StencilFace.Front;
-                var cullFaceModeBack = StencilFace.Back;
-                var stencilFaceFront = StencilFace.Front;
-                var stencilFaceBack = StencilFace.Back;
+                StencilFace cullFaceModeFront = StencilFace.Front;
+                StencilFace cullFaceModeBack = StencilFace.Back;
+                StencilFace stencilFaceFront = StencilFace.Front;
+                StencilFace stencilFaceBack = StencilFace.Back;
 
                 if (force ||
 					this.TwoSidedStencilMode != device._lastDepthStencilState.TwoSidedStencilMode ||
@@ -156,7 +161,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             device._lastDepthStencilState.TwoSidedStencilMode = this.TwoSidedStencilMode;
 
-            if (force || this.StencilWriteMask != device._lastDepthStencilState.StencilWriteMask)
+            if (force ||
+                this.StencilWriteMask != device._lastDepthStencilState.StencilWriteMask)
             {
                 GL.StencilMask(this.StencilWriteMask);
                 GraphicsExtensions.CheckGLError();

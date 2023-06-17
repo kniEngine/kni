@@ -5,6 +5,7 @@
 using System;
 using nkast.Wasm.Canvas.WebGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
@@ -60,7 +61,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (FillMode == FillMode.WireFrame)
                 throw new PlatformNotSupportedException();
 
-            if (force || this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
+            if (force ||
+                this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
 			{
 			    if (ScissorTestEnable)
 				    GL.Enable(WebGLCapability.SCISSOR_TEST);
@@ -114,7 +116,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (device.Capabilities.SupportsDepthClamp &&
-                (force || this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
+                (force ||
+                 this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
             {
                 throw new PlatformNotSupportedException();
                 device._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
