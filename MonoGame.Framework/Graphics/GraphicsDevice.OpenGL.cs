@@ -774,25 +774,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return _mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
-        private static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
-        {
-            switch (primitiveType)
-            {
-                case PrimitiveType.PointList:
-                    return GLPrimitiveType.Points;
-                case PrimitiveType.LineList:
-                    return GLPrimitiveType.Lines;
-                case PrimitiveType.LineStrip:
-                    return GLPrimitiveType.LineStrip;
-                case PrimitiveType.TriangleList:
-                    return GLPrimitiveType.Triangles;
-                case PrimitiveType.TriangleStrip:
-                    return GLPrimitiveType.TriangleStrip;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
@@ -974,7 +955,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-			var target = PrimitiveTypeGL(primitiveType);
+			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 
@@ -1011,7 +992,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vbHandle.AddrOfPinnedObject());
 
                 //Draw
-                GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+                GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                               vertexOffset,
                               vertexCount);
                 GraphicsExtensions.CheckGLError();
@@ -1035,7 +1016,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexStart < 0)
                 vertexStart = 0;
 
-			GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+			GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
 			              vertexStart,
 			              vertexCount);
             GraphicsExtensions.CheckGLError();
@@ -1071,7 +1052,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 //Draw
                 GL.DrawElements(
-                    PrimitiveTypeGL(primitiveType),
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedShort,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
@@ -1115,7 +1096,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 //Draw
                 GL.DrawElements(
-                    PrimitiveTypeGL(primitiveType),
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedInt,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
@@ -1145,7 +1126,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var target = PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 

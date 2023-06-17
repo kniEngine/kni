@@ -49,6 +49,25 @@ namespace Microsoft.Xna.Platform.Graphics
             _scissorRectangleDirty = false;
         }
 
+        internal static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
+        {
+            switch (primitiveType)
+            {
+                case PrimitiveType.PointList:
+                    return GLPrimitiveType.Points;
+                case PrimitiveType.LineList:
+                    return GLPrimitiveType.Lines;
+                case PrimitiveType.LineStrip:
+                    return GLPrimitiveType.LineStrip;
+                case PrimitiveType.TriangleList:
+                    return GLPrimitiveType.Triangles;
+                case PrimitiveType.TriangleStrip:
+                    return GLPrimitiveType.TriangleStrip;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
