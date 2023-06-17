@@ -43,7 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Enable(EnableCap.CullFace);
                     GraphicsExtensions.CheckGLError();
                     GL.CullFace(CullFaceMode.Back);
-                    GraphicsExtensions.CheckGLError(); if (offscreen)
+                    GraphicsExtensions.CheckGLError();
+                    if (offscreen)
                         GL.FrontFace(FrontFaceDirection.Ccw);
                     else
                         GL.FrontFace(FrontFaceDirection.Cw);
