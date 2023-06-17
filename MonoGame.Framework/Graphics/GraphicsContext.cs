@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal bool IsRenderTargetBound { get { return Strategy.IsRenderTargetBound; } }
 
 
-        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
+        public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
             Strategy.SetVertexBuffer(vertexBuffer);
         }
