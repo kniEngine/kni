@@ -774,25 +774,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return _mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
-        private static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
-        {
-            switch (primitiveType)
-            {
-                case PrimitiveType.PointList:
-                    return GLPrimitiveType.Points;
-                case PrimitiveType.LineList:
-                    return GLPrimitiveType.Lines;
-                case PrimitiveType.LineStrip:
-                    return GLPrimitiveType.LineStrip;
-                case PrimitiveType.TriangleList:
-                    return GLPrimitiveType.Triangles;
-                case PrimitiveType.TriangleStrip:
-                    return GLPrimitiveType.TriangleStrip;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
@@ -871,7 +852,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
             {
-                PlatformApplyBlend();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
             }
 
             if (_mainContext.Strategy._depthStencilStateDirty)
@@ -888,41 +869,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (_mainContext.Strategy._scissorRectangleDirty)
             {
-                PlatformApplyScissorRectangle();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
                 _mainContext.Strategy._scissorRectangleDirty = false;
             }
         }
 
-        private void PlatformApplyBlend()
-        {
-            if (_mainContext.Strategy._blendStateDirty)
-            {
-                _mainContext.Strategy._actualBlendState.PlatformApplyState(this);
-                _mainContext.Strategy._blendStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._blendFactorDirty)
-            {
-                GL.BlendColor(
-                    this.BlendFactor.R/255.0f,
-                    this.BlendFactor.G/255.0f,
-                    this.BlendFactor.B/255.0f,
-                    this.BlendFactor.A/255.0f);
-                GraphicsExtensions.CheckGLError();
-
-                _mainContext.Strategy._blendFactorDirty = false;
-            }
-        }
-
-        private void PlatformApplyScissorRectangle()
-        {
-            Rectangle scissorRect = _mainContext.Strategy._scissorRectangle;
-            if (!_mainContext.Strategy.IsRenderTargetBound)
-                scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
-            GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-            GraphicsExtensions.CheckGLError();
-            _mainContext.Strategy._scissorRectangleDirty = false;
-        }
 
         private void PlatformApplyViewport()
         {
@@ -1004,7 +955,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-			var target = PrimitiveTypeGL(primitiveType);
+			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 
@@ -1041,7 +992,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vbHandle.AddrOfPinnedObject());
 
                 //Draw
-                GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+                GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                               vertexOffset,
                               vertexCount);
                 GraphicsExtensions.CheckGLError();
@@ -1065,7 +1016,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexStart < 0)
                 vertexStart = 0;
 
-			GL.DrawArrays(PrimitiveTypeGL(primitiveType),
+			GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
 			              vertexStart,
 			              vertexCount);
             GraphicsExtensions.CheckGLError();
@@ -1101,7 +1052,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 //Draw
                 GL.DrawElements(
-                    PrimitiveTypeGL(primitiveType),
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedShort,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
@@ -1145,7 +1096,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 //Draw
                 GL.DrawElements(
-                    PrimitiveTypeGL(primitiveType),
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedInt,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
@@ -1175,7 +1126,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var target = PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 

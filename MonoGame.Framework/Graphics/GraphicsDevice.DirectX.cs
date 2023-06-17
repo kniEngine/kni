@@ -1051,7 +1051,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(CurrentD3DContext != null, "The d3d context is null!");
 
             {
-                PlatformApplyBlend();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
             }
 
             if (_mainContext.Strategy._depthStencilStateDirty)
@@ -1068,34 +1068,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (_mainContext.Strategy._scissorRectangleDirty)
             {
-                PlatformApplyScissorRectangle();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
                 _mainContext.Strategy._scissorRectangleDirty = false;
             }
-        }
-
-        private void PlatformApplyBlend()
-        {
-            if (_mainContext.Strategy._blendStateDirty || _mainContext.Strategy._blendFactorDirty)
-            {
-                var state = _mainContext.Strategy._actualBlendState.GetDxState(this);
-                var factor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
-                CurrentD3DContext.OutputMerger.SetBlendState(state, factor);
-
-                _mainContext.Strategy._blendStateDirty = false;
-                _mainContext.Strategy._blendFactorDirty = false;
-            }
-        }
-
-        private void PlatformApplyScissorRectangle()
-        {
-            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
-
-            CurrentD3DContext.Rasterizer.SetScissorRectangle(
-                _mainContext.Strategy._scissorRectangle.X,
-                _mainContext.Strategy._scissorRectangle.Y,
-                _mainContext.Strategy._scissorRectangle.Right,
-                _mainContext.Strategy._scissorRectangle.Bottom);
-            _mainContext.Strategy._scissorRectangleDirty = false;
         }
 
         private void PlatformApplyViewport()

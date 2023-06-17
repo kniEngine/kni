@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -11,12 +12,44 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : GraphicsContextStrategy
     {
 
+        internal IWebGLRenderingContext GL { get { return Device._glContext; } }
+
+
         internal ConcreteGraphicsContext(GraphicsDevice device)
             : base(device)
         {
 
         }
 
+
+        internal void PlatformApplyBlend()
+        {
+            if (_blendStateDirty)
+            {
+                _actualBlendState.PlatformApplyState(this.Device);
+                _blendStateDirty = false;
+            }
+
+            if (_blendFactorDirty)
+            {
+                GL.BlendColor(
+                    this.BlendFactor.R / 255.0f,
+                    this.BlendFactor.G / 255.0f,
+                    this.BlendFactor.B / 255.0f,
+                    this.BlendFactor.A / 255.0f);
+                GraphicsExtensions.CheckGLError();
+                _blendFactorDirty = false;
+            }
+        }
+
+        internal void PlatformApplyScissorRectangle()
+        {
+            Rectangle scissorRect = _scissorRectangle;
+            if (!IsRenderTargetBound)
+                scissorRect.Y = this.Device.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
+            GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
+            GraphicsExtensions.CheckGLError();
+        }
 
         internal static WebGLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
