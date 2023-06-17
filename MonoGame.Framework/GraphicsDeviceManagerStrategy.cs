@@ -111,9 +111,12 @@ namespace Microsoft.Xna.Platform
 
                 _graphicsDevice = value;
 
-                _graphicsDevice.Disposing += (sender, e) => { OnDeviceDisposing(e); };
-                _graphicsDevice.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
-                _graphicsDevice.DeviceReset     += (sender, e) => { OnDeviceReset(e); };
+                if (_graphicsDevice != null)
+                {
+                    _graphicsDevice.Disposing += (sender, e) => { OnDeviceDisposing(e); };
+                    _graphicsDevice.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
+                    _graphicsDevice.DeviceReset += (sender, e) => { OnDeviceReset(e); };
+                }
             }
         }
 
