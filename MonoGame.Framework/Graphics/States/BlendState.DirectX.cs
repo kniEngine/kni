@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState

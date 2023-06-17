@@ -5,17 +5,20 @@
 using System;
 using MonoGame.OpenGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
     {
         internal void PlatformApplyState(GraphicsDevice device, bool force = false)
         {
-            var blendEnabled = !(this.ColorSourceBlend == Blend.One &&
-                                 this.ColorDestinationBlend == Blend.Zero &&
-                                 this.AlphaSourceBlend == Blend.One &&
-                                 this.AlphaDestinationBlend == Blend.Zero);
-            if (force || blendEnabled != device._lastBlendEnable)
+            bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
+                                  this.ColorDestinationBlend == Blend.Zero &&
+                                  this.AlphaSourceBlend == Blend.One &&
+                                  this.AlphaDestinationBlend == Blend.Zero);
+
+            if (force ||
+                blendEnabled != device._lastBlendEnable)
             {
                 if (blendEnabled)
                     GL.Enable(EnableCap.Blend);
@@ -99,7 +102,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            if (force || this.ColorWriteChannels != device._lastBlendState.ColorWriteChannels)
+            if (force ||
+                this.ColorWriteChannels != device._lastBlendState.ColorWriteChannels)
             {
                 GL.ColorMask(
                     (this.ColorWriteChannels & ColorWriteChannels.Red) != 0,
@@ -170,7 +174,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }
         }
-
     }
 }
 

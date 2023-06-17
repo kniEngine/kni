@@ -5,6 +5,7 @@
 using System;
 using MonoGame.OpenGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
@@ -65,7 +66,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotImplementedException();
 #endif
 
-            if (force || this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
+            if (force ||
+                this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
 			{
 			    if (ScissorTestEnable)
 				    GL.Enable(EnableCap.ScissorTest);
@@ -106,16 +108,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     GL.Enable(EnableCap.PolygonOffsetFill);
                     GL.PolygonOffset(this.SlopeScaleDepthBias, this.DepthBias * depthMul);
+                    GraphicsExtensions.CheckGLError();
                 }
                 else
+                {
                     GL.Disable(EnableCap.PolygonOffsetFill);
-                GraphicsExtensions.CheckGLError();
+                    GraphicsExtensions.CheckGLError();
+                }
                 device._lastRasterizerState.DepthBias = this.DepthBias;
                 device._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
             if (device.Capabilities.SupportsDepthClamp &&
-                (force || this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
+                (force ||
+                 this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
             {
                 if (!DepthClipEnable)
                     GL.Enable(EnableCap.DepthClamp);

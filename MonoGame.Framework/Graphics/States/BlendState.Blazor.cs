@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using nkast.Wasm.Canvas.WebGL;
 
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
@@ -14,11 +15,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var GL = device._glContext;
 
-            var blendEnabled = !(this.ColorSourceBlend == Blend.One &&
-                                 this.ColorDestinationBlend == Blend.Zero &&
-                                 this.AlphaSourceBlend == Blend.One &&
-                                 this.AlphaDestinationBlend == Blend.Zero);
-            if (force || blendEnabled != device._lastBlendEnable)
+            bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
+                                  this.ColorDestinationBlend == Blend.Zero &&
+                                  this.AlphaSourceBlend == Blend.One &&
+                                  this.AlphaDestinationBlend == Blend.Zero);
+
+            if (force ||
+                blendEnabled != device._lastBlendEnable)
             {
                 if (blendEnabled)
                     GL.Enable(WebGLCapability.BLEND);
@@ -71,7 +74,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotImplementedException();
             }
 
-            if (force || this.ColorWriteChannels != device._lastBlendState.ColorWriteChannels)
+            if (force ||
+                this.ColorWriteChannels != device._lastBlendState.ColorWriteChannels)
             {
                 GL.ColorMask(
                     (this.ColorWriteChannels & ColorWriteChannels.Red) != 0,
@@ -135,7 +139,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }
         }
-
     }
 }
 
