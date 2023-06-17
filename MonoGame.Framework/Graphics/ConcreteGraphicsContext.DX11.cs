@@ -24,6 +24,31 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        internal void PlatformApplyBlend()
+        {
+            if (_blendStateDirty || _blendFactorDirty)
+            {
+                D3D11.BlendState blendState = _actualBlendState.GetDxState(this.Device);
+                var blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
+                D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
+
+                _blendStateDirty = false;
+                _blendFactorDirty = false;
+            }
+        }
+
+        internal void PlatformApplyScissorRectangle()
+        {
+            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
+
+            D3dContext.Rasterizer.SetScissorRectangle(
+                _scissorRectangle.X,
+                _scissorRectangle.Y,
+                _scissorRectangle.Right,
+                _scissorRectangle.Bottom);
+            _scissorRectangleDirty = false;
+        }
+
         internal static SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
         {
             return new SharpDX.Mathematics.Interop.RawColor4(

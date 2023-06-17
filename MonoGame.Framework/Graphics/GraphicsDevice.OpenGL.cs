@@ -871,7 +871,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
             {
-                PlatformApplyBlend();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
             }
 
             if (_mainContext.Strategy._depthStencilStateDirty)
@@ -888,41 +888,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (_mainContext.Strategy._scissorRectangleDirty)
             {
-                PlatformApplyScissorRectangle();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
                 _mainContext.Strategy._scissorRectangleDirty = false;
             }
         }
 
-        private void PlatformApplyBlend()
-        {
-            if (_mainContext.Strategy._blendStateDirty)
-            {
-                _mainContext.Strategy._actualBlendState.PlatformApplyState(this);
-                _mainContext.Strategy._blendStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._blendFactorDirty)
-            {
-                GL.BlendColor(
-                    this.BlendFactor.R/255.0f,
-                    this.BlendFactor.G/255.0f,
-                    this.BlendFactor.B/255.0f,
-                    this.BlendFactor.A/255.0f);
-                GraphicsExtensions.CheckGLError();
-
-                _mainContext.Strategy._blendFactorDirty = false;
-            }
-        }
-
-        private void PlatformApplyScissorRectangle()
-        {
-            Rectangle scissorRect = _mainContext.Strategy._scissorRectangle;
-            if (!_mainContext.Strategy.IsRenderTargetBound)
-                scissorRect.Y = PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
-            GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-            GraphicsExtensions.CheckGLError();
-            _mainContext.Strategy._scissorRectangleDirty = false;
-        }
 
         private void PlatformApplyViewport()
         {
