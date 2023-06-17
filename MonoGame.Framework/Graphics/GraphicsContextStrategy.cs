@@ -130,7 +130,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 BlendFactor = _actualBlendState.BlendFactor;
 
                 _blendStateDirty = true;
-
             }
         }
 
@@ -210,7 +209,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 _actualRasterizerState = newRasterizerState;
 
                 _rasterizerStateDirty = true;
-
             }
         }
 
