@@ -13,6 +13,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private IntPtr _glContext;
 
+        internal DrawBuffersEnum[] _drawBuffers;
+
         internal IntPtr GlContext { get { return _glContext; } }
 
         internal ConcreteGraphicsContext(GraphicsDevice device)

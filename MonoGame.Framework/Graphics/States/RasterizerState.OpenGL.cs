@@ -69,19 +69,19 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             if (force ||
-                this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
+                this.ScissorTestEnable != ((ConcreteGraphicsContext)context)._lastRasterizerState.ScissorTestEnable)
 			{
 			    if (ScissorTestEnable)
 				    GL.Enable(EnableCap.ScissorTest);
 			    else
 				    GL.Disable(EnableCap.ScissorTest);
                 GraphicsExtensions.CheckGLError();
-                device._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
             }
 
             if (force || 
-                this.DepthBias != device._lastRasterizerState.DepthBias ||
-                this.SlopeScaleDepthBias != device._lastRasterizerState.SlopeScaleDepthBias)
+                this.DepthBias != ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthBias ||
+                this.SlopeScaleDepthBias != ((ConcreteGraphicsContext)context)._lastRasterizerState.SlopeScaleDepthBias)
             {
                 if (this.DepthBias != 0 || this.SlopeScaleDepthBias != 0)
                 {
@@ -117,20 +117,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Disable(EnableCap.PolygonOffsetFill);
                     GraphicsExtensions.CheckGLError();
                 }
-                device._lastRasterizerState.DepthBias = this.DepthBias;
-                device._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthBias = this.DepthBias;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
             if (device.Capabilities.SupportsDepthClamp &&
                 (force ||
-                 this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
+                 this.DepthClipEnable != ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthClipEnable))
             {
                 if (!DepthClipEnable)
                     GL.Enable(EnableCap.DepthClamp);
                 else
                     GL.Disable(EnableCap.DepthClamp);
                 GraphicsExtensions.CheckGLError();
-                device._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
             }
 
             // TODO: Implement MultiSampleAntiAlias
