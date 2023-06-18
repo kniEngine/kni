@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            Textures.Dirty();
+            _mainContext.Strategy.Textures.Dirty();
         }
 
         private class RenderTargetBindingArrayComparer : IEqualityComparer<RenderTargetBinding[]>
@@ -769,7 +769,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            Textures.Dirty();
+            _mainContext.Strategy.Textures.Dirty();
 
             return _mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
@@ -936,10 +936,10 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
             _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
 
-            VertexTextures.PlatformApply();
-            VertexSamplerStates.PlatformApply();
-            Textures.PlatformApply();
-            SamplerStates.PlatformApply();
+            _mainContext.Strategy.VertexTextures.PlatformApply();
+            _mainContext.Strategy.VertexSamplerStates.PlatformApply();
+            _mainContext.Strategy.Textures.PlatformApply();
+            _mainContext.Strategy.SamplerStates.PlatformApply();
         }
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
@@ -1257,10 +1257,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Clear the texture and sampler collections forcing
             // the state to be reapplied.
-            VertexTextures.Clear();
-            VertexSamplerStates.Clear();
-            Textures.Clear();
-            SamplerStates.Clear();
+            _mainContext.Strategy.VertexTextures.Clear();
+            _mainContext.Strategy.VertexSamplerStates.Clear();
+            _mainContext.Strategy.Textures.Clear();
+            _mainContext.Strategy.SamplerStates.Clear();
 
             // Clear constant buffers
             _mainContext.Strategy._vertexConstantBuffers.Clear();

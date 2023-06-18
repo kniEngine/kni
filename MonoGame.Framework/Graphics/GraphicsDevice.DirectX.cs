@@ -970,8 +970,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
             }
 
-            Textures.Dirty();
-            SamplerStates.Dirty();
+            _mainContext.Strategy.Textures.Dirty();
+            _mainContext.Strategy.SamplerStates.Dirty();
             _mainContext.Strategy._depthStencilStateDirty = true;
             _mainContext.Strategy._blendStateDirty = true;
             _mainContext.Strategy._indexBufferDirty = true;
@@ -1024,8 +1024,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // to the device as a texture resource.
             lock (CurrentD3DContext)
             {
-                VertexTextures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
-                Textures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
+                _mainContext.Strategy.VertexTextures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
+                _mainContext.Strategy.Textures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
             }
 
             for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
@@ -1174,10 +1174,10 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
             _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
 
-            VertexTextures.PlatformApply();
-            VertexSamplerStates.PlatformApply();
-            Textures.PlatformApply();
-            SamplerStates.PlatformApply();
+            _mainContext.Strategy.VertexTextures.PlatformApply();
+            _mainContext.Strategy.VertexSamplerStates.PlatformApply();
+            _mainContext.Strategy.Textures.PlatformApply();
+            _mainContext.Strategy.SamplerStates.PlatformApply();
         }
 
         private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)
