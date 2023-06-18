@@ -13,6 +13,20 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : GraphicsContextStrategy
     {
         private D3D11.DeviceContext _d3dContext;
+        internal int _vertexBufferSlotsUsed;
+
+        internal PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
+
+        // The active render targets.
+        internal readonly D3D11.RenderTargetView[] _currentRenderTargets = new D3D11.RenderTargetView[8];
+
+        // The active depth view.
+        internal D3D11.DepthStencilView _currentDepthStencilView;
+
+        internal readonly Dictionary<VertexDeclaration, DynamicVertexBuffer> _userVertexBuffers = new Dictionary<VertexDeclaration, DynamicVertexBuffer>();
+        internal DynamicIndexBuffer _userIndexBuffer16;
+        internal DynamicIndexBuffer _userIndexBuffer32;
+
 
         internal D3D11.DeviceContext D3dContext { get { return _d3dContext; } }
 

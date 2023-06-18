@@ -32,9 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private SharpDX.Direct3D11.Device _d3dDevice;
         private SharpDX.Direct3D11.RenderTargetView _renderTargetView;
         private SharpDX.Direct3D11.DepthStencilView _depthStencilView;
-        private int _vertexBufferSlotsUsed;
-
-        private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
 
         internal SharpDX.Direct3D11.Device D3DDevice { get { return _d3dDevice; } }
         internal SharpDX.Direct3D11.DeviceContext CurrentD3DContext
@@ -70,15 +67,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #endif
 
-        // The active render targets.
-        readonly SharpDX.Direct3D11.RenderTargetView[] _currentRenderTargets = new SharpDX.Direct3D11.RenderTargetView[8];
-
-        // The active depth view.
-        SharpDX.Direct3D11.DepthStencilView _currentDepthStencilView;
-
-        private readonly Dictionary<VertexDeclaration, DynamicVertexBuffer> _userVertexBuffers = new Dictionary<VertexDeclaration, DynamicVertexBuffer>();
-        private DynamicIndexBuffer _userIndexBuffer16;
-        private DynamicIndexBuffer _userIndexBuffer32;
 
         /// <summary>
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
@@ -306,8 +294,8 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Clear the current render targets.
-            _currentDepthStencilView = null;
-            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = null;
+            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
             Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
             _mainContext.Strategy._currentRenderTargetCount = 0;
 
@@ -813,9 +801,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             // Clear options for depth/stencil buffer if not attached.
-            if (_currentDepthStencilView != null)
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView != null)
             {
-                if (_currentDepthStencilView.Description.Format != SharpDX.DXGI.Format.D24_UNorm_S8_UInt)
+                if (((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView.Description.Format != SharpDX.DXGI.Format.D24_UNorm_S8_UInt)
                     options &= ~ClearOptions.Stencil;
             }
             else
@@ -829,7 +817,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Clear the diffuse render buffer.
                 if ((options & ClearOptions.Target) == ClearOptions.Target)
                 {
-                    foreach (var view in _currentRenderTargets)
+                    foreach (var view in ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets)
                     {
                         if (view != null)
                             CurrentD3DContext.ClearRenderTargetView(view, new RawColor4(color.X, color.Y, color.Z, color.W));
@@ -844,7 +832,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     flags |= SharpDX.Direct3D11.DepthStencilClearFlags.Stencil;
 
                 if (flags != 0)
-                    CurrentD3DContext.ClearDepthStencilView(_currentDepthStencilView, flags, depth, (byte)stencil);
+                    CurrentD3DContext.ClearDepthStencilView(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, flags, depth, (byte)stencil);
             }
         }
 
@@ -857,12 +845,12 @@ namespace Microsoft.Xna.Framework.Graphics
             SharpDX.Utilities.Dispose(ref _renderTargetView);
             SharpDX.Utilities.Dispose(ref _depthStencilView);
 
-            if (_userIndexBuffer16 != null)
-                _userIndexBuffer16.Dispose();
-            if (_userIndexBuffer32 != null)
-                _userIndexBuffer32.Dispose();
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 != null)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.Dispose();
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 != null)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.Dispose();
 
-            foreach (var vb in _userVertexBuffers.Values)
+            foreach (var vb in ((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers.Values)
                 vb.Dispose();
 
             SharpDX.Utilities.Dispose(ref _swapChain);
@@ -967,7 +955,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (CurrentContext != null)
             {
                 lock (CurrentD3DContext)
-                    CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+                    CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
             }
 
             _mainContext.Strategy.Textures.Dirty();
@@ -986,12 +974,12 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformApplyDefaultRenderTarget()
         {
             // Set the default swap chain.
-            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentRenderTargets[0] = _renderTargetView;
-            _currentDepthStencilView = _depthStencilView;
+            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets[0] = _renderTargetView;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = _depthStencilView;
 
             lock (CurrentD3DContext)
-                CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+                CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
         }
 
         internal void PlatformResolveRenderTargets()
@@ -1017,8 +1005,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private IRenderTarget PlatformApplyRenderTargets()
         {
             // Clear the current render targets.
-            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentDepthStencilView = null;
+            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = null;
 
             // Make sure none of the new targets are bound
             // to the device as a texture resource.
@@ -1032,16 +1020,16 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var binding = _mainContext.Strategy._currentRenderTargetBindings[i];
                 var targetDX = (IRenderTargetDX11)binding.RenderTarget;
-                _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
             var renderTargetDX = (IRenderTargetDX11)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
-            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_mainContext.Strategy._currentRenderTargetBindings[0].ArraySlice);
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = renderTargetDX.GetDepthStencilView(_mainContext.Strategy._currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.
             lock (CurrentD3DContext)
-                CurrentD3DContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+                CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
 
             return (IRenderTarget)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
         }
@@ -1129,14 +1117,14 @@ namespace Microsoft.Xna.Framework.Graphics
                         CurrentD3DContext.InputAssembler.SetVertexBuffers(
                             slot, new SharpDX.Direct3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
                     }
-                    _vertexBufferSlotsUsed = _mainContext.Strategy._vertexBuffers.Count;
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._vertexBufferSlotsUsed = _mainContext.Strategy._vertexBuffers.Count;
                 }
                 else
                 {
-                    for (int slot = 0; slot < _vertexBufferSlotsUsed; slot++)
+                    for (int slot = 0; slot < ((ConcreteGraphicsContext)_mainContext.Strategy)._vertexBufferSlotsUsed; slot++)
                         CurrentD3DContext.InputAssembler.SetVertexBuffers(slot, new SharpDX.Direct3D11.VertexBufferBinding());
 
-                    _vertexBufferSlotsUsed = 0;
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._vertexBufferSlotsUsed = 0;
                 }
             }
         }
@@ -1185,7 +1173,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             DynamicVertexBuffer buffer;
 
-            if (!_userVertexBuffers.TryGetValue(vertexDecl, out buffer) || buffer.VertexCount < vertexCount)
+            if (!((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers.TryGetValue(vertexDecl, out buffer) || buffer.VertexCount < vertexCount)
             {
                 // Dispose the previous buffer if we have one.
                 if (buffer != null)
@@ -1194,7 +1182,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var requiredVertexCount = Math.Max(vertexCount, 4 * 256);
                 requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
                 buffer = new DynamicVertexBuffer(this, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
-                _userVertexBuffers[vertexDecl] = buffer;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers[vertexDecl] = buffer;
             }
 
             var startVertex = buffer.UserOffset;
@@ -1229,27 +1217,27 @@ namespace Microsoft.Xna.Framework.Graphics
             requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
             if (indexElementSize == IndexElementSize.SixteenBits)
             {
-                if (_userIndexBuffer16 == null || _userIndexBuffer16.IndexCount < requiredIndexCount)
+                if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 == null || ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.IndexCount < requiredIndexCount)
                 {
-                    if (_userIndexBuffer16 != null)
-                        _userIndexBuffer16.Dispose();
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 != null)
+                        ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.Dispose();
 
-                    _userIndexBuffer16 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
                 }
 
-                buffer = _userIndexBuffer16;
+                buffer = ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16;
             }
             else
             {
-                if (_userIndexBuffer32 == null || _userIndexBuffer32.IndexCount < requiredIndexCount)
+                if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 == null || ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.IndexCount < requiredIndexCount)
                 {
-                    if (_userIndexBuffer32 != null)
-                        _userIndexBuffer32.Dispose();
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 != null)
+                        ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.Dispose();
 
-                    _userIndexBuffer32 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
                 }
 
-                buffer = _userIndexBuffer32;                
+                buffer = ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32;
             }
 
             var startIndex = buffer.UserOffset;
@@ -1273,11 +1261,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
-            if (_lastPrimitiveType == primitiveType)
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._lastPrimitiveType == primitiveType)
                 return;
 
             CurrentD3DContext.InputAssembler.PrimitiveTopology = ConcreteGraphicsContext.ToPrimitiveTopology(primitiveType);
-            _lastPrimitiveType = primitiveType;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._lastPrimitiveType = primitiveType;
         }
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
