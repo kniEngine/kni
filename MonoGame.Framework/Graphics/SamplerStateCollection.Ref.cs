@@ -1,6 +1,8 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -22,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(GraphicsContextStrategy context)
         {
             throw new PlatformNotSupportedException();
         }

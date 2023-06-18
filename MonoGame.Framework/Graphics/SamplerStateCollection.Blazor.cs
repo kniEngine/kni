@@ -5,7 +5,9 @@
 // Author: Kenneth James Pouncey
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -25,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(GraphicsContextStrategy context)
         {
             for (var i = 0; i < _actualSamplers.Length; i++)
             {
@@ -43,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // NOTE: We don't have to bind the texture here because it is already bound in
                     // TextureCollection.Apply(). This, of course, assumes that Apply() is called
                     // before this method is called. If that ever changes this code will misbehave.
-                    // GL.BindTexture(texture.glTarget, texture.glTexture);
+                    // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GraphicsExtensions.CheckGLError();
 
                     sampler.Activate(_device, texture.glTarget, texture.LevelCount > 1);

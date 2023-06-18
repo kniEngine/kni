@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -20,15 +21,15 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void ClearTargets(GraphicsDevice device, RenderTargetBinding[] targets)
+        internal void ClearTargets(GraphicsContextStrategy context)
         {
             switch (_stage)
             {
                 case ShaderStage.Pixel:
-                    ClearTargets(targets, device.CurrentD3DContext.PixelShader);
+                    ClearTargets(context._currentRenderTargetBindings, ((ConcreteGraphicsContext)context).D3dContext.PixelShader);
                     break;
                 case ShaderStage.Vertex:
-                    ClearTargets(targets, device.CurrentD3DContext.VertexShader);
+                    ClearTargets(context._currentRenderTargetBindings, ((ConcreteGraphicsContext)context).D3dContext.VertexShader);
                     break;
 
                 default: throw new InvalidOperationException(_stage.ToString());
@@ -61,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(GraphicsContextStrategy context)
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -74,8 +75,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
-                    case ShaderStage.Pixel: shaderStage = _device.CurrentD3DContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = _device.CurrentD3DContext.VertexShader; break;
+                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.PixelShader; break;
+                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.VertexShader; break;
                     default: throw new InvalidOperationException();
                 }
 
