@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-        internal void Apply()
+        internal void Apply(GraphicsContext context)
         {
             uint validMask = _valid;
 
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Apply(_stage, i);
+                    buffer.Apply(context, _stage, i);
                 }
 
                 uint mask = ((uint)1) << i;

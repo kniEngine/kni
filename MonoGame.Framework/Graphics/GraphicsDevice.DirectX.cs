@@ -1171,8 +1171,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
             }
 
-            _mainContext.Strategy._vertexConstantBuffers.Apply();
-            _mainContext.Strategy._pixelConstantBuffers.Apply();
+            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
+            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
 
             VertexTextures.PlatformApply();
             VertexSamplerStates.PlatformApply();
