@@ -64,19 +64,19 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new PlatformNotSupportedException();
 
             if (force ||
-                this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)
+                this.ScissorTestEnable != ((ConcreteGraphicsContext)context)._lastRasterizerState.ScissorTestEnable)
 			{
 			    if (ScissorTestEnable)
 				    GL.Enable(WebGLCapability.SCISSOR_TEST);
 			    else
 				    GL.Disable(WebGLCapability.SCISSOR_TEST);
                 GraphicsExtensions.CheckGLError();
-                device._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
             }
 
             if (force || 
-                this.DepthBias != device._lastRasterizerState.DepthBias ||
-                this.SlopeScaleDepthBias != device._lastRasterizerState.SlopeScaleDepthBias)
+                this.DepthBias != ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthBias ||
+                this.SlopeScaleDepthBias != ((ConcreteGraphicsContext)context)._lastRasterizerState.SlopeScaleDepthBias)
             {
                 if (this.DepthBias != 0 || this.SlopeScaleDepthBias != 0)
                 {
@@ -113,16 +113,16 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Disable(WebGLCapability.POLYGON_OFFSET_FILL);
                     GraphicsExtensions.CheckGLError();
                 }
-                device._lastRasterizerState.DepthBias = this.DepthBias;
-                device._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthBias = this.DepthBias;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
             if (device.Capabilities.SupportsDepthClamp &&
                 (force ||
-                 this.DepthClipEnable != device._lastRasterizerState.DepthClipEnable))
+                 this.DepthClipEnable != ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthClipEnable))
             {
                 throw new PlatformNotSupportedException();
-                device._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
+                ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
             }
 
             // TODO: Implement MultiSampleAntiAlias

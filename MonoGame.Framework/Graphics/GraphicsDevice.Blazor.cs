@@ -24,28 +24,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         private ShaderProgramCache _programCache;
-        private ShaderProgram _shaderProgram = null;
 
-        Vector4 _posFixup;
-
-        private BufferBindingInfo[] _bufferBindingInfos;
-        private int _activeBufferBindingInfosCount;
-        private bool[] _newEnabledVertexAttributes;
-        private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
-        private bool _attribsDirty;
 
         private bool _supportsInvalidateFramebuffer;
         private bool _supportsBlitFramebuffer;
 
         private const WebGLFramebuffer _glDefaultFramebuffer = null;
-
-        // Keeps track of last applied state to avoid redundant OpenGL calls
-        internal bool _lastBlendEnable = false;
-        internal BlendState _lastBlendState = new BlendState();
-        internal DepthStencilState _lastDepthStencilState = new DepthStencilState();
-        internal RasterizerState _lastRasterizerState = new RasterizerState();
-
-        internal ShaderProgram PlatformShaderProgram { get { return _shaderProgram; } }
 
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
@@ -74,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (attrs[x])
                 {
-                    if (_enabledVertexAttributes.Add(x))
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Add(x))
                     {
                         GL.EnableVertexAttribArray(x);
                         GraphicsExtensions.CheckGLError();
@@ -82,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    if (_enabledVertexAttributes.Remove(x))
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Remove(x))
                     {
                         GL.DisableVertexAttribArray(x);
                         GraphicsExtensions.CheckGLError();
@@ -105,12 +89,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 var vertexStride = vertexDeclaration.VertexStride;
                 var offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
-                if (!_attribsDirty &&
-                    slot < _activeBufferBindingInfosCount &&
-                    _bufferBindingInfos[slot].VertexOffset == offset &&
-                    ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
-                    _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
-                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.vbo)
+                if (!((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty &&
+                    slot < ((ConcreteGraphicsContext)_mainContext.Strategy)._activeBufferBindingInfosCount &&
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].VertexOffset == offset &&
+                    ReferenceEquals(((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.vbo)
                     continue;
 
                 bindingsChanged = true;
@@ -143,29 +127,29 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
 
-                _bufferBindingInfos[slot].VertexOffset = offset;
-                _bufferBindingInfos[slot].AttributeInfo = attrInfo;
-                _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.vbo;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].VertexOffset = offset;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo = attrInfo;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.vbo;
             }
 
-            _attribsDirty = false;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty = false;
 
             if (bindingsChanged)
             {
-                for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
-                    _newEnabledVertexAttributes[eva] = false;
+                for (int eva = 0; eva < ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes.Length; eva++)
+                    ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes[eva] = false;
                 for (var slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
                 {
-                    for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    for (int e = 0; e< ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
-                        var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
-                        _newEnabledVertexAttributes[element.AttributeLocation] = true;
+                        var element = ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo.Elements[e];
+                        ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes[element.AttributeLocation] = true;
                     }
                 }
-                _activeBufferBindingInfosCount = _mainContext.Strategy._vertexBuffers.Count;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._activeBufferBindingInfosCount = _mainContext.Strategy._vertexBuffers.Count;
             }
-            SetVertexAttributeArray(_newEnabledVertexAttributes);
+            SetVertexAttributeArray(((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes);
         }
 
         private void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, int baseVertex)
@@ -193,7 +177,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
             SetVertexAttributeArray(attrInfo.EnabledAttributes);
-            _attribsDirty = true;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty = true;
         }
 
         private void PlatformSetup()
@@ -215,7 +199,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Capabilities.PlatformInitialize(this);
 
 
-            _newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -227,11 +211,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
-            _enabledVertexAttributes.Clear();
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs. 
             _programCache.DisposePrograms();
-            _shaderProgram = null;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
 
             // TODO: check for FramebufferObjectARB
             //if (graphicsDevice.Capabilities.SupportsFramebufferObjectARB
@@ -253,13 +237,11 @@ namespace Microsoft.Xna.Framework.Graphics
             this.DepthStencilState.PlatformApplyState(_mainContext.Strategy, this, true);
             this.RasterizerState.PlatformApplyState(_mainContext.Strategy, this, true);
 
-            _bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < _bufferBindingInfos.Length; i++)
-                _bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
         
-        private DepthStencilState clearDepthStencilState = new DepthStencilState { StencilEnable = true };
-
         private void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             // TODO: We need to figure out how to detect if we have a
@@ -283,7 +265,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
-            DepthStencilState = this.clearDepthStencilState;
+            DepthStencilState = ((ConcreteGraphicsContext)_mainContext.Strategy)._clearDepthStencilState;
 		    BlendState = BlendState.Opaque;
             PlatformApplyState();
 
@@ -336,55 +318,6 @@ namespace Microsoft.Xna.Framework.Graphics
             // Textures will need to be rebound to render correctly in the new render target.
             _mainContext.Strategy.Textures.Dirty();
         }
-
-        private class RenderTargetBindingArrayComparer : IEqualityComparer<RenderTargetBinding[]>
-        {
-            public bool Equals(RenderTargetBinding[] first, RenderTargetBinding[] second)
-            {
-                if (object.ReferenceEquals(first, second))
-                    return true;
-
-                if (first == null || second == null)
-                    return false;
-
-                if (first.Length != second.Length)
-                    return false;
-
-                for (var i = 0; i < first.Length; i++)
-                {
-                    if ((first[i].RenderTarget != second[i].RenderTarget) || (first[i].ArraySlice != second[i].ArraySlice))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            public int GetHashCode(RenderTargetBinding[] array)
-            {
-                if (array != null)
-                {
-                    unchecked
-                    {
-                        int hash = 17;
-                        foreach (var item in array)
-                        {
-                            if (item.RenderTarget != null)
-                                hash = hash * 23 + item.RenderTarget.GetHashCode();
-                            hash = hash * 23 + item.ArraySlice.GetHashCode();
-                        }
-                        return hash;
-                    }
-                }
-                return 0;
-            }
-        }
-
-        // FBO cache, we create 1 FBO per RenderTargetBinding combination
-        private Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
-        // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
-        private Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
 
         internal void PlatformCreateRenderTarget(IRenderTarget renderTarget, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
@@ -484,7 +417,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var bindingsToDelete = new List<RenderTargetBinding[]>();
-                foreach (var bindings in _glFramebuffers.Keys)
+                foreach (var bindings in ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Keys)
                 {
                     foreach (var binding in bindings)
                     {
@@ -499,18 +432,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 foreach (var bindings in bindingsToDelete)
                 {
                     WebGLFramebuffer fbo = null;
-                    if (_glFramebuffers.TryGetValue(bindings, out fbo))
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.TryGetValue(bindings, out fbo))
                     {
                         fbo.Dispose();
                         GraphicsExtensions.CheckGLError();
-                        _glFramebuffers.Remove(bindings);
+                        ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Remove(bindings);
                     }
-                    if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
+                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._glResolveFramebuffers.TryGetValue(bindings, out fbo))
                     {
                         fbo.Dispose();
                         GraphicsExtensions.CheckGLError();
 
-                        _glResolveFramebuffers.Remove(bindings);
+                        ((ConcreteGraphicsContext)_mainContext.Strategy)._glResolveFramebuffers.Remove(bindings);
                     }
                 }
             }
@@ -545,7 +478,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private IRenderTarget PlatformApplyRenderTargets()
         {
             WebGLFramebuffer glFramebuffer = null;
-            if (!_glFramebuffers.TryGetValue(_mainContext.Strategy._currentRenderTargetBindings, out glFramebuffer))
+            if (!((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.TryGetValue(_mainContext.Strategy._currentRenderTargetBindings, out glFramebuffer))
             {
                 glFramebuffer = GL.CreateFramebuffer();
                 GraphicsExtensions.CheckGLError();
@@ -578,7 +511,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 GraphicsExtensions.CheckFramebufferStatus();
 
-                _glFramebuffers.Add((RenderTargetBinding[])_mainContext.Strategy._currentRenderTargetBindings.Clone(), glFramebuffer);
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Add((RenderTargetBinding[])_mainContext.Strategy._currentRenderTargetBindings.Clone(), glFramebuffer);
             }
             else
             {
@@ -610,11 +543,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
 
             // Set the new program if it has changed.
-            if (_shaderProgram != shaderProgram)
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram != shaderProgram)
             {
                 GL.UseProgram(shaderProgram.Program);
                 GraphicsExtensions.CheckGLError();
-                _shaderProgram = shaderProgram;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = shaderProgram;
             }
 
             var posFixupLoc = shaderProgram.GetUniformLocation("posFixup");
@@ -647,28 +580,28 @@ namespace Microsoft.Xna.Framework.Graphics
             // 1.0 or -1.0 to turn the rendering upside down for offscreen rendering. PosFixup.x
             // contains 1.0 to allow a mad.
 
-            _posFixup.X = 1.0f;
-            _posFixup.Y = 1.0f;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.X = 1.0f;
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Y = 1.0f;
             if (!UseHalfPixelOffset)
             {
-                _posFixup.Z = 0f;
-                _posFixup.W = 0f;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Z = 0f;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W = 0f;
             }
             else
             {
-                _posFixup.Z =  (63.0f/64.0f)/Viewport.Width;
-                _posFixup.W = -(63.0f/64.0f)/Viewport.Height;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Z =  (63.0f/64.0f)/Viewport.Width;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W = -(63.0f/64.0f)/Viewport.Height;
             }
 
             //If we have a render target bound (rendering offscreen)
             if (_mainContext.Strategy.IsRenderTargetBound)
             {
                 //flip vertically
-                _posFixup.Y = -_posFixup.Y;
-                _posFixup.W = -_posFixup.W;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Y = -((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Y;
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W = -((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W;
             }
             
-            GL.Uniform4f(posFixupLoc, _posFixup.X, _posFixup.Y, _posFixup.Z, _posFixup.W);
+            GL.Uniform4f(posFixupLoc, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.X, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Y, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Z, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -959,23 +892,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
             ApplyRenderTargets(null);
-        }
-
-        // Holds information for caching
-        private class BufferBindingInfo
-        {
-            public VertexDeclaration.VertexDeclarationAttributeInfo AttributeInfo;
-            public IntPtr VertexOffset;
-            public int InstanceFrequency;
-            public WebGLBuffer Vbo;
-
-            public BufferBindingInfo(VertexDeclaration.VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, WebGLBuffer vbo)
-            {
-                AttributeInfo = attributeInfo;
-                VertexOffset = vertexOffset;
-                InstanceFrequency = instanceFrequency;
-                Vbo = vbo;
-            }
         }
 
     }
