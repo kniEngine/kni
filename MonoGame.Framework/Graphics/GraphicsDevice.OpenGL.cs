@@ -294,9 +294,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._mainContext.Strategy._actualBlendState.PlatformApplyState(this, true);
-            this.DepthStencilState.PlatformApplyState(this, true);
-            this.RasterizerState.PlatformApplyState(_mainContext, this, true);
+            this._mainContext.Strategy._actualBlendState.PlatformApplyState(_mainContext.Strategy, this, true);
+            this.DepthStencilState.PlatformApplyState(_mainContext.Strategy, this, true);
+            this.RasterizerState.PlatformApplyState(_mainContext.Strategy, this, true);
 
             _bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _bufferBindingInfos.Length; i++)
@@ -857,13 +857,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (_mainContext.Strategy._depthStencilStateDirty)
             {
-                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(this);
+                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy, this);
                 _mainContext.Strategy._depthStencilStateDirty = false;
             }
 
             if (_mainContext.Strategy._rasterizerStateDirty)
             {
-                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext, this);
+                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy, this);
                 _mainContext.Strategy._rasterizerStateDirty = false;
             }
 

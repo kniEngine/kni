@@ -3,6 +3,8 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 
@@ -10,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
     {
-        internal void PlatformApplyState(GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
         {
             bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
                                   this.ColorDestinationBlend == Blend.Zero &&

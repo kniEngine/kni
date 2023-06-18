@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -18,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal void PlatformApplyState(GraphicsContext context, GraphicsDevice device)
+        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device)
         {
             if (_state == null)
             {
@@ -47,8 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.IsMultisampleEnabled = MultiSampleAntiAlias;
 
                 // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-                DepthFormat activeDepthFormat = (context.Strategy.IsRenderTargetBound)
-                                              ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
+                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                              ? context._currentRenderTargetBindings[0].DepthFormat
                                               : device.PresentationParameters.DepthStencilFormat;
                 int depthMul;
                 switch (activeDepthFormat)
@@ -97,7 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Apply the state!
-            device.CurrentD3DContext.Rasterizer.State = _state;
+            ((ConcreteGraphicsContext)context).D3dContext.Rasterizer.State = _state;
         }
 
         partial void PlatformDispose()
