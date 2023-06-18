@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Dirty = true;
         }
 
-        internal unsafe override void PlatformApply(ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy context, ShaderStage stage, int slot)
         {
             if (_cbuffer == null)
                 _cbuffer = CreateD3D11Buffer();
@@ -62,15 +62,15 @@ namespace Microsoft.Xna.Framework.Graphics
             // Update the hardware buffer.
             if (Dirty)
             {
-                GraphicsDevice.CurrentD3DContext.UpdateSubresource(Buffer, _cbuffer);
+                ((ConcreteGraphicsContext)context).D3dContext.UpdateSubresource(Buffer, _cbuffer);
                 Dirty = false;
             }
 
             // Set the buffer to the right stage.
             switch (stage)
             {
-                case ShaderStage.Pixel: GraphicsDevice.CurrentD3DContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
-                case ShaderStage.Vertex: GraphicsDevice.CurrentD3DContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Pixel: ((ConcreteGraphicsContext)context).D3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Vertex: ((ConcreteGraphicsContext)context).D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
                 default: throw new System.ArgumentException();
             }
         }

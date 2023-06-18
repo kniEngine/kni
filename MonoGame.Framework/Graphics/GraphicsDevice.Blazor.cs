@@ -757,8 +757,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _mainContext.Strategy._pixelShaderDirty = false;
             }
 
-            _mainContext.Strategy._vertexConstantBuffers.Apply();
-            _mainContext.Strategy._pixelConstantBuffers.Apply();
+            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
+            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
 
             VertexTextures.PlatformApply();
             VertexSamplerStates.PlatformApply();

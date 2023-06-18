@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
         }
 
-        internal unsafe override void PlatformApply(ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy context, ShaderStage stage, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
