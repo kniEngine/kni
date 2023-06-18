@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal unsafe override void PlatformApply(ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy context, ShaderStage stage, int slot)
         {
             throw new PlatformNotSupportedException();
         }
