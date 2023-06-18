@@ -2,6 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 
@@ -9,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState
     {
-        internal void PlatformApplyState(GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
         {
             if (force ||
                 this.DepthBufferEnable != device._lastDepthStencilState.DepthBufferEnable)

@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_blendStateDirty || _blendFactorDirty)
             {
-                D3D11.BlendState blendState = _actualBlendState.GetDxState(this.Device);
+                D3D11.BlendState blendState = _actualBlendState.GetDxState(this, this.Device);
                 var blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
                 D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 

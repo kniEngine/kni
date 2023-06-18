@@ -3,6 +3,8 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 
@@ -10,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
     {
-        internal void PlatformApplyState(GraphicsContext context, GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
         {
             if (force)
             {
@@ -19,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // When rendering offscreen the faces change order.
-            bool offscreen = context.Strategy.IsRenderTargetBound;
+            bool offscreen = context.IsRenderTargetBound;
 
             switch (CullMode)
             {
@@ -86,8 +88,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     // from the docs it seems this works the same as for Direct3D
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
-                    DepthFormat activeDepthFormat = (context.Strategy.IsRenderTargetBound)
-                                                  ? context.Strategy._currentRenderTargetBindings[0].DepthFormat
+                    DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                                  ? context._currentRenderTargetBindings[0].DepthFormat
                                                   : device.PresentationParameters.DepthStencilFormat;
                     int depthMul;
                     switch (activeDepthFormat)

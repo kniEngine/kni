@@ -2,7 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -17,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal SharpDX.Direct3D11.BlendState GetDxState(GraphicsDevice device)
+        internal SharpDX.Direct3D11.BlendState GetDxState(GraphicsContextStrategy context, GraphicsDevice device)
         {
             if (_state == null)
             {
