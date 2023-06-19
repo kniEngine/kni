@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal SharpDX.Direct3D11.BlendState GetDxState(GraphicsContextStrategy context, GraphicsDevice device)
+        internal SharpDX.Direct3D11.BlendState GetDxState(GraphicsContextStrategy context)
         {
             if (_state == null)
             {
@@ -38,8 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Create the state.
                 _state = new SharpDX.Direct3D11.BlendState(GraphicsDevice.D3DDevice, desc);
             }
-
-            Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
 
 			// Apply the state!
 			return _state;
