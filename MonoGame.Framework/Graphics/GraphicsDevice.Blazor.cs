@@ -233,9 +233,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._mainContext.Strategy._actualBlendState.PlatformApplyState(_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // some drivers won't clear with stencil test disabled
             DepthStencilState = ((ConcreteGraphicsContext)_mainContext.Strategy)._clearDepthStencilState;
 		    BlendState = BlendState.Opaque;
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
 
             WebGLBufferBits bb = default(WebGLBufferBits);
             if ((options & ClearOptions.Target) != 0)
@@ -605,33 +605,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformApplyState()
-        {
-            // Threading.EnsureUIThread();
-
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
-            }
-
-            if (_mainContext.Strategy._depthStencilStateDirty)
-            {
-                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._depthStencilStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._rasterizerStateDirty)
-            {
-                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._rasterizerStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._scissorRectangleDirty)
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
-                _mainContext.Strategy._scissorRectangleDirty = false;
-            }
-        }
-
         private void PlatformApplyViewport()
         {
             if (_mainContext.Strategy.IsRenderTargetBound)
@@ -701,7 +674,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -725,7 +698,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -769,7 +742,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -787,7 +760,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -852,7 +825,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -865,7 +838,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();

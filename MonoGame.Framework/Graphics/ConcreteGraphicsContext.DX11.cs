@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D;
@@ -36,6 +37,34 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _d3dContext = d3dContext;
 
+        }
+
+
+        internal void PlatformApplyState()
+        {
+            Debug.Assert(this.D3dContext != null, "The d3d context is null!");
+
+            {
+                PlatformApplyBlend();
+            }
+
+            if (_depthStencilStateDirty)
+            {
+                _actualDepthStencilState.PlatformApplyState(this);
+                _depthStencilStateDirty = false;
+            }
+
+            if (_rasterizerStateDirty)
+            {
+                _actualRasterizerState.PlatformApplyState(this);
+                _rasterizerStateDirty = false;
+            }
+
+            if (_scissorRectangleDirty)
+            {
+                PlatformApplyScissorRectangle();
+                _scissorRectangleDirty = false;
+            }
         }
 
         internal void PlatformApplyBlend()

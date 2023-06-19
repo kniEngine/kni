@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal void PlatformApplyState(GraphicsContextStrategy context)
+        internal void PlatformApplyState(ConcreteGraphicsContext context)
         {
             if (_state == null)
             {
@@ -65,8 +65,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.
 
-            // Apply the state!
-            ((ConcreteGraphicsContext)context).D3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
+            // Apply the state.
+            context.D3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
         }
 
         static private SharpDX.Direct3D11.StencilOperation ToDXStencilOp(StencilOperation operation)
