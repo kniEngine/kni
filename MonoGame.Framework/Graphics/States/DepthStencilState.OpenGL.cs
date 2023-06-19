@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState
     {
-        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, bool force = false)
         {
             if (force ||
                 this.DepthBufferEnable != ((ConcreteGraphicsContext)context)._lastDepthStencilState.DepthBufferEnable)

@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_blendStateDirty)
             {
-                _actualBlendState.PlatformApplyState(this, this.Device);
+                _actualBlendState.PlatformApplyState(this);
                 _blendStateDirty = false;
             }
 

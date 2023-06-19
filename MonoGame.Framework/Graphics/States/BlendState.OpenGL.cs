@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
     {
-        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, bool force = false)
         {
             bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
                                   this.ColorDestinationBlend == Blend.Zero &&
