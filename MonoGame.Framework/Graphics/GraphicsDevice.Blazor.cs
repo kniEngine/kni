@@ -233,9 +233,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._mainContext.Strategy._actualBlendState.PlatformApplyState(_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)

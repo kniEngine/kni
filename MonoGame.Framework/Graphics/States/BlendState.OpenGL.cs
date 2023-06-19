@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
     {
-        internal void PlatformApplyState(GraphicsContextStrategy context, bool force = false)
+        internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
             bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
                                   this.ColorDestinationBlend == Blend.Zero &&
@@ -20,21 +20,21 @@ namespace Microsoft.Xna.Framework.Graphics
                                   this.AlphaDestinationBlend == Blend.Zero);
 
             if (force ||
-                blendEnabled != ((ConcreteGraphicsContext)context)._lastBlendEnable)
+                blendEnabled != context._lastBlendEnable)
             {
                 if (blendEnabled)
                     GL.Enable(EnableCap.Blend);
                 else
                     GL.Disable(EnableCap.Blend);
                 GraphicsExtensions.CheckGLError();
-                ((ConcreteGraphicsContext)context)._lastBlendEnable = blendEnabled;
+                context._lastBlendEnable = blendEnabled;
             }
 
             if (!_independentBlendEnable)
             {
                 if (force ||
-                    this.ColorBlendFunction != ((ConcreteGraphicsContext)context)._lastBlendState.ColorBlendFunction ||
-                    this.AlphaBlendFunction != ((ConcreteGraphicsContext)context)._lastBlendState.AlphaBlendFunction)
+                    this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
+                    this.AlphaBlendFunction != context._lastBlendState.AlphaBlendFunction)
                 {
                     GL.BlendEquationSeparate(
                         ToGLBlendEquationMode(this.ColorBlendFunction),
@@ -42,16 +42,16 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorBlendFunction = this.ColorBlendFunction;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaBlendFunction = this.AlphaBlendFunction;
+                        context._lastBlendState[i].ColorBlendFunction = this.ColorBlendFunction;
+                        context._lastBlendState[i].AlphaBlendFunction = this.AlphaBlendFunction;
                     }
                 }
 
                 if (force ||
-                    this.ColorSourceBlend != ((ConcreteGraphicsContext)context)._lastBlendState.ColorSourceBlend ||
-                    this.ColorDestinationBlend != ((ConcreteGraphicsContext)context)._lastBlendState.ColorDestinationBlend ||
-                    this.AlphaSourceBlend != ((ConcreteGraphicsContext)context)._lastBlendState.AlphaSourceBlend ||
-                    this.AlphaDestinationBlend != ((ConcreteGraphicsContext)context)._lastBlendState.AlphaDestinationBlend)
+                    this.ColorSourceBlend != context._lastBlendState.ColorSourceBlend ||
+                    this.ColorDestinationBlend != context._lastBlendState.ColorDestinationBlend ||
+                    this.AlphaSourceBlend != context._lastBlendState.AlphaSourceBlend ||
+                    this.AlphaDestinationBlend != context._lastBlendState.AlphaDestinationBlend)
                 {
                     GL.BlendFuncSeparate(
                         ToGLBlendFunc(this.ColorSourceBlend),
@@ -61,10 +61,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorSourceBlend = this.ColorSourceBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorDestinationBlend = this.ColorDestinationBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaSourceBlend = this.AlphaSourceBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaDestinationBlend = this.AlphaDestinationBlend;
+                        context._lastBlendState[i].ColorSourceBlend = this.ColorSourceBlend;
+                        context._lastBlendState[i].ColorDestinationBlend = this.ColorDestinationBlend;
+                        context._lastBlendState[i].AlphaSourceBlend = this.AlphaSourceBlend;
+                        context._lastBlendState[i].AlphaDestinationBlend = this.AlphaDestinationBlend;
                     }
                 }
             }
@@ -73,22 +73,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 for (int i = 0; i < 4; i++)
                 {
                     if (force ||
-                        _targetBlendState[i].ColorBlendFunction != ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorBlendFunction ||
-                        _targetBlendState[i].AlphaBlendFunction != ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaBlendFunction)
+                        _targetBlendState[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
+                        _targetBlendState[i].AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
                     {
                         GL.BlendEquationSeparatei(i,
                             ToGLBlendEquationMode(_targetBlendState[i].ColorBlendFunction),
                             ToGLBlendEquationMode(_targetBlendState[i].AlphaBlendFunction));
                         GraphicsExtensions.CheckGLError();
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorBlendFunction = _targetBlendState[i].ColorBlendFunction;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaBlendFunction = _targetBlendState[i].AlphaBlendFunction;
+                        context._lastBlendState[i].ColorBlendFunction = _targetBlendState[i].ColorBlendFunction;
+                        context._lastBlendState[i].AlphaBlendFunction = _targetBlendState[i].AlphaBlendFunction;
                     }
 
                     if (force ||
-                        _targetBlendState[i].ColorSourceBlend != ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorSourceBlend ||
-                        _targetBlendState[i].ColorDestinationBlend != ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorDestinationBlend ||
-                        _targetBlendState[i].AlphaSourceBlend != ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaSourceBlend ||
-                        _targetBlendState[i].AlphaDestinationBlend != ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaDestinationBlend)
+                        _targetBlendState[i].ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
+                        _targetBlendState[i].ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
+                        _targetBlendState[i].AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
+                        _targetBlendState[i].AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
                     {
                         GL.BlendFuncSeparatei(i,
                             ToGLBlendFunc(_targetBlendState[i].ColorSourceBlend),
@@ -96,16 +96,16 @@ namespace Microsoft.Xna.Framework.Graphics
                             ToGLBlendFunc(_targetBlendState[i].AlphaSourceBlend),
                             ToGLBlendFunc(_targetBlendState[i].AlphaDestinationBlend));
                         GraphicsExtensions.CheckGLError();
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaSourceBlend = _targetBlendState[i].AlphaSourceBlend;
-                        ((ConcreteGraphicsContext)context)._lastBlendState[i].AlphaDestinationBlend = _targetBlendState[i].AlphaDestinationBlend;
+                        context._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
+                        context._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
+                        context._lastBlendState[i].AlphaSourceBlend = _targetBlendState[i].AlphaSourceBlend;
+                        context._lastBlendState[i].AlphaDestinationBlend = _targetBlendState[i].AlphaDestinationBlend;
                     }
                 }
             }
 
             if (force ||
-                this.ColorWriteChannels != ((ConcreteGraphicsContext)context)._lastBlendState.ColorWriteChannels)
+                this.ColorWriteChannels != context._lastBlendState.ColorWriteChannels)
             {
                 GL.ColorMask(
                     (this.ColorWriteChannels & ColorWriteChannels.Red) != 0,
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (this.ColorWriteChannels & ColorWriteChannels.Blue) != 0,
                     (this.ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
                 GraphicsExtensions.CheckGLError();
-                ((ConcreteGraphicsContext)context)._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
+                context._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
             }
         }
 

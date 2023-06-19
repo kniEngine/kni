@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal SharpDX.Direct3D11.BlendState GetDxState(GraphicsContextStrategy context)
+        internal SharpDX.Direct3D11.BlendState GetDxState(ConcreteGraphicsContext context)
         {
             if (_state == null)
             {
