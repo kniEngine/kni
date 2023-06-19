@@ -4,6 +4,8 @@
 
 // Copyright (C)2023 Nick Kastellanos
 
+using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 
@@ -24,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _targets[i] = 0;
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(GraphicsContextStrategy context)
         {
             for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {

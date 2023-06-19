@@ -1012,8 +1012,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // to the device as a texture resource.
             lock (CurrentD3DContext)
             {
-                _mainContext.Strategy.VertexTextures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
-                _mainContext.Strategy.Textures.ClearTargets(this, _mainContext.Strategy._currentRenderTargetBindings);
+                _mainContext.Strategy.VertexTextures.ClearTargets(_mainContext.Strategy);
+                _mainContext.Strategy.Textures.ClearTargets(_mainContext.Strategy);
             }
 
             for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
@@ -1159,13 +1159,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
             }
 
-            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
-            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
+            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext.Strategy);
+            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext.Strategy);
 
-            _mainContext.Strategy.VertexTextures.PlatformApply();
-            _mainContext.Strategy.VertexSamplerStates.PlatformApply();
-            _mainContext.Strategy.Textures.PlatformApply();
-            _mainContext.Strategy.SamplerStates.PlatformApply();
+            _mainContext.Strategy.VertexTextures.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.VertexSamplerStates.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.Textures.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.SamplerStates.PlatformApply(_mainContext.Strategy);
         }
 
         private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)

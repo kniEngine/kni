@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -57,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContext context)
+        internal void Apply(GraphicsContextStrategy context)
         {
             uint validMask = _valid;
 

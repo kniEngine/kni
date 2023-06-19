@@ -861,13 +861,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 _mainContext.Strategy._pixelShaderDirty = false;
             }
 
-            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext);
-            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext);
+            _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext.Strategy);
+            _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext.Strategy);
 
-            _mainContext.Strategy.VertexTextures.PlatformApply();
-            _mainContext.Strategy.VertexSamplerStates.PlatformApply();
-            _mainContext.Strategy.Textures.PlatformApply();
-            _mainContext.Strategy.SamplerStates.PlatformApply();
+            _mainContext.Strategy.VertexTextures.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.VertexSamplerStates.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.Textures.PlatformApply(_mainContext.Strategy);
+            _mainContext.Strategy.SamplerStates.PlatformApply(_mainContext.Strategy);
         }
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)

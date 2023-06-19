@@ -7,6 +7,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -32,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _d3dDirty |= (((uint)1) << i);
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(GraphicsContextStrategy context)
         {
             for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
             {
@@ -45,8 +46,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
-                    case ShaderStage.Pixel: shaderStage = _device.CurrentD3DContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = _device.CurrentD3DContext.VertexShader; break;
+                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.PixelShader; break;
+                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.VertexShader; break;
                     default: throw new InvalidOperationException();
                 }
 
