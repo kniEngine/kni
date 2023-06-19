@@ -47,6 +47,33 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void PlatformApplyState()
+        {
+            // Threading.EnsureUIThread();
+
+            {
+                PlatformApplyBlend();
+            }
+
+            if (_depthStencilStateDirty)
+            {
+                _actualDepthStencilState.PlatformApplyState(this);
+                _depthStencilStateDirty = false;
+            }
+
+            if (_rasterizerStateDirty)
+            {
+                _actualRasterizerState.PlatformApplyState(this);
+                _rasterizerStateDirty = false;
+            }
+
+            if (_scissorRectangleDirty)
+            {
+                PlatformApplyScissorRectangle();
+                _scissorRectangleDirty = false;
+            }
+        }
+
         internal void PlatformApplyBlend()
         {
             if (_blendStateDirty)

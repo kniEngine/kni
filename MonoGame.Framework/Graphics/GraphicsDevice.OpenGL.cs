@@ -307,7 +307,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // some drivers won't clear with stencil test disabled
             DepthStencilState = ((ConcreteGraphicsContext)_mainContext.Strategy)._clearDepthStencilState;
 		    BlendState = BlendState.Opaque;
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
 
             ClearBufferMask bufferMask = 0;
             if ((options & ClearOptions.Target) == ClearOptions.Target)
@@ -775,33 +775,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformApplyState()
-        {
-            Threading.EnsureUIThread();
-
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
-            }
-
-            if (_mainContext.Strategy._depthStencilStateDirty)
-            {
-                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._depthStencilStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._rasterizerStateDirty)
-            {
-                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._rasterizerStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._scissorRectangleDirty)
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
-                _mainContext.Strategy._scissorRectangleDirty = false;
-            }
-        }
-
 
         private void PlatformApplyViewport()
         {
@@ -872,7 +845,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -898,7 +871,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
             where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -934,7 +907,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -954,7 +927,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -998,7 +971,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             where T : struct
         {
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
@@ -1043,7 +1016,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (!Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
-            PlatformApplyState();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();

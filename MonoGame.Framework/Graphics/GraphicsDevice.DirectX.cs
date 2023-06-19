@@ -1034,33 +1034,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return (IRenderTarget)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
         }
 
-        private void PlatformApplyState()
-        {
-            Debug.Assert(CurrentD3DContext != null, "The d3d context is null!");
-
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyBlend();
-            }
-
-            if (_mainContext.Strategy._depthStencilStateDirty)
-            {
-                _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._depthStencilStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._rasterizerStateDirty)
-            {
-                _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy);
-                _mainContext.Strategy._rasterizerStateDirty = false;
-            }
-
-            if (_mainContext.Strategy._scissorRectangleDirty)
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyScissorRectangle();
-                _mainContext.Strategy._scissorRectangleDirty = false;
-            }
-        }
-
         private void PlatformApplyViewport()
         {
             lock (CurrentD3DContext)
@@ -1272,7 +1245,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
@@ -1291,7 +1264,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
@@ -1305,7 +1278,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
@@ -1325,7 +1298,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
@@ -1345,7 +1318,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
@@ -1360,7 +1333,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (CurrentD3DContext)
             {
-                PlatformApplyState();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
