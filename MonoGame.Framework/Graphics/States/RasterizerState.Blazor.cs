@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
     {
-        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device, bool force = false)
+        internal void PlatformApplyState(GraphicsContextStrategy context, bool force = false)
         {
-            var GL = device._glContext;
+            var GL = this.GraphicsDevice._glContext;
 
             if (force)
             {
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
                     DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
                                                   ? context._currentRenderTargetBindings[0].DepthFormat
-                                                  : device.PresentationParameters.DepthStencilFormat;
+                                                  : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
                     int depthMul;
                     switch (activeDepthFormat)
                     {
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)context)._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
-            if (device.Capabilities.SupportsDepthClamp &&
+            if (this.GraphicsDevice.Capabilities.SupportsDepthClamp &&
                 (force ||
                  this.DepthClipEnable != ((ConcreteGraphicsContext)context)._lastRasterizerState.DepthClipEnable))
             {

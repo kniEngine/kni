@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal void PlatformApplyState(GraphicsContextStrategy context, GraphicsDevice device)
+        internal void PlatformApplyState(GraphicsContextStrategy context)
         {
             if (_state == null)
             {
@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
                 DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
                                               ? context._currentRenderTargetBindings[0].DepthFormat
-                                              : device.PresentationParameters.DepthStencilFormat;
+                                              : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
                 int depthMul;
                 switch (activeDepthFormat)
                 {
@@ -91,8 +91,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Create the state.
                 _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice.D3DDevice, desc);
             }
-
-            Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
 
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.
