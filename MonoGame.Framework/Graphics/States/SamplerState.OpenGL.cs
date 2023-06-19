@@ -24,7 +24,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 // be changing the state of this object now!
                 GraphicsDevice = device;
             }
-            Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
+            else
+                Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
 
             switch (Filter)
             {
