@@ -125,6 +125,152 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        private void SetVertexAttributeArray(bool[] attrs)
+        {
+            for (int x = 0; x < attrs.Length; x++)
+            {
+                if (attrs[x])
+                {
+                    if (_enabledVertexAttributes.Add(x))
+                    {
+                        GL.EnableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+                else
+                {
+                    if (_enabledVertexAttributes.Remove(x))
+                    {
+                        GL.DisableVertexAttribArray(x);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+            }
+        }
+
+        // Get a hashed value based on the currently bound shaders
+        // throws an exception if no shaders are bound
+        private int ShaderProgramHash
+        {
+            get
+            {
+                if (_vertexShader == null && _pixelShader == null)
+                    throw new InvalidOperationException("There is no shader bound!");
+                if (_vertexShader == null)
+                    return _pixelShader.HashKey;
+                if (_pixelShader == null)
+                    return _vertexShader.HashKey;
+                return _vertexShader.HashKey ^ _pixelShader.HashKey;
+            }
+        }
+
+        internal void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
+        {
+            int programHash = this.ShaderProgramHash;
+            bool bindingsChanged = false;
+
+            for (int slot = 0; slot < _vertexBuffers.Count; slot++)
+            {
+                var vertexBufferBinding = _vertexBuffers.Get(slot);
+                VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
+                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+
+                int vertexStride = vertexDeclaration.VertexStride;
+                IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
+
+                if (!_attribsDirty &&
+                    slot < _activeBufferBindingInfosCount &&
+                    _bufferBindingInfos[slot].VertexOffset == offset &&
+                    ReferenceEquals(_bufferBindingInfos, attrInfo) &&
+                    _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
+                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer._vbo)
+                    continue;
+
+                bindingsChanged = true;
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer._vbo);
+                GraphicsExtensions.CheckGLError();
+
+                for (int e = 0; e < attrInfo.Elements.Count; e++)
+                {
+                    var element = attrInfo.Elements[e];
+                    GL.VertexAttribPointer(element.AttributeLocation,
+                        element.NumberOfElements,
+                        element.VertexAttribPointerType,
+                        element.Normalized,
+                        vertexStride,
+                        (IntPtr)(offset.ToInt64() + element.Offset));
+                    GraphicsExtensions.CheckGLError();
+
+                    // only set the divisor if instancing is supported
+                    if (this.Device.Capabilities.SupportsInstancing)
+                    {
+                        GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                    else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
+                    {
+                        if (vertexBufferBinding.InstanceFrequency > 0)
+                            throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
+                    }
+                }
+
+                _bufferBindingInfos[slot].VertexOffset = offset;
+                _bufferBindingInfos[slot].AttributeInfo = attrInfo;
+                _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
+                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer._vbo;
+            }
+
+            _attribsDirty = false;
+
+            if (bindingsChanged)
+            {
+                for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
+                    _newEnabledVertexAttributes[eva] = false;
+                for (int slot = 0; slot < _vertexBuffers.Count; slot++)
+                {
+                    for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    {
+                        var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
+                        _newEnabledVertexAttributes[element.AttributeLocation] = true;
+                    }
+                }
+                _activeBufferBindingInfosCount = _vertexBuffers.Count;
+            }
+
+            SetVertexAttributeArray(_newEnabledVertexAttributes);
+        }
+
+        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, IntPtr baseVertex)
+        {
+            int programHash = this.ShaderProgramHash;
+            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+
+            // Apply the vertex attribute info
+            for (int i = 0; i < attrInfo.Elements.Count; i++)
+            {
+                var element = attrInfo.Elements[i];
+                GL.VertexAttribPointer(element.AttributeLocation,
+                    element.NumberOfElements,
+                    element.VertexAttribPointerType,
+                    element.Normalized,
+                    vertexDeclaration.VertexStride,
+                    (IntPtr)(baseVertex.ToInt64() + element.Offset));
+                GraphicsExtensions.CheckGLError();
+
+#if DESKTOPGL
+                if (this.Device.Capabilities.SupportsInstancing)
+                {
+                    GL.VertexAttribDivisor(element.AttributeLocation, 0);
+                    GraphicsExtensions.CheckGLError();
+                }
+#endif
+            }
+
+            SetVertexAttributeArray(attrInfo.EnabledAttributes);
+            _attribsDirty = true;
+        }
+
         internal static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
             switch (primitiveType)
