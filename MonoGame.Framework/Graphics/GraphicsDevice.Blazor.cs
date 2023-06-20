@@ -52,134 +52,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey; }
         }
 
-        internal void SetVertexAttributeArray(bool[] attrs)
-        {
-            for (var x = 0; x < attrs.Length; x++)
-            {
-                if (attrs[x])
-                {
-                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Add(x))
-                    {
-                        GL.EnableVertexAttribArray(x);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                }
-                else
-                {
-                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Remove(x))
-                    {
-                        GL.DisableVertexAttribArray(x);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                }
-            }
-        }
-
-        private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
-        {
-            var programHash = ShaderProgramHash;
-            var bindingsChanged = false;
-
-            for (var slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
-            {
-                var vertexBufferBinding = _mainContext.Strategy._vertexBuffers.Get(slot);
-                var vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
-
-                var vertexStride = vertexDeclaration.VertexStride;
-                var offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
-
-                if (!((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty &&
-                    slot < ((ConcreteGraphicsContext)_mainContext.Strategy)._activeBufferBindingInfosCount &&
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].VertexOffset == offset &&
-                    ReferenceEquals(((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.vbo)
-                    continue;
-
-                bindingsChanged = true;
-
-                GL.BindBuffer(WebGLBufferType.ARRAY, vertexBufferBinding.VertexBuffer.vbo);
-                GraphicsExtensions.CheckGLError();
-
-                for (int e = 0; e < attrInfo.Elements.Count; e++)
-                {
-                    var element = attrInfo.Elements[e];
-                    GL.VertexAttribPointer(element.AttributeLocation,
-                        element.NumberOfElements,
-                        element.VertexAttribPointerType,
-                        element.Normalized,
-                        vertexStride,
-                        ((IntPtr)(offset.ToInt64() + element.Offset)).ToInt32());
-                    GraphicsExtensions.CheckGLError();
-
-                    // only set the divisor if instancing is supported
-                    if (Capabilities.SupportsInstancing)
-                    {
-                        throw new NotImplementedException();
-                        //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
-                        //GraphicsExtensions.CheckGLError();
-                    }
-                    else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
-                    {
-                        if (vertexBufferBinding.InstanceFrequency > 0)
-                            throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
-                    }
-                }
-
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].VertexOffset = offset;
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo = attrInfo;
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.vbo;
-            }
-
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty = false;
-
-            if (bindingsChanged)
-            {
-                for (int eva = 0; eva < ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes.Length; eva++)
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes[eva] = false;
-                for (var slot = 0; slot < _mainContext.Strategy._vertexBuffers.Count; slot++)
-                {
-                    for (int e = 0; e< ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
-                    {
-                        var element = ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[slot].AttributeInfo.Elements[e];
-                        ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes[element.AttributeLocation] = true;
-                    }
-                }
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._activeBufferBindingInfosCount = _mainContext.Strategy._vertexBuffers.Count;
-            }
-            SetVertexAttributeArray(((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes);
-        }
-
-        private void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, int baseVertex)
-        {
-            var programHash = ShaderProgramHash;
-            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
-
-            // Apply the vertex attribute info
-            for (int i = 0; i < attrInfo.Elements.Count; i++)
-            {
-                var element = attrInfo.Elements[i];
-                GL.VertexAttribPointer(element.AttributeLocation,
-                    element.NumberOfElements,
-                    element.VertexAttribPointerType,
-                    element.Normalized,
-                    vertexDeclaration.VertexStride,
-                    (baseVertex + element.Offset));
-                GraphicsExtensions.CheckGLError();
-
-                if (Capabilities.SupportsInstancing)
-                {
-                    throw new NotImplementedException();
-                    //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
-                    //GraphicsExtensions.CheckGLError();
-                }
-            }
-            SetVertexAttributeArray(attrInfo.EnabledAttributes);
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._attribsDirty = true;
-        }
-
         private void PlatformSetup()
         {
             _programCache = new ShaderProgramCache(this);
@@ -621,23 +493,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._vertexShaderDirty = true;
         }
 
-        private void PlatformApplyIndexBuffer()
-        {
-            if (_mainContext.Strategy._indexBufferDirty)
-            {
-                if (_mainContext.Strategy._indexBuffer != null)
-                {
-                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _mainContext.Strategy._indexBuffer.ibo);
-                    GraphicsExtensions.CheckGLError();
-                }
-                _mainContext.Strategy._indexBufferDirty = false;
-            }
-        }
-
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_mainContext.Strategy._vertexShader == null)
@@ -675,8 +530,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             var shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
@@ -687,7 +542,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, baseVertex);
 
             GL.DrawElements(target,
                                      indexElementCount,
@@ -699,8 +554,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -723,7 +578,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
 
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -743,11 +598,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -761,8 +616,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -801,7 +656,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyUserVertexDataAttribs(vertexDeclaration, _mainContext.Strategy._vertexShader, vertexOffset);
 
 
             var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -826,8 +681,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
@@ -839,8 +694,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
