@@ -102,6 +102,56 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void PlatformApplyIndexBuffer()
+        {
+            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
+
+            if (_indexBufferDirty)
+            {
+                if (_indexBuffer != null)
+                {
+                    this.D3dContext.InputAssembler.SetIndexBuffer(
+                        _indexBuffer.Buffer,
+                        _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits ?
+                            SharpDX.DXGI.Format.R16_UInt : SharpDX.DXGI.Format.R32_UInt,
+                        0);
+                }
+                _indexBufferDirty = false;
+            }
+        }
+
+        internal void PlatformApplyVertexBuffers()
+        {
+            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
+
+            if (_vertexBuffersDirty)
+            {
+                if (_vertexBuffers.Count > 0)
+                {
+                    for (int slot = 0; slot < _vertexBuffers.Count; slot++)
+                    {
+                        VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
+                        VertexBuffer vertexBuffer = vertexBufferBinding.VertexBuffer;
+                        VertexDeclaration vertexDeclaration = vertexBuffer.VertexDeclaration;
+                        int vertexStride = vertexDeclaration.VertexStride;
+                        int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
+                        this.D3dContext.InputAssembler.SetVertexBuffers(
+                            slot, new D3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
+                    }
+                    _vertexBufferSlotsUsed = _vertexBuffers.Count;
+                }
+                else
+                {
+                    for (int slot = 0; slot < _vertexBufferSlotsUsed; slot++)
+                        this.D3dContext.InputAssembler.SetVertexBuffers(slot, new D3D11.VertexBufferBinding());
+
+                    _vertexBufferSlotsUsed = 0;
+                }
+            }
+        }
+
+
+
         internal static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
         {
             switch (primitiveType)

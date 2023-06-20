@@ -107,6 +107,24 @@ namespace Microsoft.Xna.Platform.Graphics
             _scissorRectangleDirty = false;
         }
 
+
+        internal void PlatformApplyIndexBuffer()
+        {
+            if (_indexBufferDirty)
+            {
+                if (_indexBuffer != null)
+                {
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer._ibo);
+                    GraphicsExtensions.CheckGLError();
+                }
+                _indexBufferDirty = false;
+            }
+        }
+
+        internal void PlatformApplyVertexBuffers()
+        {
+        }
+
         internal static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
             switch (primitiveType)

@@ -103,6 +103,24 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
+
+        internal void PlatformApplyIndexBuffer()
+        {
+            if (_indexBufferDirty)
+            {
+                if (_indexBuffer != null)
+                {
+                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _indexBuffer.ibo);
+                    GraphicsExtensions.CheckGLError();
+                }
+                _indexBufferDirty = false;
+            }
+        }
+
+        internal void PlatformApplyVertexBuffers()
+        {
+        }
+
         internal static WebGLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
             switch (primitiveType)

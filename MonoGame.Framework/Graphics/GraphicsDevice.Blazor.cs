@@ -621,23 +621,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._vertexShaderDirty = true;
         }
 
-        private void PlatformApplyIndexBuffer()
-        {
-            if (_mainContext.Strategy._indexBufferDirty)
-            {
-                if (_mainContext.Strategy._indexBuffer != null)
-                {
-                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _mainContext.Strategy._indexBuffer.ibo);
-                    GraphicsExtensions.CheckGLError();
-                }
-                _mainContext.Strategy._indexBufferDirty = false;
-            }
-        }
-
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_mainContext.Strategy._vertexShader == null)
@@ -675,8 +658,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             var shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
@@ -699,8 +682,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -743,8 +726,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
@@ -761,8 +744,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -826,8 +809,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
@@ -839,8 +822,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
-            PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
