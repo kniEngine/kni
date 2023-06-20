@@ -1093,97 +1093,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy.SamplerStates.PlatformApply(_mainContext.Strategy);
         }
 
-        private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)
-            where T : struct
-        {
-            DynamicVertexBuffer buffer;
-
-            if (!((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers.TryGetValue(vertexDecl, out buffer) || buffer.VertexCount < vertexCount)
-            {
-                // Dispose the previous buffer if we have one.
-                if (buffer != null)
-                    buffer.Dispose();
-
-                var requiredVertexCount = Math.Max(vertexCount, 4 * 256);
-                requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
-                buffer = new DynamicVertexBuffer(this, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers[vertexDecl] = buffer;
-            }
-
-            var startVertex = buffer.UserOffset;
-
-
-            if ((vertexCount + buffer.UserOffset) < buffer.VertexCount)
-            {
-                buffer.UserOffset += vertexCount;
-                buffer.SetData(startVertex * vertexDecl.VertexStride, vertexData, vertexOffset, vertexCount, vertexDecl.VertexStride, SetDataOptions.NoOverwrite);
-            }
-            else
-            {
-                buffer.UserOffset = vertexCount;
-                buffer.SetData(vertexData, vertexOffset, vertexCount, SetDataOptions.Discard);
-                startVertex = 0;
-            }
-
-            SetVertexBuffer(buffer);
-
-            return startVertex;
-        }
-
-        private int SetUserIndexBuffer<T>(T[] indexData, int indexOffset, int indexCount)
-            where T : struct
-        {
-            DynamicIndexBuffer buffer;
-
-            var indexSize = ReflectionHelpers.SizeOf<T>();
-            var indexElementSize = indexSize == 2 ? IndexElementSize.SixteenBits : IndexElementSize.ThirtyTwoBits;
-
-            var requiredIndexCount = Math.Max(indexCount, 6 * 512);
-            requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
-            if (indexElementSize == IndexElementSize.SixteenBits)
-            {
-                if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 == null || ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.IndexCount < requiredIndexCount)
-                {
-                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 != null)
-                        ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.Dispose();
-
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
-                }
-
-                buffer = ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16;
-            }
-            else
-            {
-                if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 == null || ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.IndexCount < requiredIndexCount)
-                {
-                    if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 != null)
-                        ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.Dispose();
-
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 = new DynamicIndexBuffer(this, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
-                }
-
-                buffer = ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32;
-            }
-
-            var startIndex = buffer.UserOffset;
-
-            if ((indexCount + buffer.UserOffset) < buffer.IndexCount)
-            {
-                buffer.UserOffset += indexCount;
-                buffer.SetData(startIndex * indexSize, indexData, indexOffset, indexCount, SetDataOptions.NoOverwrite);
-            }
-            else
-            {
-                startIndex = 0;
-                buffer.UserOffset = indexCount;
-                buffer.SetData(indexData, indexOffset, indexCount, SetDataOptions.Discard);
-            }
-
-            Indices = buffer;
-
-            return startIndex;
-        }
-
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
             if (((ConcreteGraphicsContext)_mainContext.Strategy)._lastPrimitiveType == primitiveType)
@@ -1212,7 +1121,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // TODO: Do not set public VertexBuffers.
             //       Bind directly to d3dContext and set dirty flags.
-            var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, vertexCount, vertexDeclaration);
+            int startVertex = ((ConcreteGraphicsContext)_mainContext.Strategy).SetUserVertexBuffer(vertexData, vertexOffset, vertexCount, vertexDeclaration);
 
             lock (CurrentD3DContext)
             {
@@ -1245,8 +1154,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
             var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
-            var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+            int startVertex = ((ConcreteGraphicsContext)_mainContext.Strategy).SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
+            int startIndex = ((ConcreteGraphicsContext)_mainContext.Strategy).SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
             lock (CurrentD3DContext)
             {
@@ -1265,8 +1174,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
             var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
-            var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+            int startVertex = ((ConcreteGraphicsContext)_mainContext.Strategy).SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
+            int startIndex = ((ConcreteGraphicsContext)_mainContext.Strategy).SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
             lock (CurrentD3DContext)
             {
