@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _newEnabledVertexAttributes[eva] = false;
                 for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
-                    for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
                         var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
@@ -240,6 +240,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 _activeBufferBindingInfosCount = _vertexBuffers.Count;
             }
+
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
 
@@ -267,6 +268,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     //GraphicsExtensions.CheckGLError();
                 }
             }
+
             SetVertexAttributeArray(attrInfo.EnabledAttributes);
             _attribsDirty = true;
         }

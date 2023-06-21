@@ -20,8 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (GraphicsDevice == null)
             {
-                // We're now bound to a device... no one should
-                // be changing the state of this object now!
+                // We're now bound to a device...
                 GraphicsDevice = device;
             }
             else
