@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyBlend()
+        private void PlatformApplyBlend()
         {
             if (_blendStateDirty)
             {
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyScissorRectangle()
+        private void PlatformApplyScissorRectangle()
         {
             Rectangle scissorRect = _scissorRectangle;
             if (!IsRenderTargetBound)

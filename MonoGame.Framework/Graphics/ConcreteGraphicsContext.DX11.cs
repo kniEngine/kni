@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyBlend()
+        private void PlatformApplyBlend()
         {
             if (_blendStateDirty || _blendFactorDirty)
             {
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyScissorRectangle()
+        private void PlatformApplyScissorRectangle()
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
