@@ -151,7 +151,14 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
+        {
+            if (_lastPrimitiveType == primitiveType)
+                return;
 
+            this.D3dContext.InputAssembler.PrimitiveTopology = ConcreteGraphicsContext.ToPrimitiveTopology(primitiveType);
+            _lastPrimitiveType = primitiveType;
+        }
 
         internal static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
         {
