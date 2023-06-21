@@ -558,7 +558,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            ShaderProgram shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ((ConcreteGraphicsContext)_mainContext.Strategy).ShaderProgramHash2);
+            int programHash = ((ConcreteGraphicsContext)_mainContext.Strategy).GetCurrentShaderProgramHash2();
+            ShaderProgram shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, programHash);
             if (shaderProgram.Program == -1)
                 return;
 

@@ -125,9 +125,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal int ShaderProgramHash2
+        internal int GetCurrentShaderProgramHash2()
         {
-            get { return _vertexShader.HashKey ^ _pixelShader.HashKey; }
+            return _vertexShader.HashKey ^ _pixelShader.HashKey;
         }
 
         private void SetVertexAttributeArray(bool[] attrs)
@@ -155,23 +155,21 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
-        private int ShaderProgramHash
+        private int GetCurrentShaderProgramHash()
         {
-            get
-            {
-                if (_vertexShader == null && _pixelShader == null)
-                    throw new InvalidOperationException("There is no shader bound!");
-                if (_vertexShader == null)
-                    return _pixelShader.HashKey;
-                if (_pixelShader == null)
-                    return _vertexShader.HashKey;
-                return _vertexShader.HashKey ^ _pixelShader.HashKey;
-            }
+            if (_vertexShader == null && _pixelShader == null)
+                throw new InvalidOperationException("There is no shader bound!");
+            if (_vertexShader == null)
+                return _pixelShader.HashKey;
+            if (_pixelShader == null)
+                return _vertexShader.HashKey;
+
+            return _vertexShader.HashKey ^ _pixelShader.HashKey;
         }
 
         internal void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
         {
-            int programHash = this.ShaderProgramHash;
+            int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
 
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
@@ -248,7 +246,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, IntPtr baseVertex)
         {
-            int programHash = this.ShaderProgramHash;
+            int programHash = GetCurrentShaderProgramHash();
             var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
 
             // Apply the vertex attribute info

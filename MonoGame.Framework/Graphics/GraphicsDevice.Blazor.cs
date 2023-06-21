@@ -31,22 +31,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private const WebGLFramebuffer _glDefaultFramebuffer = null;
 
-        // Get a hashed value based on the currently bound shaders
-        // throws an exception if no shaders are bound
-        private int ShaderProgramHash
-        {
-            get
-            {
-                if (_mainContext.Strategy._vertexShader == null && _mainContext.Strategy._pixelShader == null)
-                    throw new InvalidOperationException("There is no shader bound!");
-                if (_mainContext.Strategy._vertexShader == null)
-                    return _mainContext.Strategy._pixelShader.HashKey;
-                if (_mainContext.Strategy._pixelShader == null)
-                    return _mainContext.Strategy._vertexShader.HashKey;
-                return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey;
-            }
-        }
-
 
         private void PlatformSetup()
         {
@@ -406,7 +390,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            var shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ((ConcreteGraphicsContext)_mainContext.Strategy).ShaderProgramHash2);
+            int programHash = ((ConcreteGraphicsContext)_mainContext.Strategy).GetCurrentShaderProgramHash2();
+            var shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, programHash);
             if (shaderProgram.Program == null)
                 return;
 
