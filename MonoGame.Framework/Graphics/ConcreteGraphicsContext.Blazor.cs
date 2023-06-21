@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
 
-        internal ShaderProgram PlatformShaderProgram { get { return _shaderProgram; } }
+        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
 
         internal IWebGLRenderingContext GL { get { return Device._glContext; } }
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyBlend()
+        private void PlatformApplyBlend()
         {
             if (_blendStateDirty)
             {
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyScissorRectangle()
+        private void PlatformApplyScissorRectangle()
         {
             Rectangle scissorRect = _scissorRectangle;
             if (!IsRenderTargetBound)
@@ -119,6 +119,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyVertexBuffers()
         {
+        }
+
+        internal int GetCurrentShaderProgramHash2()
+        {
+            return _vertexShader.HashKey ^ _pixelShader.HashKey;
         }
 
         private void SetVertexAttributeArray(bool[] attrs)
@@ -146,24 +151,21 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // Get a hashed value based on the currently bound shaders
         // throws an exception if no shaders are bound
-        private int ShaderProgramHash
+        private int GetCurrentShaderProgramHash()
         {
-            get
-            {
-                if (_vertexShader == null && _pixelShader == null)
-                    throw new InvalidOperationException("There is no shader bound!");
-                if (_vertexShader == null)
-                    return _pixelShader.HashKey;
-                if (_pixelShader == null)
-                    return _vertexShader.HashKey;
+            if (_vertexShader == null && _pixelShader == null)
+                throw new InvalidOperationException("There is no shader bound!");
+            if (_vertexShader == null)
+                return _pixelShader.HashKey;
+            if (_pixelShader == null)
+                return _vertexShader.HashKey;
 
-                return _vertexShader.HashKey ^ _pixelShader.HashKey;
-            }
+            return _vertexShader.HashKey ^ _pixelShader.HashKey;
         }
 
         internal void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
         {
-            int programHash = this.ShaderProgramHash;
+            int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
 
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
@@ -227,7 +229,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _newEnabledVertexAttributes[eva] = false;
                 for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
-                    for (int e = 0; e< _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
+                    for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
                         var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
@@ -235,12 +237,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 _activeBufferBindingInfosCount = _vertexBuffers.Count;
             }
+
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
 
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, int baseVertex)
         {
-            int programHash = this.ShaderProgramHash;
+            int programHash = GetCurrentShaderProgramHash();
             var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
 
             // Apply the vertex attribute info
@@ -262,6 +265,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     //GraphicsExtensions.CheckGLError();
                 }
             }
+
             SetVertexAttributeArray(attrInfo.EnabledAttributes);
             _attribsDirty = true;
         }
