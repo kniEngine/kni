@@ -950,7 +950,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS_UAP
         internal void UAP_ResetRenderTargets()
         {
-            PlatformApplyViewport();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyViewport();
 
             if (CurrentContext != null)
             {
@@ -1032,26 +1032,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
 
             return (IRenderTarget)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
-        }
-
-        private void PlatformApplyViewport()
-        {
-            lock (CurrentD3DContext)
-            {
-                if (CurrentContext != null)
-                {
-                    var viewport = new RawViewportF
-                    {
-                        X = _viewport.X,
-                        Y = _viewport.Y,
-                        Width = _viewport.Width,
-                        Height = _viewport.Height,
-                        MinDepth = _viewport.MinDepth,
-                        MaxDepth = _viewport.MaxDepth
-                    };
-                    CurrentD3DContext.Rasterizer.SetViewport(viewport);
-                }
-            }
         }
 
         private void PlatformApplyShaders()

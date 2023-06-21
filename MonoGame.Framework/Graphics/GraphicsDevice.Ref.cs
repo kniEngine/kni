@@ -49,11 +49,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformApplyViewport()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             throw new PlatformNotSupportedException();

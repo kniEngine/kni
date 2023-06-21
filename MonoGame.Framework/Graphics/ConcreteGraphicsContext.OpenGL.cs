@@ -41,6 +41,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
+        public override Viewport Viewport
+        {
+            get { return base.Viewport; }
+            set
+            {
+                base.Viewport = value;
+                PlatformApplyViewport();
+            }
+        }
 
         internal ConcreteGraphicsContextGL(GraphicsDevice device)
             : base(device)
@@ -107,6 +116,21 @@ namespace Microsoft.Xna.Platform.Graphics
             _scissorRectangleDirty = false;
         }
 
+        internal void PlatformApplyViewport()
+        {
+            if (this.IsRenderTargetBound)
+                GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
+            else
+                GL.Viewport(_viewport.X, this.Device.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+            GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+
+            GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
+            GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
+
+            // In OpenGL we have to re-apply the special "_posFixup"
+            // vertex shader uniform if the viewport changes.
+            _vertexShaderDirty = true;
+        }
 
         internal void PlatformApplyIndexBuffer()
         {

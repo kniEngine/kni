@@ -36,8 +36,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
-        private Viewport _viewport;
-
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
         internal GraphicsCapabilities Capabilities { get; private set; }
@@ -214,7 +212,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Initialize the main viewport
-            _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
+            _mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
             _mainContext.Strategy._textures = new TextureCollection(this, ShaderStage.Pixel, Capabilities.MaxTextureSlots);
             _mainContext.Strategy._vertexTextures = new TextureCollection(this, ShaderStage.Vertex, Capabilities.MaxVertexTextureSlots);
@@ -267,7 +265,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _mainContext.Strategy._scissorRectangleDirty = true;
-            _mainContext.Strategy._scissorRectangle = _viewport.Bounds;
+            _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
             ApplyRenderTargets(null);
@@ -281,12 +279,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Viewport Viewport
         {
-            get { return _viewport; }
-            set
-            {
-                _viewport = value;
-                PlatformApplyViewport();
-            }
+            get { return CurrentContext.Viewport; }
+            set { CurrentContext.Viewport = value; }
         }
 
         public BlendState BlendState
@@ -354,7 +348,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var options = ClearOptions.Target;
             options |= ClearOptions.DepthBuffer;
             options |= ClearOptions.Stencil;
-            PlatformClear(options, color.ToVector4(), _viewport.MaxDepth, 0);
+            PlatformClear(options, color.ToVector4(), _mainContext.Strategy._viewport.MaxDepth, 0);
 
             unchecked { CurrentContext._graphicsMetrics._clearCount++; }
         }

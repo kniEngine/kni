@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 using SharpDX.Direct3D;
+using SharpDX.Mathematics.Interop;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -32,6 +33,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal D3D11.DeviceContext D3dContext { get { return _d3dContext; } }
 
+        public override Viewport Viewport
+        {
+            get { return base.Viewport; }
+            set
+            {
+                base.Viewport = value;
+                PlatformApplyViewport();
+            }
+        }
 
         internal ConcreteGraphicsContext(GraphicsDevice device, D3D11.DeviceContext d3dContext)
             : base(device)
@@ -102,6 +112,25 @@ namespace Microsoft.Xna.Platform.Graphics
                     blendFactor.A / 255.0f);
         }
 
+        internal void PlatformApplyViewport()
+        {
+            lock (this.D3dContext)
+            {
+                if (this.D3dContext != null)
+                {
+                    var viewport = new RawViewportF
+                    {
+                        X = _viewport.X,
+                        Y = _viewport.Y,
+                        Width = _viewport.Width,
+                        Height = _viewport.Height,
+                        MinDepth = _viewport.MinDepth,
+                        MaxDepth = _viewport.MaxDepth
+                    };
+                    this.D3dContext.Rasterizer.SetViewport(viewport);
+                }
+            }
+        }
 
         internal void PlatformApplyIndexBuffer()
         {
