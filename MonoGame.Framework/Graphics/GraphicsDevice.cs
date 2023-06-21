@@ -201,6 +201,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Setup
 
+            PlatformSetup();
+
 #if DEBUG
             if (DisplayMode == null)
             {
@@ -213,8 +215,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Initialize the main viewport
             _viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
-
-            PlatformSetup();
 
             _mainContext.Strategy._textures = new TextureCollection(this, ShaderStage.Pixel, Capabilities.MaxTextureSlots);
             _mainContext.Strategy._vertexTextures = new TextureCollection(this, ShaderStage.Vertex, Capabilities.MaxVertexTextureSlots);
