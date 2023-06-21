@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformInitialize()
         {
-            _viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
             ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Rectangle prevScissorRect = ScissorRectangle;
             DepthStencilState prevDepthStencilState = DepthStencilState;
             BlendState prevBlendState = BlendState;
-            ScissorRectangle = _viewport.Bounds;
+            ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
@@ -626,23 +626,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-
-        private void PlatformApplyViewport()
-        {
-            if (_mainContext.Strategy.IsRenderTargetBound)
-                GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
-            else
-                GL.Viewport(_viewport.X, PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
-            GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
-
-            GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
-            GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
-
-            // In OpenGL we have to re-apply the special "posFixup"
-            // vertex shader uniform if the viewport changes.
-            _mainContext.Strategy._vertexShaderDirty = true;
-        }
-
         private void PlatformApplyShaders()
         {
             if (_mainContext.Strategy._vertexShader == null)
@@ -993,7 +976,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _mainContext.Strategy._scissorRectangleDirty = true;
-            ScissorRectangle = _viewport.Bounds;
+            ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
             ApplyRenderTargets(null);

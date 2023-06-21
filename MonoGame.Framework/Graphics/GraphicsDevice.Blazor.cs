@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PresentationParameters.BackBufferWidth = _glContext.Canvas.Width;
             PresentationParameters.BackBufferHeight = _glContext.Canvas.Height;
 
-            _viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
             ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    var prevScissorRect = ScissorRectangle;
 		    var prevDepthStencilState = DepthStencilState;
             var prevBlendState = BlendState;
-            ScissorRectangle = _viewport.Bounds;
+            ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
@@ -456,22 +456,6 @@ namespace Microsoft.Xna.Framework.Graphics
             
             GL.Uniform4f(posFixupLoc, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.X, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Y, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.Z, ((ConcreteGraphicsContext)_mainContext.Strategy)._posFixup.W);
             GraphicsExtensions.CheckGLError();
-        }
-
-        private void PlatformApplyViewport()
-        {
-            if (_mainContext.Strategy.IsRenderTargetBound)
-                GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
-            else
-                GL.Viewport(_viewport.X, PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
-            GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
-
-            GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
-            //GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
-
-            // In OpenGL we have to re-apply the special "posFixup"
-            // vertex shader uniform if the viewport changes.
-            _mainContext.Strategy._vertexShaderDirty = true;
         }
 
         private void PlatformApplyShaders()

@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal Rectangle _scissorRectangle;
         internal bool _scissorRectangleDirty;
+        internal Viewport _viewport;
 
         // states
         internal BlendState _blendState;
@@ -91,6 +92,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        virtual public Viewport Viewport
+        {
+            get { return _viewport; }
+            set { _viewport = value; }
+        }
 
         public BlendState BlendState
         {

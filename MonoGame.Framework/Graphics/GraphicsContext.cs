@@ -43,6 +43,12 @@ namespace Microsoft.Xna.Framework.Graphics
             set { Strategy.ScissorRectangle = value; }
         }
 
+        public Viewport Viewport
+        {
+            get { return Strategy.Viewport; }
+            set { Strategy.Viewport = value; }
+        }
+
         public BlendState BlendState
         {
             get { return Strategy.BlendState; }
