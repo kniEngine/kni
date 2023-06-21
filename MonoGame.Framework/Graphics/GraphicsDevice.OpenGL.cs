@@ -40,12 +40,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal int _glDefaultFramebuffer = 0;
 
 
-        private int ShaderProgramHash2
-        {
-            get { return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey; }
-        }
-
-
         private void PlatformSetup()
         {
             _programCache = new ShaderProgramCache(this);
@@ -564,7 +558,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            ShaderProgram shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ShaderProgramHash2);
+            ShaderProgram shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ((ConcreteGraphicsContext)_mainContext.Strategy).ShaderProgramHash2);
             if (shaderProgram.Program == -1)
                 return;
 

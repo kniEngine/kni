@@ -47,10 +47,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private int ShaderProgramHash2
-        {
-            get { return _mainContext.Strategy._vertexShader.HashKey ^ _mainContext.Strategy._pixelShader.HashKey; }
-        }
 
         private void PlatformSetup()
         {
@@ -410,7 +406,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            var shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ShaderProgramHash2);
+            var shaderProgram = _programCache.GetProgram(_mainContext.Strategy.VertexShader, _mainContext.Strategy.PixelShader, ((ConcreteGraphicsContext)_mainContext.Strategy).ShaderProgramHash2);
             if (shaderProgram.Program == null)
                 return;
 

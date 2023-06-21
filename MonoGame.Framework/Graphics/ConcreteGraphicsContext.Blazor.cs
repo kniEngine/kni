@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
 
-        internal ShaderProgram PlatformShaderProgram { get { return _shaderProgram; } }
+        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
 
         internal IWebGLRenderingContext GL { get { return Device._glContext; } }
@@ -119,6 +119,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyVertexBuffers()
         {
+        }
+
+        internal int ShaderProgramHash2
+        {
+            get { return _vertexShader.HashKey ^ _pixelShader.HashKey; }
         }
 
         private void SetVertexAttributeArray(bool[] attrs)

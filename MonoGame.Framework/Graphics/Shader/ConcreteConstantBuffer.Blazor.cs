@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // NOTE: We assume here the program has
             // already been set on the device.
-            ShaderProgram program = ((ConcreteGraphicsContext)context).PlatformShaderProgram;
+            ShaderProgram program = ((ConcreteGraphicsContext)context).ShaderProgram;
 
             // If the program changed then lookup the
             // uniform again and apply the state.
