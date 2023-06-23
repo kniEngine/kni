@@ -298,6 +298,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        public abstract void Clear(ClearOptions options, Vector4 color, float depth, int stencil);
+
         internal void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
             if (vertexBuffer != null)

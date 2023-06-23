@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -24,6 +25,11 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(device)
         {
 
+        }
+
+        public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
+        {
+            throw new PlatformNotSupportedException();
         }
 
         internal void PlatformApplyViewport()

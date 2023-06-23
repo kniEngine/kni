@@ -798,44 +798,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return multisampleDesc;
         }
 
-        private void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
-        {
-            // Clear options for depth/stencil buffer if not attached.
-            if (((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView != null)
-            {
-                if (((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView.Description.Format != SharpDX.DXGI.Format.D24_UNorm_S8_UInt)
-                    options &= ~ClearOptions.Stencil;
-            }
-            else
-            {
-                options &= ~ClearOptions.DepthBuffer;
-                options &= ~ClearOptions.Stencil;
-            }
-
-            lock (CurrentD3DContext)
-            {
-                // Clear the diffuse render buffer.
-                if ((options & ClearOptions.Target) == ClearOptions.Target)
-                {
-                    foreach (var view in ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets)
-                    {
-                        if (view != null)
-                            CurrentD3DContext.ClearRenderTargetView(view, new RawColor4(color.X, color.Y, color.Z, color.W));
-                    }
-                }
-
-                // Clear the depth/stencil render buffer.
-                SharpDX.Direct3D11.DepthStencilClearFlags flags = 0;
-                if ((options & ClearOptions.DepthBuffer) == ClearOptions.DepthBuffer)
-                    flags |= SharpDX.Direct3D11.DepthStencilClearFlags.Depth;
-                if ((options & ClearOptions.Stencil) == ClearOptions.Stencil)
-                    flags |= SharpDX.Direct3D11.DepthStencilClearFlags.Stencil;
-
-                if (flags != 0)
-                    CurrentD3DContext.ClearDepthStencilView(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, flags, depth, (byte)stencil);
-            }
-        }
-
         private void PlatformDispose()
         {
             // make sure to release full screen or this might cause issues on exit

@@ -103,6 +103,29 @@ namespace Microsoft.Xna.Framework.Graphics
         public int RenderTargetCount { get { return Strategy.RenderTargetCount; } }
         internal bool IsRenderTargetBound { get { return Strategy.IsRenderTargetBound; } }
 
+        public void Clear(Color color)
+        {
+            ClearOptions options = ClearOptions.Target
+                                 | ClearOptions.DepthBuffer
+                                 | ClearOptions.Stencil;
+            Strategy.Clear(options, color.ToVector4(), Strategy.Viewport.MaxDepth, 0);
+
+            unchecked { _graphicsMetrics._clearCount++; }
+        }
+
+        public void Clear(ClearOptions options, Color color, float depth, int stencil)
+        {
+            Strategy.Clear(options, color.ToVector4(), depth, stencil);
+
+            unchecked { _graphicsMetrics._clearCount++; }
+        }
+
+        public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
+        {
+            Strategy.Clear(options, color, depth, stencil);
+
+            unchecked { _graphicsMetrics._clearCount++; }
+        }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
