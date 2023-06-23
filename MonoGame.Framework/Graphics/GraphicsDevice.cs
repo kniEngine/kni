@@ -345,26 +345,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Clear(Color color)
         {
-            var options = ClearOptions.Target;
-            options |= ClearOptions.DepthBuffer;
-            options |= ClearOptions.Stencil;
-            PlatformClear(options, color.ToVector4(), _mainContext.Strategy._viewport.MaxDepth, 0);
-
-            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
+            CurrentContext.Clear(color);
         }
 
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
-            PlatformClear(options, color.ToVector4(), depth, stencil);
-
-            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
+            CurrentContext.Clear(options, color, depth, stencil);
         }
 
 		public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
-            PlatformClear(options, color, depth, stencil);
-
-            unchecked { CurrentContext._graphicsMetrics._clearCount++; }
+            CurrentContext.Clear(options, color, depth, stencil);
         }
 
         public void Dispose()

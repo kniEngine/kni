@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }        
 
-        private void PlatformClear(ClearOptions options, Vector4 color, float depth, int stencil)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformDispose()
         {
         }

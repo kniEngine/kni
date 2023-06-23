@@ -57,6 +57,81 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
+        {
+            // TODO: We need to figure out how to detect if we have a
+            // depth stencil buffer or not, and clear options relating
+            // to them if not attached.
+
+            // Unlike with XNA and DirectX...  GL.Clear() obeys several
+            // different render states:
+            //
+            //  - The color write flags.
+            //  - The scissor rectangle.
+            //  - The depth/stencil state.
+            //
+            // So overwrite these states with what is needed to perform
+            // the clear correctly and restore it afterwards.
+            //
+            Rectangle prevScissorRect = ScissorRectangle;
+            DepthStencilState prevDepthStencilState = DepthStencilState;
+            BlendState prevBlendState = BlendState;
+            ScissorRectangle = _viewport.Bounds;
+            // DepthStencilState.Default has the Stencil Test disabled; 
+            // make sure stencil test is enabled before we clear since
+            // some drivers won't clear with stencil test disabled
+            DepthStencilState = _clearDepthStencilState;
+            BlendState = BlendState.Opaque;
+            PlatformApplyState();
+
+            ClearBufferMask bufferMask = 0;
+            if ((options & ClearOptions.Target) == ClearOptions.Target)
+            {
+                if (color != _lastClearColor)
+                {
+                    GL.ClearColor(color.X, color.Y, color.Z, color.W);
+                    GraphicsExtensions.CheckGLError();
+                    _lastClearColor = color;
+                }
+                bufferMask = bufferMask | ClearBufferMask.ColorBufferBit;
+            }
+            if ((options & ClearOptions.Stencil) == ClearOptions.Stencil)
+            {
+                if (stencil != _lastClearStencil)
+                {
+                    GL.ClearStencil(stencil);
+                    GraphicsExtensions.CheckGLError();
+                    _lastClearStencil = stencil;
+                }
+                bufferMask = bufferMask | ClearBufferMask.StencilBufferBit;
+            }
+
+            if ((options & ClearOptions.DepthBuffer) == ClearOptions.DepthBuffer)
+            {
+                if (depth != _lastClearDepth)
+                {
+                    GL.ClearDepth(depth);
+                    GraphicsExtensions.CheckGLError();
+                    _lastClearDepth = depth;
+                }
+                bufferMask = bufferMask | ClearBufferMask.DepthBufferBit;
+            }
+
+#if IOS || TVOS
+            if (GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt) == FramebufferErrorCode.FramebufferComplete)
+            {
+#endif
+            GL.Clear(bufferMask);
+            GraphicsExtensions.CheckGLError();
+#if IOS || TVOS
+            }
+#endif
+
+            // Restore the previous render state.
+            ScissorRectangle = prevScissorRect;
+            DepthStencilState = prevDepthStencilState;
+            BlendState = prevBlendState;
+        }
 
         internal void PlatformApplyState()
         {
