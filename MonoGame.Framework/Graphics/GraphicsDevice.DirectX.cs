@@ -30,8 +30,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         // Core Direct3D Objects
         private SharpDX.Direct3D11.Device _d3dDevice;
-        private SharpDX.Direct3D11.RenderTargetView _renderTargetView;
-        private SharpDX.Direct3D11.DepthStencilView _depthStencilView;
+        internal SharpDX.Direct3D11.RenderTargetView _renderTargetView;
+        internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
 
         internal SharpDX.Direct3D11.Device D3DDevice { get { return _d3dDevice; } }
         internal SharpDX.Direct3D11.DeviceContext CurrentD3DContext
@@ -612,7 +612,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
             CreateSizeDependentResources();
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
         partial void PlatformReset()
@@ -932,69 +932,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._scissorRectangleDirty = true;
         }
 #endif
-
-        private void PlatformApplyDefaultRenderTarget()
-        {
-            // Set the default swap chain.
-            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets[0] = _renderTargetView;
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = _depthStencilView;
-
-            lock (CurrentD3DContext)
-                CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
-        }
-
-        internal void PlatformResolveRenderTargets()
-        {
-            for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-            {
-                var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
-
-                // Resolve MSAA render targets
-                var renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
-                if (renderTarget != null && renderTarget.MultiSampleCount > 1)
-                    renderTarget.ResolveSubresource();
-
-                // Generate mipmaps.
-                if (renderTargetBinding.RenderTarget.LevelCount > 1)
-                {
-                    lock (CurrentD3DContext)
-                        CurrentD3DContext.GenerateMips(renderTargetBinding.RenderTarget.GetShaderResourceView());
-                }
-            }
-        }
-
-        private IRenderTarget PlatformApplyRenderTargets()
-        {
-            // Clear the current render targets.
-            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = null;
-
-            // Make sure none of the new targets are bound
-            // to the device as a texture resource.
-            lock (CurrentD3DContext)
-            {
-                _mainContext.Strategy.VertexTextures.ClearTargets(_mainContext.Strategy);
-                _mainContext.Strategy.Textures.ClearTargets(_mainContext.Strategy);
-            }
-
-            for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-            {
-                var binding = _mainContext.Strategy._currentRenderTargetBindings[i];
-                var targetDX = (IRenderTargetDX11)binding.RenderTarget;
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
-            }
-
-            // Use the depth from the first target.
-            var renderTargetDX = (IRenderTargetDX11)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = renderTargetDX.GetDepthStencilView(_mainContext.Strategy._currentRenderTargetBindings[0].ArraySlice);
-
-            // Set the targets.
-            lock (CurrentD3DContext)
-                CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
-
-            return (IRenderTarget)_mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget;
-        }
 
         private void PlatformApplyShaders()
         {

@@ -32,8 +32,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private ShaderProgramCache _programCache;
 
 
-        private bool _supportsInvalidateFramebuffer;
-        private bool _supportsBlitFramebuffer;
+        internal bool _supportsInvalidateFramebuffer;
+        internal bool _supportsBlitFramebuffer;
 
         internal int _glMajorVersion = 0;
         internal int _glMinorVersion = 0;
@@ -149,19 +149,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Sdl.GL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
             GraphicsExtensions.CheckGLError();
 #endif
-        }
-
-        private void PlatformApplyDefaultRenderTarget()
-        {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glDefaultFramebuffer);
-            GraphicsExtensions.CheckGLError();
-
-            // Reset the raster state because we flip vertices
-            // when rendering offscreen and hence the cull direction.
-            _mainContext.Strategy._rasterizerStateDirty = true;
-
-            // Textures will need to be rebound to render correctly in the new render target.
-            _mainContext.Strategy.Textures.Dirty();
         }
 
         internal void PlatformCreateRenderTarget(IRenderTarget renderTarget, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
@@ -325,155 +312,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
             }
-        }
-
-        internal static readonly FramebufferAttachment[] InvalidateFramebufferAttachements =
-        {
-            FramebufferAttachment.ColorAttachment0,
-            FramebufferAttachment.DepthAttachment,
-            FramebufferAttachment.StencilAttachment,
-        };
-
-        private void PlatformResolveRenderTargets()
-        {
-            if (!this._mainContext.Strategy.IsRenderTargetBound)
-                return;
-
-            var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[0];
-            var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && _supportsBlitFramebuffer)
-            {
-                int glResolveFramebuffer = 0;
-                if (!((ConcreteGraphicsContext)_mainContext.Strategy)._glResolveFramebuffers.TryGetValue(_mainContext.Strategy._currentRenderTargetBindings, out glResolveFramebuffer))
-                {
-                    glResolveFramebuffer = GL.GenFramebuffer();
-                    GraphicsExtensions.CheckGLError();
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
-                    GraphicsExtensions.CheckGLError();
-
-                    for (int i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-                    {
-                        var renderTargetGL = (IRenderTargetGL)_mainContext.Strategy._currentRenderTargetBindings[i].RenderTarget;
-                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);                       
-                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, target, renderTargetGL.GLTexture, 0);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                    ((ConcreteGraphicsContext)_mainContext.Strategy)._glResolveFramebuffers.Add((RenderTargetBinding[])_mainContext.Strategy._currentRenderTargetBindings.Clone(), glResolveFramebuffer);
-                }
-                else
-                {
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
-                    GraphicsExtensions.CheckGLError();
-                }
-
-                // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
-                if (((ConcreteGraphicsContext)_mainContext.Strategy)._lastRasterizerState.ScissorTestEnable)
-                {
-                    GL.Disable(EnableCap.ScissorTest);
-                    GraphicsExtensions.CheckGLError();
-                }
-
-                int glFramebuffer = ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers[_mainContext.Strategy._currentRenderTargetBindings];
-                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
-                GraphicsExtensions.CheckGLError();
-
-                for (int i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-                {
-                    renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
-                    renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-                    GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + i);
-                    GraphicsExtensions.CheckGLError();
-                    GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
-                    GraphicsExtensions.CheckGLError();
-                    GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height, 0, 0, renderTarget.Width, renderTarget.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
-                    GraphicsExtensions.CheckGLError();
-                }
-
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && _supportsInvalidateFramebuffer)
-                {
-                    Debug.Assert(_supportsInvalidateFramebuffer);
-                    GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
-                    GraphicsExtensions.CheckGLError();
-                }
-
-                if (((ConcreteGraphicsContext)_mainContext.Strategy)._lastRasterizerState.ScissorTestEnable)
-                {
-                    GL.Enable(EnableCap.ScissorTest);
-                    GraphicsExtensions.CheckGLError();
-                }
-            }
-
-            for (int i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-            {
-                renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
-                if (renderTargetBinding.RenderTarget.LevelCount > 1)
-                {
-                    var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
-                    GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
-                    GraphicsExtensions.CheckGLError();
-                    GL.GenerateMipmap(renderTargetGL.GLTarget);
-                    GraphicsExtensions.CheckGLError();
-                }
-            }
-        }
-
-        private IRenderTarget PlatformApplyRenderTargets()
-        {
-            int glFramebuffer = 0;
-            if (!((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.TryGetValue(_mainContext.Strategy._currentRenderTargetBindings, out glFramebuffer))
-            {
-                glFramebuffer = GL.GenFramebuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
-                GraphicsExtensions.CheckGLError();
-                var renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[0];
-                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
-                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
-                GraphicsExtensions.CheckGLError();
-                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
-                GraphicsExtensions.CheckGLError();
-
-                for (int i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-                {
-                    renderTargetBinding = _mainContext.Strategy._currentRenderTargetBindings[i];
-                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
-                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
-                    var attachement = (FramebufferAttachment.ColorAttachment0 + i);
-                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
-                    {
-                        GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                    else
-                    {
-                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                }
-
-                GraphicsExtensions.CheckFramebufferStatus();
-
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Add((RenderTargetBinding[])_mainContext.Strategy._currentRenderTargetBindings.Clone(), glFramebuffer);
-            }
-            else
-            {
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
-                GraphicsExtensions.CheckGLError();
-            }
-
-#if DESKTOPGL
-            GL.DrawBuffers(_mainContext.Strategy._currentRenderTargetCount, ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers);
-#endif
-
-            // Reset the raster state because we flip vertices
-            // when rendering offscreen and hence the cull direction.
-            _mainContext.Strategy._rasterizerStateDirty = true;
-
-            // Textures will need to be rebound to render correctly in the new render target.
-            _mainContext.Strategy.Textures.Dirty();
-
-            return _mainContext.Strategy._currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
         /// <summary>
@@ -837,7 +675,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
 
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
         internal void Android_OnDeviceResetting()
@@ -903,7 +741,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
 #if DESKTOPGL

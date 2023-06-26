@@ -268,7 +268,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            ApplyRenderTargets(null);
+            _mainContext.ApplyRenderTargets(null);
         }
 
         public Rectangle ScissorRectangle
@@ -597,7 +597,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return;
             }
 
-            ApplyRenderTargets(renderTargets);
+            CurrentContext.ApplyRenderTargets(renderTargets);
 
             if (renderTargetCount == 0)
             {
@@ -612,52 +612,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public int RenderTargetCount
         {
             get { return CurrentContext.RenderTargetCount; }
-        }
-
-        internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
-        {
-            var clearTarget = false;
-
-            PlatformResolveRenderTargets();
-
-            // Clear the current bindings.
-            Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
-
-            int renderTargetWidth;
-            int renderTargetHeight;
-            if (renderTargets == null)
-            {
-                _mainContext.Strategy._currentRenderTargetCount = 0;
-
-                PlatformApplyDefaultRenderTarget();
-                clearTarget = PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
-
-                renderTargetWidth = PresentationParameters.BackBufferWidth;
-                renderTargetHeight = PresentationParameters.BackBufferHeight;
-            }
-			else
-			{
-                // Copy the new bindings.
-                Array.Copy(renderTargets, _mainContext.Strategy._currentRenderTargetBindings, renderTargets.Length);
-                _mainContext.Strategy._currentRenderTargetCount = renderTargets.Length;
-
-                var renderTarget = PlatformApplyRenderTargets();
-
-                // We clear the render target if asked.
-                clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;
-
-                renderTargetWidth = renderTarget.Width;
-                renderTargetHeight = renderTarget.Height;
-            }
-
-            // Set the viewport to the size of the first render target.
-            Viewport = new Viewport(0, 0, renderTargetWidth, renderTargetHeight);
-
-            // Set the scissor rectangle to the size of the first render target.
-            ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
-
-            if (clearTarget)
-                Clear(DiscardColor);
         }
 
         public RenderTargetBinding[] GetRenderTargets()

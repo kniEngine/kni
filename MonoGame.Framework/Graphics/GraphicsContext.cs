@@ -159,6 +159,51 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.GetRenderTargets(bindings);
         }
 
+        internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
+        {
+            bool clearTarget = false;
+
+            ((ConcreteGraphicsContext)Strategy).PlatformResolveRenderTargets();
+
+            // Clear the current bindings.
+            Array.Clear(Strategy._currentRenderTargetBindings, 0, Strategy._currentRenderTargetBindings.Length);
+
+            int renderTargetWidth;
+            int renderTargetHeight;
+            if (renderTargets == null)
+            {
+                Strategy._currentRenderTargetCount = 0;
+
+                ((ConcreteGraphicsContext)Strategy).PlatformApplyDefaultRenderTarget();
+                clearTarget = _device.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+
+                renderTargetWidth = _device.PresentationParameters.BackBufferWidth;
+                renderTargetHeight = _device.PresentationParameters.BackBufferHeight;
+            }
+            else
+            {
+                // Copy the new bindings.
+                Array.Copy(renderTargets, Strategy._currentRenderTargetBindings, renderTargets.Length);
+                Strategy._currentRenderTargetCount = renderTargets.Length;
+
+                IRenderTarget renderTarget = ((ConcreteGraphicsContext)Strategy).PlatformApplyRenderTargets();
+
+                // We clear the render target if asked.
+                clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+
+                renderTargetWidth = renderTarget.Width;
+                renderTargetHeight = renderTarget.Height;
+            }
+
+            // Set the viewport to the size of the first render target.
+            Strategy.Viewport = new Viewport(0, 0, renderTargetWidth, renderTargetHeight);
+
+            // Set the scissor rectangle to the size of the first render target.
+            Strategy.ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
+
+            if (clearTarget)
+                Clear(_device.DiscardColor);
+        }
 
 
         #region IDisposable Members

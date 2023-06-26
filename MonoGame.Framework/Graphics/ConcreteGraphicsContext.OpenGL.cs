@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
@@ -401,6 +402,175 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             base.Dispose(disposing);
+        }
+
+        static readonly FramebufferAttachment[] InvalidateFramebufferAttachements =
+        {
+            FramebufferAttachment.ColorAttachment0,
+            FramebufferAttachment.DepthAttachment,
+            FramebufferAttachment.StencilAttachment,
+        };
+
+        internal void PlatformResolveRenderTargets()
+        {
+            if (!this.IsRenderTargetBound)
+                return;
+
+            var renderTargetBinding = _currentRenderTargetBindings[0];
+            var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+            if (renderTarget.MultiSampleCount > 0 && this.Device._supportsBlitFramebuffer)
+            {
+                int glResolveFramebuffer = 0;
+                if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
+                {
+                    glResolveFramebuffer = GL.GenFramebuffer();
+                    GraphicsExtensions.CheckGLError();
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GraphicsExtensions.CheckGLError();
+
+                    for (int i = 0; i < _currentRenderTargetCount; i++)
+                    {
+                        var renderTargetGL = (IRenderTargetGL)_currentRenderTargetBindings[i].RenderTarget;
+
+                        FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
+                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                    _glResolveFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glResolveFramebuffer);
+                }
+                else
+                {
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
+                if (_lastRasterizerState.ScissorTestEnable)
+                {
+                    GL.Disable(EnableCap.ScissorTest);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                int glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
+
+                for (int i = 0; i < _currentRenderTargetCount; i++)
+                {
+                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+
+                    GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + i);
+                    GraphicsExtensions.CheckGLError();
+                    GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
+                    GraphicsExtensions.CheckGLError();
+                    GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height,
+                                       0, 0, renderTarget.Width, renderTarget.Height,
+                                       ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this.Device._supportsInvalidateFramebuffer)
+                {
+                    Debug.Assert(this.Device._supportsInvalidateFramebuffer);
+                    GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                if (_lastRasterizerState.ScissorTestEnable)
+                {
+                    GL.Enable(EnableCap.ScissorTest);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+
+            for (int i = 0; i < _currentRenderTargetCount; i++)
+            {
+                renderTargetBinding = _currentRenderTargetBindings[i];
+                if (renderTargetBinding.RenderTarget.LevelCount > 1)
+                {
+                    var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+                    GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
+                    GraphicsExtensions.CheckGLError();
+                    GL.GenerateMipmap(renderTargetGL.GLTarget);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+        }
+
+        internal void PlatformApplyDefaultRenderTarget()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Device._glDefaultFramebuffer);
+            GraphicsExtensions.CheckGLError();
+
+            // Reset the raster state because we flip vertices
+            // when rendering offscreen and hence the cull direction.
+            _rasterizerStateDirty = true;
+
+            // Textures will need to be rebound to render correctly in the new render target.
+            this.Textures.Dirty();
+        }
+
+        internal IRenderTarget PlatformApplyRenderTargets()
+        {
+            int glFramebuffer = 0;
+            if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
+            {
+                glFramebuffer = GL.GenFramebuffer();
+                GraphicsExtensions.CheckGLError();
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
+                var renderTargetBinding = _currentRenderTargetBindings[0];
+                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+
+                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
+                GraphicsExtensions.CheckGLError();
+                GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
+                GraphicsExtensions.CheckGLError();
+
+                for (int i = 0; i < _currentRenderTargetCount; i++)
+                {
+                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
+                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
+                    var attachement = (FramebufferAttachment.ColorAttachment0 + i);
+
+                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    {
+                        GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                    else
+                    {
+                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+
+                GraphicsExtensions.CheckFramebufferStatus();
+
+                _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
+            }
+            else
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
+            }
+
+#if DESKTOPGL
+            GL.DrawBuffers(_currentRenderTargetCount, ((ConcreteGraphicsContext)this)._drawBuffers);
+#endif
+
+            // Reset the raster state because we flip vertices
+            // when rendering offscreen and hence the cull direction.
+            _rasterizerStateDirty = true;
+
+            // Textures will need to be rebound to render correctly in the new render target.
+            Textures.Dirty();
+
+            return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
         // Holds information for caching

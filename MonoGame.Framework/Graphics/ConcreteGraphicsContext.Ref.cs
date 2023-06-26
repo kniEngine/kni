@@ -37,6 +37,20 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
+        internal void PlatformResolveRenderTargets()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        internal void PlatformApplyDefaultRenderTarget()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        internal IRenderTarget PlatformApplyRenderTargets()
+        {
+            throw new PlatformNotSupportedException();
+        }
 
         protected override void Dispose(bool disposing)
         {
