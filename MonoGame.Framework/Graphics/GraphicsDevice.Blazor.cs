@@ -532,7 +532,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void OnPresentationChanged()
         {
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
     }

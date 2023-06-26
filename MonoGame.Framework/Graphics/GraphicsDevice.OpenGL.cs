@@ -675,7 +675,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
 
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
         internal void Android_OnDeviceResetting()
@@ -741,7 +741,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
 #if DESKTOPGL

@@ -612,7 +612,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
             CreateSizeDependentResources();
-            ApplyRenderTargets(null);
+            CurrentContext.ApplyRenderTargets(null);
         }
 
         partial void PlatformReset()
