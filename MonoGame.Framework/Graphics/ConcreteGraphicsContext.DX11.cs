@@ -352,5 +352,68 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dispose(disposing);
         }
 
+        internal void PlatformResolveRenderTargets()
+        {
+            for (int i = 0; i < _currentRenderTargetCount; i++)
+            {
+                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[i];
+
+                // Resolve MSAA render targets
+                RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
+                if (renderTarget != null && renderTarget.MultiSampleCount > 1)
+                    renderTarget.ResolveSubresource();
+
+                // Generate mipmaps.
+                if (renderTargetBinding.RenderTarget.LevelCount > 1)
+                {
+                    lock (this.D3dContext)
+                        this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetShaderResourceView());
+                }
+            }
+        }
+
+        internal void PlatformApplyDefaultRenderTarget()
+        {
+            // Set the default swap chain.
+            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
+            _currentRenderTargets[0] = this.Device._renderTargetView;
+            _currentDepthStencilView = this.Device._depthStencilView;
+
+            lock (this.D3dContext)
+                this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+        }
+
+        internal IRenderTarget PlatformApplyRenderTargets()
+        {
+            // Clear the current render targets.
+            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
+            _currentDepthStencilView = null;
+
+            // Make sure none of the new targets are bound
+            // to the device as a texture resource.
+            lock (this.D3dContext)
+            {
+                VertexTextures.ClearTargets(this);
+                Textures.ClearTargets(this);
+            }
+
+            for (int i = 0; i < _currentRenderTargetCount; i++)
+            {
+                var binding = _currentRenderTargetBindings[i];
+                var targetDX = (IRenderTargetDX11)binding.RenderTarget;
+                _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
+            }
+
+            // Use the depth from the first target.
+            var renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
+
+            // Set the targets.
+            lock (this.D3dContext)
+                this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+
+            return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
+        }
+
     }
 }

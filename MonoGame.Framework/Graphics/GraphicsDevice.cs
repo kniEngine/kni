@@ -618,7 +618,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var clearTarget = false;
 
-            PlatformResolveRenderTargets();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformResolveRenderTargets();
 
             // Clear the current bindings.
             Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
@@ -629,7 +629,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _mainContext.Strategy._currentRenderTargetCount = 0;
 
-                PlatformApplyDefaultRenderTarget();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyDefaultRenderTarget();
                 clearTarget = PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
 
                 renderTargetWidth = PresentationParameters.BackBufferWidth;
@@ -641,7 +641,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Array.Copy(renderTargets, _mainContext.Strategy._currentRenderTargetBindings, renderTargets.Length);
                 _mainContext.Strategy._currentRenderTargetCount = renderTargets.Length;
 
-                var renderTarget = PlatformApplyRenderTargets();
+                IRenderTarget renderTarget = ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyRenderTargets();
 
                 // We clear the render target if asked.
                 clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;

@@ -29,21 +29,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformApplyDefaultRenderTarget()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private void PlatformResolveRenderTargets()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private IRenderTarget PlatformApplyRenderTargets()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             throw new PlatformNotSupportedException();

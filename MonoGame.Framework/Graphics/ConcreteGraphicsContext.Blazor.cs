@@ -379,12 +379,110 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dispose(disposing);
         }
 
-        internal static readonly WebGLFramebufferAttachmentPoint[] InvalidateFramebufferAttachements =
+        static readonly WebGLFramebufferAttachmentPoint[] InvalidateFramebufferAttachements =
         {
             WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
             WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT,
             WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
         };
+
+        internal void PlatformResolveRenderTargets()
+        {
+            if (!this.IsRenderTargetBound)
+                return;
+
+            var renderTargetBinding = _currentRenderTargetBindings[0];
+            var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+            if (renderTarget.MultiSampleCount > 0 && this.Device._supportsBlitFramebuffer)
+            {
+                throw new NotImplementedException();
+            }
+
+            for (var i = 0; i < _currentRenderTargetCount; i++)
+            {
+                renderTargetBinding = _currentRenderTargetBindings[i];
+                if (renderTargetBinding.RenderTarget.LevelCount > 1)
+                {
+                    var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+                    GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
+                    GraphicsExtensions.CheckGLError();
+                    GL.GenerateMipmap(renderTargetGL.GLTarget);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+        }
+
+        internal void PlatformApplyDefaultRenderTarget()
+        {
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, this.Device._glDefaultFramebuffer);
+            GraphicsExtensions.CheckGLError();
+
+            // Reset the raster state because we flip vertices
+            // when rendering offscreen and hence the cull direction.
+            _rasterizerStateDirty = true;
+
+            // Textures will need to be rebound to render correctly in the new render target.
+            Textures.Dirty();
+        }
+
+        internal IRenderTarget PlatformApplyRenderTargets()
+        {
+            WebGLFramebuffer glFramebuffer = null;
+            if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
+            {
+                glFramebuffer = GL.CreateFramebuffer();
+                GraphicsExtensions.CheckGLError();
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
+                var renderTargetBinding = _currentRenderTargetBindings[0];
+                var renderTargetGL = (IRenderTargetGL)renderTargetBinding.RenderTarget;
+
+                GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
+                GraphicsExtensions.CheckGLError();
+                GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
+                GraphicsExtensions.CheckGLError();
+
+                for (var i = 0; i < _currentRenderTargetCount; i++)
+                {
+                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
+                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetGL;
+                    var attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
+
+                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, renderTargetGL.GLTexture);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+
+                GraphicsExtensions.CheckFramebufferStatus();
+
+                _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
+            }
+            else
+            {
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+                GraphicsExtensions.CheckGLError();
+            }
+#if !GLES
+            //GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);
+#endif
+
+            // Reset the raster state because we flip vertices
+            // when rendering offscreen and hence the cull direction.
+            _rasterizerStateDirty = true;
+
+            // Textures will need to be rebound to render correctly in the new render target.
+            this.Textures.Dirty();
+
+            return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
+        }
 
         // Holds information for caching
         internal class BufferBindingInfo
