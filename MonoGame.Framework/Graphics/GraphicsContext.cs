@@ -159,6 +159,107 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.GetRenderTargets(bindings);
         }
 
+        public void SetRenderTarget(RenderTarget2D renderTarget)
+        {
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+                SetRenderTargets(Strategy._singleRenderTargetBinding);
+            }
+        }
+
+        public void SetRenderTarget(RenderTargetCube renderTarget, CubeMapFace cubeMapFace)
+        {
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
+                SetRenderTargets(Strategy._singleRenderTargetBinding);
+            }
+        }
+
+        /// <remarks>Only implemented for DirectX </remarks>
+        public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
+        {
+            if (!_device.Capabilities.SupportsTextureArrays)
+                throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
+
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(Strategy._singleRenderTargetBinding);
+            }
+        }
+
+        /// <remarks>Only implemented for DirectX </remarks>
+        public void SetRenderTarget(RenderTarget3D renderTarget, int arraySlice)
+        {
+            if (renderTarget == null)
+            {
+                SetRenderTargets(null);
+            }
+            else
+            {
+                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(Strategy._singleRenderTargetBinding);
+            }
+        }
+
+        public void SetRenderTargets(params RenderTargetBinding[] renderTargets)
+        {
+            // Avoid having to check for both null and zero length array.
+            int renderTargetCount = 0;
+            if (renderTargets != null)
+            {
+                renderTargetCount = renderTargets.Length;
+                if (renderTargetCount == 0)
+                    renderTargets = null;
+            }
+
+            if (_device.GraphicsProfile == GraphicsProfile.Reach && renderTargetCount > 1)
+                throw new NotSupportedException("Reach profile supports a maximum of 1 simultaneous rendertargets");
+            if (_device.GraphicsProfile == GraphicsProfile.HiDef && renderTargetCount > 4)
+                throw new NotSupportedException("HiDef profile supports a maximum of 4 simultaneous rendertargets");
+            if (renderTargetCount > 8)
+                throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
+
+            // Try to early out if the current and new bindings are equal.
+            if (Strategy._currentRenderTargetCount == renderTargetCount)
+            {
+                bool isEqual = true;
+                for (int i = 0; i < Strategy._currentRenderTargetCount; i++)
+                {
+                    if (Strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
+                        Strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+
+                if (isEqual)
+                    return;
+            }
+
+            ApplyRenderTargets(renderTargets);
+
+            if (renderTargetCount == 0)
+                unchecked { _graphicsMetrics._targetCount++; }
+            else
+                unchecked { _graphicsMetrics._targetCount += renderTargetCount; }
+        }
+
         internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
         {
             bool clearTarget = false;

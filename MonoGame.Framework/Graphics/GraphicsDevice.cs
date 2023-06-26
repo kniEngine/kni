@@ -504,109 +504,29 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetRenderTarget(RenderTarget2D renderTarget)
         {
-            if (renderTarget == null)
-            {
-                SetRenderTargets(null);
-            }
-            else
-            {
-                _mainContext.Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-                SetRenderTargets(_mainContext.Strategy._singleRenderTargetBinding);
-            }
+            CurrentContext.SetRenderTarget(renderTarget);
         }
 
         public void SetRenderTarget(RenderTargetCube renderTarget, CubeMapFace cubeMapFace)
         {
-            if (renderTarget == null)
-            {
-                SetRenderTargets(null);
-            }
-            else
-            {
-                _mainContext.Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
-                SetRenderTargets(_mainContext.Strategy._singleRenderTargetBinding);
-            }
+            CurrentContext.SetRenderTarget(renderTarget, cubeMapFace);
         }
 
         /// <remarks>Only implemented for DirectX </remarks>
         public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
         {
-            if (!Capabilities.SupportsTextureArrays)
-                throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
-
-            if (renderTarget == null)
-            {
-                SetRenderTargets(null);
-            }
-            else
-            {
-                _mainContext.Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_mainContext.Strategy._singleRenderTargetBinding);
-            }
+            CurrentContext.SetRenderTarget(renderTarget, arraySlice);
         }
 
         /// <remarks>Only implemented for DirectX </remarks>
         public void SetRenderTarget(RenderTarget3D renderTarget, int arraySlice)
         {
-            if (renderTarget == null)
-            {
-                SetRenderTargets(null);
-            }
-            else
-            {
-                _mainContext.Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_mainContext.Strategy._singleRenderTargetBinding);
-            }
+            CurrentContext.SetRenderTarget(renderTarget, arraySlice);
         }
 
 		public void SetRenderTargets(params RenderTargetBinding[] renderTargets)
 		{
-            // Avoid having to check for null and zero length.
-            var renderTargetCount = 0;
-            if (renderTargets != null)
-            {
-                renderTargetCount = renderTargets.Length;
-                if (renderTargetCount == 0)
-                {
-                    renderTargets = null;
-                }
-            }
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && renderTargetCount > 1)
-                throw new NotSupportedException("Reach profile supports a maximum of 1 simultaneous rendertargets");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && renderTargetCount > 4)
-                throw new NotSupportedException("HiDef profile supports a maximum of 4 simultaneous rendertargets");
-            if (renderTargetCount > 8)
-                throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
-
-            // Try to early out if the current and new bindings are equal.
-            if (_mainContext.Strategy._currentRenderTargetCount == renderTargetCount)
-            {
-                var isEqual = true;
-                for (var i = 0; i < _mainContext.Strategy._currentRenderTargetCount; i++)
-                {
-                    if (_mainContext.Strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
-                        _mainContext.Strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
-                    {
-                        isEqual = false;
-                        break;
-                    }
-                }
-
-                if (isEqual)
-                    return;
-            }
-
-            CurrentContext.ApplyRenderTargets(renderTargets);
-
-            if (renderTargetCount == 0)
-            {
-                unchecked { CurrentContext._graphicsMetrics._targetCount++; }
-            }
-            else
-            {
-                unchecked { CurrentContext._graphicsMetrics._targetCount += renderTargetCount; }
-            }
+            CurrentContext.SetRenderTargets(renderTargets);
         }
 
         public int RenderTargetCount
