@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
     /// <remarks>Note that AudioContent can load and process audio files that are not supported by the importers.</remarks>
     public class AudioContent : ContentItem, IDisposable
     {
-        private bool _disposed;
+        private bool _isDisposed;
         private readonly string _fileName;
         private readonly AudioFileType _fileType;
         private ReadOnlyCollection<byte> _data;
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         {
             get
             {
-                if (_disposed || _data == null)                
+                if (_isDisposed || _data == null)                
                     throw new InvalidContentException("Could not read the audio data from file \"" + Path.GetFileName(_fileName) + "\".");
                 return _data;
             }
@@ -56,49 +56,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         /// <summary>
         /// The duration of the audio data.
         /// </summary>
-        public TimeSpan Duration
-        {
-            get
-            {
-                return _duration;
-            }
-        }
+        public TimeSpan Duration { get { return _duration; } }
 
         /// <summary>
         /// The current format of the audio data.
         /// </summary>
         /// <remarks>This changes from the source format to the output format after conversion.</remarks>
-        public AudioFormat Format
-        {
-            get
-            {
-                return _format;
-            }
-        }
+        public AudioFormat Format { get { return _format; } }
 
         /// <summary>
         /// The current loop length in samples.
         /// </summary>
         /// <remarks>This changes from the source loop length to the output loop length after conversion.</remarks>
-        public int LoopLength
-        {
-            get
-            {
-                return _loopLength;
-            } 
-        }
+        public int LoopLength { get { return _loopLength; } }
 
         /// <summary>
         /// The current loop start location in samples.
         /// </summary>
         /// <remarks>This changes from the source loop start to the output loop start after conversion.</remarks>
-        public int LoopStart
-        {
-            get
-            {
-                return _loopStart;
-            }
-        }
+        public int LoopStart { get { return _loopStart; } }
 
         /// <summary>
         /// Initializes a new instance of AudioContent.
@@ -195,8 +171,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
 
         public void Dispose()
         {
-            _disposed = true;
             _data = null;
+
+            _isDisposed = true;
         }
     }
 }
