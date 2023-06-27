@@ -200,9 +200,83 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal int GetCurrentShaderProgramHash2()
+        private int GetCurrentShaderProgramHash2()
         {
             return _vertexShader.HashKey ^ _pixelShader.HashKey;
+        }
+
+        /// <summary>
+        /// Activates the Current Vertex/Pixel shader pair into a program.         
+        /// </summary>
+        internal unsafe void ActivateShaderProgram()
+        {
+            // Lookup the shader program.
+            int programHash = GetCurrentShaderProgramHash2();
+            var shaderProgram = this.Device._programCache.GetProgram(VertexShader, PixelShader, programHash);
+            if (shaderProgram.Program == null)
+                return;
+
+            // Set the new program if it has changed.
+            if (_shaderProgram != shaderProgram)
+            {
+                GL.UseProgram(shaderProgram.Program);
+                GraphicsExtensions.CheckGLError();
+                _shaderProgram = shaderProgram;
+            }
+
+            var posFixupLoc = shaderProgram.GetUniformLocation("posFixup");
+            if (posFixupLoc == null)
+                return;
+
+            // Apply vertex shader fix:
+            // The following two lines are appended to the end of vertex shaders
+            // to account for rendering differences between OpenGL and DirectX:
+            //
+            // gl_Position.y = gl_Position.y * posFixup.y;
+            // gl_Position.xy += posFixup.zw * gl_Position.ww;
+            //
+            // (the following paraphrased from wine, wined3d/state.c and wined3d/glsl_shader.c)
+            //
+            // - We need to flip along the y-axis in case of offscreen rendering.
+            // - D3D coordinates refer to pixel centers while GL coordinates refer
+            //   to pixel corners.
+            // - D3D has a top-left filling convention. We need to maintain this
+            //   even after the y-flip mentioned above.
+            // In order to handle the last two points, we translate by
+            // (63.0 / 128.0) / VPw and (63.0 / 128.0) / VPh. This is equivalent to
+            // translating slightly less than half a pixel. We want the difference to
+            // be large enough that it doesn't get lost due to rounding inside the
+            // driver, but small enough to prevent it from interfering with any
+            // anti-aliasing.
+            //
+            // OpenGL coordinates specify the center of the pixel while d3d coords specify
+            // the corner. The offsets are stored in z and w in posFixup. posFixup.y contains
+            // 1.0 or -1.0 to turn the rendering upside down for offscreen rendering. PosFixup.x
+            // contains 1.0 to allow a mad.
+
+            _posFixup.X = 1.0f;
+            _posFixup.Y = 1.0f;
+            if (!this.Device.UseHalfPixelOffset)
+            {
+                _posFixup.Z = 0f;
+                _posFixup.W = 0f;
+            }
+            else
+            {
+                _posFixup.Z =  (63.0f/64.0f)/Viewport.Width;
+                _posFixup.W = -(63.0f/64.0f)/Viewport.Height;
+            }
+
+            //If we have a render target bound (rendering offscreen)
+            if (this.IsRenderTargetBound)
+            {
+                //flip vertically
+                _posFixup.Y = -_posFixup.Y;
+                _posFixup.W = -_posFixup.W;
+            }
+            
+            GL.Uniform4f(posFixupLoc, _posFixup.X, _posFixup.Y, _posFixup.Z, _posFixup.W);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void SetVertexAttributeArray(bool[] attrs)
