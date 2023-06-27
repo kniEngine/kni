@@ -148,7 +148,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         /// the audio is stored external to the XNB file.  If this is null, then the converted audio is stored in
         /// the Data property.
         /// </param>
-        [Obsolete("You should prefer to use AudioProfile.")]
         public void ConvertFormat(ConversionFormat formatType, ConversionQuality quality, string saveToFile)
         {
             // Call the legacy conversion code.
