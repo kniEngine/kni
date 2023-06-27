@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
     /// <remarks>Note that AudioContent can load and process audio files that are not supported by the importers.</remarks>
     public class AudioContent : ContentItem, IDisposable
     {
-        private bool _disposed;
+        private bool _isDisposed;
         private readonly string _fileName;
         private readonly AudioFileType _fileType;
         private ReadOnlyCollection<byte> _data;
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         {
             get
             {
-                if (_disposed || _data == null)                
+                if (_isDisposed || _data == null)                
                     throw new InvalidContentException("Could not read the audio data from file \"" + Path.GetFileName(_fileName) + "\".");
                 return _data;
             }
@@ -171,8 +171,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
 
         public void Dispose()
         {
-            _disposed = true;
             _data = null;
+
+            _isDisposed = true;
         }
     }
 }
