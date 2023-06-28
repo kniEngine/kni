@@ -225,6 +225,27 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        internal void PlatformApplyShaders()
+        {
+            if (_vertexShaderDirty || _pixelShaderDirty)
+            {
+                ActivateShaderProgram();
+
+                if (_vertexShaderDirty)
+                {
+                    unchecked { this.Device.CurrentContext._graphicsMetrics._vertexShaderCount++; }
+                }
+
+                if (_pixelShaderDirty)
+                {
+                    unchecked { this.Device.CurrentContext._graphicsMetrics._pixelShaderCount++; }
+                }
+
+                _vertexShaderDirty = false;
+                _pixelShaderDirty = false;
+            }
+        }
+
         internal void PlatformApplyShaderBuffers()
         {
             _vertexConstantBuffers.Apply(this);
@@ -244,7 +265,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
-        internal unsafe void ActivateShaderProgram()
+        private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
             int programHash = GetCurrentShaderProgramHash2();

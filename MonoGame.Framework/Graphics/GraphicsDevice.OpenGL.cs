@@ -314,33 +314,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformApplyShaders()
-        {
-            if (_mainContext.Strategy._vertexShaderDirty || _mainContext.Strategy._pixelShaderDirty)
-            {
-                ((ConcreteGraphicsContext)_mainContext.Strategy).ActivateShaderProgram();
-
-                if (_mainContext.Strategy._vertexShaderDirty)
-                {
-                    unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
-                }
-
-                if (_mainContext.Strategy._pixelShaderDirty)
-                {
-                    unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
-                }
-
-                _mainContext.Strategy._vertexShaderDirty = false;
-                _mainContext.Strategy._pixelShaderDirty = false;
-            }
-        }
-
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             bool shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
@@ -367,7 +346,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
@@ -404,7 +383,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
@@ -425,7 +404,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
@@ -470,7 +449,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
@@ -516,7 +495,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-            PlatformApplyShaders();
+            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
             bool shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;

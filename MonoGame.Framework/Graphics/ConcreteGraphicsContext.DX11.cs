@@ -217,6 +217,32 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal void PlatformApplyShaders()
+        {
+            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
+
+            if (_vertexShaderDirty)
+            {
+                this.D3dContext.VertexShader.Set(_vertexShader.VertexShader);
+
+                unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
+            }
+            if (_vertexShaderDirty || _vertexBuffersDirty)
+            {
+                this.D3dContext.InputAssembler.InputLayout = _vertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
+                _vertexShaderDirty = false;
+                _vertexBuffersDirty = false;
+            }
+
+            if (_pixelShaderDirty)
+            {
+                this.D3dContext.PixelShader.Set(_pixelShader.PixelShader);
+                _pixelShaderDirty = false;
+
+                unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
+            }
+        }
+
         internal void PlatformApplyShaderBuffers()
         {
             _vertexConstantBuffers.Apply(this);
