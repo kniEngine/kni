@@ -594,9 +594,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to render from the index buffer.</param>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawIndexedPrimitives.");
-
             if (_mainContext.Strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawIndexedPrimitives.");
 
@@ -623,6 +620,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
+
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawIndexedPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
 
             PlatformDrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
@@ -694,6 +696,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserPrimitives.");
+
             PlatformDrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
@@ -708,9 +715,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to draw.</param>
         public void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount)
         {
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawPrimitives.");
-
             if (_mainContext.Strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawPrimitives.");
 
@@ -734,6 +738,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
+
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawPrimitives.");
 
             var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
@@ -832,6 +841,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
+
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
 
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
@@ -932,6 +946,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
 
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
+
             PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
@@ -984,9 +1003,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if (this.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Instancing.");
 
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawInstancedPrimitives.");
-
             if (_mainContext.Strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawInstancedPrimitives.");
 
@@ -995,6 +1011,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
+
+            if (_mainContext.Strategy._vertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawInstancedPrimitives.");
+            if (_mainContext.Strategy._pixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawInstancedPrimitives.");
 
             PlatformDrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
 

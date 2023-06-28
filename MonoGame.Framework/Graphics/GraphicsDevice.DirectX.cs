@@ -937,11 +937,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("A vertex shader must be set!");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("A pixel shader must be set!");
-
             if (_mainContext.Strategy._vertexShaderDirty)
             {
                 CurrentD3DContext.VertexShader.Set(_mainContext.Strategy._vertexShader.VertexShader);
