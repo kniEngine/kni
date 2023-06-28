@@ -200,6 +200,17 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        internal void PlatformApplyShaderBuffers()
+        {
+            _vertexConstantBuffers.Apply(this);
+            _pixelConstantBuffers.Apply(this);
+
+            this.VertexTextures.PlatformApply(this);
+            this.VertexSamplerStates.PlatformApply(this);
+            this.Textures.PlatformApply(this);
+            this.SamplerStates.PlatformApply(this);
+        }
+
         private int GetCurrentShaderProgramHash2()
         {
             return _vertexShader.HashKey ^ _pixelShader.HashKey;

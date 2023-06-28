@@ -217,6 +217,17 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal void PlatformApplyShaderBuffers()
+        {
+            _vertexConstantBuffers.Apply(this);
+            _pixelConstantBuffers.Apply(this);
+
+            this.VertexTextures.PlatformApply(this);
+            this.VertexSamplerStates.PlatformApply(this);
+            this.Textures.PlatformApply(this);
+            this.SamplerStates.PlatformApply(this);
+        }
+
         internal void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
             if (_lastPrimitiveType == primitiveType)
