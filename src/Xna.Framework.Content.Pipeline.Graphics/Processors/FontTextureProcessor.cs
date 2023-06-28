@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         public override SpriteFontContent Process(Texture2DContent input, ContentProcessorContext context)
         {
-            var output = new SpriteFontContent();
+            SpriteFontContent output = new SpriteFontContent();
 
             BitmapContent fontBitmap = input.Faces[0][0];
             SurfaceFormat faceFormat;
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
 
             // Get the platform specific texture profile.
-            var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
+            TextureProfile texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
 
             // We need to know how to pack the glyphs.
             bool requiresPot, requiresSquare;
@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 output.CharacterMap.Add(ch);
 
-                var texRect = glyph.Subrect;
+                Rectangle texRect = glyph.Subrect;
                 output.Glyphs.Add(texRect);
 
                 Rectangle cropping;
@@ -142,10 +142,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             for (int i = 0; i < regions.Count; i++)
             {
-                var character = (char)(FirstCharacter + i);
+                char character = (char)(FirstCharacter + i);
 
-                var rect = regions[i];
-                var glyphBitmap = new PixelBitmapContent<Vector4>(rect.Width, rect.Height);
+                Rectangle rect = regions[i];
+                PixelBitmapContent<Vector4> glyphBitmap = new PixelBitmapContent<Vector4>(rect.Width, rect.Height);
                 BitmapContent.Copy(bitmap, rect, glyphBitmap, new Rectangle(0, 0, rect.Width, rect.Height));
 
                 GlyphKerning kerning = new GlyphKerning();

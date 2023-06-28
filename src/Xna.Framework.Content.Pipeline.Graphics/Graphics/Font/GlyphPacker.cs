@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         // Once arranging is complete, copies each glyph to its chosen position in the single larger output bitmap.
         static BitmapContent CopyGlyphsToOutput(List<ArrangedFontGlyph> arrangedGlyphs, int width, int height)
         {
-            var output = new PixelBitmapContent<Vector4>(width, height);
+            PixelBitmapContent<Vector4> output = new PixelBitmapContent<Vector4>(width, height);
 
             foreach (ArrangedFontGlyph glyph in arrangedGlyphs)
             {
