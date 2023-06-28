@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             face.Glyph.RenderGlyph(renderMode);
 
             // Render the character.
-            BitmapContent glyphBitmap = null;
+            PixelBitmapContent<Vector4> glyphBitmap = null;
             if (face.Glyph.Bitmap.Width > 0 && face.Glyph.Bitmap.Rows > 0)
             {
                 switch (face.Glyph.Bitmap.PixelMode)

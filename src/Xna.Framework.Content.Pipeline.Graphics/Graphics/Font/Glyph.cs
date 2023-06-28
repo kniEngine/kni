@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     internal class FontGlyph
     {
         // Constructor.
-        public FontGlyph(BitmapContent bitmap)
+        public FontGlyph(PixelBitmapContent<Vector4> bitmap)
         {
             Bitmap = bitmap;
             Subrect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         }
 
         // Glyph image data (may only use a portion of a larger bitmap).
-        public BitmapContent Bitmap;
+        public PixelBitmapContent<Vector4> Bitmap;
         public Rectangle Subrect;
 
         public int FontBitmapLeft;
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public void Crop()
         {
             // Crop the top.
-            while (Subrect.Height > 1 && IsAlphaEntirely(Bitmap, Subrect.X, Subrect.Y, Subrect.Width, 1))
+            while (Subrect.Height > 1 && IsEmptyRow(this.Bitmap, Subrect.X, Subrect.Y, Subrect.Width))
             {
                 YOffset++;
                 Subrect.Y++;
@@ -77,13 +77,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Crop the bottom.
-            while (Subrect.Height > 1 && IsAlphaEntirely(Bitmap, Subrect.X, Subrect.Bottom - 1, Subrect.Width, 1))
+            while (Subrect.Height > 1 && IsEmptyRow(this.Bitmap, Subrect.X, Subrect.Bottom - 1, Subrect.Width))
             {
                 Subrect.Height--;
             }
 
             // Crop the left.
-            while (Subrect.Width > 1 && IsAlphaEntirely(Bitmap, Subrect.X, Subrect.Y, 1, Subrect.Height))
+            while (Subrect.Width > 1 && IsEmptyColumn(this.Bitmap, Subrect.X, Subrect.Y, Subrect.Height))
             {
                 XOffset++;
                 Subrect.X++;
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Crop the right.
-            while (Subrect.Width > 1 && IsAlphaEntirely(Bitmap, Subrect.Right - 1, Subrect.Y, 1, Subrect.Height))
+            while (Subrect.Width > 1 && IsEmptyColumn(this.Bitmap, Subrect.Right - 1, Subrect.Y, Subrect.Height))
             {
                 Subrect.Width--;
 
@@ -101,19 +101,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         const float TransparentAlpha = 0f;
 
-        // Checks whether an area of a bitmap contains entirely the specified alpha value.
-        public static bool IsAlphaEntirely(BitmapContent bitmap, int rX, int rY, int rW, int rH)
+        public static bool IsEmptyRow(PixelBitmapContent<Vector4> bmp, int rX, int rY, int rW)
         {
-            var bmp = (PixelBitmapContent<Vector4>)bitmap;
+            for (int x = 0; x < rW; x++)
+            {
+                float alpha = bmp.GetPixel(rX + x, rY + 0).W;
+                if (alpha != TransparentAlpha)
+                    return false;
+            }
 
+            return true;
+        }
+
+        public static bool IsEmptyColumn(PixelBitmapContent<Vector4> bmp, int rX, int rY, int rH)
+        {
             for (int y = 0; y < rH; y++)
             {
-                for (int x = 0; x < rW; x++)
-                {
-                    var alpha = bmp.GetPixel(rX + x, rY + y).W;
-                    if (alpha != TransparentAlpha)
-                        return false;
-                }
+                float alpha = bmp.GetPixel(rX + 0, rY + y).W;
+                if (alpha != TransparentAlpha)
+                    return false;
             }
 
             return true;
