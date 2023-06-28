@@ -933,32 +933,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-        private void PlatformApplyShaders()
-        {
-            // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
-
-            if (_mainContext.Strategy._vertexShaderDirty)
-            {
-                CurrentD3DContext.VertexShader.Set(_mainContext.Strategy._vertexShader.VertexShader);
-
-                unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
-            }
-            if (_mainContext.Strategy._vertexShaderDirty || _mainContext.Strategy._vertexBuffersDirty)
-            {
-                CurrentD3DContext.InputAssembler.InputLayout = _mainContext.Strategy._vertexShader.InputLayouts.GetOrCreate(_mainContext.Strategy._vertexBuffers);
-                _mainContext.Strategy._vertexShaderDirty = false;
-                _mainContext.Strategy._vertexBuffersDirty = false;
-            }
-
-            if (_mainContext.Strategy._pixelShaderDirty)
-            {
-                CurrentD3DContext.PixelShader.Set(_mainContext.Strategy._pixelShader.PixelShader);
-                _mainContext.Strategy._pixelShaderDirty = false;
-
-                unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
-            }
-        }
-
         private void PlatformDrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
             lock (CurrentD3DContext)
@@ -966,7 +940,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
@@ -986,7 +960,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
@@ -1001,7 +975,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
@@ -1022,7 +996,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
@@ -1043,7 +1017,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
@@ -1059,7 +1033,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyState();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
-                PlatformApplyShaders();
+                ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaders();
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyShaderBuffers();
 
                 ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyPrimitiveType(primitiveType);
