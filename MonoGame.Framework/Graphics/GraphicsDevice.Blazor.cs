@@ -251,7 +251,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 _mainContext.Strategy._vertexShaderDirty = false;
                 _mainContext.Strategy._pixelShaderDirty = false;
             }
+        }
 
+        private void PlatformApplyShaderBuffers()
+        {
             _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext.Strategy);
             _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext.Strategy);
 
@@ -267,6 +270,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             var shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -291,6 +295,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             // TODO: reimplement without creating new buffers
 
@@ -335,6 +340,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
 
@@ -353,6 +359,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             // TODO: reimplement without creating new buffers
 
@@ -418,6 +425,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             throw new NotImplementedException();
         }
@@ -431,6 +439,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             throw new NotImplementedException();
         }

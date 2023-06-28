@@ -333,7 +333,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 _mainContext.Strategy._vertexShaderDirty = false;
                 _mainContext.Strategy._pixelShaderDirty = false;
             }
+        }
 
+        private void PlatformApplyShaderBuffers()
+        {
             _mainContext.Strategy._vertexConstantBuffers.Apply(_mainContext.Strategy);
             _mainContext.Strategy._pixelConstantBuffers.Apply(_mainContext.Strategy);
 
@@ -349,6 +352,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             bool shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -375,6 +379,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -411,6 +416,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffersAttribs(_mainContext.Strategy._vertexShader, 0);
 
@@ -431,6 +437,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -475,6 +482,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             //((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -520,6 +528,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyIndexBuffer();
             ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyVertexBuffers();
             PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
 
             bool shortIndices = _mainContext.Strategy._indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
