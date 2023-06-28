@@ -316,11 +316,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformApplyShaders()
         {
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("A vertex shader must be set!");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("A pixel shader must be set!");
-
             if (_mainContext.Strategy._vertexShaderDirty || _mainContext.Strategy._pixelShaderDirty)
             {
                 ((ConcreteGraphicsContext)_mainContext.Strategy).ActivateShaderProgram();
