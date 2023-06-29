@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Graphics
 		    BlendState = prevBlendState;
         }
 
-        internal void PlatformApplyState()
+        private void PlatformApplyState()
         {
             // Threading.EnsureUIThread();
 
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexShaderDirty = true;
         }
 
-        internal void PlatformApplyIndexBuffer()
+        private void PlatformApplyIndexBuffer()
         {
             if (_indexBufferDirty)
             {
@@ -196,11 +196,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyVertexBuffers()
+        private void PlatformApplyVertexBuffers()
         {
         }
 
-        internal void PlatformApplyShaders()
+        private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
@@ -221,7 +221,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyShaderBuffers()
+        private void PlatformApplyShaderBuffers()
         {
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
@@ -473,6 +473,190 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new ArgumentException();
             }
         }
+
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            PlatformApplyVertexBuffersAttribs(_vertexShader, 0);
+
+            if (vertexStart < 0)
+                vertexStart = 0;
+
+            GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+			              vertexStart,
+			              vertexCount);
+            GraphicsExtensions.CheckGLError();
+        }
+
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        {
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+
+			var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
+            var indexElementSize = shortIndices ? 2 : 4;
+			var indexOffsetInBytes = (startIndex * indexElementSize);
+			var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+
+            GL.DrawElements(target,
+                                     indexElementCount,
+                                     indexElementType,
+                                     indexOffsetInBytes);
+            GraphicsExtensions.CheckGLError();
+        }
+
+        public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
+        {
+            if (!this.Device.Capabilities.SupportsInstancing)
+                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
+
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            throw new NotImplementedException();
+        }
+
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            // TODO: reimplement without creating new buffers
+
+            // create and bind vertexBuffer
+            var vbo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GraphicsExtensions.CheckGLError();
+            GL.BufferData(WebGLBufferType.ARRAY,
+                          (vertexDeclaration.VertexStride * vertexData.Length),
+                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
+            // mark the default Vertex buffers for rebinding
+            _vertexBuffersDirty = true;
+
+            //set vertex data
+            GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
+            GraphicsExtensions.CheckGLError();
+
+            // Setup the vertex declaration to point at the VB data.
+            vertexDeclaration.GraphicsDevice = this.Device;
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+                          vertexOffset,
+                          vertexCount);
+            GraphicsExtensions.CheckGLError();
+
+            //GL.BindBuffer(WebGLBufferType.ARRAY, null);
+            //GraphicsExtensions.CheckGLError();
+            //GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, null);
+            //GraphicsExtensions.CheckGLError();
+
+            vbo.Dispose();
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            // TODO: reimplement without creating new buffers
+
+            // create and bind vertexBuffer
+            var vbo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GraphicsExtensions.CheckGLError();
+            GL.BufferData(WebGLBufferType.ARRAY,
+                          (vertexDeclaration.VertexStride * vertexData.Length),
+                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
+            // mark the default Vertex buffers for rebinding
+            _vertexBuffersDirty = true;
+
+            //set vertex data
+            GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
+            GraphicsExtensions.CheckGLError();
+
+            // create and bind index buffer
+            var ibo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GraphicsExtensions.CheckGLError();
+            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                          (indexData.Length * sizeof(short)),
+                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
+            // mark the default index buffer for rebinding
+            _indexBufferDirty = true;
+
+            // set index buffer
+            GL.BufferSubData(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
+            GraphicsExtensions.CheckGLError();
+
+            // Setup the vertex declaration to point at the VB data.
+            vertexDeclaration.GraphicsDevice = this.Device;
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+
+
+            var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            var indexOffsetInBytes = (indexOffset * sizeof(short));
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            GL.DrawElements(target,
+                                     indexElementCount,
+                                     WebGLDataType.USHORT,
+                                     indexOffsetInBytes);
+            GraphicsExtensions.CheckGLError();
+
+            //GL.BindBuffer(WebGLBufferType.ARRAY, null);
+            //GraphicsExtensions.CheckGLError();
+            //GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, null);
+            //GraphicsExtensions.CheckGLError();
+
+            ibo.Dispose();
+            vbo.Dispose();
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            throw new NotImplementedException();
+        }
+
 
         protected override void Dispose(bool disposing)
         {

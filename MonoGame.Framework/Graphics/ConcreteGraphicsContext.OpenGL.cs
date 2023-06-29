@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
@@ -134,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
             BlendState = prevBlendState;
         }
 
-        internal void PlatformApplyState()
+        private void PlatformApplyState()
         {
             Threading.EnsureUIThread();
 
@@ -208,7 +209,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexShaderDirty = true;
         }
 
-        internal void PlatformApplyIndexBuffer()
+        private void PlatformApplyIndexBuffer()
         {
             if (_indexBufferDirty)
             {
@@ -221,11 +222,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyVertexBuffers()
+        private void PlatformApplyVertexBuffers()
         {
         }
 
-        internal void PlatformApplyShaders()
+        private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
@@ -246,7 +247,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyShaderBuffers()
+        private void PlatformApplyShaderBuffers()
         {
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
@@ -373,7 +374,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return _vertexShader.HashKey ^ _pixelShader.HashKey;
         }
 
-        internal void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
+        private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
@@ -480,7 +481,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _attribsDirty = true;
         }
 
-        internal static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
+        private static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
             switch (primitiveType)
             {
@@ -498,6 +499,220 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new ArgumentException();
             }
         }
+
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        {
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            PlatformApplyVertexBuffersAttribs(_vertexShader, 0);
+
+            if (vertexStart < 0)
+                vertexStart = 0;
+
+			GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+			              vertexStart,
+			              vertexCount);
+            GraphicsExtensions.CheckGLError();
+        }
+
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        {
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+
+			var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
+            int indexElementSize = shortIndices ? 2 : 4;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+
+            GL.DrawElements(target,
+                                     indexElementCount,
+                                     indexElementType,
+                                     indexOffsetInBytes);
+            GraphicsExtensions.CheckGLError();
+        }
+
+        public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
+        {
+            if (!this.Device.Capabilities.SupportsInstancing)
+                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
+
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+
+            var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
+            int indexElementSize = shortIndices ? 2 : 4;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+
+            if (baseInstance > 0)
+            {
+                if (!this.Device.Capabilities.SupportsBaseIndexInstancing)
+                    throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
+
+                GL.DrawElementsInstancedBaseInstance(target,
+                                          indexElementCount,
+                                          indexElementType,
+                                          indexOffsetInBytes,
+                                          instanceCount,
+                                          baseInstance);
+            }
+            else
+                GL.DrawElementsInstanced(target,
+                                     indexElementCount,
+                                     indexElementType,
+                                     indexOffsetInBytes,
+                                     instanceCount);
+
+            GraphicsExtensions.CheckGLError();
+        }
+
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            // Unbind current VBOs.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
+
+            // Pin the buffers.
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            try
+            {
+                // Setup the vertex declaration to point at the VB data.
+                vertexDeclaration.GraphicsDevice = this.Device;
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vbHandle.AddrOfPinnedObject());
+
+                //Draw
+                GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+                              vertexOffset,
+                              vertexCount);
+                GraphicsExtensions.CheckGLError();
+            }
+            finally
+            {
+                // Release the handles.
+                vbHandle.Free();
+            }
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            // Unbind current VBOs.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _indexBufferDirty = true;
+
+            // Pin the buffers.
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+            try
+            {
+                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+
+                // Setup the vertex declaration to point at the VB data.
+                vertexDeclaration.GraphicsDevice = this.Device;
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexAddr);
+
+                //Draw
+                GL.DrawElements(
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+                    GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
+                    DrawElementsType.UnsignedShort,
+                    (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
+                GraphicsExtensions.CheckGLError();
+            }
+            finally
+            {
+                // Release the handles.
+                ibHandle.Free();
+                vbHandle.Free();
+            }
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            PlatformApplyState();
+            //PlatformApplyIndexBuffer();
+            //PlatformApplyVertexBuffers();
+            PlatformApplyShaders();
+            PlatformApplyShaderBuffers();
+
+            // Unbind current VBOs.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _vertexBuffersDirty = true;
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GraphicsExtensions.CheckGLError();
+            _indexBufferDirty = true;
+
+            // Pin the buffers.
+            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+            try
+            {
+                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+
+                // Setup the vertex declaration to point at the VB data.
+                vertexDeclaration.GraphicsDevice = this.Device;
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexAddr);
+
+                //Draw
+                GL.DrawElements(
+                    ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+                    GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
+                    DrawElementsType.UnsignedInt,
+                    (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
+                GraphicsExtensions.CheckGLError();
+            }
+            finally
+            {
+                // Release the handles.
+                ibHandle.Free();
+                vbHandle.Free();
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {
