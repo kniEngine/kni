@@ -52,6 +52,40 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+            //where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

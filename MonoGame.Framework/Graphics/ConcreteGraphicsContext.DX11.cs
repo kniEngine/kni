@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyState()
+        private void PlatformApplyState()
         {
             Debug.Assert(this.D3dContext != null, "The d3d context is null!");
 
@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyIndexBuffer()
+        private void PlatformApplyIndexBuffer()
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyVertexBuffers()
+        private void PlatformApplyVertexBuffers()
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
@@ -217,7 +217,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyShaders()
+        private void PlatformApplyShaders()
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
@@ -243,7 +243,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyShaderBuffers()
+        private void PlatformApplyShaderBuffers()
         {
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
@@ -283,7 +283,66 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        {
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                //PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                this.D3dContext.Draw(vertexCount, vertexStart);
+            }
+        }
+
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        {
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+                this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
+            }
+        }
+
+        public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex,
+            int primitiveCount, int baseInstance, int instanceCount)
+        {
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+
+                if (baseInstance > 0)
+                {
+                    if (!this.Device.Capabilities.SupportsBaseIndexInstancing)
+                        throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
+
+                    this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);
+                }
+                else
+                {
+                    this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, 0);
+                }
+            }
+        }
+
+        private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)
             where T : struct
         {
             DynamicVertexBuffer buffer;
@@ -372,6 +431,70 @@ namespace Microsoft.Xna.Platform.Graphics
             Indices = buffer;
 
             return startIndex;
+        }
+
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+            //where T : struct
+        {
+            // TODO: Do not set public VertexBuffers.
+            //       Bind directly to d3dContext and set dirty flags.
+            int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, vertexCount, vertexDeclaration);
+
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                //PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                this.D3dContext.Draw(vertexCount, startVertex);
+            }
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            // TODO: Do not set public VertexBuffers and Indices.
+            //       Bind directly to d3dContext and set dirty flags.
+            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
+            int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+            }
+        }
+
+        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+            //where T : struct
+        {
+            // TODO: Do not set public VertexBuffers and Indices.
+            //       Bind directly to d3dContext and set dirty flags.
+            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
+            int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+
+            lock (this.D3dContext)
+            {
+                PlatformApplyState();
+                PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
+                PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
+                PlatformApplyShaders();
+                PlatformApplyShaderBuffers();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+            }
         }
 
 

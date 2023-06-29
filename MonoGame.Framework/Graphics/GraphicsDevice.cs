@@ -626,7 +626,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
 
-            PlatformDrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            _mainContext.Strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
@@ -701,7 +701,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserPrimitives.");
 
-            PlatformDrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
+            _mainContext.Strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
@@ -746,7 +746,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
-            PlatformDrawPrimitives(primitiveType, vertexStart, vertexCount);
+            _mainContext.Strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
@@ -847,7 +847,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
 
-            PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+            _mainContext.Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
@@ -951,7 +951,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
 
-            PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+            _mainContext.Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
@@ -1017,7 +1017,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext.Strategy._pixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawInstancedPrimitives.");
 
-            PlatformDrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
+            _mainContext.Strategy.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
 
             unchecked { CurrentContext._graphicsMetrics._drawCount++; }
             unchecked { CurrentContext._graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
