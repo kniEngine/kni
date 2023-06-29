@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 this.D3dContext.VertexShader.Set(_vertexShader.VertexShader);
 
-                unchecked { CurrentContext._graphicsMetrics._vertexShaderCount++; }
+                unchecked { this.Device.CurrentContext._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.PixelShader.Set(_pixelShader.PixelShader);
                 _pixelShaderDirty = false;
 
-                unchecked { CurrentContext._graphicsMetrics._pixelShaderCount++; }
+                unchecked { this.Device.CurrentContext._graphicsMetrics._pixelShaderCount++; }
             }
         }
 
