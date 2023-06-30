@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private D3D11.DeviceContext _d3dContext;
         internal int _vertexBufferSlotsUsed;
 
-        internal PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
+        private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
 
         // The active render targets.
         internal readonly D3D11.RenderTargetView[] _currentRenderTargets = new D3D11.RenderTargetView[8];
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _scissorRectangleDirty = false;
         }
 
-        internal static SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
+        private static SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
         {
             return new SharpDX.Mathematics.Interop.RawColor4(
                     blendFactor.R / 255.0f,
@@ -223,20 +223,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(_vertexShader.VertexShader);
+                this.D3dContext.VertexShader.Set(VertexShader.VertexShader);
 
                 unchecked { this.Device.CurrentContext._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = _vertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = VertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(_pixelShader.PixelShader);
+                this.D3dContext.PixelShader.Set(PixelShader.PixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Device.CurrentContext._graphicsMetrics._pixelShaderCount++; }
@@ -254,7 +254,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this.SamplerStates.PlatformApply(this);
         }
 
-        internal void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
+        private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
             if (_lastPrimitiveType == primitiveType)
                 return;
@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _lastPrimitiveType = primitiveType;
         }
 
-        internal static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
+        private static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
         {
             switch (primitiveType)
             {
@@ -379,7 +379,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return startVertex;
         }
 
-        internal int SetUserIndexBuffer<T>(T[] indexData, int indexOffset, int indexCount)
+        private int SetUserIndexBuffer<T>(T[] indexData, int indexOffset, int indexCount)
             where T : struct
         {
             DynamicIndexBuffer buffer;
