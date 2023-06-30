@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
             for (int i = 0; i < _actualSamplers.Length; i++)
             {
                 SamplerState sampler = _actualSamplers[i];
-                Texture texture = _device.Textures[i];
+                Texture texture = context.Textures[i];
 
                 if (sampler != null && texture != null && sampler != texture._glLastSamplerState)
                 {
