@@ -19,15 +19,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram _shaderProgram = null;
 
-        internal Vector4 _posFixup;
+        private Vector4 _posFixup;
 
         internal BufferBindingInfo[] _bufferBindingInfos;
-        internal int _activeBufferBindingInfosCount;
+        private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
         internal readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
-        internal bool _attribsDirty;
+        private bool _attribsDirty;
 
-        internal DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
+        private DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
 
         // FBO cache, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private int GetCurrentShaderProgramHash2()
         {
-            return _vertexShader.HashKey ^ _pixelShader.HashKey;
+            return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
         /// <summary>
@@ -338,17 +338,17 @@ namespace Microsoft.Xna.Platform.Graphics
         // throws an exception if no shaders are bound
         private int GetCurrentShaderProgramHash()
         {
-            if (_vertexShader == null && _pixelShader == null)
+            if (VertexShader == null && PixelShader == null)
                 throw new InvalidOperationException("There is no shader bound!");
-            if (_vertexShader == null)
-                return _pixelShader.HashKey;
-            if (_pixelShader == null)
-                return _vertexShader.HashKey;
+            if (VertexShader == null)
+                return PixelShader.HashKey;
+            if (PixelShader == null)
+                return VertexShader.HashKey;
 
-            return _vertexShader.HashKey ^ _pixelShader.HashKey;
+            return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
-        internal void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
+        private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
@@ -455,7 +455,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _attribsDirty = true;
         }
 
-        internal static WebGLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
+        private static WebGLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
         {
             switch (primitiveType)
             {
@@ -482,7 +482,7 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, 0);
+            PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -501,20 +501,20 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
 
-            var shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
 			var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
-            var indexElementSize = shortIndices ? 2 : 4;
-			var indexOffsetInBytes = (startIndex * indexElementSize);
-			var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexElementSize = shortIndices ? 2 : 4;
+            int indexOffsetInBytes = (startIndex * indexElementSize);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
 
             GL.DrawElements(target,
-                                     indexElementCount,
-                                     indexElementType,
-                                     indexOffsetInBytes);
+                            indexElementCount,
+                            indexElementType,
+                            indexOffsetInBytes);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -544,7 +544,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // TODO: reimplement without creating new buffers
 
             // create and bind vertexBuffer
-            var vbo = GL.CreateBuffer();
+            WebGLBuffer vbo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();
@@ -561,7 +561,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this.Device;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -590,7 +590,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // TODO: reimplement without creating new buffers
 
             // create and bind vertexBuffer
-            var vbo = GL.CreateBuffer();
+            WebGLBuffer vbo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();
@@ -606,7 +606,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // create and bind index buffer
-            var ibo = GL.CreateBuffer();
+            WebGLBuffer ibo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
             GraphicsExtensions.CheckGLError();
@@ -623,17 +623,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.GraphicsDevice = this.Device;
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexOffset);
+            PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
 
-            var indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var indexOffsetInBytes = (indexOffset * sizeof(short));
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexOffsetInBytes = (indexOffset * sizeof(short));
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             GL.DrawElements(target,
-                                     indexElementCount,
-                                     WebGLDataType.USHORT,
-                                     indexOffsetInBytes);
+                            indexElementCount,
+                            WebGLDataType.USHORT,
+                            indexOffsetInBytes);
             GraphicsExtensions.CheckGLError();
 
             //GL.BindBuffer(WebGLBufferType.ARRAY, null);
@@ -688,7 +688,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException();
             }
 
-            for (var i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < _currentRenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
@@ -732,7 +732,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
                 GraphicsExtensions.CheckGLError();
 
-                for (var i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
@@ -760,7 +760,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
             }
-#if !GLES
+#if DESKTOPGL
             //GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);
 #endif
 
@@ -804,7 +804,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (first.Length != second.Length)
                     return false;
 
-                for (var i = 0; i < first.Length; i++)
+                for (int i = 0; i < first.Length; i++)
                 {
                     if ((first[i].RenderTarget != second[i].RenderTarget) || (first[i].ArraySlice != second[i].ArraySlice))
                     {

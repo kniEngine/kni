@@ -21,20 +21,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram _shaderProgram = null;
 
-        internal Vector4 _posFixup;
+        private Vector4 _posFixup;
 
         internal BufferBindingInfo[] _bufferBindingInfos;
-        internal int _activeBufferBindingInfosCount;
+        private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
         internal readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
-        internal bool _attribsDirty;
+        private bool _attribsDirty;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
-        internal Vector4 _lastClearColor = Vector4.Zero;
-        internal float _lastClearDepth = 1.0f;
-        internal int _lastClearStencil = 0;
+        private Vector4 _lastClearColor = Vector4.Zero;
+        private float _lastClearDepth = 1.0f;
+        private int _lastClearStencil = 0;
 
-        internal DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
+        private DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
 
         // FBO cache, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], int> _glFramebuffers = new Dictionary<RenderTargetBinding[], int>(new ConcreteGraphicsContextGL.RenderTargetBindingArrayComparer());
@@ -146,12 +146,12 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_depthStencilStateDirty)
             {
                 _actualDepthStencilState.PlatformApplyState(this);
-               _depthStencilStateDirty = false;
+                _depthStencilStateDirty = false;
             }
 
             if (_rasterizerStateDirty)
             {
-               _actualRasterizerState.PlatformApplyState(this);
+                _actualRasterizerState.PlatformApplyState(this);
                 _rasterizerStateDirty = false;
             }
 
@@ -260,7 +260,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private int GetCurrentShaderProgramHash2()
         {
-            return _vertexShader.HashKey ^ _pixelShader.HashKey;
+            return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
         /// <summary>
@@ -364,14 +364,14 @@ namespace Microsoft.Xna.Platform.Graphics
         // throws an exception if no shaders are bound
         private int GetCurrentShaderProgramHash()
         {
-            if (_vertexShader == null && _pixelShader == null)
+            if (VertexShader == null && PixelShader == null)
                 throw new InvalidOperationException("There is no shader bound!");
-            if (_vertexShader == null)
-                return _pixelShader.HashKey;
-            if (_pixelShader == null)
-                return _vertexShader.HashKey;
+            if (VertexShader == null)
+                return PixelShader.HashKey;
+            if (PixelShader == null)
+                return VertexShader.HashKey;
 
-            return _vertexShader.HashKey ^ _pixelShader.HashKey;
+            return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
         private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
@@ -508,14 +508,14 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, 0);
+            PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
 
-			GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
-			              vertexStart,
-			              vertexCount);
+            GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
+                          vertexStart,
+                          vertexCount);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -529,18 +529,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
             bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
 
-			var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
+            var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
             int indexElementSize = shortIndices ? 2 : 4;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
 
             GL.DrawElements(target,
-                                     indexElementCount,
-                                     indexElementType,
-                                     indexOffsetInBytes);
+                            indexElementCount,
+                            indexElementType,
+                            indexOffsetInBytes);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -563,7 +563,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(_vertexShader, baseVertex);
+            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
 
             if (baseInstance > 0)
             {
@@ -571,18 +571,18 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
                 GL.DrawElementsInstancedBaseInstance(target,
-                                          indexElementCount,
-                                          indexElementType,
-                                          indexOffsetInBytes,
-                                          instanceCount,
-                                          baseInstance);
+                                                     indexElementCount,
+                                                     indexElementType,
+                                                     indexOffsetInBytes,
+                                                     instanceCount,
+                                                     baseInstance);
             }
             else
                 GL.DrawElementsInstanced(target,
-                                     indexElementCount,
-                                     indexElementType,
-                                     indexOffsetInBytes,
-                                     instanceCount);
+                                         indexElementCount,
+                                         indexElementType,
+                                         indexOffsetInBytes,
+                                         instanceCount);
 
             GraphicsExtensions.CheckGLError();
         }
@@ -610,7 +610,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 // Setup the vertex declaration to point at the VB data.
                 vertexDeclaration.GraphicsDevice = this.Device;
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vbHandle.AddrOfPinnedObject());
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vbHandle.AddrOfPinnedObject());
 
                 //Draw
                 GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
@@ -651,7 +651,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Setup the vertex declaration to point at the VB data.
                 vertexDeclaration.GraphicsDevice = this.Device;
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexAddr);
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
@@ -695,7 +695,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Setup the vertex declaration to point at the VB data.
                 vertexDeclaration.GraphicsDevice = this.Device;
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, _vertexShader, vertexAddr);
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
 
                 //Draw
                 GL.DrawElements(

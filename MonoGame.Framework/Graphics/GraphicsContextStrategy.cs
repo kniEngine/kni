@@ -51,8 +51,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal RasterizerState _rasterizerStateCullNone;
 
         // shaders
-        internal Shader _vertexShader;
-        internal Shader _pixelShader;
+        private Shader _vertexShader;
+        private Shader _pixelShader;
         internal readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
         internal readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
