@@ -581,7 +581,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Note that minVertexIndex and numVertices are unused in MonoGame and will be ignored.</remarks>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
         {
-            DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            CurrentContext.DrawIndexedPrimitives(primitiveType, baseVertex, minVertexIndex, numVertices, startIndex, primitiveCount);
         }
 
         /// <summary>
@@ -593,42 +593,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to render from the index buffer.</param>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            if (_mainContext.Strategy._vertexBuffers.Count == 0)
-                throw new InvalidOperationException("Vertex buffer must be set before calling DrawIndexedPrimitives.");
-
-            if (_mainContext.Strategy._indexBuffer == null)
-                throw new InvalidOperationException("Index buffer must be set before calling DrawIndexedPrimitives.");
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
-                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
-                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
-                {
-                    var tx2D = Textures[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawIndexedPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
-
-            _mainContext.Strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
+            CurrentContext.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
         }
 
         /// <summary>
@@ -643,7 +608,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// from an instance of <typeparamref name="T"/> and cached for subsequent calls.</remarks>
         public void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount) where T : struct, IVertexType
         {
-            DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
+            CurrentContext.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount);
         }
 
         /// <summary>
@@ -657,53 +622,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="vertexDeclaration">The layout of the vertices.</param>
         public void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            if (vertexData == null)
-                throw new ArgumentNullException("vertexData");
-
-            if (vertexData.Length == 0)
-                throw new ArgumentOutOfRangeException("vertexData");
-
-            if (vertexOffset < 0 || vertexOffset >= vertexData.Length)
-                throw new ArgumentOutOfRangeException("vertexOffset");
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
-                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
-                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
-                {
-                    var tx2D = Textures[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-
-            if (vertexOffset + vertexCount > vertexData.Length)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (vertexDeclaration == null)
-                throw new ArgumentNullException("vertexDeclaration");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserPrimitives.");
-
-            _mainContext.Strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
+            CurrentContext.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount, vertexDeclaration);
         }
 
         /// <summary>
@@ -714,41 +633,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to draw.</param>
         public void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount)
         {
-            if (_mainContext.Strategy._vertexBuffers.Count == 0)
-                throw new InvalidOperationException("Vertex buffer must be set before calling DrawPrimitives.");
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
-                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
-                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
-                {
-                    var tx2D = Textures[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawPrimitives.");
-
-            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-
-            _mainContext.Strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
+            CurrentContext.DrawPrimitives(primitiveType, vertexStart, primitiveCount);
         }
 
         /// <summary>
@@ -769,7 +654,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// in the array of vertices.</remarks>
         public void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount) where T : struct, IVertexType
         {
-            DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
+            CurrentContext.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount);
         }
 
         /// <summary>
@@ -789,67 +674,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// in the array of vertices.</remarks>
         public void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            // These parameter checks are a duplicate of the checks in the int[] overload of DrawUserIndexedPrimitives.
-            // Inlined here for efficiency.
-
-            if (vertexData == null || vertexData.Length == 0)
-                throw new ArgumentNullException("vertexData");
-
-            if (vertexOffset < 0 || vertexOffset >= vertexData.Length)
-                throw new ArgumentOutOfRangeException("vertexOffset");
-
-            if (numVertices <= 0 || numVertices > vertexData.Length)
-                throw new ArgumentOutOfRangeException("numVertices");
-
-            if (vertexOffset + numVertices > vertexData.Length)
-                throw new ArgumentOutOfRangeException("numVertices");
-
-            if (indexData == null || indexData.Length == 0)
-                throw new ArgumentNullException("indexData");
-
-            if (indexOffset < 0 || indexOffset >= indexData.Length)
-                throw new ArgumentOutOfRangeException("indexOffset");
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
-                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
-                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
-                {
-                    var tx2D = Textures[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (indexOffset + GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (vertexDeclaration == null)
-                throw new ArgumentNullException("vertexDeclaration");
-
-            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
-                throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
-
-            _mainContext.Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
+             CurrentContext.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
         }
 
         /// <summary>
@@ -870,7 +695,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// in the array of vertices.</remarks>
         public void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount) where T : struct, IVertexType
         {
-            DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, VertexDeclarationCache<T>.VertexDeclaration);
+            CurrentContext.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount);
         }
 
         /// <summary>
@@ -890,70 +715,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// in the array of vertices.</remarks>
         public void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-                throw new NotSupportedException("Reach profile does not support 32 bit indices");
-
-            // These parameter checks are a duplicate of the checks in the short[] overload of DrawUserIndexedPrimitives.
-            // Inlined here for efficiency.
-
-            if (vertexData == null || vertexData.Length == 0)
-                throw new ArgumentNullException("vertexData");
-
-            if (vertexOffset < 0 || vertexOffset >= vertexData.Length)
-                throw new ArgumentOutOfRangeException("vertexOffset");
-
-            if (numVertices <= 0 || numVertices > vertexData.Length)
-                throw new ArgumentOutOfRangeException("numVertices");
-
-            if (vertexOffset + numVertices > vertexData.Length)
-                throw new ArgumentOutOfRangeException("numVertices");
-
-            if (indexData == null || indexData.Length == 0)
-                throw new ArgumentNullException("indexData");
-
-            if (indexOffset < 0 || indexOffset >= indexData.Length)
-                throw new ArgumentOutOfRangeException("indexOffset");
-
-            if (this.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
-                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
-                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < Capabilities.MaxTextureSlots; i++)
-                {
-                    var tx2D = Textures[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (indexOffset + GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount) > indexData.Length)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (vertexDeclaration == null)
-                throw new ArgumentNullException("vertexDeclaration");
-
-            if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
-                throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
-
-            _mainContext.Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += primitiveCount; }
+            CurrentContext.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
         }
 
         /// <summary>
@@ -969,7 +731,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Note that minVertexIndex and numVertices are unused in MonoGame and will be ignored.</remarks>
         public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount, int instanceCount)
         {
-            DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, 0, instanceCount);
+            CurrentContext.DrawInstancedPrimitives(primitiveType, baseVertex, minVertexIndex, numVertices, startIndex, primitiveCount, instanceCount);
         }
 
         /// <summary>
@@ -983,7 +745,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Draw geometry with data from multiple bound vertex streams at different frequencies.</remarks>
         public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int instanceCount)
         {
-            DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, 0, instanceCount);
+            CurrentContext.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, instanceCount);
         }
 
         /// <summary>
@@ -998,27 +760,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Draw geometry with data from multiple bound vertex streams at different frequencies.</remarks>
         public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (this.GraphicsProfile == GraphicsProfile.Reach)
-                throw new NotSupportedException("Reach profile does not support Instancing.");
-
-            if (_mainContext.Strategy._vertexBuffers.Count == 0)
-                throw new InvalidOperationException("Vertex buffer must be set before calling DrawInstancedPrimitives.");
-
-            if (_mainContext.Strategy._indexBuffer == null)
-                throw new InvalidOperationException("Index buffer must be set before calling DrawInstancedPrimitives.");
-
-            if (primitiveCount <= 0)
-                throw new ArgumentOutOfRangeException("primitiveCount");
-
-            if (_mainContext.Strategy._vertexShader == null)
-                throw new InvalidOperationException("Vertex shader must be set before calling DrawInstancedPrimitives.");
-            if (_mainContext.Strategy._pixelShader == null)
-                throw new InvalidOperationException("Pixel shader must be set before calling DrawInstancedPrimitives.");
-
-            _mainContext.Strategy.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
-
-            unchecked { CurrentContext._graphicsMetrics._drawCount++; }
-            unchecked { CurrentContext._graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
+            CurrentContext.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
         }
 
         /// <summary>
