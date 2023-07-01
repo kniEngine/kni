@@ -213,11 +213,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                if (Indices != null)
-                {
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices._ibo);
-                    GraphicsExtensions.CheckGLError();
-                }
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices._ibo);
+                GraphicsExtensions.CheckGLError();
                 _indexBufferDirty = false;
             }
         }
@@ -503,7 +500,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
             PlatformApplyState();
-            PlatformApplyIndexBuffer();
+            //PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
