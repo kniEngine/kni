@@ -175,11 +175,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_indexBufferDirty)
             {
-                if (_indexBuffer != null)
+                if (Indices != null)
                 {
                     this.D3dContext.InputAssembler.SetIndexBuffer(
-                        _indexBuffer.Buffer,
-                        _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits ?
+                        Indices.Buffer,
+                        Indices.IndexElementSize == IndexElementSize.SixteenBits ?
                             SharpDX.DXGI.Format.R16_UInt : SharpDX.DXGI.Format.R32_UInt,
                         0);
                 }

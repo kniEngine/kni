@@ -213,9 +213,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                if (_indexBuffer != null)
+                if (Indices != null)
                 {
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer._ibo);
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices._ibo);
                     GraphicsExtensions.CheckGLError();
                 }
                 _indexBufferDirty = false;
@@ -527,7 +527,7 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
 
-            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
             var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
             int indexElementSize = shortIndices ? 2 : 4;
@@ -555,7 +555,7 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyShaders();
             PlatformApplyShaderBuffers();
 
-            bool shortIndices = _indexBuffer.IndexElementSize == IndexElementSize.SixteenBits;
+            bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
             var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
             int indexElementSize = shortIndices ? 2 : 4;
