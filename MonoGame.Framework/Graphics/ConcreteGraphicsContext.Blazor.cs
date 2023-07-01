@@ -187,11 +187,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                if (Indices != null)
-                {
-                    GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, Indices.ibo);
-                    GraphicsExtensions.CheckGLError();
-                }
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, Indices.ibo);
+               GraphicsExtensions.CheckGLError();
                 _indexBufferDirty = false;
             }
         }
