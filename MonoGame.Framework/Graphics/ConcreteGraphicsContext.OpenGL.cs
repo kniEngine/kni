@@ -391,7 +391,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!_attribsDirty &&
                     slot < _activeBufferBindingInfosCount &&
                     _bufferBindingInfos[slot].VertexOffset == offset &&
-                    ReferenceEquals(_bufferBindingInfos, attrInfo) &&
+                    ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
                     _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
                     _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer._vbo)
                     continue;
