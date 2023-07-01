@@ -338,7 +338,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (Strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawIndexedPrimitives.");
 
-            if (Strategy._indexBuffer == null)
+            if (Strategy.Indices == null)
                 throw new InvalidOperationException("Index buffer must be set before calling DrawIndexedPrimitives.");
 
             if (this._device.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
@@ -743,7 +743,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (Strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawInstancedPrimitives.");
 
-            if (Strategy._indexBuffer == null)
+            if (Strategy.Indices == null)
                 throw new InvalidOperationException("Index buffer must be set before calling DrawInstancedPrimitives.");
 
             if (primitiveCount <= 0)

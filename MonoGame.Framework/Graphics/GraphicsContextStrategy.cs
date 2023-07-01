@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal bool _pixelShaderDirty;
 
         // buffers
-        internal IndexBuffer _indexBuffer;
+        private IndexBuffer _indexBuffer;
         internal VertexBufferBindings _vertexBuffers;
 
         // buffers dirty flags
@@ -244,11 +244,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _indexBuffer; }
             set
             {
-                if (_indexBuffer == value)
-                    return;
-
-                _indexBuffer = value;
-                _indexBufferDirty = true;
+                if (_indexBuffer != value)
+                {
+                    _indexBuffer = value;
+                    _indexBufferDirty = true;
+                }
             }
         }
 
