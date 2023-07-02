@@ -190,27 +190,24 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexBuffersDirty)
             {
-                if (_vertexBuffers.Count > 0)
+                for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
-                    for (int slot = 0; slot < _vertexBuffers.Count; slot++)
-                    {
-                        VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
-                        VertexBuffer vertexBuffer = vertexBufferBinding.VertexBuffer;
-                        VertexDeclaration vertexDeclaration = vertexBuffer.VertexDeclaration;
-                        int vertexStride = vertexDeclaration.VertexStride;
-                        int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
-                        this.D3dContext.InputAssembler.SetVertexBuffers(
-                            slot, new D3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
-                    }
-                    _vertexBufferSlotsUsed = _vertexBuffers.Count;
+                    VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
+                    VertexBuffer vertexBuffer = vertexBufferBinding.VertexBuffer;
+                    VertexDeclaration vertexDeclaration = vertexBuffer.VertexDeclaration;
+                    int vertexStride = vertexDeclaration.VertexStride;
+                    int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
+                    this.D3dContext.InputAssembler.SetVertexBuffers(
+                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
                 }
-                else
-                {
-                    for (int slot = 0; slot < _vertexBufferSlotsUsed; slot++)
-                        this.D3dContext.InputAssembler.SetVertexBuffers(slot, new D3D11.VertexBufferBinding());
 
-                    _vertexBufferSlotsUsed = 0;
-                }
+                // TODO: do we need to reset the previously set slots?
+                //for (int slot = _vertexBuffers.Count; slot < _vertexBufferSlotsUsed; slot++)
+                //{
+                //    this.D3dContext.InputAssembler.SetVertexBuffers(slot, new D3D11.VertexBufferBinding());
+                //}
+
+                _vertexBufferSlotsUsed = _vertexBuffers.Count;
             }
         }
 
