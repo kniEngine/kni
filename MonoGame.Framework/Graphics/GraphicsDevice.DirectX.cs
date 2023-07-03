@@ -905,30 +905,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-#if WINDOWS_UAP
-        internal void UAP_ResetRenderTargets()
-        {
-            ((ConcreteGraphicsContext)_mainContext.Strategy).PlatformApplyViewport();
-
-            if (CurrentContext != null)
-            {
-                lock (CurrentD3DContext)
-                    CurrentD3DContext.OutputMerger.SetTargets(((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets);
-            }
-
-            _mainContext.Strategy.Textures.Dirty();
-            _mainContext.Strategy.SamplerStates.Dirty();
-            _mainContext.Strategy._depthStencilStateDirty = true;
-            _mainContext.Strategy._blendStateDirty = true;
-            _mainContext.Strategy._indexBufferDirty = true;
-            _mainContext.Strategy._vertexBuffersDirty = true;
-            _mainContext.Strategy._pixelShaderDirty = true;
-            _mainContext.Strategy._vertexShaderDirty = true;
-            _mainContext.Strategy._rasterizerStateDirty = true;
-            _mainContext.Strategy._scissorRectangleDirty = true;
-        }
-#endif
-
         private void PlatformGetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int count) where T : struct
         {
             // TODO share code with Texture2D.GetData and do pooling for staging textures
