@@ -359,11 +359,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     ModeDescription =
                     {
                         Format = format,
-#if WINDOWS_UAP
-                        Scaling = DXGI.DisplayModeScaling.Stretched,
-#else
                         Scaling = DXGI.DisplayModeScaling.Unspecified,
-#endif
                         Width = PresentationParameters.BackBufferWidth,
                         Height = PresentationParameters.BackBufferHeight,
                     },
