@@ -965,7 +965,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                 {
                                     Rectangle r = rect.Value;
                                     CurrentD3DContext.CopySubresourceRegion(noMsTex, 0,
-                                        new ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex,
+                                        new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex,
                                         0);
                                 }
                                 else
@@ -978,7 +978,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             {
                                 Rectangle r = rect.Value;
                                 CurrentD3DContext.CopySubresourceRegion(backBufferTexture, 0,
-                                    new ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex, 0);
+                                    new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex, 0);
                             }
                             else
                                 CurrentD3DContext.CopyResource(backBufferTexture, stagingTex);
@@ -988,7 +988,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         DataStream stream = null;
                         try
                         {
-                            DataBox databox = CurrentD3DContext.MapSubresource(stagingTex, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None, out stream);
+                            DataBox databox = CurrentD3DContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                             int elementsInRow, rows;
                             if (rect.HasValue)
