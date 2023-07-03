@@ -317,14 +317,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
             }
 
-            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            var multisampleDesc = GetSupportedSampleDescription(
+            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
 
-            var swapChainFlags = SwapChainFlags.None;
+            DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
-            swapChainFlags = SwapChainFlags.AllowModeSwitch;
+            swapChainFlags = DXGI.SwapChainFlags.AllowModeSwitch;
 
             // If the swap chain already exists... update it.
             if (_swapChain != null
@@ -343,7 +343,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Otherwise, create a new swap chain.
             else
             {
-                var wasFullScreen = false;
+                bool wasFullScreen = false;
                 // Dispose of old swap chain if exists
                 if (_swapChain != null)
                 {
@@ -354,15 +354,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 // SwapChain description
-                var desc = new SharpDX.DXGI.SwapChainDescription()
+                DXGI.SwapChainDescription desc = new DXGI.SwapChainDescription()
                 {
                     ModeDescription =
                     {
                         Format = format,
 #if WINDOWS_UAP
-                        Scaling = DisplayModeScaling.Stretched,
+                        Scaling = DXGI.DisplayModeScaling.Stretched,
 #else
-                        Scaling = DisplayModeScaling.Unspecified,
+                        Scaling = DXGI.DisplayModeScaling.Unspecified,
 #endif
                         Width = PresentationParameters.BackBufferWidth,
                         Height = PresentationParameters.BackBufferHeight,
@@ -372,7 +372,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     IsWindowed = true,
 
                     SampleDescription = multisampleDesc,
-                    Usage = SharpDX.DXGI.Usage.RenderTargetOutput,
+                    Usage = DXGI.Usage.RenderTargetOutput,
                     BufferCount = 2,
                     SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
                     Flags = swapChainFlags
@@ -382,13 +382,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
                 // Creates the swap chain 
-                using (var dxgiDevice = D3DDevice.QueryInterface<SharpDX.DXGI.Device1>())
-                using (var dxgiAdapter = dxgiDevice.Adapter)
-                using (var dxgiFactory = dxgiAdapter.GetParent<SharpDX.DXGI.Factory1>())
+                using (DXGI.Device1 dxgiDevice = D3DDevice.QueryInterface<DXGI.Device1>())
+                using (DXGI.Adapter dxgiAdapter = dxgiDevice.Adapter)
+                using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
                 {
-                    _swapChain = new SwapChain(dxgiFactory, dxgiDevice, desc);
+                    _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
                     RefreshAdapter();
-                    dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, WindowAssociationFlags.IgnoreAll);
+                    dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, DXGI.WindowAssociationFlags.IgnoreAll);
                     // To reduce latency, ensure that DXGI does not queue more than one frame at a time.
                     // Docs: https://msdn.microsoft.com/en-us/library/windows/desktop/ff471334(v=vs.85).aspx
                     dxgiDevice.MaximumFrameLatency = 1;
@@ -427,12 +427,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            var format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            var multisampleDesc = GetSupportedSampleDescription(
+            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
 
-            var swapChainFlags = SwapChainFlags.None;
+            DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
             _isTearingSupported = IsTearingSupported();
             if (_isTearingSupported)
