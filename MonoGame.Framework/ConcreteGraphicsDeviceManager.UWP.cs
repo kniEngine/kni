@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
 using Windows.UI.Xaml.Controls;
 
 namespace Microsoft.Xna.Platform
@@ -203,13 +204,13 @@ namespace Microsoft.Xna.Platform
         {
             //return base.BeginDraw();
 
-            var device = this.GraphicsDevice;
+            GraphicsDevice device = this.GraphicsDevice;
             if (device != null)
             {
                 // For a UAP app we need to re-apply the
                 // render target before every draw.
                 // I guess the OS changes it and doesn't restore it?
-                device.UAP_ResetRenderTargets();
+                ((ConcreteGraphicsContext)device.CurrentContext.Strategy).UAP_ResetRenderTargets();
             }
 
             return true;

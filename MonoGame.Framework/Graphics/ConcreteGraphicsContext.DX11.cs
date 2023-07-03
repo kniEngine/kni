@@ -569,5 +569,27 @@ namespace Microsoft.Xna.Platform.Graphics
             return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
         }
 
+
+#if WINDOWS_UAP
+        internal void UAP_ResetRenderTargets()
+        {
+            PlatformApplyViewport();
+                        
+            lock (this.D3dContext)
+                    this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+
+            this.Textures.Dirty();
+            this.SamplerStates.Dirty();
+            _depthStencilStateDirty = true;
+            _blendStateDirty = true;
+            _indexBufferDirty = true;
+            _vertexBuffersDirty = true;
+            _pixelShaderDirty = true;
+            _vertexShaderDirty = true;
+            _rasterizerStateDirty = true;
+            _scissorRectangleDirty = true;
+        }
+#endif
+
     }
 }
