@@ -153,19 +153,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             lock (this.D3dContext)
             {
-                if (this.D3dContext != null)
+                var viewport = new RawViewportF
                 {
-                    var viewport = new RawViewportF
-                    {
-                        X = _viewport.X,
-                        Y = _viewport.Y,
-                        Width = _viewport.Width,
-                        Height = _viewport.Height,
-                        MinDepth = _viewport.MinDepth,
-                        MaxDepth = _viewport.MaxDepth
-                    };
-                    this.D3dContext.Rasterizer.SetViewport(viewport);
-                }
+                    X = _viewport.X,
+                    Y = _viewport.Y,
+                    Width = (float)_viewport.Width,
+                    Height = (float)_viewport.Height,
+                    MinDepth = _viewport.MinDepth,
+                    MaxDepth = _viewport.MaxDepth
+                };
+                this.D3dContext.Rasterizer.SetViewport(viewport);
             }
         }
 
@@ -368,7 +365,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 startVertex = 0;
             }
 
-            SetVertexBuffer(buffer);
+            SetVertexBuffer(buffer, 0);
 
             return startVertex;
         }
@@ -582,6 +579,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this.SamplerStates.Dirty();
             _depthStencilStateDirty = true;
             _blendStateDirty = true;
+            _blendFactorDirty = true;
             _indexBufferDirty = true;
             _vertexBuffersDirty = true;
             _pixelShaderDirty = true;

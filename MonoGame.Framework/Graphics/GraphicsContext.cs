@@ -134,17 +134,56 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
-            Strategy.SetVertexBuffer(vertexBuffer);
+            if (vertexBuffer != null)
+            {
+                Strategy.SetVertexBuffer(vertexBuffer, 0);
+            }
+            else
+            {
+                Strategy.ClearVertexBuffers();
+            }
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
-            Strategy.SetVertexBuffer(vertexBuffer, vertexOffset);
+            if (vertexBuffer != null)
+            {
+                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
+                {
+                    Strategy.SetVertexBuffer(vertexBuffer, vertexOffset);
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
+            }
+            else
+            {
+                if (vertexOffset == 0)
+                {
+                    Strategy.ClearVertexBuffers();
+                }
+                else
+                    throw new ArgumentOutOfRangeException("vertexOffset");
+            }
         }
 
         public void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
         {
-            Strategy.SetVertexBuffers(vertexBuffers);
+            if (vertexBuffers != null && vertexBuffers.Length > 0)
+            {
+                if (vertexBuffers.Length <= _device.Capabilities.MaxVertexBufferSlots)
+                {
+                    Strategy.SetVertexBuffers(vertexBuffers);
+                }
+                else
+                {
+                    var message = string.Format("Max number of vertex buffers is {0}.", _device.Capabilities.MaxVertexBufferSlots);
+                    throw new ArgumentOutOfRangeException("vertexBuffers", message);
+                }
+            }
+            else
+            {
+                Strategy.ClearVertexBuffers();
+            }
         }
 
         internal Shader VertexShader

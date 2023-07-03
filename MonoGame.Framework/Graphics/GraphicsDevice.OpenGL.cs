@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using MonoGame.OpenGL;
@@ -391,9 +392,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._blendFactorDirty = true;
             _mainContext.Strategy._depthStencilStateDirty = true;
             _mainContext.Strategy._rasterizerStateDirty = true;
-            BlendState = BlendState.Opaque;
-            DepthStencilState = DepthStencilState.Default;
-            RasterizerState = RasterizerState.CullCounterClockwise;
+            _mainContext.Strategy.BlendState = BlendState.Opaque;
+            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
+            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Clear the texture and sampler collections forcing
             // the state to be reapplied.
@@ -415,7 +416,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _mainContext.Strategy._scissorRectangleDirty = true;
-            ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
+            _mainContext.Strategy.ScissorRectangle = Viewport.Bounds;
 
             // Set the default render target.
             _mainContext.ApplyRenderTargets(null);

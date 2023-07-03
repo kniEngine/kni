@@ -220,25 +220,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._samplerStates = new SamplerStateCollection(this, _mainContext, ShaderStage.Pixel, Capabilities.MaxTextureSlots);
             _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _mainContext, ShaderStage.Vertex, Capabilities.MaxVertexTextureSlots);
 
-            _mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
-            _mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
-            _mainContext.Strategy._blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
-            _mainContext.Strategy._blendStateOpaque = BlendState.Opaque.Clone();
-
-            _mainContext.Strategy.BlendState = BlendState.Opaque;
-
-            _mainContext.Strategy._depthStencilStateDefault = DepthStencilState.Default.Clone();
-            _mainContext.Strategy._depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
-            _mainContext.Strategy._depthStencilStateNone = DepthStencilState.None.Clone();
-
-            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
-
-            _mainContext.Strategy._rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
-            _mainContext.Strategy._rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
-            _mainContext.Strategy._rasterizerStateCullNone = RasterizerState.CullNone.Clone();
-
-            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
-
             // Setup end
 
             PlatformInitialize();
@@ -265,7 +246,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set the default scissor rect.
             _mainContext.Strategy._scissorRectangleDirty = true;
-            _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
+            _mainContext.Strategy.ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
             _mainContext.ApplyRenderTargets(null);
@@ -385,24 +366,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Clear the effect cache.
                     EffectCache.Clear();
 
-                    _mainContext.Strategy._blendState = null;
-                    _mainContext.Strategy._actualBlendState = null;
-                    _mainContext.Strategy._blendStateAdditive.Dispose();
-                    _mainContext.Strategy._blendStateAlphaBlend.Dispose();
-                    _mainContext.Strategy._blendStateNonPremultiplied.Dispose();
-                    _mainContext.Strategy._blendStateOpaque.Dispose();
-
-                    _mainContext.Strategy._depthStencilState = null;
-                    _mainContext.Strategy._actualDepthStencilState = null;
-                    _mainContext.Strategy._depthStencilStateDefault.Dispose();
-                    _mainContext.Strategy._depthStencilStateDepthRead.Dispose();
-                    _mainContext.Strategy._depthStencilStateNone.Dispose();
-
-                    _mainContext.Strategy._rasterizerState = null;
-                    _mainContext.Strategy._actualRasterizerState = null;
-                    _mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
-                    _mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
-                    _mainContext.Strategy._rasterizerStateCullNone.Dispose();
+                    _mainContext.Strategy.DisposeBlendState();
+                    _mainContext.Strategy.DisposeDepthStencilState();
+                    _mainContext.Strategy.DisposeRasterizerState();
 
                     PlatformDispose();
                 }

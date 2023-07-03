@@ -19,15 +19,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool _isDisposed = false;
 
-        internal Rectangle _scissorRectangle;
+        protected Rectangle _scissorRectangle;
         internal bool _scissorRectangleDirty;
         internal Viewport _viewport;
 
         // states
-        internal BlendState _blendState;
-        internal Color _blendFactor = Color.White;
-        internal DepthStencilState _depthStencilState;
-        internal RasterizerState _rasterizerState;
+        private BlendState _blendState;
+        private Color _blendFactor = Color.White;
+        private DepthStencilState _depthStencilState;
+        private RasterizerState _rasterizerState;
         internal SamplerStateCollection _samplerStates;
         internal SamplerStateCollection _vertexSamplerStates;
 
@@ -43,16 +43,16 @@ namespace Microsoft.Xna.Platform.Graphics
         internal RasterizerState _actualRasterizerState;
 
         // predefined states
-        internal BlendState _blendStateAdditive;
-        internal BlendState _blendStateAlphaBlend;
-        internal BlendState _blendStateNonPremultiplied;
-        internal BlendState _blendStateOpaque;
-        internal DepthStencilState _depthStencilStateDefault;
-        internal DepthStencilState _depthStencilStateDepthRead;
-        internal DepthStencilState _depthStencilStateNone;
-        internal RasterizerState _rasterizerStateCullClockwise;
-        internal RasterizerState _rasterizerStateCullCounterClockwise;
-        internal RasterizerState _rasterizerStateCullNone;
+        private BlendState _blendStateAdditive;
+        private BlendState _blendStateAlphaBlend;
+        private BlendState _blendStateNonPremultiplied;
+        private BlendState _blendStateOpaque;
+        private DepthStencilState _depthStencilStateDefault;
+        private DepthStencilState _depthStencilStateDepthRead;
+        private DepthStencilState _depthStencilStateNone;
+        private RasterizerState _rasterizerStateCullClockwise;
+        private RasterizerState _rasterizerStateCullCounterClockwise;
+        private RasterizerState _rasterizerStateCullNone;
 
         // shaders
         private Shader _vertexShader;
@@ -288,62 +288,39 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Device = device;
             
+            _blendStateAdditive = BlendState.Additive.Clone();
+            _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
+            _blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
+            _blendStateOpaque = BlendState.Opaque.Clone();
+
+            _depthStencilStateDefault = DepthStencilState.Default.Clone();
+            _depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
+            _depthStencilStateNone = DepthStencilState.None.Clone();
+
+            _rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
+            _rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
+            _rasterizerStateCullNone = RasterizerState.CullNone.Clone();
+
+            BlendState = BlendState.Opaque;
+            DepthStencilState = DepthStencilState.Default;
+            RasterizerState = RasterizerState.CullCounterClockwise;
         }
 
-        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
-        {
-            if (vertexBuffer != null)
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, 0);
-            }
-            else
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Clear();
-            }
-        }
-
-        public abstract void Clear(ClearOptions options, Vector4 color, float depth, int stencil);
+        public abstract void Clear(ClearOptions options, Vector4 vector4, float maxDepth, int v);
 
         internal void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
-            if (vertexBuffer != null)
-            {
-                if (0 >= vertexOffset && vertexOffset < vertexBuffer.VertexCount)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, vertexOffset);
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
-            else
-            {
-                if (vertexOffset == 0)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Clear();
-                }
-                else
-                    throw new ArgumentOutOfRangeException("vertexOffset");
-            }
+            _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffer, vertexOffset);
         }
 
         internal void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
         {
-            if (vertexBuffers != null && vertexBuffers.Length > 0)
-            {
-                if (vertexBuffers.Length <= this.Device.Capabilities.MaxVertexBufferSlots)
-                {
-                    _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
-                }
-                else
-                {
-                    var message = string.Format("Max number of vertex buffers is {0}.", this.Device.Capabilities.MaxVertexBufferSlots);
-                    throw new ArgumentOutOfRangeException("vertexBuffers", message);
-                }
-            }
-            else
-            {
-                _vertexBuffersDirty |= _vertexBuffers.Clear();
-            }
+            _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
+        }
+
+        internal void ClearVertexBuffers()
+        {
+            _vertexBuffersDirty |= _vertexBuffers.Clear();
         }
 
         internal void GetRenderTargets(RenderTargetBinding[] bindings)
@@ -351,6 +328,34 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(bindings.Length == _currentRenderTargetCount, "Invalid bindings array length!");
 
             Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
+        }
+
+        internal void DisposeBlendState()
+        {
+            _blendState = null;
+            _actualBlendState = null;
+            _blendStateAdditive.Dispose();
+            _blendStateAlphaBlend.Dispose();
+            _blendStateNonPremultiplied.Dispose();
+            _blendStateOpaque.Dispose();
+        }
+
+        internal void DisposeDepthStencilState()
+        {
+            _depthStencilState = null;
+            _actualDepthStencilState = null;
+            _depthStencilStateDefault.Dispose();
+            _depthStencilStateDepthRead.Dispose();
+            _depthStencilStateNone.Dispose();
+        }
+
+        internal void DisposeRasterizerState()
+        {
+            _rasterizerState = null;
+            _actualRasterizerState = null;
+            _rasterizerStateCullClockwise.Dispose();
+            _rasterizerStateCullCounterClockwise.Dispose();
+            _rasterizerStateCullNone.Dispose();
         }
 
         internal static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)

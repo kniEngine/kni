@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var prevScissorRect = ScissorRectangle;
             var prevDepthStencilState = DepthStencilState;
             var prevBlendState = BlendState;
-            ScissorRectangle = _viewport.Bounds;
+            ScissorRectangle = Viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
