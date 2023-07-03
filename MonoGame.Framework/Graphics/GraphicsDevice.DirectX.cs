@@ -433,7 +433,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _isTearingSupported = IsTearingSupported();
             if (_isTearingSupported)
             {
-                swapChainFlags = SwapChainFlags.AllowTearing;
+                swapChainFlags = DXGI.SwapChainFlags.AllowTearing;
             }
 
             // If the swap chain already exists... update it.
