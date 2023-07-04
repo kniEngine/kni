@@ -21,15 +21,15 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void ClearTargets(GraphicsContextStrategy context)
+        internal void ClearTargets()
         {
             switch (_stage)
             {
                 case ShaderStage.Pixel:
-                    ClearTargets(context._currentRenderTargetBindings, ((ConcreteGraphicsContext)context).D3dContext.PixelShader);
+                    ClearTargets(_context.Strategy._currentRenderTargetBindings, ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader);
                     break;
                 case ShaderStage.Vertex:
-                    ClearTargets(context._currentRenderTargetBindings, ((ConcreteGraphicsContext)context).D3dContext.VertexShader);
+                    ClearTargets(_context.Strategy._currentRenderTargetBindings, ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader);
                     break;
 
                 default: throw new InvalidOperationException(_stage.ToString());
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void PlatformApply(GraphicsContextStrategy context)
+        internal void PlatformApply()
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -75,8 +75,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
-                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.VertexShader; break;
+                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
+                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader; break;
                     default: throw new InvalidOperationException();
                 }
 
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
-                    unchecked { _device.CurrentContext._graphicsMetrics._textureCount++; }
+                    unchecked { _context._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);

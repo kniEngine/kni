@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _targets[i] = 0;
         }
 
-        internal void PlatformApply(GraphicsContextStrategy context)
+        internal void PlatformApply()
         {
             for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BindTexture(tex._glTarget, tex._glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    unchecked { _device.CurrentContext._graphicsMetrics._textureCount++; }
+                    unchecked { _context._graphicsMetrics._textureCount++; }
                 }
 
                 // clear texture bit

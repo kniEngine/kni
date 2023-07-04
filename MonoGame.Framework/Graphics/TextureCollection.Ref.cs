@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal void PlatformApply(GraphicsContextStrategy context)
+        internal void PlatformApply()
         {
             throw new PlatformNotSupportedException();
         }

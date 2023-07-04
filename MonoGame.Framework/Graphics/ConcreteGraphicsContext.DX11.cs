@@ -242,10 +242,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply(this);
-            this.VertexSamplerStates.PlatformApply(this);
-            this.Textures.PlatformApply(this);
-            this.SamplerStates.PlatformApply(this);
+            this.VertexTextures.PlatformApply();
+            this.VertexSamplerStates.PlatformApply();
+            this.Textures.PlatformApply();
+            this.SamplerStates.PlatformApply();
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
@@ -547,8 +547,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                this.VertexTextures.ClearTargets(this);
-                this.Textures.ClearTargets(this);
+                this.VertexTextures.ClearTargets();
+                this.Textures.ClearTargets();
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)

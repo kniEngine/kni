@@ -249,10 +249,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply(this);
-            this.VertexSamplerStates.PlatformApply(this);
-            this.Textures.PlatformApply(this);
-            this.SamplerStates.PlatformApply(this);
+            this.VertexTextures.PlatformApply();
+            this.VertexSamplerStates.PlatformApply();
+            this.Textures.PlatformApply();
+            this.SamplerStates.PlatformApply();
         }
 
         private int GetCurrentShaderProgramHash2()

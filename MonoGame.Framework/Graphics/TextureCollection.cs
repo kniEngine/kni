@@ -12,19 +12,21 @@ namespace Microsoft.Xna.Framework.Graphics
     public sealed partial class TextureCollection
     {
         private readonly GraphicsDevice _device;
+        private readonly GraphicsContext _context;
         private readonly ShaderStage _stage = ShaderStage.Pixel;
 
         private readonly Texture[] _textures;
         private uint _dirty;
 
 
-        internal TextureCollection(GraphicsDevice device, ShaderStage stage, int capacity)
+        internal TextureCollection(GraphicsDevice device, GraphicsContext context, ShaderStage stage, int capacity)
         {
             // hard limit of 32 because of _dirty flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
             
             _device = device;
+            _context = context;
             _stage = stage;
 
             _textures = new Texture[capacity];

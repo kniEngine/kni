@@ -27,12 +27,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void PlatformApply(GraphicsContextStrategy context)
+        internal void PlatformApply()
         {
             for (int i = 0; i < _actualSamplers.Length; i++)
             {
                 SamplerState sampler = _actualSamplers[i];
-                Texture texture = context.Textures[i];
+                Texture texture = _context.Strategy.Textures[i];
 
                 if (sampler != null && texture != null && sampler != texture.glLastSamplerState)
                 {

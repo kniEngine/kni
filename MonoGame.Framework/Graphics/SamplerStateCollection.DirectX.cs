@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _d3dDirty |= (((uint)1) << i);
         }
 
-        internal void PlatformApply(GraphicsContextStrategy context)
+        internal void PlatformApply()
         {
             for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
             {
@@ -46,8 +46,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 SharpDX.Direct3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
-                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)context).D3dContext.VertexShader; break;
+                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
+                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader; break;
                     default: throw new InvalidOperationException();
                 }
 
