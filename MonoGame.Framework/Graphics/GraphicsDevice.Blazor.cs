@@ -70,8 +70,8 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
 
             // TODO: check for FramebufferObjectARB
-            //if (graphicsDevice.Capabilities.SupportsFramebufferObjectARB
-            //|| graphicsDevice.Capabilities.SupportsFramebufferObjectEXT)
+            //if (this.Capabilities.SupportsFramebufferObjectARB
+            //||  this.Capabilities.SupportsFramebufferObjectEXT)
             if (true)
             {
                 this._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
@@ -200,9 +200,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var bindingsToDelete = new List<RenderTargetBinding[]>();
-                foreach (var bindings in ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Keys)
+                foreach (RenderTargetBinding[] bindings in ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Keys)
                 {
-                    foreach (var binding in bindings)
+                    foreach (RenderTargetBinding binding in bindings)
                     {
                         if (binding.RenderTarget == renderTarget)
                         {
@@ -250,7 +250,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void OnPresentationChanged()
         {
-            CurrentContext.ApplyRenderTargets(null);
+            _mainContext.ApplyRenderTargets(null);
         }
 
     }

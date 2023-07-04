@@ -71,15 +71,15 @@ namespace Microsoft.Xna.Platform.Graphics
             // So overwrite these states with what is needed to perform
             // the clear correctly and restore it afterwards.
             //
-		    var prevScissorRect = ScissorRectangle;
-		    var prevDepthStencilState = DepthStencilState;
+            var prevScissorRect = ScissorRectangle;
+            var prevDepthStencilState = DepthStencilState;
             var prevBlendState = BlendState;
             ScissorRectangle = _viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
             DepthStencilState = _clearDepthStencilState;
-		    BlendState = BlendState.Opaque;
+            BlendState = BlendState.Opaque;
             PlatformApplyState();
 
             WebGLBufferBits bb = default(WebGLBufferBits);
@@ -106,9 +106,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // Restore the previous render state.
-		    ScissorRectangle = prevScissorRect;
-		    DepthStencilState = prevDepthStencilState;
-		    BlendState = prevBlendState;
+            ScissorRectangle = prevScissorRect;
+            DepthStencilState = prevDepthStencilState;
+            BlendState = prevBlendState;
         }
 
         private void PlatformApplyState()
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_indexBufferDirty)
             {
                 GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, Indices.ibo);
-               GraphicsExtensions.CheckGLError();
+                GraphicsExtensions.CheckGLError();
                 _indexBufferDirty = false;
             }
         }
@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexBuffersDirty = true;
 
             //set vertex data
-            GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
+            GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
@@ -599,7 +599,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexBuffersDirty = true;
 
             //set vertex data
-            GL.BufferSubData(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
+            GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
             GraphicsExtensions.CheckGLError();
 
             // create and bind index buffer
@@ -615,7 +615,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _indexBufferDirty = true;
 
             // set index buffer
-            GL.BufferSubData(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
+            GL.BufferSubData<short>(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.

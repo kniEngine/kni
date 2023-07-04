@@ -21,10 +21,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).GlContext; }
         }
-        internal ConcreteGraphicsContext CurrentConcreteContext
-        {
-            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy); }
-        }
 #endif
 
 
@@ -122,9 +118,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
@@ -282,9 +278,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 var bindingsToDelete = new List<RenderTargetBinding[]>();
-                foreach (var bindings in ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Keys)
+                foreach (RenderTargetBinding[] bindings in ((ConcreteGraphicsContext)_mainContext.Strategy)._glFramebuffers.Keys)
                 {
-                    foreach (var binding in bindings)
+                    foreach (RenderTargetBinding binding in bindings)
                     {
                         if (binding.RenderTarget == renderTarget)
                         {
@@ -351,12 +347,12 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            CurrentConcreteContext.MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            ((ConcreteGraphicsContext)_mainContext.Strategy).MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(PresentationParameters.PresentationInterval);
             Sdl.GL.SetSwapInterval(swapInterval);
 #endif
 
-            CurrentContext.ApplyRenderTargets(null);
+            _mainContext.ApplyRenderTargets(null);
         }
 
         internal void Android_OnDeviceResetting()
@@ -422,7 +418,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            CurrentContext.ApplyRenderTargets(null);
+            _mainContext.ApplyRenderTargets(null);
         }
 
 #if DESKTOPGL

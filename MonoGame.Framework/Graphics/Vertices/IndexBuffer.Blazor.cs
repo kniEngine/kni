@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         _isDynamic ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             }
 
-            GL.BufferSubData(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
+            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
             GraphicsExtensions.CheckGLError();
         }
 
