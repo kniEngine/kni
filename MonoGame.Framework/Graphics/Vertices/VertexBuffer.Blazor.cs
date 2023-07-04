@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
             {
                 // there are no gaps so we can copy in one go
-                GL.BufferSubData(WebGLBufferType.ARRAY, offsetInBytes, data, elementCount);
+                GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, elementCount);
                 GraphicsExtensions.CheckGLError();
             }
             else

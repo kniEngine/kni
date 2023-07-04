@@ -547,8 +547,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                VertexTextures.ClearTargets(this);
-                Textures.ClearTargets(this);
+                this.VertexTextures.ClearTargets(this);
+                this.Textures.ClearTargets(this);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)

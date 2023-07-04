@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformInitialize()
         {
             throw new PlatformNotSupportedException();
-        }        
+        }
 
         private void PlatformDispose()
         {
