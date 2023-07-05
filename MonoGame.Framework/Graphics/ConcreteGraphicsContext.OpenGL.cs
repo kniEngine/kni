@@ -891,6 +891,39 @@ namespace Microsoft.Xna.Platform.Graphics
             return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
+        internal void PlatformUnbindRenderTarget(IRenderTarget renderTarget)
+        {
+            var bindingsToDelete = new List<RenderTargetBinding[]>();
+            foreach (RenderTargetBinding[] bindings in _glFramebuffers.Keys)
+            {
+                foreach (RenderTargetBinding binding in bindings)
+                {
+                    if (binding.RenderTarget == renderTarget)
+                    {
+                        bindingsToDelete.Add(bindings);
+                        break;
+                    }
+                }
+            }
+
+            foreach (RenderTargetBinding[] bindings in bindingsToDelete)
+            {
+                int fbo = 0;
+                if (_glFramebuffers.TryGetValue(bindings, out fbo))
+                {
+                    GL.DeleteFramebuffer(fbo);
+                    GraphicsExtensions.CheckGLError();
+                    _glFramebuffers.Remove(bindings);
+                }
+                if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
+                {
+                    GL.DeleteFramebuffer(fbo);
+                    GraphicsExtensions.CheckGLError();
+                    _glResolveFramebuffers.Remove(bindings);
+                }
+            }
+        }
+
         // Holds information for caching
         internal class BufferBindingInfo
         {

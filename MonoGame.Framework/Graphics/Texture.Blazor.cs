@@ -4,12 +4,15 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
+        IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
+
         internal WebGLTexture glTexture;
         internal WebGLTextureTarget glTarget;
         internal WebGLInternalFormat glInternalFormat;
@@ -101,6 +104,108 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new PlatformNotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
             }
         }
+
+        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        {
+            WebGLTexture color = null;
+            WebGLRenderbuffer depth = null;
+            WebGLRenderbuffer stencil = null;
+
+            if (preferredMultiSampleCount > 0 && graphicsDevice._supportsBlitFramebuffer)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (preferredDepthFormat != DepthFormat.None)
+            {
+                WebGLRenderbufferInternalFormat depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                WebGLRenderbufferInternalFormat stencilInternalFormat = (WebGLRenderbufferInternalFormat)0;
+                switch (preferredDepthFormat)
+                {
+                    case DepthFormat.Depth16:
+                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                        break;
+                    case DepthFormat.Depth24:
+                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                        break;
+                    case DepthFormat.Depth24Stencil8:
+                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                        stencilInternalFormat = WebGLRenderbufferInternalFormat.STENCIL_INDEX8;
+                        break;
+                }
+
+                if (depthInternalFormat != 0)
+                {
+                    depth = GL.CreateRenderbuffer();
+                    GraphicsExtensions.CheckGLError();
+                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
+                    GraphicsExtensions.CheckGLError();
+                    if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                        throw new NotImplementedException();
+                    else
+                        GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                    GraphicsExtensions.CheckGLError();
+                    if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                    {
+                        stencil = depth;
+                        if (stencilInternalFormat != 0)
+                        {
+                            stencil = GL.CreateRenderbuffer();
+                            GraphicsExtensions.CheckGLError();
+                            GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
+                            GraphicsExtensions.CheckGLError();
+                            if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                                throw new NotImplementedException();
+                            else
+                                GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);
+                            GraphicsExtensions.CheckGLError();
+                        }
+                    }
+                }
+            }
+
+            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
+            if (color != null)
+                renderTargetGL.GLColorBuffer = color;
+            else
+                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
+            renderTargetGL.GLDepthBuffer = depth;
+            renderTargetGL.GLStencilBuffer = stencil;
+        }
+
+        protected void PlatformDeleteRenderTarget()
+        {
+            WebGLTexture color = null;
+            WebGLRenderbuffer depth = null;
+            WebGLRenderbuffer stencil = null;
+
+            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
+            color = renderTargetGL.GLColorBuffer;
+            depth = renderTargetGL.GLDepthBuffer;
+            stencil = renderTargetGL.GLStencilBuffer;
+            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
+
+            if (color != null)
+            {
+                if (colorIsRenderbuffer)
+                {
+                    throw new NotImplementedException();
+                }
+                if (stencil != null && stencil != depth)
+                {
+                    stencil.Dispose();
+                    GraphicsExtensions.CheckGLError();
+                }
+                if (depth != null)
+                {
+                    depth.Dispose();
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                ((ConcreteGraphicsContext)GraphicsDevice.CurrentContext.Strategy).PlatformUnbindRenderTarget((IRenderTarget)this);
+            }
+        }
+
     }
 
 }

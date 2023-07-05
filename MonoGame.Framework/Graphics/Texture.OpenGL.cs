@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -322,6 +323,142 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new NotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
             }
         }
+
+        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        {
+            int color = 0;
+            int depth = 0;
+            int stencil = 0;
+
+            if (preferredMultiSampleCount > 0 && graphicsDevice._supportsBlitFramebuffer)
+            {
+                color = GL.GenRenderbuffer();
+                GraphicsExtensions.CheckGLError();
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
+                GraphicsExtensions.CheckGLError();
+                if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                else
+                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
+                GraphicsExtensions.CheckGLError();
+            }
+
+            if (preferredDepthFormat != DepthFormat.None)
+            {
+                RenderbufferStorage depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                RenderbufferStorage stencilInternalFormat = (RenderbufferStorage)0;
+                switch (preferredDepthFormat)
+                {
+                    case DepthFormat.Depth16:
+                        depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                        break;
+#if GLES
+                    case DepthFormat.Depth24:
+                        if (Capabilities.SupportsDepth24)
+                            depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                        else if (Capabilities.SupportsDepthNonLinear)
+                            depthInternalFormat = (RenderbufferStorage)0x8E2C;
+                        else
+                            depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                        break;
+                    case DepthFormat.Depth24Stencil8:
+                        if (Capabilities.SupportsPackedDepthStencil)
+                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
+                        else
+                        {
+                            if (Capabilities.SupportsDepth24)
+                                depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                            else if (Capabilities.SupportsDepthNonLinear)
+                                depthInternalFormat = (RenderbufferStorage)0x8E2C;
+                            else
+                                depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                            stencilInternalFormat = RenderbufferStorage.StencilIndex8;
+                            break;
+                        }
+                        break;
+#else
+                    case DepthFormat.Depth24:
+                        depthInternalFormat = RenderbufferStorage.DepthComponent24;
+                        break;
+                    case DepthFormat.Depth24Stencil8:
+                        depthInternalFormat = RenderbufferStorage.Depth24Stencil8;
+                        break;
+#endif
+                }
+
+                if (depthInternalFormat != 0)
+                {
+                    depth = GL.GenRenderbuffer();
+                    GraphicsExtensions.CheckGLError();
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
+                    GraphicsExtensions.CheckGLError();
+                    if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, depthInternalFormat, width, height);
+                    else
+                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
+                    GraphicsExtensions.CheckGLError();
+                    if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                    {
+                        stencil = depth;
+                        if (stencilInternalFormat != 0)
+                        {
+                            stencil = GL.GenRenderbuffer();
+                            GraphicsExtensions.CheckGLError();
+                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
+                            GraphicsExtensions.CheckGLError();
+                            if (preferredMultiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                                GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, preferredMultiSampleCount, stencilInternalFormat, width, height);
+                            else
+                                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
+                            GraphicsExtensions.CheckGLError();
+                        }
+                    }
+                }
+            }
+
+            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
+            if (color != 0)
+                renderTargetGL.GLColorBuffer = color;
+            else
+                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
+            renderTargetGL.GLDepthBuffer = depth;
+            renderTargetGL.GLStencilBuffer = stencil;
+        }
+
+        protected void PlatformDeleteRenderTarget()
+        {
+            int color = 0;
+            int depth = 0;
+            int stencil = 0;
+
+            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
+            color = renderTargetGL.GLColorBuffer;
+            depth = renderTargetGL.GLDepthBuffer;
+            stencil = renderTargetGL.GLStencilBuffer;
+            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
+
+            if (color != 0)
+            {
+                if (colorIsRenderbuffer)
+                {
+                    GL.DeleteRenderbuffer(color);
+                    GraphicsExtensions.CheckGLError();
+                }
+                if (stencil != 0 && stencil != depth)
+                {
+                    GL.DeleteRenderbuffer(stencil);
+                    GraphicsExtensions.CheckGLError();
+                }
+                if (depth != 0)
+                {
+                    GL.DeleteRenderbuffer(depth);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                ((ConcreteGraphicsContext)GraphicsDevice.CurrentContext.Strategy).PlatformUnbindRenderTarget((IRenderTarget)this);
+            }
+        }
+
     }
 }
 
