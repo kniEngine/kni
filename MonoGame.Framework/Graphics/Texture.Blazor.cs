@@ -122,16 +122,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 WebGLRenderbufferInternalFormat stencilInternalFormat = (WebGLRenderbufferInternalFormat)0;
                 switch (preferredDepthFormat)
                 {
+                    case DepthFormat.None:
+                        break;
+
                     case DepthFormat.Depth16:
                         depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
                         break;
+
                     case DepthFormat.Depth24:
                         depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
                         break;
+
                     case DepthFormat.Depth24Stencil8:
                         depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
                         stencilInternalFormat = WebGLRenderbufferInternalFormat.STENCIL_INDEX8;
                         break;
+
+                    default:
+                        throw new InvalidOperationException("preferredDepthFormat");
                 }
 
                 if (depthInternalFormat != 0)
