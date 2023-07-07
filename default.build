@@ -113,6 +113,9 @@
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:restore" />
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
 
+      <exec program="${msbuild17}" commandline='XNA.Framework.iOS.netcore.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='XNA.Framework.iOS.netcore.sln /t:Build /p:Configuration=Release' />
+
   </target>
 
   <target name="build_android" description="Build Android">
@@ -126,6 +129,9 @@
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
         <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
       </if>
+
+      <exec program="${msbuild17}" commandline='XNA.Framework.Android.netcore.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='XNA.Framework.Android.netcore.sln /t:Build /p:Configuration=Release' />
 
   </target>
   

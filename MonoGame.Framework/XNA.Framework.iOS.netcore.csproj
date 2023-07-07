@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\iOS</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    
+    <Version>3.9.9001.0</Version>
+    <AssemblyVersion>3.9.9001.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>net6.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
+    <LangVersion>Default</LangVersion>
+    <ProjectGuid>{D93291EF-3419-412E-BC56-376BD6A02224}</ProjectGuid>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
+    <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
+    <PackageId>MonoGame.Framework.iOS</PackageId>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Project="Xna.Framework.Audio.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
+
+  <ItemGroup>
+    <Compile Include="Platform\iOS\Devices\Sensors\Accelerometer.cs" />
+    <Compile Include="Platform\iOS\Devices\Sensors\Compass.cs" />
+    <Compile Include="Platform\iOS\ConcreteGame.cs" />
+    <Compile Include="Platform\iOS\iOSGameView.cs" />
+    <Compile Include="Platform\iOS\iOSGameViewController.cs" />
+    <Compile Include="Platform\iOS\iOSGameView_GLAbstraction.cs" />
+    <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />
+    <Compile Include="Platform\iOS\iOSGameWindow.cs" />
+    <Compile Include="Platform\iOS\OrientationConverter.cs" />
+
+    <Compile Include="Graphics\ConcreteGraphicsAdapter.iOS.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.iOS.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.iOS.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Platform\Graphics\OpenGL.iOS.cs" />
+    <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
+    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
+    <Compile Include="Input\GamePad.iOS.cs" />
+    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\Keyboard.Default.cs" />
+    <Compile Include="Input\KeyboardInput.iOS.cs" />
+    <Compile Include="Input\MessageBox.iOS.cs" />
+    <Compile Include="Input\Mouse.Default.cs" />
+    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\iOS\ConcreteAlbum.cs" />
+    <Compile Include="Media\iOS\ConcreteMediaFactory.cs" />
+    <Compile Include="Media\iOS\ConcreteMediaLibrary.cs" />
+    <Compile Include="Media\iOS\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\iOS\ConcreteSong.cs" />
+    <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
+    <Compile Include="Media\iOS\ConcreteVideo.cs" />
+    <Compile Include="TitleContainer.MacOS.cs" />
+    <Compile Include="Platform\Utilities\FuncLoader.iOS.cs" />
+    <Compile Include="Platform\Utilities\InteropHelpers.cs" />
+
+    <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
+    <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MonoGame.Framework.iOS.targets" PackagePath="build" />
+  </ItemGroup>
+
+  <Import Project="OpenGL.targets" />
+  <Import Project="OpenAL.targets" />
+  <Import Project="Microsoft.Devices.Sensors.targets" />
+</Project>

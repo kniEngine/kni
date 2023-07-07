@@ -1,0 +1,113 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\Android</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    
+    <Version>3.9.9001.0</Version>
+    <AssemblyVersion>3.9.9001.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>17</SupportedOSPlatformVersion>
+    <LangVersion>Default</LangVersion>
+    <ProjectGuid>{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}</ProjectGuid>
+    <AssemblyName>Monogame.Framework</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <DefineConstants>ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The MonoGame runtime for Android.</Description>
+    <PackageTags>monogame;.net core;core;.net standard;standard;android</PackageTags>
+    <PackageId>MonoGame.Framework.Android</PackageId>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Project="Xna.Framework.Audio.props" />
+  <Import Project="MonoGame.Framework.Common.props" />
+
+  <ItemGroup>
+    <Compile Remove="Input\Keyboard.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Platform\Android\AndroidCompatibility.cs" />
+    <Compile Include="Platform\Android\AndroidGameActivity.cs" />
+    <Compile Include="Platform\Android\ConcreteGame.cs" />
+    <Compile Include="Platform\Android\AndroidGameWindow.cs" />
+    <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
+    <Compile Include="Platform\Android\Devices\Sensors\Compass.cs" />
+    <Compile Include="Platform\Android\Input\Keyboard.cs" />
+    <Compile Include="Platform\Android\Input\Touch\AndroidTouchEventManager.cs" />
+    <Compile Include="Platform\Android\IResumeManager.cs" />
+    <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
+    <Compile Include="Platform\Android\OrientationListener.cs" />
+    <Compile Include="Platform\Android\ResumeManager.cs" />
+    <Compile Include="Platform\Android\ScreenReceiver.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdapter.Android.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Android.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.Android.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
+    <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
+    <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
+    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
+    <Compile Include="Input\GamePad.Android.cs" />
+    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\KeyboardInput.Android.cs" />
+    <Compile Include="Input\MessageBox.Android.cs" />
+    <Compile Include="Input\Mouse.Default.cs" />
+    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Media\Android\ConcreteAlbum.cs" />
+    <Compile Include="Media\Android\ConcreteMediaFactory.cs" />
+    <Compile Include="Media\Android\ConcreteMediaLibrary.cs" />
+    <Compile Include="Media\Android\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\Android\ConcreteSong.cs" />
+    <Compile Include="Media\Android\ConcreteVideo.cs" />
+    <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
+    <Compile Include="Platform\PrimaryThreadLoader.cs" />
+    <Compile Include="TitleContainer.Android.cs" />
+    <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
+    <Compile Include="Platform\Utilities\InteropHelpers.cs" />
+
+    <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
+    <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="MonoGame.Framework.Android.targets" PackagePath="build" Pack="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\armeabi-v7a\libopenal32.so">
+      <Link>libs\armeabi-v7a\libopenal32.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\arm64-v8a\libopenal32.so">
+      <Link>libs\arm64-v8a\libopenal32.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\x86\libopenal32.so">
+      <Link>libs\x86\libopenal32.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\x86_64\libopenal32.so">
+      <Link>libs\x86_64\libopenal32.so</Link>
+    </EmbeddedNativeLibrary>
+  </ItemGroup>
+
+  <Import Project="OpenGL.targets" />
+  <Import Project="OpenAL.targets" />
+  <Import Project="Microsoft.Devices.Sensors.targets" />
+</Project>

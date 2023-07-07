@@ -26,8 +26,13 @@
   <files>
     <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
     
-    <!-- C# Assemblies -->
+    <!-- C# Assemblies (.mono) -->
     <file src="MonoGame.Framework\bin\Android\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
     <file src="MonoGame.Framework\bin\Android\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
+    
+    <!-- C# Assemblies (.netcore) -->
+    <file src="Artifacts\Monogame.Framework\Android\Release\net6.0-android\MonoGame.Framework.aar" target="lib\net6.0-android\MonoGame.Framework.aar" />
+    <file src="Artifacts\Monogame.Framework\Android\Release\net6.0-android\MonoGame.Framework.dll" target="lib\net6.0-android\MonoGame.Framework.dll" />
+    <file src="Artifacts\Monogame.Framework\Android\Release\net6.0-android\MonoGame.Framework.xml" target="lib\net6.0-android\MonoGame.Framework.xml" />
   </files>
 </package>
