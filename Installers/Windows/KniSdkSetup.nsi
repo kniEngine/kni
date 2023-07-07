@@ -120,6 +120,10 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   SetOutPath '$INSTDIR\Assemblies\Android'
   File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.dll'
   File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.xml'
+  SetOutPath '$INSTDIR\Assemblies\Android\net6.0-android'
+  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.aar'
+  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.dll'
+  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.xml'
   
   ; Install DesktopGL Assemblies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL'
@@ -184,6 +188,9 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ;SetOutPath '$INSTDIR\Assemblies\iOS'
   ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.dll'
   ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.xml'
+  SetOutPath '$INSTDIR\Assemblies\iOS\net6.0-ios'
+  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\net6.0-ios\*.dll'
+  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\net6.0-ios\*.xml'
   SkipiOSAssemblies:
 
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows' '' '$INSTDIR\Assemblies\Windows'

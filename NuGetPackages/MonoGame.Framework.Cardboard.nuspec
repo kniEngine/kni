@@ -38,7 +38,7 @@
   <files>
     <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
     
-    <!-- C# Assemblies -->
+    <!-- C# Assemblies  (.mono) -->
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\GoogleCardboard.dll"    target="lib\MonoAndroid\GoogleCardboard.dll" />
