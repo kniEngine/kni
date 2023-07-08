@@ -8,7 +8,6 @@
         <description>Templates for building MonoGame based games.</description>
         <licenseUrl>https://github.com/mono/MonoGame/blob/develop/LICENSE.txt</licenseUrl>
         <projectUrl>http://monogame.net/</projectUrl>
-        <iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <copyright>Copyright 2013-2017</copyright>
         <packageTypes>
@@ -17,5 +16,8 @@
     </metadata>
     <files>
         <file src="..\Templates\DotNetTemplate\content\**" target="content" exclude="**\.DS_Store" />
+        
+        <!-- Nuget Icon -->
+        <file src="Images\Icon.png" target="\" />
     </files>
 </package>

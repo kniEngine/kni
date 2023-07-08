@@ -8,7 +8,6 @@
     <owners>Kastellanos Nikos</owners>
     <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/kniEngine/kni</projectUrl>
-    <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       This is a custom build of MonoGame framework. Includes bugfixes, performance improvements, less memory garbage per frame, and better memory management.
@@ -51,5 +50,8 @@
     
     <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\MonoGame.Framework.dll" target="lib\net6.0-windows7.0\MonoGame.Framework.dll" />
     <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\MonoGame.Framework.xml" target="lib\net6.0-windows7.0\MonoGame.Framework.xml" />
+    
+    <!-- Nuget Icon -->
+    <file src="Images\Icon.png" target="\" />
   </files>
 </package>

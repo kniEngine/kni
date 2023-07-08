@@ -8,7 +8,6 @@
     <owners>Kastellanos Nikos</owners>
     <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/kniEngine/kni</projectUrl>
-    <!--<iconUrl>https://pbs.twimg.com/profile_images/487954549441691649/O3KsHAsb_400x400.png</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       This is a custom build of MonoGame framework. Includes bugfixes, performance improvements, less memory garbage per frame, and better memory management.
@@ -46,5 +45,7 @@
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\x86\SDL2.dll" target="build\native\x86\SDL2.dll" />
     <file src="MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\x86\soft_oal.dll" target="build\native\x86\soft_oal.dll" />
     
+    <!-- Nuget Icon -->
+    <file src="Images\Icon.png" target="\" />
   </files>
 </package>
