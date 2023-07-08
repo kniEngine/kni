@@ -2,7 +2,7 @@
 
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
-    <BaseOutputPath>..\Artifacts\Monogame.Framework\Ref</BaseOutputPath>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\Ref</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
     <Version>3.8.9102.0</Version>
@@ -14,7 +14,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>REF</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

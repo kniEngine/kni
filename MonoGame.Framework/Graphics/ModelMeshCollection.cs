@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 get { return _collection[_position]; }
             }
 
-            /// <remarks>This is a Monogame extension</remarks>
+            /// <remarks>This is a MonoGame extension</remarks>
             public void Reset()
             {
                 _position = -1;
