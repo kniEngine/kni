@@ -59,7 +59,7 @@ Check out the awesome work of the larger MonoGame community with their own tutor
 - [A series on embedding MonoGame/WinGL into WinForms](http://jaquadro.com/2013/03/bringing-your-xna-winforms-controls-to-monogame-opengl/)
 - [French articles about MonoGame on Linux, Windows and Windows 8](http://www.demonixis.net/blog/category/tutoriels/tuto-xna/)
 - [MonoGame "Hello World" on Mac OS X and Xamarin Studio](http://jaquadro.com/2013/09/monogame-hello-world-on-mac-os-x-and-xamarin-studio/)
-- [Solving Resolution Independent Rendering And 2D Camera Using Monogame](http://blog.roboblob.com/2013/07/27/solving-resolution-independent-rendering-and-2d-camera-using-monogame/)
+- [Solving Resolution Independent Rendering And 2D Camera Using MonoGame](http://blog.roboblob.com/2013/07/27/solving-resolution-independent-rendering-and-2d-camera-using-monogame/)
 - [XNA is Dead; Long Live the New XNA, MonoGame](http://www.codemag.com/Article/1411081)
 - [Running MonoGame on Android Wear](http://crossplatform.io/running-monogame-on-android-wear/)
 - [Text rendering in MonoGame](https://roy-t.nl/2018/07/04/Text-Rendering.html)

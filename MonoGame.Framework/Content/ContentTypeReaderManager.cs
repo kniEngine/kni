@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
 
-            // map XNA & Monogame build-in TypeReaders
+            // map XNA & MonoGame build-in TypeReaders
             resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", "Xna.Framework"));
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework"));
