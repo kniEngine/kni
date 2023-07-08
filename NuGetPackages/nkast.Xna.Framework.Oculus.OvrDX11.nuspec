@@ -52,6 +52,8 @@
             target="lib\net6.0-windows7.0\Xna.Framework.Oculus.OvrDX11.dll" />
     <file src="Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net6.0-windows\Xna.Framework.Oculus.OvrDX11.xml" 
             target="lib\net6.0-windows7.0\Xna.Framework.Oculus.OvrDX11.xml" />
-            
+    
+    <!-- Nuget Icon -->
+    <file src="Images\Icon.png" target="\" />
   </files>
 </package>

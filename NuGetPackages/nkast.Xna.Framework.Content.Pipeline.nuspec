@@ -39,6 +39,8 @@
             target="lib\netstandard2.0\Xna.Framework.Content.Pipeline.dll" />
     <file src="Artifacts\Xna.Framework.Content.Pipeline\Release\netstandard2.0\Xna.Framework.Content.Pipeline.xml" 
             target="lib\netstandard2.0\Xna.Framework.Content.Pipeline.xml" />
-
+    
+    <!-- Nuget Icon -->
+    <file src="Images\Icon.png" target="\" />
   </files>
 </package>
