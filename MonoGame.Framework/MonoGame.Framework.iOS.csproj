@@ -15,7 +15,7 @@
     <TargetFramework>xamarinios10</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

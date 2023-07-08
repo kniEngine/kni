@@ -14,7 +14,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;net6.0-windows</TargetFrameworks>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>WINDOWS;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

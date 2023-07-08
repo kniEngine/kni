@@ -15,7 +15,7 @@
     <TargetFramework>monoandroid90</TargetFramework>
     <SupportedOSPlatformVersion>17</SupportedOSPlatformVersion>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

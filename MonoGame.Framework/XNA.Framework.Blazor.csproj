@@ -2,7 +2,7 @@
 
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
-    <BaseOutputPath>..\Artifacts\Monogame.Framework\Blazor\</BaseOutputPath>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\Blazor\</BaseOutputPath>
 
     <DefineConstants>BLAZORGL;STBSHARP_INTERNAL</DefineConstants>
     
@@ -15,7 +15,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants></DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

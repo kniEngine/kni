@@ -13,7 +13,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>uap10.0</TargetFramework>
     <LangVersion>5</LangVersion>
-    <AssemblyName>Monogame.Framework</AssemblyName>
+    <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>WINDOWS_UAP;DIRECTX11_1;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
