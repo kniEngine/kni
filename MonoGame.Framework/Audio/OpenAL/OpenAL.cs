@@ -697,13 +697,13 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             alcGetString = FuncLoader.LoadFunctionOrNull<d_alcgetstring>(library, "alcGetString");
 
 #if IOS || TVOS
-            SuspendContext = FuncLoader.LoadFunctionOrNull<d_alcsuspendcontext>(AL.Current.NativeLibrary, "alcSuspendContext");
-            ProcessContext = FuncLoader.LoadFunctionOrNull<d_alcprocesscontext>(AL.Current.NativeLibrary, "alcProcessContext");
+            SuspendContext = FuncLoader.LoadFunctionOrNull<d_alcsuspendcontext>(library, "alcSuspendContext");
+            ProcessContext = FuncLoader.LoadFunctionOrNull<d_alcprocesscontext>(library, "alcProcessContext");
 #endif
 
 #if ANDROID
-            DevicePause = FuncLoader.LoadFunctionOrNull<d_alcdevicepausesoft>(AL.Current.NativeLibrary, "alcDevicePauseSOFT");
-            DeviceResume = FuncLoader.LoadFunctionOrNull<d_alcdeviceresumesoft>(AL.Current.NativeLibrary, "alcDeviceResumeSOFT");
+            DevicePause = FuncLoader.LoadFunctionOrNull<d_alcdevicepausesoft>(library, "alcDevicePauseSOFT");
+            DeviceResume = FuncLoader.LoadFunctionOrNull<d_alcdeviceresumesoft>(library, "alcDeviceResumeSOFT");
 #endif
         }
 
