@@ -1,7 +1,4 @@
-﻿#if __OPENGL__
-	#define SV_POSITION POSITION
-#endif
-
+﻿
 matrix WorldViewProjection;
 
 struct VertexShaderInput

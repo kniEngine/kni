@@ -1,7 +1,4 @@
-﻿#if __OPENGL__
-	#define SV_POSITION POSITION
-#endif
-
+﻿
 Texture2D SpriteTexture;
 sampler2D SpriteTextureSampler = sampler_state
 {
