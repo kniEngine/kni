@@ -34,6 +34,13 @@ namespace Microsoft.Xna.Framework
             // Detection of NaturalOrientation. This must happend as soon as possible at start up.
             AndroidCompatibility.Initialize(this);
             
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.P)
+            {
+                // Enable drawing over the camera cutoff. Cardboard renderer requires the entire screen.
+                // fixes: [CardboardView] Surface size 2340x1036 does not match the expected screen size 2340x1080. Rendering is disabled.
+                Window.Attributes.LayoutInDisplayCutoutMode |= Android.Views.LayoutInDisplayCutoutMode.ShortEdges;
+            }
+            
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
 
