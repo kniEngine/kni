@@ -102,13 +102,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public GraphicsDebug GraphicsDebug { get { return _graphicsDebug; } set { _graphicsDebug = value; } }
 
-        internal GraphicsDevice()
-		{
-            PresentationParameters = new PresentationParameters();
-            PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
-
-            Initialize();
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsDevice" /> class.
