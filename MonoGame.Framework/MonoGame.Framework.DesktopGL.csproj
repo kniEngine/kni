@@ -80,6 +80,8 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

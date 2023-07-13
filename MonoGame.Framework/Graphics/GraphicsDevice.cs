@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice : IDisposable
     {
+        private GraphicsDeviceStrategy _strategy;
+
         /// <summary>
         /// Indicates if DX9 style pixel addressing or current standard
         /// pixel addressing should be used. This flag is set to
@@ -35,6 +37,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private GraphicsContext _mainContext;
 
         private Color _discardColor = new Color(68, 34, 136, 255);
+
+        internal GraphicsDeviceStrategy Strategy { get { return _strategy; } }
 
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
@@ -114,6 +118,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
+            _strategy = new ConcreteGraphicsDevice();
+
             if (adapter == null)
                 throw new ArgumentNullException("adapter");
             if (!adapter.IsProfileSupported(graphicsProfile))
@@ -140,6 +146,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
+            _strategy = new ConcreteGraphicsDevice();
+
             if (adapter == null)
                 throw new ArgumentNullException("adapter");
             if (!adapter.IsProfileSupported(graphicsProfile))
@@ -357,6 +365,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!_isDisposed)
             {
+                _strategy.Dispose();
+
                 if (disposing)
                 {
                     // Dispose of all remaining graphics resources before disposing of the graphics device
