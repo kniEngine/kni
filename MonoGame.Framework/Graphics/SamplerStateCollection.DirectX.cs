@@ -8,6 +8,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -43,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
-                SharpDX.Direct3D11.CommonShaderStage shaderStage;
+                D3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
                     case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
@@ -51,8 +52,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     default: throw new InvalidOperationException();
                 }
 
-                var sampler = _actualSamplers[i];
-                SharpDX.Direct3D11.SamplerState state = null;
+                SamplerState sampler = _actualSamplers[i];
+                D3D11.SamplerState state = null;
                 if (sampler != null)
                     state = sampler.GetState(_device);
 
