@@ -23,6 +23,17 @@
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40' ">
+    <Reference Include="AssimpNet" >
+      <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\net40\AssimpNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
+    <Reference Include="AssimpNet" >
+      <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\netstandard1.3\AssimpNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
   <ItemGroup>
     <Reference Include="Nvidia.TextureTools">
       <HintPath>..\..\ThirdParty\Dependencies\NVTT\Nvidia.TextureTools.dll</HintPath>
@@ -36,10 +47,6 @@
     <Reference Include="ATI.TextureConverter">
       <HintPath>..\..\ThirdParty\Dependencies\ATI.TextureConverter\ATI.TextureConverter.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AssimpNet" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -203,6 +210,11 @@
     <Compile Include="..\..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\ThirdParty\AssimpNet\4.1.0\runtimes\win-x64\native\Assimp.dll">
+      <Link>Assimp.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <NativeBinary>True</NativeBinary>
+    </None>
     <None Include="..\..\ThirdParty\Dependencies\NVTT\Windows\nvtt.dll">
       <Link>nvtt.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
