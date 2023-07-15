@@ -578,7 +578,7 @@ namespace Microsoft.Xna.Platform.Graphics
             lock (this.D3dContext)
                     this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
 
-            this.Textures.Dirty();
+            _pixelTextures.Dirty();
             this.SamplerStates.Dirty();
             _depthStencilStateDirty = true;
             _blendStateDirty = true;

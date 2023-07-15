@@ -827,7 +827,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            this.Textures.Dirty();
+            _pixelTextures.Strategy.Dirty();
         }
 
         internal IRenderTarget PlatformApplyRenderTargets()
@@ -886,7 +886,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            Textures.Dirty();
+            _pixelTextures.Strategy.Dirty();
 
             return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }

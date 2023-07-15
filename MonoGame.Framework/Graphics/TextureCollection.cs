@@ -14,29 +14,12 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private TextureCollectionStrategy _strategy;
 
-        private readonly GraphicsDevice _device;
-        private readonly GraphicsContext _context;
-
-        private readonly Texture[] _textures;
-        private uint _dirty;
-
         internal TextureCollectionStrategy Strategy { get { return _strategy; } }
 
 
         internal TextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
         {
-            _strategy = new ConcreteTextureCollection();
-
-            // hard limit of 32 because of _dirty flags being 32bits.
-            if (capacity > 32)
-                throw new ArgumentOutOfRangeException("capacity");
-            
-            _device = device;
-            _context = context;
-
-            _textures = new Texture[capacity];
-
-            Dirty();
+            _strategy = new ConcreteTextureCollection(device, context, capacity);
 
             PlatformInit(capacity);
             PlatformClear();
@@ -44,25 +27,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Texture this[int index]
         {
-            get { return _textures[index]; }
-            set
-            {
-                if (_textures[index] != value)
-                {
-                    uint mask = ((uint)1) << index;
-                    _textures[index] = value;
-                    _dirty |= mask;
-                }
-            }
+            get { return _strategy[index]; }
+            set { _strategy[index] = value; }
         }
 
         internal void Clear()
         {
-            for (var i = 0; i < _textures.Length; i++)
-                _textures[i] = null;
-
-            Dirty();
-
+            _strategy.Clear();
             PlatformClear();
         }
 
@@ -71,9 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal void Dirty()
         {
-            for (var i = 0; i < _textures.Length; i++)
-                _dirty |= (((uint)1) << i);
+            _strategy.Dirty();
         }
-
     }
 }

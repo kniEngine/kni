@@ -28,19 +28,19 @@ namespace Microsoft.Xna.Framework.Graphics
             // locked the d3dContext for us to use.
 
             // Make one pass across all the texture slots.
-            for (var i = 0; i < _textures.Length; i++)
+            for (var i = 0; i < _strategy._textures.Length; i++)
             {
-                if (_textures[i] == null)
+                if (_strategy._textures[i] == null)
                     continue;
 
                 for (int k = 0; k < targets.Length; k++)
                 {
-                    if (_textures[i] == targets[k].RenderTarget)
+                    if (_strategy._textures[i] == targets[k].RenderTarget)
                     {
                         uint mask = ((uint)1) << i;
                         // clear texture bit
-                        _dirty &= ~mask;
-                        _textures[i] = null;
+                        _strategy._dirty &= ~mask;
+                        _strategy._textures[i] = null;
                         shaderStage.SetShaderResource(i, null);
                         break;
                     }
@@ -50,28 +50,28 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
         {
-            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (var i = 0; _strategy._dirty != 0 && i < _strategy._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((_dirty & mask) == 0)
+                if ((_strategy._dirty & mask) == 0)
                     continue;
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
 
-                Texture tex = _textures[i];
+                Texture tex = _strategy._textures[i];
 
                 if (tex != null && !tex.IsDisposed)
                 {
                     shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
-                    unchecked { _context._graphicsMetrics._textureCount++; }
+                    unchecked { _strategy._context._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);
 
                 // clear texture bit
-                _dirty &= ~mask;
+                _strategy._dirty &= ~mask;
             }
         }
 

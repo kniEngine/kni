@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
 
-        internal ConcreteTextureCollection()
-            : base()
+        internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
         }
 
