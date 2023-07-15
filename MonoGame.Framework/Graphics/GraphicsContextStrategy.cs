@@ -28,8 +28,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal Color _blendFactor = Color.White;
         internal DepthStencilState _depthStencilState;
         internal RasterizerState _rasterizerState;
-        internal SamplerStateCollection _samplerStates;
         internal SamplerStateCollection _vertexSamplerStates;
+        internal SamplerStateCollection _pixelSamplerStates;
 
         // states dirty flags
         internal bool _blendStateDirty;
@@ -73,8 +73,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal bool _vertexBuffersDirty;
 
         // textures
-        internal TextureCollection _textures;
         internal TextureCollection _vertexTextures;
+        internal TextureCollection _pixelTextures;
 
         internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         internal int _currentRenderTargetCount;
@@ -222,24 +222,24 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public SamplerStateCollection SamplerStates
-        {
-            get { return _samplerStates; }
-        }
-
         public SamplerStateCollection VertexSamplerStates
         {
             get { return _vertexSamplerStates; }
         }
 
-        public TextureCollection Textures
+        public SamplerStateCollection SamplerStates
         {
-            get { return _textures; }
+            get { return _pixelSamplerStates; }
         }
 
         public TextureCollection VertexTextures
         {
             get { return _vertexTextures; }
+        }
+
+        public TextureCollection Textures
+        {
+            get { return _pixelTextures; }
         }
 
 
