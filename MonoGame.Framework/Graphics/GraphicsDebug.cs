@@ -3,6 +3,8 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 // Copyright (C)2023 Nick Kastellanos
+using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -11,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private GraphicsDebugStrategy _strategy;
 
-        internal TextureCollectionStrategy Strategy { get { return _strategy; } }
+        internal GraphicsDebugStrategy Strategy { get { return _strategy; } }
 
 
         /// <summary>

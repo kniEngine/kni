@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsDevice : ConcreteGraphicsDeviceGL
     {
 
-        internal ConcreteGraphicsDevice()
-            : base()
+        internal ConcreteGraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
+            : base(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)
         {
         }
 
