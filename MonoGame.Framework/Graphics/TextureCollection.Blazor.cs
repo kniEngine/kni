@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if ((_dirty & mask) == 0)
                     continue;
 
-                var tex = _textures[i];
+                Texture tex = _textures[i];
 
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
                 GraphicsExtensions.CheckGLError();

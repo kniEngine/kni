@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -36,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void ClearTargets(RenderTargetBinding[] targets, SharpDX.Direct3D11.CommonShaderStage shaderStage)
+        private void ClearTargets(RenderTargetBinding[] targets, D3D11.CommonShaderStage shaderStage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.
@@ -72,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
-                SharpDX.Direct3D11.CommonShaderStage shaderStage;
+                D3D11.CommonShaderStage shaderStage;
                 switch (_stage)
                 {
                     case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
@@ -80,7 +81,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     default: throw new InvalidOperationException();
                 }
 
-                var tex = _textures[i];
+                Texture tex = _textures[i];
 
                 if (tex != null && !tex.IsDisposed)
                 {
