@@ -9,6 +9,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.DX11.cs" />
 	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />

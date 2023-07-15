@@ -285,6 +285,7 @@
     <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
     <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
     <Compile Include="Graphics\SamplerStateCollection.cs" />
+    <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
@@ -363,6 +364,7 @@
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteTextureCollection.OpenGL.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />

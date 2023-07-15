@@ -7,12 +7,15 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
 	{
+        private SamplerStateCollectionStrategy _strategy;
+
         private readonly GraphicsDevice _device;
         private readonly GraphicsContext _context;
 
@@ -26,9 +29,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly SamplerState[] _samplers;
         private readonly SamplerState[] _actualSamplers;
 
+        internal SamplerStateCollectionStrategy Strategy { get { return _strategy; } }
+
 
         internal SamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
         {
+            _strategy = new ConcreteSamplerStateCollection();
+
             // hard limit of 32 because of _d3dDirty flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
