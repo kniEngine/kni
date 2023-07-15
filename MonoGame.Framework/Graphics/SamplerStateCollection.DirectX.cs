@@ -30,13 +30,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDirty()
         {
-            for (var i = 0; i < _actualSamplers.Length; i++)
+            for (var i = 0; i < _strategy._actualSamplers.Length; i++)
                 _d3dDirty |= (((uint)1) << i);
         }
 
         internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
         {
-            for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
+            for (var i = 0; _d3dDirty != 0 && i < _strategy._actualSamplers.Length; i++)
             {
                 uint mask = ((uint)1) << i;
                 if ((_d3dDirty & mask) == 0)
@@ -45,10 +45,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
 
-                SamplerState sampler = _actualSamplers[i];
+                SamplerState sampler = _strategy._actualSamplers[i];
                 D3D11.SamplerState state = null;
                 if (sampler != null)
-                    state = sampler.GetState(_device);
+                    state = sampler.GetState(_strategy._device);
 
                 shaderStage.SetSampler(i, state);
 

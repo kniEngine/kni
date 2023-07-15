@@ -27,10 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApply()
         {
-            for (int i = 0; i < _actualSamplers.Length; i++)
+            for (int i = 0; i < _strategy._actualSamplers.Length; i++)
             {
-                SamplerState sampler = _actualSamplers[i];
-                Texture texture = _context.Strategy.Textures[i];
+                SamplerState sampler = _strategy._actualSamplers[i];
+                Texture texture = _strategy._context.Strategy.Textures[i];
 
                 if (sampler != null && texture != null && sampler != texture._glLastSamplerState)
                 {
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GraphicsExtensions.CheckGLError();
 
-                    sampler.Activate(_device, texture._glTarget, texture.LevelCount > 1);
+                    sampler.Activate(_strategy._device, texture._glTarget, texture.LevelCount > 1);
                     texture._glLastSamplerState = sampler;
                 }
             }

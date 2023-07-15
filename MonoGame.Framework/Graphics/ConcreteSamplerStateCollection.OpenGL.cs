@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
 
-        internal ConcreteSamplerStateCollection()
-            : base()
+        internal ConcreteSamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
         }
 
