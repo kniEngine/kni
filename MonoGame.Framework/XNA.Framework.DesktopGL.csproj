@@ -339,6 +339,7 @@
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
@@ -372,6 +373,7 @@
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsDebug.Default.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />

@@ -227,6 +227,7 @@
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />

@@ -353,6 +353,7 @@
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />

@@ -82,6 +82,7 @@
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
