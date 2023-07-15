@@ -22,22 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void ClearTargets()
-        {
-            switch (_stage)
-            {
-                case ShaderStage.Pixel:
-                    ClearTargets(_context.Strategy._currentRenderTargetBindings, ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader);
-                    break;
-                case ShaderStage.Vertex:
-                    ClearTargets(_context.Strategy._currentRenderTargetBindings, ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader);
-                    break;
-
-                default: throw new InvalidOperationException(_stage.ToString());
-            }
-        }
-
-        private void ClearTargets(RenderTargetBinding[] targets, D3D11.CommonShaderStage shaderStage)
+        internal void ClearTargets(RenderTargetBinding[] targets, D3D11.CommonShaderStage shaderStage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.
@@ -63,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
         {
             for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
@@ -73,13 +58,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
-                D3D11.CommonShaderStage shaderStage;
-                switch (_stage)
-                {
-                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader; break;
-                    default: throw new InvalidOperationException();
-                }
 
                 Texture tex = _textures[i];
 

@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _d3dDirty |= (((uint)1) << i);
         }
 
-        internal void PlatformApply()
+        internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
         {
             for (var i = 0; _d3dDirty != 0 && i < _actualSamplers.Length; i++)
             {
@@ -44,13 +44,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
-                D3D11.CommonShaderStage shaderStage;
-                switch (_stage)
-                {
-                    case ShaderStage.Pixel: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.PixelShader; break;
-                    case ShaderStage.Vertex: shaderStage = ((ConcreteGraphicsContext)_context.Strategy).D3dContext.VertexShader; break;
-                    default: throw new InvalidOperationException();
-                }
 
                 SamplerState sampler = _actualSamplers[i];
                 D3D11.SamplerState state = null;
