@@ -13,8 +13,18 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
             : base(device, context, capacity)
         {
+            throw new PlatformNotSupportedException();
         }
 
+        internal override void Clear()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        internal void PlatformApply()
+        {
+            throw new PlatformNotSupportedException();
+        }
 
     }
 }

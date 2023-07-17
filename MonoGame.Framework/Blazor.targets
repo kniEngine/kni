@@ -25,7 +25,6 @@
     <Compile Include="Graphics\Texture.Blazor.cs" />
     <Compile Include="Graphics\Texture2D.Blazor.cs" />
     <Compile Include="Graphics\Texture3D.Blazor.cs" />
-    <Compile Include="Graphics\TextureCollection.Blazor.cs" />
     <Compile Include="Graphics\TextureCube.Blazor.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Blazor.cs" />

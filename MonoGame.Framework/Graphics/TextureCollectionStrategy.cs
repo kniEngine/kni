@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal virtual void Clear()
         {
-            for (var i = 0; i < _textures.Length; i++)
+            for (int i = 0; i < _textures.Length; i++)
             {
                 _textures[i] = null;
             }
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         internal void Dirty()
         {
-            for (var i = 0; i < _textures.Length; i++)
+            for (int i = 0; i < _textures.Length; i++)
                 _dirty |= (((uint)1) << i);
         }
 

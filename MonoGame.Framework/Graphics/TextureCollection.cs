@@ -20,9 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal TextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
         {
             _strategy = new ConcreteTextureCollection(device, context, capacity);
-
-            PlatformInit(capacity);
-            PlatformClear();
         }
 
         public Texture this[int index]
@@ -34,7 +31,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void Clear()
         {
             _strategy.Clear();
-            PlatformClear();
         }
 
         /// <summary>

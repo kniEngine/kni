@@ -242,9 +242,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply(D3dContext.VertexShader);
+            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(D3dContext.VertexShader);
             this.VertexSamplerStates.PlatformApply(D3dContext.VertexShader);
-            this.Textures.PlatformApply(D3dContext.PixelShader);
+            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(D3dContext.PixelShader);
             this.SamplerStates.PlatformApply(D3dContext.PixelShader);
         }
 
@@ -547,8 +547,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                this.VertexTextures.ClearTargets(_currentRenderTargetBindings, D3dContext.VertexShader);
-                this.Textures.ClearTargets(_currentRenderTargetBindings, D3dContext.PixelShader);
+                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.VertexShader);
+                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.PixelShader);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)

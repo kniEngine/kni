@@ -223,9 +223,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply();
+            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply();
             this.VertexSamplerStates.PlatformApply();
-            this.Textures.PlatformApply();
+            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply();
             this.SamplerStates.PlatformApply();
         }
 
