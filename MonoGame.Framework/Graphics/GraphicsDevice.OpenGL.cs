@@ -221,7 +221,37 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Android_ReInitializeContext()
         {
-            PlatformInitialize();
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+
+            // Ensure the vertex attributes are reset
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
+
+            // Free all the cached shader programs.
+            _programCache.Clear();
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
+
+            if (Capabilities.SupportsFramebufferObjectARB
+            || Capabilities.SupportsFramebufferObjectEXT)
+            {
+                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
+
+            // Force resetting states
+            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
+      
 
             // Force set the default render states.
             _mainContext.Strategy._blendStateDirty = true;
