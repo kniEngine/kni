@@ -17,10 +17,10 @@ namespace Microsoft.Xna.Framework.Graphics
     /// implement <see cref="IEquatable{T}"/>. Two <see cref="VertexInputLayout"/> instance are
     /// considered equal if the vertex layouts are structurally identical.
     /// </remarks>
-    internal abstract partial class VertexInputLayout : IEquatable<VertexInputLayout>
+    internal abstract class VertexInputLayout : IEquatable<VertexInputLayout>
     {
-        protected VertexDeclaration[] VertexDeclarations { get; private set; }
-        protected int[] InstanceFrequencies { get; private set; }
+        protected internal VertexDeclaration[] VertexDeclarations { get; private set; }
+        protected internal int[] InstanceFrequencies { get; private set; }
 
         /// <summary>
         /// Gets or sets the number of used input slots.
