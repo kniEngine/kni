@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Clear()
         {
-            for (var i = 0; i < _buffers.Length; i++)
+            for (int i = 0; i < _buffers.Length; i++)
                 _buffers[i] = null;
 
             _valid = 0;

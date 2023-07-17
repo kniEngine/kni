@@ -53,13 +53,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Clear()
         {
-            foreach (var value in _programCache.Values)
+            foreach (ShaderProgram shaderProgram in _programCache.Values)
             {
                 if (!_device.IsDisposed)
                 {
-                    if (GL.IsProgram(value.Program))
+                    if (GL.IsProgram(shaderProgram.Program))
                     {
-                        GL.DeleteProgram(value.Program);
+                        GL.DeleteProgram(shaderProgram.Program);
                         GraphicsExtensions.CheckGLError();
                     }
                 }

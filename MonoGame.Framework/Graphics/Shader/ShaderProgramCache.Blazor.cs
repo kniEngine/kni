@@ -59,9 +59,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Clear()
         {
-            foreach (var value in _programCache.Values)
+            foreach (ShaderProgram shaderProgram in _programCache.Values)
             {
-                value.Program.Dispose();
+                shaderProgram.Program.Dispose();
             }
             _programCache.Clear();
         }
