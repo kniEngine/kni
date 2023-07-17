@@ -48,6 +48,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdapter.Ref.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Ref.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.Ref.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.Ref.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.Ref.cs" />
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.Ref.cs" />
 	<Compile Include="Graphics\ConcreteTextureCollection.Ref.cs" />

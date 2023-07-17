@@ -277,6 +277,7 @@
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
     <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
@@ -363,6 +364,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.DX11.cs" />
 	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />

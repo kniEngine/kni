@@ -80,6 +80,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />

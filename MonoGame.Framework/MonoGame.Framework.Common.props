@@ -184,6 +184,7 @@
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
     <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />

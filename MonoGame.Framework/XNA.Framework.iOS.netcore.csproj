@@ -52,6 +52,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />

@@ -236,6 +236,7 @@
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
     <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
@@ -362,6 +363,7 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.iOS.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />

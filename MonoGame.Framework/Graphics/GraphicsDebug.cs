@@ -2,10 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDebug
     {
+        private GraphicsDebugStrategy _strategy;
+
+        internal TextureCollectionStrategy Strategy { get { return _strategy; } }
+
+
         /// <summary>
         /// Attempt to dequeue a debugging message from the graphics subsystem.
         /// </summary>
