@@ -29,7 +29,6 @@
     <Compile Include="Graphics\TextureCube.Blazor.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Blazor.cs" />
-    <Compile Include="Graphics\Vertices\VertexElement.Blazor.cs" />
         
     <Compile Include="Graphics\Texture2D.StbSharp.cs" />
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
