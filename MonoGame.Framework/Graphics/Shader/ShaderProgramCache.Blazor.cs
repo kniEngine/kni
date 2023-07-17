@@ -139,7 +139,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (disposing)
                 {
-                    Clear();
+                    foreach (ShaderProgram shaderProgram in _programCache.Values)
+                    {
+                        shaderProgram.Program.Dispose();
+                    }
+                    _programCache.Clear();
+
                     _device = null;
                 }
 

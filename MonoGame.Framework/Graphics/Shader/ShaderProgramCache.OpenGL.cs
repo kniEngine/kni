@@ -149,7 +149,19 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (disposing)
                 {
-                    Clear();
+                    foreach (ShaderProgram shaderProgram in _programCache.Values)
+                    {
+                        if (!_device.IsDisposed)
+                        {
+                            if (GL.IsProgram(shaderProgram.Program))
+                            {
+                                GL.DeleteProgram(shaderProgram.Program);
+                                GraphicsExtensions.CheckGLError();
+                            }
+                        }
+                    }
+                    _programCache.Clear();
+
                     _device = null;
                 }
 
