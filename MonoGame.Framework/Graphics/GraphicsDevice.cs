@@ -245,10 +245,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
             _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
-            // Clear constant buffers
-            _mainContext.Strategy._vertexConstantBuffers.Clear();
-            _mainContext.Strategy._pixelConstantBuffers.Clear();
-
             // Force set the buffers and shaders on next ApplyState() call
             _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Capabilities.MaxVertexBufferSlots);
             _mainContext.Strategy._vertexBuffersDirty = true;
