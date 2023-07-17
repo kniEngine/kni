@@ -85,8 +85,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_cache.TryGetValue(vertexBuffers, out inputLayout))
                 return inputLayout;
 
-            var vertexInputLayout = vertexBuffers.ToImmutable();
-            var inputElements = InputLayoutCache.GetInputElements(vertexInputLayout);
+            var immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
+            var inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
                 inputLayout = new InputLayout(_graphicsDevice.D3DDevice, _shaderByteCode, inputElements);
@@ -161,11 +161,29 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            _cache.Add(vertexInputLayout, inputLayout);
+            _cache.Add(immutableVertexInputLayout, inputLayout);
 
             return inputLayout;
         }
 
+        /// <summary>
+        /// Creates an <see cref="ImmutableVertexInputLayout"/> that can be used as a key in the
+        /// <see cref="InputLayoutCache"/>.
+        /// </summary>
+        /// <returns>The <see cref="ImmutableVertexInputLayout"/>.</returns>
+        public static ImmutableVertexInputLayout ToImmutable(VertexBufferBindings vertexBuffers)
+        {
+            int count = vertexBuffers.Count;
+
+            var vertexDeclarations = new VertexDeclaration[count];
+            Array.Copy(vertexBuffers.VertexDeclarations, vertexDeclarations, count);
+
+            var instanceFrequencies = new int[count];
+            Array.Copy(vertexBuffers.InstanceFrequencies, instanceFrequencies, count);
+
+            return new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
+        }
+  
 
         internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
         {

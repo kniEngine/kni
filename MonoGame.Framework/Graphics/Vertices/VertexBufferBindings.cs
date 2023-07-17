@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Stores the vertex buffers to be bound to the input assembler stage.
     /// </summary>
-    internal sealed partial class VertexBufferBindings : VertexInputLayout
+    internal sealed class VertexBufferBindings : VertexInputLayout
     {
         private readonly VertexBuffer[] _vertexBuffers;
         private readonly int[] _vertexOffsets;
