@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Clear the program cache releasing all shader programs.
         /// </summary>
-        public void DisposePrograms()
+        public void Clear()
         {
             foreach (var value in _programCache.Values)
             {
@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (disposing)
                 {
-                    DisposePrograms();
+                    Clear();
                     _device = null;
                 }
 
