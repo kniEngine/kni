@@ -9,17 +9,15 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDebug
     {
-        private readonly GraphicsDevice _device;
         private readonly InfoQueue _infoQueue;
         private readonly Queue<GraphicsDebugMessage> _cachedMessages;
         private bool _hasPushedFilters = false;
 
         public GraphicsDebug(GraphicsDevice device)
         {
-            _strategy = new ConcreteGraphicsDebug();
+            _strategy = new ConcreteGraphicsDebug(device);
 
-            _device = device;
-            _infoQueue = _device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
+            _infoQueue = device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();
 
             if (_infoQueue != null)

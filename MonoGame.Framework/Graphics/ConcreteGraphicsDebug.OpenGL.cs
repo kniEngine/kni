@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsDebug : GraphicsDebugStrategy
     {
 
-        internal ConcreteGraphicsDebug()
-            : base()
+        internal ConcreteGraphicsDebug(GraphicsDevice device)
+            : base(device)
         {
         }
 

@@ -11,10 +11,12 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class GraphicsDebugStrategy
     {
+        internal readonly GraphicsDevice _device;
 
-        internal GraphicsDebugStrategy()
+        internal GraphicsDebugStrategy(GraphicsDevice device)
         {
-            
+            _device = device;
+
         }
 
     }
