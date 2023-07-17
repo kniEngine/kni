@@ -62,13 +62,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            // Ensure the vertex attributes are reset
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
-
-            // Free all the cached shader programs. 
-            _programCache.Clear();
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
-
             // TODO: check for FramebufferObjectARB
             //if (this.Capabilities.SupportsFramebufferObjectARB
             //||  this.Capabilities.SupportsFramebufferObjectEXT)
