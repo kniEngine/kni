@@ -413,7 +413,6 @@
     <Compile Include="Platform\Graphics\Vertices\InputLayoutCache.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.DirectX.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.DirectX.cs" />
-    <Compile Include="Graphics\Vertices\VertexInputLayout.DirectX.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
