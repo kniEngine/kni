@@ -402,7 +402,6 @@
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
     <Compile Include="Graphics\RenderTargetCube.DirectX.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.DirectX.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />

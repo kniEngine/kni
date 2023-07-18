@@ -30,17 +30,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		public SamplerState this[int index] 
         {
 			get { return _strategy[index]; }
-			set
-            {
-                _strategy[index] = value;
-                PlatformSetSamplerState(index);
-            }
+			set { _strategy[index] = value; }
 		}
 
         internal void Clear()
         {
             _strategy.Clear();
-            PlatformClear();
         }
 
         /// <summary>
@@ -49,7 +44,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void Dirty()
         {
             _strategy.Dirty();
-            PlatformDirty();
         }
     }
 }

@@ -243,9 +243,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _pixelConstantBuffers.Apply(this);
 
             ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(D3dContext.VertexShader);
-            this.VertexSamplerStates.PlatformApply(D3dContext.VertexShader);
+            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(D3dContext.VertexShader);
             ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(D3dContext.PixelShader);
-            this.SamplerStates.PlatformApply(D3dContext.PixelShader);
+            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(D3dContext.PixelShader);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)

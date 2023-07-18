@@ -9,7 +9,6 @@
     <Compile Include="Graphics\RenderTarget2D.Ref.cs" />
     <Compile Include="Graphics\RenderTarget3D.Ref.cs" />
     <Compile Include="Graphics\RenderTargetCube.Ref.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.Ref.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.Ref.cs" />
     <Compile Include="Graphics\Shader\Shader.Ref.cs" />
     <Compile Include="Graphics\Texture.Ref.cs" />
