@@ -743,7 +743,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     if (adapter.DeviceName == output.Description.DeviceName)
                     {
-                        Adapter = adapter;
+                        _strategy.Adapter = adapter;
                         break;
                     }
                 }

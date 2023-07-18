@@ -5,23 +5,29 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public sealed partial class TextureCollection
+    internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
         private TextureTarget[] _targets;
 
-        void PlatformInit(int capacity)
+        internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
             _targets = new TextureTarget[capacity];
+            for (int i = 0; i < _targets.Length; i++)
+                _targets[i] = 0;
         }
 
-        void PlatformClear()
+
+        internal override void Clear()
         {
+            base.Clear();
             for (int i = 0; i < _targets.Length; i++)
                 _targets[i] = 0;
         }

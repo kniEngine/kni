@@ -277,8 +277,10 @@
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
+    <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
     <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\GraphicsProfile.cs" />
@@ -325,6 +327,7 @@
     <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
     <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
     <Compile Include="Graphics\SamplerStateCollection.cs" />
+    <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
@@ -355,14 +358,18 @@
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.DX11.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.DX11.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\IRenderTarget.DirectX.cs" />
@@ -370,7 +377,6 @@
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
     <Compile Include="Graphics\RenderTargetCube.DirectX.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.DirectX.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
@@ -383,7 +389,6 @@
     <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
     <Compile Include="Graphics\Texture3D.DirectX.cs" />
-    <Compile Include="Graphics\TextureCollection.DirectX.cs" />
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\TextureCube.DirectX.cs" />

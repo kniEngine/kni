@@ -2,10 +2,26 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
+using Microsoft.Xna.Platform.Graphics;
+
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDebug
     {
+        private GraphicsDebugStrategy _strategy;
+
+        internal GraphicsDebugStrategy Strategy { get { return _strategy; } }
+
+        public GraphicsDebug(GraphicsDevice device)
+        {
+            _strategy = device.Strategy.CreateGraphicsDebugStrategy(device);
+
+        }
+
         /// <summary>
         /// Attempt to dequeue a debugging message from the graphics subsystem.
         /// </summary>
@@ -18,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>True if a graphics debugging message was retrieved, false otherwise.</returns>
         public bool TryDequeueMessage(out GraphicsDebugMessage message)
         {
-            return PlatformTryDequeueMessage(out message);
+            return _strategy.TryDequeueMessage(out message);
         }
     }
 }

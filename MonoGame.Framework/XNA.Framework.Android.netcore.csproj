@@ -59,6 +59,11 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Android.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.Android.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.Android.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.OpenGL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />

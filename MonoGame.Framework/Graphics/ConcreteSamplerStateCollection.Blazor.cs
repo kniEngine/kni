@@ -1,30 +1,41 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-//
-// Author: Kenneth James Pouncey
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public sealed partial class SamplerStateCollection
+    internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
         IWebGLRenderingContext GL { get { return _device._glContext; } }
 
-        private void PlatformSetSamplerState(int index)
+
+        internal ConcreteSamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
         }
 
-        private void PlatformClear()
+
+        public override SamplerState this[int index]
         {
+            get { return base[index]; }
+            set
+            {
+                base[index] = value;
+            }
         }
 
-        private void PlatformDirty()
+        public override void Clear()
         {
+            base.Clear();
+        }
+
+        public override void Dirty()
+        {
+            base.Dirty();
         }
 
         internal void PlatformApply()
@@ -53,5 +64,5 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
         }
-	}
+    }
 }

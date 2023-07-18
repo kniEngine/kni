@@ -15,26 +15,13 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice : IDisposable
     {
-        /// <summary>
-        /// Indicates if DX9 style pixel addressing or current standard
-        /// pixel addressing should be used. This flag is set to
-        /// <c>false</c> by default. If `UseHalfPixelOffset` is
-        /// `true` you have to add half-pixel offset to a Projection matrix.
-        /// See also <see cref="GraphicsDeviceManager.PreferHalfPixelOffset"/>.
-        /// </summary>
-        /// <remarks>
-        /// XNA uses DirectX9 for its graphics. DirectX9 interprets UV
-        /// coordinates differently from other graphics API's. This is
-        /// typically referred to as the half-pixel offset. MonoGame
-        /// replicates XNA behavior if this flag is set to <c>true</c>.
-        /// </remarks>
-        public bool UseHalfPixelOffset { get; private set; }
-
-        private bool _isDisposed;
+        private GraphicsDeviceStrategy _strategy;
 
         private GraphicsContext _mainContext;
 
         private Color _discardColor = new Color(68, 34, 136, 255);
+
+        internal GraphicsDeviceStrategy Strategy { get { return _strategy; } }
 
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
@@ -65,8 +52,8 @@ namespace Microsoft.Xna.Framework.Graphics
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
         public bool IsDisposed
-        { 
-            get { return _isDisposed; } 
+        {
+            get { return _strategy.IsDisposed; }
         }
 
         public bool IsContentLost
@@ -81,9 +68,37 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public GraphicsAdapter Adapter
         {
-            get;
-            private set;
+            get { return _strategy.Adapter; }
         }
+
+        public GraphicsProfile GraphicsProfile
+        {
+            get { return _strategy.GraphicsProfile; }
+        }
+
+        /// <summary>
+        /// Indicates if DX9 style pixel addressing or current standard
+        /// pixel addressing should be used. This flag is set to
+        /// <c>false</c> by default. If `UseHalfPixelOffset` is
+        /// `true` you have to add half-pixel offset to a Projection matrix.
+        /// See also <see cref="GraphicsDeviceManager.PreferHalfPixelOffset"/>.
+        /// </summary>
+        /// <remarks>
+        /// XNA uses DirectX9 for its graphics. DirectX9 interprets UV
+        /// coordinates differently from other graphics API's. This is
+        /// typically referred to as the half-pixel offset. MonoGame
+        /// replicates XNA behavior if this flag is set to <c>true</c>.
+        /// </remarks>
+        public bool UseHalfPixelOffset
+        {
+            get { return _strategy.UseHalfPixelOffset; }
+        }
+
+        public PresentationParameters PresentationParameters
+        {
+            get { return _strategy.PresentationParameters; }
+        }
+
 
         /// <summary>
         /// The rendering information for debugging and profiling.
@@ -100,7 +115,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Access debugging APIs for the graphics subsystem.
         /// </summary>
-        public GraphicsDebug GraphicsDebug { get { return _graphicsDebug; } set { _graphicsDebug = value; } }
+        public GraphicsDebug GraphicsDebug
+        {
+            get { return _graphicsDebug; }
+            set { _graphicsDebug = value; }
+        }
 
 
         /// <summary>
@@ -114,16 +133,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
-            if (adapter == null)
-                throw new ArgumentNullException("adapter");
-            if (!adapter.IsProfileSupported(graphicsProfile))
-                throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
-            if (presentationParameters == null)
-                throw new ArgumentNullException("presentationParameters");
-
-            Adapter = adapter;
-            PresentationParameters = presentationParameters;
-            _graphicsProfile = graphicsProfile;
+            _strategy = new ConcreteGraphicsDevice(adapter, graphicsProfile, false, presentationParameters);
 
             Initialize();
         }
@@ -140,22 +150,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
-            if (adapter == null)
-                throw new ArgumentNullException("adapter");
-            if (!adapter.IsProfileSupported(graphicsProfile))
-                throw new NoSuitableGraphicsDeviceException(String.Format("Adapter '{0}' does not support the {1} profile.", adapter.Description, graphicsProfile));
-            if (presentationParameters == null)
-                throw new ArgumentNullException("presentationParameters");
-
-#if DIRECTX
-            // TODO we need to figure out how to inject the half pixel offset into DX shaders
+#if DIRECTX            
             preferHalfPixelOffset = false;
 #endif
 
-            Adapter = adapter;
-            _graphicsProfile = graphicsProfile;
-            UseHalfPixelOffset = preferHalfPixelOffset;
-            PresentationParameters = presentationParameters;
+            _strategy = new ConcreteGraphicsDevice(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
+
 
             Initialize();
         }
@@ -191,7 +191,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private void Initialize()
         {
             // Setup
-
             PlatformSetup();
 
 #if DEBUG
@@ -207,7 +206,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Initialize the main viewport
             _mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
-            _mainContext.Strategy._vertexTextures = new TextureCollection(this, _mainContext,Capabilities.MaxVertexTextureSlots);
+            _mainContext.Strategy._vertexTextures = new TextureCollection(this, _mainContext, Capabilities.MaxVertexTextureSlots);
             _mainContext.Strategy._pixelTextures = new TextureCollection(this, _mainContext, Capabilities.MaxTextureSlots);
 
             _mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _mainContext, Capabilities.MaxTextureSlots);
@@ -274,9 +273,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BlendState BlendState
         {
-			get { return CurrentContext.BlendState; }
-			set { CurrentContext.BlendState = value; }
-		}
+            get { return CurrentContext.BlendState; }
+            set { CurrentContext.BlendState = value; }
+        }
 
         /// <summary>
         /// The color used as blend factor when alpha blending.
@@ -328,9 +327,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public Color DiscardColor
         {
-			get { return _discardColor; }
-			set { _discardColor = value; }
-		}
+            get { return _discardColor; }
+            set { _discardColor = value; }
+        }
 
         public void Clear(Color color)
         {
@@ -342,7 +341,7 @@ namespace Microsoft.Xna.Framework.Graphics
             CurrentContext.Clear(options, color, depth, stencil);
         }
 
-		public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
+        public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             CurrentContext.Clear(options, color, depth, stencil);
         }
@@ -355,53 +354,53 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_isDisposed)
+            if (!_strategy.IsDisposed)
+                return;
+
+            _strategy.Dispose();
+
+            if (disposing)
             {
-                if (disposing)
+                // Dispose of all remaining graphics resources before disposing of the graphics device
+                lock (_resourcesLock)
                 {
-                    // Dispose of all remaining graphics resources before disposing of the graphics device
-                    lock (_resourcesLock)
+                    foreach (var resource in _resources.ToArray())
                     {
-                        foreach (var resource in _resources.ToArray())
-                        {
-                            var target = resource.Target as IDisposable;
-                            if (target != null)
-                                target.Dispose();
-                        }
-                        _resources.Clear();
+                        var target = resource.Target as IDisposable;
+                        if (target != null)
+                            target.Dispose();
                     }
-
-                    // Clear the effect cache.
-                    EffectCache.Clear();
-
-                    _mainContext.Strategy._blendState = null;
-                    _mainContext.Strategy._actualBlendState = null;
-                    _mainContext.Strategy._blendStateAdditive.Dispose();
-                    _mainContext.Strategy._blendStateAlphaBlend.Dispose();
-                    _mainContext.Strategy._blendStateNonPremultiplied.Dispose();
-                    _mainContext.Strategy._blendStateOpaque.Dispose();
-
-                    _mainContext.Strategy._depthStencilState = null;
-                    _mainContext.Strategy._actualDepthStencilState = null;
-                    _mainContext.Strategy._depthStencilStateDefault.Dispose();
-                    _mainContext.Strategy._depthStencilStateDepthRead.Dispose();
-                    _mainContext.Strategy._depthStencilStateNone.Dispose();
-
-                    _mainContext.Strategy._rasterizerState = null;
-                    _mainContext.Strategy._actualRasterizerState = null;
-                    _mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
-                    _mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
-                    _mainContext.Strategy._rasterizerStateCullNone.Dispose();
-
-                    PlatformDispose();
+                    _resources.Clear();
                 }
 
-                _isDisposed = true;
+                // Clear the effect cache.
+                EffectCache.Clear();
 
-                var handler = Disposing;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
+                _mainContext.Strategy._blendState = null;
+                _mainContext.Strategy._actualBlendState = null;
+                _mainContext.Strategy._blendStateAdditive.Dispose();
+                _mainContext.Strategy._blendStateAlphaBlend.Dispose();
+                _mainContext.Strategy._blendStateNonPremultiplied.Dispose();
+                _mainContext.Strategy._blendStateOpaque.Dispose();
+
+                _mainContext.Strategy._depthStencilState = null;
+                _mainContext.Strategy._actualDepthStencilState = null;
+                _mainContext.Strategy._depthStencilStateDefault.Dispose();
+                _mainContext.Strategy._depthStencilStateDepthRead.Dispose();
+                _mainContext.Strategy._depthStencilStateNone.Dispose();
+
+                _mainContext.Strategy._rasterizerState = null;
+                _mainContext.Strategy._actualRasterizerState = null;
+                _mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
+                _mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
+                _mainContext.Strategy._rasterizerStateCullNone.Dispose();
+
+                PlatformDispose();
             }
+
+            var handler = Disposing;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         internal void AddResourceReference(WeakReference resourceReference)
@@ -464,7 +463,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
-            PresentationParameters = presentationParameters;
+            _strategy.PresentationParameters = presentationParameters;
             Reset();
         }
 
@@ -478,17 +477,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return GraphicsDeviceStatus.Normal; }
         }
 
-        public PresentationParameters PresentationParameters
-        {
-            get;
-            private set;
-        }
-
-        private readonly GraphicsProfile _graphicsProfile;
-        public GraphicsProfile GraphicsProfile
-        {
-            get { return _graphicsProfile; }
-        }
 
 
         public void SetRenderTarget(RenderTarget2D renderTarget)

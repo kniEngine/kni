@@ -242,10 +242,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply(D3dContext.VertexShader);
-            this.VertexSamplerStates.PlatformApply(D3dContext.VertexShader);
-            this.Textures.PlatformApply(D3dContext.PixelShader);
-            this.SamplerStates.PlatformApply(D3dContext.PixelShader);
+            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(D3dContext.VertexShader);
+            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(D3dContext.VertexShader);
+            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(D3dContext.PixelShader);
+            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(D3dContext.PixelShader);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
@@ -547,8 +547,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                this.VertexTextures.ClearTargets(_currentRenderTargetBindings, D3dContext.VertexShader);
-                this.Textures.ClearTargets(_currentRenderTargetBindings, D3dContext.PixelShader);
+                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.VertexShader);
+                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.PixelShader);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)
@@ -578,7 +578,7 @@ namespace Microsoft.Xna.Platform.Graphics
             lock (this.D3dContext)
                     this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
 
-            this.Textures.Dirty();
+            _pixelTextures.Dirty();
             this.SamplerStates.Dirty();
             _depthStencilStateDirty = true;
             _blendStateDirty = true;

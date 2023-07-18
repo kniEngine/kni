@@ -223,10 +223,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            this.VertexTextures.PlatformApply();
-            this.VertexSamplerStates.PlatformApply();
-            this.Textures.PlatformApply();
-            this.SamplerStates.PlatformApply();
+            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply();
+            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply();
+            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply();
+            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply();
         }
 
         private int GetCurrentShaderProgramHash2()
@@ -709,7 +709,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            Textures.Dirty();
+            _pixelTextures.Strategy.Dirty();
         }
 
         internal IRenderTarget PlatformApplyRenderTargets()
@@ -766,7 +766,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _rasterizerStateDirty = true;
 
             // Textures will need to be rebound to render correctly in the new render target.
-            this.Textures.Dirty();
+            _pixelTextures.Strategy.Dirty();
 
             return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }

@@ -5,21 +5,25 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using D3D11 = SharpDX.Direct3D11;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public sealed partial class TextureCollection
+    internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
 
-        void PlatformInit(int capacity)
+        internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
         }
 
-        void PlatformClear()
+
+        internal override void Clear()
         {
+            base.Clear();
         }
 
         internal void ClearTargets(RenderTargetBinding[] targets, D3D11.CommonShaderStage shaderStage)

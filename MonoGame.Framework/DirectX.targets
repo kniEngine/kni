@@ -8,10 +8,13 @@
     <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.DX11.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.DX11.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsDebug.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\IRenderTarget.DirectX.cs" />
@@ -19,7 +22,6 @@
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
     <Compile Include="Graphics\RenderTargetCube.DirectX.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.DirectX.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
@@ -29,7 +31,6 @@
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.DirectX.cs" />
     <Compile Include="Graphics\Texture3D.DirectX.cs" />
-    <Compile Include="Graphics\TextureCollection.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.DirectX.cs" />
     <Compile Include="Platform\Graphics\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.DirectX.cs" />

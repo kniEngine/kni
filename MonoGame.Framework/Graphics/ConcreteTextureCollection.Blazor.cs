@@ -1,36 +1,39 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-// Copyright (C)2023 Nick Kastellanos
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public sealed partial class TextureCollection
+    internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
         private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
+
         private WebGLTextureTarget[] _targets;
 
-        void PlatformInit(int capacity)
+        internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+            : base(device, context, capacity)
         {
             _targets = new WebGLTextureTarget[capacity];
+            for (int i = 0; i < _targets.Length; i++)
+                _targets[i] = 0;
         }
 
-        void PlatformClear()
+
+        internal override void Clear()
         {
-            for (var i = 0; i < _targets.Length; i++)
+            base.Clear();
+            for (int i = 0; i < _targets.Length; i++)
                 _targets[i] = 0;
         }
 
         internal void PlatformApply()
         {
-            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
                 if ((_dirty & mask) == 0)

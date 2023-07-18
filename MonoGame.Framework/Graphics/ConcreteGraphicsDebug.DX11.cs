@@ -2,22 +2,27 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using SharpDX.Direct3D11;
-using System.Collections.Generic;
+// Copyright (C)2023 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework.Graphics
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct3D11;
+
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class GraphicsDebug
+    internal sealed class ConcreteGraphicsDebug : GraphicsDebugStrategy
     {
-        private readonly GraphicsDevice _device;
         private readonly InfoQueue _infoQueue;
         private readonly Queue<GraphicsDebugMessage> _cachedMessages;
         private bool _hasPushedFilters = false;
 
-        public GraphicsDebug(GraphicsDevice device)
+
+        internal ConcreteGraphicsDebug(GraphicsDevice device)
+            : base(device)
         {
-            _device = device;
-            _infoQueue = _device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
+            _infoQueue = device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();
 
             if (_infoQueue != null)
@@ -28,7 +33,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private bool PlatformTryDequeueMessage(out GraphicsDebugMessage message)
+
+        public override bool TryDequeueMessage(out GraphicsDebugMessage message)
         {
             if (_infoQueue == null)
             {

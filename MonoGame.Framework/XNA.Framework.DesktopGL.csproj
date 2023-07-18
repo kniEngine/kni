@@ -259,8 +259,10 @@
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
+    <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
     <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\GraphicsProfile.cs" />
@@ -307,6 +309,7 @@
     <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
     <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
     <Compile Include="Graphics\SamplerStateCollection.cs" />
+    <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
@@ -338,6 +341,7 @@
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
@@ -369,8 +373,12 @@
     <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
 	<Compile Include="Graphics\ConcreteGraphicsContext.OpenGL.cs" />
+    <Compile Include="Graphics\ConcreteGraphicsDebug.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
+	<Compile Include="Graphics\ConcreteGraphicsDevice.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteSamplerStateCollection.OpenGL.cs" />
+	<Compile Include="Graphics\ConcreteTextureCollection.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
-    <Compile Include="Graphics\GraphicsDebug.Default.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
@@ -381,7 +389,6 @@
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ShaderProgramCache.OpenGL.cs" />
@@ -394,7 +401,6 @@
     <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
     <Compile Include="Graphics\Texture3D.OpenGL.cs" />
-    <Compile Include="Graphics\TextureCollection.OpenGL.cs" />
     <Compile Include="Graphics\TextureCube.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
