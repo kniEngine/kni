@@ -7,7 +7,6 @@
   <ItemGroup>
     <Compile Include="Graphics\Effect\EffectResource.Blazor.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Blazor.cs" />
-    <Compile Include="Graphics\GraphicsDebug.Blazor.cs" />
     <Compile Include="Graphics\GraphicsDevice.Blazor.cs" />
     <Compile Include="Graphics\GraphicsExtensions.Blazor.cs" />
     <Compile Include="Graphics\IRenderTarget.Blazor.cs" />

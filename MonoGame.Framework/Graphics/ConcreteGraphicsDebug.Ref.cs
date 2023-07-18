@@ -16,5 +16,9 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        public override bool TryDequeueMessage(out GraphicsDebugMessage message)
+        {
+            throw new PlatformNotSupportedException();
+        }
     }
 }

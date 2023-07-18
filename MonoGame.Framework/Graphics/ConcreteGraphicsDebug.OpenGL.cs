@@ -16,5 +16,10 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        public override bool TryDequeueMessage(out GraphicsDebugMessage message)
+        {
+            message = null;
+            return false;
+        }
     }
 }
