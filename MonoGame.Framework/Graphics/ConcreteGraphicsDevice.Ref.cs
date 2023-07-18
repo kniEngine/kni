@@ -16,6 +16,22 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
+        {
+            return new ConcreteTextureCollection(device, context, capacity);
+        }
+
+        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
+        {
+            return new ConcreteSamplerStateCollection(device, context, capacity);
+        }
+
+        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsDevice device)
+        {
+            return new ConcreteGraphicsDebug(device);
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -22,8 +22,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal SamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
         {
-            _strategy = new ConcreteSamplerStateCollection(device, context, capacity);
-
+            _strategy = device.Strategy.CreateSamplerStateCollectionStrategy(device, context, capacity);
+            
             Clear();
         }
 		

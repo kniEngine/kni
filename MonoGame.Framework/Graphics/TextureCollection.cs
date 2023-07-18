@@ -19,7 +19,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal TextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
         {
-            _strategy = new ConcreteTextureCollection(device, context, capacity);
+            _strategy = device.Strategy.CreateTextureCollectionStrategy(device, context, capacity);
+
         }
 
         public Texture this[int index]

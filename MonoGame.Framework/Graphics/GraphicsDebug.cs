@@ -18,7 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public GraphicsDebug(GraphicsDevice device)
         {
-            _strategy = new ConcreteGraphicsDebug(device);
+            _strategy = device.Strategy.CreateGraphicsDebugStrategy(device);
+
         }
 
         /// <summary>

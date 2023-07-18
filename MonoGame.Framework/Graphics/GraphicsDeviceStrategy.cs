@@ -61,6 +61,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+
+        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);
+        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);
+        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsDevice device);
+
         #region IDisposable Members
 
         ~GraphicsDeviceStrategy()
@@ -86,6 +91,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
         }
+
 
         #endregion IDisposable Members
 
