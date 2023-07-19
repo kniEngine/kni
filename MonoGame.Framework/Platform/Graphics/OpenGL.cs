@@ -30,8 +30,9 @@ namespace MonoGame.OpenGL
 
     internal enum BufferUsageHint
     {
-        StreamDraw = 0x88E0,
-        StaticDraw = 0x88E4,
+        StreamDraw  = 0x88E0,
+        StaticDraw  = 0x88E4,
+        DynamicDraw = 0x88E8,
     }
 
     internal enum StencilFace
