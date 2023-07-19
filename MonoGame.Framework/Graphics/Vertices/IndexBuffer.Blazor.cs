@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
                 GraphicsExtensions.CheckGLError();
                 GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                              sizeInBytes, _isDynamic ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                              sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
                 GraphicsExtensions.CheckGLError();
             }
         }
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BufferData(
                         WebGLBufferType.ELEMENT_ARRAY,
                         bufferSize,
-                        _isDynamic ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                        _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             }
 
             GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
