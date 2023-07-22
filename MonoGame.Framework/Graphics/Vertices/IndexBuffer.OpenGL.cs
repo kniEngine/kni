@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GraphicsExtensions.CheckGLError();
                 GL.BufferData(BufferTarget.ElementArrayBuffer,
-                              (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.StreamDraw : BufferUsageHint.StaticDraw);
+                              (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
                 GraphicsExtensions.CheckGLError();
             }
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         BufferTarget.ElementArrayBuffer,
                         (IntPtr)bufferSize,
                         IntPtr.Zero,
-                        _isDynamic ? BufferUsageHint.StreamDraw : BufferUsageHint.StaticDraw);
+                        _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
                     GraphicsExtensions.CheckGLError();
                 }
 

@@ -547,7 +547,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
             GL.BufferData(WebGLBufferType.ARRAY,
                           (vertexDeclaration.VertexStride * vertexData.Length),
-                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default Vertex buffers for rebinding
             _vertexBuffersDirty = true;
@@ -593,7 +593,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
             GL.BufferData(WebGLBufferType.ARRAY,
                           (vertexDeclaration.VertexStride * vertexData.Length),
-                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default Vertex buffers for rebinding
             _vertexBuffersDirty = true;
@@ -609,7 +609,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
             GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
                           (indexData.Length * sizeof(short)),
-                          (false) ? WebGLBufferUsageHint.STREAM_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
             // mark the default index buffer for rebinding
             _indexBufferDirty = true;
