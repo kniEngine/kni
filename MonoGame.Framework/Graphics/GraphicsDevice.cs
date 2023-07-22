@@ -354,7 +354,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_strategy.IsDisposed)
+            if (_strategy.IsDisposed)
                 return;
 
             _strategy.Dispose();
