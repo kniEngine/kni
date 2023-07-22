@@ -364,12 +364,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Dispose of all remaining graphics resources before disposing of the graphics device
                 lock (_resourcesLock)
                 {
-                    foreach (var resource in _resources.ToArray())
+                    for (int i = _resources.Count - 1; i >= 0; i--)
                     {
-                        var target = resource.Target as IDisposable;
+                        WeakReference resource = _resources[i];
+
+                        IDisposable target = resource.Target as IDisposable;
                         if (target != null)
                             target.Dispose();
                     }
+
                     _resources.Clear();
                 }
 
