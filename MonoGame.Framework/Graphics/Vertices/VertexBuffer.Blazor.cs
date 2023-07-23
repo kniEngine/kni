@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
                 GraphicsExtensions.CheckGLError();
+                this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+
                 GL.BufferData(WebGLBufferType.ARRAY,
                               (VertexDeclaration.VertexStride * VertexCount),
                               (_isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
@@ -55,6 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             if (options == SetDataOptions.Discard)
             {

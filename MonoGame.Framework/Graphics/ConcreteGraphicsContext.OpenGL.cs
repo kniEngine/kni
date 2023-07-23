@@ -599,7 +599,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexBuffersDirty = true;
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GraphicsExtensions.CheckGLError();
-            _vertexBuffersDirty = true;
+            _indexBufferDirty = true;
 
             // Pin the buffers.
             GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);

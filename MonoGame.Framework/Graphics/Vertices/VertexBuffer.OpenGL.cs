@@ -38,6 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
                 GraphicsExtensions.CheckGLError();
+                this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+
                 GL.BufferData(BufferTarget.ArrayBuffer,
                               new IntPtr(VertexDeclaration.VertexStride * VertexCount), IntPtr.Zero,
                               _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
@@ -66,6 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             // Pointer to the start of data in the vertex buffer
             IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
@@ -119,6 +122,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             if (options == SetDataOptions.Discard)
             {
