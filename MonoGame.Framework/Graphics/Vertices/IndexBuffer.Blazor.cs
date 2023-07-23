@@ -36,6 +36,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
                 GraphicsExtensions.CheckGLError();
+                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
                 GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
                               sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
                 GraphicsExtensions.CheckGLError();
@@ -59,6 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
             GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             if (options == SetDataOptions.Discard)
             {

@@ -38,6 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GraphicsExtensions.CheckGLError();
+                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
                 GL.BufferData(BufferTarget.ElementArrayBuffer,
                               (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
                 GraphicsExtensions.CheckGLError();
@@ -63,6 +65,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
             GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             // Pointer to the start of data to read in the index buffer
@@ -105,6 +109,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GraphicsExtensions.CheckGLError();
+                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
                 if (options == SetDataOptions.Discard)
                 {
