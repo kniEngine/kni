@@ -61,6 +61,7 @@ namespace Microsoft.Xna.Framework
 		public abstract string ScreenDeviceName { get; }
 
 		private string _title;
+
         /// <summary>
         /// Gets or sets the title of the game window.
         /// </summary>
@@ -73,11 +74,16 @@ namespace Microsoft.Xna.Framework
 			get { return _title; }
 			set 
             {
-				if (_title != value) 
+                if (value != null)
                 {
-					SetTitle(value);
-					_title = value;
-				}
+                    if (_title != value)
+                    {
+                        SetTitle(value);
+                        _title = value;
+                    }
+                }
+                else
+                    throw new ArgumentNullException("Title");
 			}
 		}
 
