@@ -434,13 +434,17 @@ internal static class Sdl
         public static d_sdl_setwindowsize SetSize = FuncLoader.LoadFunctionOrNull<d_sdl_setwindowsize>(NativeLibrary, "SDL_SetWindowSize");
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void d_sdl_setwindowtitle(IntPtr window, ref byte value);
+        private unsafe delegate void d_sdl_setwindowtitle(IntPtr window, byte* value);
         private static d_sdl_setwindowtitle SDL_SetWindowTitle = FuncLoader.LoadFunctionOrNull<d_sdl_setwindowtitle>(NativeLibrary, "SDL_SetWindowTitle");
 
-        public static void SetTitle(IntPtr handle, string title)
+        public unsafe static void SetTitle(IntPtr handle, string title)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(title+'\0');
-            SDL_SetWindowTitle(handle, ref bytes[0]);
+            byte[] str = Encoding.UTF8.GetBytes(title+'\0');
+
+            fixed (byte* pStr = str)
+            {
+                SDL_SetWindowTitle(handle, pStr);
+            }
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
