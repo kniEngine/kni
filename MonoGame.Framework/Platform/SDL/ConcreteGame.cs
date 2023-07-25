@@ -149,6 +149,13 @@ namespace Microsoft.Xna.Platform
                     case Sdl.EventType.ControllerAxisMotion:
                         GamePad.UpdatePacketInfo(ev.ControllerDevice.Which, ev.ControllerDevice.TimeStamp);
                         break;
+                    case Sdl.EventType.MouseMotion:
+                        unchecked
+                        {
+                            _window.MouseState.RawX += ev.Motion.Xrel;
+                            _window.MouseState.RawY += ev.Motion.Yrel;
+                        }
+                        break;
                     case Sdl.EventType.MouseWheel:
                         const int wheelDelta = 120;
                         Mouse.ScrollY += ev.Wheel.Y * wheelDelta;
