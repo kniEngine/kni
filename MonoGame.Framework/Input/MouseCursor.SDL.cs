@@ -11,6 +11,8 @@ namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
+        private static Sdl SDL { get { return Sdl.Current; } }
+
         private readonly bool _isBuildInMouseCursor;
         private IntPtr _handle;
         
@@ -34,7 +36,7 @@ namespace Microsoft.Xna.Framework.Input
         private MouseCursor(bool isBuildInMouseCursor, Sdl.Mouse.SystemCursor cursor)
         {
             _isBuildInMouseCursor = isBuildInMouseCursor;
-            _handle = Sdl.Mouse.CreateSystemCursor(cursor);
+            _handle = SDL.MOUSE.CreateSystemCursor(cursor);
         }
 
 
@@ -59,20 +61,20 @@ namespace Microsoft.Xna.Framework.Input
             IntPtr surface = IntPtr.Zero;
             try
             {
-                surface = Sdl.CreateRGBSurfaceFrom(data, w, h, 32, w * 4, 0x000000ff, 0x0000FF00, 0x00FF0000, 0xFF000000);
+                surface = SDL.CreateRGBSurfaceFrom(data, w, h, 32, w * 4, 0x000000ff, 0x0000FF00, 0x00FF0000, 0xFF000000);
                 if (surface == IntPtr.Zero)
-                    throw new InvalidOperationException("Failed to create surface for mouse cursor: " + Sdl.GetError());
+                    throw new InvalidOperationException("Failed to create surface for mouse cursor: " + SDL.GetError());
 
-                IntPtr handle = Sdl.Mouse.CreateColorCursor(surface, originx, originy);
+                IntPtr handle = SDL.MOUSE.CreateColorCursor(surface, originx, originy);
                 if (handle == IntPtr.Zero)
-                    throw new InvalidOperationException("Failed to set surface for mouse cursor: " + Sdl.GetError());
+                    throw new InvalidOperationException("Failed to set surface for mouse cursor: " + SDL.GetError());
 
                 return new MouseCursor(false, handle);
             }
             finally
             {
                 if (surface != IntPtr.Zero)
-                    Sdl.FreeSurface(surface);
+                    SDL.FreeSurface(surface);
             }
         }
 
@@ -84,7 +86,7 @@ namespace Microsoft.Xna.Framework.Input
             }
 
             if (_handle != IntPtr.Zero)
-                Sdl.Mouse.FreeCursor(_handle);
+                SDL.MOUSE.FreeCursor(_handle);
 
             _handle = IntPtr.Zero;
         }

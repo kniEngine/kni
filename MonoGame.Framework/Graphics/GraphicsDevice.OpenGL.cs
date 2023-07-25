@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if DEBUG
             // create debug context, so we get better error messages (glDebugMessageCallback)
-            Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 #endif
 
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformPresent()
         {
 #if DESKTOPGL
-            Sdl.GL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
+            Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
             GraphicsExtensions.CheckGLError();
 #endif
         }
@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if DESKTOPGL
             ((ConcreteGraphicsContext)_mainContext.Strategy).MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(PresentationParameters.PresentationInterval);
-            Sdl.GL.SetSwapInterval(swapInterval);
+            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
 #endif
 
             _mainContext.ApplyRenderTargets(null);
@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 DriverData = IntPtr.Zero
             };
             Sdl.Display.Mode closest;
-            Sdl.Display.GetClosestDisplayMode(0, mode, out closest);
+            Sdl.Current.DISPLAY.GetClosestDisplayMode(0, mode, out closest);
             width = closest.Width;
             height = closest.Height;
         }
@@ -307,7 +307,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void GetDisplayResolution(out int width, out int height)
         {
             Sdl.Display.Mode mode;
-            Sdl.Display.GetCurrentDisplayMode(0, out mode);
+            Sdl.Current.DISPLAY.GetCurrentDisplayMode(0, out mode);
             width = mode.Width;
             height = mode.Height;
         }

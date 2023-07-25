@@ -10,6 +10,8 @@ namespace Microsoft.Xna.Framework.Input
 {
     public static partial class Mouse
     {
+        private static Sdl SDL { get { return Sdl.Current; } }
+
         internal static int ScrollX;
         internal static int ScrollY;
 
@@ -30,8 +32,8 @@ namespace Microsoft.Xna.Framework.Input
         private static MouseState PlatformGetState(GameWindow window)
         {
             int x, y;
-            var winFlags = Sdl.Window.GetWindowFlags(window.Handle);
-            var state = Sdl.Mouse.GetGlobalState(out x, out y);
+            var winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
+            var state = SDL.MOUSE.GetGlobalState(out x, out y);
             var clientBounds = window.ClientBounds;
 
             window.MouseState.LeftButton = (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released;
@@ -53,13 +55,13 @@ namespace Microsoft.Xna.Framework.Input
         {
             PrimaryWindow.MouseState.X = x;
             PrimaryWindow.MouseState.Y = y;
-            
-            Sdl.Mouse.WarpInWindow(PrimaryWindow.Handle, x, y);
+
+            SDL.MOUSE.WarpInWindow(PrimaryWindow.Handle, x, y);
         }
 
         private static void PlatformSetCursor(MouseCursor cursor)
         {
-            Sdl.Mouse.SetCursor(cursor.Handle);
+            SDL.MOUSE.SetCursor(cursor.Handle);
         }
     }
 }

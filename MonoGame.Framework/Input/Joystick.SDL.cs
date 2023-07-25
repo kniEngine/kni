@@ -9,19 +9,21 @@ namespace Microsoft.Xna.Framework.Input
 {
     static partial class Joystick
     {
+        private static Sdl SDL { get { return Sdl.Current; } }
+
         internal static Dictionary<int, IntPtr> Joysticks = new Dictionary<int, IntPtr>();
         private static int _lastConnectedIndex = -1;
 
         internal static void AddDevices()
         {
-            int numJoysticks = Sdl.Joystick.NumJoysticks();
+            int numJoysticks = SDL.JOYSTICK.NumJoysticks();
             for (int i = 0; i < numJoysticks; i++)
                 AddDevice(i);
         }
 
         internal static void AddDevice(int deviceId)
         {
-            var jdevice = Sdl.Joystick.Open(deviceId);
+            var jdevice = SDL.JOYSTICK.Open(deviceId);
             if (Joysticks.ContainsValue(jdevice)) return;
 
             var id = 0;
@@ -34,7 +36,7 @@ namespace Microsoft.Xna.Framework.Input
 
             Joysticks.Add(id, jdevice);
 
-            if (Sdl.GameController.IsGameController(deviceId) == 1)
+            if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
                 GamePad.AddDevice(deviceId);
         }
 
@@ -42,11 +44,11 @@ namespace Microsoft.Xna.Framework.Input
         {
             foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
             {
-                if (Sdl.Joystick.InstanceID(entry.Value) == instanceid)
+                if (SDL.JOYSTICK.InstanceID(entry.Value) == instanceid)
                 {
                     int key = entry.Key;
 
-                    Sdl.Joystick.Close(Joysticks[entry.Key]);
+                    SDL.JOYSTICK.Close(Joysticks[entry.Key]);
                     Joysticks.Remove(entry.Key);
 
                     if (key == _lastConnectedIndex)
@@ -62,7 +64,7 @@ namespace Microsoft.Xna.Framework.Input
             GamePad.CloseDevices();
 
             foreach (var entry in Joysticks)
-                Sdl.Joystick.Close(entry.Value);
+                SDL.JOYSTICK.Close(entry.Value);
 
             Joysticks.Clear();
         }
@@ -103,12 +105,12 @@ namespace Microsoft.Xna.Framework.Input
             return new JoystickCapabilities
             {
                 IsConnected = true,
-                DisplayName = Sdl.Joystick.GetJoystickName(jdevice),
-                Identifier = Sdl.Joystick.GetGUID(jdevice).ToString(),
-                IsGamepad = (Sdl.GameController.IsGameController(index) == 1),
-                AxisCount = Sdl.Joystick.NumAxes(jdevice),
-                ButtonCount = Sdl.Joystick.NumButtons(jdevice), 
-                HatCount = Sdl.Joystick.NumHats(jdevice)
+                DisplayName = SDL.JOYSTICK.GetJoystickName(jdevice),
+                Identifier = SDL.JOYSTICK.GetGUID(jdevice).ToString(),
+                IsGamepad = (SDL.GAMECONTROLLER.IsGameController(index) == 1),
+                AxisCount = SDL.JOYSTICK.NumAxes(jdevice),
+                ButtonCount = SDL.JOYSTICK.NumButtons(jdevice), 
+                HatCount = SDL.JOYSTICK.NumHats(jdevice)
             };
         }
 
@@ -123,16 +125,16 @@ namespace Microsoft.Xna.Framework.Input
 
             var axes = new int[jcap.AxisCount];
             for (var i = 0; i < axes.Length; i++)
-                axes[i] = Sdl.Joystick.GetAxis(jdevice, i);
+                axes[i] = SDL.JOYSTICK.GetAxis(jdevice, i);
 
             var buttons = new ButtonState[jcap.ButtonCount];
             for (var i = 0; i < buttons.Length; i++)
-                buttons[i] = (Sdl.Joystick.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
+                buttons[i] = (SDL.JOYSTICK.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
             var hats = new JoystickHat[jcap.HatCount];
             for (var i = 0; i < hats.Length; i++)
             {
-                var hatstate = Sdl.Joystick.GetHat(jdevice, i);
+                var hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
 
                 hats[i] = new JoystickHat
                 {
@@ -181,14 +183,14 @@ namespace Microsoft.Xna.Framework.Input
             }
 
             for (var i = 0; i < jcap.AxisCount; i++)
-                joystickState.Axes[i] = Sdl.Joystick.GetAxis(jdevice, i);
+                joystickState.Axes[i] = SDL.JOYSTICK.GetAxis(jdevice, i);
 
             for (var i = 0; i < jcap.ButtonCount; i++)
-                joystickState.Buttons[i] = (Sdl.Joystick.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
+                joystickState.Buttons[i] = (SDL.JOYSTICK.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
             for (var i = 0; i < jcap.HatCount; i++)
             {
-                var hatstate = Sdl.Joystick.GetHat(jdevice, i);
+                var hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
 
                 joystickState.Hats[i] = new JoystickHat
                 {

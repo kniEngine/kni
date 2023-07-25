@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
+        private Sdl SDL { get { return Sdl.Current; } }
+
         internal override void Run()
         {
             if (!_initialized)
@@ -56,27 +58,25 @@ namespace Microsoft.Xna.Platform
             _keys = new List<Keys>();
             Keyboard.SetKeys(_keys);
 
-            Sdl.GetVersion(out Sdl.version);
-
             var minVersion = new Sdl.Version(2,0,5);
 
-            if (Sdl.version < minVersion)
+            if (SDL.version < minVersion)
                 Debug.WriteLine("Please use SDL " + minVersion + " or higher.");
 
             // Needed so VS can debug the project on Windows
-            if (Sdl.version >= minVersion && CurrentPlatform.OS == OS.Windows && Debugger.IsAttached)
-                Sdl.SetHint("SDL_WINDOWS_DISABLE_THREAD_NAMING", "1");
+            if (SDL.version >= minVersion && CurrentPlatform.OS == OS.Windows && Debugger.IsAttached)
+                SDL.SetHint("SDL_WINDOWS_DISABLE_THREAD_NAMING", "1");
 
             _dropList = new List<string>();
 
-            Sdl.Init((int)(
+            SDL.Init((int)(
                 Sdl.InitFlags.Video |
                 Sdl.InitFlags.Joystick |
                 Sdl.InitFlags.GameController |
                 Sdl.InitFlags.Haptic
             ));
 
-            Sdl.DisableScreenSaver();
+            SDL.DisableScreenSaver();
 
             GamePad.InitDatabase();
             Window = _window = new SdlGameWindow(Game);
@@ -104,15 +104,15 @@ namespace Microsoft.Xna.Platform
 
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
-            int displayIndex = Sdl.Window.GetDisplayIndex(Window.Handle);
-            string displayName = Sdl.Display.GetDisplayName(displayIndex);
+            int displayIndex = SDL.WINDOW.GetDisplayIndex(Window.Handle);
+            string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
             bool willBeFullScreen = pp.IsFullScreen;
             EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
         }
 
         private void RunLoop()
         {
-            Sdl.Window.Show(Window.Handle);
+            SDL.WINDOW.Show(Window.Handle);
 
             while (true)
             {
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform
         {
             Sdl.Event ev;
 
-            while (Sdl.PollEvent(out ev) == 1)
+            while (SDL.PollEvent(out ev) == 1)
             {
                 switch (ev.Type)
                 {
@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Platform
                             break;
 
                         string path = InteropHelpers.Utf8ToString(ev.Drop.File);
-                        Sdl.Drop.SDL_Free(ev.Drop.File);
+                        SDL.SDL_Free(ev.Drop.File);
                         _dropList.Add(path);
 
                         break;
@@ -327,7 +327,7 @@ namespace Microsoft.Xna.Platform
 
                 Joystick.CloseDevices();
 
-                Sdl.Quit();
+                SDL.Quit();
             }
 
             base.Dispose(disposing);

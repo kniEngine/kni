@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
+        private Sdl SDL { get { return Sdl.Current; } }
+
         private DisplayModeCollection _supportedDisplayModes;
         string _description = string.Empty;
 
@@ -71,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get
             {
                 bool displayChanged = false;
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
+                var displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
                 displayChanged = displayIndex != _displayIndex;
                 if (_supportedDisplayModes == null || displayChanged)
                 {
@@ -80,12 +82,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     _displayIndex = displayIndex;
                     modes.Clear();
 
-                    var modeCount = Sdl.Display.GetNumDisplayModes(displayIndex);
+                    var modeCount = SDL.DISPLAY.GetNumDisplayModes(displayIndex);
 
                     for (int i = 0; i < modeCount; i++)
                     {
                         Sdl.Display.Mode mode;
-                        Sdl.Display.GetDisplayMode(displayIndex, i, out mode);
+                        SDL.DISPLAY.GetDisplayMode(displayIndex, i, out mode);
 
                         // We are only using one format, Color
                         // mode.Format gets the Color format from SDL
@@ -110,10 +112,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                var displayIndex = Sdl.Display.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
+                var displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
                 Sdl.Display.Mode mode;
-                Sdl.Display.GetCurrentDisplayMode(displayIndex, out mode);
+                SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out mode);
 
                 return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
             }
