@@ -11,6 +11,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsContext : ConcreteGraphicsContextGL
     {
+        private Sdl SDL { get { return Sdl.Current; } }
+
         private IntPtr _glContext;
 
         internal DrawBuffersEnum[] _drawBuffers;
@@ -20,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsContext(GraphicsDevice device)
             : base(device)
         {
-            _glContext = Sdl.GL.CreateGLContext(device.PresentationParameters.DeviceWindowHandle);
+            _glContext = SDL.OpenGL.CreateGLContext(device.PresentationParameters.DeviceWindowHandle);
 
             // GL entry points must be loaded after the GL context creation, otherwise some Windows drivers will return only GL 1.3 compatible functions
             try
@@ -36,12 +38,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
             MakeCurrent(device.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(device.PresentationParameters.PresentationInterval);
-            Sdl.GL.SetSwapInterval(swapInterval);
+            SDL.OpenGL.SetSwapInterval(swapInterval);
         }
 
         public void MakeCurrent(IntPtr winHandle)
         {
-            Sdl.GL.MakeCurrent(winHandle, _glContext);
+            SDL.OpenGL.MakeCurrent(winHandle, _glContext);
         }
 
         /// <summary>
@@ -82,7 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             if (_glContext != IntPtr.Zero)
-                Sdl.GL.DeleteContext(_glContext);
+                SDL.OpenGL.DeleteContext(_glContext);
             _glContext = IntPtr.Zero;
 
             base.Dispose(disposing);

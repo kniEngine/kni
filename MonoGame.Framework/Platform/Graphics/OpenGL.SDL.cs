@@ -17,7 +17,7 @@ namespace MonoGame.OpenGL
 
         private static T LoadFunction<T>(string function)
         {
-            IntPtr funcAddress = Sdl.GL.GetProcAddress(function);
+            IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 
             if (funcAddress != IntPtr.Zero)
                 return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
@@ -27,7 +27,7 @@ namespace MonoGame.OpenGL
 
         private static T LoadFunctionOrNull<T>(string function)
         {
-            IntPtr funcAddress = Sdl.GL.GetProcAddress(function);
+            IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 
             if (funcAddress != IntPtr.Zero)
                 return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);

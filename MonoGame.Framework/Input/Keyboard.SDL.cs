@@ -8,11 +8,13 @@ namespace Microsoft.Xna.Framework.Input
 {
     public static partial class Keyboard
     {
+        private static Sdl SDL { get { return Sdl.Current; } }
+
         static List<Keys> _keys;
 
         private static KeyboardState PlatformGetState()
         {
-            var modifiers = Sdl.Keyboard.GetModState();
+            var modifiers = SDL.KEYBOARD.GetModState();
             return new KeyboardState(_keys,
                                      (modifiers & Sdl.Keyboard.Keymod.CapsLock) == Sdl.Keyboard.Keymod.CapsLock,
                                      (modifiers & Sdl.Keyboard.Keymod.NumLock) == Sdl.Keyboard.Keymod.NumLock);
