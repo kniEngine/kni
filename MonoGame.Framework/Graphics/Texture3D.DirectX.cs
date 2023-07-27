@@ -9,6 +9,8 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -57,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice.D3DDevice, description);
+            return new SharpDX.Direct3D11.Texture3D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, description);
         }
 
 	    private void PlatformSetData<T>(int level,
@@ -109,7 +111,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice.D3DDevice, desc))
+            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc))
             {
                 lock (GraphicsDevice.CurrentD3DContext)
                 {

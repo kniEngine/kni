@@ -82,6 +82,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework
@@ -295,8 +296,8 @@ namespace Microsoft.Xna.Framework
 				gds.GraphicsDevice.Viewport = new Viewport(
 					0, 0,
 					pp.BackBufferWidth, pp.BackBufferHeight);
-				
-				gds.GraphicsDevice._glDefaultFramebuffer = _framebuffer;
+                
+                ((ConcreteGraphicsDevice)gds.GraphicsDevice.Strategy)._glDefaultFramebuffer = _framebuffer;
 			}
 		}
 

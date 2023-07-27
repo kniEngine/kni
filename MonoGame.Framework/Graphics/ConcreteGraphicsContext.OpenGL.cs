@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             int programHash = GetCurrentShaderProgramHash2();
-            ShaderProgram shaderProgram = this.Device._programCache.GetProgram(VertexShader, PixelShader, programHash);
+            ShaderProgram shaderProgram = ((ConcreteGraphicsDevice)this.Device.Strategy)._programCache.GetProgram(VertexShader, PixelShader, programHash);
             if (shaderProgram.Program == -1)
                 return;
 
@@ -733,7 +733,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var renderTargetBinding = _currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && this.Device._supportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0 && ((ConcreteGraphicsDevice)this.Device.Strategy)._supportsBlitFramebuffer)
             {
                 int glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
@@ -786,9 +786,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this.Device._supportsInvalidateFramebuffer)
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && ((ConcreteGraphicsDevice)this.Device.Strategy)._supportsInvalidateFramebuffer)
                 {
-                    Debug.Assert(this.Device._supportsInvalidateFramebuffer);
+                    Debug.Assert(((ConcreteGraphicsDevice)this.Device.Strategy)._supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GraphicsExtensions.CheckGLError();
                 }
@@ -816,7 +816,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Device._glDefaultFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ((ConcreteGraphicsDevice)this.Device.Strategy)._glDefaultFramebuffer);
             GraphicsExtensions.CheckGLError();
 
             // Reset the raster state because we flip vertices

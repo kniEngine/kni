@@ -5,7 +5,9 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX.Direct3D11;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -89,13 +91,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private void CreatePixelShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Pixel);
-            _pixelShader = new PixelShader(GraphicsDevice.D3DDevice, _shaderBytecode);
+            _pixelShader = new PixelShader(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, _shaderBytecode);
         }
 
         private void CreateVertexShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Vertex);
-            _vertexShader = new VertexShader(GraphicsDevice.D3DDevice, _shaderBytecode, null);
+            _vertexShader = new VertexShader(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, _shaderBytecode, null);
             _inputLayouts = new InputLayoutCache(GraphicsDevice, Bytecode);
         }
     }

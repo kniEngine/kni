@@ -23,21 +23,13 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-
-        internal ShaderProgramCache _programCache;
-
-
-        internal bool _supportsInvalidateFramebuffer;
-        internal bool _supportsBlitFramebuffer;
-
         internal int _glMajorVersion = 0;
         internal int _glMinorVersion = 0;
-        internal int _glDefaultFramebuffer = 0;
 
 
         private void PlatformSetup()
         {
-            _programCache = new ShaderProgramCache(this);
+            ((ConcreteGraphicsDevice)_strategy)._programCache = new ShaderProgramCache(this);
 
 #if DESKTOPGL
             System.Diagnostics.Debug.Assert(_mainContext == null);
@@ -100,8 +92,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (Capabilities.SupportsFramebufferObjectARB
             || Capabilities.SupportsFramebufferObjectEXT)
             {
-                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
             }
             else
             {
@@ -123,7 +115,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDispose()
         {
             // Free all the cached shader programs.
-            _programCache.Dispose();
+            ((ConcreteGraphicsDevice)_strategy)._programCache.Dispose();
 
 #if DESKTOPGL
             _mainContext.Dispose();
@@ -226,14 +218,14 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs.
-            _programCache.Clear();
+            ((ConcreteGraphicsDevice)_strategy)._programCache.Clear();
             ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
 
             if (Capabilities.SupportsFramebufferObjectARB
             || Capabilities.SupportsFramebufferObjectEXT)
             {
-                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
             }
             else
             {

@@ -23,18 +23,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private IWebGLRenderingContext GL { get { return _glContext; } }
 
 
-        internal ShaderProgramCache _programCache;
-
-
-        internal bool _supportsInvalidateFramebuffer;
-        internal bool _supportsBlitFramebuffer;
-
-        internal WebGLFramebuffer _glDefaultFramebuffer = null;
-
-
         private void PlatformSetup()
         {
-            _programCache = new ShaderProgramCache(this);
+            ((ConcreteGraphicsDevice)_strategy)._programCache = new ShaderProgramCache(this);
 
             var handle = PresentationParameters.DeviceWindowHandle;
             var gameWindow = BlazorGameWindow.FromHandle(handle);
@@ -67,8 +58,8 @@ namespace Microsoft.Xna.Framework.Graphics
             //||  this.Capabilities.SupportsFramebufferObjectEXT)
             if (true)
             {
-                this._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
-                this._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
+                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
             }
             else
             {

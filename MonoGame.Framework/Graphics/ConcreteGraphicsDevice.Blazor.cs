@@ -3,12 +3,20 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using nkast.Wasm.Canvas.WebGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsDevice : GraphicsDeviceStrategy
     {
+        internal ShaderProgramCache _programCache;
+
+        internal bool _supportsInvalidateFramebuffer;
+        internal bool _supportsBlitFramebuffer;
+
+        internal WebGLFramebuffer _glDefaultFramebuffer = null;
+
 
         internal ConcreteGraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
             : base(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)

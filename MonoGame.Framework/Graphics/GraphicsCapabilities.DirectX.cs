@@ -4,6 +4,8 @@
 
 // Copyright (C)2023 Nick Kastellanos
 
+using Microsoft.Xna.Platform.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -71,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var maxLevel = MultiSampleCountLimit;
             while (maxLevel > 0)
             {
-                qualityLevels = device.D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
+                qualityLevels = ((ConcreteGraphicsDevice)device.Strategy).D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
                 if (qualityLevels > 0)
                     break;
                 maxLevel /= 2;

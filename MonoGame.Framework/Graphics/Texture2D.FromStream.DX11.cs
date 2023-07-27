@@ -5,6 +5,7 @@
 // Copyright (C)2019 Kastellanos Nikos
 
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
@@ -74,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, s);
                     DataRectangle rect = new DataRectangle(s.DataPointer, bmpSource.Size.Width * 4);
-                    textureResource = new SharpDX.Direct3D11.Texture2D(graphicsDevice.D3DDevice, desc, rect);
+                    textureResource = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)graphicsDevice.Strategy).D3DDevice, desc, rect);
                 }
                 texture.SetTextureInternal_DX(textureResource);
 

@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.AlphaToCoverageEnable = false;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.BlendState(GraphicsDevice.D3DDevice, desc);
+                _state = new SharpDX.Direct3D11.BlendState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
 			// Apply the state!

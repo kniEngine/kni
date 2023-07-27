@@ -330,7 +330,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int depth = 0;
             int stencil = 0;
 
-            if (preferredMultiSampleCount > 0 && graphicsDevice._supportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && ((ConcreteGraphicsDevice)graphicsDevice.Strategy)._supportsBlitFramebuffer)
             {
                 color = GL.GenRenderbuffer();
                 GraphicsExtensions.CheckGLError();

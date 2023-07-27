@@ -8,9 +8,9 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-
-
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX.MediaFoundation;
+
 
 namespace Microsoft.Xna.Platform.Media
 {
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Media
             MediaManager.Startup();
 
             _devManager = new DXGIDeviceManager();
-            _devManager.ResetDevice(Game.Instance.Strategy.GraphicsDevice.D3DDevice);
+            _devManager.ResetDevice(((ConcreteGraphicsDevice)Game.Instance.Strategy.GraphicsDevice.Strategy).D3DDevice);
 
             using (var factory = new MediaEngineClassFactory())
             using (var attributes = new MediaEngineAttributes

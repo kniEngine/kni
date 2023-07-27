@@ -4,6 +4,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -50,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 usage = SharpDX.Direct3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.D3DDevice,
+            _buffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice,
                                                         VertexDeclaration.VertexStride * VertexCount,
                                                         usage,
                                                         SharpDX.Direct3D11.BindFlags.VertexBuffer,
@@ -68,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
             stagingDesc.Usage = SharpDX.Direct3D11.ResourceUsage.Staging;
             stagingDesc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
 
-            return new SharpDX.Direct3D11.Buffer(GraphicsDevice.D3DDevice, stagingDesc);
+            return new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, stagingDesc);
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride) where T : struct
