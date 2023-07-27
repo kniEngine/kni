@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Utilities.Png;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -158,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 DataRectangle rect = new DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
-                return new SharpDX.Direct3D11.Texture2D(device.D3DDevice, desc, rect);
+                return new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)device.Strategy).D3DDevice, desc, rect);
             }
         }
 

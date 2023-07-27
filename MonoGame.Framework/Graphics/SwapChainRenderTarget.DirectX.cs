@@ -4,6 +4,7 @@
 using System;
 using SharpDX.DXGI;
 using SharpDX.Direct3D11;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -55,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private SharpDX.Direct3D11.Texture2D CreateSwaipChainTexture(SharpDX.DXGI.Format dxgiFormat, SharpDX.DXGI.SampleDescription multisampleDesc)
         {
-            var d3dDevice = GraphicsDevice.D3DDevice;
+            var d3dDevice = ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice;
 
             var desc = new SwapChainDescription()
             {
@@ -96,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Once the desired swap chain description is configured, it must 
             // be created on the same adapter as our D3D Device
-            var d3dDevice = GraphicsDevice.D3DDevice;
+            var d3dDevice = ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice;
 
             // Create a view interface on the rendertarget to use on bind.
             _renderTargetViews = new[] { new RenderTargetView(d3dDevice, backBuffer) };

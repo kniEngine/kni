@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -50,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.MaximumLod = float.MaxValue;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.SamplerState(GraphicsDevice.D3DDevice, desc);
+                _state = new SharpDX.Direct3D11.SamplerState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
             Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");

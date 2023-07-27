@@ -3,7 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX.Direct3D11;
+
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -60,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_resourceView != null)
                 return _resourceView;
 
-            _resourceView = new ShaderResourceView(GraphicsDevice.D3DDevice, GetTexture());
+            _resourceView = new ShaderResourceView(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, GetTexture());
             return _resourceView;
         }
 

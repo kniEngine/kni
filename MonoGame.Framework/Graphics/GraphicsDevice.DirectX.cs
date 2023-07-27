@@ -28,44 +28,10 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-        // Core Direct3D Objects
-        private D3D11.Device _d3dDevice;
-        internal D3D11.RenderTargetView _renderTargetView;
-        internal D3D11.DepthStencilView _depthStencilView;
-
-        internal D3D11.Device D3DDevice { get { return _d3dDevice; } }
         internal D3D11.DeviceContext CurrentD3DContext
         {
             get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext; }
         }
-
-#if WINDOWS_UAP
-
-        // The swap chain resources.
-        DXGI.SwapChain1 _swapChain;
-        SharpDX.Direct2D1.Bitmap1 _bitmapTarget;
-
-		SwapChainPanel _swapChainPanel;
-
-        // Declare Direct2D Objects
-        SharpDX.Direct2D1.Factory1 _d2dFactory;
-        SharpDX.Direct2D1.Device _d2dDevice;
-        SharpDX.Direct2D1.DeviceContext _d2dContext;
-
-        // Declare DirectWrite & Windows Imaging Component Objects
-        SharpDX.DirectWrite.Factory _dwriteFactory;
-        SharpDX.WIC.ImagingFactory2 _wicFactory;
-
-        // Tearing (disabling V-Sync) support
-        bool _isTearingSupported;
-
-		float _dpi;
-#endif
-#if WINDOWS
-
-        DXGI.SwapChain _swapChain;
-
-#endif
 
 
         /// <summary>
@@ -74,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public object Handle
         {
-            get { return _d3dDevice; }
+            get { return ((ConcreteGraphicsDevice)_strategy)._d3dDevice; }
         }
 
         private void PlatformSetup()
@@ -112,17 +78,17 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Dispose previous references.
-            if (_d2dFactory != null)
-                _d2dFactory.Dispose();
-            if (_dwriteFactory != null)
-                _dwriteFactory.Dispose();
-            if (_wicFactory != null)
-                _wicFactory.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._d2dFactory != null)
+                ((ConcreteGraphicsDevice)_strategy)._d2dFactory.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._dwriteFactory != null)
+                ((ConcreteGraphicsDevice)_strategy)._dwriteFactory.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._wicFactory != null)
+                ((ConcreteGraphicsDevice)_strategy)._wicFactory.Dispose();
 
             // Allocate new references
-            _d2dFactory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded, debugLevel);
-            _dwriteFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
-            _wicFactory = new SharpDX.WIC.ImagingFactory2();
+            ((ConcreteGraphicsDevice)_strategy)._d2dFactory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded, debugLevel);
+            ((ConcreteGraphicsDevice)_strategy)._dwriteFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
+            ((ConcreteGraphicsDevice)_strategy)._wicFactory = new SharpDX.WIC.ImagingFactory2();
 #endif
         }
 
@@ -132,18 +98,18 @@ namespace Microsoft.Xna.Framework.Graphics
         protected virtual void CreateDeviceResources()
         {
             // Dispose previous references.
-            if (_d3dDevice != null)
-                _d3dDevice.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._d3dDevice != null)
+                ((ConcreteGraphicsDevice)_strategy)._d3dDevice.Dispose();
             if (_mainContext != null)
                 _mainContext.Dispose();
             _mainContext = null;
 
 
 #if WINDOWS_UAP
-            if (_d2dDevice != null)
-                _d2dDevice.Dispose();
-            if (_d2dContext != null)
-                _d2dContext.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._d2dDevice != null)
+                ((ConcreteGraphicsDevice)_strategy)._d2dDevice.Dispose();
+            if (((ConcreteGraphicsDevice)_strategy)._d2dContext != null)
+                ((ConcreteGraphicsDevice)_strategy)._d2dContext.Dispose();
 #endif
 
             // Windows requires BGRA support out of DX.
@@ -209,16 +175,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
                 {
 #if WINDOWS
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
 #if WINDOWS_UAP
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
 #endif
                 }
 
 #if WINDOWS_UAP
                 // Necessary to enable video playback
-                SharpDX.Direct3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<SharpDX.Direct3D.DeviceMultithread>();
+                SharpDX.Direct3D.DeviceMultithread multithread = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.QueryInterface<SharpDX.Direct3D.DeviceMultithread>();
                 multithread.SetMultithreadProtected(true);
 #endif
             }
@@ -230,20 +196,20 @@ namespace Microsoft.Xna.Framework.Graphics
                 using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
                 {
 #if WINDOWS
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
 #if WINDOWS_UAP
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
 #endif
                 }
             }
 
             // Get Direct3D 11.1 context
 #if WINDOWS
-            D3D11.DeviceContext d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
+            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
 #endif
 #if WINDOWS_UAP
-            D3D11.DeviceContext1 d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
+            D3D11.DeviceContext1 d3dContext = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
 #endif
             GraphicsContextStrategy contextStrategy = new ConcreteGraphicsContext(this, d3dContext);
             _mainContext = new GraphicsContext(this, contextStrategy);
@@ -256,11 +222,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if WINDOWS_UAP
             // Create the Direct2D device.
-            using (DXGI.Device dxgiDevice = _d3dDevice.QueryInterface<DXGI.Device>())
-                _d2dDevice = new SharpDX.Direct2D1.Device(_d2dFactory, dxgiDevice);
+            using (DXGI.Device dxgiDevice = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.QueryInterface<DXGI.Device>())
+                ((ConcreteGraphicsDevice)_strategy)._d2dDevice = new SharpDX.Direct2D1.Device(((ConcreteGraphicsDevice)_strategy)._d2dFactory, dxgiDevice);
 
             // Create Direct2D context
-            _d2dContext = new SharpDX.Direct2D1.DeviceContext(_d2dDevice, SharpDX.Direct2D1.DeviceContextOptions.None);
+            ((ConcreteGraphicsDevice)_strategy)._d2dContext = new SharpDX.Direct2D1.DeviceContext(((ConcreteGraphicsDevice)_strategy)._d2dDevice, SharpDX.Direct2D1.DeviceContextOptions.None);
 #endif
         }
 
@@ -273,24 +239,24 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
 
-            if (_renderTargetView != null)
+            if (((ConcreteGraphicsDevice)_strategy)._renderTargetView != null)
             {
-                _renderTargetView.Dispose();
-                _renderTargetView = null;
+                ((ConcreteGraphicsDevice)_strategy)._renderTargetView.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._renderTargetView = null;
             }
-            if (_depthStencilView != null)
+            if (((ConcreteGraphicsDevice)_strategy)._depthStencilView != null)
             {
-                _depthStencilView.Dispose();
-                _depthStencilView = null;
+                ((ConcreteGraphicsDevice)_strategy)._depthStencilView.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._depthStencilView = null;
             }
 
 #if WINDOWS_UAP
-            if (_bitmapTarget != null)
+            if (((ConcreteGraphicsDevice)_strategy)._bitmapTarget != null)
             {
-                _bitmapTarget.Dispose();
-                _bitmapTarget = null;
+                ((ConcreteGraphicsDevice)_strategy)._bitmapTarget.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._bitmapTarget = null;
             }
-            _d2dContext.Target = null;
+            ((ConcreteGraphicsDevice)_strategy)._d2dContext.Target = null;
 #endif
 
             // Clear the current render targets.
@@ -308,10 +274,10 @@ namespace Microsoft.Xna.Framework.Graphics
             ||  (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
                )
             {
-                if (_swapChain != null)
+                if (((ConcreteGraphicsDevice)_strategy)._swapChain != null)
                 {
-                    _swapChain.Dispose();
-                    _swapChain = null;
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.Dispose();
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain = null;
                 }
 
                 return;
@@ -327,13 +293,13 @@ namespace Microsoft.Xna.Framework.Graphics
             swapChainFlags = DXGI.SwapChainFlags.AllowModeSwitch;
 
             // If the swap chain already exists... update it.
-            if (_swapChain != null
+            if (((ConcreteGraphicsDevice)_strategy)._swapChain != null
                 // check if multisampling hasn't changed
-                && _swapChain.Description.SampleDescription.Count == multisampleDesc.Count
-                && _swapChain.Description.SampleDescription.Quality == multisampleDesc.Quality
+                && ((ConcreteGraphicsDevice)_strategy)._swapChain.Description.SampleDescription.Count == multisampleDesc.Count
+                && ((ConcreteGraphicsDevice)_strategy)._swapChain.Description.SampleDescription.Quality == multisampleDesc.Quality
                )
             {
-                _swapChain.ResizeBuffers(2,
+                ((ConcreteGraphicsDevice)_strategy)._swapChain.ResizeBuffers(2,
                                         PresentationParameters.BackBufferWidth,
                                         PresentationParameters.BackBufferHeight,
                                         format,
@@ -345,12 +311,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 bool wasFullScreen = false;
                 // Dispose of old swap chain if exists
-                if (_swapChain != null)
+                if (((ConcreteGraphicsDevice)_strategy)._swapChain != null)
                 {
-                    wasFullScreen = _swapChain.IsFullScreen;
+                    wasFullScreen = ((ConcreteGraphicsDevice)_strategy)._swapChain.IsFullScreen;
                     // Before releasing a swap chain, first switch to windowed mode
-                    _swapChain.SetFullscreenState(false, null);
-                    _swapChain.Dispose();
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(false, null);
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.Dispose();
                 }
 
                 // SwapChain description
@@ -378,11 +344,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
                 // Creates the swap chain 
-                using (DXGI.Device1 dxgiDevice = D3DDevice.QueryInterface<DXGI.Device1>())
+                using (DXGI.Device1 dxgiDevice = ((ConcreteGraphicsDevice)_strategy).D3DDevice.QueryInterface<DXGI.Device1>())
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice.Adapter)
                 using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
                 {
-                    _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
                     RefreshAdapter();
                     dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, DXGI.WindowAssociationFlags.IgnoreAll);
                     // To reduce latency, ensure that DXGI does not queue more than one frame at a time.
@@ -402,24 +368,24 @@ namespace Microsoft.Xna.Framework.Graphics
                    (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
                )
             {
-                if (_swapChain != null)
+                if (((ConcreteGraphicsDevice)_strategy)._swapChain != null)
                 {
-                    _swapChain.Dispose();
-                    _swapChain = null;
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.Dispose();
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain = null;
                 }
 
                 return;
             }
 
             // Did we change swap panels?
-            if (PresentationParameters.SwapChainPanel != _swapChainPanel)
+            if (PresentationParameters.SwapChainPanel != ((ConcreteGraphicsDevice)_strategy)._swapChainPanel)
             {
-                _swapChainPanel = null;
+                ((ConcreteGraphicsDevice)_strategy)._swapChainPanel = null;
 
-                if (_swapChain != null)
+                if (((ConcreteGraphicsDevice)_strategy)._swapChain != null)
                 {
-                    _swapChain.Dispose();
-                    _swapChain = null;
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.Dispose();
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain = null;
                 }
             }
 
@@ -430,17 +396,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
             DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
-            _isTearingSupported = IsTearingSupported();
-            if (_isTearingSupported)
+            ((ConcreteGraphicsDevice)_strategy)._isTearingSupported = IsTearingSupported();
+            if (((ConcreteGraphicsDevice)_strategy)._isTearingSupported)
             {
                 swapChainFlags = DXGI.SwapChainFlags.AllowTearing;
             }
 
             // If the swap chain already exists... update it.
-            if (_swapChain != null
+            if (((ConcreteGraphicsDevice)_strategy)._swapChain != null
                )
             {
-                _swapChain.ResizeBuffers(2,
+                ((ConcreteGraphicsDevice)_strategy)._swapChain.ResizeBuffers(2,
                                         PresentationParameters.BackBufferWidth,
                                         PresentationParameters.BackBufferHeight,
                                         format,
@@ -473,7 +439,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
                 // Creates the swap chain 
-                using (DXGI.Device2 dxgiDevice2 = D3DDevice.QueryInterface<DXGI.Device2>())
+                using (DXGI.Device2 dxgiDevice2 = ((ConcreteGraphicsDevice)_strategy).D3DDevice.QueryInterface<DXGI.Device2>())
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice2.Adapter)
                 using (DXGI.Factory2 dxgiFactory2 = dxgiAdapter.GetParent<DXGI.Factory2>())
                 {
@@ -482,15 +448,15 @@ namespace Microsoft.Xna.Framework.Graphics
                         // Creates a SwapChain from a CoreWindow pointer.
                         CoreWindow coreWindow = Marshal.GetObjectForIUnknown(PresentationParameters.DeviceWindowHandle) as CoreWindow;
                         using (ComObject comWindow = new ComObject(coreWindow))
-                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref desc);
+                            ((ConcreteGraphicsDevice)_strategy)._swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref desc);
                     }
                     else
                     {
-                        _swapChainPanel = PresentationParameters.SwapChainPanel;
+                        ((ConcreteGraphicsDevice)_strategy)._swapChainPanel = PresentationParameters.SwapChainPanel;
                         using (DXGI.ISwapChainPanelNative nativePanel = ComObject.As<DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
                         {
-                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref desc, null);
-                            nativePanel.SwapChain = _swapChain;
+                            ((ConcreteGraphicsDevice)_strategy)._swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref desc, null);
+                            nativePanel.SwapChain = ((ConcreteGraphicsDevice)_strategy)._swapChain;
 
                             // update swapChain2.MatrixTransform on SizeChanged of SwapChainPanel
                             // sometimes window.SizeChanged and SwapChainPanel.SizeChanged are not synced
@@ -498,7 +464,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             {
                                 try
                                 {
-                                    using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
+                                    using (DXGI.SwapChain2 swapChain2 = ((ConcreteGraphicsDevice)_strategy)._swapChain.QueryInterface<DXGI.SwapChain2>())
                                     {
                                         RawMatrix3x2 inverseScale = new RawMatrix3x2();
                                         inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth / PresentationParameters.BackBufferWidth;
@@ -518,7 +484,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            _swapChain.Rotation = DXGI.DisplayModeRotation.Identity;
+            ((ConcreteGraphicsDevice)_strategy)._swapChain.Rotation = DXGI.DisplayModeRotation.Identity;
 
             // Counter act the composition scale of the render target as 
             // we already handle this in the platform window code. 
@@ -529,7 +495,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     RawMatrix3x2 inverseScale = new RawMatrix3x2();
                     inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth  / PresentationParameters.BackBufferWidth;
                     inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
-                    using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
+                    using (DXGI.SwapChain2 swapChain2 = ((ConcreteGraphicsDevice)_strategy)._swapChain.QueryInterface<DXGI.SwapChain2>())
                         swapChain2.MatrixTransform = inverseScale;
                 });
             }
@@ -537,10 +503,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Obtain the backbuffer for this window which will be the final 3D rendertarget.
             Point targetSize;
-            using (D3D11.Texture2D backBuffer = D3D11.Texture2D.FromSwapChain<D3D11.Texture2D>(_swapChain, 0))
+            using (D3D11.Texture2D backBuffer = D3D11.Texture2D.FromSwapChain<D3D11.Texture2D>(((ConcreteGraphicsDevice)_strategy)._swapChain, 0))
             {
                 // Create a view interface on the rendertarget to use on bind.
-                _renderTargetView = new D3D11.RenderTargetView(D3DDevice, backBuffer);
+                ((ConcreteGraphicsDevice)_strategy)._renderTargetView = new D3D11.RenderTargetView(((ConcreteGraphicsDevice)_strategy).D3DDevice, backBuffer);
 
                 // Get the rendertarget dimensions for later.
                 D3D11.Texture2DDescription backBufferDesc = backBuffer.Description;
@@ -553,7 +519,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 DXGI.Format depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
-                using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(D3DDevice, new D3D11.Texture2DDescription()
+                using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(((ConcreteGraphicsDevice)_strategy).D3DDevice, new D3D11.Texture2DDescription()
                     {
                         Format = depthFormat,
                         ArraySize = 1,
@@ -566,7 +532,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }))
                 {
                     // Create a DepthStencil view on this surface to use on bind.
-                    _depthStencilView = new D3D11.DepthStencilView(D3DDevice, depthBuffer);
+                    ((ConcreteGraphicsDevice)_strategy)._depthStencilView = new D3D11.DepthStencilView(((ConcreteGraphicsDevice)_strategy).D3DDevice, depthBuffer);
                 }
 
             }
@@ -588,20 +554,20 @@ namespace Microsoft.Xna.Framework.Graphics
             // swapchain associated with the window.
             SharpDX.Direct2D1.BitmapProperties1 bitmapProperties = new SharpDX.Direct2D1.BitmapProperties1(
                 new SharpDX.Direct2D1.PixelFormat(format, SharpDX.Direct2D1.AlphaMode.Premultiplied),
-                _dpi, _dpi,
+                ((ConcreteGraphicsDevice)_strategy)._dpi, ((ConcreteGraphicsDevice)_strategy)._dpi,
                 SharpDX.Direct2D1.BitmapOptions.Target | SharpDX.Direct2D1.BitmapOptions.CannotDraw);
 
             // Direct2D needs the dxgi version of the backbuffer surface pointer.
             // Get a D2D surface from the DXGI back buffer to use as the D2D render target.
-            using (DXGI.Surface dxgiBackBuffer = _swapChain.GetBackBuffer<DXGI.Surface>(0))
-                _bitmapTarget = new SharpDX.Direct2D1.Bitmap1(_d2dContext, dxgiBackBuffer, bitmapProperties);
+            using (DXGI.Surface dxgiBackBuffer = ((ConcreteGraphicsDevice)_strategy)._swapChain.GetBackBuffer<DXGI.Surface>(0))
+                ((ConcreteGraphicsDevice)_strategy)._bitmapTarget = new SharpDX.Direct2D1.Bitmap1(((ConcreteGraphicsDevice)_strategy)._d2dContext, dxgiBackBuffer, bitmapProperties);
 
             // So now we can set the Direct2D render target.
-            _d2dContext.Target = _bitmapTarget;
+            ((ConcreteGraphicsDevice)_strategy)._d2dContext.Target = ((ConcreteGraphicsDevice)_strategy)._bitmapTarget;
 
             // Set D2D text anti-alias mode to Grayscale to 
             // ensure proper rendering of text on intermediate surfaces.
-            _d2dContext.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Grayscale;
+            ((ConcreteGraphicsDevice)_strategy)._d2dContext.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Grayscale;
 #endif
         }
 
@@ -648,7 +614,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void GetModeSwitchedSize(out int width, out int height)
         {
             DXGI.Output output = null;
-            if (_swapChain == null)
+            if (((ConcreteGraphicsDevice)_strategy)._swapChain == null)
             {
                 // get the primary output
                 using (DXGI.Factory1 factory = new DXGI.Factory1())
@@ -659,7 +625,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 try
                 {
-                    output = _swapChain.ContainingOutput;
+                    output = ((ConcreteGraphicsDevice)_strategy)._swapChain.ContainingOutput;
                 }
                 catch (SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
@@ -681,7 +647,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 DXGI.ModeDescription closest;
-                output.GetClosestMatchingMode(D3DDevice, target, out closest);
+                output.GetClosestMatchingMode(((ConcreteGraphicsDevice)_strategy).D3DDevice, target, out closest);
                 width = closest.Width;
                 height = closest.Height;
                 output.Dispose();
@@ -699,12 +665,12 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS
         internal void SetHardwareFullscreen()
         {
-            _swapChain.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
+            ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
         }
 
         internal void ClearHardwareFullscreen()
         {
-            _swapChain.SetFullscreenState(false, null);
+            ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(false, null);
         }
 #endif
 
@@ -720,20 +686,20 @@ namespace Microsoft.Xna.Framework.Graphics
                 Height = PresentationParameters.BackBufferHeight,
             };
 
-            _swapChain.ResizeTarget(ref descr);
+            ((ConcreteGraphicsDevice)_strategy)._swapChain.ResizeTarget(ref descr);
         }
 #endif
 
 #if WINDOWS
         internal void RefreshAdapter()
         {
-            if (_swapChain == null)
+            if (((ConcreteGraphicsDevice)_strategy)._swapChain == null)
                 return;
 
             DXGI.Output output = null;
             try
             {
-                output = _swapChain.ContainingOutput;
+                output = ((ConcreteGraphicsDevice)_strategy)._swapChain.ContainingOutput;
             }
             catch (SharpDXException) { /* ContainingOutput fails on a headless device */ }
 
@@ -774,7 +740,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // The valid range is between zero and one less than the level returned by CheckMultisampleQualityLevels
             // https://msdn.microsoft.com/en-us/library/windows/desktop/bb173072(v=vs.85).aspx
-            int quality = D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
+            int quality = ((ConcreteGraphicsDevice)_strategy).D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
             // NOTE: should we always return highest quality?
             return Math.Max(quality, 0); // clamp minimum to 0 
         }
@@ -797,11 +763,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDispose()
         {
             // make sure to release full screen or this might cause issues on exit
-            if (_swapChain != null && _swapChain.IsFullScreen)
-                _swapChain.SetFullscreenState(false, null);
+            if (((ConcreteGraphicsDevice)_strategy)._swapChain != null && ((ConcreteGraphicsDevice)_strategy)._swapChain.IsFullScreen)
+                ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(false, null);
 
-            SharpDX.Utilities.Dispose(ref _renderTargetView);
-            SharpDX.Utilities.Dispose(ref _depthStencilView);
+            SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._renderTargetView);
+            SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._depthStencilView);
 
             if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 != null)
                 ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.Dispose();
@@ -811,40 +777,40 @@ namespace Microsoft.Xna.Framework.Graphics
             foreach (DynamicVertexBuffer vb in ((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers.Values)
                 vb.Dispose();
 
-            SharpDX.Utilities.Dispose(ref _swapChain);
+            SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._swapChain);
 
 #if WINDOWS_UAP
 
-            if (_bitmapTarget != null)
+            if (((ConcreteGraphicsDevice)_strategy)._bitmapTarget != null)
             {
-                _bitmapTarget.Dispose();
-                _depthStencilView = null;
+                ((ConcreteGraphicsDevice)_strategy)._bitmapTarget.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._depthStencilView = null;
             }
-            if (_d2dDevice != null)
+            if (((ConcreteGraphicsDevice)_strategy)._d2dDevice != null)
             {
-                _d2dDevice.Dispose();
-                _d2dDevice = null;
+                ((ConcreteGraphicsDevice)_strategy)._d2dDevice.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._d2dDevice = null;
             }
-            if (_d2dContext != null)
+            if (((ConcreteGraphicsDevice)_strategy)._d2dContext != null)
             {
-                _d2dContext.Target = null;
-                _d2dContext.Dispose();
-                _d2dContext = null;
+                ((ConcreteGraphicsDevice)_strategy)._d2dContext.Target = null;
+                ((ConcreteGraphicsDevice)_strategy)._d2dContext.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._d2dContext = null;
             }
-            if (_d2dFactory != null)
+            if (((ConcreteGraphicsDevice)_strategy)._d2dFactory != null)
             {
-                _d2dFactory.Dispose();
-                _d2dFactory = null;
+                ((ConcreteGraphicsDevice)_strategy)._d2dFactory.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._d2dFactory = null;
             }
-            if (_dwriteFactory != null)
+            if (((ConcreteGraphicsDevice)_strategy)._dwriteFactory != null)
             {
-                _dwriteFactory.Dispose();
-                _dwriteFactory = null;
+                ((ConcreteGraphicsDevice)_strategy)._dwriteFactory.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._dwriteFactory = null;
             }
-            if (_wicFactory != null)
+            if (((ConcreteGraphicsDevice)_strategy)._wicFactory != null)
             {
-                _wicFactory.Dispose();
-                _wicFactory = null;
+                ((ConcreteGraphicsDevice)_strategy)._wicFactory.Dispose();
+                ((ConcreteGraphicsDevice)_strategy)._wicFactory = null;
             }
 
 #endif
@@ -852,7 +818,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_mainContext != null)
                 _mainContext.Dispose();
             _mainContext = null;
-            SharpDX.Utilities.Dispose(ref _d3dDevice);
+            SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._d3dDevice);
         }
 
         private void PlatformPresent()
@@ -873,7 +839,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // The first argument instructs DXGI to block until VSync, putting the application
                     // to sleep until the next VSync. This ensures we don't waste any cycles rendering
                     // frames that will never be displayed to the screen.
-                    if (_isTearingSupported && PresentationParameters.PresentationInterval == PresentInterval.Immediate)
+                    if (((ConcreteGraphicsDevice)_strategy)._isTearingSupported && PresentationParameters.PresentationInterval == PresentInterval.Immediate)
                     {
                         syncInterval = 0;
                         presentFlags = DXGI.PresentFlags.AllowTearing;
@@ -884,7 +850,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
 #endif
 
-                    _swapChain.Present(syncInterval, presentFlags);
+                    ((ConcreteGraphicsDevice)_strategy)._swapChain.Present(syncInterval, presentFlags);
                 }
             }
             catch (SharpDX.SharpDXException ex)
@@ -911,7 +877,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // first set up a staging texture
             const SurfaceFormat format = SurfaceFormat.Color;
             //You can't Map the BackBuffer surface, so we copy to another texture
-            using (D3D11.Texture2D backBufferTexture = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0))
+            using (D3D11.Texture2D backBufferTexture = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(((ConcreteGraphicsDevice)_strategy)._swapChain, 0))
             {
                 D3D11.Texture2DDescription desc = backBufferTexture.Description;
                 desc.SampleDescription = new DXGI.SampleDescription(1, 0);
@@ -920,7 +886,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Usage = D3D11.ResourceUsage.Staging;
                 desc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(D3DDevice, desc))
+                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(((ConcreteGraphicsDevice)_strategy).D3DDevice, desc))
                 {
                     lock (((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext)
                     {
@@ -930,7 +896,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             desc.Usage = D3D11.ResourceUsage.Default;
                             desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-                            using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(D3DDevice, desc))
+                            using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(((ConcreteGraphicsDevice)_strategy).D3DDevice, desc))
                             {
                                 ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, desc.Format);
                                 if (rect.HasValue)
@@ -1023,20 +989,20 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Trim()
         {
-            using (DXGI.Device3 dxgiDevice3 = D3DDevice.QueryInterface<DXGI.Device3>())
+            using (DXGI.Device3 dxgiDevice3 = ((ConcreteGraphicsDevice)_strategy).D3DDevice.QueryInterface<DXGI.Device3>())
                 dxgiDevice3.Trim();
         }
 
         internal float Dpi
         {
-            get { return _dpi; }
+            get { return ((ConcreteGraphicsDevice)_strategy)._dpi; }
             set
             {
-                if (_dpi == value)
+                if (((ConcreteGraphicsDevice)_strategy)._dpi == value)
                     return;
 
-                _dpi = value;
-                _d2dContext.DotsPerInch = new Size2F(_dpi, _dpi);
+                ((ConcreteGraphicsDevice)_strategy)._dpi = value;
+                ((ConcreteGraphicsDevice)_strategy)._d2dContext.DotsPerInch = new Size2F(((ConcreteGraphicsDevice)_strategy)._dpi, ((ConcreteGraphicsDevice)_strategy)._dpi);
 
                 //if (OnDpiChanged != null)
                 //    OnDpiChanged(this);

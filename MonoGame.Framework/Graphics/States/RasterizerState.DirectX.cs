@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.DepthBiasClamp = 0.0f;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice.D3DDevice, desc);
+                _state = new SharpDX.Direct3D11.RasterizerState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
             // NOTE: We make the assumption here that the caller has

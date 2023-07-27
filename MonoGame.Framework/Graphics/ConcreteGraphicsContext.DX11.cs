@@ -530,8 +530,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Set the default swap chain.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentRenderTargets[0] = this.Device._renderTargetView;
-            _currentDepthStencilView = this.Device._depthStencilView;
+            _currentRenderTargets[0] = ((ConcreteGraphicsDevice)this.Device.Strategy)._renderTargetView;
+            _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Device.Strategy)._depthStencilView;
 
             lock (this.D3dContext)
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
