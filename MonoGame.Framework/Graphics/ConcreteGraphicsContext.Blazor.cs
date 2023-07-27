@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             int programHash = GetCurrentShaderProgramHash2();
-            var shaderProgram = this.Device._programCache.GetProgram(VertexShader, PixelShader, programHash);
+            var shaderProgram = ((ConcreteGraphicsDevice)this.Device.Strategy)._programCache.GetProgram(VertexShader, PixelShader, programHash);
             if (shaderProgram.Program == null)
                 return;
 
@@ -680,7 +680,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var renderTargetBinding = _currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && this.Device._supportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0 && ((ConcreteGraphicsDevice)this.Device.Strategy)._supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
@@ -701,7 +701,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, this.Device._glDefaultFramebuffer);
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, ((ConcreteGraphicsDevice)this.Device.Strategy)._glDefaultFramebuffer);
             GraphicsExtensions.CheckGLError();
 
             // Reset the raster state because we flip vertices

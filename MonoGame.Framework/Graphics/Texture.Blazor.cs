@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Graphics
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
 
-            if (preferredMultiSampleCount > 0 && graphicsDevice._supportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && ((ConcreteGraphicsDevice)graphicsDevice.Strategy)._supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
