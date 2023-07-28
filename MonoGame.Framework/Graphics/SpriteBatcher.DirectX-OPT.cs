@@ -56,6 +56,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private DynamicVertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
 
+        public int BatchItemCount { get { return _batchItemCount; } }
+
         public SpriteBatcher(GraphicsDevice device, int capacity = 0)
         {
             _device = device;
@@ -164,18 +166,12 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
-        /// Sorts the batch items and then groups batch drawing into maximal allowed batch sets that do not
-        /// overflow the 16 bit array indices for vertices.
+        /// Sorts the batch items
         /// </summary>
         /// <param name="sortMode">The type of depth sorting desired for the rendering.</param>
-        /// <param name="effect">The custom effect to apply to the drawn geometry</param>
-        public unsafe void DrawBatch(SpriteSortMode sortMode, Effect effect)
+        /// <param name="sortMode"></param>
+        public void SortBatch(SpriteSortMode sortMode)
         {
-            // nothing to do
-            if (_batchItemCount == 0)
-                return;
-
-            // sort the batch items
             switch (sortMode)
             {
                 case SpriteSortMode.Texture:
@@ -184,7 +180,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     Array.Sort(_batchItemList, 0, _batchItemCount);
                     break;
             }
+        }
 
+        /// <summary>
+        /// Groups batch drawing into maximal allowed batch sets that do not
+        /// overflow the 16 bit array indices for vertices.
+        /// </summary>
+        /// <param name="effect">The custom effect to apply to the drawn geometry</param>
+        public unsafe void DrawBatch(Effect effect)
+        {
             // Determine how many iterations through the drawing code we need to make
             int batchIndex = 0;
             int batchCount = _batchItemCount;
