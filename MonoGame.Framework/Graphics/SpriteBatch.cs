@@ -123,9 +123,15 @@ namespace Microsoft.Xna.Framework.Graphics
             _beginCalled = false;
 
             if (_sortMode != SpriteSortMode.Immediate)
+            {
                 Setup();
 
-            _batcher.DrawBatch(_sortMode, _effect);
+                if (_batcher.BatchItemCount > 0)
+                {
+                    _batcher.SortBatch(_sortMode);
+                    _batcher.DrawBatch(_effect);
+                }
+            }
         }
 
         void Setup()
@@ -309,7 +315,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -481,7 +487,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -529,7 +535,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      _texCoordBR);
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -573,7 +579,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      _texCoordBR);
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -602,7 +608,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      Vector2.One);
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -631,7 +637,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      Vector2.One);
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -735,7 +741,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -1111,7 +1117,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
@@ -1381,7 +1387,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             if (_sortMode == SpriteSortMode.Immediate)
-                _batcher.DrawBatch(_sortMode, _effect);
+                _batcher.DrawBatch(_effect);
         }
 
         /// <summary>
