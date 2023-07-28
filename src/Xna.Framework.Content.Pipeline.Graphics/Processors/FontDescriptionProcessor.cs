@@ -120,7 +120,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (input.UseKerning)
                     output.Kerning.Add(glyph.Kerning.ToVector3());
                 else
-                    output.Kerning.Add(new Vector3(0, glyph.Width, 0));
+                    output.Kerning.Add(new Vector3(0, glyph.Width + 1, 0));
             }
 
             if (PremultiplyAlpha)
