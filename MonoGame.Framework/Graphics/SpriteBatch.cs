@@ -308,7 +308,8 @@ namespace Microsoft.Xna.Framework.Graphics
                          _texCoordBR);
             }
 
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -479,16 +480,8 @@ namespace Microsoft.Xna.Framework.Graphics
                          _texCoordBR);
             }
 
-            FlushIfNeeded();
-        }
-
-        // Mark the end of a draw operation for Immediate SpriteSortMode.
-        internal void FlushIfNeeded()
-        {
             if (_sortMode == SpriteSortMode.Immediate)
-            {
                 _batcher.DrawBatch(_sortMode, _effect);
-            }
         }
 
         /// <summary>
@@ -535,7 +528,8 @@ namespace Microsoft.Xna.Framework.Graphics
                      _texCoordTL,
                      _texCoordBR);
 
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -578,7 +572,8 @@ namespace Microsoft.Xna.Framework.Graphics
                      _texCoordTL,
                      _texCoordBR);
 
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -606,7 +601,8 @@ namespace Microsoft.Xna.Framework.Graphics
                      Vector2.Zero,
                      Vector2.One);
 
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -634,7 +630,8 @@ namespace Microsoft.Xna.Framework.Graphics
                      Vector2.Zero,
                      Vector2.One);
 
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -737,8 +734,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            // We need to flush if we're using Immediate sort mode.
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -1113,8 +1110,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            // We need to flush if we're using Immediate sort mode.
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
@@ -1383,8 +1380,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            // We need to flush if we're using Immediate sort mode.
-            FlushIfNeeded();
+            if (_sortMode == SpriteSortMode.Immediate)
+                _batcher.DrawBatch(_sortMode, _effect);
         }
 
         /// <summary>
