@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessor(DisplayName = "Sprite Font Description - MonoGame")]
     public class FontDescriptionProcessor : ContentProcessor<FontDescription, SpriteFontContent>
     {
-        SmoothingMode _smoothing = SmoothingMode.Disable;
+        SmoothingMode _smoothing = SmoothingMode.Normal;
 
         [DefaultValue(true)]
         public virtual bool PremultiplyAlpha { get; set; }
@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         [DefaultValue(typeof(TextureProcessorOutputFormat), "Compressed")]
         public virtual TextureProcessorOutputFormat TextureFormat { get; set; }
 
-        [DefaultValue(typeof(SmoothingMode), "Disable")]
+        [DefaultValue(typeof(SmoothingMode), "Normal")]
         public virtual SmoothingMode Smoothing
         {
             get { return _smoothing; }
@@ -408,14 +408,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         public enum SmoothingMode
         {
-            [System.ComponentModel.Description("Bitmap with 1bit alpha")]
-            Disable,
             [System.ComponentModel.Description("Normal hinting")]
             Normal,
             [System.ComponentModel.Description("Light hinting")]
             Light,
             [System.ComponentModel.Description("Auto-hinter")]
             AutoHint,
+            [System.ComponentModel.Description("Bitmap with 1bit alpha")]
+            Disable,
         }
     }
 }
