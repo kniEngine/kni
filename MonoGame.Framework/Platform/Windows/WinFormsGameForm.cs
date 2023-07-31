@@ -62,6 +62,13 @@ namespace Microsoft.Xna.Framework.Windows
         {
             _window = window;
             Application.AddMessageFilter(this);
+            base.Disposed += WinFormsGameForm_Disposed;
+        }
+
+        private void WinFormsGameForm_Disposed(object sender, EventArgs e)
+        {
+            base.Disposed -= WinFormsGameForm_Disposed;
+            Application.RemoveMessageFilter(this);
         }
 
         public void CenterOnPrimaryMonitor()
