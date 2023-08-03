@@ -26,11 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal GraphicsCapabilities Capabilities { get; private set; }
 
 
-        /// <summary>
-        /// The cache of effects from unique byte streams.
-        /// </summary>
-        internal readonly Dictionary<int, Effect> EffectCache = new Dictionary<int, Effect>();
-
         // Resources may be added to and removed from the list from many threads.
         private readonly object _resourcesLock = new object();
 
@@ -358,7 +353,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 // Clear the effect cache.
-                EffectCache.Clear();
+                _strategy.EffectCache.Clear();
 
                 _mainContext.Strategy._blendState = null;
                 _mainContext.Strategy._actualBlendState = null;

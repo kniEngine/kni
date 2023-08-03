@@ -18,6 +18,13 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _useHalfPixelOffset;
         private PresentationParameters _presentationParameters;
 
+
+        /// <summary>
+        /// The cache of effects from unique byte streams.
+        /// </summary>
+        public readonly Dictionary<int, Effect> EffectCache = new Dictionary<int, Effect>();
+
+
         public bool IsDisposed
         {
             get { return _isDisposed; }
