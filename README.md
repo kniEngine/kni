@@ -57,13 +57,15 @@ For the prerequisites for building from source, please look at the [Requirements
 A high level breakdown of the components of the framework:
 
 * The game framework is found in [MonoGame.Framework](MonoGame.Framework).
-* The content pipeline is located in [MonoGame.Framework.Content.Pipeline](MonoGame.Framework.Content.Pipeline).
+* The core math types are located in [src\Xna.Framework](src\Xna.Framework).
+* The Design converters are located in [src\Xna.Framework.Design](src\Xna.Framework.Design).
+* The content pipeline is located in [src\Xna.Framework.Content.Pipeline](src\Xna.Framework.Content.Pipeline).
 * Project templates are in [Templates](Templates).
 * See [Tests](Tests) for the framework unit tests.
 * See [Tools/Tests](Tools/MonoGame.Tools.Tests) for the content pipeline and other tool tests.
 * [mgcb](Tools/MonoGame.Content.Builder) is the command line tool for content processing.
 * [mgfxc](Tools/MonoGame.Effect.Compiler) is the command line effect compiler tool.
-* The [pipeline-editor](Tools/Content.Pipeline.Editor) tool is a GUI frontend for content processing.
+* The [pipeline-editor](Tools/Content.Pipeline.Editor.WinForms) tool is a GUI frontend for content processing.
 
 ## Helpful Links
 
