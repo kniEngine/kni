@@ -14,7 +14,7 @@ jobs:
 
       # Generate the sponsors
       - name: Generate Sponsors 💖
-        uses: nkast/github-sponsors-readme-action@v1
+        uses: KniEngine/Kni@v1
         with:
           # The name of this should correspond with the name you gave your secret, in my example this is 'PAT'.
           token: ${{ secrets.SECRET_SPONSORS_README }}
@@ -24,7 +24,7 @@ jobs:
 
       # Deploy the changes back to the main branch of the repository
       - name: Deploy to GitHub Pages 🚀
-        uses: nkast/github-pages-deploy-action@v4
+        uses: KniEngine/Kni@v4
         with:
           # Typically this should be the name of the base branch, in many cases this is 'main'.
           branch: main
