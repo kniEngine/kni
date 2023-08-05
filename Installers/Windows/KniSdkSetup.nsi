@@ -1,6 +1,7 @@
 SetCompressor /SOLID /FINAL lzma
 
 !include "header.nsh"
+!include "LogicLib.nsh"
 !define APPNAME "MonoGame"
 
 ;Include Modern UI
@@ -32,12 +33,15 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 
+Page Custom SponsorPage SponsorPageLeave
+
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
 !insertmacro MUI_LANGUAGE "English"
 
+ 
 Name '${APPNAME} SDK ${INSTALLERVERSION}'
 OutFile 'KniSdkSetup.exe'
 InstallDir '$PROGRAMFILES\${APPNAME}\v${VERSION}'
@@ -309,6 +313,21 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Function SponsorPage
+  ReserveFile "SponsorPage.ini"
+  !insertmacro INSTALLOPTIONS_EXTRACT "SponsorPage.ini"
+  !insertmacro INSTALLOPTIONS_DISPLAY "SponsorPage.ini"
+FunctionEnd
+ 
+Function SponsorPageLeave
+  # Find out which field event called us. 0 = Next button called us.
+  !insertmacro INSTALLOPTIONS_READ $R0 "SponsorPage.ini" "Settings" "State"
+  ${If} $R0 == 3 # Field 3.
+    ExecShell "open" "https://github.com/sponsors/nkast"
+    abort
+  ${EndIf}
+FunctionEnd
 
 Function checkVS2012Redist
  ; TODO: check if VS2012 Redisttributables are installed 
