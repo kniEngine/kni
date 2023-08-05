@@ -73,8 +73,7 @@ A high level breakdown of the components of the framework:
 While KNI is free and open-source, maintaining and expanding the framework requires ongoing effort and resources. We rely on the support of our community to continue delivering top-notch updates, features, and support.
 By [becoming a Sponsor](https://github.com/sponsors/nkast), you can directly contribute to the growth and sustainability of the KNI Game Framework. 
 
-<!-- sponsors -->
-<!-- sponsors -->
+<!-- sponsors --><!-- sponsors -->
 
 ## License
 
