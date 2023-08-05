@@ -35,14 +35,6 @@ If you need help using Kni or have other questions we suggest you post on our [c
 
 If you are interested in contributing fixes or features to Kni, please read our [contributors guide](CONTRIBUTING.md) first.
 
-### Subscription
-
-If you'd like to help the project by supporting us financially, consider supporting us via a subscription for the price of a monthly coffee.
-
-Money goes towards hosting, new hardware and if enough people subscribe a dedicated developer.
-
-There are several options on our [Donation Page](http://).
-
 ## Source Code
 
 The full source code is available here from GitHub:
@@ -76,6 +68,13 @@ A high level breakdown of the components of the framework:
 * The [MonoGame documentation](http://www.monogame.net/documentation/).
 * Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
 
+## Sponsors ❤️
+
+While KNI is free and open-source, maintaining and expanding the framework requires ongoing effort and resources. We rely on the support of our community to continue delivering top-notch updates, features, and support.
+By [becoming a Sponsor](https://github.com/sponsors/nkast), you can directly contribute to the growth and sustainability of the KNI Game Framework. 
+
+<!-- sponsors -->
+<!-- sponsors -->
 
 ## License
 
