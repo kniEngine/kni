@@ -68,13 +68,13 @@ A high level breakdown of the components of the framework:
 * The [MonoGame documentation](http://www.monogame.net/documentation/).
 * Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
 
+## License
+
+The Kni project is under the [Microsoft Public License](https://opensource.org/licenses/MS-PL) except for a few portions of the code.  See the [LICENSE.txt](LICENSE.txt) file for more details.  Third-party libraries used by KNI are under their own licenses.  Please refer to those libraries for details on the license they use.
+
 ## Sponsors ❤️
 
 While KNI is free and open-source, maintaining and expanding the framework requires ongoing effort and resources. We rely on the support of our community to continue delivering top-notch updates, features, and support.
 By [becoming a Sponsor](https://github.com/sponsors/nkast), you can directly contribute to the growth and sustainability of the KNI Game Framework. 
 
 <!-- sponsors --><!-- sponsors -->
-
-## License
-
-The Kni project is under the [Microsoft Public License](https://opensource.org/licenses/MS-PL) except for a few portions of the code.  See the [LICENSE.txt](LICENSE.txt) file for more details.  Third-party libraries used by KNI are under their own licenses.  Please refer to those libraries for details on the license they use.
