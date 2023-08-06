@@ -42,6 +42,15 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _graphicsMetrics = value; }
         }
 
+        /// <summary>
+        /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
+        /// </summary>
+        public Color DiscardColor
+        {
+            get { return Strategy.DiscardColor; }
+            set { Strategy.DiscardColor = value; }
+        }
+
         public Rectangle ScissorRectangle
         {
             get { return Strategy.ScissorRectangle; }
@@ -308,7 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
 
             if (clearTarget)
-                Clear(_device.DiscardColor);
+                Clear(Strategy.DiscardColor);
         }
 
         /// <summary>
