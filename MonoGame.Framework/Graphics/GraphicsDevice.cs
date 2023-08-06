@@ -54,16 +54,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.IsDisposed; }
         }
 
-        public bool IsContentLost
-        {
-            get
-            {
-                // We will just return IsDisposed for now
-                // as that is the only case I can see for now
-                return IsDisposed;
-            }
-        }
-
         public GraphicsAdapter Adapter
         {
             get { return _strategy.Adapter; }
@@ -542,8 +532,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return CurrentContext.Indices; }
             set { CurrentContext.Indices = value; }
         }
-
-        public bool ResourcesLost { get; set; }
 
         /// <summary>
         /// Draw geometry by indexing into the vertex buffer.
