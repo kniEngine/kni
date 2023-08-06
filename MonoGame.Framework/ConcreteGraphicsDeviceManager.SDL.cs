@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Platform
             {   
                 if ((GraphicsDevice != null))
                 {
-                    presentationParameters.MultiSampleCount = GraphicsDevice.Capabilities.MaxMultiSampleCount;
+                    presentationParameters.MultiSampleCount = GraphicsDevice.Strategy.Capabilities.MaxMultiSampleCount;
                 }
                 else
                 {

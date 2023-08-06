@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (baseInstance > 0)
                 {
-                    if (!this.Device.Capabilities.SupportsBaseIndexInstancing)
+                    if (!this.Device.Strategy.Capabilities.SupportsBaseIndexInstancing)
                         throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
 
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);

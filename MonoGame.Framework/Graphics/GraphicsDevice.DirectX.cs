@@ -48,8 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			CreateDeviceIndependentResources();
 			CreateDeviceResources();
 
-            Capabilities = new GraphicsCapabilities();
-            Capabilities.PlatformInitialize(this);
+            _strategy._capabilities = new GraphicsCapabilities();
+            _strategy._capabilities.PlatformInitialize(this);
 
 #if WINDOWS_UAP
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;

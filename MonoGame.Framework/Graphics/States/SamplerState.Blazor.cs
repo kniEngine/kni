@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             switch (Filter)
             {
                 case TextureFilter.Point:
-                    if (GraphicsDevice.Capabilities.SupportsTextureFilterAnisotropic)
+                    if (GraphicsDevice.Strategy.Capabilities.SupportsTextureFilterAnisotropic)
                     {
                         throw new NotImplementedException();
                     }
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                     break;
                 case TextureFilter.Linear:
-                    if (GraphicsDevice.Capabilities.SupportsTextureFilterAnisotropic)
+                    if (GraphicsDevice.Strategy.Capabilities.SupportsTextureFilterAnisotropic)
                     {
                         throw new NotImplementedException();
                     }
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                     break;
                 case TextureFilter.Anisotropic:
-                    if (GraphicsDevice.Capabilities.SupportsTextureFilterAnisotropic)
+                    if (GraphicsDevice.Strategy.Capabilities.SupportsTextureFilterAnisotropic)
                     {
                         throw new NotImplementedException();
                     }
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, ToGLTextureAddressMode(AddressV));
             GraphicsExtensions.CheckGLError();
 
-            if (GraphicsDevice.Capabilities.SupportsTextureMaxLevel)
+            if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.MaxMipLevel > 0)
                 {
