@@ -16,10 +16,13 @@ namespace Microsoft.Xna.Framework.Graphics
 		public int MultiSampleCount { get; private set; }
 		
 		public RenderTargetUsage RenderTargetUsage { get; private set; }
-		
-		public bool IsContentLost { get { return false; } }
-		
-		public event EventHandler<EventArgs> ContentLost;
+
+        public bool IsContentLost
+        {
+            get { throw new NotImplementedException("IsContentLost"); }
+        }
+
+        public event EventHandler<EventArgs> ContentLost;
 
 
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
