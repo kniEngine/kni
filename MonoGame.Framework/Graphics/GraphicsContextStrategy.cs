@@ -80,8 +80,19 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int _currentRenderTargetCount;
         internal readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
 
+        private Color _discardColor = new Color(68, 34, 136, 255);
+
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
         internal bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
+
+        /// <summary>
+        /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
+        /// </summary>
+        public Color DiscardColor
+        {
+            get { return _discardColor; }
+            set { _discardColor = value; }
+        }
 
         public Rectangle ScissorRectangle
         {

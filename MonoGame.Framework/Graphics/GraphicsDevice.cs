@@ -19,8 +19,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private GraphicsContext _mainContext;
 
-        private Color _discardColor = new Color(68, 34, 136, 255);
-
         internal GraphicsDeviceStrategy Strategy { get { return _strategy; } }
 
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
@@ -327,8 +325,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public Color DiscardColor
         {
-            get { return _discardColor; }
-            set { _discardColor = value; }
+            get { return CurrentContext.DiscardColor; }
+            set { CurrentContext.DiscardColor = value; }
         }
 
         public void Clear(Color color)
