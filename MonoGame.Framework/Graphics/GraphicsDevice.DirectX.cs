@@ -211,13 +211,14 @@ namespace Microsoft.Xna.Framework.Graphics
 #if WINDOWS_UAP
             D3D11.DeviceContext1 d3dContext = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
 #endif
+
             GraphicsContextStrategy contextStrategy = new ConcreteGraphicsContext(this, d3dContext);
             _mainContext = new GraphicsContext(this, contextStrategy);
 
 
 #if WINDOWS
             // Create a new instance of GraphicsDebug because we support it on Windows platforms.
-            _graphicsDebug = new GraphicsDebug(this);
+            _mainContext.Strategy.GraphicsDebug = new GraphicsDebug(this);
 #endif
 
 #if WINDOWS_UAP

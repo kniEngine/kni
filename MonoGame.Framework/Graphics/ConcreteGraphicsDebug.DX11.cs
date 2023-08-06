@@ -7,14 +7,14 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsDebug : GraphicsDebugStrategy
     {
-        private readonly InfoQueue _infoQueue;
+        private readonly D3D11.InfoQueue _infoQueue;
         private readonly Queue<GraphicsDebugMessage> _cachedMessages;
         private bool _hasPushedFilters = false;
 
@@ -22,7 +22,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsDebug(GraphicsDevice device)
             : base(device)
         {
-            _infoQueue = device.CurrentD3DContext.QueryInterfaceOrNull<InfoQueue>();
+            GraphicsContext context = device.CurrentContext;
+            D3D11.DeviceContext d3DContext =((ConcreteGraphicsContext)context.Strategy).D3dContext;
+
+            _infoQueue = d3DContext.QueryInterfaceOrNull<D3D11.InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();
 
             if (_infoQueue != null)
