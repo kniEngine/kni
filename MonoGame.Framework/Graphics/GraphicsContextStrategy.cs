@@ -82,6 +82,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
+        private GraphicsDebug _graphicsDebug;
+
+
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
         internal bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
 
@@ -92,6 +95,15 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _discardColor; }
             set { _discardColor = value; }
+        }
+
+        /// <summary>
+        /// Access debugging APIs for the graphics subsystem.
+        /// </summary>
+        public GraphicsDebug GraphicsDebug
+        {
+            get { return _graphicsDebug; }
+            set { _graphicsDebug = value; }
         }
 
         public Rectangle ScissorRectangle

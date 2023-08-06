@@ -108,15 +108,13 @@ namespace Microsoft.Xna.Framework.Graphics
             set { CurrentContext.Metrics = value; }
         }
 
-        private GraphicsDebug _graphicsDebug;
-
         /// <summary>
         /// Access debugging APIs for the graphics subsystem.
         /// </summary>
         public GraphicsDebug GraphicsDebug
         {
-            get { return _graphicsDebug; }
-            set { _graphicsDebug = value; }
+            get { return CurrentContext.GraphicsDebug ; }
+            set { CurrentContext.GraphicsDebug = value; }
         }
 
 

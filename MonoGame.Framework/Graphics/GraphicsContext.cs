@@ -51,6 +51,15 @@ namespace Microsoft.Xna.Framework.Graphics
             set { Strategy.DiscardColor = value; }
         }
 
+        /// <summary>
+        /// Access debugging APIs for the graphics subsystem.
+        /// </summary>
+        public GraphicsDebug GraphicsDebug
+        {
+            get { return Strategy.GraphicsDebug; }
+            set { Strategy.GraphicsDebug = value; }
+        }
+
         public Rectangle ScissorRectangle
         {
             get { return Strategy.ScissorRectangle; }
