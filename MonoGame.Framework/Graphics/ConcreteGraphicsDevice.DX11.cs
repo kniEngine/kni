@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Graphics
    
 
         internal ConcreteGraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
-            : base(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)
+            : base(adapter, graphicsProfile, false, presentationParameters)
         {
         }
 

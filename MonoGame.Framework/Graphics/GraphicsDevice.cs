@@ -136,12 +136,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
-#if DIRECTX            
-            preferHalfPixelOffset = false;
-#endif
-
             _strategy = new ConcreteGraphicsDevice(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
-
 
             Initialize();
         }
