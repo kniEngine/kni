@@ -14,7 +14,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal int UserOffset;
 
-        public bool IsContentLost { get { return false; } }
+        public bool IsContentLost
+        {
+            get { throw new NotImplementedException("IsContentLost"); }
+        }
 
         public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage)
             : base(graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, true)

@@ -44,7 +44,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _size; }
         }
 
-		public bool IsContentLost { get { return false; } }
+		public bool IsContentLost
+        {
+            get { throw new NotImplementedException("IsContentLost"); }
+        }
+
 		public event EventHandler<EventArgs> ContentLost;
 		
         /// <summary>
