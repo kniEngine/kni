@@ -729,8 +729,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <typeparam name="T">A byte[] of size (ViewPort.Width * ViewPort.Height * 4)</typeparam>
         public void GetBackBufferData<T>(T[] data) where T : struct
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
             GetBackBufferData(null, data, 0, data.Length);
         }
 
@@ -748,7 +746,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int width, height;
             if (rect.HasValue)
             {
-                var rectangle = rect.Value;
+                Rectangle rectangle = rect.Value;
                 width = rectangle.Width;
                 height = rectangle.Height;
 
@@ -762,15 +760,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 height = PresentationParameters.BackBufferHeight;
             }
 
-            var tSize = ReflectionHelpers.SizeOf<T>();
-            var fSize = PresentationParameters.BackBufferFormat.GetSize();
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = PresentationParameters.BackBufferFormat.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
             if (startIndex < 0 || startIndex >= data.Length)
                 throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data array is too small.");
-            var dataByteSize = width * height * fSize;
+            int dataByteSize = width * height * fSize;
 
             if (elementCount * tSize != dataByteSize)
                 throw new ArgumentException(string.Format("elementCount is not the right size, " +
