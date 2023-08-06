@@ -183,9 +183,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (handler != null)
                 handler(this, EventArgs.Empty);
 
-            lock (_resourcesLock)
+            lock (_strategy.ResourcesLock)
             {
-                foreach (WeakReference resource in _resources)
+                foreach (WeakReference resource in _strategy.Resources)
                 {
                     GraphicsResource target = resource.Target as GraphicsResource;
                     if (target != null)
@@ -193,12 +193,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 // Remove references to resources that have been garbage collected.
-                for (int i = _resources.Count - 1; i >= 0; i--)
+                for (int i = _strategy.Resources.Count - 1; i >= 0; i--)
                 {
-                    WeakReference resource = _resources[i];
+                    WeakReference resource = _strategy.Resources[i];
 
                     if (!resource.IsAlive)
-                        _resources.RemoveAt(i);
+                        _strategy.Resources.RemoveAt(i);
                 }
             }
         }
