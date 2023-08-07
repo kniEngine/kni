@@ -61,7 +61,6 @@
     <Compile Include="PipelineProcessorContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
-    <Compile Include="TypeExtensions.cs" />
     <Compile Include="XmlColor.cs" />
   </ItemGroup>
   <ItemGroup>

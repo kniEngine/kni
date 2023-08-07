@@ -38,12 +38,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public override void AddDependency(string filename)
         {
-            _pipelineEvent.Dependencies.AddUnique(filename);
+            if (!_pipelineEvent.Dependencies.Contains(filename))
+                _pipelineEvent.Dependencies.Add(filename);
         }
 
         public override void AddOutputFile(string filename)
         {
-            _pipelineEvent.BuildOutput.AddUnique(filename);
+            if (!_pipelineEvent.BuildOutput.Contains(filename))
+                _pipelineEvent.BuildOutput.Add(filename);
         }
 
         public override TOutput Convert<TInput, TOutput>(   TInput input, 
@@ -55,8 +57,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.
-            _pipelineEvent.Dependencies.AddRangeUnique(processContext._pipelineEvent.Dependencies);
-            _pipelineEvent.BuildAsset.AddRangeUnique(processContext._pipelineEvent.BuildAsset);
+            foreach (string dependency in processContext._pipelineEvent.Dependencies)
+            {
+                if (!_pipelineEvent.Dependencies.Contains(dependency))
+                    _pipelineEvent.Dependencies.Add(dependency);
+            }
+            foreach (string buildAsset in processContext._pipelineEvent.BuildAsset)
+            {
+                if (!_pipelineEvent.BuildAsset.Contains(buildAsset))
+                    _pipelineEvent.BuildAsset.Add(buildAsset);
+            }
 
             return (TOutput)processedObject;
         }
@@ -87,7 +97,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var processedObject = _manager.ProcessContent(this._logger, buildEvent);
 
             // Record that we processed this dependent asset.
-            _pipelineEvent.Dependencies.AddUnique(sourceFilepath);
+            if (!_pipelineEvent.Dependencies.Contains(sourceFilepath))
+                _pipelineEvent.Dependencies.Add(sourceFilepath);
 
             return (TOutput)processedObject;
         }
@@ -105,7 +116,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var buildEvent = _manager.BuildContent(this._logger, sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
 
             // Record that we built this dependent asset.
-            _pipelineEvent.BuildAsset.AddUnique(buildEvent.DestFile);
+            if (!_pipelineEvent.BuildAsset.Contains(buildEvent.DestFile))
+                _pipelineEvent.BuildAsset.Add(buildEvent.DestFile);
 
             return new ExternalReference<TOutput>(buildEvent.DestFile);
         }
