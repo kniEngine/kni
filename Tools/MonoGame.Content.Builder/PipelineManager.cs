@@ -709,7 +709,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    var importContext = new PipelineImporterContext(logger, this);
+                    var importContext = new PipelineImporterContext(logger, this, pipelineEvent);
                     importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
                 }
                 catch (PipelineException)
@@ -727,7 +727,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
             else
             {
-                var importContext = new PipelineImporterContext(logger, this);
+                var importContext = new PipelineImporterContext(logger, this, pipelineEvent);
                 importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
             }
 

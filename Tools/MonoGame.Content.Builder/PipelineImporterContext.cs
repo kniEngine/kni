@@ -11,8 +11,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     {
         ConsoleLogger _logger;
         private readonly PipelineManager _manager;
+        private readonly PipelineBuildEvent _pipelineEvent;
 
-        public PipelineImporterContext(ConsoleLogger logger, PipelineManager manager)
+        public PipelineImporterContext(ConsoleLogger logger, PipelineManager manager, PipelineBuildEvent pipelineEvent)
         {
             _logger = logger;
             _manager = manager;
@@ -24,6 +25,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public override void AddDependency(string filename)
         {            
+            if (!_pipelineEvent.Dependencies.Contains(filename))
+                _pipelineEvent.Dependencies.Add(filename);
         }
     }
 }
