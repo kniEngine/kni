@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             _logger = logger;
             _manager = manager;
+            _pipelineEvent = pipelineEvent;
         }
 
         public override string IntermediateDirectory { get { return _manager.IntermediateDirectory; } }
