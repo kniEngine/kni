@@ -1,5 +1,81 @@
 ﻿# Changelog
 
+## 3.9.9001 Release - august 09, 2023
+
+### Fixed
+ - bugfix: fix Complex.Magnitude.
+ - bugfix: fix DictionaryReader.
+ - bugfix: fix RenderTarget3D/RenderTargetCube multisample.
+ - bugfix: fix EffectParameter.SetValueTranspose(Matrix) for Matrxi4x3 and Matrix3x4.
+ - bugfix: [OpenGL] Dispose of GraphicsContext.
+ - bugfix: [OpenGL] fix MarshalStringToPtr(...).
+ - bugfix: [OpenGL] fix RenderTarget2D multisample.
+ - bugfix: [OpenGL] IndexBuffer is invalidated after a call to DrawUserPrimitives, IndexBuffer's .ctor and GetData/SetData.
+ - bugfix: [WindowsDX] fix ObjectDisposedException in PreFilterMessage.
+ - bugfix: [WindowsDX] fix VideoPlayer.Resume().
+ - bugfix: [WindowsDX] fix VideoPlayer memory leak.
+ - bugfix: [WindowsDX/UAP] fix VideoPlayer.GetTexture().
+ - bugfix: [DesktopGL] DeviceWindowHandle is not updated to the actual GL Window handle.
+ - bugfix: [DesktopGL] game window fails to load Icon.bmp.
+ - bugfix: [DesktopGL] GameWindow.Title.
+ - bugfix: [Content.Pipeline] fix FontDescriptionProcessor smoothing.
+ - bugfix: [Content.Pipeline] FontDescription.Spacing was incorectly applied to VerticalLineSpacing (XNA API compatibility).
+ - bugfix: [Content.Pipeline] fix FontDescriptionProcessor Yoffset Cropping.
+ - bugfix: [Content.Pipeline] fix font size.
+ - bugfix: [Content.Pipeline] Added 1px spacing to Glyphs when UseKerning is false.
+ - bugfix: [Content.Pipeline] method CalculateAlphaRange(...) should throw instead of returning default value when the type is unsupported.
+ - bugfix: [Content.Pipeline] fix GLSL optimized matrix parameter.
+ - bugfix: [Content.Pipeline] fix Compression of 16bit Textures with Alpha.
+ - bugfix: [Content.Pipeline] fix EnvironmentMapEffectWriter.
+ - bugfix: [Content.Pipeline] fix MeshHelper.CalculateNormals(...).
+ - bugfix: [Content.Pipeline] Implement ContentImporterContext.AddDependency() (XNA API compatibility).
+ - bugfix: [Content.Pipeline] Interpolate curved animation (XNA API compatibility).
+ 
+### Performance
+ - [DesktopGL] reduce GamePad.GetCapabilities(...) string allocations.
+ - [GL] Use DYNAMIC_DRAW for Dynamic buffers instead of STREAM_DRAW.
+ - [Content.Pipeline] Optimized ProcessPremultiplyAlpha(...).
+ - [Content.Pipeline] Optimized Texture compression.
+ - [Content.Pipeline] Optimized FontDescriptionProcessor and FontTextureProcessor.
+ - [Content.Pipeline] Optimized PixelBitmapContentT.SetPixelData(...) and PixelBitmapContentT.ReplaceColor(...).
+ - [PipelineEditor] optimize UpdateRecentProjectList().
+ 
+### Changed
+  - The library MonoGame.Framework is split into MonoGame.Framework, Xna.Framework and Xna.Framework.Design.
+  - Game.Exit() will now throw PlatformNotSupportedException instead of InvalidOperationException (XNA API change).
+  - GameWindow.Title will throw ArgumentNullException (XNA API compatibility).
+  - Max Capacity of TextureCollection, ConstantBufferCollection, SamplerStateCollection increased to 32. Collections will throw ArgumentOutOfRangeException.
+  - EffectParameter.SetValue(Matrix) will throw InvalidCastException for unsuported Matrix types.
+  - Vector2/3/4TypeConverter, renamed to Vector2/3/4Converter.
+  - IsContentLost will throw NotImplementedException.
+  - [BlazorGL] Game.Exit() will throw PlatformNotSupportedException.
+  - [BlazorGL] MaxTextureSlots increased to 8 from 4.
+  - [WindowsDX] Texture2D.Reload() will throw NotImplementedException.
+  - [PipelineEditor] font size increased to 11 from 9.
+  - [Content.Pipeline] AssimpNet updated to v4.1.0.
+  - [Content.Pipeline] The library MonoGame.Framework.Content.Pipeline is split into
+Xna.Framework.Content.Pipeline, Xna.Framework.Content.Pipeline.Audio, Xna.Framework.Content.Pipeline.Media,
+Xna.Framework.Content.Pipeline.Graphics and Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.
+ 
+### Added
+ - Implement IPackedVector<UInt32> for Color (XNA API compatibility).
+ - Implement EffectParameter.SetValue(Matrix) for Matrix4x2.
+ - [DesktopGL] Implement Mouse Raw Input.
+ - [WindowsDX/UAP] Implement VideoPlayer.IsLooped.
+ - [Android] Implement VideoPlayer.GetTexture(), VideoPlayer.PlayPosition, VideoPlayer.IsLooped, VideoPlayer.Volume.
+ - [BlazorGL] Implement building effects for the WebGL Platform.
+ - [BlazorGL] Update template to prevent Arrows Keys and Spacebar scrolling the outer page when running inside an iframe. (by @Terria-K)
+ - [BlazorGL] Update template to prevent Mousewheel scrolling the outer page when running inside an iframe.
+ - [Content.Pipeline] added FontDescriptionProcessor.Smoothing parameter.
+ - [Content.Pipeline] support Alpha8, NormalizedShort2, NormalizedShort4 in PixelBitmapContent (XNA API compatibility).
+ 
+### Removed
+  - GraphicsDevice.IsContentLost property.
+  - GraphicsDevice.ResourcesLost property.
+  - [UAP] removed Game.PreviousExecutionState property.
+  - [Android] removed Game.Activity property.
+  - [Content.Pipeline] StbSharp is now internal.
+ 
 ## 3.8.9102 Release - February 5, 2023
 
 ### Fixed
