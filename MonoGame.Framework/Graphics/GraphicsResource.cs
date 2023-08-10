@@ -106,14 +106,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 // during their lifetime. But only one GraphicsDevice should retain ownership.
                 if (_graphicsDevice != null)
                 {
-                    _graphicsDevice.RemoveResourceReference(_selfReference);
+                    _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
                     _selfReference = null;
                 }
 
                 _graphicsDevice = value;
 
                 _selfReference = new WeakReference(this);
-                _graphicsDevice.AddResourceReference(_selfReference);
+                _graphicsDevice.Strategy.AddResourceReference(_selfReference);
             }
         }
 
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // Remove from the global list of graphics resources
                 if (_graphicsDevice != null)
-                    _graphicsDevice.RemoveResourceReference(_selfReference);
+                    _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
 
                 _selfReference = null;
                 _graphicsDevice = null;

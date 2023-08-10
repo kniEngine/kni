@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Clamp MultiSampleCount
             PresentationParameters.MultiSampleCount =
-                GetClampedMultisampleCount(PresentationParameters.MultiSampleCount);
+                _strategy.GetClampedMultisampleCount(PresentationParameters.MultiSampleCount);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);

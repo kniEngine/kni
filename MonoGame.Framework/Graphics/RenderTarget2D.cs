@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException();
 
             DepthStencilFormat = depthFormat;
-            MultiSampleCount = graphicsDevice.GetClampedMultisampleCount(preferredMultiSampleCount);
+            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
         }
 
