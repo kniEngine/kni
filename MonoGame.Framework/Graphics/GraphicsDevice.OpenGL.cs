@@ -71,26 +71,26 @@ namespace Microsoft.Xna.Framework.Graphics
                 _glMinorVersion = 1;
             }
 
-            Capabilities = new GraphicsCapabilities();
-            Capabilities.PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
+            Strategy._capabilities = new GraphicsCapabilities();
+            Strategy._capabilities.PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
 
 #if DESKTOPGL
             // Initialize draw buffer attachment array
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers = new DrawBuffersEnum[Capabilities.MaxDrawBuffers];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers = new DrawBuffersEnum[Strategy.Capabilities.MaxDrawBuffers];
 			for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers.Length; i++)
                 ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
         {
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            if (Capabilities.SupportsFramebufferObjectARB
-            || Capabilities.SupportsFramebufferObjectEXT)
+            if (Strategy.Capabilities.SupportsFramebufferObjectARB
+            ||  Strategy.Capabilities.SupportsFramebufferObjectEXT)
             {
                 ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
             _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
                 ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
         }
@@ -221,8 +221,8 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsDevice)_strategy)._programCache.Clear();
             ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
 
-            if (Capabilities.SupportsFramebufferObjectARB
-            || Capabilities.SupportsFramebufferObjectEXT)
+            if (Strategy.Capabilities.SupportsFramebufferObjectARB
+            ||  Strategy.Capabilities.SupportsFramebufferObjectEXT)
             {
                 ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
             _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
                 ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
       
@@ -265,7 +265,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy._pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Capabilities.MaxVertexBufferSlots);
+            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
             _mainContext.Strategy._vertexBuffersDirty = true;
             _mainContext.Strategy._indexBufferDirty = true;
             _mainContext.Strategy._vertexShaderDirty = true;

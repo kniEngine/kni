@@ -64,15 +64,15 @@ namespace Microsoft.Xna.Framework.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = graphicsDevice.Capabilities.SupportsSRgb;
-            bool supportsS3tc = graphicsDevice.Capabilities.SupportsS3tc;
-            bool supportsPvrtc = graphicsDevice.Capabilities.SupportsPvrtc;
-            bool supportsEtc1 = graphicsDevice.Capabilities.SupportsEtc1;
-            bool supportsEtc2 = graphicsDevice.Capabilities.SupportsEtc2;
-            bool supportsAtitc = graphicsDevice.Capabilities.SupportsAtitc;
-            bool supportsFloat = graphicsDevice.Capabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = graphicsDevice.Capabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = graphicsDevice.Capabilities.SupportsNormalized;
+            bool supportsSRgb = graphicsDevice.Strategy.Capabilities.SupportsSRgb;
+            bool supportsS3tc = graphicsDevice.Strategy.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = graphicsDevice.Strategy.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = graphicsDevice.Strategy.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = graphicsDevice.Strategy.Capabilities.SupportsEtc2;
+            bool supportsAtitc = graphicsDevice.Strategy.Capabilities.SupportsAtitc;
+            bool supportsFloat = graphicsDevice.Strategy.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = graphicsDevice.Strategy.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = graphicsDevice.Strategy.Capabilities.SupportsNormalized;
             bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
 
             switch (format)
@@ -358,22 +358,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if GLES
                     case DepthFormat.Depth24:
-                        if (graphicsDevice.Capabilities.SupportsDepth24)
+                        if (graphicsDevice.Strategy.Capabilities.SupportsDepth24)
                             depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                        else if (graphicsDevice.Capabilities.SupportsDepthNonLinear)
+                        else if (graphicsDevice.Strategy.Capabilities.SupportsDepthNonLinear)
                             depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                         else
                             depthInternalFormat = RenderbufferStorage.DepthComponent16;
                         break;
 
                     case DepthFormat.Depth24Stencil8:
-                        if (graphicsDevice.Capabilities.SupportsPackedDepthStencil)
+                        if (graphicsDevice.Strategy.Capabilities.SupportsPackedDepthStencil)
                             depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
                         else
                         {
-                            if (graphicsDevice.Capabilities.SupportsDepth24)
+                            if (graphicsDevice.Strategy.Capabilities.SupportsDepth24)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                            else if (graphicsDevice.Capabilities.SupportsDepthNonLinear)
+                            else if (graphicsDevice.Strategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16;

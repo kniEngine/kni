@@ -23,7 +23,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
-        internal GraphicsCapabilities Capabilities { get; private set; }
 
         // TODO Graphics Device events need implementing
         public event EventHandler<EventArgs> DeviceLost;
@@ -147,8 +146,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 msc = msc | (msc >> 4);
                 msc -= (msc >> 1);
                 // and clamp it to what the device can handle
-                if (msc > Capabilities.MaxMultiSampleCount)
-                    msc = Capabilities.MaxMultiSampleCount;
+                if (msc > Strategy.Capabilities.MaxMultiSampleCount)
+                    msc = Strategy.Capabilities.MaxMultiSampleCount;
 
                 return msc;
             }
@@ -173,11 +172,11 @@ namespace Microsoft.Xna.Framework.Graphics
             // Initialize the main viewport
             _mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
-            _mainContext.Strategy._vertexTextures = new TextureCollection(this, _mainContext, Capabilities.MaxVertexTextureSlots);
-            _mainContext.Strategy._pixelTextures = new TextureCollection(this, _mainContext, Capabilities.MaxTextureSlots);
+            _mainContext.Strategy._vertexTextures = new TextureCollection(this, _mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
+            _mainContext.Strategy._pixelTextures = new TextureCollection(this, _mainContext, Strategy.Capabilities.MaxTextureSlots);
 
-            _mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _mainContext, Capabilities.MaxTextureSlots);
-            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _mainContext, Capabilities.MaxVertexTextureSlots);
+            _mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _mainContext, Strategy.Capabilities.MaxTextureSlots);
+            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
 
             _mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
             _mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -212,7 +211,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Capabilities.MaxVertexBufferSlots);
+            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
             _mainContext.Strategy._vertexBuffersDirty = true;
             _mainContext.Strategy._indexBufferDirty = true;
             _mainContext.Strategy._vertexShaderDirty = true;

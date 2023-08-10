@@ -384,7 +384,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (this.Device.Capabilities.SupportsInstancing)
+                    if (this.Device.Strategy.Capabilities.SupportsInstancing)
                     {
                         throw new NotImplementedException();
                         //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
@@ -440,7 +440,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     (baseVertex + element.Offset));
                 GraphicsExtensions.CheckGLError();
 
-                if (this.Device.Capabilities.SupportsInstancing)
+                if (this.Device.Strategy.Capabilities.SupportsInstancing)
                 {
                     throw new NotImplementedException();
                     //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
@@ -517,7 +517,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!this.Device.Capabilities.SupportsInstancing)
+            if (!this.Device.Strategy.Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();

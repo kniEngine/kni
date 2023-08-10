@@ -38,11 +38,11 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-            Capabilities = new GraphicsCapabilities();
-            Capabilities.PlatformInitialize(this);
+            Strategy._capabilities = new GraphicsCapabilities();
+            Strategy._capabilities.PlatformInitialize(this);
 
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
             this._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
                 ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }

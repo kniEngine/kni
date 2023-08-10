@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return attrInfo;
 
             // Get the vertex attribute info and cache it
-            attrInfo = new VertexDeclarationAttributeInfo(GraphicsDevice.Capabilities.MaxVertexBufferSlots);
+            attrInfo = new VertexDeclarationAttributeInfo(GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots);
 
             foreach (var ve in InternalVertexElements)
             {

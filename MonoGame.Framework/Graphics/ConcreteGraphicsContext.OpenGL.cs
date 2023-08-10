@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
 
                     // only set the divisor if instancing is supported
-                    if (this.Device.Capabilities.SupportsInstancing)
+                    if (this.Device.Strategy.Capabilities.SupportsInstancing)
                     {
                         GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
                         GraphicsExtensions.CheckGLError();
@@ -466,7 +466,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GraphicsExtensions.CheckGLError();
 
 #if DESKTOPGL
-                if (this.Device.Capabilities.SupportsInstancing)
+                if (this.Device.Strategy.Capabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
                     GraphicsExtensions.CheckGLError();
@@ -543,7 +543,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!this.Device.Capabilities.SupportsInstancing)
+            if (!this.Device.Strategy.Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();
@@ -564,7 +564,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (baseInstance > 0)
             {
-                if (!this.Device.Capabilities.SupportsBaseIndexInstancing)
+                if (!this.Device.Strategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
                 GL.DrawElementsInstancedBaseInstance(target,

@@ -211,7 +211,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Only implemented for DirectX </remarks>
         public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
         {
-            if (!_device.Capabilities.SupportsTextureArrays)
+            if (!_device.Strategy.Capabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
 
             if (renderTarget == null)
@@ -365,7 +365,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this._device.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < this._device.Capabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < this._device.Strategy.Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -433,7 +433,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this._device.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < this._device.Capabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < this._device.Strategy.Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -485,7 +485,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this._device.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < this._device.Capabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < this._device.Strategy.Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -576,7 +576,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this._device.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < this._device.Capabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < this._device.Strategy.Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
@@ -677,7 +677,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this._device.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < this._device.Capabilities.MaxTextureSlots; i++)
+                for (int i = 0; i < this._device.Strategy.Capabilities.MaxTextureSlots; i++)
                 {
                     var tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
