@@ -25,15 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsCapabilities Capabilities { get; private set; }
 
-
-        // Resources may be added to and removed from the list from many threads.
-        private readonly object _resourcesLock = new object();
-
-        // Use WeakReference for the global resources list as we do not know when a resource
-        // may be disposed and collected. We do not want to prevent a resource from being
-        // collected by holding a strong reference to it in this list.
-        private readonly List<WeakReference> _resources = new List<WeakReference>();
-
         // TODO Graphics Device events need implementing
         public event EventHandler<EventArgs> DeviceLost;
         public event EventHandler<EventArgs> DeviceReset;
@@ -338,18 +329,18 @@ namespace Microsoft.Xna.Framework.Graphics
             if (disposing)
             {
                 // Dispose of all remaining graphics resources before disposing of the graphics device
-                lock (_resourcesLock)
+                lock (_strategy.ResourcesLock)
                 {
-                    for (int i = _resources.Count - 1; i >= 0; i--)
+                    for (int i = _strategy.Resources.Count - 1; i >= 0; i--)
                     {
-                        WeakReference resource = _resources[i];
+                        WeakReference resource = _strategy.Resources[i];
 
                         IDisposable target = resource.Target as IDisposable;
                         if (target != null)
                             target.Dispose();
                     }
 
-                    _resources.Clear();
+                    _strategy.Resources.Clear();
                 }
 
                 // Clear the effect cache.
@@ -384,17 +375,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void AddResourceReference(WeakReference resourceReference)
         {
-            lock (_resourcesLock)
+            lock (_strategy.ResourcesLock)
             {
-                _resources.Add(resourceReference);
+                _strategy.Resources.Add(resourceReference);
             }
         }
 
         internal void RemoveResourceReference(WeakReference resourceReference)
         {
-            lock (_resourcesLock)
+            lock (_strategy.ResourcesLock)
             {
-                _resources.Remove(resourceReference);
+                _strategy.Resources.Remove(resourceReference);
             }
         }
 
