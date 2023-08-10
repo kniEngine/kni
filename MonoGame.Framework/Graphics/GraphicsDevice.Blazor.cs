@@ -95,12 +95,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             return new Rectangle(x, y, width, height);
         }
-        
-        internal void PlatformSetMultiSamplingToMaximum(PresentationParameters presentationParameters, out int quality)
-        {
-            presentationParameters.MultiSampleCount = 0;
-            quality = 0;
-        }
 
         internal void OnPresentationChanged()
         {
