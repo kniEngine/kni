@@ -121,9 +121,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // First look for it in the cache.
             //
             Effect effect;
-            lock (graphicsDevice.EffectCache)
+            lock (graphicsDevice.Strategy.EffectCache)
             {
-                if (!graphicsDevice.EffectCache.TryGetValue(header.EffectKey, out effect))
+                if (!graphicsDevice.Strategy.EffectCache.TryGetValue(header.EffectKey, out effect))
                 {
                     using (var stream = new MemoryStream(effectCode, index + header.HeaderSize, count - header.HeaderSize, false))
                     {
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                 effect = reader.ReadEffect();
 
                                 // Cache the effect for later in its original unmodified state.
-                                graphicsDevice.EffectCache.Add(header.EffectKey, effect);
+                                graphicsDevice.Strategy.EffectCache.Add(header.EffectKey, effect);
                             }
                         }
                         else
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                 effect = reader.ReadEffect();
 
                                 // Cache the effect for later in its original unmodified state.
-                                graphicsDevice.EffectCache.Add(header.EffectKey, effect);
+                                graphicsDevice.Strategy.EffectCache.Add(header.EffectKey, effect);
                             }
                         }
                     }
