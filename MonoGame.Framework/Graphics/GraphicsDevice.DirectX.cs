@@ -981,11 +981,6 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
         }
 
-        private static Rectangle PlatformGetTitleSafeArea(int x, int y, int width, int height)
-        {
-            return new Rectangle(x, y, width, height);
-        }
-
 #if WINDOWS_UAP
 
         internal void Trim()

@@ -778,7 +778,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal static Rectangle GetTitleSafeArea(int x, int y, int width, int height)
         {
-            return PlatformGetTitleSafeArea(x, y, width, height);
+            return new Rectangle(x, y, width, height);
         }
     }
 }

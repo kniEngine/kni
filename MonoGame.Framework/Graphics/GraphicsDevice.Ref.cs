@@ -34,11 +34,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private static Rectangle PlatformGetTitleSafeArea(int x, int y, int width, int height)
-        {
-            throw new PlatformNotSupportedException();
-        }        
-
         internal void OnPresentationChanged()
         {
             throw new PlatformNotSupportedException();
