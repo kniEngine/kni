@@ -367,15 +367,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
             Strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
-            throw new NotImplementedException();
         }
-
-        partial void PlatformReset();
 
         public void Reset()
         {
             Strategy.Reset();
-            PlatformReset();
 
             var deviceResettingHandler = DeviceResetting;
             if (deviceResettingHandler != null)
@@ -399,8 +395,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("presentationParameters");
 
             Strategy.Reset(presentationParameters);
-            _strategy.PresentationParameters = presentationParameters;
-            Reset();
         }
 
         public DisplayMode DisplayMode

@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Graphics
                              ? SharpDX.DXGI.Format.B8G8R8A8_UNorm
                              : GraphicsExtensions.ToDXFormat(surfaceFormat);
 
-            var multisampleDesc = GraphicsDevice.GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
+            var multisampleDesc = ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
             _windowHandle = windowHandle;
             PresentInterval = presentInterval;
 

@@ -16,6 +16,31 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void GetModeSwitchedSize(out int width, out int height)
+        {
+            var mode = new Sdl.Display.Mode
+            {
+                Width = PresentationParameters.BackBufferWidth,
+                Height = PresentationParameters.BackBufferHeight,
+                Format = 0,
+                RefreshRate = 0,
+                DriverData = IntPtr.Zero
+            };
+            Sdl.Display.Mode closest;
+            Sdl.Current.DISPLAY.GetClosestDisplayMode(0, mode, out closest);
+            width = closest.Width;
+            height = closest.Height;
+        }
+
+        internal void GetDisplayResolution(out int width, out int height)
+        {
+            Sdl.Display.Mode mode;
+            Sdl.Current.DISPLAY.GetCurrentDisplayMode(0, out mode);
+            width = mode.Width;
+            height = mode.Height;
+        }
+
+
         public override void Present()
         {
         }

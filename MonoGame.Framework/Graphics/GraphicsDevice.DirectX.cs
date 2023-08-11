@@ -45,52 +45,25 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-			CreateDeviceIndependentResources();
+            ((ConcreteGraphicsDevice)_strategy).CreateDeviceIndependentResources();
 			CreateDeviceResources();
 
             _strategy._capabilities = new GraphicsCapabilities();
             _strategy._capabilities.PlatformInitialize(this);
 
 #if WINDOWS_UAP
-			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
+            ((ConcreteGraphicsDevice)_strategy).Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
         }
 
         private void PlatformInitialize()
         {
 #if WINDOWS
-            CorrectBackBufferSize();
+            ((ConcreteGraphicsDevice)_strategy).CorrectBackBufferSize();
 #endif
             CreateSizeDependentResources();
         }
 
-        /// <summary>
-        /// Creates resources not tied the active graphics device.
-        /// </summary>
-        protected void CreateDeviceIndependentResources()
-        {
-#if WINDOWS_UAP
-
-            SharpDX.Direct2D1.DebugLevel debugLevel = SharpDX.Direct2D1.DebugLevel.None;
-
-#if DEBUG && WINDOWS_UAP
-            debugLevel |= SharpDX.Direct2D1.DebugLevel.Information;
-#endif
-
-            // Dispose previous references.
-            if (((ConcreteGraphicsDevice)_strategy)._d2dFactory != null)
-                ((ConcreteGraphicsDevice)_strategy)._d2dFactory.Dispose();
-            if (((ConcreteGraphicsDevice)_strategy)._dwriteFactory != null)
-                ((ConcreteGraphicsDevice)_strategy)._dwriteFactory.Dispose();
-            if (((ConcreteGraphicsDevice)_strategy)._wicFactory != null)
-                ((ConcreteGraphicsDevice)_strategy)._wicFactory.Dispose();
-
-            // Allocate new references
-            ((ConcreteGraphicsDevice)_strategy)._d2dFactory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded, debugLevel);
-            ((ConcreteGraphicsDevice)_strategy)._dwriteFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
-            ((ConcreteGraphicsDevice)_strategy)._wicFactory = new SharpDX.WIC.ImagingFactory2();
-#endif
-        }
 
         /// <summary>
         /// Create graphics device specific resources.
@@ -285,7 +258,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
+            DXGI.SampleDescription multisampleDesc = ((ConcreteGraphicsDevice)_strategy).GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
 
@@ -350,7 +323,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
                 {
                     ((ConcreteGraphicsDevice)_strategy)._swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
-                    RefreshAdapter();
+                    ((ConcreteGraphicsDevice)_strategy).RefreshAdapter();
                     dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, DXGI.WindowAssociationFlags.IgnoreAll);
                     // To reduce latency, ensure that DXGI does not queue more than one frame at a time.
                     // Docs: https://msdn.microsoft.com/en-us/library/windows/desktop/ff471334(v=vs.85).aspx
@@ -359,7 +332,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Preserve full screen state, after swap chain is re-created 
                 if (PresentationParameters.HardwareModeSwitch
                     && wasFullScreen)
-                    SetHardwareFullscreen();
+                    ((ConcreteGraphicsDevice)_strategy).SetHardwareFullscreen();
             }
 #endif
 
@@ -391,13 +364,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
+            DXGI.SampleDescription multisampleDesc = ((ConcreteGraphicsDevice)_strategy).GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
 
             DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
-            ((ConcreteGraphicsDevice)_strategy)._isTearingSupported = IsTearingSupported();
+            ((ConcreteGraphicsDevice)_strategy)._isTearingSupported = ((ConcreteGraphicsDevice)_strategy).IsTearingSupported();
             if (((ConcreteGraphicsDevice)_strategy)._isTearingSupported)
             {
                 swapChainFlags = DXGI.SwapChainFlags.AllowTearing;
@@ -578,188 +551,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        partial void PlatformReset()
-        {
-#if WINDOWS
-            CorrectBackBufferSize();
-#endif
-
-#if WINDOWS
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
-#endif
-#if WINDOWS_UAP
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
-#endif
-        }
-
-#if WINDOWS
-        private void CorrectBackBufferSize()
-        {
-            // Window size can be modified when we're going full screen, we need to take that into account
-            // so the back buffer has the right size.
-            if (PresentationParameters.IsFullScreen)
-            {
-                int newWidth, newHeight;
-                if (PresentationParameters.HardwareModeSwitch)
-                    GetModeSwitchedSize(out newWidth, out newHeight);
-                else
-                    GetDisplayResolution(out newWidth, out newHeight);
-
-                PresentationParameters.BackBufferWidth = newWidth;
-                PresentationParameters.BackBufferHeight = newHeight;
-            }
-        }
-
-        internal void GetModeSwitchedSize(out int width, out int height)
-        {
-            DXGI.Output output = null;
-            if (((ConcreteGraphicsDevice)_strategy)._swapChain == null)
-            {
-                // get the primary output
-                using (DXGI.Factory1 factory = new DXGI.Factory1())
-                using (DXGI.Adapter1 adapter = factory.GetAdapter1(0))
-                    output = adapter.Outputs[0];
-            }
-            else
-            {
-                try
-                {
-                    output = ((ConcreteGraphicsDevice)_strategy)._swapChain.ContainingOutput;
-                }
-                catch (SharpDXException) { /* ContainingOutput fails on a headless device */ }
-            }
-
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            DXGI.ModeDescription target = new DXGI.ModeDescription
-            {
-                Format = format,
-                Scaling = DXGI.DisplayModeScaling.Unspecified,
-                Width = PresentationParameters.BackBufferWidth,
-                Height = PresentationParameters.BackBufferHeight,
-            };
-
-            if (output == null)
-            {
-                width = PresentationParameters.BackBufferWidth;
-                height = PresentationParameters.BackBufferHeight;
-            }
-            else
-            {
-                DXGI.ModeDescription closest;
-                output.GetClosestMatchingMode(((ConcreteGraphicsDevice)_strategy).D3DDevice, target, out closest);
-                width = closest.Width;
-                height = closest.Height;
-                output.Dispose();
-            }
-        }
-
-        internal void GetDisplayResolution(out int width, out int height)
-        {
-            width = Adapter.CurrentDisplayMode.Width;
-            height = Adapter.CurrentDisplayMode.Height;
-        }
-
-#endif
-
-#if WINDOWS
-        internal void SetHardwareFullscreen()
-        {
-            ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
-        }
-
-        internal void ClearHardwareFullscreen()
-        {
-            ((ConcreteGraphicsDevice)_strategy)._swapChain.SetFullscreenState(false, null);
-        }
-#endif
-
-#if WINDOWS
-        internal void ResizeTargets()
-        {
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            DXGI.ModeDescription descr = new DXGI.ModeDescription
-            {
-                Format = format,
-                Scaling = DXGI.DisplayModeScaling.Unspecified,
-                Width = PresentationParameters.BackBufferWidth,
-                Height = PresentationParameters.BackBufferHeight,
-            };
-
-            ((ConcreteGraphicsDevice)_strategy)._swapChain.ResizeTarget(ref descr);
-        }
-#endif
-
-#if WINDOWS
-        internal void RefreshAdapter()
-        {
-            if (((ConcreteGraphicsDevice)_strategy)._swapChain == null)
-                return;
-
-            DXGI.Output output = null;
-            try
-            {
-                output = ((ConcreteGraphicsDevice)_strategy)._swapChain.ContainingOutput;
-            }
-            catch (SharpDXException) { /* ContainingOutput fails on a headless device */ }
-
-            if (output != null)
-            {
-                foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
-                {
-                    if (adapter.DeviceName == output.Description.DeviceName)
-                    {
-                        _strategy.Adapter = adapter;
-                        break;
-                    }
-                }
-
-                output.Dispose();
-            }
-        }
-#endif
-
-#if WINDOWS_UAP
-        private void SetMultiSamplingToMaximum(PresentationParameters presentationParameters, out int quality)
-        {
-            quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
-        }
-#endif
-
-        /// <summary>
-        /// Get highest multisample quality level for specified format and multisample count.
-        /// Returns 0 if multisampling is not supported for input parameters.
-        /// </summary>
-        /// <param name="format">The texture format.</param>
-        /// <param name="multiSampleCount">The number of samples during multisampling.</param>
-        /// <returns>
-        /// Higher than zero if multiSampleCount is supported. 
-        /// Zero if multiSampleCount is not supported.
-        /// </returns>
-        private int GetMultiSamplingQuality(DXGI.Format format, int multiSampleCount)
-        {
-            // The valid range is between zero and one less than the level returned by CheckMultisampleQualityLevels
-            // https://msdn.microsoft.com/en-us/library/windows/desktop/bb173072(v=vs.85).aspx
-            int quality = ((ConcreteGraphicsDevice)_strategy).D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
-            // NOTE: should we always return highest quality?
-            return Math.Max(quality, 0); // clamp minimum to 0 
-        }
-
-        internal DXGI.SampleDescription GetSupportedSampleDescription(DXGI.Format format, int multiSampleCount)
-        {
-            DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
-
-            if (multiSampleCount > 1)
-            {
-                int quality = GetMultiSamplingQuality(format, multiSampleCount);
-
-                multisampleDesc.Count = multiSampleCount;
-                multisampleDesc.Quality = quality;
-            }
-
-            return multisampleDesc;
-        }
 
         private void PlatformDispose()
         {
@@ -980,56 +771,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
         }
-
-#if WINDOWS_UAP
-
-        internal void Trim()
-        {
-            using (DXGI.Device3 dxgiDevice3 = ((ConcreteGraphicsDevice)_strategy).D3DDevice.QueryInterface<DXGI.Device3>())
-                dxgiDevice3.Trim();
-        }
-
-        internal float Dpi
-        {
-            get { return ((ConcreteGraphicsDevice)_strategy)._dpi; }
-            set
-            {
-                if (((ConcreteGraphicsDevice)_strategy)._dpi == value)
-                    return;
-
-                ((ConcreteGraphicsDevice)_strategy)._dpi = value;
-                ((ConcreteGraphicsDevice)_strategy)._d2dContext.DotsPerInch = new Size2F(((ConcreteGraphicsDevice)_strategy)._dpi, ((ConcreteGraphicsDevice)_strategy)._dpi);
-
-                //if (OnDpiChanged != null)
-                //    OnDpiChanged(this);
-            }
-        }
-
-        private bool IsTearingSupported()
-        {
-            RawBool allowTearing;
-            using (DXGI.Factory2 dxgiFactory2 = new DXGI.Factory2())
-            {
-                unsafe
-                {
-                    DXGI.Factory5 factory5 = dxgiFactory2.QueryInterface<DXGI.Factory5>();
-                    try
-                    {
-                        factory5.CheckFeatureSupport(DXGI.Feature.PresentAllowTearing, new IntPtr(&allowTearing), sizeof(RawBool));
-
-                        return allowTearing;
-                    }
-                    catch (SharpDXException ex)
-                    {
-                        // can't request feature
-                    }
-                }
-            }
-
-            return false;
-        }
-
-#endif
 
     }
 }

@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset(PresentationParameters presentationParameters)
         {
+            PresentationParameters = presentationParameters;
+            Reset();
         }
 
         public override void Reset()
@@ -34,6 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
+            throw new NotImplementedException();
         }
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)

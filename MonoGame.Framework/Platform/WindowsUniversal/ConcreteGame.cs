@@ -20,7 +20,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform
                 _enableRunLoop = false;
 
             if (this.GraphicsDevice != null)
-                this.GraphicsDevice.Trim();
+                ((ConcreteGraphicsDevice)this.GraphicsDevice.Strategy).Trim();
         }
 
         private void CoreApplication_Resuming(object sender, Object e)
