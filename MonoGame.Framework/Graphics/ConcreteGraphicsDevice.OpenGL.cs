@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -19,6 +20,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteGraphicsDeviceGL(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
             : base(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)
+        {
+        }
+
+
+        public override void Reset(PresentationParameters presentationParameters)
+        {
+        }
+
+        public override void Reset()
+        {
+        }
+
+        public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
+        {
+        }
+
+        public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
         }
 

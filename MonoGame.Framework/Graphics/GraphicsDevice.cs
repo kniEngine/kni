@@ -360,11 +360,13 @@ namespace Microsoft.Xna.Framework.Graphics
             // reset _graphicsMetrics
             _mainContext._graphicsMetrics = new GraphicsMetrics();
 
+            Strategy.Present();
             PlatformPresent();
         }
 
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
+            Strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
             throw new NotImplementedException();
         }
 
@@ -372,6 +374,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
+            Strategy.Reset();
             PlatformReset();
 
             var deviceResettingHandler = DeviceResetting;
@@ -388,13 +391,14 @@ namespace Microsoft.Xna.Framework.Graphics
             var deviceResetHandler = DeviceReset;
             if (deviceResetHandler != null)
                 deviceResetHandler(this, EventArgs.Empty);
-       }
+        }
 
         public void Reset(PresentationParameters presentationParameters)
         {
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
+            Strategy.Reset(presentationParameters);
             _strategy.PresentationParameters = presentationParameters;
             Reset();
         }
@@ -723,6 +727,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1} bytes.",
                                             elementCount * tSize, dataByteSize), "elementCount");
 
+            Strategy.GetBackBufferData(rect, data, startIndex, elementCount);
             PlatformGetBackBufferData(rect, data, startIndex, elementCount);
         }
 
