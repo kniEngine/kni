@@ -131,28 +131,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Dispose(false);
         }
 
-        internal int GetClampedMultisampleCount(int multiSampleCount)
-        {
-            if (multiSampleCount > 1)
-            {
-                // Round down MultiSampleCount to the nearest power of two
-                // hack from http://stackoverflow.com/a/2681094
-                // Note: this will return an incorrect, but large value
-                // for very large numbers. That doesn't matter because
-                // the number will get clamped below anyway in this case.
-                var msc = multiSampleCount;
-                msc = msc | (msc >> 1);
-                msc = msc | (msc >> 2);
-                msc = msc | (msc >> 4);
-                msc -= (msc >> 1);
-                // and clamp it to what the device can handle
-                if (msc > Strategy.Capabilities.MaxMultiSampleCount)
-                    msc = Strategy.Capabilities.MaxMultiSampleCount;
-
-                return msc;
-            }
-            else return 0;
-        }
 
         private void Initialize()
         {
@@ -372,21 +350,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 handler(this, EventArgs.Empty);
         }
 
-        internal void AddResourceReference(WeakReference resourceReference)
-        {
-            lock (_strategy.ResourcesLock)
-            {
-                _strategy.Resources.Add(resourceReference);
-            }
-        }
-
-        internal void RemoveResourceReference(WeakReference resourceReference)
-        {
-            lock (_strategy.ResourcesLock)
-            {
-                _strategy.Resources.Remove(resourceReference);
-            }
-        }
 
         public void Present()
         {
@@ -397,11 +360,13 @@ namespace Microsoft.Xna.Framework.Graphics
             // reset _graphicsMetrics
             _mainContext._graphicsMetrics = new GraphicsMetrics();
 
+            Strategy.Present();
             PlatformPresent();
         }
 
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
+            Strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
             throw new NotImplementedException();
         }
 
@@ -409,6 +374,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
+            Strategy.Reset();
             PlatformReset();
 
             var deviceResettingHandler = DeviceResetting;
@@ -425,13 +391,14 @@ namespace Microsoft.Xna.Framework.Graphics
             var deviceResetHandler = DeviceReset;
             if (deviceResetHandler != null)
                 deviceResetHandler(this, EventArgs.Empty);
-       }
+        }
 
         public void Reset(PresentationParameters presentationParameters)
         {
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
+            Strategy.Reset(presentationParameters);
             _strategy.PresentationParameters = presentationParameters;
             Reset();
         }
@@ -760,6 +727,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1} bytes.",
                                             elementCount * tSize, dataByteSize), "elementCount");
 
+            Strategy.GetBackBufferData(rect, data, startIndex, elementCount);
             PlatformGetBackBufferData(rect, data, startIndex, elementCount);
         }
 

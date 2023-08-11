@@ -80,6 +80,52 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        internal int GetClampedMultisampleCount(int multiSampleCount)
+        {
+            if (multiSampleCount > 1)
+            {
+                // Round down MultiSampleCount to the nearest power of two
+                // hack from http://stackoverflow.com/a/2681094
+                // Note: this will return an incorrect, but large value
+                // for very large numbers. That doesn't matter because
+                // the number will get clamped below anyway in this case.
+                var msc = multiSampleCount;
+                msc = msc | (msc >> 1);
+                msc = msc | (msc >> 2);
+                msc = msc | (msc >> 4);
+                msc -= (msc >> 1);
+                // and clamp it to what the device can handle
+                if (msc > Capabilities.MaxMultiSampleCount)
+                    msc = Capabilities.MaxMultiSampleCount;
+
+                return msc;
+            }
+            else return 0;
+        }
+
+        internal void AddResourceReference(WeakReference resourceReference)
+        {
+            lock (ResourcesLock)
+            {
+                Resources.Add(resourceReference);
+            }
+        }
+
+        internal void RemoveResourceReference(WeakReference resourceReference)
+        {
+            lock (ResourcesLock)
+            {
+                Resources.Remove(resourceReference);
+            }
+        }
+
+
+        public abstract void Reset();
+        public abstract void Reset(PresentationParameters presentationParameters);
+        public abstract void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle);
+        public abstract void Present();
+        public abstract void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct;
+                
 
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);

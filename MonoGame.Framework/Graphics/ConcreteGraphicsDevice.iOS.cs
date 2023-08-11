@@ -16,6 +16,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        public override void Present()
+        {
+        }
+
+
         internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
         {
             return new ConcreteTextureCollection(device, context, capacity);
