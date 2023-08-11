@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultisampleCount(preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
-            _msSampleDescription = GraphicsDevice.GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
+            _msSampleDescription = ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
 
             GenerateIfRequired();
         }

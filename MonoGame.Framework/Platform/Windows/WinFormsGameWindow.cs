@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Windows;
 using Microsoft.Xna.Platform;
 using SysDrawing = System.Drawing;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace MonoGame.Framework
@@ -285,7 +286,7 @@ namespace MonoGame.Framework
             {
                 // we may need to restore full screen when coming back from a minimized window
                 if (_lastFormState == FormWindowState.Minimized)
-                    _concreteGame.GraphicsDevice.SetHardwareFullscreen();
+                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).SetHardwareFullscreen();
                 UpdateBackBufferSize();
             }
 
@@ -303,7 +304,7 @@ namespace MonoGame.Framework
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
                 if (_concreteGame.GraphicsDevice != null)
-                    _concreteGame.GraphicsDevice.RefreshAdapter();
+                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).RefreshAdapter();
             }
 
             OnClientSizeChanged();
@@ -453,8 +454,8 @@ namespace MonoGame.Framework
             {
                 if( _concreteGame.IsActive )
                 {
-					// stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
-					_concreteGame.GraphicsDevice.ResizeTargets();
+                    // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
+                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).ResizeTargets();
 				}
                 else
                 {
@@ -490,7 +491,7 @@ namespace MonoGame.Framework
             if (!IsFullScreen)
                 _locationBeforeFullScreen = Form.Location;
 
-            _concreteGame.GraphicsDevice.SetHardwareFullscreen();
+            ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).SetHardwareFullscreen();
 
             if (!pp.HardwareModeSwitch)
             {
@@ -517,7 +518,7 @@ namespace MonoGame.Framework
         {
             _switchingFullScreen = true;
 
-            _concreteGame.GraphicsDevice.ClearHardwareFullscreen();
+            ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).ClearHardwareFullscreen();
 
             IsBorderless = false;
             Form.WindowState = FormWindowState.Normal;
@@ -536,7 +537,7 @@ namespace MonoGame.Framework
         {
             _switchingFullScreen = true;
 
-            _concreteGame.GraphicsDevice.ClearHardwareFullscreen();
+            ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).ClearHardwareFullscreen();
 
             IsBorderless = false;
             Form.WindowState = FormWindowState.Minimized;
