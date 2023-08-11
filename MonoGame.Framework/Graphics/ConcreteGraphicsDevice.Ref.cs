@@ -19,14 +19,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset(PresentationParameters presentationParameters)
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void Reset()
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void Present()

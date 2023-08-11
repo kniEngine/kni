@@ -63,14 +63,29 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset(PresentationParameters presentationParameters)
         {
+            PresentationParameters = presentationParameters;
+            Reset();
         }
 
         public override void Reset()
         {
+#if WINDOWS
+            CorrectBackBufferSize();
+#endif
+
+#if WINDOWS
+            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
+                throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
+#endif
+#if WINDOWS_UAP
+            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
+                throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
+#endif
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
+            throw new NotImplementedException();
         }
 
         public override void Present()

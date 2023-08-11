@@ -551,23 +551,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        partial void PlatformReset()
-        {
-#if WINDOWS
-            ((ConcreteGraphicsDevice)_strategy).CorrectBackBufferSize();
-#endif
-
-#if WINDOWS
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
-#endif
-#if WINDOWS_UAP
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
-#endif
-        }
-
-
 
         private void PlatformDispose()
         {
