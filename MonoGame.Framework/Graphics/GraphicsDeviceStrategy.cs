@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _useHalfPixelOffset;
         private PresentationParameters _presentationParameters;
         internal GraphicsCapabilities _capabilities;
+        internal GraphicsContext _mainContext;
 
         // Use WeakReference for the global resources list as we do not know when a resource
         // may be disposed and collected. We do not want to prevent a resource from being
@@ -62,6 +63,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _capabilities; }
         }
+
+        internal GraphicsContext MainContext { get { return _mainContext; } }
+
+        internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
 
         protected GraphicsDeviceStrategy(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)

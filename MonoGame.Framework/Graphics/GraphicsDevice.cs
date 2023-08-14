@@ -17,11 +17,9 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private GraphicsDeviceStrategy _strategy;
 
-        private GraphicsContext _mainContext;
-
         internal GraphicsDeviceStrategy Strategy { get { return _strategy; } }
 
-        internal GraphicsContext CurrentContext { get { return _mainContext; } }
+        internal GraphicsContext CurrentContext { get { return _strategy.CurrentContext; } }
 
 
         // TODO Graphics Device events need implementing
@@ -148,59 +146,59 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Initialize the main viewport
-            _mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
+            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
-            _mainContext.Strategy._vertexTextures = new TextureCollection(this, _mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
-            _mainContext.Strategy._pixelTextures = new TextureCollection(this, _mainContext, Strategy.Capabilities.MaxTextureSlots);
+            _strategy._mainContext.Strategy._vertexTextures = new TextureCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
+            _strategy._mainContext.Strategy._pixelTextures = new TextureCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
 
-            _mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _mainContext, Strategy.Capabilities.MaxTextureSlots);
-            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
+            _strategy._mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
+            _strategy._mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
 
-            _mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
-            _mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
-            _mainContext.Strategy._blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
-            _mainContext.Strategy._blendStateOpaque = BlendState.Opaque.Clone();
+            _strategy._mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
+            _strategy._mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
+            _strategy._mainContext.Strategy._blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
+            _strategy._mainContext.Strategy._blendStateOpaque = BlendState.Opaque.Clone();
 
-            _mainContext.Strategy.BlendState = BlendState.Opaque;
+            _strategy._mainContext.Strategy.BlendState = BlendState.Opaque;
 
-            _mainContext.Strategy._depthStencilStateDefault = DepthStencilState.Default.Clone();
-            _mainContext.Strategy._depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
-            _mainContext.Strategy._depthStencilStateNone = DepthStencilState.None.Clone();
+            _strategy._mainContext.Strategy._depthStencilStateDefault = DepthStencilState.Default.Clone();
+            _strategy._mainContext.Strategy._depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
+            _strategy._mainContext.Strategy._depthStencilStateNone = DepthStencilState.None.Clone();
 
-            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
+            _strategy._mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
 
-            _mainContext.Strategy._rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
-            _mainContext.Strategy._rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
-            _mainContext.Strategy._rasterizerStateCullNone = RasterizerState.CullNone.Clone();
+            _strategy._mainContext.Strategy._rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
+            _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
+            _strategy._mainContext.Strategy._rasterizerStateCullNone = RasterizerState.CullNone.Clone();
 
-            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            _strategy._mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Setup end
 
             PlatformInitialize();
 
             // Force set the default render states.
-            _mainContext.Strategy._blendStateDirty = true;
-            _mainContext.Strategy._blendFactorDirty = true;
-            _mainContext.Strategy._depthStencilStateDirty = true;
-            _mainContext.Strategy._rasterizerStateDirty = true;
-            _mainContext.Strategy.BlendState = BlendState.Opaque;
-            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
-            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            _strategy._mainContext.Strategy._blendStateDirty = true;
+            _strategy._mainContext.Strategy._blendFactorDirty = true;
+            _strategy._mainContext.Strategy._depthStencilStateDirty = true;
+            _strategy._mainContext.Strategy._rasterizerStateDirty = true;
+            _strategy._mainContext.Strategy.BlendState = BlendState.Opaque;
+            _strategy._mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
+            _strategy._mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
-            _mainContext.Strategy._vertexBuffersDirty = true;
-            _mainContext.Strategy._indexBufferDirty = true;
-            _mainContext.Strategy._vertexShaderDirty = true;
-            _mainContext.Strategy._pixelShaderDirty = true;
+            _strategy._mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
+            _strategy._mainContext.Strategy._vertexBuffersDirty = true;
+            _strategy._mainContext.Strategy._indexBufferDirty = true;
+            _strategy._mainContext.Strategy._vertexShaderDirty = true;
+            _strategy._mainContext.Strategy._pixelShaderDirty = true;
 
             // Set the default scissor rect.
-            _mainContext.Strategy._scissorRectangleDirty = true;
-            _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
+            _strategy._mainContext.Strategy._scissorRectangleDirty = true;
+            _strategy._mainContext.Strategy._scissorRectangle = _strategy._mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            _mainContext.ApplyRenderTargets(null);
+            _strategy._mainContext.ApplyRenderTargets(null);
         }
 
         public Rectangle ScissorRectangle
@@ -323,24 +321,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Clear the effect cache.
                 _strategy.EffectCache.Clear();
 
-                _mainContext.Strategy._blendState = null;
-                _mainContext.Strategy._actualBlendState = null;
-                _mainContext.Strategy._blendStateAdditive.Dispose();
-                _mainContext.Strategy._blendStateAlphaBlend.Dispose();
-                _mainContext.Strategy._blendStateNonPremultiplied.Dispose();
-                _mainContext.Strategy._blendStateOpaque.Dispose();
+                _strategy._mainContext.Strategy._blendState = null;
+                _strategy._mainContext.Strategy._actualBlendState = null;
+                _strategy._mainContext.Strategy._blendStateAdditive.Dispose();
+                _strategy._mainContext.Strategy._blendStateAlphaBlend.Dispose();
+                _strategy._mainContext.Strategy._blendStateNonPremultiplied.Dispose();
+                _strategy._mainContext.Strategy._blendStateOpaque.Dispose();
 
-                _mainContext.Strategy._depthStencilState = null;
-                _mainContext.Strategy._actualDepthStencilState = null;
-                _mainContext.Strategy._depthStencilStateDefault.Dispose();
-                _mainContext.Strategy._depthStencilStateDepthRead.Dispose();
-                _mainContext.Strategy._depthStencilStateNone.Dispose();
+                _strategy._mainContext.Strategy._depthStencilState = null;
+                _strategy._mainContext.Strategy._actualDepthStencilState = null;
+                _strategy._mainContext.Strategy._depthStencilStateDefault.Dispose();
+                _strategy._mainContext.Strategy._depthStencilStateDepthRead.Dispose();
+                _strategy._mainContext.Strategy._depthStencilStateNone.Dispose();
 
-                _mainContext.Strategy._rasterizerState = null;
-                _mainContext.Strategy._actualRasterizerState = null;
-                _mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
-                _mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
-                _mainContext.Strategy._rasterizerStateCullNone.Dispose();
+                _strategy._mainContext.Strategy._rasterizerState = null;
+                _strategy._mainContext.Strategy._actualRasterizerState = null;
+                _strategy._mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
+                _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
+                _strategy._mainContext.Strategy._rasterizerStateCullNone.Dispose();
 
                 PlatformDispose();
             }
@@ -354,11 +352,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present()
         {
             // We cannot present with a RT set on the device.
-            if (_mainContext.IsRenderTargetBound)
+            if (_strategy._mainContext.IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
             // reset _graphicsMetrics
-            _mainContext._graphicsMetrics = new GraphicsMetrics();
+            _strategy._mainContext._graphicsMetrics = new GraphicsMetrics();
 
             Strategy.Present();
             PlatformPresent();
