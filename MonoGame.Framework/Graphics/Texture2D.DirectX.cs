@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
 
-                    GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
                 }
             }
             finally
@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
 
-                    GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
                 }
             }
             finally
@@ -155,13 +155,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 var elementsInRow = rect.Width;
                 var rows = rect.Height;
                 var region = new ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
-                GraphicsDevice.CurrentD3DContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
+                d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                 // Copy the data to the array.
                 DataStream stream = null;
                 try
                 {
-                    var databox = GraphicsDevice.CurrentD3DContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
+                    var databox = d3dContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
 
                     var elementSize = _format.GetSize();
                     if (_format.IsCompressedFormat())
@@ -217,7 +217,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Utilities.Dispose( ref stream);
 
-                    GraphicsDevice.CurrentD3DContext.UnmapSubresource(stagingTexture, 0);                    
+                    d3dContext.UnmapSubresource(stagingTexture, 0);                    
                     SharpDX.Utilities.Dispose(ref stagingTexture);
                 }
             }

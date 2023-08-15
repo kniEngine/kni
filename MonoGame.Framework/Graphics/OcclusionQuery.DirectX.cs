@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
 
-                GraphicsDevice.CurrentD3DContext.Begin(_query);
+                d3dContext.Begin(_query);
             }
         }
 
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
 
-                GraphicsDevice.CurrentD3DContext.End(_query);
+                d3dContext.End(_query);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
 
-                isComplete = GraphicsDevice.CurrentD3DContext.GetData(_query, out count);
+                isComplete = d3dContext.GetData(_query, out count);
             }
 
             pixelCount = (int)count;
