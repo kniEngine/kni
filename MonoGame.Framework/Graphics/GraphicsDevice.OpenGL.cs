@@ -16,13 +16,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-#if DESKTOPGL
-        internal IntPtr CurrentGlContext
-        {
-            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).GlContext; }
-        }
-#endif
-
         internal int _glMajorVersion = 0;
         internal int _glMinorVersion = 0;
 
