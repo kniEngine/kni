@@ -14,7 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
 
         private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
         {
@@ -23,6 +22,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             {
                 GenerateGLTextureIfRequired();
+
+                var GL = GraphicsDevice._glContext;
+
                 int w = width;
                 int h = height;
                 int level = 0;
@@ -73,6 +75,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
+            var GL = GraphicsDevice._glContext;
+
             int w, h;
             GetSizeForLevel(Width, Height, level, out w, out h);
 
@@ -107,6 +111,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            var GL = GraphicsDevice._glContext;
+
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
             var startBytes = startIndex * elementSizeInByte;
@@ -147,6 +153,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GenerateGLTextureIfRequired()
         {
+            var GL = GraphicsDevice._glContext;
+
             if (glTexture == null)
             {
                 glTexture = GL.CreateTexture();

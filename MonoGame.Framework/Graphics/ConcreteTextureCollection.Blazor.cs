@@ -10,9 +10,6 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
-        private IWebGLRenderingContext GL { get { return _device._glContext; } }
-
-
         private WebGLTextureTarget[] _targets;
 
         internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
@@ -33,6 +30,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
+            var GL = _device._glContext;
+
             for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;

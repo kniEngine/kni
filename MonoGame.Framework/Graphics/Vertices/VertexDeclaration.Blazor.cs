@@ -10,8 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexDeclaration
     {
-        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
-
         private readonly Dictionary<int, VertexDeclarationAttributeInfo> _shaderAttributeInfo = new Dictionary<int, VertexDeclarationAttributeInfo>();
 
         internal VertexDeclarationAttributeInfo GetAttributeInfo(Shader shader, int programHash)

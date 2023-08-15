@@ -20,8 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
 
-        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
-
         private static ShaderProfileType PlatformProfile()
         {
             return ShaderProfileType.OpenGL_Mojo;
@@ -40,6 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_shaderHandle != null)
                 return _shaderHandle;
             
+            var GL = GraphicsDevice._glContext;
+
             //
             _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? WebGLShaderType.VERTEX : WebGLShaderType.FRAGMENT);
             GraphicsExtensions.CheckGLError();
@@ -63,6 +63,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetVertexAttributeLocations(WebGLProgram program)
         {
+            var GL = GraphicsDevice._glContext;
+
             for (int i = 0; i < Attributes.Length; i++)
             {
                 Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
@@ -82,6 +84,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ApplySamplerTextureUnits(WebGLProgram program)
         {
+            var GL = GraphicsDevice._glContext;
+
             // Assign the texture unit index to the sampler uniforms.
             foreach (var sampler in Samplers)
             {

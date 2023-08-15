@@ -10,8 +10,6 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
-        IWebGLRenderingContext GL { get { return _device._glContext; } }
-
 
         internal ConcreteSamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
             : base(device, context, capacity)
@@ -40,6 +38,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
+            var GL = _device._glContext;
+
             for (int i = 0; i < _actualSamplers.Length; i++)
             {
                 SamplerState sampler = _actualSamplers[i];

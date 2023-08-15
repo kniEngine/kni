@@ -15,8 +15,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformInitialize(GraphicsDevice device)
         {
-            GraphicsProfile profile = device.GraphicsProfile;
             IWebGLRenderingContext GL = device._glContext;
+
+            GraphicsProfile profile = device.GraphicsProfile;
 
             _maxTextureSize = 2048;
             if (profile == GraphicsProfile.HiDef)

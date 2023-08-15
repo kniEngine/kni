@@ -11,8 +11,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
-
         internal WebGLTexture glTexture;
         internal WebGLTextureTarget glTarget;
         internal WebGLInternalFormat glInternalFormat;
@@ -107,6 +105,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
+            var GL = GraphicsDevice._glContext;
+
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
