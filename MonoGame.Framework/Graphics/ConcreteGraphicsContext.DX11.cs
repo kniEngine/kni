@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 options &= ~ClearOptions.Stencil;
             }
 
-            lock (D3dContext)
+            lock (this.D3dContext)
             {
                 // Clear the diffuse render buffer.
                 if ((options & ClearOptions.Target) == ClearOptions.Target)
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     foreach (D3D11.RenderTargetView view in _currentRenderTargets)
                     {
                         if (view != null)
-                            D3dContext.ClearRenderTargetView(view, new RawColor4(color.X, color.Y, color.Z, color.W));
+                            this.D3dContext.ClearRenderTargetView(view, new RawColor4(color.X, color.Y, color.Z, color.W));
                     }
                 }
 
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     flags |= D3D11.DepthStencilClearFlags.Stencil;
 
                 if (flags != 0)
-                    D3dContext.ClearDepthStencilView(_currentDepthStencilView, flags, depth, (byte)stencil);
+                    this.D3dContext.ClearDepthStencilView(_currentDepthStencilView, flags, depth, (byte)stencil);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 D3D11.BlendState blendState = _actualBlendState.GetDxState(this);
                 var blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
-                D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
+                this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 
                 _blendStateDirty = false;
                 _blendFactorDirty = false;
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
-            D3dContext.Rasterizer.SetScissorRectangle(
+            this.D3dContext.Rasterizer.SetScissorRectangle(
                 _scissorRectangle.X,
                 _scissorRectangle.Y,
                 _scissorRectangle.Right,
@@ -242,10 +242,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(D3dContext.VertexShader);
-            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(D3dContext.VertexShader);
-            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(D3dContext.PixelShader);
-            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(D3dContext.PixelShader);
+            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(this.D3dContext.VertexShader);
+            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(this.D3dContext.VertexShader);
+            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(this.D3dContext.PixelShader);
+            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(this.D3dContext.PixelShader);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
@@ -521,7 +521,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     lock (this.D3dContext)
+                    {
                         this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetShaderResourceView());
+                    }
                 }
             }
         }
@@ -534,7 +536,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Device.Strategy)._depthStencilView;
 
             lock (this.D3dContext)
+            {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+            }
         }
 
         internal IRenderTarget PlatformApplyRenderTargets()
@@ -547,8 +551,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.VertexShader);
-                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, D3dContext.PixelShader);
+                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
+                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)
@@ -564,7 +568,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Set the targets.
             lock (this.D3dContext)
+            {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+            }
 
             return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
         }

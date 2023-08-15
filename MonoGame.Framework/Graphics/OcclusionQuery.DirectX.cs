@@ -26,14 +26,22 @@ namespace Microsoft.Xna.Framework.Graphics
         
         private void PlatformBegin()
         {
-            lock(GraphicsDevice.CurrentD3DContext)
-                GraphicsDevice.CurrentD3DContext.Begin(_query);
+            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            {
+                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+
+                d3dContext.Begin(_query);
+            }
         }
 
         private void PlatformEnd()
         {
-            lock (GraphicsDevice.CurrentD3DContext)
-                GraphicsDevice.CurrentD3DContext.End(_query);
+            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            {
+                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+
+                d3dContext.End(_query);
+            }
         }
 
         private bool PlatformGetResult(out int pixelCount)
@@ -41,8 +49,12 @@ namespace Microsoft.Xna.Framework.Graphics
             ulong count;
             bool isComplete;
 
-            lock (GraphicsDevice.CurrentD3DContext)
-                isComplete = GraphicsDevice.CurrentD3DContext.GetData(_query, out count);
+            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            {
+                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+
+                isComplete = d3dContext.GetData(_query, out count);
+            }
 
             pixelCount = (int)count;
             return isComplete;

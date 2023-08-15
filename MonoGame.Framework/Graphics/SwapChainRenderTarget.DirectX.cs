@@ -150,8 +150,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Present()
         {
-            lock (GraphicsDevice.CurrentD3DContext)
+            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+
                 try
                 {
                     _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(PresentInterval), PresentFlags.None);

@@ -23,9 +23,9 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(device)
         {
             GraphicsContext context = device.CurrentContext;
-            D3D11.DeviceContext d3DContext =((ConcreteGraphicsContext)context.Strategy).D3dContext;
+            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)context.Strategy).D3dContext;
 
-            _infoQueue = d3DContext.QueryInterfaceOrNull<D3D11.InfoQueue>();
+            _infoQueue = d3dContext.QueryInterfaceOrNull<D3D11.InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();
 
             if (_infoQueue != null)
