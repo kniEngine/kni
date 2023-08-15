@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // create context.
             _glContext = canvas.GetContext<IWebGLRenderingContext>();
             var contextStrategy = new ConcreteGraphicsContext(this);
-            _mainContext = new GraphicsContext(this, contextStrategy);
+            _strategy._mainContext = new GraphicsContext(this, contextStrategy);
             GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy._capabilities.PlatformInitialize(this);
 
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
+            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
         private void PlatformInitialize()
@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PresentationParameters.BackBufferWidth = _glContext.Canvas.Width;
             PresentationParameters.BackBufferHeight = _glContext.Canvas.Height;
 
-            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // TODO: check for FramebufferObjectARB
             //if (this.Capabilities.SupportsFramebufferObjectARB
@@ -69,13 +69,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             // Force resetting states
-            this._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
-            this._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            _strategy._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
+            _strategy._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
+            _strategy._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
 
         private void PlatformDispose()
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void OnPresentationChanged()
         {
-            _mainContext.ApplyRenderTargets(null);
+            _strategy._mainContext.ApplyRenderTargets(null);
         }
 
     }
