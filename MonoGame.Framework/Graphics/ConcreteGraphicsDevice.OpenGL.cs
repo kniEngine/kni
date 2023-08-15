@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MonoGame.Framework.Utilities;
+using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -41,6 +42,26 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
+            Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
+            GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+
+            // buffer is returned upside down, so we swap the rows around when copying over
+            int rowSize = srcRect.Width * PresentationParameters.BackBufferFormat.GetSize() / tSize;
+            T[] row = new T[rowSize];
+            for (int dy = 0; dy < srcRect.Height/2; dy++)
+            {
+                int topRow = startIndex + dy*rowSize;
+                int bottomRow = startIndex + (srcRect.Height - dy - 1)*rowSize;
+                // copy the bottom row to buffer
+                Array.Copy(data, bottomRow, row, 0, rowSize);
+                // copy top row to bottom row
+                Array.Copy(data, topRow, data, bottomRow, rowSize);
+                // copy buffer to top row
+                Array.Copy(row, 0, data, topRow, rowSize);
+                elementCount -= rowSize;
+            }
         }
 
 

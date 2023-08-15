@@ -29,11 +29,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int count) where T : struct
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         internal void OnPresentationChanged()
         {
             throw new PlatformNotSupportedException();
