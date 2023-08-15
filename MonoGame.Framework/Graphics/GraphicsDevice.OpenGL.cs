@@ -124,30 +124,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        private void PlatformGetBackBufferData<T>(Rectangle? rectangle, T[] data, int startIndex, int count) where T : struct
-        {
-            Rectangle rect = rectangle ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            int tSize = ReflectionHelpers.SizeOf<T>();
-            int flippedY = PresentationParameters.BackBufferHeight - rect.Y - rect.Height;
-            GL.ReadPixels(rect.X, flippedY, rect.Width, rect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, data);
-
-            // buffer is returned upside down, so we swap the rows around when copying over
-            int rowSize = rect.Width * PresentationParameters.BackBufferFormat.GetSize() / tSize;
-            T[] row = new T[rowSize];
-            for (int dy = 0; dy < rect.Height/2; dy++)
-            {
-                int topRow = startIndex + dy*rowSize;
-                int bottomRow = startIndex + (rect.Height - dy - 1)*rowSize;
-                // copy the bottom row to buffer
-                Array.Copy(data, bottomRow, row, 0, rowSize);
-                // copy top row to bottom row
-                Array.Copy(data, topRow, data, bottomRow, rowSize);
-                // copy buffer to top row
-                Array.Copy(row, 0, data, topRow, rowSize);
-                count -= rowSize;
-            }
-        }
-
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL

@@ -81,11 +81,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        private void PlatformGetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int count) where T : struct
-        {
-            throw new NotImplementedException();
-        }
-
         internal void OnPresentationChanged()
         {
             _strategy._mainContext.ApplyRenderTargets(null);

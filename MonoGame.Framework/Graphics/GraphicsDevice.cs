@@ -720,7 +720,6 @@ namespace Microsoft.Xna.Framework.Graphics
                                             elementCount * tSize, dataByteSize), "elementCount");
 
             Strategy.GetBackBufferData(rect, data, startIndex, elementCount);
-            PlatformGetBackBufferData(rect, data, startIndex, elementCount);
         }
 
         // uniformly scales down the given rectangle by 10%

@@ -38,6 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
+            throw new PlatformNotSupportedException();
         }
 
 

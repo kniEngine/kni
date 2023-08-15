@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
 using D3D11 = SharpDX.Direct3D11;
+using MonoGame.Framework.Utilities;
+using System.IO;
 
 #if WINDOWS_UAP
 using System.Runtime.InteropServices;
@@ -94,6 +96,104 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
+            // TODO share code with Texture2D.GetData
+            // first set up a staging texture
+            const SurfaceFormat format = SurfaceFormat.Color;
+            //You can't Map the BackBuffer surface, so we copy to another texture
+            using (D3D11.Texture2D backBufferTexture = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0))
+            {
+                D3D11.Texture2DDescription desc = backBufferTexture.Description;
+                desc.SampleDescription = new DXGI.SampleDescription(1, 0);
+                desc.BindFlags = D3D11.BindFlags.None;
+                desc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+                desc.Usage = D3D11.ResourceUsage.Staging;
+                desc.OptionFlags = D3D11.ResourceOptionFlags.None;
+
+                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, desc))
+                {
+                    lock (((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext)
+                    {
+                        // Copy the data from the GPU to the staging texture.
+                        // if MSAA is enabled we need to first copy to a resource without MSAA
+                        if (backBufferTexture.Description.SampleDescription.Count > 1)
+                        {
+                            desc.Usage = D3D11.ResourceUsage.Default;
+                            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+                            using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(this.D3DDevice, desc))
+                            {
+                                ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, desc.Format);
+                                if (rect.HasValue)
+                                {
+                                    Rectangle r = rect.Value;
+                                    ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.CopySubresourceRegion(noMsTex, 0,
+                                        new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex,
+                                        0);
+                                }
+                                else
+                                    ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.CopyResource(noMsTex, stagingTex);
+                            }
+                        }
+                        else
+                        {
+                            if (rect.HasValue)
+                            {
+                                Rectangle r = rect.Value;
+                                ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.CopySubresourceRegion(backBufferTexture, 0,
+                                    new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex, 0);
+                            }
+                            else
+                                ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.CopyResource(backBufferTexture, stagingTex);
+                        }
+
+                        // Copy the data to the array.
+                        DX.DataStream stream = null;
+                        try
+                        {
+                            DX.DataBox databox = ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+
+                            int elementsInRow, rows;
+                            if (rect.HasValue)
+                            {
+                                elementsInRow = rect.Value.Width;
+                                rows = rect.Value.Height;
+                            }
+                            else
+                            {
+                                elementsInRow = stagingTex.Description.Width;
+                                rows = stagingTex.Description.Height;
+                            }
+                            int elementSize = format.GetSize();
+                            int rowSize = elementSize * elementsInRow;
+                            if (rowSize == databox.RowPitch)
+                                stream.ReadRange(data, startIndex, elementCount);
+                            else
+                            {
+                                // Some drivers may add pitch to rows.
+                                // We need to copy each row separately and skip trailing zeroes.
+                                stream.Seek(0, SeekOrigin.Begin);
+
+                                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                                for (int row = 0; row < rows; row++)
+                                {
+                                    int i;
+                                    for (i = row * rowSize / elementSizeInByte; i < (row + 1) * rowSize / elementSizeInByte; i++)
+                                        data[i + startIndex] = stream.Read<T>();
+
+                                    if (i >= elementCount)
+                                        break;
+
+                                    stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            SharpDX.Utilities.Dispose( ref stream);
+                        }
+                    }
+                }
+            }
+
         }
 
 
