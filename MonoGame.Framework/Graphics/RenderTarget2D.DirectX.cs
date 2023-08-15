@@ -145,6 +145,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (GraphicsDevice.CurrentD3DContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                 GraphicsDevice.CurrentD3DContext.ResolveSubresource(
                     GetMSTexture(),
                     0,

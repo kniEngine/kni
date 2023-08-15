@@ -28,6 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock(GraphicsDevice.CurrentD3DContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                 GraphicsDevice.CurrentD3DContext.Begin(_query);
             }
         }
@@ -36,6 +38,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (GraphicsDevice.CurrentD3DContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                 GraphicsDevice.CurrentD3DContext.End(_query);
             }
         }
@@ -47,6 +51,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (GraphicsDevice.CurrentD3DContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                 isComplete = GraphicsDevice.CurrentD3DContext.GetData(_query, out count);
             }
 

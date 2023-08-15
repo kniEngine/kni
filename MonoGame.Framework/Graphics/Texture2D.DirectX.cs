@@ -73,6 +73,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 var subresourceIndex = CalculateSubresourceIndex(0, level);
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
                 }
             }
@@ -104,6 +106,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
                 }
             }
@@ -143,6 +147,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (GraphicsDevice.CurrentD3DContext)
             {
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
 
                 // Copy the data from the GPU to the staging texture.

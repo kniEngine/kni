@@ -85,6 +85,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     // Copy the data from the GPU to the staging texture.
                     var subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
                     var elementsInRow = rect.Width;
@@ -161,6 +163,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }
             }

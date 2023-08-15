@@ -83,6 +83,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     lock (GraphicsDevice.CurrentD3DContext)
                     {
+                        SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                         GraphicsDevice.CurrentD3DContext.CopyResource(_buffer, stagingBuffer);
                     }
 
@@ -96,6 +98,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         lock (GraphicsDevice.CurrentD3DContext)
                         {
+                            SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                             // Map the staging resource to a CPU accessible memory
                             var box = GraphicsDevice.CurrentD3DContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
 
@@ -126,6 +130,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     var dataBox = GraphicsDevice.CurrentD3DContext.MapSubresource(_buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
                     SharpDX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
                                             elementCount);
@@ -153,6 +159,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     lock (GraphicsDevice.CurrentD3DContext)
                     {
+                        SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                         GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, _buffer, 0, region);
                     }
                 }

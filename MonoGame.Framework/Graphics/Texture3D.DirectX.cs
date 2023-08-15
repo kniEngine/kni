@@ -82,6 +82,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }
             }
@@ -117,6 +119,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 lock (GraphicsDevice.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+
                     // Copy the data from the GPU to the staging texture.
                     GraphicsDevice.CurrentD3DContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 

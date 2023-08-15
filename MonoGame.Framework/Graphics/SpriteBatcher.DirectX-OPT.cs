@@ -212,6 +212,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (_device.CurrentD3DContext)
                 {
+                    SharpDX.Direct3D11.DeviceContext d3dContext = _device.CurrentD3DContext;
+
                     //map vertexBaffer
                     var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
                     if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
