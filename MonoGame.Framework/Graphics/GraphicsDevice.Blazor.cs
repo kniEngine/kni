@@ -77,10 +77,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void PlatformPresent()
-        {
-        }
-
         internal void OnPresentationChanged()
         {
             _strategy._mainContext.ApplyRenderTargets(null);

@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Present()
         {
+            base.Present();
         }
 
 

@@ -24,11 +24,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal void PlatformPresent()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         internal void OnPresentationChanged()
         {
             throw new PlatformNotSupportedException();

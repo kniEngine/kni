@@ -42,6 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Present()
         {
+            base.Present();
         }
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
