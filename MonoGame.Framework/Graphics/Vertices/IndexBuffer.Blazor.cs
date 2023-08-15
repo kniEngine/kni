@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -26,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void GenerateIfRequired()
         {
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             if (ibo == null)
             {
@@ -52,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
         {
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             GenerateIfRequired();
 

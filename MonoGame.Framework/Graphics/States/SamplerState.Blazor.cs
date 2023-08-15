@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -21,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else
                 Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
 
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)device.Strategy.CurrentContext.Strategy).GL;
 
             switch (Filter)
             {

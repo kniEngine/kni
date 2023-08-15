@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -25,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_uniformLocations.TryGetValue(name, out location))
                 return location;
 
-            var GL = _device._glContext;
+            var GL = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).GL;
 
             location = GL.GetUniformLocation(Program, name);
             GraphicsExtensions.CheckGLError();
@@ -82,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
-            var GL = _device._glContext;
+            var GL = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).GL;
 
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();

@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -28,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vbo == null)
             {
-                var GL = GraphicsDevice._glContext;
+                var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
                 vbo = GL.CreateBuffer();
                 GraphicsExtensions.CheckGLError();
@@ -55,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GenerateIfRequired();
 
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();

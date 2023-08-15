@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 GenerateGLTextureIfRequired();
 
-                var GL = GraphicsDevice._glContext;
+                var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
                 int w = width;
                 int h = height;
@@ -75,7 +76,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             int w, h;
             GetSizeForLevel(Width, Height, level, out w, out h);
@@ -111,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
@@ -153,7 +154,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GenerateGLTextureIfRequired()
         {
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             if (glTexture == null)
             {

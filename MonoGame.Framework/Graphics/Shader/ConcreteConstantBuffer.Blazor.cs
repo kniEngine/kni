@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = GraphicsDevice._glContext;
+            var GL = ((ConcreteGraphicsContext)context).GL;
 
             // NOTE: We assume here the program has
             // already been set on the device.
