@@ -10,7 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
     internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
     {
-        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
 
         private ShaderProgram _shaderProgram = null;
         private WebGLUniformLocation _location;
@@ -44,6 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
         internal unsafe override void PlatformApply(GraphicsContextStrategy context, ShaderStage stage, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
+
+            var GL = ((ConcreteGraphicsContext)context).GL;
 
             // NOTE: We assume here the program has
             // already been set on the device.

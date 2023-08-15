@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using nkast.Wasm.Canvas.WebGL;
-
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -19,8 +19,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
-
-        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
 
         private static ShaderProfileType PlatformProfile()
         {
@@ -39,7 +37,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // If the shader has already been created then return it.
             if (_shaderHandle != null)
                 return _shaderHandle;
-            
+
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
             //
             _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? WebGLShaderType.VERTEX : WebGLShaderType.FRAGMENT);
             GraphicsExtensions.CheckGLError();
@@ -63,6 +63,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetVertexAttributeLocations(WebGLProgram program)
         {
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
             for (int i = 0; i < Attributes.Length; i++)
             {
                 Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
@@ -82,6 +84,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ApplySamplerTextureUnits(WebGLProgram program)
         {
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
             // Assign the texture unit index to the sampler uniforms.
             foreach (var sampler in Samplers)
             {

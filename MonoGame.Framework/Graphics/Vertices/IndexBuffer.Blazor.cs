@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -11,8 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class IndexBuffer
     {
-        IWebGLRenderingContext GL { get { return this.GraphicsDevice._glContext; } }
-
         internal WebGLBuffer ibo { get; private set; }
 
         private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
@@ -28,6 +27,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void GenerateIfRequired()
         {
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
             if (ibo == null)
             {
                 var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
@@ -52,6 +53,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
         {
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
             GenerateIfRequired();
 
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>();

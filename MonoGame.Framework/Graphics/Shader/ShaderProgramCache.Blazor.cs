@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -13,8 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private readonly Dictionary<string, WebGLUniformLocation> _uniformLocations = new Dictionary<string, WebGLUniformLocation>();
 
-        private IWebGLRenderingContext GL { get { return _device._glContext; } }
-
         public ShaderProgram(WebGLProgram program, GraphicsDevice device)
         {
             _device = device;
@@ -26,6 +25,8 @@ namespace Microsoft.Xna.Framework.Graphics
             WebGLUniformLocation location;
             if (_uniformLocations.TryGetValue(name, out location))
                 return location;
+
+            var GL = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).GL;
 
             location = GL.GetUniformLocation(Program, name);
             GraphicsExtensions.CheckGLError();
@@ -45,8 +46,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
         bool _isDisposed;
-
-        private IWebGLRenderingContext GL { get { return _device._glContext; } }
 
         public ShaderProgramCache(GraphicsDevice device)
         {
@@ -84,6 +83,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
+            var GL = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).GL;
+
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 

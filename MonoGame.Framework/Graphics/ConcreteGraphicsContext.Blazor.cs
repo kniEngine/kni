@@ -11,6 +11,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsContext : GraphicsContextStrategy
     {
+        private IWebGLRenderingContext _glContext;
+
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal BlendState _lastBlendState = new BlendState();
         internal bool _lastBlendEnable = false;
@@ -36,8 +38,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
-
-        internal IWebGLRenderingContext GL { get { return Device._glContext; } }
+        internal IWebGLRenderingContext GlContext { get { return _glContext; } }
+        internal IWebGLRenderingContext GL { get { return _glContext; } }
 
         public override Viewport Viewport
         {
@@ -49,10 +51,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal ConcreteGraphicsContext(GraphicsDevice device)
+        internal ConcreteGraphicsContext(GraphicsDevice device, IWebGLRenderingContext glContext)
             : base(device)
         {
-
+            _glContext = glContext;
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)

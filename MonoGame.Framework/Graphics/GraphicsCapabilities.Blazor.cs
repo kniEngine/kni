@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -15,8 +16,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformInitialize(GraphicsDevice device)
         {
+            IWebGLRenderingContext GL = ((ConcreteGraphicsContext)device.Strategy.MainContext.Strategy).GL;
+
             GraphicsProfile profile = device.GraphicsProfile;
-            IWebGLRenderingContext GL = device._glContext;
 
             _maxTextureSize = 2048;
             if (profile == GraphicsProfile.HiDef)

@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -11,8 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexBuffer
     {
-        private IWebGLRenderingContext GL { get { return this.GraphicsDevice._glContext; } }
-
         internal WebGLBuffer vbo { get; private set; }
 
         private void PlatformConstructVertexBuffer()
@@ -30,6 +29,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vbo == null)
             {
+                var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+
                 vbo = GL.CreateBuffer();
                 GraphicsExtensions.CheckGLError();
                 GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
@@ -54,6 +55,8 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             GenerateIfRequired();
+
+            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
 
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();

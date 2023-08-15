@@ -4,14 +4,13 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class SamplerState
     {
-        private IWebGLRenderingContext GL { get { return GraphicsDevice._glContext; } }
-
 
         internal void Activate(GraphicsDevice device, WebGLTextureTarget target, bool useMipmaps = false)
         {
@@ -22,6 +21,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
                 Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
+
+            var GL = ((ConcreteGraphicsContext)device.Strategy.CurrentContext.Strategy).GL;
 
             switch (Filter)
             {

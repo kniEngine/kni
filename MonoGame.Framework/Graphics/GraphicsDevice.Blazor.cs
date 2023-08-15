@@ -17,11 +17,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-        // TODO: make private
-        internal IWebGLRenderingContext _glContext;
-
-        private IWebGLRenderingContext GL { get { return _glContext; } }
-
 
         private void PlatformSetup()
         {
@@ -32,10 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
             var canvas = gameWindow._canvas;
 
             // create context.
-            _glContext = canvas.GetContext<IWebGLRenderingContext>();
-            var contextStrategy = new ConcreteGraphicsContext(this);
+            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
+            var contextStrategy = new ConcreteGraphicsContext(this, glContext);
             _strategy._mainContext = new GraphicsContext(this, contextStrategy);
-            GraphicsExtensions.GL = _glContext; // for GraphicsExtensions.CheckGLError()
+            GraphicsExtensions.GL = contextStrategy.GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
             Strategy._capabilities = new GraphicsCapabilities();
@@ -48,8 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformInitialize()
         {
             // set actual backbuffer size
-            PresentationParameters.BackBufferWidth = _glContext.Canvas.Width;
-            PresentationParameters.BackBufferHeight = _glContext.Canvas.Height;
+            PresentationParameters.BackBufferWidth = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext.Canvas.Width;
+            PresentationParameters.BackBufferHeight = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext.Canvas.Height;
 
             _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
