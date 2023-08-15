@@ -160,7 +160,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 };
 
                 lock (GraphicsDevice.CurrentD3DContext)
+                {
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                }
             }
             finally
             {

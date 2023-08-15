@@ -72,7 +72,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(0, level);
                 lock (GraphicsDevice.CurrentD3DContext)
+                {
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
+                }
             }
             finally
             {
@@ -101,7 +103,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
                 lock (GraphicsDevice.CurrentD3DContext)
+                {
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
+                }
             }
             finally
             {

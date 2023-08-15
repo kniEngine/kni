@@ -27,13 +27,17 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformBegin()
         {
             lock(GraphicsDevice.CurrentD3DContext)
+            {
                 GraphicsDevice.CurrentD3DContext.Begin(_query);
+            }
         }
 
         private void PlatformEnd()
         {
             lock (GraphicsDevice.CurrentD3DContext)
+            {
                 GraphicsDevice.CurrentD3DContext.End(_query);
+            }
         }
 
         private bool PlatformGetResult(out int pixelCount)
@@ -42,7 +46,9 @@ namespace Microsoft.Xna.Framework.Graphics
             bool isComplete;
 
             lock (GraphicsDevice.CurrentD3DContext)
+            {
                 isComplete = GraphicsDevice.CurrentD3DContext.GetData(_query, out count);
+            }
 
             pixelCount = (int)count;
             return isComplete;

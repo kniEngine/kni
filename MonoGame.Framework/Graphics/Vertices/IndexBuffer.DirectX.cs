@@ -82,7 +82,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, stagingDesc))
                 {
                     lock (GraphicsDevice.CurrentD3DContext)
+                    {
                         GraphicsDevice.CurrentD3DContext.CopyResource(_buffer, stagingBuffer);
+                    }
 
                     int TsizeInBytes = SharpDX.Utilities.SizeOf<T>();
                     var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -150,7 +152,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
                     lock (GraphicsDevice.CurrentD3DContext)
+                    {
                         GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, _buffer, 0, region);
+                    }
                 }
                 finally
                 {

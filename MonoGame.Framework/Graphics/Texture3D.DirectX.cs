@@ -81,7 +81,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 var region = new ResourceRegion(left, top, front, right, bottom, back);
 
                 lock (GraphicsDevice.CurrentD3DContext)
+                {
                     GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                }
             }
             finally
             {

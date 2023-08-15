@@ -521,7 +521,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     lock (this.D3dContext)
+                    {
                         this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetShaderResourceView());
+                    }
                 }
             }
         }
@@ -534,7 +536,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Device.Strategy)._depthStencilView;
 
             lock (this.D3dContext)
+            {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+            }
         }
 
         internal IRenderTarget PlatformApplyRenderTargets()
@@ -564,7 +568,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Set the targets.
             lock (this.D3dContext)
+            {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
+            }
 
             return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
         }

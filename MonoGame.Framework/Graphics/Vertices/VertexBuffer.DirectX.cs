@@ -168,7 +168,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
                         lock (GraphicsDevice.CurrentD3DContext)
+                        {
                             GraphicsDevice.CurrentD3DContext.UpdateSubresource(box, _buffer, 0, region);
+                        }
                     }
                     else
                     {
