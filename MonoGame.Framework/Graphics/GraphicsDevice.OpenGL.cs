@@ -116,14 +116,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        private void PlatformPresent()
-        {
-#if DESKTOPGL
-            Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
-            GraphicsExtensions.CheckGLError();
-#endif
-        }
-
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL

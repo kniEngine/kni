@@ -43,6 +43,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Present()
         {
+            base.Present();
+
+            Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
+            GraphicsExtensions.CheckGLError();
         }
 
 

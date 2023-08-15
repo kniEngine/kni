@@ -128,7 +128,12 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void Reset();
         public abstract void Reset(PresentationParameters presentationParameters);
         public abstract void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle);
-        public abstract void Present();
+        public virtual void Present()
+        {
+            // reset _graphicsMetrics
+            MainContext._graphicsMetrics = new GraphicsMetrics();
+        }
+
         public abstract void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct;
                 
 

@@ -355,11 +355,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_strategy._mainContext.IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
-            // reset _graphicsMetrics
-            _strategy._mainContext._graphicsMetrics = new GraphicsMetrics();
-
             Strategy.Present();
-            PlatformPresent();
         }
 
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)

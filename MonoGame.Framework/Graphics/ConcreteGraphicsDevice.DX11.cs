@@ -92,6 +92,54 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Present()
         {
+            base.Present();
+
+            try
+            {
+                lock (((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext)
+                {
+                    int syncInterval = 0;
+                    DXGI.PresentFlags presentFlags = DXGI.PresentFlags.None;
+
+#if WINDOWS
+                    // The first argument instructs DXGI to block n VSyncs before presenting.
+                    syncInterval = GraphicsExtensions.ToDXSwapInterval(PresentationParameters.PresentationInterval);
+#endif
+
+#if WINDOWS_UAP
+                    // The first argument instructs DXGI to block until VSync, putting the application
+                    // to sleep until the next VSync. This ensures we don't waste any cycles rendering
+                    // frames that will never be displayed to the screen.
+                    if (_isTearingSupported && PresentationParameters.PresentationInterval == PresentInterval.Immediate)
+                    {
+                        syncInterval = 0;
+                        presentFlags = DXGI.PresentFlags.AllowTearing;
+                    }
+                    else
+                    {
+                        syncInterval = 1;
+                    }
+#endif
+
+                    _swapChain.Present(syncInterval, presentFlags);
+                }
+            }
+            catch (SharpDX.SharpDXException ex)
+            {
+                // TODO: How should we deal with a device lost case here?
+
+#if WINDOWS_UAP
+                /*               
+                // If the device was removed either by a disconnect or a driver upgrade, we 
+                // must completely reinitialize the renderer.
+                if (ex.ResultCode == DXGI.DXGIError.DeviceRemoved ||
+                    ex.ResultCode == DXGI.DXGIError.DeviceReset)
+                    this.Initialize();
+                else
+                    throw;
+                */
+#endif
+            }
         }
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
