@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -210,9 +211,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 _device.SetVertexBuffer(_vertexBuffer);
                 _device.Indices = _indexBuffer;
 
-                lock (_device.CurrentD3DContext)
+                lock (((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = _device.CurrentD3DContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).D3dContext;
 
                     //map vertexBaffer
                     var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;

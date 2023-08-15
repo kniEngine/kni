@@ -42,9 +42,9 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
             desc.SizeInBytes = Buffer.Length;
 
-            lock (GraphicsDevice.CurrentD3DContext)
+            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.CurrentD3DContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
 
                 return new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }

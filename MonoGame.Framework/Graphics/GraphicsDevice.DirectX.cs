@@ -28,12 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-        internal D3D11.DeviceContext CurrentD3DContext
-        {
-            get { return ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext; }
-        }
-
-
         /// <summary>
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
         /// For usage, convert this to SharpDX.Direct3D11.Device.
