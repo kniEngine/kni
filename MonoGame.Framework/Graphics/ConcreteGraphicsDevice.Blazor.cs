@@ -51,6 +51,21 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
+        internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
+        {
+            return _programCache.GetProgram(vertexShader, pixelShader, shaderProgramHash);
+        }
+
+        internal void ClearProgramCache()
+        {
+            _programCache.Clear();
+        }
+
+        internal void DisposeProgramCache()
+        {
+            _programCache.Dispose();
+        }
+
 
         internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
         {
