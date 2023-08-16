@@ -6,35 +6,6 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-
-    internal class ShaderProgram
-    {
-        GraphicsDevice _device;
-        public readonly WebGLProgram Program;
-
-        private readonly Dictionary<string, WebGLUniformLocation> _uniformLocations = new Dictionary<string, WebGLUniformLocation>();
-
-        public ShaderProgram(WebGLProgram program, GraphicsDevice device)
-        {
-            _device = device;
-            Program = program;
-        }
-
-        public WebGLUniformLocation GetUniformLocation(string name)
-        {
-            WebGLUniformLocation location;
-            if (_uniformLocations.TryGetValue(name, out location))
-                return location;
-
-            var GL = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).GL;
-
-            location = GL.GetUniformLocation(Program, name);
-            GraphicsExtensions.CheckGLError();
-            _uniformLocations[name] = location;
-            return location;
-        }
-    }
-
     /// <summary>
     /// This class is used to Cache the links between Vertex/Pixel Shaders and Constant Buffers.
     /// It will be responsible for linking the programs under OpenGL if they have not been linked
@@ -111,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (linkStatus == true)
             {
-                return new ShaderProgram(program, _device);
+                return new ShaderProgram(program, _device.Strategy);
             }
             else
             { 

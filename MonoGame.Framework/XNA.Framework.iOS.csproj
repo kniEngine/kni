@@ -373,6 +373,7 @@
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ConcreteConstantBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
+    <Compile Include="Graphics\Shader\ShaderProgram.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ShaderProgramCache.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
