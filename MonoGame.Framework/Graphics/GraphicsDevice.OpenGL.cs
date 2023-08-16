@@ -28,8 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
             System.Diagnostics.Debug.Assert(_strategy._mainContext == null);
 #endif
 
-            GraphicsContextStrategy contextStrategy = _strategy.CreateGraphicsContextStrategy(this);
-            _strategy._mainContext = new GraphicsContext(this, contextStrategy);
+            _strategy._mainContext = new GraphicsContext(this);
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string

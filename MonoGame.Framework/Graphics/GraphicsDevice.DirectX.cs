@@ -171,8 +171,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            GraphicsContextStrategy contextStrategy = _strategy.CreateGraphicsContextStrategy(this);
-            _strategy._mainContext = new GraphicsContext(this, contextStrategy);
+            _strategy._mainContext = new GraphicsContext(this);
 
 
 #if WINDOWS
