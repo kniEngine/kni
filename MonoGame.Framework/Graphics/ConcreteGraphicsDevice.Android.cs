@@ -22,6 +22,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        {
+            return new ConcreteGraphicsContext(device);
+        }
+
         internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
         {
             return new ConcreteTextureCollection(device, context, capacity);

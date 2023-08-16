@@ -22,15 +22,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             ((ConcreteGraphicsDevice)_strategy)._programCache = new ShaderProgramCache(this);
 
-            var handle = PresentationParameters.DeviceWindowHandle;
-            var gameWindow = BlazorGameWindow.FromHandle(handle);
-            var canvas = gameWindow._canvas;
-
             // create context.
-            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
-            var contextStrategy = new ConcreteGraphicsContext(this, glContext);
+            GraphicsContextStrategy contextStrategy = _strategy.CreateGraphicsContextStrategy(this);
             _strategy._mainContext = new GraphicsContext(this, contextStrategy);
-            GraphicsExtensions.GL = contextStrategy.GlContext; // for GraphicsExtensions.CheckGLError()
+            GraphicsExtensions.GL = ((ConcreteGraphicsContext)contextStrategy).GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
             Strategy._capabilities = new GraphicsCapabilities();

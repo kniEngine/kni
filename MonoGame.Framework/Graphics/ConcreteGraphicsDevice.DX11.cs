@@ -499,6 +499,19 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        {
+            // Get Direct3D 11.1 context
+#if WINDOWS
+            D3D11.DeviceContext d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
+#endif
+#if WINDOWS_UAP
+            D3D11.DeviceContext1 d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
+#endif
+
+            return new ConcreteGraphicsContext(device, d3dContext);
+        }
+
         internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
         {
             return new ConcreteTextureCollection(device, context, capacity);
