@@ -24,11 +24,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsContextStrategy Strategy { get { return _strategy; } }
 
-        internal GraphicsContext(GraphicsDevice device, GraphicsContextStrategy strategy)
+        internal GraphicsContext(GraphicsDevice device)
         {
             _device = device;
-            _strategy = strategy;
-
+            _strategy = device.Strategy.CreateGraphicsContextStrategy(device);
         }
 
 

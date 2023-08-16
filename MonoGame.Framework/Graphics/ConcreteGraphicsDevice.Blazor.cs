@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using nkast.Wasm.Canvas;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -50,6 +51,17 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
+
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        {
+            IntPtr handle = PresentationParameters.DeviceWindowHandle;
+            GameWindow gameWindow = BlazorGameWindow.FromHandle(handle);
+            Canvas canvas = ((BlazorGameWindow)gameWindow)._canvas;
+
+            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
+
+            return new ConcreteGraphicsContext(device, glContext);
+        }
 
         internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
         {

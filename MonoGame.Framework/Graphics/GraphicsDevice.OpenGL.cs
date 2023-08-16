@@ -26,15 +26,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if DESKTOPGL
             System.Diagnostics.Debug.Assert(_strategy._mainContext == null);
-
-#if DEBUG
-            // create debug context, so we get better error messages (glDebugMessageCallback)
-            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
-#endif
 #endif
 
-            var contextStrategy = new ConcreteGraphicsContext(this);
-            _strategy._mainContext = new GraphicsContext(this, contextStrategy);
+            _strategy._mainContext = new GraphicsContext(this);
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string

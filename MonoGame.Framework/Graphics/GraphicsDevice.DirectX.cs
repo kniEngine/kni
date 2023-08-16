@@ -171,16 +171,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            // Get Direct3D 11.1 context
-#if WINDOWS
-            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
-#endif
-#if WINDOWS_UAP
-            D3D11.DeviceContext1 d3dContext = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
-#endif
-
-            GraphicsContextStrategy contextStrategy = new ConcreteGraphicsContext(this, d3dContext);
-            _strategy._mainContext = new GraphicsContext(this, contextStrategy);
+            _strategy._mainContext = new GraphicsContext(this);
 
 
 #if WINDOWS
