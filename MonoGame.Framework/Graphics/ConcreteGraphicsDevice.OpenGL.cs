@@ -64,6 +64,21 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
+        {
+            return _programCache.GetProgram(vertexShader, pixelShader, shaderProgramHash);
+        }
+
+        internal void ClearProgramCache()
+        {
+            _programCache.Clear();
+        }
+
+        internal void DisposeProgramCache()
+        {
+            _programCache.Dispose();
+        }
+
 
         protected override void Dispose(bool disposing)
         {

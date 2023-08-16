@@ -243,7 +243,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             int programHash = GetCurrentShaderProgramHash2();
-            var shaderProgram = ((ConcreteGraphicsDevice)this.Device.Strategy)._programCache.GetProgram(VertexShader, PixelShader, programHash);
+            ShaderProgram shaderProgram = ((ConcreteGraphicsDevice)this.Device.Strategy).GetProgram(VertexShader, PixelShader, programHash);
             if (shaderProgram.Program == null)
                 return;
 

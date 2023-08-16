@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs.
-            ((ConcreteGraphicsDevice)_strategy)._programCache.Clear();
+            ((ConcreteGraphicsDevice)_strategy).ClearProgramCache();
             ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._shaderProgram = null;
 
             if (Strategy.Capabilities.SupportsFramebufferObjectARB
