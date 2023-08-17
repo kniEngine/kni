@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -17,6 +18,13 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
+        private static Dictionary<IntPtr, AndroidGameWindow> _instances = new Dictionary<IntPtr, AndroidGameWindow>();
+
+        internal static AndroidGameWindow FromHandle(IntPtr windowHandle)
+        {
+            return _instances[windowHandle];
+        }
+
         internal static AndroidGameActivity Activity { get; set; }
 
         internal AndroidSurfaceView GameView { get; private set; }
@@ -27,7 +35,7 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
-        public override IntPtr Handle { get { return IntPtr.Zero; } }
+        public override IntPtr Handle { get { return GameView.Handle; } }
 
 
         public void SetResumer(IResumeManager resumer)
@@ -66,6 +74,8 @@ namespace Microsoft.Xna.Framework
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
+
+            _instances.Add(this.Handle, this);
         }
 
         #region AndroidGameView Methods
@@ -315,6 +325,8 @@ namespace Microsoft.Xna.Framework
                 GameView.Dispose();
                 GameView = null;
             }
+            
+            _instances.Remove(this.Handle);
         }
 
         protected override void SetTitle(string title)

@@ -83,6 +83,8 @@ namespace Microsoft.Xna.Platform
 
             // Set "full screen"  as default
             presentationParameters.IsFullScreen = true;
+            
+            presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
 
             GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
             gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.
