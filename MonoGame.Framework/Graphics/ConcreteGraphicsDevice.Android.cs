@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -19,6 +20,18 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void Present()
         {
             base.Present();
+
+            try
+            {
+                IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
+                AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
+
+                gameWindow.GameView.SwapBuffers();
+            }
+            catch (Exception ex)
+            {
+                Android.Util.Log.Error("Error in swap buffers", ex.ToString());
+            }
         }
 
 

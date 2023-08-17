@@ -213,19 +213,9 @@ namespace Microsoft.Xna.Platform
         {
             //base.EndDraw();
 
-            try
-            {
-                var device = this.GraphicsDevice;
-                if (device != null)
-                    device.Present();
-
-                AndroidGameWindow androidGameWindow = (AndroidGameWindow)Game.Window;
-                androidGameWindow.GameView.SwapBuffers();
-            }
-            catch (Exception ex)
-            {
-                Android.Util.Log.Error("Error in swap buffers", ex.ToString());
-            }
+            var device = this.GraphicsDevice;
+            if (device != null)
+                device.Present();
         }
 
         #endregion IGraphicsDeviceManager strategy
