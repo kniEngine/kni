@@ -534,7 +534,7 @@ namespace Microsoft.Xna.Platform
                     _updateFrameLag--;
 
                 // Draw needs to know the total elapsed time
-                // that occured for the fixed length updates.
+                // that occurred for the fixed length updates.
                 Time.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
             }
             else
