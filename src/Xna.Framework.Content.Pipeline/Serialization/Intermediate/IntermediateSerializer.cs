@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate
             }
             catch (XmlException xmlException)
             {
-                throw reader.NewInvalidContentException(xmlException, "An error occured parsing.");
+                throw reader.NewInvalidContentException(xmlException, "An error occurred parsing.");
             }
 
             return asset;

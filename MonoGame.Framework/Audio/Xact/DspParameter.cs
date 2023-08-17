@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Audio
             MaxValue = reader.ReadSingle();
 
             // Looks to always be zero...  maybe some padding
-            // for future expansion that never occured?
+            // for future expansion that never occurred?
             reader.ReadUInt16();
         }
 
