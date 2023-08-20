@@ -19,10 +19,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal IntPtr GlContext { get { return _glContext; } }
 
-        internal ConcreteGraphicsContext(GraphicsDevice device)
-            : base(device)
+        internal ConcreteGraphicsContext(GraphicsContext context)
+            : base(context)
         {
-            _glContext = SDL.OpenGL.CreateGLContext(device.PresentationParameters.DeviceWindowHandle);
+            _glContext = SDL.OpenGL.CreateGLContext(context.Device.PresentationParameters.DeviceWindowHandle);
 
             // GL entry points must be loaded after the GL context creation, otherwise some Windows drivers will return only GL 1.3 compatible functions
             try
@@ -36,8 +36,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     "Try updating your graphics drivers.");
             }
 
-            MakeCurrent(device.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(device.PresentationParameters.PresentationInterval);
+            MakeCurrent(context.Device.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(context.Device.PresentationParameters.PresentationInterval);
             SDL.OpenGL.SetSwapInterval(swapInterval);
         }
 

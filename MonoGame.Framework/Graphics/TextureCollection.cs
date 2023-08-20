@@ -17,9 +17,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal TextureCollectionStrategy Strategy { get { return _strategy; } }
 
 
-        internal TextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
+        internal TextureCollection(GraphicsContext context, int capacity)
         {
-            _strategy = device.Strategy.CreateTextureCollectionStrategy(device, context, capacity);
+            _strategy = context.Strategy.CreateTextureCollectionStrategy(context, capacity);
 
         }
 

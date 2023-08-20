@@ -50,24 +50,14 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
 #if DEBUG
             // create debug context, so we get better error messages (glDebugMessageCallback)
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
 #endif
 
-            return new ConcreteGraphicsContext(device);
-        }
-
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteTextureCollection(device, context, capacity);
-        }
-
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteSamplerStateCollection(device, context, capacity);
+            return new ConcreteGraphicsContext(context);
         }
 
 

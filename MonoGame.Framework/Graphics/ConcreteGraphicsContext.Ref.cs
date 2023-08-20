@@ -21,8 +21,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal ConcreteGraphicsContext(GraphicsDevice device)
-            : base(device)
+        internal ConcreteGraphicsContext(GraphicsContext context)
+            : base(context)
         {
 
         }
@@ -89,6 +89,16 @@ namespace Microsoft.Xna.Platform.Graphics
         internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContext context)
         {
             return new ConcreteGraphicsDebug(context);
+        }
+
+        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContext context, int capacity)
+        {
+            return new ConcreteTextureCollection(context, capacity);
+        }
+
+        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContext context, int capacity)
+        {
+            return new ConcreteSamplerStateCollection(context, capacity);
         }
 
 

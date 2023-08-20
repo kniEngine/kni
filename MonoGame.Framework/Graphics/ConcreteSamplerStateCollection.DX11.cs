@@ -16,8 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private uint _d3dDirty;
 
-        internal ConcreteSamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
-            : base(device, context, capacity)
+        internal ConcreteSamplerStateCollection(GraphicsContext context, int capacity)
+            : base(context, capacity)
         {
         }
 
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 SamplerState sampler = _actualSamplers[i];
                 D3D11.SamplerState state = null;
                 if (sampler != null)
-                    state = sampler.GetState(_device);
+                    state = sampler.GetState(_context);
 
                 shaderStage.SetSampler(i, state);
 

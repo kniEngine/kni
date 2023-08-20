@@ -838,7 +838,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             // Get Direct3D 11.1 context
 #if WINDOWS
@@ -848,17 +848,7 @@ namespace Microsoft.Xna.Platform.Graphics
             D3D11.DeviceContext1 d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
 #endif
 
-            return new ConcreteGraphicsContext(device, d3dContext);
-        }
-
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteTextureCollection(device, context, capacity);
-        }
-
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteSamplerStateCollection(device, context, capacity);
+            return new ConcreteGraphicsContext(context, d3dContext);
         }
 
 

@@ -137,9 +137,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct;
                 
 
-        internal abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device);
-        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);
-        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity);
+        internal abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context);
 
 
         #region IDisposable Members

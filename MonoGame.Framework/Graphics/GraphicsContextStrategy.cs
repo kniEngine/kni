@@ -15,7 +15,9 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class GraphicsContextStrategy : IDisposable
     {
-        protected GraphicsDevice Device { get; private set; }
+        private GraphicsContext _context;
+
+        protected GraphicsDevice Device { get { return _context.Device; }  }
 
         private bool _isDisposed = false;
 
@@ -307,9 +309,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        protected GraphicsContextStrategy(GraphicsDevice device)
+        protected GraphicsContextStrategy(GraphicsContext context)
         {
-            Device = device;
+            _context = context;
             
         }
 
@@ -404,6 +406,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContext context);
+        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContext context, int capacity);
+        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContext context, int capacity);
 
 
         #region IDisposable Members

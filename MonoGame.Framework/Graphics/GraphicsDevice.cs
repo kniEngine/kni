@@ -148,11 +148,11 @@ namespace Microsoft.Xna.Framework.Graphics
             // Initialize the main viewport
             _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
-            _strategy._mainContext.Strategy._vertexTextures = new TextureCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
-            _strategy._mainContext.Strategy._pixelTextures = new TextureCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
+            _strategy._mainContext.Strategy._vertexTextures = new TextureCollection(_strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
+            _strategy._mainContext.Strategy._pixelTextures = new TextureCollection(_strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
 
-            _strategy._mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
-            _strategy._mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(this, _strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
+            _strategy._mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(_strategy._mainContext, Strategy.Capabilities.MaxTextureSlots);
+            _strategy._mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(_strategy._mainContext, Strategy.Capabilities.MaxVertexTextureSlots);
 
             _strategy._mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
             _strategy._mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
