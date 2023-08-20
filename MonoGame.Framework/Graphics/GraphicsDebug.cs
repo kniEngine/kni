@@ -16,10 +16,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsDebugStrategy Strategy { get { return _strategy; } }
 
-        public GraphicsDebug(GraphicsDevice device)
+        public GraphicsDebug(GraphicsDevice device) : this(device.Strategy.MainContext)
         {
-            _strategy = device.Strategy.CreateGraphicsDebugStrategy(device);
+        }
 
+        internal GraphicsDebug(GraphicsContext context)
+        {
+            _strategy = context.Strategy.CreateGraphicsDebugStrategy(context);
         }
 
         /// <summary>

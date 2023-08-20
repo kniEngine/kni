@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if WINDOWS
             // Create a new instance of GraphicsDebug because we support it on Windows platforms.
-            _strategy._mainContext.Strategy.GraphicsDebug = new GraphicsDebug(this);
+            _strategy._mainContext.Strategy.GraphicsDebug = new GraphicsDebug(_strategy._mainContext);
 #endif
 
 #if WINDOWS_UAP

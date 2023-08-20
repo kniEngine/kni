@@ -37,11 +37,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(device, context, capacity);
         }
 
-        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsDevice device)
-        {
-            return new ConcreteGraphicsDebug(device);
-        }
-
 
         protected override void Dispose(bool disposing)
         {
