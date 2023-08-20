@@ -708,6 +708,12 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContext context)
+        {
+            return new ConcreteGraphicsDebug(context);
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
