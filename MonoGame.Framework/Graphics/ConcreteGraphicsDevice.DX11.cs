@@ -1,14 +1,13 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
 using D3D11 = SharpDX.Direct3D11;
 using MonoGame.Framework.Utilities;
-using System.IO;
 
 #if WINDOWS_UAP
 using System.Runtime.InteropServices;
@@ -410,6 +409,346 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
+        internal void CreateSizeDependentResources()
+        {
+            // Clamp MultiSampleCount
+            PresentationParameters.MultiSampleCount =
+                GetClampedMultisampleCount(PresentationParameters.MultiSampleCount);
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
+                                                                                                (D3D11.RenderTargetView)null);
+
+            if (_renderTargetView != null)
+            {
+                _renderTargetView.Dispose();
+                _renderTargetView = null;
+            }
+            if (_depthStencilView != null)
+            {
+                _depthStencilView.Dispose();
+                _depthStencilView = null;
+            }
+
+#if WINDOWS_UAP
+            if (_bitmapTarget != null)
+            {
+                _bitmapTarget.Dispose();
+                _bitmapTarget = null;
+            }
+            _d2dContext.Target = null;
+#endif
+
+            // Clear the current render targets.
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._currentDepthStencilView = null;
+            Array.Clear(((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets, 0, ((ConcreteGraphicsContext)_mainContext.Strategy)._currentRenderTargets.Length);
+            Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
+            _mainContext.Strategy._currentRenderTargetCount = 0;
+
+            // Make sure all pending rendering commands are flushed.
+            ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.Flush();
+
+#if WINDOWS
+            // We need presentation parameters to continue here.
+            if (PresentationParameters == null
+            ||  (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
+               )
+            {
+                if (_swapChain != null)
+                {
+                    _swapChain.Dispose();
+                    _swapChain = null;
+                }
+
+                return;
+            }
+
+            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
+                format,
+                PresentationParameters.MultiSampleCount);
+
+            DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
+
+            swapChainFlags = DXGI.SwapChainFlags.AllowModeSwitch;
+
+            // If the swap chain already exists... update it.
+            if (_swapChain != null
+                // check if multisampling hasn't changed
+                && _swapChain.Description.SampleDescription.Count == multisampleDesc.Count
+                && _swapChain.Description.SampleDescription.Quality == multisampleDesc.Quality
+               )
+            {
+                _swapChain.ResizeBuffers(2,
+                                         PresentationParameters.BackBufferWidth,
+                                         PresentationParameters.BackBufferHeight,
+                                         format,
+                                         swapChainFlags);
+            }
+
+            // Otherwise, create a new swap chain.
+            else
+            {
+                bool wasFullScreen = false;
+                // Dispose of old swap chain if exists
+                if (_swapChain != null)
+                {
+                    wasFullScreen = _swapChain.IsFullScreen;
+                    // Before releasing a swap chain, first switch to windowed mode
+                    _swapChain.SetFullscreenState(false, null);
+                    _swapChain.Dispose();
+                }
+
+                // SwapChain description
+                DXGI.SwapChainDescription desc = new DXGI.SwapChainDescription()
+                {
+                    ModeDescription =
+                    {
+                        Format = format,
+                        Scaling = DXGI.DisplayModeScaling.Unspecified,
+                        Width = PresentationParameters.BackBufferWidth,
+                        Height = PresentationParameters.BackBufferHeight,
+                    },
+
+                    OutputHandle = PresentationParameters.DeviceWindowHandle,
+                    IsWindowed = true,
+
+                    SampleDescription = multisampleDesc,
+                    Usage = DXGI.Usage.RenderTargetOutput,
+                    BufferCount = 2,
+                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
+                    Flags = swapChainFlags
+                };
+
+                // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
+
+                // First, retrieve the underlying DXGI Device from the D3D Device.
+                // Creates the swap chain 
+                using (DXGI.Device1 dxgiDevice = this.D3DDevice.QueryInterface<DXGI.Device1>())
+                using (DXGI.Adapter dxgiAdapter = dxgiDevice.Adapter)
+                using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
+                {
+                    _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
+                    RefreshAdapter();
+                    dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, DXGI.WindowAssociationFlags.IgnoreAll);
+                    // To reduce latency, ensure that DXGI does not queue more than one frame at a time.
+                    // Docs: https://msdn.microsoft.com/en-us/library/windows/desktop/ff471334(v=vs.85).aspx
+                    dxgiDevice.MaximumFrameLatency = 1;
+                }
+                // Preserve full screen state, after swap chain is re-created 
+                if (PresentationParameters.HardwareModeSwitch
+                    && wasFullScreen)
+                    SetHardwareFullscreen();
+            }
+#endif
+
+#if WINDOWS_UAP
+            // We need presentation parameters to continue here.
+            if (PresentationParameters == null ||
+                   (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
+               )
+            {
+                if (_swapChain != null)
+                {
+                    _swapChain.Dispose();
+                    _swapChain = null;
+                }
+
+                return;
+            }
+
+            // Did we change swap panels?
+            if (PresentationParameters.SwapChainPanel != _swapChainPanel)
+            {
+                _swapChainPanel = null;
+
+                if (_swapChain != null)
+                {
+                    _swapChain.Dispose();
+                    _swapChain = null;
+                }
+            }
+
+            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
+                format,
+                PresentationParameters.MultiSampleCount);
+
+            DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
+
+            _isTearingSupported = IsTearingSupported();
+            if (_isTearingSupported)
+            {
+                swapChainFlags = DXGI.SwapChainFlags.AllowTearing;
+            }
+
+            // If the swap chain already exists... update it.
+            if (_swapChain != null
+               )
+            {
+                _swapChain.ResizeBuffers(2,
+                                         PresentationParameters.BackBufferWidth,
+                                         PresentationParameters.BackBufferHeight,
+                                         format,
+                                         swapChainFlags);
+            }
+
+            // Otherwise, create a new swap chain.
+            else
+            {
+                // SwapChain description
+                DXGI.SwapChainDescription1 desc = new DXGI.SwapChainDescription1()
+                {
+                    // Automatic sizing
+                    Width = PresentationParameters.BackBufferWidth,
+                    Height = PresentationParameters.BackBufferHeight,
+                    Format = format,
+                    Stereo = false,
+                    // By default we scale the backbuffer to the window 
+                    // rectangle to function more like a WP7 game.
+                    Scaling = DXGI.Scaling.Stretch,
+
+                    SampleDescription = multisampleDesc,
+                    Usage = DXGI.Usage.RenderTargetOutput,
+                    BufferCount = 2,
+                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
+                    Flags = swapChainFlags
+                };
+
+                // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
+
+                // First, retrieve the underlying DXGI Device from the D3D Device.
+                // Creates the swap chain 
+                using (DXGI.Device2 dxgiDevice2 = this.D3DDevice.QueryInterface<DXGI.Device2>())
+                using (DXGI.Adapter dxgiAdapter = dxgiDevice2.Adapter)
+                using (DXGI.Factory2 dxgiFactory2 = dxgiAdapter.GetParent<DXGI.Factory2>())
+                {
+                    if (PresentationParameters.DeviceWindowHandle != IntPtr.Zero)
+                    {
+                        // Creates a SwapChain from a CoreWindow pointer.
+                        CoreWindow coreWindow = Marshal.GetObjectForIUnknown(PresentationParameters.DeviceWindowHandle) as CoreWindow;
+                        using (DX.ComObject comWindow = new DX.ComObject(coreWindow))
+                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref desc);
+                    }
+                    else
+                    {
+                        _swapChainPanel = PresentationParameters.SwapChainPanel;
+                        using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
+                        {
+                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref desc, null);
+                            nativePanel.SwapChain = _swapChain;
+
+                            // update swapChain2.MatrixTransform on SizeChanged of SwapChainPanel
+                            // sometimes window.SizeChanged and SwapChainPanel.SizeChanged are not synced
+                            PresentationParameters.SwapChainPanel.SizeChanged += (sender, e) =>
+                            {
+                                try
+                                {
+                                    using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
+                                    {
+                                        RawMatrix3x2 inverseScale = new RawMatrix3x2();
+                                        inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth / PresentationParameters.BackBufferWidth;
+                                        inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
+                                        swapChain2.MatrixTransform = inverseScale;
+                                    };
+                                }
+                                catch (Exception) { }
+                            };
+                        }
+                    }
+
+                    // Ensure that DXGI does not queue more than one frame at a time. This both reduces 
+                    // latency and ensures that the application will only render after each VSync, minimizing 
+                    // power consumption.
+                    dxgiDevice2.MaximumFrameLatency = 1;
+                }
+            }
+
+            _swapChain.Rotation = DXGI.DisplayModeRotation.Identity;
+
+            // Counter act the composition scale of the render target as 
+            // we already handle this in the platform window code. 
+            if (PresentationParameters.SwapChainPanel != null)
+            {
+                Windows.Foundation.IAsyncAction asyncResult = PresentationParameters.SwapChainPanel.Dispatcher.RunIdleAsync((e) =>
+                {
+                    RawMatrix3x2 inverseScale = new RawMatrix3x2();
+                    inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth  / PresentationParameters.BackBufferWidth;
+                    inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
+                    using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
+                        swapChain2.MatrixTransform = inverseScale;
+                });
+            }
+#endif
+
+            // Obtain the backbuffer for this window which will be the final 3D rendertarget.
+            Point targetSize;
+            using (D3D11.Texture2D backBuffer = D3D11.Texture2D.FromSwapChain<D3D11.Texture2D>(_swapChain, 0))
+            {
+                // Create a view interface on the rendertarget to use on bind.
+                _renderTargetView = new D3D11.RenderTargetView(this.D3DDevice, backBuffer);
+
+                // Get the rendertarget dimensions for later.
+                D3D11.Texture2DDescription backBufferDesc = backBuffer.Description;
+                targetSize = new Point(backBufferDesc.Width, backBufferDesc.Height);
+            }
+
+            // Create the depth buffer if we need it.
+            if (PresentationParameters.DepthStencilFormat != DepthFormat.None)
+            {
+                DXGI.Format depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
+
+                // Allocate a 2-D surface as the depth/stencil buffer.
+                using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(this.D3DDevice, new D3D11.Texture2DDescription()
+                    {
+                        Format = depthFormat,
+                        ArraySize = 1,
+                        MipLevels = 1,
+                        Width = targetSize.X,
+                        Height = targetSize.Y,
+                        SampleDescription = multisampleDesc,
+                        Usage = D3D11.ResourceUsage.Default,
+                        BindFlags = D3D11.BindFlags.DepthStencil,
+                    }))
+                {
+                    // Create a DepthStencil view on this surface to use on bind.
+                    _depthStencilView = new D3D11.DepthStencilView(this.D3DDevice, depthBuffer);
+                }
+
+            }
+
+            // Set the current viewport.
+            _mainContext.Viewport = new Viewport
+            {
+                X = 0,
+                Y = 0,
+                Width = targetSize.X,
+                Height = targetSize.Y,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            };
+
+#if WINDOWS_UAP
+            // Now we set up the Direct2D render target bitmap linked to the swapchain. 
+            // Whenever we render to this bitmap, it will be directly rendered to the 
+            // swapchain associated with the window.
+            SharpDX.Direct2D1.BitmapProperties1 bitmapProperties = new SharpDX.Direct2D1.BitmapProperties1(
+                new SharpDX.Direct2D1.PixelFormat(format, SharpDX.Direct2D1.AlphaMode.Premultiplied),
+                _dpi, _dpi,
+                SharpDX.Direct2D1.BitmapOptions.Target | SharpDX.Direct2D1.BitmapOptions.CannotDraw);
+
+            // Direct2D needs the dxgi version of the backbuffer surface pointer.
+            // Get a D2D surface from the DXGI back buffer to use as the D2D render target.
+            using (DXGI.Surface dxgiBackBuffer = _swapChain.GetBackBuffer<DXGI.Surface>(0))
+                _bitmapTarget = new SharpDX.Direct2D1.Bitmap1(_d2dContext, dxgiBackBuffer, bitmapProperties);
+
+            // So now we can set the Direct2D render target.
+            _d2dContext.Target = _bitmapTarget;
+
+            // Set D2D text anti-alias mode to Grayscale to 
+            // ensure proper rendering of text on intermediate surfaces.
+            _d2dContext.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Grayscale;
+#endif
+        }
 
 
 
