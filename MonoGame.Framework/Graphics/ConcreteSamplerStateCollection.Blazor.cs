@@ -11,8 +11,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
 
-        internal ConcreteSamplerStateCollection(GraphicsDevice device, GraphicsContext context, int capacity)
-            : base(device, context, capacity)
+        internal ConcreteSamplerStateCollection(GraphicsContext context, int capacity)
+            : base(context, capacity)
         {
         }
 
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GraphicsExtensions.CheckGLError();
 
-                    sampler.Activate(_device, texture.glTarget, texture.LevelCount > 1);
+                    sampler.Activate(_context, texture.glTarget, texture.LevelCount > 1);
                     texture.glLastSamplerState = sampler;
                 }
             }

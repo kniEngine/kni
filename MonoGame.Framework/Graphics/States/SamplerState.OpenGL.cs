@@ -16,15 +16,15 @@ namespace Microsoft.Xna.Framework.Graphics
         internal const TextureParameterName TextureParameterNameTextureMaxAnisotropy = (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt;
         internal const TextureParameterName TextureParameterNameTextureMaxLevel = TextureParameterName.TextureMaxLevel;
 
-        internal void Activate(GraphicsDevice device, TextureTarget target, bool useMipmaps = false)
+        internal void Activate(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
         {
             if (GraphicsDevice == null)
             {
                 // We're now bound to a device...
-                GraphicsDevice = device;
+                GraphicsDevice = context.Device;
             }
             else
-                Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
+                Debug.Assert(GraphicsDevice == context.Device, "The state was created for a different device!");
 
             switch (Filter)
             {

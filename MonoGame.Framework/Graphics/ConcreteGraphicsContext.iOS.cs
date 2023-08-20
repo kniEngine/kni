@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : ConcreteGraphicsContextGL
     {
 
-        internal ConcreteGraphicsContext(GraphicsDevice device)
-            : base(device)
+        internal ConcreteGraphicsContext(GraphicsContext context)
+            : base(context)
         {
 
         }

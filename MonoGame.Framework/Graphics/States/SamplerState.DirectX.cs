@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.GraphicsDeviceResetting();
         }
 
-        internal SharpDX.Direct3D11.SamplerState GetState(GraphicsDevice device)
+        internal SharpDX.Direct3D11.SamplerState GetState(GraphicsContext context)
         {
             if (_state == null)
             {
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				desc.BorderColor = BorderColor.ToDXColor4();
 #endif
 				desc.Filter = ToDXTextureFilter(Filter, FilterMode);
-                desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, device.Strategy.Capabilities.MaxTextureAnisotropy);
+                desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, context.Device.Strategy.Capabilities.MaxTextureAnisotropy);
                 desc.MipLodBias = MipMapLevelOfDetailBias;
                 desc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _state = new SharpDX.Direct3D11.SamplerState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
-            Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
+            Debug.Assert(GraphicsDevice == context.Device, "The state was created for a different device!");
 
             return _state;
         }

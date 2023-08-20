@@ -11,19 +11,17 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class TextureCollectionStrategy
     {
-        internal readonly GraphicsDevice _device;
-        internal readonly GraphicsContext _context;
+        protected readonly GraphicsContext _context;
 
         internal readonly Texture[] _textures;
         internal uint _dirty;
 
-        internal TextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
+        internal TextureCollectionStrategy(GraphicsContext context, int capacity)
         {
             // hard limit of 32 because of _dirty flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
 
-            _device = device;
             _context = context;
 
             _textures = new Texture[capacity];

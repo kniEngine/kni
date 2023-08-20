@@ -12,17 +12,17 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class SamplerState
     {
 
-        internal void Activate(GraphicsDevice device, WebGLTextureTarget target, bool useMipmaps = false)
+        internal void Activate(GraphicsContext context, WebGLTextureTarget target, bool useMipmaps = false)
         {
             if (GraphicsDevice == null)
             {
                 // We're now bound to a device...
-                GraphicsDevice = device;
+                GraphicsDevice = context.Device;
             }
             else
-                Debug.Assert(GraphicsDevice == device, "The state was created for a different device!");
+                Debug.Assert(GraphicsDevice == context.Device, "The state was created for a different device!");
 
-            var GL = ((ConcreteGraphicsContext)device.Strategy.CurrentContext.Strategy).GL;
+            var GL = ((ConcreteGraphicsContext)context.Strategy).GL;
 
             switch (Filter)
             {

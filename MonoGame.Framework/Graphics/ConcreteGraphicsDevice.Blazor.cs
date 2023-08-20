@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsDevice device)
+        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             IntPtr handle = PresentationParameters.DeviceWindowHandle;
             GameWindow gameWindow = BlazorGameWindow.FromHandle(handle);
@@ -75,17 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
 
-            return new ConcreteGraphicsContext(device, glContext);
-        }
-
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteTextureCollection(device, context, capacity);
-        }
-
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsDevice device, GraphicsContext context, int capacity)
-        {
-            return new ConcreteSamplerStateCollection(device, context, capacity);
+            return new ConcreteGraphicsContext(context, glContext);
         }
 
 

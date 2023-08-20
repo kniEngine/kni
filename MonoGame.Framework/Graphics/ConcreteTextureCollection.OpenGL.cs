@@ -16,8 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private TextureTarget[] _targets;
 
-        internal ConcreteTextureCollection(GraphicsDevice device, GraphicsContext context, int capacity)
-            : base(device, context, capacity)
+        internal ConcreteTextureCollection(GraphicsContext context, int capacity)
+            : base(context, capacity)
         {
             _targets = new TextureTarget[capacity];
             for (int i = 0; i < _targets.Length; i++)
