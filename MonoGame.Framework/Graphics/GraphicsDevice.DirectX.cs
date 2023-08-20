@@ -166,12 +166,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy._mainContext = new GraphicsContext(this);
 
-
-#if WINDOWS
-            // Create a new instance of GraphicsDebug because we support it on Windows platforms.
-            _strategy._mainContext.Strategy.GraphicsDebug = new GraphicsDebug(_strategy._mainContext);
-#endif
-
 #if WINDOWS_UAP
             // Create the Direct2D device.
             using (DXGI.Device dxgiDevice = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.QueryInterface<DXGI.Device>())

@@ -48,6 +48,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _d3dContext = d3dContext;
 
+#if WINDOWS
+            GraphicsDebug = new GraphicsDebug(context);
+#endif
+
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
