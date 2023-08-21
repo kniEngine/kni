@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework
 
         void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            // Set flag to recreate gl surface or rendering can be bad on orienation change or if app 
+            // Set flag to recreate gl surface or rendering can be bad on orientation change or if app 
             // is closed in one orientation and re-opened in another.
 
             // can only be triggered when main loop is running, is unsafe to overwrite other states
@@ -850,7 +850,7 @@ namespace Microsoft.Xna.Framework
 
             handled = Keyboard.KeyDown(keyCode);
 
-            // we need to handle the Back key here because it doesnt work any other way
+            // we need to handle the Back key here because it doesn't work any other way
             if (keyCode == Keycode.Back)
             {
                 GamePad.Back = true;

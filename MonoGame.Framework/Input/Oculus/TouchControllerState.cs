@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// using the specified GamePadThumbSticks, GamePadTriggers, GamePadButtons, and GamePadDPad.
         /// </summary>
         /// <param name="thumbSticks">Initial thumbstick state.</param>
-        /// <param name="triggers">Initial trigger state..</param>
+        /// <param name="triggers">Initial trigger state.</param>
         /// <param name="buttons">Initial button state.</param>
         /// <param name="dPad">Initial directional pad state.</param>
         public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, TouchButtons touchButtons) : this()
