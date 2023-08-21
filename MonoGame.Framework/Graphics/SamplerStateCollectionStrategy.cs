@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class SamplerStateCollectionStrategy
     {
-        protected readonly GraphicsContext _context;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
         private readonly SamplerState _samplerStateAnisotropicClamp;
         private readonly SamplerState _samplerStateAnisotropicWrap;
@@ -24,13 +24,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal readonly SamplerState[] _actualSamplers;
 
 
-        internal SamplerStateCollectionStrategy(GraphicsContext context, int capacity)
+        internal SamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
         {
             // hard limit of 32 because of _d3dDirty flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
 
-            _context = context;
+            _contextStrategy = contextStrategy;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
             _samplerStateAnisotropicWrap = SamplerState.AnisotropicWrap.Clone();
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(value, SamplerState.PointWrap))
                     newSamplerState = _samplerStatePointWrap;
 
-                newSamplerState.BindToGraphicsDevice(_context.Device);
+                newSamplerState.BindToGraphicsDevice(_contextStrategy.Context.Device);
 
                 _actualSamplers[index] = newSamplerState;
             }
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 _samplers[i] = SamplerState.LinearWrap;
 
-                _samplerStateLinearWrap.BindToGraphicsDevice(_context.Device);
+                _samplerStateLinearWrap.BindToGraphicsDevice(_contextStrategy.Context.Device);
                 _actualSamplers[i] = _samplerStateLinearWrap;
             }
         }

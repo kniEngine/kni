@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private GraphicsContext _context;
 
+        internal GraphicsContext Context { get { return _context; } }
         protected GraphicsDevice Device { get { return _context.Device; }  }
 
         private bool _isDisposed = false;
@@ -405,9 +406,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct;
 
 
-        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContext context);
-        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContext context, int capacity);
-        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContext context, int capacity);
+        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContextStrategy contextStrategy);
+        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity);
+        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity);
 
 
         #region IDisposable Members

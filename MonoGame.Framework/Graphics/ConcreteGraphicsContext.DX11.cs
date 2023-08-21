@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _d3dContext = d3dContext;
 
 #if WINDOWS
-            GraphicsDebug = new GraphicsDebug(context);
+            GraphicsDebug = new GraphicsDebug(this);
 #endif
 
         }
@@ -496,19 +496,19 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContext context)
+        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContextStrategy contextStrategy)
         {
-            return new ConcreteGraphicsDebug(context);
+            return new ConcreteGraphicsDebug(contextStrategy);
         }
 
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContext context, int capacity)
+        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            return new ConcreteTextureCollection(context, capacity);
+            return new ConcreteTextureCollection(contextStrategy, capacity);
         }
 
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContext context, int capacity)
+        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            return new ConcreteSamplerStateCollection(context, capacity);
+            return new ConcreteSamplerStateCollection(contextStrategy, capacity);
         }
 
 

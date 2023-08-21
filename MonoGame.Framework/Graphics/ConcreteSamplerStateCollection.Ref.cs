@@ -10,10 +10,11 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
 
-        internal ConcreteSamplerStateCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteSamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
         }
+
 
         public override SamplerState this[int index]
         {
@@ -38,5 +39,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+
     }
 }

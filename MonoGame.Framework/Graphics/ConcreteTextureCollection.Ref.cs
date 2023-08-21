@@ -10,11 +10,12 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
 
-        internal ConcreteTextureCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteTextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
             throw new PlatformNotSupportedException();
         }
+
 
         internal override void Clear()
         {

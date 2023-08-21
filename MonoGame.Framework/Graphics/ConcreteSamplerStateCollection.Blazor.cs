@@ -11,8 +11,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
 
-        internal ConcreteSamplerStateCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteSamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
         }
 
@@ -38,12 +38,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
-            var GL = ((ConcreteGraphicsContext)_context.Strategy).GL;
+            var GL = ((ConcreteGraphicsContext)_contextStrategy).GL;
 
             for (int i = 0; i < _actualSamplers.Length; i++)
             {
                 SamplerState sampler = _actualSamplers[i];
-                Texture texture = _context.Strategy.Textures[i];
+                Texture texture = _contextStrategy.Textures[i];
 
                 if (sampler != null && texture != null && sampler != texture.glLastSamplerState)
                 {
@@ -59,10 +59,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GraphicsExtensions.CheckGLError();
 
-                    sampler.Activate(_context, texture.glTarget, texture.LevelCount > 1);
+                    sampler.Activate(_contextStrategy.Context, texture.glTarget, texture.LevelCount > 1);
                     texture.glLastSamplerState = sampler;
                 }
             }
         }
+
     }
 }
