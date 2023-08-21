@@ -20,9 +20,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal GraphicsDebug(GraphicsContext context)
+        internal GraphicsDebug(GraphicsContext context) : this(context.Strategy)
         {
-            _strategy = context.Strategy.CreateGraphicsDebugStrategy(context);
+        }
+
+        internal GraphicsDebug(GraphicsContextStrategy contextStrategy)
+        {
+            _strategy = contextStrategy.CreateGraphicsDebugStrategy(contextStrategy);
         }
 
         /// <summary>

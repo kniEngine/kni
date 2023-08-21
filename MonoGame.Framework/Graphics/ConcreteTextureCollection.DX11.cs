@@ -15,8 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
 
-        internal ConcreteTextureCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteTextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
         }
 
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
 
-                    unchecked { _context._graphicsMetrics._textureCount++; }
+                    unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);

@@ -20,9 +20,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal SamplerStateCollectionStrategy Strategy { get { return _strategy; } }
 
 
-        internal SamplerStateCollection(GraphicsContext context, int capacity)
+        internal SamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            _strategy = context.Strategy.CreateSamplerStateCollectionStrategy(context, capacity);
+            _strategy = contextStrategy.CreateSamplerStateCollectionStrategy(contextStrategy, capacity);
             
             Clear();
         }

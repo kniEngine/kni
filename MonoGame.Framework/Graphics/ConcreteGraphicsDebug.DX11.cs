@@ -19,10 +19,10 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _hasPushedFilters = false;
 
 
-        internal ConcreteGraphicsDebug(GraphicsContext context)
-            : base(context)
+        internal ConcreteGraphicsDebug(GraphicsContextStrategy contextStrategy)
+            : base(contextStrategy)
         {
-            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)context.Strategy).D3dContext;
+            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)contextStrategy).D3dContext;
 
             _infoQueue = d3dContext.QueryInterfaceOrNull<D3D11.InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();

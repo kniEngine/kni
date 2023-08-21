@@ -16,8 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private TextureTarget[] _targets;
 
-        internal ConcreteTextureCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteTextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
             _targets = new TextureTarget[capacity];
             for (int i = 0; i < _targets.Length; i++)
@@ -60,12 +60,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindTexture(tex._glTarget, tex._glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    unchecked { _context._graphicsMetrics._textureCount++; }
+                    unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
                 }
 
                 // clear texture bit
                 _dirty &= ~mask;
             }
         }
+
     }
 }

@@ -16,8 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private uint _d3dDirty;
 
-        internal ConcreteSamplerStateCollection(GraphicsContext context, int capacity)
-            : base(context, capacity)
+        internal ConcreteSamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
+            : base(contextStrategy, capacity)
         {
         }
 
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 SamplerState sampler = _actualSamplers[i];
                 D3D11.SamplerState state = null;
                 if (sampler != null)
-                    state = sampler.GetState(_context);
+                    state = sampler.GetState(_contextStrategy.Context);
 
                 shaderStage.SetSampler(i, state);
 
@@ -70,7 +70,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 _d3dDirty &= ~mask;
             }
         }
-
 
     }
 }
