@@ -258,14 +258,6 @@ namespace Microsoft.Xna.Platform.Graphics
             debugLevel |= SharpDX.Direct2D1.DebugLevel.Information;
 #endif
 
-            // Dispose previous references.
-            if (_d2dFactory != null)
-                _d2dFactory.Dispose();
-            if (_dwriteFactory != null)
-                _dwriteFactory.Dispose();
-            if (_wicFactory != null)
-                _wicFactory.Dispose();
-
             // Allocate new references
             _d2dFactory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded, debugLevel);
             _dwriteFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);

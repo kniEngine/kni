@@ -57,21 +57,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         protected virtual void CreateDeviceResources()
         {
-            // Dispose previous references.
-            if (((ConcreteGraphicsDevice)_strategy)._d3dDevice != null)
-                ((ConcreteGraphicsDevice)_strategy)._d3dDevice.Dispose();
-            if (_strategy._mainContext != null)
-                _strategy._mainContext.Dispose();
-            _strategy._mainContext = null;
-
-
-#if WINDOWS_UAP
-            if (((ConcreteGraphicsDevice)_strategy)._d2dDevice != null)
-                ((ConcreteGraphicsDevice)_strategy)._d2dDevice.Dispose();
-            if (((ConcreteGraphicsDevice)_strategy)._d2dContext != null)
-                ((ConcreteGraphicsDevice)_strategy)._d2dContext.Dispose();
-#endif
-
             // Windows requires BGRA support out of DX.
             D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
 
