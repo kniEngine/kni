@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = program.GetUniformLocation(Name);
+                var location = ((ConcreteGraphicsContext)context).GetUniformLocation(program, Name);
                 if (location == null)
                     return;
 

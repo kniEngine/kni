@@ -279,7 +279,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderProgram = shaderProgram;
             }
 
-            int posFixupLoc = shaderProgram.GetUniformLocation("posFixup");
+            int posFixupLoc = this.GetUniformLocation(shaderProgram, "posFixup");
             if (posFixupLoc == -1)
                 return;
 
@@ -332,6 +332,19 @@ namespace Microsoft.Xna.Platform.Graphics
             
             GL.Uniform4(posFixupLoc, _posFixup);
             GraphicsExtensions.CheckGLError();
+        }
+
+        internal int GetUniformLocation(ShaderProgram shaderProgram, string name)
+        {
+            int location;
+            if (shaderProgram._uniformLocationCache.TryGetValue(name, out location))
+                return location;
+
+            location = GL.GetUniformLocation(shaderProgram.Program, name);
+            GraphicsExtensions.CheckGLError();
+
+            shaderProgram._uniformLocationCache[name] = location;
+            return location;
         }
 
         private void SetVertexAttributeArray(bool[] attrs)
