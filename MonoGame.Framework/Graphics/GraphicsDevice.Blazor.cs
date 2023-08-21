@@ -20,8 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-            ((ConcreteGraphicsDevice)_strategy)._programCache = new ShaderProgramCache(this);
-
             // create context.
             _strategy._mainContext = new GraphicsContext(this);
             GraphicsExtensions.GL = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext; // for GraphicsExtensions.CheckGLError()

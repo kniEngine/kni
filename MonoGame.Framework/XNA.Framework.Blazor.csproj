@@ -59,7 +59,6 @@
 	<Compile Include="Graphics\ConcreteSamplerStateCollection.Blazor.cs" />
 	<Compile Include="Graphics\ConcreteTextureCollection.Blazor.cs" />
     <Compile Include="Graphics\Shader\ShaderProgram.Blazor.cs" />
-    <Compile Include="Graphics\Shader\ShaderProgramCache.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.Blazor.cs" />
     <Compile Include="Input\GamePad.Blazor.cs" />
     <Compile Include="Input\Joystick.Blazor.cs" />

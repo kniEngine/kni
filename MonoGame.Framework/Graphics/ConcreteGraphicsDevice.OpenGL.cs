@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal abstract class ConcreteGraphicsDeviceGL : GraphicsDeviceStrategy
     {
-        internal ShaderProgramCache _programCache;
+        private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
 
         internal bool _supportsInvalidateFramebuffer;
         internal bool _supportsBlitFramebuffer;
@@ -66,17 +66,74 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
         {
-            return _programCache.GetProgram(vertexShader, pixelShader, shaderProgramHash);
+            ShaderProgram shaderProgram;
+            if (_programCache.TryGetValue(shaderProgramHash, out shaderProgram))
+                return shaderProgram;
+
+            // the key does not exist so we need to link the programs
+            shaderProgram = CreateProgram(vertexShader, pixelShader);
+            _programCache.Add(shaderProgramHash, shaderProgram);
+            return shaderProgram;
+        }
+
+        private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
+        {
+            int program = GL.CreateProgram();
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, vertexShader.GetShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, pixelShader.GetShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            //vertexShader.BindVertexAttributes(program);
+
+            GL.LinkProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            GL.UseProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            vertexShader.GetVertexAttributeLocations(program);
+
+            pixelShader.ApplySamplerTextureUnits(program);
+
+            int linkStatus;
+            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
+            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
+
+            if (linkStatus == (int)Bool.True)
+            {
+                return new ShaderProgram(program);
+            }
+            else
+            { 
+                var log = GL.GetProgramInfoLog(program);
+                Console.WriteLine(log);
+                GL.DetachShader(program, vertexShader.GetShaderHandle());
+                GL.DetachShader(program, pixelShader.GetShaderHandle());
+                
+                if (GL.IsProgram(program))
+                {
+                    GL.DeleteProgram(program);
+                    GraphicsExtensions.CheckGLError();
+                }
+                throw new InvalidOperationException("Unable to link effect program");
+            }
         }
 
         internal void ClearProgramCache()
         {
+            foreach (ShaderProgram shaderProgram in _programCache.Values)
+            {
+                if (GL.IsProgram(shaderProgram.Program))
+                {
+                    GL.DeleteProgram(shaderProgram.Program);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
             _programCache.Clear();
-        }
-
-        internal void DisposeProgramCache()
-        {
-            _programCache.Dispose();
         }
 
 

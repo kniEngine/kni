@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsDevice : GraphicsDeviceStrategy
     {
-        internal ShaderProgramCache _programCache;
+        private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
 
         internal bool _supportsInvalidateFramebuffer;
         internal bool _supportsBlitFramebuffer;
@@ -52,20 +52,67 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
+        {   
+            ShaderProgram shaderProgram;
+            if(_programCache.TryGetValue(shaderProgramHash, out shaderProgram))
+                return shaderProgram;
+
+            // the key does not exist so we need to link the programs
+            shaderProgram = CreateProgram(vertexShader, pixelShader);
+            _programCache.Add(shaderProgramHash, shaderProgram);
+            return shaderProgram;
+        }
+
+        private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
-            return _programCache.GetProgram(vertexShader, pixelShader, shaderProgramHash);
+            var GL = ((ConcreteGraphicsContext)CurrentContext.Strategy).GL;
+
+            var program = GL.CreateProgram();
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, vertexShader.GetShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, pixelShader.GetShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            //vertexShader.BindVertexAttributes(program);
+
+            GL.LinkProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            GL.UseProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            vertexShader.GetVertexAttributeLocations(program);
+
+            pixelShader.ApplySamplerTextureUnits(program);
+
+            bool linkStatus;
+            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
+
+            if (linkStatus == true)
+            {
+                return new ShaderProgram(program);
+            }
+            else
+            {
+                var log = GL.GetProgramInfoLog(program);
+                vertexShader.Dispose();
+                pixelShader.Dispose();
+                program.Dispose();
+                throw new InvalidOperationException("Unable to link effect program");
+            }
         }
 
         internal void ClearProgramCache()
         {
+            foreach (ShaderProgram shaderProgram in _programCache.Values)
+            {
+                shaderProgram.Program.Dispose();
+            }
             _programCache.Clear();
         }
-
-        internal void DisposeProgramCache()
-        {
-            _programCache.Dispose();
-        }
-
 
         internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {

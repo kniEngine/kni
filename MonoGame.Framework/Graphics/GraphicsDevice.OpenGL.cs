@@ -22,8 +22,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-            ((ConcreteGraphicsDevice)_strategy)._programCache = new ShaderProgramCache(this);
-
 #if DESKTOPGL
             System.Diagnostics.Debug.Assert(_strategy._mainContext == null);
 #endif
@@ -102,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDispose()
         {
             // Free all the cached shader programs.
-            ((ConcreteGraphicsDevice)_strategy)._programCache.Dispose();
+            ((ConcreteGraphicsDevice)_strategy).ClearProgramCache();
 
 #if DESKTOPGL
             _strategy._mainContext.Dispose();
