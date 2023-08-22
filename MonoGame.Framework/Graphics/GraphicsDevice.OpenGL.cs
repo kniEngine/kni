@@ -22,10 +22,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-#if DESKTOPGL
-            System.Diagnostics.Debug.Assert(_strategy._mainContext == null);
-#endif
-
             _strategy._mainContext = new GraphicsContext(this);
 
             // try getting the context version
