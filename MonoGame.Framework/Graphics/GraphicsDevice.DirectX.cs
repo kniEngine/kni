@@ -43,15 +43,6 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        private void PlatformInitialize()
-        {
-#if WINDOWS
-            ((ConcreteGraphicsDevice)_strategy).CorrectBackBufferSize();
-#endif
-            ((ConcreteGraphicsDevice)_strategy).CreateSizeDependentResources();
-        }
-
-
         /// <summary>
         /// Create graphics device specific resources.
         /// </summary>

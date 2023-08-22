@@ -51,6 +51,40 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
+
+        internal void PlatformInitialize()
+        {
+            // set actual backbuffer size
+            PresentationParameters.BackBufferWidth = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext.Canvas.Width;
+            PresentationParameters.BackBufferHeight = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext.Canvas.Height;
+
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+
+            // TODO: check for FramebufferObjectARB
+            //if (this.Capabilities.SupportsFramebufferObjectARB
+            //||  this.Capabilities.SupportsFramebufferObjectEXT)
+            if (true)
+            {
+                _supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
+                _supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
+
+            // Force resetting states
+            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+        }
+
         internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
         {   
             ShaderProgram shaderProgram;
