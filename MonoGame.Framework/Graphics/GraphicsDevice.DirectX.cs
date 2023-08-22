@@ -33,21 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetup()
         {
             ((ConcreteGraphicsDevice)_strategy).CreateDeviceIndependentResources();
-			CreateDeviceResources();
 
-            _strategy._capabilities = new GraphicsCapabilities();
-            _strategy._capabilities.PlatformInitialize(this);
-
-#if WINDOWS_UAP
-            ((ConcreteGraphicsDevice)_strategy).Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
-#endif
-        }
-
-        /// <summary>
-        /// Create graphics device specific resources.
-        /// </summary>
-        protected virtual void CreateDeviceResources()
-        {
             // Windows requires BGRA support out of DX.
             D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
 
@@ -149,6 +135,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Create Direct2D context
             ((ConcreteGraphicsDevice)_strategy)._d2dContext = new SharpDX.Direct2D1.DeviceContext(((ConcreteGraphicsDevice)_strategy)._d2dDevice, SharpDX.Direct2D1.DeviceContextOptions.None);
+#endif
+
+
+            _strategy._capabilities = new GraphicsCapabilities();
+            _strategy._capabilities.PlatformInitialize(this);
+
+#if WINDOWS_UAP
+            ((ConcreteGraphicsDevice)_strategy).Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
         }
 
