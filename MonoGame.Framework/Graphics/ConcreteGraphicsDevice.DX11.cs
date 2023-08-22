@@ -767,9 +767,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // The valid range is between zero and one less than the level returned by CheckMultisampleQualityLevels
             // https://msdn.microsoft.com/en-us/library/windows/desktop/bb173072(v=vs.85).aspx
-            int quality = this.D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
-            // NOTE: should we always return highest quality?
-            return Math.Max(quality, 0); // clamp minimum to 0
+            int qualityLevels = this.D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
+
+            return Math.Max(qualityLevels, 0); // clamp minimum to 0
         }
 
         internal DXGI.SampleDescription GetSupportedSampleDescription(DXGI.Format format, int multiSampleCount)
