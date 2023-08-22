@@ -753,6 +753,24 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
+        {
+            SharpDX.DXGI.Format format = GraphicsExtensions.ToDXFormat(surfaceFormat);
+
+            // Find the maximum supported level starting with the game's requested multisampling level
+            // and halving each time until reaching 0 (meaning no multisample support).
+            int qualityLevels = 0;
+            int maxLevel = 32; // The highest possible multisampling level
+            while (maxLevel > 0)
+            {
+                qualityLevels = this.D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
+                if (qualityLevels > 0)
+                    break;
+                maxLevel /= 2;
+            }
+            return maxLevel;
+        }
+
         /// <summary>
         /// Get highest multisample quality level for specified format and multisample count.
         /// Returns 0 if multisampling is not supported for input parameters.
