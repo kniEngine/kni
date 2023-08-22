@@ -61,24 +61,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
 
-            _maxMultiSampleCount = GetMaxMultiSampleCount(device);
+            _maxMultiSampleCount = ((ConcreteGraphicsDevice)device.Strategy).GetMaxMultiSampleCount(device.PresentationParameters.BackBufferFormat);
         }
 
-        private int GetMaxMultiSampleCount(GraphicsDevice device)
-        {
-            var format = GraphicsExtensions.ToDXFormat(device.PresentationParameters.BackBufferFormat);
-            // Find the maximum supported level starting with the game's requested multisampling level
-            // and halving each time until reaching 0 (meaning no multisample support).
-            var qualityLevels = 0;
-            var maxLevel = MultiSampleCountLimit;
-            while (maxLevel > 0)
-            {
-                qualityLevels = ((ConcreteGraphicsDevice)device.Strategy).D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
-                if (qualityLevels > 0)
-                    break;
-                maxLevel /= 2;
-            }
-            return maxLevel;
-        }
     }
 }

@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultisampleCount(preferredMultiSampleCount);
+            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
             //Threading.EnsureUIThread();

@@ -415,7 +415,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Clamp MultiSampleCount
             PresentationParameters.MultiSampleCount =
-                GetClampedMultisampleCount(PresentationParameters.MultiSampleCount);
+                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
@@ -752,6 +752,46 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
+        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
+        {
+            if (multiSampleCount > 1)
+            {
+                // Round down MultiSampleCount to the nearest power of two
+                // hack from http://stackoverflow.com/a/2681094
+                // Note: this will return an incorrect, but large value
+                // for very large numbers. That doesn't matter because
+                // the number will get clamped below anyway in this case.
+                var msc = multiSampleCount;
+                msc = msc | (msc >> 1);
+                msc = msc | (msc >> 2);
+                msc = msc | (msc >> 4);
+                msc -= (msc >> 1);
+                // and clamp it to what the device can handle
+                if (msc > Capabilities.MaxMultiSampleCount)
+                    msc = Capabilities.MaxMultiSampleCount;
+
+                return msc;
+            }
+            else return 0;
+        }
+
+        internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
+        {
+            SharpDX.DXGI.Format format = GraphicsExtensions.ToDXFormat(surfaceFormat);
+
+            // Find the maximum supported level starting with the game's requested multisampling level
+            // and halving each time until reaching 0 (meaning no multisample support).
+            int qualityLevels = 0;
+            int maxLevel = 32; // The highest possible multisampling level
+            while (maxLevel > 0)
+            {
+                qualityLevels = this.D3DDevice.CheckMultisampleQualityLevels(format, maxLevel);
+                if (qualityLevels > 0)
+                    break;
+                maxLevel /= 2;
+            }
+            return maxLevel;
+        }
 
         /// <summary>
         /// Get highest multisample quality level for specified format and multisample count.
@@ -767,9 +807,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // The valid range is between zero and one less than the level returned by CheckMultisampleQualityLevels
             // https://msdn.microsoft.com/en-us/library/windows/desktop/bb173072(v=vs.85).aspx
-            int quality = this.D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
-            // NOTE: should we always return highest quality?
-            return Math.Max(quality, 0); // clamp minimum to 0
+            int qualityLevels = this.D3DDevice.CheckMultisampleQualityLevels(format, multiSampleCount) - 1;
+
+            return Math.Max(qualityLevels, 0); // clamp minimum to 0
         }
 
         internal DXGI.SampleDescription GetSupportedSampleDescription(DXGI.Format format, int multiSampleCount)
