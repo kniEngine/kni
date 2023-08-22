@@ -32,38 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
-        private void PlatformInitialize()
-        {
-            // set actual backbuffer size
-            PresentationParameters.BackBufferWidth = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext.Canvas.Width;
-            PresentationParameters.BackBufferHeight = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext.Canvas.Height;
-
-            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-
-            // TODO: check for FramebufferObjectARB
-            //if (this.Capabilities.SupportsFramebufferObjectARB
-            //||  this.Capabilities.SupportsFramebufferObjectEXT)
-            if (true)
-            {
-                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
-                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
-            }
-
-            // Force resetting states
-            _strategy._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_strategy._mainContext.Strategy, true);
-
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
-        }
 
         private void PlatformDispose()
         {

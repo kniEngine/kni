@@ -70,32 +70,6 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._newEnabledVertexAttributes = new bool[Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
-        private void PlatformInitialize()
-        {
-            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-
-            if (Strategy.Capabilities.SupportsFramebufferObjectARB
-            ||  Strategy.Capabilities.SupportsFramebufferObjectEXT)
-            {
-                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
-            }
-
-            // Force resetting states
-            _strategy._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
-        }
 
         private void PlatformDispose()
         {
@@ -150,75 +124,6 @@ namespace Microsoft.Xna.Framework.Graphics
             var handler = DeviceReset;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-        }
-
-        internal void Android_ReInitializeContext()
-        {
-            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-
-            // Ensure the vertex attributes are reset
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._enabledVertexAttributes.Clear();
-
-            // Free all the cached shader programs.
-            ((ConcreteGraphicsDevice)_strategy).ClearProgramCache();
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._shaderProgram = null;
-
-            if (Strategy.Capabilities.SupportsFramebufferObjectARB
-            ||  Strategy.Capabilities.SupportsFramebufferObjectEXT)
-            {
-                ((ConcreteGraphicsDevice)_strategy)._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                ((ConcreteGraphicsDevice)_strategy)._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
-            }
-
-            // Force resetting states
-            _strategy._mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-            _strategy._mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_strategy._mainContext.Strategy, true);
-
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Strategy.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_strategy._mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
-
-
-            // Force set the default render states.
-            _strategy._mainContext.Strategy._blendStateDirty = true;
-            _strategy._mainContext.Strategy._blendFactorDirty = true;
-            _strategy._mainContext.Strategy._depthStencilStateDirty = true;
-            _strategy._mainContext.Strategy._rasterizerStateDirty = true;
-            BlendState = BlendState.Opaque;
-            DepthStencilState = DepthStencilState.Default;
-            RasterizerState = RasterizerState.CullCounterClockwise;
-
-            // Clear the texture and sampler collections forcing
-            // the state to be reapplied.
-            _strategy._mainContext.Strategy.VertexTextures.Clear();
-            _strategy._mainContext.Strategy.VertexSamplerStates.Clear();
-            _strategy._mainContext.Strategy.Textures.Clear();
-            _strategy._mainContext.Strategy.SamplerStates.Clear();
-
-            // Clear constant buffers
-            _strategy._mainContext.Strategy._vertexConstantBuffers.Clear();
-            _strategy._mainContext.Strategy._pixelConstantBuffers.Clear();
-
-            // Force set the buffers and shaders on next ApplyState() call
-            _strategy._mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
-            _strategy._mainContext.Strategy._vertexBuffersDirty = true;
-            _strategy._mainContext.Strategy._indexBufferDirty = true;
-            _strategy._mainContext.Strategy._vertexShaderDirty = true;
-            _strategy._mainContext.Strategy._pixelShaderDirty = true;
-
-            // Set the default scissor rect.
-            _strategy._mainContext.Strategy._scissorRectangleDirty = true;
-            ScissorRectangle = _strategy._mainContext.Strategy._viewport.Bounds;
-
-            // Set the default render target.
-            _strategy._mainContext.ApplyRenderTargets(null);
         }
 
     }

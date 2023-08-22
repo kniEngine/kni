@@ -43,6 +43,12 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void PlatformInitialize()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+
         internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             return new ConcreteGraphicsContext(context);

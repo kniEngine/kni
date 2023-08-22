@@ -64,6 +64,105 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        internal void PlatformInitialize()
+        {
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+
+            if (this.Capabilities.SupportsFramebufferObjectARB
+            || this.Capabilities.SupportsFramebufferObjectEXT)
+            {
+                _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
+
+            // Force resetting states
+            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
+        }
+
+
+        internal void Android_ReInitializeContext()
+        {
+            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+
+            // Ensure the vertex attributes are reset
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
+
+            // Free all the cached shader programs.
+            ClearProgramCache();
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
+
+            if (this.Capabilities.SupportsFramebufferObjectARB
+            ||  this.Capabilities.SupportsFramebufferObjectEXT)
+            {
+                _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
+
+            // Force resetting states
+            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
+
+
+            // Force set the default render states.
+            _mainContext.Strategy._blendStateDirty = true;
+            _mainContext.Strategy._blendFactorDirty = true;
+            _mainContext.Strategy._depthStencilStateDirty = true;
+            _mainContext.Strategy._rasterizerStateDirty = true;
+            _mainContext.BlendState = BlendState.Opaque;
+            _mainContext.DepthStencilState = DepthStencilState.Default;
+            _mainContext.RasterizerState = RasterizerState.CullCounterClockwise;
+
+            // Clear the texture and sampler collections forcing
+            // the state to be reapplied.
+            _mainContext.Strategy.VertexTextures.Clear();
+            _mainContext.Strategy.VertexSamplerStates.Clear();
+            _mainContext.Strategy.Textures.Clear();
+            _mainContext.Strategy.SamplerStates.Clear();
+
+            // Clear constant buffers
+            _mainContext.Strategy._vertexConstantBuffers.Clear();
+            _mainContext.Strategy._pixelConstantBuffers.Clear();
+
+            // Force set the buffers and shaders on next ApplyState() call
+            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
+            _mainContext.Strategy._vertexBuffersDirty = true;
+            _mainContext.Strategy._indexBufferDirty = true;
+            _mainContext.Strategy._vertexShaderDirty = true;
+            _mainContext.Strategy._pixelShaderDirty = true;
+
+            // Set the default scissor rect.
+            _mainContext.Strategy._scissorRectangleDirty = true;
+            _mainContext.ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
+
+            // Set the default render target.
+            _mainContext.ApplyRenderTargets(null);
+        }
+
+
         internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
         {
             ShaderProgram shaderProgram;

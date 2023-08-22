@@ -244,7 +244,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-
         /// <summary>
         /// Creates resources not tied the active graphics device.
         /// </summary>
@@ -265,9 +264,16 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
+        internal void PlatformInitialize()
+        {
+#if WINDOWS
+            CorrectBackBufferSize();
+#endif
+            CreateSizeDependentResources();
+        }
 
 #if WINDOWS
-        internal void CorrectBackBufferSize()
+        private void CorrectBackBufferSize()
         {
             // Window size can be modified when we're going full screen, we need to take that into account
             // so the back buffer has the right size.
@@ -275,16 +281,20 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 int newWidth, newHeight;
                 if (PresentationParameters.HardwareModeSwitch)
+                {
                     GetModeSwitchedSize(out newWidth, out newHeight);
+                }
                 else
+                {
                     GetDisplayResolution(out newWidth, out newHeight);
+                }
 
                 PresentationParameters.BackBufferWidth = newWidth;
                 PresentationParameters.BackBufferHeight = newHeight;
             }
         }
 
-        internal void GetModeSwitchedSize(out int width, out int height)
+        private void GetModeSwitchedSize(out int width, out int height)
         {
             DXGI.Output output = null;
             if (_swapChain == null)
@@ -327,7 +337,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void GetDisplayResolution(out int width, out int height)
+        private void GetDisplayResolution(out int width, out int height)
         {
             width = Adapter.CurrentDisplayMode.Width;
             height = Adapter.CurrentDisplayMode.Height;
@@ -741,7 +751,6 @@ namespace Microsoft.Xna.Platform.Graphics
             _d2dContext.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Grayscale;
 #endif
         }
-
 
 
         /// <summary>

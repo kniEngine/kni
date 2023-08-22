@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup end
 
-            PlatformInitialize();
+            ((ConcreteGraphicsDevice)_strategy).PlatformInitialize();
 
             // Force set the default render states.
             _strategy._mainContext.Strategy._blendStateDirty = true;

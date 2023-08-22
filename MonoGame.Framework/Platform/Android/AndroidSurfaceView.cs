@@ -814,7 +814,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game.Strategy.GraphicsDevice != null)
             {
-                _game.Strategy.GraphicsDevice.Android_ReInitializeContext();
+                ((Microsoft.Xna.Platform.Graphics.ConcreteGraphicsDevice)_game.Strategy.GraphicsDevice.Strategy).Android_ReInitializeContext();
 
                 IsResuming = true;
                 if (_gameWindow.Resumer != null)
