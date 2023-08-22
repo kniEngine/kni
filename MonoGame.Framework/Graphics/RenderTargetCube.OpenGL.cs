@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(preferredMultiSampleCount);
+            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
             Threading.EnsureUIThread();

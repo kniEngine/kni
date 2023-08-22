@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override int GetClampedMultiSampleCount(int multiSampleCount)
+        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
         {
             throw new PlatformNotSupportedException();
         }

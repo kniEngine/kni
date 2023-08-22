@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _programCache.Clear();
         }
 
-        internal override int GetClampedMultiSampleCount(int multiSampleCount)
+        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
         {
             if (multiSampleCount > 1)
             {

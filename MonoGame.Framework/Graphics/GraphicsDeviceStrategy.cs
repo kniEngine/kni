@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        internal abstract int GetClampedMultiSampleCount(int multiSampleCount);
+        internal abstract int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount);
 
         internal void AddResourceReference(WeakReference resourceReference)
         {

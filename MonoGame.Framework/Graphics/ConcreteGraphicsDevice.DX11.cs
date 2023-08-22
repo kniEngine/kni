@@ -415,7 +415,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Clamp MultiSampleCount
             PresentationParameters.MultiSampleCount =
-                GetClampedMultiSampleCount(PresentationParameters.MultiSampleCount);
+                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount);
 
             ((ConcreteGraphicsContext)_mainContext.Strategy).D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
@@ -752,7 +752,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
-        internal override int GetClampedMultiSampleCount(int multiSampleCount)
+        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
         {
             if (multiSampleCount > 1)
             {
