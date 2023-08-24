@@ -12,10 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 
-        private void PlatformDispose()
-        {
-        }
-
         internal void OnPresentationChanged()
         {
             _strategy._mainContext.ApplyRenderTargets(null);

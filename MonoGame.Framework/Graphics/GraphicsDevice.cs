@@ -340,7 +340,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
                 _strategy._mainContext.Strategy._rasterizerStateCullNone.Dispose();
 
-                PlatformDispose();
+                ((ConcreteGraphicsDevice)_strategy).PlatformDispose();
             }
 
             var handler = Disposing;

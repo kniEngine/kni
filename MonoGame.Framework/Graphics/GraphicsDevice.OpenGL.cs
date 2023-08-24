@@ -13,17 +13,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 
-        private void PlatformDispose()
-        {
-            // Free all the cached shader programs.
-            ((ConcreteGraphicsDevice)_strategy).ClearProgramCache();
-
-#if DESKTOPGL
-            _strategy._mainContext.Dispose();
-            _strategy._mainContext = null;
-#endif
-        }
-
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL

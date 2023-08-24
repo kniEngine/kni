@@ -271,7 +271,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void ClearProgramCache()
+        private void ClearProgramCache()
         {
             foreach (ShaderProgram shaderProgram in _programCache.Values)
             {
@@ -305,6 +305,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 return msc;
             }
             else return 0;
+        }
+
+        internal void PlatformDispose()
+        {
+            // Free all the cached shader programs.
+            ClearProgramCache();
+
+#if DESKTOPGL
+            _mainContext.Dispose();
+            _mainContext = null;
+#endif
         }
 
 

@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void ClearProgramCache()
+        private void ClearProgramCache()
         {
             foreach (ShaderProgram shaderProgram in _programCache.Values)
             {
@@ -195,6 +195,10 @@ namespace Microsoft.Xna.Platform.Graphics
             IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
 
             return new ConcreteGraphicsContext(context, glContext);
+        }
+
+        internal void PlatformDispose()
+        {
         }
 
 
