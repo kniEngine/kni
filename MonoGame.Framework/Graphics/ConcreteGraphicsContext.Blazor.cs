@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _posFixup.X = 1.0f;
             _posFixup.Y = 1.0f;
-            if (!this.Context.Device.UseHalfPixelOffset)
+            if (!this.Context.Device.Strategy.UseHalfPixelOffset)
             {
                 _posFixup.Z = 0f;
                 _posFixup.W = 0f;
