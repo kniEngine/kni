@@ -307,6 +307,17 @@ namespace Microsoft.Xna.Platform.Graphics
             else return 0;
         }
 
+        internal void OnPresentationChanged()
+        {
+#if DESKTOPGL
+            ((ConcreteGraphicsContext)_mainContext.Strategy).MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
+            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
+#endif
+
+            _mainContext.ApplyRenderTargets(null);
+        }
+
         internal void PlatformDispose()
         {
             // Free all the cached shader programs.

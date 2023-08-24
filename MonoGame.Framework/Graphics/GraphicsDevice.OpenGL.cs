@@ -13,17 +13,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 
-        internal void OnPresentationChanged()
-        {
-#if DESKTOPGL
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).MakeCurrent(_strategy.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(_strategy.PresentationParameters.PresentationInterval);
-            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
-#endif
-
-            _strategy._mainContext.ApplyRenderTargets(null);
-        }
-
         internal void Android_OnDeviceResetting()
         {
             var handler = DeviceResetting;

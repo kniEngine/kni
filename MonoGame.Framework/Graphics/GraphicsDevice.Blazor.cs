@@ -11,11 +11,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-
-        internal void OnPresentationChanged()
-        {
-            _strategy._mainContext.ApplyRenderTargets(null);
-        }
-
     }
 }

@@ -29,12 +29,5 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
         }
 
-
-        internal void OnPresentationChanged()
-        {
-            ((ConcreteGraphicsDevice)_strategy).CreateSizeDependentResources();
-            _strategy._mainContext.ApplyRenderTargets(null);
-        }
-
     }
 }
