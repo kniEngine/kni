@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 using GetParamName = MonoGame.OpenGL.GetPName;
 
@@ -36,9 +37,9 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
 
-        internal void PlatformInitialize(GraphicsDevice device, int majorVersion, int minorVersion)
+        internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy, int majorVersion, int minorVersion)
         {
-            GraphicsProfile profile = device.GraphicsProfile;
+            GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
             GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();

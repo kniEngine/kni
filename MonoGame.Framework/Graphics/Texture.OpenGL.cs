@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             bool supportsFloat = graphicsDevice.Strategy.Capabilities.SupportsFloatTextures;
             bool supportsHalfFloat = graphicsDevice.Strategy.Capabilities.SupportsHalfFloatTextures;
             bool supportsNormalized = graphicsDevice.Strategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && ((ConcreteGraphicsDevice)graphicsDevice.Strategy)._glMajorVersion == 2;
 
             switch (format)
             {

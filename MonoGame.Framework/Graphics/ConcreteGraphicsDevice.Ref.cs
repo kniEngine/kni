@@ -43,6 +43,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void PlatformSetup()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         internal void PlatformInitialize()
         {
             throw new PlatformNotSupportedException();

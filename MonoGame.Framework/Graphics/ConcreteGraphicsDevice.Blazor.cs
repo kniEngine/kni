@@ -52,6 +52,20 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void PlatformSetup()
+        {
+            // create context.
+            _mainContext = new GraphicsContext(this);
+            GraphicsExtensions.GL = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext; // for GraphicsExtensions.CheckGLError()
+            //_glContext = new LogContent(_glContext);
+
+            _capabilities = new GraphicsCapabilities();
+            _capabilities.PlatformInitialize(this);
+
+
+            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+        }
+
         internal void PlatformInitialize()
         {
             // set actual backbuffer size
