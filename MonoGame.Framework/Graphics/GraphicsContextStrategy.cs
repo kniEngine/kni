@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private GraphicsContext _context;
 
         internal GraphicsContext Context { get { return _context; } }
-        protected GraphicsDevice Device { get { return _context.Device; }  }
 
         private bool _isDisposed = false;
 
@@ -154,12 +153,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_blendState, BlendState.Opaque))
                     newBlendState = _blendStateOpaque;
 
-                if (newBlendState.IndependentBlendEnable && !Device.Strategy.Capabilities.SupportsSeparateBlendStates)
+                if (newBlendState.IndependentBlendEnable && !Context.DeviceStrategy.Capabilities.SupportsSeparateBlendStates)
                     throw new PlatformNotSupportedException("Independent blend states requires at least OpenGL 4.0 or GL_ARB_draw_buffers_blend. Try upgrading your graphics drivers.");
 
                 // Blend state is now bound to a device... no one should
                 // be changing the state of the blend state object now!
-                newBlendState.BindToGraphicsDevice(this.Device);
+                newBlendState.BindToGraphicsDevice(this.Context.DeviceStrategy.Device);
 
                 _actualBlendState = newBlendState;
 
@@ -205,7 +204,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_depthStencilState, DepthStencilState.None))
                     newDepthStencilState = _depthStencilStateNone;
 
-                newDepthStencilState.BindToGraphicsDevice(this.Device);
+                newDepthStencilState.BindToGraphicsDevice(this.Context.DeviceStrategy.Device);
 
                 _actualDepthStencilState = newDepthStencilState;
 
@@ -225,7 +224,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_rasterizerState == value)
                     return;
 
-                if (!value.DepthClipEnable && !Device.Strategy.Capabilities.SupportsDepthClamp)
+                if (!value.DepthClipEnable && !Context.DeviceStrategy.Capabilities.SupportsDepthClamp)
                     throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
 
                 _rasterizerState = value;
@@ -240,7 +239,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_rasterizerState, RasterizerState.CullNone))
                     newRasterizerState = _rasterizerStateCullNone;
 
-                newRasterizerState.BindToGraphicsDevice(this.Device);
+                newRasterizerState.BindToGraphicsDevice(this.Context.DeviceStrategy.Device);
 
                 _actualRasterizerState = newRasterizerState;
 
@@ -356,13 +355,13 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                if (vertexBuffers.Length <= this.Device.Strategy.Capabilities.MaxVertexBufferSlots)
+                if (vertexBuffers.Length <= this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots)
                 {
                     _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
                 }
                 else
                 {
-                    var message = string.Format("Max number of vertex buffers is {0}.", this.Device.Strategy.Capabilities.MaxVertexBufferSlots);
+                    var message = string.Format("Max number of vertex buffers is {0}.", this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }

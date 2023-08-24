@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetup()
         {
             // create context.
-            _strategy._mainContext = new GraphicsContext(this);
+            _strategy._mainContext = new GraphicsContext(_strategy);
             GraphicsExtensions.GL = ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 

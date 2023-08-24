@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 this.D3dContext.VertexShader.Set(VertexShader.VertexShader);
 
-                unchecked { this.Device.CurrentContext._graphicsMetrics._vertexShaderCount++; }
+                unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
@@ -237,7 +237,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.PixelShader.Set(PixelShader.PixelShader);
                 _pixelShaderDirty = false;
 
-                unchecked { this.Device.CurrentContext._graphicsMetrics._pixelShaderCount++; }
+                unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
             }
         }
 
@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (baseInstance > 0)
                 {
-                    if (!this.Device.Strategy.Capabilities.SupportsBaseIndexInstancing)
+                    if (!this.Context.DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                         throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
 
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);
@@ -353,7 +353,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 int requiredVertexCount = Math.Max(vertexCount, 4 * 256);
                 requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
-                buffer = new DynamicVertexBuffer(this.Device, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
+                buffer = new DynamicVertexBuffer(this.Context.DeviceStrategy.Device, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
                 _userVertexBuffers[vertexDecl] = buffer;
             }
 
@@ -394,7 +394,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (_userIndexBuffer16 != null)
                         _userIndexBuffer16.Dispose();
 
-                    _userIndexBuffer16 = new DynamicIndexBuffer(this.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
+                    _userIndexBuffer16 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
                 }
 
                 buffer = _userIndexBuffer16;
@@ -406,7 +406,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (_userIndexBuffer32 != null)
                         _userIndexBuffer32.Dispose();
 
-                    _userIndexBuffer32 = new DynamicIndexBuffer(this.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
+                    _userIndexBuffer32 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
                 }
 
                 buffer = _userIndexBuffer32;
@@ -552,8 +552,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Set the default swap chain.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentRenderTargets[0] = ((ConcreteGraphicsDevice)this.Device.Strategy)._renderTargetView;
-            _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Device.Strategy)._depthStencilView;
+            _currentRenderTargets[0] = ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._renderTargetView;
+            _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._depthStencilView;
 
             lock (this.D3dContext)
             {

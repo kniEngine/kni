@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.Device D3DDevice { get { return _d3dDevice; } }
    
 
-        internal ConcreteGraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
-            : base(adapter, graphicsProfile, false, presentationParameters)
+        internal ConcreteGraphicsDevice(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
+            : base(device, adapter, graphicsProfile, false, presentationParameters)
         {
         }
 

@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
-            _strategy = new ConcreteGraphicsDevice(adapter, graphicsProfile, false, presentationParameters);
+            _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, false, presentationParameters);
 
             Initialize();
         }
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
-            _strategy = new ConcreteGraphicsDevice(adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
+            _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
 
             Initialize();
         }
