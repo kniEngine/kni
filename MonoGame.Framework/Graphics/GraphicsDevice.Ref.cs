@@ -10,12 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class GraphicsDevice
     {
 
-        private void PlatformSetup()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-
         private void PlatformDispose()
         {
         }

@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void Initialize()
         {
             // Setup
-            PlatformSetup();
+            ((ConcreteGraphicsDevice)_strategy).PlatformSetup();
 
 #if DEBUG
             if (DisplayMode == null)

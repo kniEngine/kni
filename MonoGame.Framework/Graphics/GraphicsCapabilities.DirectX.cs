@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class GraphicsCapabilities
     {
 
-        internal void PlatformInitialize(GraphicsDevice device)
+        internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy)
         {
-            GraphicsProfile profile = device.GraphicsProfile;
+            GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
             _maxTextureSize = 2048;
             if (profile == GraphicsProfile.HiDef)
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
 
-            _maxMultiSampleCount = ((ConcreteGraphicsDevice)device.Strategy).GetMaxMultiSampleCount(device.PresentationParameters.BackBufferFormat);
+            _maxMultiSampleCount = ((ConcreteGraphicsDevice)deviceStrategy).GetMaxMultiSampleCount(deviceStrategy.PresentationParameters.BackBufferFormat);
         }
 
     }

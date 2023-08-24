@@ -1,11 +1,14 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
+using D2D = SharpDX.Direct2D1;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using MonoGame.Framework.Utilities;
 
@@ -34,14 +37,14 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWS_UAP
         // The swap chain resources.
         internal DXGI.SwapChain1 _swapChain;
-        internal SharpDX.Direct2D1.Bitmap1 _bitmapTarget;
+        internal D2D.Bitmap1 _bitmapTarget;
 
         internal SwapChainPanel _swapChainPanel;
 
         // Declare Direct2D Objects
-        internal SharpDX.Direct2D1.Factory1 _d2dFactory;
-        internal SharpDX.Direct2D1.Device _d2dDevice;
-        internal SharpDX.Direct2D1.DeviceContext _d2dContext;
+        internal D2D.Factory1 _d2dFactory;
+        internal D2D.Device _d2dDevice;
+        internal D2D.DeviceContext _d2dContext;
 
         // Declare DirectWrite & Windows Imaging Component Objects
         internal SharpDX.DirectWrite.Factory _dwriteFactory;
@@ -244,21 +247,138 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+
+        internal void PlatformSetup()
+        {
+            CreateDeviceIndependentResources();
+
+            // Windows requires BGRA support out of DX.
+            D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
+
+            if (GraphicsAdapter.UseDebugLayers)
+            {
+                creationFlags |= D3D11.DeviceCreationFlags.Debug;
+            }
+
+#if DEBUG && WINDOWS_UAP
+            creationFlags |= D3D11.DeviceCreationFlags.Debug;
+#endif
+
+            // Pass the preferred feature levels based on the
+            // target profile that may have been set by the user.
+            D3D.FeatureLevel[] featureLevels;
+            List<D3D.FeatureLevel> featureLevelsList = new List<D3D.FeatureLevel>();
+            // create device with the highest available profile
+            featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_2);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
+#if DEBUG
+            featureLevelsList.Clear();
+            // create device specific to profile
+            if (GraphicsProfile == GraphicsProfile.FL11_1) featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
+            if (GraphicsProfile == GraphicsProfile.FL11_0) featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
+            if (GraphicsProfile == GraphicsProfile.FL10_1) featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
+            if (GraphicsProfile == GraphicsProfile.FL10_0) featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
+            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
+            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
+#endif
+            featureLevels = featureLevelsList.ToArray();
+
+            D3D.DriverType driverType = D3D.DriverType.Hardware;   //Default value
+
+#if WINDOWS
+            switch (GraphicsAdapter.UseDriverType)
+            {
+                case GraphicsAdapter.DriverType.Reference:
+                    driverType = D3D.DriverType.Reference;
+                    break;
+
+                case GraphicsAdapter.DriverType.FastSoftware:
+                    driverType = D3D.DriverType.Warp;
+                    break;
+            }
+#endif
+
+#if WINDOWS_UAP
+            driverType = GraphicsAdapter.UseReferenceDevice
+                       ? D3D.DriverType.Reference
+                       : D3D.DriverType.Hardware;
+#endif
+
+            try
+            {
+                // Create the Direct3D device.
+                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
+                {
+#if WINDOWS
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+#endif
+#if WINDOWS_UAP
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+#endif
+                }
+
+#if WINDOWS_UAP
+                // Necessary to enable video playback
+                SharpDX.Direct3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<SharpDX.Direct3D.DeviceMultithread>();
+                multithread.SetMultithreadProtected(true);
+#endif
+            }
+            catch (DX.SharpDXException)
+            {
+                // Try again without the debug flag.  This allows debug builds to run
+                // on machines that don't have the debug runtime installed.
+                creationFlags &= ~D3D11.DeviceCreationFlags.Debug;
+                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
+                {
+#if WINDOWS
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+#endif
+#if WINDOWS_UAP
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+#endif
+                }
+            }
+
+            _mainContext = new GraphicsContext(this);
+
+#if WINDOWS_UAP
+            // Create the Direct2D device.
+            using (DXGI.Device dxgiDevice = _d3dDevice.QueryInterface<DXGI.Device>())
+                _d2dDevice = new D2D.Device(_d2dFactory, dxgiDevice);
+
+            // Create Direct2D context
+            _d2dContext = new D2D.DeviceContext(_d2dDevice, D2D.DeviceContextOptions.None);
+#endif
+
+
+            _capabilities = new GraphicsCapabilities();
+            _capabilities.PlatformInitialize(this);
+
+#if WINDOWS_UAP
+            this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
+#endif
+        }
+
         /// <summary>
         /// Creates resources not tied the active graphics device.
         /// </summary>
-        internal void CreateDeviceIndependentResources()
+        private void CreateDeviceIndependentResources()
         {
 #if WINDOWS_UAP
 
-            SharpDX.Direct2D1.DebugLevel debugLevel = SharpDX.Direct2D1.DebugLevel.None;
+            D2D.DebugLevel debugLevel = D2D.DebugLevel.None;
 
 #if DEBUG && WINDOWS_UAP
-            debugLevel |= SharpDX.Direct2D1.DebugLevel.Information;
+            debugLevel |= D2D.DebugLevel.Information;
 #endif
 
             // Allocate new references
-            _d2dFactory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded, debugLevel);
+            _d2dFactory = new D2D.Factory1(D2D.FactoryType.SingleThreaded, debugLevel);
             _dwriteFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
             _wicFactory = new SharpDX.WIC.ImagingFactory2();
 #endif
@@ -733,22 +853,22 @@ namespace Microsoft.Xna.Platform.Graphics
             // Now we set up the Direct2D render target bitmap linked to the swapchain. 
             // Whenever we render to this bitmap, it will be directly rendered to the 
             // swapchain associated with the window.
-            SharpDX.Direct2D1.BitmapProperties1 bitmapProperties = new SharpDX.Direct2D1.BitmapProperties1(
-                new SharpDX.Direct2D1.PixelFormat(format, SharpDX.Direct2D1.AlphaMode.Premultiplied),
+            D2D.BitmapProperties1 bitmapProperties = new D2D.BitmapProperties1(
+                new D2D.PixelFormat(format, D2D.AlphaMode.Premultiplied),
                 _dpi, _dpi,
-                SharpDX.Direct2D1.BitmapOptions.Target | SharpDX.Direct2D1.BitmapOptions.CannotDraw);
+                D2D.BitmapOptions.Target | D2D.BitmapOptions.CannotDraw);
 
             // Direct2D needs the dxgi version of the backbuffer surface pointer.
             // Get a D2D surface from the DXGI back buffer to use as the D2D render target.
             using (DXGI.Surface dxgiBackBuffer = _swapChain.GetBackBuffer<DXGI.Surface>(0))
-                _bitmapTarget = new SharpDX.Direct2D1.Bitmap1(_d2dContext, dxgiBackBuffer, bitmapProperties);
+                _bitmapTarget = new D2D.Bitmap1(_d2dContext, dxgiBackBuffer, bitmapProperties);
 
             // So now we can set the Direct2D render target.
             _d2dContext.Target = _bitmapTarget;
 
             // Set D2D text anti-alias mode to Grayscale to 
             // ensure proper rendering of text on intermediate surfaces.
-            _d2dContext.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Grayscale;
+            _d2dContext.TextAntialiasMode = D2D.TextAntialiasMode.Grayscale;
 #endif
         }
 

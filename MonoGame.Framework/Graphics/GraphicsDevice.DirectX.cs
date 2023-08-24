@@ -5,16 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
-using SharpDX.Direct3D;
-using DXGI = SharpDX.DXGI;
-using D3D11 = SharpDX.Direct3D11;
-
-#if WINDOWS_UAP
-using Windows.Graphics.Display;
-#endif
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -30,121 +21,14 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return ((ConcreteGraphicsDevice)_strategy)._d3dDevice; }
         }
 
-        private void PlatformSetup()
+        /// <summary>
+        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
+        /// </summary>
+        public void Flush()
         {
-            ((ConcreteGraphicsDevice)_strategy).CreateDeviceIndependentResources();
-
-            // Windows requires BGRA support out of DX.
-            D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
-
-            if (GraphicsAdapter.UseDebugLayers)
-            {
-                creationFlags |= D3D11.DeviceCreationFlags.Debug;
-            }
-
-#if DEBUG && WINDOWS_UAP
-            creationFlags |= D3D11.DeviceCreationFlags.Debug;
-#endif
-            
-            // Pass the preferred feature levels based on the
-            // target profile that may have been set by the user.
-            FeatureLevel[] featureLevels;
-            List<FeatureLevel> featureLevelsList = new List<FeatureLevel>();
-            // create device with the highest available profile
-            featureLevelsList.Add(FeatureLevel.Level_11_1);
-            featureLevelsList.Add(FeatureLevel.Level_11_0);
-            featureLevelsList.Add(FeatureLevel.Level_10_1);
-            featureLevelsList.Add(FeatureLevel.Level_10_0);
-            featureLevelsList.Add(FeatureLevel.Level_9_3);
-            featureLevelsList.Add(FeatureLevel.Level_9_2);
-            featureLevelsList.Add(FeatureLevel.Level_9_1);
-#if DEBUG
-            featureLevelsList.Clear();
-            // create device specific to profile
-            if (GraphicsProfile == GraphicsProfile.FL11_1) featureLevelsList.Add(FeatureLevel.Level_11_1);
-            if (GraphicsProfile == GraphicsProfile.FL11_0) featureLevelsList.Add(FeatureLevel.Level_11_0);
-            if (GraphicsProfile == GraphicsProfile.FL10_1) featureLevelsList.Add(FeatureLevel.Level_10_1);
-            if (GraphicsProfile == GraphicsProfile.FL10_0) featureLevelsList.Add(FeatureLevel.Level_10_0);
-            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(FeatureLevel.Level_9_3);
-            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(FeatureLevel.Level_9_1);
-#endif
-            featureLevels = featureLevelsList.ToArray();
-
-            DriverType driverType = DriverType.Hardware;   //Default value
-
-#if WINDOWS
-            switch (GraphicsAdapter.UseDriverType)
-            {
-                case GraphicsAdapter.DriverType.Reference:
-                    driverType = DriverType.Reference;
-                    break;
-
-                case GraphicsAdapter.DriverType.FastSoftware:
-                    driverType = DriverType.Warp;
-                    break;
-            }
-#endif
-
-#if WINDOWS_UAP
-            driverType = GraphicsAdapter.UseReferenceDevice
-                       ? DriverType.Reference
-                       : DriverType.Hardware;
-#endif
-
-            try
-            {
-                // Create the Direct3D device.
-                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
-                {
-#if WINDOWS
-                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
-#endif
-#if WINDOWS_UAP
-                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
-#endif
-                }
-
-#if WINDOWS_UAP
-                // Necessary to enable video playback
-                SharpDX.Direct3D.DeviceMultithread multithread = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.QueryInterface<SharpDX.Direct3D.DeviceMultithread>();
-                multithread.SetMultithreadProtected(true);
-#endif
-            }
-            catch (SharpDXException)
-            {
-                // Try again without the debug flag.  This allows debug builds to run
-                // on machines that don't have the debug runtime installed.
-                creationFlags &= ~D3D11.DeviceCreationFlags.Debug;
-                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
-                {
-#if WINDOWS
-                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
-#endif
-#if WINDOWS_UAP
-                    ((ConcreteGraphicsDevice)_strategy)._d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
-#endif
-                }
-            }
-
-            _strategy._mainContext = new GraphicsContext(_strategy);
-
-#if WINDOWS_UAP
-            // Create the Direct2D device.
-            using (DXGI.Device dxgiDevice = ((ConcreteGraphicsDevice)_strategy)._d3dDevice.QueryInterface<DXGI.Device>())
-                ((ConcreteGraphicsDevice)_strategy)._d2dDevice = new SharpDX.Direct2D1.Device(((ConcreteGraphicsDevice)_strategy)._d2dFactory, dxgiDevice);
-
-            // Create Direct2D context
-            ((ConcreteGraphicsDevice)_strategy)._d2dContext = new SharpDX.Direct2D1.DeviceContext(((ConcreteGraphicsDevice)_strategy)._d2dDevice, SharpDX.Direct2D1.DeviceContextOptions.None);
-#endif
-
-
-            _strategy._capabilities = new GraphicsCapabilities();
-            _strategy._capabilities.PlatformInitialize(this);
-
-#if WINDOWS_UAP
-            ((ConcreteGraphicsDevice)_strategy).Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
-#endif
+            ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
         }
+
 
         internal void OnPresentationChanged()
         {
@@ -214,13 +98,6 @@ namespace Microsoft.Xna.Framework.Graphics
             SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._d3dDevice);
         }
 
-        /// <summary>
-        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
-        /// </summary>
-        public void Flush()
-        {
-            ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
-        }
 
     }
 }
