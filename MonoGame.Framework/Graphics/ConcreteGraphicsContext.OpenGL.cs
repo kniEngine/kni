@@ -616,7 +616,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 // Setup the vertex declaration to point at the VB data.
-                vertexDeclaration.GraphicsDevice = this.Context.Device;
+                vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
                 PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vbHandle.AddrOfPinnedObject());
 
                 //Draw
@@ -657,7 +657,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                vertexDeclaration.GraphicsDevice = this.Context.Device;
+                vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
                 PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
 
                 //Draw
@@ -701,7 +701,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                vertexDeclaration.GraphicsDevice = this.Context.Device;
+                vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
                 PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
 
                 //Draw

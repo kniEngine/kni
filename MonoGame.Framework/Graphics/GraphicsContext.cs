@@ -24,7 +24,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal GraphicsMetrics _graphicsMetrics;
 
         internal GraphicsContextStrategy Strategy { get { return _strategy; } }
-        internal GraphicsDevice Device { get { return _deviceStrategy.Device; } }
         internal GraphicsDeviceStrategy DeviceStrategy { get { return _deviceStrategy; } }
 
 

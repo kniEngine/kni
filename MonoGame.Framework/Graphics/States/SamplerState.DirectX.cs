@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _state = new SharpDX.Direct3D11.SamplerState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
-            Debug.Assert(GraphicsDevice == context.Device, "The state was created for a different device!");
+            Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
             return _state;
         }
