@@ -301,10 +301,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 Strategy._currentRenderTargetCount = 0;
 
                 ((ConcreteGraphicsContext)Strategy).PlatformApplyDefaultRenderTarget();
-                clearTarget = this.Device.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+                clearTarget = this.Device.Strategy.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
 
-                renderTargetWidth = this.Device.PresentationParameters.BackBufferWidth;
-                renderTargetHeight = this.Device.PresentationParameters.BackBufferHeight;
+                renderTargetWidth = this.Device.Strategy.PresentationParameters.BackBufferWidth;
+                renderTargetHeight = this.Device.Strategy.PresentationParameters.BackBufferHeight;
             }
             else
             {

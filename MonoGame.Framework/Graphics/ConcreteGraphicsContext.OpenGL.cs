@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Rectangle scissorRect = _scissorRectangle;
             if (!IsRenderTargetBound)
-                scissorRect.Y = this.Context.Device.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
+                scissorRect.Y = this.Context.Device.Strategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
             GraphicsExtensions.CheckGLError();
             _scissorRectangleDirty = false;
@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this.IsRenderTargetBound)
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
             else
-                GL.Viewport(_viewport.X, this.Context.Device.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+                GL.Viewport(_viewport.X, this.Context.Device.Strategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
             GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);

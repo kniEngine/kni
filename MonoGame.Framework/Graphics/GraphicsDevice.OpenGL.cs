@@ -81,8 +81,8 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(PresentationParameters.PresentationInterval);
+            ((ConcreteGraphicsContext)_strategy._mainContext.Strategy).MakeCurrent(_strategy.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(_strategy.PresentationParameters.PresentationInterval);
             Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
 #endif
 
