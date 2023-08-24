@@ -248,7 +248,7 @@ namespace MonoGame.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    _concreteGame.GraphicsDevice.OnPresentationChanged();
+                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).OnPresentationChanged();
             }
         }
 

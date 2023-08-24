@@ -372,7 +372,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 deviceResettingHandler(this, EventArgs.Empty);
 
             // Update the back buffer.
-            OnPresentationChanged();
+            ((ConcreteGraphicsDevice)Strategy).OnPresentationChanged();
             
             var presentationChangedHandler = PresentationChanged;
             if (presentationChangedHandler != null)

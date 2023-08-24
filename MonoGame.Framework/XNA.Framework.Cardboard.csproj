@@ -68,7 +68,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Graphics\GraphicsDevice.Cardboard.cs" />
   </ItemGroup>
 
   <ItemGroup>

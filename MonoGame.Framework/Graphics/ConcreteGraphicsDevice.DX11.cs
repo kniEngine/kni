@@ -531,7 +531,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-        internal void CreateSizeDependentResources()
+        private void CreateSizeDependentResources()
         {
             // Clamp MultiSampleCount
             PresentationParameters.MultiSampleCount =
@@ -1010,6 +1010,12 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             return new ConcreteGraphicsContext(context, d3dContext);
+        }
+
+        internal void OnPresentationChanged()
+        {
+            CreateSizeDependentResources();
+            _mainContext.ApplyRenderTargets(null);
         }
 
         internal void PlatformDispose()

@@ -3,7 +3,6 @@
   <ItemGroup>
     <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
-    <Compile Include="Graphics\GraphicsDevice.Ref.cs" />
     <Compile Include="Graphics\OcclusionQuery.Ref.cs" />
     <Compile Include="Graphics\RenderTarget2D.Ref.cs" />
     <Compile Include="Graphics\RenderTarget3D.Ref.cs" />

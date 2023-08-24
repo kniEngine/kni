@@ -197,6 +197,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context, glContext);
         }
 
+        internal void OnPresentationChanged()
+        {
+            _mainContext.ApplyRenderTargets(null);
+        }
+
         internal void PlatformDispose()
         {
         }

@@ -12,6 +12,7 @@ using Microsoft.Xna.Platform;
 using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework
 {
@@ -233,7 +234,7 @@ namespace Microsoft.Xna.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    _concreteGame.GraphicsDevice.OnPresentationChanged();
+                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).OnPresentationChanged();
             }
         }
 

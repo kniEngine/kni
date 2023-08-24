@@ -64,6 +64,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context);
         }
 
+        internal void OnPresentationChanged()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         internal void PlatformDispose()
         {
         }
