@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetup()
         {
-            _strategy._mainContext = new GraphicsContext(this);
+            _strategy._mainContext = new GraphicsContext(_strategy);
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string

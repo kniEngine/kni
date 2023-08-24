@@ -11,6 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class GraphicsDeviceStrategy : IDisposable
     {
+        GraphicsDevice _device;
         private bool _isDisposed;
 
         private GraphicsAdapter _graphicsAdapter;
@@ -31,6 +32,8 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         public readonly Dictionary<int, Effect> EffectCache = new Dictionary<int, Effect>();
 
+
+        internal GraphicsDevice Device { get { return _device; } }
 
         public bool IsDisposed
         {
@@ -69,7 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GraphicsContext CurrentContext { get { return _mainContext; } }
 
 
-        protected GraphicsDeviceStrategy(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
+        protected GraphicsDeviceStrategy(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
             if (adapter == null)
                 throw new ArgumentNullException("adapter");
@@ -78,6 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
+            this._device = device;
             this._graphicsAdapter = adapter;
             this._graphicsProfile = graphicsProfile;
             this._useHalfPixelOffset = preferHalfPixelOffset;
@@ -140,6 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (disposing)
             {
 
+                _device = null;
                 _isDisposed = true;
             }
 

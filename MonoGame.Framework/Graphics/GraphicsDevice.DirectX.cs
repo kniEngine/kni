@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            _strategy._mainContext = new GraphicsContext(this);
+            _strategy._mainContext = new GraphicsContext(_strategy);
 
 #if WINDOWS_UAP
             // Create the Direct2D device.

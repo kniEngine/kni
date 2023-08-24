@@ -16,21 +16,25 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed class GraphicsContext : IDisposable
     {
-        private GraphicsDevice _device;
         private GraphicsContextStrategy _strategy;
+        private GraphicsDeviceStrategy _deviceStrategy;
         private bool _isDisposed = false;
 
 
         internal GraphicsMetrics _graphicsMetrics;
 
         internal GraphicsContextStrategy Strategy { get { return _strategy; } }
-        internal GraphicsDevice Device { get { return _device; } }
+        internal GraphicsDevice Device { get { return _deviceStrategy.Device; } }
 
 
-        internal GraphicsContext(GraphicsDevice device)
+        internal GraphicsContext(GraphicsDevice device) : this(device.Strategy)
         {
-            _device = device;
-            _strategy = device.Strategy.CreateGraphicsContextStrategy(this);
+        }
+
+        internal GraphicsContext(GraphicsDeviceStrategy deviceStrategy)
+        {
+            _deviceStrategy = deviceStrategy;
+            _strategy = deviceStrategy.CreateGraphicsContextStrategy(this);
         }
 
 
@@ -804,7 +808,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy.Dispose();
 
                 _strategy = null;
-                _device = null;
+                _deviceStrategy = null;
                 _isDisposed = true;
             }
         }
