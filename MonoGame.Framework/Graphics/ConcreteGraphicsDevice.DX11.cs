@@ -1012,6 +1012,70 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context, d3dContext);
         }
 
+        internal void PlatformDispose()
+        {
+            // make sure to release full screen or this might cause issues on exit
+            if (_swapChain != null && _swapChain.IsFullScreen)
+                _swapChain.SetFullscreenState(false, null);
+
+            SharpDX.Utilities.Dispose(ref _renderTargetView);
+            SharpDX.Utilities.Dispose(ref _depthStencilView);
+
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16 != null)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer16.Dispose();
+            if (((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32 != null)
+                ((ConcreteGraphicsContext)_mainContext.Strategy)._userIndexBuffer32.Dispose();
+
+            foreach (DynamicVertexBuffer vb in ((ConcreteGraphicsContext)_mainContext.Strategy)._userVertexBuffers.Values)
+                vb.Dispose();
+
+            SharpDX.Utilities.Dispose(ref _swapChain);
+
+#if WINDOWS_UAP
+
+            if (_bitmapTarget != null)
+            {
+                _bitmapTarget.Dispose();
+                _depthStencilView = null;
+            }
+            if (_d2dDevice != null)
+            {
+                _d2dDevice.Dispose();
+                _d2dDevice = null;
+            }
+            if (_d2dContext != null)
+            {
+                _d2dContext.Target = null;
+                _d2dContext.Dispose();
+                _d2dContext = null;
+            }
+            if (_d2dFactory != null)
+            {
+                _d2dFactory.Dispose();
+                _d2dFactory = null;
+            }
+            if (_dwriteFactory != null)
+            {
+                _dwriteFactory.Dispose();
+                _dwriteFactory = null;
+            }
+            if (_wicFactory != null)
+            {
+                _wicFactory.Dispose();
+                _wicFactory = null;
+            }
+
+#endif
+
+            if (_mainContext != null)
+            {
+                _mainContext.Dispose();
+                _mainContext = null;
+            }
+
+            SharpDX.Utilities.Dispose(ref _d3dDevice);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

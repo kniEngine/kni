@@ -64,6 +64,10 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context);
         }
 
+        internal void PlatformDispose()
+        {
+        }
+
 
         protected override void Dispose(bool disposing)
         {
