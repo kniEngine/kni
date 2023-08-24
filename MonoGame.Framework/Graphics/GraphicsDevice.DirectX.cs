@@ -30,6 +30,15 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return ((ConcreteGraphicsDevice)_strategy)._d3dDevice; }
         }
 
+        /// <summary>
+        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
+        /// </summary>
+        public void Flush()
+        {
+            ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
+        }
+
+
         private void PlatformSetup()
         {
             ((ConcreteGraphicsDevice)_strategy).CreateDeviceIndependentResources();
@@ -214,13 +223,6 @@ namespace Microsoft.Xna.Framework.Graphics
             SharpDX.Utilities.Dispose(ref ((ConcreteGraphicsDevice)_strategy)._d3dDevice);
         }
 
-        /// <summary>
-        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
-        /// </summary>
-        public void Flush()
-        {
-            ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
-        }
 
     }
 }
