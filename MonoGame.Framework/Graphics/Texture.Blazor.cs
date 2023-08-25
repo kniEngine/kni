@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
-            var GL = ((ConcreteGraphicsContext)graphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = graphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                ((ConcreteGraphicsContext)GraphicsDevice.CurrentContext.Strategy).PlatformUnbindRenderTarget((IRenderTarget)this);
+                GraphicsDevice.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
             }
         }
 

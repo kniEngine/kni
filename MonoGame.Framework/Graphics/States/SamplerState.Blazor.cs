@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else
                 Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
-            var GL = ((ConcreteGraphicsContext)context.Strategy).GL;
+            var GL = context.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             switch (Filter)
             {

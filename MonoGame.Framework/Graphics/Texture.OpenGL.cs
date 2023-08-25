@@ -464,7 +464,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                ((ConcreteGraphicsContext)GraphicsDevice.CurrentContext.Strategy).PlatformUnbindRenderTarget((IRenderTarget)this);
+                GraphicsDevice.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
             }
         }
 

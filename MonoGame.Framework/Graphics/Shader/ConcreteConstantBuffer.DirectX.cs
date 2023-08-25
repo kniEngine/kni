@@ -42,9 +42,9 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
             desc.SizeInBytes = Buffer.Length;
 
-            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 return new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
@@ -67,15 +67,15 @@ namespace Microsoft.Xna.Framework.Graphics
             // Update the hardware buffer.
             if (Dirty)
             {
-                ((ConcreteGraphicsContext)contextStrategy).D3dContext.UpdateSubresource(Buffer, _cbuffer);
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(Buffer, _cbuffer);
                 Dirty = false;
             }
 
             // Set the buffer to the right stage.
             switch (stage)
             {
-                case ShaderStage.Pixel: ((ConcreteGraphicsContext)contextStrategy).D3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
-                case ShaderStage.Vertex: ((ConcreteGraphicsContext)contextStrategy).D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Pixel: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
+                case ShaderStage.Vertex: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
                 default: throw new System.ArgumentException();
             }
         }

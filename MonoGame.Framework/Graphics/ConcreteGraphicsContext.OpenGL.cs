@@ -904,7 +904,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
 #if DESKTOPGL
-            GL.DrawBuffers(_currentRenderTargetCount, ((ConcreteGraphicsContext)this)._drawBuffers);
+            GL.DrawBuffers(_currentRenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
 #endif
 
             // Reset the raster state because we flip vertices

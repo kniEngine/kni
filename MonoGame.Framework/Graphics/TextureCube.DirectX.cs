@@ -83,9 +83,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             using (var stagingTex = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc))
             {
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
                     var subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
@@ -161,9 +161,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     Right = rect.Right
                 };
 
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }

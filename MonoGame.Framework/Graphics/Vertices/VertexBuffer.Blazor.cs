@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (vbo == null)
             {
-                var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+                var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                 vbo = GL.CreateBuffer();
                 GraphicsExtensions.CheckGLError();
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GenerateIfRequired();
 
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
             GraphicsExtensions.CheckGLError();

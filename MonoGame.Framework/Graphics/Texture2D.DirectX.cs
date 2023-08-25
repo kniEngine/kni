@@ -71,9 +71,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(0, level);
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
                 }
@@ -104,9 +104,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
                 }
@@ -145,9 +145,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 stagingTexture = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
             }
 
-            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
 

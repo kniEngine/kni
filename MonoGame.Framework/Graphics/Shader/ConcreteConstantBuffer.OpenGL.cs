@@ -65,13 +65,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // NOTE: We assume here the program has
             // already been set on the device.
-            ShaderProgram program = ((ConcreteGraphicsContext)contextStrategy).ShaderProgram;
+            ShaderProgram program = contextStrategy.ToConcrete<ConcreteGraphicsContext>().ShaderProgram;
 
             // If the program changed then lookup the
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                int location = ((ConcreteGraphicsContext)contextStrategy).GetUniformLocation(program, Name);
+                int location = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GetUniformLocation(program, Name);
                 if (location == -1)
                     return;
 
