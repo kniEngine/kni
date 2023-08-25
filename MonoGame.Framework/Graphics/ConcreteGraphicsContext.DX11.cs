@@ -246,9 +246,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(this.D3dContext.VertexShader);
+            this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.VertexShader);
             ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(this.D3dContext.VertexShader);
-            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(this.D3dContext.PixelShader);
+            this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.PixelShader);
             ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(this.D3dContext.PixelShader);
         }
 
@@ -571,8 +571,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
-                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
+                this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
+                this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)
