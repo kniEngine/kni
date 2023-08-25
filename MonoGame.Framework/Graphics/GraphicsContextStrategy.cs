@@ -405,9 +405,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct;
 
 
-        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContextStrategy contextStrategy);
-        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity);
-        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity);
+        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy();
+        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
+        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 
 
         #region IDisposable Members

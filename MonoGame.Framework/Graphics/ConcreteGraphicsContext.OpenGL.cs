@@ -721,19 +721,19 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy(GraphicsContextStrategy contextStrategy)
+        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {
-            return new ConcreteGraphicsDebug(contextStrategy);
+            return new ConcreteGraphicsDebug(this);
         }
 
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
+        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity)
         {
-            return new ConcreteTextureCollection(contextStrategy, capacity);
+            return new ConcreteTextureCollection(this, capacity);
         }
 
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
+        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity)
         {
-            return new ConcreteSamplerStateCollection(contextStrategy, capacity);
+            return new ConcreteSamplerStateCollection(this, capacity);
         }
 
 

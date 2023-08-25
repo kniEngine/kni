@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal TextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            _strategy = contextStrategy.CreateTextureCollectionStrategy(contextStrategy, capacity);
+            _strategy = contextStrategy.CreateTextureCollectionStrategy(capacity);
 
         }
 
