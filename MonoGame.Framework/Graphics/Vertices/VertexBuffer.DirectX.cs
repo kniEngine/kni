@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
 
-                                d3dContext.CopyResource(_buffer, stagingBuffer);
+                            d3dContext.CopyResource(_buffer, stagingBuffer);
 
                             // Map the staging resource to a CPU accessible memory
                             var box = d3dContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read,
