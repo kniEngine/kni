@@ -226,9 +226,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _pixelConstantBuffers.Apply(this);
 
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply();
+            this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
             this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply();
+            this.SamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
         }
 
         private int GetCurrentShaderProgramHash2()

@@ -96,5 +96,11 @@ namespace Microsoft.Xna.Platform.Graphics
         public virtual void Dirty()
         {
         }
+
+        internal T ToConcrete<T>() where T : SamplerStateCollectionStrategy
+        {
+            return (T)this;
+        }
+
     }
 }
