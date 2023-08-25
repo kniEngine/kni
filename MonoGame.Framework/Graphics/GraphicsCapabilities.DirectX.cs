@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
 
-            _maxMultiSampleCount = ((ConcreteGraphicsDevice)deviceStrategy).GetMaxMultiSampleCount(deviceStrategy.PresentationParameters.BackBufferFormat);
+            _maxMultiSampleCount = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(deviceStrategy.PresentationParameters.BackBufferFormat);
         }
 
     }

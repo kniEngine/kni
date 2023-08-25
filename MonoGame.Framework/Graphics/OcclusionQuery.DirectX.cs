@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Flags = QueryFlags.None,
                 Type = QueryType.Occlusion
             };
-            _query = new Query(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, queryDescription);
+            _query = new Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDescription);
         }
         
         private void PlatformBegin()

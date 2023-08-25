@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
-            _msSampleDescription = ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
+            _msSampleDescription = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
 
             GenerateIfRequired();
         }
@@ -59,12 +59,12 @@ namespace Microsoft.Xna.Framework.Graphics
                         renderTargetViewDescription.Texture2DArray.MipSlice = 0;
                     }
                     _renderTargetViews[i] = new RenderTargetView(
-                        ((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, viewTex, renderTargetViewDescription);
+                        GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, viewTex, renderTargetViewDescription);
                 }
             }
             else
             {
-                _renderTargetViews = new[] { new RenderTargetView(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, viewTex) };
+                _renderTargetViews = new[] { new RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, viewTex) };
             }
 
             // If we don't need a depth buffer then we're done.
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create a descriptor for the depth/stencil buffer.
             // Allocate a 2-D surface as the depth/stencil buffer.
             // Create a DepthStencil view on this surface to use on bind.
-            using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, new Texture2DDescription
+            using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, new Texture2DDescription
             {
                 Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
                 ArraySize = 1,
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }))
             {
                 // Create the view for binding to the device.
-                _depthStencilView = new DepthStencilView(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, depthBuffer,
+                _depthStencilView = new DepthStencilView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer,
                     new DepthStencilViewDescription()
                     {
                         Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var desc = GetMSTexture2DDescription();
 
-            return new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
+            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
         }
 
         internal virtual Texture2DDescription GetMSTexture2DDescription()

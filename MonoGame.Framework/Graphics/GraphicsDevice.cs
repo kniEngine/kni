@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void Initialize()
         {
             // Setup
-            ((ConcreteGraphicsDevice)_strategy).PlatformSetup();
+            _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformSetup();
 
 #if DEBUG
             if (DisplayMode == null)
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Setup end
 
-            ((ConcreteGraphicsDevice)_strategy).PlatformInitialize();
+            _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformInitialize();
 
             // Force set the default render states.
             _strategy._mainContext.Strategy._blendStateDirty = true;
@@ -340,7 +340,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
                 _strategy._mainContext.Strategy._rasterizerStateCullNone.Dispose();
 
-                ((ConcreteGraphicsDevice)_strategy).PlatformDispose();
+                _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformDispose();
             }
 
             var handler = Disposing;
@@ -372,7 +372,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 deviceResettingHandler(this, EventArgs.Empty);
 
             // Update the back buffer.
-            ((ConcreteGraphicsDevice)Strategy).OnPresentationChanged();
+            Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
             
             var presentationChangedHandler = PresentationChanged;
             if (presentationChangedHandler != null)

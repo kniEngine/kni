@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 resUsage = SharpDX.Direct3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice,
+            _buffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
                                                         sizeInBytes,
                                                         resUsage,
                                                         SharpDX.Direct3D11.BindFlags.IndexBuffer,
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 stagingDesc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.Read | SharpDX.Direct3D11.CpuAccessFlags.Write;
                 stagingDesc.Usage = SharpDX.Direct3D11.ResourceUsage.Staging;
                 stagingDesc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
-                using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, stagingDesc))
+                using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
                 {
                     lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {

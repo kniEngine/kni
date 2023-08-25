@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.DepthStencilState(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
+                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
 
             // NOTE: We make the assumption here that the caller has

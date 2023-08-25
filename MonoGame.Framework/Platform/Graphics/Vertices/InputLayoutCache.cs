@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
-                inputLayout = new InputLayout(((ConcreteGraphicsDevice)_graphicsDevice.Strategy).D3DDevice, _shaderByteCode, inputElements);
+                inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
             }
             catch (SharpDXException ex)
             {
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    inputLayout = new InputLayout(((ConcreteGraphicsDevice)_graphicsDevice.Strategy).D3DDevice, _shaderByteCode, inputElements);
+                    inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
 
                     // Workaround succeeded? This means that there is a vertex shader that needs
                     // to be updated.

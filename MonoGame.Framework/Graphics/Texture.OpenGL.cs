@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             bool supportsFloat = graphicsDevice.Strategy.Capabilities.SupportsFloatTextures;
             bool supportsHalfFloat = graphicsDevice.Strategy.Capabilities.SupportsHalfFloatTextures;
             bool supportsNormalized = graphicsDevice.Strategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && ((ConcreteGraphicsDevice)graphicsDevice.Strategy)._glMajorVersion == 2;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
 
             switch (format)
             {
@@ -330,7 +330,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int depth = 0;
             int stencil = 0;
 
-            if (preferredMultiSampleCount > 0 && ((ConcreteGraphicsDevice)graphicsDevice.Strategy)._supportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 color = GL.GenRenderbuffer();
                 GraphicsExtensions.CheckGLError();

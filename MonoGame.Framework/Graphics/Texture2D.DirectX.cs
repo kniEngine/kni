@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Usage = ResourceUsage.Staging;
                 desc.OptionFlags = ResourceOptionFlags.None;
 
-                stagingTexture = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
+                stagingTexture = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
@@ -260,7 +260,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // TODO: Move this to SetData() if we want to make Immutable textures!
             var desc = GetTexture2DDescription();
-            return new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc);
+            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
         }
 
         private void PlatformReload(Stream textureStream)
