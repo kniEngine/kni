@@ -274,5 +274,10 @@ namespace Microsoft.Xna.Platform
         {
 
         }
+
+        internal T ToConcrete<T>() where T : GraphicsDeviceManagerStrategy
+        {
+            return (T)this;
+        }
     }
 }

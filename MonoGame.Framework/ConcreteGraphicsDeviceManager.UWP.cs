@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform
                 this.GraphicsDevice.Dispose();
                 this.GraphicsDevice = null;
 
-                ((ConcreteGraphicsDeviceManager)this).CreateDevice(gdi);
+                this.ToConcrete<ConcreteGraphicsDeviceManager>().CreateDevice(gdi);
             }
             else
             {
