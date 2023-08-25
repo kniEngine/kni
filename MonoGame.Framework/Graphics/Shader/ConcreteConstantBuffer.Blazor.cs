@@ -40,21 +40,21 @@ namespace Microsoft.Xna.Framework.Graphics
             _shaderProgram = null;
         }
 
-        internal unsafe override void PlatformApply(GraphicsContextStrategy context, ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = ((ConcreteGraphicsContext)context).GL;
+            var GL = ((ConcreteGraphicsContext)contextStrategy).GL;
 
             // NOTE: We assume here the program has
             // already been set on the device.
-            ShaderProgram program = ((ConcreteGraphicsContext)context).ShaderProgram;
+            ShaderProgram program = ((ConcreteGraphicsContext)contextStrategy).ShaderProgram;
 
             // If the program changed then lookup the
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = ((ConcreteGraphicsContext)context).GetUniformLocation(program, Name);
+                var location = ((ConcreteGraphicsContext)contextStrategy).GetUniformLocation(program, Name);
                 if (location == null)
                     return;
 

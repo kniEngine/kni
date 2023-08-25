@@ -33,9 +33,9 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        internal void Apply(GraphicsContextStrategy context, ShaderStage stage, int slot)
+        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
-            _strategy.PlatformApply(context, stage, slot);
+            _strategy.PlatformApply(contextStrategy, stage, slot);
         }
 
         internal void Clear()
