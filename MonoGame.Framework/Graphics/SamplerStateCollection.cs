@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal SamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            _strategy = contextStrategy.CreateSamplerStateCollectionStrategy(contextStrategy, capacity);
+            _strategy = contextStrategy.CreateSamplerStateCollectionStrategy(capacity);
             
             Clear();
         }
