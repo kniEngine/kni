@@ -38,5 +38,10 @@ namespace Microsoft.Xna.Platform.Graphics
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
             
+        internal T ToConcrete<T>() where T : GraphicsAdapterStrategy
+        {
+            return (T)this;
+        }
+
     }
 }
