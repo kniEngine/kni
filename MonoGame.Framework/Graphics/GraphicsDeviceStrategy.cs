@@ -122,6 +122,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context);
 
+        internal T ToConcrete<T>() where T : GraphicsDeviceStrategy
+        {
+            return (T)this;
+        }
+
 
         #region IDisposable Members
 

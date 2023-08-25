@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsDebug(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
-            D3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)contextStrategy).D3dContext;
+            D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
             _infoQueue = d3dContext.QueryInterfaceOrNull<D3D11.InfoQueue>();
             _cachedMessages = new Queue<GraphicsDebugMessage>();

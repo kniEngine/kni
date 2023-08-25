@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public object Handle
         {
-            get { return ((ConcreteGraphicsDevice)_strategy)._d3dDevice; }
+            get { return _strategy.ToConcrete<ConcreteGraphicsDevice>()._d3dDevice; }
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Flush()
         {
-            ((ConcreteGraphicsContext)CurrentContext.Strategy).D3dContext.Flush();
+            CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();
         }
 
     }

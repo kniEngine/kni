@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         void GenerateIfRequired()
         {
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             if (ibo == null)
             {
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
         {
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GenerateIfRequired();
 

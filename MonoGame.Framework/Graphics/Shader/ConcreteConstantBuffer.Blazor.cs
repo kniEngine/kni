@@ -44,17 +44,17 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = ((ConcreteGraphicsContext)contextStrategy).GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // NOTE: We assume here the program has
             // already been set on the device.
-            ShaderProgram program = ((ConcreteGraphicsContext)contextStrategy).ShaderProgram;
+            ShaderProgram program = contextStrategy.ToConcrete<ConcreteGraphicsContext>().ShaderProgram;
 
             // If the program changed then lookup the
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = ((ConcreteGraphicsContext)contextStrategy).GetUniformLocation(program, Name);
+                var location = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GetUniformLocation(program, Name);
                 if (location == null)
                     return;
 

@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 resUsage = SharpDX.Direct3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice,
+            _buffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
                                                         sizeInBytes,
                                                         resUsage,
                                                         SharpDX.Direct3D11.BindFlags.IndexBuffer,
@@ -79,11 +79,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 stagingDesc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.Read | SharpDX.Direct3D11.CpuAccessFlags.Write;
                 stagingDesc.Usage = SharpDX.Direct3D11.ResourceUsage.Staging;
                 stagingDesc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
-                using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, stagingDesc))
+                using (var stagingBuffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
                 {
-                    lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {
-                        SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                        SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
                     }
@@ -96,9 +96,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                         SharpDX.DataPointer DataPointer = new SharpDX.DataPointer(dataPtr, elementCount * TsizeInBytes);
 
-                        lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                        lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                         {
-                            SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                            SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             // Map the staging resource to a CPU accessible memory
                             var box = d3dContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
@@ -128,9 +128,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
                     mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
 
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
                     SharpDX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
@@ -157,9 +157,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     region.Left = offsetInBytes;
                     region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
-                    lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {
-                        SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                        SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.UpdateSubresource(box, _buffer, 0, region);
                     }

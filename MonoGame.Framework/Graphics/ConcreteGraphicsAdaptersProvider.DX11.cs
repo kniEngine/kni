@@ -107,18 +107,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     modes.Add(mode);
 
-                    if (((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode == null)
+                    if (adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null)
                     {
                         if (mode.Width == desktopWidth && mode.Height == desktopHeight && mode.Format == SurfaceFormat.Color)
-                            ((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode = mode;
+                            adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = mode;
                     }
                 }
             }
 
-            ((ConcreteGraphicsAdapter)adapter.Strategy)._supportedDisplayModes = new DisplayModeCollection(modes);
+            adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._supportedDisplayModes = new DisplayModeCollection(modes);
 
-            if (((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
-                ((ConcreteGraphicsAdapter)adapter.Strategy)._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+            if (adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
+                adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
 
             return adapter;
         }

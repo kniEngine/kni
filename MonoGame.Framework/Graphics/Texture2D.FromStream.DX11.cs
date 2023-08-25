@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, s);
                     DataRectangle rect = new DataRectangle(s.DataPointer, bmpSource.Size.Width * 4);
-                    textureResource = new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)graphicsDevice.Strategy).D3DDevice, desc, rect);
+                    textureResource = new SharpDX.Direct3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
                 }
                 texture.SetTextureInternal_DX(textureResource);
 

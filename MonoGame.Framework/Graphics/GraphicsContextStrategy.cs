@@ -409,6 +409,11 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 
+        internal T ToConcrete<T>() where T : GraphicsContextStrategy
+        {
+            return (T)this;
+        }
+
 
         #region IDisposable Members
 

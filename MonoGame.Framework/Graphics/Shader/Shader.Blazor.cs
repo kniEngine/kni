@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_shaderHandle != null)
                 return _shaderHandle;
 
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             //
             _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? WebGLShaderType.VERTEX : WebGLShaderType.FRAGMENT);
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void GetVertexAttributeLocations(WebGLProgram program)
         {
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             for (int i = 0; i < Attributes.Length; i++)
             {
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ApplySamplerTextureUnits(WebGLProgram program)
         {
-            var GL = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).GL;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // Assign the texture unit index to the sampler uniforms.
             foreach (var sampler in Samplers)

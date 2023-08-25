@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform
                 this.GraphicsDevice.Dispose();
                 this.GraphicsDevice = null;
 
-                ((ConcreteGraphicsDeviceManager)this).CreateDevice(gdi);
+                this.ToConcrete<ConcreteGraphicsDeviceManager>().CreateDevice(gdi);
             }
             else
             {
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Platform
                 // For a UAP app we need to re-apply the
                 // render target before every draw.
                 // I guess the OS changes it and doesn't restore it?
-                ((ConcreteGraphicsContext)device.CurrentContext.Strategy).UAP_ResetRenderTargets();
+                device.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().UAP_ResetRenderTargets();
             }
 
             return true;

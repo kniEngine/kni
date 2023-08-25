@@ -106,12 +106,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if DESKTOPGL
             // Initialize draw buffer attachment array
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers = new DrawBuffersEnum[this.Capabilities.MaxDrawBuffers];
-			for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers.Length; i++)
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[this.Capabilities.MaxDrawBuffers];
+			for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
+                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
         internal void PlatformInitialize()
@@ -136,9 +136,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
             _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
         }
 
 
@@ -147,11 +147,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._enabledVertexAttributes.Clear();
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs.
             ClearProgramCache();
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._shaderProgram = null;
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._shaderProgram = null;
 
             if (this.Capabilities.SupportsFramebufferObjectARB
             ||  this.Capabilities.SupportsFramebufferObjectEXT)
@@ -171,9 +171,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
             _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0, -1);
 
 
             // Force set the default render states.
@@ -310,7 +310,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            ((ConcreteGraphicsContext)_mainContext.Strategy).MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
             Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
 #endif

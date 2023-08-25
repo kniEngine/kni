@@ -246,10 +246,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply(this.D3dContext.VertexShader);
-            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply(this.D3dContext.VertexShader);
-            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply(this.D3dContext.PixelShader);
-            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply(this.D3dContext.PixelShader);
+            this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.VertexShader);
+            this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.VertexShader);
+            this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.PixelShader);
+            this.SamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.PixelShader);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
@@ -552,8 +552,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Set the default swap chain.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentRenderTargets[0] = ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._renderTargetView;
-            _currentDepthStencilView = ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._depthStencilView;
+            _currentRenderTargets[0] = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._renderTargetView;
+            _currentDepthStencilView = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._depthStencilView;
 
             lock (this.D3dContext)
             {
@@ -571,8 +571,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.D3dContext)
             {
-                ((ConcreteTextureCollection)this.VertexTextures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
-                ((ConcreteTextureCollection)this.Textures.Strategy).ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
+                this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
+                this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
             }
 
             for (int i = 0; i < _currentRenderTargetCount; i++)

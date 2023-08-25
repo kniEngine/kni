@@ -91,13 +91,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private void CreatePixelShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Pixel);
-            _pixelShader = new PixelShader(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, _shaderBytecode);
+            _pixelShader = new PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode);
         }
 
         private void CreateVertexShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Vertex);
-            _vertexShader = new VertexShader(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, _shaderBytecode, null);
+            _vertexShader = new VertexShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode, null);
             _inputLayouts = new InputLayoutCache(GraphicsDevice, Bytecode);
         }
     }

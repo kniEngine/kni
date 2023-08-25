@@ -56,21 +56,21 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // create context.
             _mainContext = new GraphicsContext(this);
-            GraphicsExtensions.GL = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext; // for GraphicsExtensions.CheckGLError()
+            GraphicsExtensions.GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
             _capabilities = new GraphicsCapabilities();
             _capabilities.PlatformInitialize(this);
 
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
         internal void PlatformInitialize()
         {
             // set actual backbuffer size
-            PresentationParameters.BackBufferWidth = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext.Canvas.Width;
-            PresentationParameters.BackBufferHeight = ((ConcreteGraphicsContext)_mainContext.Strategy).GlContext.Canvas.Height;
+            PresentationParameters.BackBufferWidth = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Width;
+            PresentationParameters.BackBufferHeight = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Height;
 
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
@@ -90,13 +90,13 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContext)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualBlendState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
 
-            ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos.Length; i++)
-                ((ConcreteGraphicsContext)_mainContext.Strategy)._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
 
         internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
         {
-            var GL = ((ConcreteGraphicsContext)CurrentContext.Strategy).GL;
+            var GL = CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();

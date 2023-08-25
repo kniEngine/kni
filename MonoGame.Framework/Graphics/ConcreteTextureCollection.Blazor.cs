@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
-            var GL = ((ConcreteGraphicsContext)_contextStrategy).GL;
+            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {

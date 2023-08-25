@@ -297,7 +297,7 @@ namespace Microsoft.Xna.Framework
 					0, 0,
 					pp.BackBufferWidth, pp.BackBufferHeight);
                 
-                ((ConcreteGraphicsDevice)gds.GraphicsDevice.Strategy)._glDefaultFramebuffer = _framebuffer;
+                gds.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer = _framebuffer;
 			}
 		}
 

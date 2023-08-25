@@ -21,14 +21,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 Flags = QueryFlags.None,
                 Type = QueryType.Occlusion
             };
-            _query = new Query(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, queryDescription);
+            _query = new Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDescription);
         }
         
         private void PlatformBegin()
         {
-            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.Begin(_query);
             }
@@ -36,9 +36,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformEnd()
         {
-            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.End(_query);
             }
@@ -49,9 +49,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ulong count;
             bool isComplete;
 
-            lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 isComplete = d3dContext.GetData(_query, out count);
             }

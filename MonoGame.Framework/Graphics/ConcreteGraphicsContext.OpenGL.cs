@@ -249,10 +249,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
-            ((ConcreteTextureCollection)this.VertexTextures.Strategy).PlatformApply();
-            ((ConcreteSamplerStateCollection)this.VertexSamplerStates.Strategy).PlatformApply();
-            ((ConcreteTextureCollection)this.Textures.Strategy).PlatformApply();
-            ((ConcreteSamplerStateCollection)this.SamplerStates.Strategy).PlatformApply();
+            this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
+            this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
+            this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
+            this.SamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
         }
 
         private int GetCurrentShaderProgramHash2()
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             int programHash = GetCurrentShaderProgramHash2();
-            ShaderProgram shaderProgram = ((ConcreteGraphicsDevice)this.Context.DeviceStrategy).GetProgram(VertexShader, PixelShader, programHash);
+            ShaderProgram shaderProgram = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetProgram(VertexShader, PixelShader, programHash);
             if (shaderProgram.Program == -1)
                 return;
 
@@ -762,7 +762,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var renderTargetBinding = _currentRenderTargetBindings[0];
             var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._supportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0 && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 int glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
@@ -815,9 +815,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._supportsInvalidateFramebuffer)
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer)
                 {
-                    Debug.Assert(((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._supportsInvalidateFramebuffer);
+                    Debug.Assert(this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GraphicsExtensions.CheckGLError();
                 }
@@ -845,7 +845,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ((ConcreteGraphicsDevice)this.Context.DeviceStrategy)._glDefaultFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
             GraphicsExtensions.CheckGLError();
 
             // Reset the raster state because we flip vertices
@@ -904,7 +904,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
 #if DESKTOPGL
-            GL.DrawBuffers(_currentRenderTargetCount, ((ConcreteGraphicsContext)this)._drawBuffers);
+            GL.DrawBuffers(_currentRenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
 #endif
 
             // Reset the raster state because we flip vertices

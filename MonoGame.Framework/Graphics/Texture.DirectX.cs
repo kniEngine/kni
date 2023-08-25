@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_resourceView != null)
                 return _resourceView;
 
-            _resourceView = new ShaderResourceView(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, GetTexture());
+            _resourceView = new ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
             return _resourceView;
         }
 

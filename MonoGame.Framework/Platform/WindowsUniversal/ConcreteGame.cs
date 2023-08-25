@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform
                 _enableRunLoop = false;
 
             if (this.GraphicsDevice != null)
-                ((ConcreteGraphicsDevice)this.GraphicsDevice.Strategy).Trim();
+                this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Trim();
         }
 
         private void CoreApplication_Resuming(object sender, Object e)

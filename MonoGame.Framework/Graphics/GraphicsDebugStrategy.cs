@@ -20,5 +20,12 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public abstract bool TryDequeueMessage(out GraphicsDebugMessage message);
+                
+
+        internal T ToConcrete<T>() where T : GraphicsDebugStrategy
+        {
+            return (T)this;
+        }
+        
     }
 }

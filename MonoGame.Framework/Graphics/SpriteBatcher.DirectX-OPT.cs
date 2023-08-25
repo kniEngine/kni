@@ -211,9 +211,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 _device.SetVertexBuffer(_vertexBuffer);
                 _device.Indices = _indexBuffer;
 
-                lock (((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (_device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)_device.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     //map vertexBaffer
                     var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;

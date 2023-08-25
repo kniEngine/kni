@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            return new SharpDX.Direct3D11.Texture3D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, description);
+            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
         }
 
 	    private void PlatformSetData<T>(int level,
@@ -80,9 +80,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 var region = new ResourceRegion(left, top, front, right, bottom, back);
 
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }
@@ -115,11 +115,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 OptionFlags = ResourceOptionFlags.None,
             };
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(((ConcreteGraphicsDevice)GraphicsDevice.Strategy).D3DDevice, desc))
+            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
             {
-                lock (((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = ((ConcreteGraphicsContext)GraphicsDevice.Strategy.CurrentContext.Strategy).D3dContext;
+                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
                     d3dContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);

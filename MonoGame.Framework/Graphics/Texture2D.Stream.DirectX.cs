@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 DataRectangle rect = new DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
-                return new SharpDX.Direct3D11.Texture2D(((ConcreteGraphicsDevice)device.Strategy).D3DDevice, desc, rect);
+                return new SharpDX.Direct3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
             }
         }
 

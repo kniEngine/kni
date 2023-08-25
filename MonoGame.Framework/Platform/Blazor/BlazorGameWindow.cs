@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    ((ConcreteGraphicsDevice)_concreteGame.GraphicsDevice.Strategy).OnPresentationChanged();
+                    _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
             }
         }
 
