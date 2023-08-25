@@ -44,8 +44,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public static DriverType UseDriverType
         {
-            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType; }
-            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDriverType = value; }
+            get { return GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDriverType; }
+            set { GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDriverType = value; }
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Usable only on DirectX platforms.</remarks>
         public static bool UseDebugLayers
         {
-            get { return ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers; }
-            set { ((ConcreteGraphicsAdaptersProvider)GraphicsAdaptersProviderStrategy.Current).PlatformDX_UseDebugLayers = value; }
+            get { return GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDebugLayers; }
+            set { GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDebugLayers = value; }
         }
 
     }
