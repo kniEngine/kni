@@ -103,23 +103,23 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
                 throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
                 throw new NotSupportedException("HiDef profile supports a maximum Texture2D size of 4096");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
                 throw new NotSupportedException("FL10_0 profile supports a maximum Texture2D size of 8192");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
                 throw new NotSupportedException("FL10_1 profile supports a maximum Texture2D size of 8192");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
                 throw new NotSupportedException("FL11_0 profile supports a maximum Texture2D size of 16384");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
                 throw new NotSupportedException("FL11_1 profile supports a maximum Texture2D size of 16384");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && mipmap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && mipmap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires mipmapped Texture2D sizes to be powers of two");            
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires compressed Texture2D sizes to be powers of two");
-            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
                 throw new NotSupportedException("Reach profile does not support Texture2D format "+ format);
             if (width <= 0)
                 throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");
