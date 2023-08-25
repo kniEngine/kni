@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (graphicsDevice != null)
             {
-                graphicsDevice.Adapter.QueryRenderTargetFormat(graphicsDevice.GraphicsProfile, preferredFormat, DepthFormat.None, 0, 
+                graphicsDevice.Adapter.QueryRenderTargetFormat(graphicsDevice.Strategy.GraphicsProfile, preferredFormat, DepthFormat.None, 0, 
                     out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount);
             }
             
