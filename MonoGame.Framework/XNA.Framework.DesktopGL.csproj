@@ -377,10 +377,10 @@
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />

@@ -76,10 +76,10 @@
     <Compile Include="Input\Mouse.SDL.cs" />
     <Compile Include="Input\MouseCursor.SDL.cs" />
     <Compile Include="Platform\Graphics\OpenGL.SDL.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdapter.SDL.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.SDL.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsContext.SDL.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsDevice.SDL.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
