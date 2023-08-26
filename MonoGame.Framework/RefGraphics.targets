@@ -1,13 +1,20 @@
 <Project>
 
   <ItemGroup>
+    <Compile Include="Graphics\.Ref\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteGraphicsDebug.cs" />
+	<Compile Include="Graphics\.Ref\ConcreteGraphicsDevice.cs" />
+	<Compile Include="Graphics\.Ref\ConcreteSamplerStateCollection.cs" />
+	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
     <Compile Include="Graphics\OcclusionQuery.Ref.cs" />
     <Compile Include="Graphics\RenderTarget2D.Ref.cs" />
     <Compile Include="Graphics\RenderTarget3D.Ref.cs" />
     <Compile Include="Graphics\RenderTargetCube.Ref.cs" />
-    <Compile Include="Graphics\Shader\ConcreteConstantBuffer.Ref.cs" />
     <Compile Include="Graphics\Shader\Shader.Ref.cs" />
     <Compile Include="Graphics\Texture.Ref.cs" />
     <Compile Include="Graphics\Texture2D.Ref.cs" />
