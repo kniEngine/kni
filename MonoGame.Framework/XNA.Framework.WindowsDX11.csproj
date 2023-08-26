@@ -230,6 +230,16 @@
     <Compile Include="Content\ContentTypeReaderManager.cs" />
     <Compile Include="Content\LzxDecoder.cs" />
     <Compile Include="Content\ResourceContentManager.cs" />
+	  
+    <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsAdaptersProvider.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
+	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
+	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
+	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
     <Compile Include="Graphics\CubeMapFace.cs" />
@@ -361,13 +371,6 @@
     <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdapter.DX11.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.DX11.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsContext.DX11.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsDebug.DX11.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsDevice.DX11.cs" />
-	<Compile Include="Graphics\ConcreteSamplerStateCollection.DX11.cs" />
-	<Compile Include="Graphics\ConcreteTextureCollection.DX11.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
@@ -377,7 +380,6 @@
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
     <Compile Include="Graphics\RenderTargetCube.DirectX.cs" />
-    <Compile Include="Graphics\Shader\ConcreteConstantBuffer.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
