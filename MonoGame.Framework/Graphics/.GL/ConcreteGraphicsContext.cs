@@ -740,6 +740,35 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
+        internal override ITexture2DStrategy CreateTexture2DStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override ITexture3DStrategy CreateTexture3DStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override ITextureCubeStrategy CreateTextureCubeStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy()
+        {
+            throw new NotImplementedException();
+        }
 
         protected override void Dispose(bool disposing)
         {

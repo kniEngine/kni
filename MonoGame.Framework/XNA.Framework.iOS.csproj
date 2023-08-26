@@ -254,6 +254,14 @@
     <Compile Include="Graphics\GraphicsResource.cs" />
     <Compile Include="Graphics\IGraphicsDeviceService.cs" />
     <Compile Include="Graphics\IRenderTarget.cs" />
+    <Compile Include="Graphics\IRenderTargetStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget2DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget3DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTargetCubeStrategy.cs" />
+    <Compile Include="Graphics\ITexture2DStrategy.cs" />
+    <Compile Include="Graphics\ITexture3DStrategy.cs" />
+    <Compile Include="Graphics\ITextureCubeStrategy.cs" />
+    <Compile Include="Graphics\ITextureStrategy.cs" />
     <Compile Include="Graphics\ModelBoneCollection.cs" />
     <Compile Include="Graphics\ModelBone.cs" />
     <Compile Include="Graphics\Model.cs" />
