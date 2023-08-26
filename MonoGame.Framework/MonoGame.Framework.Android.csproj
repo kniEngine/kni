@@ -58,10 +58,10 @@
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdapter.Android.cs" />
-    <Compile Include="Graphics\ConcreteGraphicsAdaptersProvider.Android.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsContext.Android.cs" />
-	<Compile Include="Graphics\ConcreteGraphicsDevice.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
+	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
     <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
