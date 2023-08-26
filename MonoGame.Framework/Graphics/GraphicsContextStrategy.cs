@@ -409,6 +409,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 
+        internal abstract ITexture2DStrategy CreateTexture2DStrategy();
+        internal abstract ITexture3DStrategy CreateTexture3DStrategy();
+        internal abstract ITextureCubeStrategy CreateTextureCubeStrategy();
+        internal abstract IRenderTarget2DStrategy CreateRenderTarget2DStrategy();
+        internal abstract IRenderTarget3DStrategy CreateRenderTarget3DStrategy();
+        internal abstract IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy();
+
         internal T ToConcrete<T>() where T : GraphicsContextStrategy
         {
             return (T)this;

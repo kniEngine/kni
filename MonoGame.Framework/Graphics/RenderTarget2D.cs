@@ -5,12 +5,15 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class RenderTarget2D : Texture2D, IRenderTarget
 	{
+        private IRenderTarget2DStrategy _strategyRenderTarget2D;
+
 		public DepthFormat DepthStencilFormat { get; private set; }
 		
 		public int MultiSampleCount { get; private set; }
@@ -23,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public event EventHandler<EventArgs> ContentLost;
-		
+
 
         /// <summary>
         /// Allows child class to specify the surface type, eg: a swap chain.
@@ -42,6 +45,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
 	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, SurfaceType.RenderTarget)
 	    {
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy();
+
             PlatformConstructRenderTarget2D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
 	    }
         

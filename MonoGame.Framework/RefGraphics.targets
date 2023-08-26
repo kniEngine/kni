@@ -7,6 +7,12 @@
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />

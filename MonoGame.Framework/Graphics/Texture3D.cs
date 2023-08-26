@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
@@ -13,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class Texture3D : Texture
 	{
+        private ITexture3DStrategy _strategyTexture3D;
+
         private int _width;
         private int _height;
         private int _depth;
@@ -50,6 +53,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("height","Texture height must be greater than zero");
             if (depth <= 0)
                 throw new ArgumentOutOfRangeException("depth","Texture depth must be greater than zero");
+
+            _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy();
 
 		    this.GraphicsDevice = graphicsDevice;
             this._width = width;

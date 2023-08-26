@@ -233,6 +233,12 @@
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
 	  
@@ -293,6 +299,14 @@
     <Compile Include="Graphics\GraphicsResource.cs" />
     <Compile Include="Graphics\IGraphicsDeviceService.cs" />
     <Compile Include="Graphics\IRenderTarget.cs" />
+    <Compile Include="Graphics\IRenderTargetStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget2DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget3DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTargetCubeStrategy.cs" />
+    <Compile Include="Graphics\ITexture2DStrategy.cs" />
+    <Compile Include="Graphics\ITexture3DStrategy.cs" />
+    <Compile Include="Graphics\ITextureCubeStrategy.cs" />
+    <Compile Include="Graphics\ITextureStrategy.cs" />
     <Compile Include="Graphics\ModelBoneCollection.cs" />
     <Compile Include="Graphics\ModelBone.cs" />
     <Compile Include="Graphics\Model.cs" />

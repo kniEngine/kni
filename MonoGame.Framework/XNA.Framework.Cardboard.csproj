@@ -286,6 +286,14 @@
     <Compile Include="Graphics\GraphicsResource.cs" />
     <Compile Include="Graphics\IGraphicsDeviceService.cs" />
     <Compile Include="Graphics\IRenderTarget.cs" />
+    <Compile Include="Graphics\IRenderTargetStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget2DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget3DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTargetCubeStrategy.cs" />
+    <Compile Include="Graphics\ITexture2DStrategy.cs" />
+    <Compile Include="Graphics\ITexture3DStrategy.cs" />
+    <Compile Include="Graphics\ITextureCubeStrategy.cs" />
+    <Compile Include="Graphics\ITextureStrategy.cs" />
     <Compile Include="Graphics\ModelBoneCollection.cs" />
     <Compile Include="Graphics\ModelBone.cs" />
     <Compile Include="Graphics\Model.cs" />
@@ -403,6 +411,12 @@
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />

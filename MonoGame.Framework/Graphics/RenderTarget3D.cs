@@ -5,12 +5,15 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class RenderTarget3D : Texture3D, IRenderTarget
 	{
+        private IRenderTarget3DStrategy _strategyRenderTarget3D;
+
 		public DepthFormat DepthStencilFormat { get; private set; }
 		
 		public int MultiSampleCount { get; private set; }
@@ -25,9 +28,12 @@ namespace Microsoft.Xna.Framework.Graphics
         public event EventHandler<EventArgs> ContentLost;
 
 
+
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
 		{
+            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy();
+
             // If we don't need a depth buffer then we're done.
             if (preferredDepthFormat == DepthFormat.None)
                 return;

@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
@@ -12,6 +13,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class TextureCube : Texture
 	{
+        private ITextureCubeStrategy _strategyTextureCube;
+
 		internal int _size;
 
         /// <summary>
@@ -47,6 +50,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("Reach profile does not support Texture2D format "+ format);
             if (size <= 0)
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");
+
+            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy();
 
             this.GraphicsDevice = graphicsDevice;
 			this._size = size;

@@ -11,6 +11,12 @@
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteTextureCollection.cs" />
   </ItemGroup>
