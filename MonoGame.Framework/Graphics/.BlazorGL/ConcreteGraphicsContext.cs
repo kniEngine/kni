@@ -687,32 +687,32 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override ITexture2DStrategy CreateTexture2DStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteTexture2D(this);
         }
 
         internal override ITexture3DStrategy CreateTexture3DStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteTexture3D(this);
         }
 
         internal override ITextureCubeStrategy CreateTextureCubeStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteTextureCube(this);
         }
 
         internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteRenderTarget2D(this);
         }
 
         internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteRenderTarget3D(this);
         }
 
         internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy()
         {
-            throw new NotImplementedException();
+            return new ConcreteRenderTargetCube(this);
         }
 
         protected override void Dispose(bool disposing)

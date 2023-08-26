@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
@@ -14,6 +15,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
+        private ITexture2DStrategy _strategyTexture2D;
+
         internal protected enum SurfaceType
         {
             Texture,
@@ -127,6 +130,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("height","Texture height must be greater than zero");
             if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
+
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy();
 
             this.GraphicsDevice = graphicsDevice;
             this._width = width;

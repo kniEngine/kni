@@ -233,6 +233,12 @@
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
 	  

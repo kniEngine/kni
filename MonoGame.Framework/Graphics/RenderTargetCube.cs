@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -14,6 +15,8 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public partial class RenderTargetCube : TextureCube, IRenderTarget
     {
+        private IRenderTargetCubeStrategy _strategyTargetCube;
+
         /// <summary>
         /// Gets the depth-stencil buffer format of this render target.
         /// </summary>
@@ -77,6 +80,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
             : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
         {
+            _strategyTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy();
+
             PlatformConstructRenderTargetCube(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
         }
         
