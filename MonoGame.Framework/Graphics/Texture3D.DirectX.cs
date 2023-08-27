@@ -25,7 +25,10 @@ namespace Microsoft.Xna.Framework.Graphics
             this.mipMap = mipMap;
 
             if (mipMap)
-                this._levelCount = CalculateMipLevels(width, height, depth);
+            {
+                int levelCount = CalculateMipLevels(width, height, depth);
+                this.DX_SetLevelCount(levelCount);
+            }
 
             // Create texture
             GetTexture();
@@ -36,11 +39,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var description = new Texture3DDescription
             {
-                Width = _width,
-                Height = _height,
-                Depth = _depth,
-                MipLevels = _levelCount,
-                Format = GraphicsExtensions.ToDXFormat(_format),
+                Width = this.Width,
+                Height = this.Height,
+                Depth = this.Depth,
+                MipLevels = this.LevelCount,
+                Format = GraphicsExtensions.ToDXFormat(this.Format),
                 BindFlags = BindFlags.ShaderResource,
                 CpuAccessFlags = CpuAccessFlags.None,
                 Usage = ResourceUsage.Default,
@@ -104,11 +107,11 @@ namespace Microsoft.Xna.Framework.Graphics
             //
             var desc = new Texture3DDescription
             {
-                Width = _width,
-                Height = _height,
-                Depth = _depth,
+                Width = this.Width,
+                Height = this.Height,
+                Depth = this.Depth,
                 MipLevels = 1,
-                Format = GraphicsExtensions.ToDXFormat(_format),
+                Format = GraphicsExtensions.ToDXFormat(this.Format),
                 BindFlags = BindFlags.None,
                 CpuAccessFlags = CpuAccessFlags.Read,
                 Usage = ResourceUsage.Staging,
@@ -133,7 +136,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.
                         var currentIndex = startIndex;
-                        var elementSize = _format.GetSize();
+                        var elementSize = this.Format.GetSize();
                         var elementsInRow = right - left;
                         var rowsInSlice = bottom - top;
                         for (var slice = front; slice < back; slice++)

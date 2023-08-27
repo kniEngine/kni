@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
 
             GenerateGLTextureIfRequired();
-            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(_format.GetSize(), 8));
+            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
             GraphicsExtensions.CheckGLError();
 
             if (_glIsCompressedTexture)
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
 
             GenerateGLTextureIfRequired();
-            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(_format.GetSize(), 8));
+            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
 
             if (_glIsCompressedTexture)
             {
@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 GL.TexParameter(
                     WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MIN_FILTER,
-                    (_levelCount > 1) ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
+                    (this.LevelCount > 1) ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
                 GraphicsExtensions.CheckGLError();
 
                 GL.TexParameter(
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 //GraphicsExtensions.CheckGLError();
                 if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
                 {
-                    if (_levelCount > 0)
+                    if (this.LevelCount > 0)
                     {
                         throw new NotImplementedException();
                         // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);

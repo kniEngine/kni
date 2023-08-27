@@ -35,11 +35,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var description = new Texture2DDescription
             {
-                Width = _size,
-                Height = _size,
-                MipLevels = _levelCount,
+                Width = this.Size,
+                Height = this.Size,
+                MipLevels = this.LevelCount,
                 ArraySize = 6, // A texture cube is a 2D texture array with 6 textures.
-                Format = GraphicsExtensions.ToDXFormat(_format),
+                Format = GraphicsExtensions.ToDXFormat(this.Format),
                 BindFlags = BindFlags.ShaderResource,
                 CpuAccessFlags = CpuAccessFlags.None,
                 SampleDescription = { Count = 1, Quality = 0 },
@@ -64,8 +64,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Like in Texture2D, we should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var min = _format.IsCompressedFormat() ? 4 : 1;
-            var levelSize = Math.Max(_size >> level, min);
+            var min = this.Format.IsCompressedFormat() ? 4 : 1;
+            var levelSize = Math.Max(this.Size >> level, min);
 
             var desc = new Texture2DDescription
             {
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Height = levelSize,
                 MipLevels = 1,
                 ArraySize = 1,
-                Format = GraphicsExtensions.ToDXFormat(_format),
+                Format = GraphicsExtensions.ToDXFormat(this.Format),
                 SampleDescription = new SampleDescription(1, 0),
                 BindFlags = BindFlags.None,
                 CpuAccessFlags = CpuAccessFlags.Read,
@@ -100,8 +100,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     {
                         var databox = d3dContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
 
-                        var elementSize = _format.GetSize();
-                        if (_format.IsCompressedFormat())
+                        var elementSize = this.Format.GetSize();
+                        if (this.Format.IsCompressedFormat())
                         {
                             // for 4x4 block compression formats an element is one block, so elementsInRow
                             // and number of rows are 1/4 of number of pixels in width and height of the rectangle
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private int CalculateSubresourceIndex(CubeMapFace face, int level)
 	    {
-	        return (int) face * _levelCount + level;
+	        return (int) face * this.LevelCount + level;
 	    }
 	}
 }

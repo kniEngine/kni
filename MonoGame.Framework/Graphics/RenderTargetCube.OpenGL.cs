@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
             {
                 base.PlatformCreateRenderTarget(
-                    graphicsDevice, _size, _size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount, usage);
+                    graphicsDevice, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount, usage);
             }
         }
 

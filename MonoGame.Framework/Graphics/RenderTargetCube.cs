@@ -36,16 +36,10 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTargetUsage RenderTargetUsage { get; private set; }
 
         /// <inheritdoc/>
-        int IRenderTarget.Width
-        {
-            get { return _size; }
-        }
+        int IRenderTarget.Width { get { return this.Size; } }
 
         /// <inheritdoc/>
-        int IRenderTarget.Height
-        {
-            get { return _size; }
-        }
+        int IRenderTarget.Height { get { return this.Size; } }
 
 		public bool IsContentLost
         {

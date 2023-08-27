@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 GenerateGLTextureIfRequired();
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(_format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 GenerateGLTextureIfRequired();
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(_format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -424,7 +424,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 GL.TexParameter(
                     TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                    (_levelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
+                    (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
                 GraphicsExtensions.CheckGLError();
 
                 GL.TexParameter(
@@ -445,9 +445,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
                 if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
                 {
-                    if (_levelCount > 0)
+                    if (this.LevelCount > 0)
                     {
-                        GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, _levelCount - 1);
+                        GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
                     }
                     else
                     {

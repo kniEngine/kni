@@ -55,8 +55,8 @@ namespace Microsoft.Xna.Framework.Graphics
             depthStencilDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
             depthStencilDesc.ArraySize = 1;
             depthStencilDesc.MipLevels = 1;
-            depthStencilDesc.Width = _size;
-            depthStencilDesc.Height = _size;
+            depthStencilDesc.Width = this.Size;
+            depthStencilDesc.Height = this.Size;
             depthStencilDesc.SampleDescription = sampleDescription;
             depthStencilDesc.BindFlags = BindFlags.DepthStencil;
 
