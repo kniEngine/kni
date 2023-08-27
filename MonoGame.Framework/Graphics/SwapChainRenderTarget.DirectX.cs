@@ -64,8 +64,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     Format = dxgiFormat,
                     Scaling = DisplayModeScaling.Stretched,
-                    Width = _width,
-                    Height = _height,
+                    Width = this.Width,
+                    Height = this.Height,
                 },
 
                 OutputHandle = _windowHandle,

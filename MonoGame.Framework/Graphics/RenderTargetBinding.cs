@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (renderTarget == null)
                 throw new ArgumentNullException("renderTarget");
-            if (arraySlice < 0 || arraySlice >= renderTarget._arraySize)
+            if (arraySlice < 0 || arraySlice >= renderTarget.ArraySize)
                 throw new ArgumentOutOfRangeException("arraySlice");
             if (!renderTarget.GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");

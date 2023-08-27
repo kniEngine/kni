@@ -24,9 +24,9 @@ namespace Microsoft.Xna.Framework.Graphics
             SwapChainRenderTarget,
         }
 
-		internal int _width;
-		internal int _height;
-        internal int _arraySize;
+        private int _width;
+        private int _height;
+        private int _arraySize;
                 
         internal float TexelWidth { get; private set; }
         internal float TexelHeight { get; private set; }
@@ -41,12 +41,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public int Height { get { return _height; } }
 
+        internal int ArraySize { get { return _arraySize; } }
+
         /// <summary>
         /// Gets the dimensions of the texture
         /// </summary>
         public Rectangle Bounds
         {
-            get { return new Rectangle(0, 0, this._width, this._height); }
+            get { return new Rectangle(0, 0, this.Width, this.Height); }
         }
 
         /// <summary>
@@ -349,13 +351,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
             int startIndex, int elementCount, out Rectangle checkedRect) where T : struct
         {
-            var textureBounds = new Rectangle(0, 0, Math.Max(_width >> level, 1), Math.Max(_height >> level, 1));
+            var textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
             checkedRect = rect ?? textureBounds;
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
             if (arraySlice > 0 && !GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
-            if (arraySlice < 0 || arraySlice >= _arraySize)
+            if (arraySlice < 0 || arraySlice >= ArraySize)
                 throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
             if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");

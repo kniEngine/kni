@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._height = height;
             this._depth = depth;
             this._levelCount = 1;
-		    this._format = format;
+            this._format = format;
 
             PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to get.</param>
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
-            GetData(0, 0, 0, _width, _height, 0, _depth, data, startIndex, elementCount);
+            GetData(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
         /// <summary>

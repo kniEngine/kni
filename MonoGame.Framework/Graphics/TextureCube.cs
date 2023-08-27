@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private ITextureCubeStrategy _strategyTextureCube;
 
-		internal int _size;
+        private int _size;
 
         /// <summary>
         /// Gets the width and height of the cube map face in pixels.

@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	            var desc = new RenderTargetViewDescription
 	            {
-	                Format = GraphicsExtensions.ToDXFormat(_format),
+	                Format = GraphicsExtensions.ToDXFormat(this.Format),
 	                Dimension = RenderTargetViewDimension.Texture3D,
 	                Texture3D =
 	                    {

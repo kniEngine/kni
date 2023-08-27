@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // For DXT compressed formats the width and height must be
             // a multiple of 4 for the complete mip level to be set.
-            if (_format.IsCompressedFormat())
+            if (this.Format.IsCompressedFormat())
             {
                 w = (w + 3) & ~3;
                 h = (h + 3) & ~3;
@@ -124,9 +124,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: We should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var min = _format.IsCompressedFormat() ? 4 : 1;
-            var levelWidth = Math.Max(_width >> level, min);
-            var levelHeight = Math.Max(_height >> level, min);
+            var min = this.Format.IsCompressedFormat() ? 4 : 1;
+            var levelWidth = Math.Max(this.Width >> level, min);
+            var levelHeight = Math.Max(this.Height >> level, min);
 
             SharpDX.Direct3D11.Texture2D stagingTexture;
             {
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.Height = levelHeight;
                 desc.MipLevels = 1;
                 desc.ArraySize = 1;
-                desc.Format = GraphicsExtensions.ToDXFormat(_format);
+                desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
                 desc.BindFlags = BindFlags.None;
                 desc.CpuAccessFlags = CpuAccessFlags.Read;
                 desc.SampleDescription = SampleDescription;
@@ -163,8 +163,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     var databox = d3dContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
 
-                    var elementSize = _format.GetSize();
-                    if (_format.IsCompressedFormat())
+                    var elementSize = this.Format.GetSize();
+                    if (this.Format.IsCompressedFormat())
                     {
                         // for 4x4 block compression formats an element is one block, so elementsInRow
                         // and number of rows are 1/4 of number of pixels in width and height of the rectangle
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         stream.ReadRange(data, startIndex, elementCount);
                     else if (level == 0 && arraySlice == 0 &&
                              rect.X == 0 && rect.Y == 0 &&
-                             rect.Width == this.Width && rect.Height == this._height &&
+                             rect.Width == this.Width && rect.Height == this.Height &&
                              startIndex == 0 && elementCount == data.Length)
                     {
                         // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
@@ -234,17 +234,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private int CalculateSubresourceIndex(int arraySlice, int level)
         {
-            return arraySlice * _levelCount + level;
+            return arraySlice * this.LevelCount + level;
         }
 
         protected internal virtual Texture2DDescription GetTexture2DDescription()
         {
             var desc = new Texture2DDescription();
-            desc.Width = _width;
-            desc.Height = _height;
-            desc.MipLevels = _levelCount;
-            desc.ArraySize = _arraySize;
-            desc.Format = GraphicsExtensions.ToDXFormat(_format);
+            desc.Width = this.Width;
+            desc.Height = this.Height;
+            desc.MipLevels = this.LevelCount;
+            desc.ArraySize = this.ArraySize;
+            desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
             desc.BindFlags = BindFlags.ShaderResource;
             desc.CpuAccessFlags = CpuAccessFlags.None;
             desc.SampleDescription = SampleDescription;

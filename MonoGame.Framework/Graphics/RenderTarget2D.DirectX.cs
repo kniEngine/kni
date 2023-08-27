@@ -39,10 +39,10 @@ namespace Microsoft.Xna.Framework.Graphics
             var viewTex = MultiSampleCount > 1 ? GetMSTexture() : GetTexture();
 
             // Create a view interface on the rendertarget to use on bind.
-            if (_arraySize > 1)
+            if (this.ArraySize > 1)
             {
-                _renderTargetViews = new RenderTargetView[_arraySize];
-                for (var i = 0; i < _arraySize; i++)
+                _renderTargetViews = new RenderTargetView[this.ArraySize];
+                for (var i = 0; i < this.ArraySize; i++)
                 {
                     var renderTargetViewDescription = new RenderTargetViewDescription();
                     if (MultiSampleCount > 1)
@@ -85,8 +85,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
                 ArraySize = 1,
                 MipLevels = 1,
-                Width = _width,
-                Height = _height,
+                Width = this.Width,
+                Height = this.Height,
                 SampleDescription = multisampleDesc,
                 BindFlags = BindFlags.DepthStencil,
             }))
@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     0,
                     GetTexture(),
                     0,
-                    GraphicsExtensions.ToDXFormat(_format));
+                    GraphicsExtensions.ToDXFormat(this.Format));
             }
         }
 

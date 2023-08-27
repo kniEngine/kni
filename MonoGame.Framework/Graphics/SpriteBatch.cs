@@ -520,7 +520,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                size = new Vector2(texture._width, texture._height);
+                size = new Vector2(texture.Width, texture.Height);
                 _texCoordTL = Vector2.Zero;
                 _texCoordBR = Vector2.One;
             }
