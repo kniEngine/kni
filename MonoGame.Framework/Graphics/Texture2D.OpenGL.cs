@@ -229,8 +229,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int pixelToT = Format.GetSize() / tSizeInByte;
-                int tFullWidth = Math.Max(this._width >> level, 1) / 4 * pixelToT;
-                T[] temp = new T[Math.Max(this._height >> level, 1) / 4 * tFullWidth];
+                int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
+                T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(TextureTarget.Texture2D, level, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -246,8 +246,8 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                int tFullWidth = Math.Max(this._width >> level, 1) * Format.GetSize() / tSizeInByte;
-                T[] temp = new T[Math.Max(this._height >> level, 1) * tFullWidth];
+                int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / tSizeInByte;
+                T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
                 GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -416,7 +416,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
                 // dimension is not a power of two.
                 TextureWrapMode wrap = TextureWrapMode.Repeat;
-                if (((_width & (_width - 1)) != 0) || ((_height & (_height - 1)) != 0))
+                if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                     wrap = TextureWrapMode.ClampToEdge;
 
                 GL.BindTexture(TextureTarget.Texture2D, this._glTexture);

@@ -122,8 +122,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int pixelToT = Format.GetSize() / tSizeInByte;
-                int tFullWidth = Math.Max(this._size >> level, 1) / 4 * pixelToT;
-                T[] temp = new T[Math.Max(this._size >> level, 1) / 4 * tFullWidth];
+                int tFullWidth = Math.Max(this.Size >> level, 1) / 4 * pixelToT;
+                T[] temp = new T[Math.Max(this.Size >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(target, level, temp);
                 GraphicsExtensions.CheckGLError();
 
@@ -139,8 +139,8 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                int tFullWidth = Math.Max(this._size >> level, 1) * Format.GetSize() / tSizeInByte;
-                T[] temp = new T[Math.Max(this._size >> level, 1) * tFullWidth];
+                int tFullWidth = Math.Max(this.Size >> level, 1) * Format.GetSize() / tSizeInByte;
+                T[] temp = new T[Math.Max(this.Size >> level, 1) * tFullWidth];
                 GL.GetTexImage(target, level, _glFormat, _glType, temp);
                 GraphicsExtensions.CheckGLError();
 
