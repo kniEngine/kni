@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy, ITextureStrategy
     {
-        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy)
+        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipmap)
         {
 
         }

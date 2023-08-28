@@ -685,34 +685,34 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy()
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap)
         {
-            return new ConcreteTexture2D(this);
+            return new ConcreteTexture2D(this, width, height, mipmap);
         }
 
-        internal override ITexture3DStrategy CreateTexture3DStrategy()
+        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap)
         {
-            return new ConcreteTexture3D(this);
+            return new ConcreteTexture3D(this, width, height, depth, mipMap);
         }
 
-        internal override ITextureCubeStrategy CreateTextureCubeStrategy()
+        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap)
         {
-            return new ConcreteTextureCube(this);
+            return new ConcreteTextureCube(this, size, mipMap);
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy()
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipmap)
         {
-            return new ConcreteRenderTarget2D(this);
+            return new ConcreteRenderTarget2D(this, width, height, mipmap);
         }
 
-        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy()
+        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap)
         {
-            return new ConcreteRenderTarget3D(this);
+            return new ConcreteRenderTarget3D(this, width, height, depth, mipMap);
         }
 
-        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy()
+        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap)
         {
-            return new ConcreteRenderTargetCube(this);
+            return new ConcreteRenderTargetCube(this, size, mipMap);
         }
 
         protected override void Dispose(bool disposing)
