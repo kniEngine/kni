@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (mipMap)
             {
-                int levelCount = CalculateMipLevels(width, height, depth);
+                int levelCount = Texture.CalculateMipLevels(width, height, depth);
                 ((ConcreteTexture)_strategyTexture).DX_SetLevelCount(levelCount);
             }
 
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
-                int rowPitch = GetPitch(width);
+                int rowPitch = Texture.GetPitch(this.Format, width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
                 var box = new DataBox(dataPtr, rowPitch, slicePitch);
 

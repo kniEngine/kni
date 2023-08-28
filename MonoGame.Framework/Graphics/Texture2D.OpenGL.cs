@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Threading.EnsureUIThread();
 
             int w, h;
-            GetSizeForLevel(Width, Height, level, out w, out h);
+            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);

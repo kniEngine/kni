@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int w, h;
-            GetSizeForLevel(Width, Height, level, out w, out h);
+            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 

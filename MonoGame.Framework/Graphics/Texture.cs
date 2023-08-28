@@ -29,6 +29,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		public SurfaceFormat Format { get { return _strategyTexture.Format; } }		
 		public int LevelCount { get { return _strategyTexture.LevelCount; } }
 
+        internal protected override void GraphicsDeviceResetting()
+        {
+            PlatformGraphicsDeviceResetting();
+        }
+        
+        
         internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
         {
             int levels = 1;
@@ -77,11 +83,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 d = 1;
         }
 
-        internal int GetPitch(int width)
+        internal static int GetPitch(SurfaceFormat format, int width)
         {
             Debug.Assert(width > 0, "The width is negative!");
 
-            switch (this.Format)
+            switch (format)
             {
                 case SurfaceFormat.Dxt1:
                 case SurfaceFormat.Dxt1SRgb:
@@ -98,17 +104,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.Dxt5:
                 case SurfaceFormat.Dxt5SRgb:
                 case SurfaceFormat.RgbPvrtc4Bpp:
-                case SurfaceFormat.RgbaPvrtc4Bpp:                    
-                    return ((width + 3) / 4) * this.Format.GetSize();
+                case SurfaceFormat.RgbaPvrtc4Bpp:
+                    return ((width + 3) / 4) * format.GetSize();
 
                 default:
-                    return width * this.Format.GetSize();
+                    return width * format.GetSize();
             };
-        }
-
-        internal protected override void GraphicsDeviceResetting()
-        {
-            PlatformGraphicsDeviceResetting();
         }
     }
 }
