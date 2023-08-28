@@ -23,10 +23,6 @@ namespace Microsoft.Xna.Framework.Graphics
             RenderTarget,
             SwapChainRenderTarget,
         }
-
-        private int _width;
-        private int _height;
-        private int _arraySize;
                 
         internal float TexelWidth { get; private set; }
         internal float TexelHeight { get; private set; }
@@ -34,22 +30,19 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets the width of the texture in pixels.
         /// </summary>
-        public int Width { get { return _width; } }
+        public int Width { get { return _strategyTexture2D.Width; } }
 
         /// <summary>
         /// Gets the height of the texture in pixels.
         /// </summary>
-        public int Height { get { return _height; } }
+        public int Height { get { return _strategyTexture2D.Height; } }
 
-        internal int ArraySize { get { return _arraySize; } }
+        internal int ArraySize { get { return _strategyTexture2D.ArraySize; } }
 
         /// <summary>
         /// Gets the dimensions of the texture
         /// </summary>
-        public Rectangle Bounds
-        {
-            get { return new Rectangle(0, 0, this.Width, this.Height); }
-        }
+        public Rectangle Bounds { get { return _strategyTexture2D.Bounds; } }
 
         /// <summary>
         /// Creates a new texture of the given size
@@ -136,15 +129,11 @@ namespace Microsoft.Xna.Framework.Graphics
             int levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
 
             _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
-            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipmap, format);
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipmap, format, arraySize);
 
             this.GraphicsDevice = graphicsDevice;
-            this._width = width;
-            this._height = height;
             this.TexelWidth = 1f / (float)width;
             this.TexelHeight = 1f / (float)height;
-
-            this._arraySize = arraySize;
 
             // Texture will be assigned by the swap chain.
 		    if (surfaceType == SurfaceType.SwapChainRenderTarget)

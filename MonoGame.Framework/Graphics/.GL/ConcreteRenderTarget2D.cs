@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy, ITextureStrategy
     {
-        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipmap)
+        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipmap, int arraySize)
         {
 
         }
@@ -36,6 +36,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public int Height
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public int ArraySize
         {
             get { throw new NotImplementedException(); }
         }

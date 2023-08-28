@@ -10,9 +10,11 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteTextureCube : ITextureCubeStrategy, ITextureStrategy
     {
+        private readonly int _size;
+
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
-
+            this._size = size;
         }
 
 
@@ -30,10 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         #region ITextureCubeStrategy
-        public int Size
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public int Size { get { return _size; } }
         #endregion #region ITextureCubeStrategy
 
     }

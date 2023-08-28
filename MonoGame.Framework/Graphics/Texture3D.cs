@@ -16,15 +16,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private ITexture3DStrategy _strategyTexture3D;
 
-        private int _width;
-        private int _height;
-        private int _depth;
+        public int Width { get { return _strategyTexture3D.Width; } }
 
-        public int Width { get { return _width; } }
+        public int Height { get { return _strategyTexture3D.Height; } }
 
-        public int Height { get { return _height; } }
-
-        public int Depth { get { return _depth; } }
+        public int Depth { get { return _strategyTexture3D.Depth; } }
 
 		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, false)
@@ -60,9 +56,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
 
 		    this.GraphicsDevice = graphicsDevice;
-            this._width = width;
-            this._height = height;
-            this._depth = depth;
 
             PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }

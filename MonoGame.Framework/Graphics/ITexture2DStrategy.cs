@@ -13,6 +13,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         int Width { get; }
         int Height { get; }
+        int ArraySize { get; }
+
         Rectangle Bounds { get; }
     }
 }
