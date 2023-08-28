@@ -8,27 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTextureCube : ITextureCubeStrategy, ITextureStrategy
+    internal class ConcreteTextureCube : ConcreteTexture, ITextureCubeStrategy
     {
         private readonly int _size;
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
         }
-
-
-        #region ITextureStrategy
-        public SurfaceFormat Format
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int LevelCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-        #endregion #region ITextureStrategy
 
 
         #region ITextureCubeStrategy

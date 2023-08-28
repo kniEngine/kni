@@ -49,10 +49,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (size <= 0)
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");
 
-            int levelCount = Texture.CalculateMipLevels(mipMap, size);
-
-            _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
+            _strategyTexture = _strategyTextureCube;
 
             this.GraphicsDevice = graphicsDevice;
 

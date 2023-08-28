@@ -8,31 +8,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture2D : ITexture2DStrategy, ITextureStrategy
+    internal class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
     {
         private readonly int _width;
         private readonly int _height;
         private readonly int _arraySize;
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
+            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
         }
-
-
-        #region ITextureStrategy
-        public SurfaceFormat Format
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int LevelCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-        #endregion #region ITextureStrategy
 
 
         #region ITexture2DStrategy
