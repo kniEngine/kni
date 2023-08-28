@@ -10,6 +10,7 @@
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteTexture.cs" />
     <Compile Include="Graphics\.Ref\ConcreteTexture2D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteTextureCube.cs" />

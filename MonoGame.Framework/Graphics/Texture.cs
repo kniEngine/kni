@@ -5,13 +5,13 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
 	public abstract partial class Texture : GraphicsResource
 	{
-        internal SurfaceFormat _format;
-        internal int _levelCount;
+        protected ITextureStrategy _strategyTexture;
         
         private readonly int _sortingKey = Interlocked.Increment(ref _lastSortingKey);
         private static int _lastSortingKey;
@@ -26,10 +26,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         internal int SortingKey { get { return _sortingKey; } }
 
-		public SurfaceFormat Format { get { return _format; } }
-		public int LevelCount { get { return _levelCount; } }
-
-        protected void DX_SetLevelCount(int levelCount) { _levelCount = levelCount; }
+		public SurfaceFormat Format { get { return _strategyTexture.Format; } }		
+		public int LevelCount { get { return _strategyTexture.LevelCount; } }
 
         internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
         {

@@ -133,6 +133,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
+            int levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
+
+            _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipmap, format);
 
             this.GraphicsDevice = graphicsDevice;
@@ -141,8 +144,6 @@ namespace Microsoft.Xna.Framework.Graphics
             this.TexelWidth = 1f / (float)width;
             this.TexelHeight = 1f / (float)height;
 
-            this._format = format;
-            this._levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
             this._arraySize = arraySize;
 
             // Texture will be assigned by the swap chain.
