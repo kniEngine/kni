@@ -11,15 +11,15 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget3D : IRenderTargetGL
     {
 
-        WebGLTexture IRenderTargetGL.GLTexture { get { return glTexture; } }
-        WebGLTextureTarget IRenderTargetGL.GLTarget { get { return glTarget; } }
+        WebGLTexture IRenderTargetGL.GLTexture { get { return _glTexture; } }
+        WebGLTextureTarget IRenderTargetGL.GLTarget { get { return _glTarget; } }
         WebGLTexture IRenderTargetGL.GLColorBuffer { get; set; }
         WebGLRenderbuffer IRenderTargetGL.GLDepthBuffer { get; set; }
         WebGLRenderbuffer IRenderTargetGL.GLStencilBuffer { get; set; }
 
         WebGLTextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
         {
-            return glTarget;
+            return _glTarget;
         }
 
         private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
