@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteTextureCube : ITextureCubeStrategy, ITextureStrategy
     {
-        internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy)
+        internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap)
         {
 
         }

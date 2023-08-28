@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (size <= 0)
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");
 
-            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy();
+            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap);
 
             this.GraphicsDevice = graphicsDevice;
 			this._size = size;
