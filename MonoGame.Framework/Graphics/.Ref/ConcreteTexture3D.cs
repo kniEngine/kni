@@ -8,25 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture3D : ITexture3DStrategy, ITextureStrategy
+    internal class ConcreteTexture3D : ConcreteTexture, ITexture3DStrategy
     {
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
 
         }
-
-
-        #region ITextureStrategy
-        public SurfaceFormat Format
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public int LevelCount
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-        #endregion #region ITextureStrategy
 
 
         #region ITexture3DStrategy
