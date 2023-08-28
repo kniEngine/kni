@@ -182,7 +182,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     this.BlendFactor.B/255.0f,
                     this.BlendFactor.A/255.0f);
                 GraphicsExtensions.CheckGLError();
-
                 _blendFactorDirty = false;
             }
         }
@@ -740,19 +739,19 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap)
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format)
         {
-            return new ConcreteTexture2D(this, width, height, mipmap);
+            return new ConcreteTexture2D(this, width, height, mipmap, format);
         }
 
-        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap)
+        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
-            return new ConcreteTexture3D(this, width, height, depth, mipMap);
+            return new ConcreteTexture3D(this, width, height, depth, mipMap, format);
         }
 
-        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap)
+        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format)
         {
-            return new ConcreteTextureCube(this, size, mipMap);
+            return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
         internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipmap)
@@ -978,6 +977,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.DeleteFramebuffer(fbo);
                     GraphicsExtensions.CheckGLError();
+
                     _glResolveFramebuffers.Remove(bindings);
                 }
             }

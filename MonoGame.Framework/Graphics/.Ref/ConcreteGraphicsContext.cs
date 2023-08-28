@@ -101,17 +101,17 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap)
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format)
         {
             throw new NotImplementedException();
         }
 
-        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap)
+        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
             throw new NotImplementedException();
         }
 
-        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap)
+        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format)
         {
             throw new NotImplementedException();
         }
