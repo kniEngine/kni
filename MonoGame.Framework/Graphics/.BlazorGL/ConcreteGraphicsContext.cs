@@ -167,6 +167,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 scissorRect.Y = this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
             GraphicsExtensions.CheckGLError();
+
         }
 
         internal void PlatformApplyViewport()
@@ -500,8 +501,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 vertexStart = 0;
 
             GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
-			              vertexStart,
-			              vertexCount);
+                          vertexStart,
+                          vertexCount);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -515,11 +516,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
-			var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
+            var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
             int indexElementSize = shortIndices ? 2 : 4;
             int indexOffsetInBytes = (startIndex * indexElementSize);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-			var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
 
@@ -685,19 +686,19 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap)
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format)
         {
-            return new ConcreteTexture2D(this, width, height, mipmap);
+            return new ConcreteTexture2D(this, width, height, mipmap, format);
         }
 
-        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap)
+        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
-            return new ConcreteTexture3D(this, width, height, depth, mipMap);
+            return new ConcreteTexture3D(this, width, height, depth, mipMap, format);
         }
 
-        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap)
+        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format)
         {
-            return new ConcreteTextureCube(this, size, mipMap);
+            return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
         internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipmap)
@@ -817,6 +818,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
             }
+
 #if DESKTOPGL
             //GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);
 #endif
