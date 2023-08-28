@@ -164,7 +164,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
                 // dimension is not a power of two.
                 var wrap = WebGLTexParam.REPEAT;
-                if (((_width & (_width - 1)) != 0) || ((_height & (_height - 1)) != 0))
+                if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                     wrap = WebGLTexParam.CLAMP_TO_EDGE;
 
                 GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, this.glTexture);
