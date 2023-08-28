@@ -22,27 +22,27 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		Anisotropic,	
         /// <summary>
-        /// Use linear filtering to shrink or expand, and point filtering between mipmap levels (mip).
+        /// Use linear filtering to shrink or expand, and point filtering between mipMap levels (mip).
         /// </summary>
 		LinearMipPoint,
         /// <summary>
-        /// Use point filtering to shrink (minify) or expand (magnify), and linear filtering between mipmap levels.
+        /// Use point filtering to shrink (minify) or expand (magnify), and linear filtering between mipMap levels.
         /// </summary>
 		PointMipLinear,
         /// <summary>
-        /// Use linear filtering to shrink, point filtering to expand, and linear filtering between mipmap levels.
+        /// Use linear filtering to shrink, point filtering to expand, and linear filtering between mipMap levels.
         /// </summary>
 		MinLinearMagPointMipLinear,
         /// <summary>
-        /// Use linear filtering to shrink, point filtering to expand, and point filtering between mipmap levels.
+        /// Use linear filtering to shrink, point filtering to expand, and point filtering between mipMap levels.
         /// </summary>
 		MinLinearMagPointMipPoint,
         /// <summary>
-        /// Use point filtering to shrink, linear filtering to expand, and linear filtering between mipmap levels.
+        /// Use point filtering to shrink, linear filtering to expand, and linear filtering between mipMap levels.
         /// </summary>
 		MinPointMagLinearMipLinear,
         /// <summary>
-        /// Use point filtering to shrink, linear filtering to expand, and point filtering between mipmap levels.
+        /// Use point filtering to shrink, linear filtering to expand, and point filtering between mipMap levels.
         /// </summary>
 		MinPointMagLinearMipPoint
 	}

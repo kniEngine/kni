@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _arraySize;
 
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
         {
             this._width  = width;
             this._height = height;

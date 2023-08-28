@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (depth <= 0)
                 throw new ArgumentOutOfRangeException("depth","Texture depth must be greater than zero");
 
-            int levelCount = 1;
+            int levelCount = CalculateMipLevels(mipMap, width, height, depth);
 
             _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
@@ -87,10 +87,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
         /// <summary>
-        /// Gets a copy of 3D texture data, specifying a mipmap level, source box, start index, and number of elements.
+        /// Gets a copy of 3D texture data, specifying a mipMap level, source box, start index, and number of elements.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the array.</typeparam>
-        /// <param name="level">Mipmap level.</param>
+        /// <param name="level">MipMap level.</param>
         /// <param name="left">Position of the left side of the box on the x-axis.</param>
         /// <param name="top">Position of the top of the box on the y-axis.</param>
         /// <param name="right">Position of the right side of the box on the x-axis.</param>

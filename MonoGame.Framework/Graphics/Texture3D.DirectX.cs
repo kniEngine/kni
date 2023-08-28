@@ -24,12 +24,6 @@ namespace Microsoft.Xna.Framework.Graphics
             this.renderTarget = renderTarget;
             this.mipMap = mipMap;
 
-            if (mipMap)
-            {
-                int levelCount = Texture.CalculateMipLevels(width, height, depth);
-                ((ConcreteTexture)_strategyTexture).DX_SetLevelCount(levelCount);
-            }
-
             // Create texture
             GetTexture();
         }
