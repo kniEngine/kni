@@ -35,8 +35,11 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         
         
-        internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
+        internal static int CalculateMipLevels(bool mipMap, int width, int height = 0, int depth = 0)
         {
+            if (!mipMap)
+                return 1;
+
             int levels = 1;
             int size = Math.Max(Math.Max(width, height), depth);
             while (size > 1)

@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class Texture2D : Texture
     {
 
-        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             this.glTarget = WebGLTextureTarget.TEXTURE_2D;
             ToGLSurfaceFormat(format, GraphicsDevice, out glInternalFormat, out glFormat, out glType, out _glIsCompressedTexture);
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         GraphicsExtensions.CheckGLError();
                     }
 
-                    if ((w == 1 && h == 1) || !mipmap)
+                    if ((w == 1 && h == 1) || !mipMap)
                         break;
                     if (w > 1)
                         w = w / 2;
@@ -186,7 +186,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_T, wrap);
                 GraphicsExtensions.CheckGLError();
 
-                // Set mipmap levels
+                // Set mipMap levels
                 //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
                 //GraphicsExtensions.CheckGLError();
                 if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)

@@ -409,7 +409,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 
-        internal abstract ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format, int arraySize);
+        internal abstract ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize);
         internal abstract ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format);
         internal abstract ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format);
         internal abstract IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize);

@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (MultiSampleCount == 0 || Shared)
                 desc.BindFlags |= BindFlags.RenderTarget;
 
-            if (Mipmap)
+            if (MipMap)
             {
                 desc.OptionFlags |= ResourceOptionFlags.GenerateMipMaps;
             }

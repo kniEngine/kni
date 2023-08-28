@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteTexture2D : ITexture2DStrategy, ITextureStrategy
     {
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipmap, SurfaceFormat format)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format)
         {
 
         }

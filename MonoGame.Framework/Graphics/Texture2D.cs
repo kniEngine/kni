@@ -61,10 +61,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="graphicsDevice"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="mipmap"></param>
+        /// <param name="mipMap"></param>
         /// <param name="format"></param>
-        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format)
-            : this(graphicsDevice, width, height, mipmap, format, false, 1, SurfaceType.Texture)
+        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format)
+            : this(graphicsDevice, width, height, mipMap, format, false, 1, SurfaceType.Texture)
         {
         }
 
@@ -75,11 +75,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="graphicsDevice"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="mipmap"></param>
+        /// <param name="mipMap"></param>
         /// <param name="format"></param>
         /// <param name="arraySize"></param>
-        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
-            : this(graphicsDevice, width, height, mipmap, format, false, arraySize, SurfaceType.Texture)
+        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
+            : this(graphicsDevice, width, height, mipMap, format, false, arraySize, SurfaceType.Texture)
         {
         }
 
@@ -89,15 +89,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="graphicsDevice"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="mipmap"></param>
+        /// <param name="mipMap"></param>
         /// <param name="format"></param>
         /// <param name="surfaceType"></param>
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType surfaceType)
-            : this(graphicsDevice, width, height, mipmap, format, false, 1, surfaceType)
+        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, SurfaceType surfaceType)
+            : this(graphicsDevice, width, height, mipMap, format, false, 1, surfaceType)
         {
         }
         
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
+        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("FL11_0 profile supports a maximum Texture2D size of 16384");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
                 throw new NotSupportedException("FL11_1 profile supports a maximum Texture2D size of 16384");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && mipmap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && mipMap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires mipmapped Texture2D sizes to be powers of two");            
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires compressed Texture2D sizes to be powers of two");
@@ -126,10 +126,10 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
-            int levelCount = mipmap ? Texture.CalculateMipLevels(width, height) : 1;
+            int levelCount = Texture.CalculateMipLevels(mipMap, width, height);
 
             _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
-            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipmap, format, arraySize);
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize);
 
             this.GraphicsDevice = graphicsDevice;
             this.TexelWidth = 1f / (float)width;
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    if (surfaceType == SurfaceType.SwapChainRenderTarget)
 		        return;
 
-            PlatformConstructTexture2D(width, height, mipmap, format, surfaceType, shared);
+            PlatformConstructTexture2D(width, height, mipMap, format, surfaceType, shared);
         }
 
 

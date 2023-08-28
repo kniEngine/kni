@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="size">The width and height of a texture cube face in pixels.</param>
-        /// <param name="mipMap"><see langword="true"/> to generate a full mipmap chain; otherwise <see langword="false"/>.</param>
+        /// <param name="mipMap"><see langword="true"/> to generate a full mipMap chain; otherwise <see langword="false"/>.</param>
         /// <param name="preferredFormat">The preferred format of the surface.</param>
         /// <param name="preferredDepthFormat">The preferred format of the depth-stencil buffer.</param>
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="size">The width and height of a texture cube face in pixels.</param>
-        /// <param name="mipMap"><see langword="true"/> to generate a full mipmap chain; otherwise <see langword="false"/>.</param>
+        /// <param name="mipMap"><see langword="true"/> to generate a full mipMap chain; otherwise <see langword="false"/>.</param>
         /// <param name="preferredFormat">The preferred format of the surface.</param>
         /// <param name="preferredDepthFormat">The preferred format of the depth-stencil buffer.</param>
         /// <param name="preferredMultiSampleCount">The preferred number of multisample locations.</param>

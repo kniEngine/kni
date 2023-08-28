@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
         {
             throw new NotImplementedException();
         }
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipmap, int arraySize)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize)
         {
             throw new NotImplementedException();
         }

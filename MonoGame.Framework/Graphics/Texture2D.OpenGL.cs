@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             this._glTarget = TextureTarget.Texture2D;
             ToGLSurfaceFormat(format, GraphicsDevice, out _glInternalFormat, out _glFormat, out _glType);
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         GraphicsExtensions.CheckGLError();
                     }
 
-                    if ((w == 1 && h == 1) || !mipmap)
+                    if ((w == 1 && h == 1) || !mipMap)
                         break;
                     if (w > 1)
                         w = w / 2;
@@ -438,7 +438,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
                 GraphicsExtensions.CheckGLError();
 
-                // Set mipmap levels
+                // Set mipMap levels
 #if !GLES
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 #endif

@@ -27,17 +27,17 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class Texture2D : Texture
     {
         protected bool Shared { get { return _shared; } }
-        protected bool Mipmap { get { return _mipmap; } }
+        protected bool MipMap { get { return _mipMap; } }
         protected SampleDescription SampleDescription { get { return _sampleDescription; } }
 
         private bool _shared;
-        private bool _mipmap;
+        private bool _mipMap;
         private SampleDescription _sampleDescription;
 
-        private void PlatformConstructTexture2D(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             _shared = shared;
-            _mipmap = mipmap;
+            _mipMap = mipMap;
             _sampleDescription = new SampleDescription(1, 0);
         }
 

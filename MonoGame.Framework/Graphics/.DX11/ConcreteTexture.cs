@@ -12,9 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly GraphicsContextStrategy _contextStrategy;
         private readonly SurfaceFormat _format;        
-        private /*readonly*/ int _levelCount;
-
-        internal void DX_SetLevelCount(int levelCount) { _levelCount = levelCount; }
+        private readonly int _levelCount;
 
         internal ConcreteTexture(GraphicsContextStrategy contextStrategy, SurfaceFormat format, int levelCount)
         {

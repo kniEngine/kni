@@ -739,9 +739,9 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
+        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
         {
-            return new ConcreteTexture2D(this, width, height, mipmap, format, arraySize);
+            return new ConcreteTexture2D(this, width, height, mipMap, format, arraySize);
         }
 
         internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
@@ -754,9 +754,9 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipmap, int arraySize)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize)
         {
-            return new ConcreteRenderTarget2D(this, width, height, mipmap, arraySize);
+            return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize);
         }
 
         internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap)
