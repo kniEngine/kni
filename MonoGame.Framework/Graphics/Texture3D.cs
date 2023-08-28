@@ -54,14 +54,15 @@ namespace Microsoft.Xna.Framework.Graphics
             if (depth <= 0)
                 throw new ArgumentOutOfRangeException("depth","Texture depth must be greater than zero");
 
+            int levelCount = 1;
+
+            _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
 
 		    this.GraphicsDevice = graphicsDevice;
             this._width = width;
             this._height = height;
             this._depth = depth;
-            this._levelCount = 1;
-            this._format = format;
 
             PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }

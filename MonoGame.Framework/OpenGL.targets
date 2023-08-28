@@ -12,6 +12,7 @@
     <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
