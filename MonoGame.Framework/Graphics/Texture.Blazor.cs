@@ -11,30 +11,30 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        internal WebGLTexture glTexture;
-        internal WebGLTextureTarget glTarget;
-        internal WebGLInternalFormat glInternalFormat;
-        internal WebGLFormat glFormat;
-        internal WebGLTexelType glType;
+        internal WebGLTexture _glTexture;
+        internal WebGLTextureTarget _glTarget;
+        internal WebGLInternalFormat _glInternalFormat;
+        internal WebGLFormat _glFormat;
+        internal WebGLTexelType _glType;
         internal bool _glIsCompressedTexture;
-        internal SamplerState glLastSamplerState;
+        internal SamplerState _glLastSamplerState;
 
         private void PlatformGraphicsDeviceResetting()
         {
-            if (glTexture != null)
-                glTexture.Dispose();
-            glTexture = null;
-            glLastSamplerState = null;
+            if (_glTexture != null)
+                _glTexture.Dispose();
+            _glTexture = null;
+            _glLastSamplerState = null;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (glTexture != null)
-                    glTexture.Dispose();
-                glTexture = null;
-                glLastSamplerState = null;
+                if (_glTexture != null)
+                    _glTexture.Dispose();
+                _glTexture = null;
+                _glLastSamplerState = null;
             }
 
             base.Dispose(disposing);
