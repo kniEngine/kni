@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
             int w, h;
-            GetSizeForLevel(Width, Height, level, out w, out h);
+            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
             // For DXT compressed formats the width and height must be
             // a multiple of 4 for the complete mip level to be set.
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
                 }
             }
             finally
@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
                 }
             }
             finally

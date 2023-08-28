@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
-            int levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
+            int levelCount = mipmap ? Texture.CalculateMipLevels(width, height) : 1;
 
             _strategyTexture = new ConcreteTexture(graphicsDevice.Strategy.MainContext.Strategy, format, levelCount);
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipmap, format, arraySize);
