@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public interface ITexture3DStrategy
+    public interface ITexture3DStrategy : ITextureStrategy
     {
 
         int Width { get; }
