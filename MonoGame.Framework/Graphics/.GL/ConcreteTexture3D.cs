@@ -10,9 +10,15 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteTexture3D : ITexture3DStrategy, ITextureStrategy
     {
+        private readonly int _width;
+        private readonly int _height;
+        private readonly int _depth;
+
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
-
+            this._width = width;
+            this._height = height;
+            this._depth = depth;
         }
 
 
@@ -30,20 +36,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         #region ITexture3DStrategy
-        public int Width
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int Height
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int Depth
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public int Width { get { return _width; } }
+        public int Height { get { return _height; } }
+        public int Depth { get { return _depth; } }
         #endregion #region ITexture3DStrategy
 
     }

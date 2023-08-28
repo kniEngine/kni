@@ -40,6 +40,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public int ArraySize
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         public Rectangle Bounds
         {
             get { throw new PlatformNotSupportedException(); }

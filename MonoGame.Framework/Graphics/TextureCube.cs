@@ -15,13 +15,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private ITextureCubeStrategy _strategyTextureCube;
 
-        private int _size;
-
         /// <summary>
         /// Gets the width and height of the cube map face in pixels.
         /// </summary>
         /// <value>The width and height of a cube map face in pixels.</value>
-        public int Size { get { return _size; } }
+        public int Size { get { return _strategyTextureCube.Size; } }
 		
 		public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, size, mipMap, format, false)
@@ -57,7 +55,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
 
             this.GraphicsDevice = graphicsDevice;
-			this._size = size;
 
             PlatformConstructTextureCube(graphicsDevice, size, mipMap, format, renderTarget);
         }
