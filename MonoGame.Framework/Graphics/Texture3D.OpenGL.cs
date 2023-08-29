@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 using MonoGame.OpenGL;
 
@@ -14,19 +15,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructTexture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-            this._glTarget = TextureTarget.Texture3D;
+            GetTextureStrategy<ConcreteTexture>()._glTarget = TextureTarget.Texture3D;
 
             Threading.EnsureUIThread();
             {
-                this._glTexture = GL.GenTexture();
+                GetTextureStrategy<ConcreteTexture>()._glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 
-                GL.BindTexture(_glTarget, _glTexture);
+                GL.BindTexture(GetTextureStrategy<ConcreteTexture>()._glTarget, GetTextureStrategy<ConcreteTexture>()._glTexture);
                 GraphicsExtensions.CheckGLError();
 
-                ToGLSurfaceFormat(format, GraphicsDevice, out _glInternalFormat, out _glFormat, out _glType);
+                ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
 
-                GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
+                GL.TexImage3D(GetTextureStrategy<ConcreteTexture>()._glTarget, 0, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, width, height, depth, 0, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, IntPtr.Zero);
                 GraphicsExtensions.CheckGLError();
             }
 
@@ -49,10 +50,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
-                    GL.BindTexture(_glTarget, _glTexture);
+                    GL.BindTexture(GetTextureStrategy<ConcreteTexture>()._glTarget, GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
 
-                    GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
+                    GL.TexSubImage3D(GetTextureStrategy<ConcreteTexture>()._glTarget, level, left, top, front, width, height, depth, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
                     GraphicsExtensions.CheckGLError();
                 }
                 finally

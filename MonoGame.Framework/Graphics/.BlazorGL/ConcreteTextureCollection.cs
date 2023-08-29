@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Clear the previous binding if the 
                 // target is different from the new one.
-                if (_targets[i] != 0 && (tex == null || _targets[i] != tex._glTarget))
+                if (_targets[i] != 0 && (tex == null || _targets[i] != tex.GetTextureStrategy<ConcreteTexture>()._glTarget))
                 {
                     GL.BindTexture(_targets[i], null);
                     _targets[i] = 0;
@@ -54,8 +54,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (tex != null)
                 {
-                    _targets[i] = tex._glTarget;
-                    GL.BindTexture(tex._glTarget, tex._glTexture);
+                    _targets[i] = tex.GetTextureStrategy<ConcreteTexture>()._glTarget;
+                    GL.BindTexture(tex.GetTextureStrategy<ConcreteTexture>()._glTarget, tex.GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
 
                     unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
