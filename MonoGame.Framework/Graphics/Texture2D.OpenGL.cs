@@ -15,17 +15,6 @@ using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
 using PixelFormat = MonoGame.OpenGL.PixelFormat;
 #endif
 
-#if ANDROID && OPENGL
-using Android.Graphics;
-#endif
-
-#if IOS || TVOS
-using UIKit;
-using CoreGraphics;
-using Foundation;
-using System.Drawing;
-#endif
-
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -263,109 +252,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 #endif
         }
-
-#if IOS || TVOS
-        [CLSCompliant(false)]
-        public static Texture2D FromStream(GraphicsDevice graphicsDevice, UIImage uiImage)
-        {
-            return PlatformFromStream(graphicsDevice, uiImage.CGImage);
-        }
-#elif ANDROID
-        [CLSCompliant(false)]
-        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Bitmap bitmap)
-        {
-            return PlatformFromStream(graphicsDevice, bitmap);
-        }
-
-        [CLSCompliant(false)]
-        public void Reload(Bitmap image)
-        {
-            int width = image.Width;
-            int height = image.Height;
-
-            int[] pixels = new int[width * height];
-            if ((width != image.Width) || (height != image.Height))
-            {
-                using (Bitmap imagePadded = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888))
-                {
-                    Canvas canvas = new Canvas(imagePadded);
-                    canvas.DrawARGB(0, 0, 0, 0);
-                    canvas.DrawBitmap(image, 0, 0, null);
-                    imagePadded.GetPixels(pixels, 0, width, 0, 0, width, height);
-                    imagePadded.Recycle();
-                }
-            }
-            else
-            {
-                image.GetPixels(pixels, 0, width, 0, 0, width, height);
-            }
-
-            image.Recycle();
-
-            this.SetData<int>(pixels);
-        }
-#endif
-
-#if IOS || TVOS
-        private static Texture2D PlatformFromStream(GraphicsDevice graphicsDevice, CGImage cgImage)
-        {
-            int width = (int)cgImage.Width;
-            int height = (int)cgImage.Height;
-
-            byte[] data = new byte[width * height * 4];
-
-            var colorSpace = CGColorSpace.CreateDeviceRGB();
-            var bitmapContext = new CGBitmapContext(data, width, height, 8, width * 4, colorSpace, CGBitmapFlags.PremultipliedLast);
-            bitmapContext.DrawImage(new RectangleF(0, 0, width, height), cgImage);
-            bitmapContext.Dispose();
-            colorSpace.Dispose();
-
-            Texture2D texture = null;
-            Threading.EnsureUIThread();
-            {
-                texture = new Texture2D(graphicsDevice, (int)width, (int)height, false, SurfaceFormat.Color);
-                texture.SetData(data);
-            }
-
-            return texture;
-        }
-#elif ANDROID
-        private static Texture2D PlatformFromStream(GraphicsDevice graphicsDevice, Bitmap image)
-        {
-            int width = image.Width;
-            int height = image.Height;
-
-            int[] pixels = new int[width * height];
-            if ((width != image.Width) || (height != image.Height))
-            {
-                using (Bitmap imagePadded = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888))
-                {
-                    Canvas canvas = new Canvas(imagePadded);
-                    canvas.DrawARGB(0, 0, 0, 0);
-                    canvas.DrawBitmap(image, 0, 0, null);
-                    imagePadded.GetPixels(pixels, 0, width, 0, 0, width, height);
-                    imagePadded.Recycle();
-                }
-            }
-            else
-            {
-                image.GetPixels(pixels, 0, width, 0, 0, width, height);
-            }
-            image.Recycle();
-
-            // Convert from ARGB to ABGR
-            ConvertToABGR(height, width, pixels);
-
-            Texture2D texture = null;
-            Threading.EnsureUIThread();
-            {
-                texture = new Texture2D(graphicsDevice, width, height, false, SurfaceFormat.Color);
-                texture.SetData<int>(pixels);
-            }
-
-            return texture;
-        }
-#endif
 
         private void GenerateGLTextureIfRequired()
         {
