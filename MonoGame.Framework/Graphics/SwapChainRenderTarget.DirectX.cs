@@ -57,9 +57,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SampleDescription multisampleDesc = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
 
+            base._renderTargetViews = new D3D11.RenderTargetView[1];
+            base._depthStencilViews = new D3D11.DepthStencilView[1];
 
             CreateSwapChainTexture(d3dDevice, width, height, multisampleDesc, dxgiFormat);
-
             if (depthFormat != DepthFormat.None)
             {
                 DXGI.Format dxgiDepthFormat = GraphicsExtensions.ToDXFormat(depthFormat);
@@ -97,7 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Obtain the backbuffer for this window which will be the final 3D rendertarget.
                 _backBuffer = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0);
                 // Create a view interface on the rendertarget to use on bind.
-                base._renderTargetViews = new D3D11.RenderTargetView[] { new D3D11.RenderTargetView(d3dDevice, _backBuffer) };
+                base._renderTargetViews[0] = new D3D11.RenderTargetView(d3dDevice, _backBuffer);
             }
         }
 
@@ -119,7 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
             using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(d3dDevice, textureDescription))
             {
                 // Create a DepthStencil view on this surface to use on bind.
-                _depthStencilView = new D3D11.DepthStencilView(d3dDevice, depthBuffer);
+                _depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer);
             }
         }
         
