@@ -367,45 +367,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-        private void FillTextureFromStream(Stream stream)
-        {
-#if ANDROID
-            using (Bitmap image = BitmapFactory.DecodeStream(stream, null, new BitmapFactory.Options
-            {
-                InScaled = false,
-                InDither = false,
-                InJustDecodeBounds = false,
-                InPurgeable = true,
-                InInputShareable = true,
-            }))
-            {
-                int width = image.Width;
-                int height = image.Height;
-
-                int[] pixels = new int[width * height];
-                image.GetPixels(pixels, 0, width, 0, 0, width, height);
-
-                // Convert from ARGB to ABGR
-                ConvertToABGR(height, width, pixels);
-
-                this.SetData<int>(pixels);
-                image.Recycle();
-            }
-#endif
-        }
-
-        // This method allows games that use Texture2D.FromStream
-        // to reload their textures after the GL context is lost.
-        private void PlatformReload(Stream textureStream)
-        {
-            int prev = GetBoundTexture2D();
-
-            GenerateGLTextureIfRequired();
-            FillTextureFromStream(textureStream);
-
-            GL.BindTexture(TextureTarget.Texture2D, prev);
-        }
-
         private void GenerateGLTextureIfRequired()
         {
             if (this._glTexture < 0)

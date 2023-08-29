@@ -29,11 +29,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformReload(Stream textureStream)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
     }
 }
 

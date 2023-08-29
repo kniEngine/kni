@@ -318,13 +318,6 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformSaveAsPng(stream, width, height);
         }
 
-        // This method allows games that use Texture2D.FromStream 
-        // to reload their textures after the GL context is lost.
-        public void Reload(Stream textureStream)
-        {
-            PlatformReload(textureStream);
-        }
-
         //Converts Pixel Data from ARGB to ABGR
         private static void ConvertToABGR(int pixelHeight, int pixelWidth, int[] pixels)
         {

@@ -262,11 +262,6 @@ namespace Microsoft.Xna.Framework.Graphics
             var desc = GetTexture2DDescription();
             return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
         }
-
-        private void PlatformReload(Stream textureStream)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 
