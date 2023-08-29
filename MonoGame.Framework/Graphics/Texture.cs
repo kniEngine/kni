@@ -34,6 +34,11 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformGraphicsDeviceResetting();
         }
         
+        internal T GetTextureStrategy<T>() where T : ITextureStrategy
+        {
+            return (T)_strategyTexture;
+        }
+
         
         internal static int CalculateMipLevels(bool mipMap, int width, int height = 0, int depth = 0)
         {

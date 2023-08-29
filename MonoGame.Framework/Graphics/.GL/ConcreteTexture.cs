@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -27,5 +28,14 @@ namespace Microsoft.Xna.Platform.Graphics
         public int LevelCount { get { return _levelCount; } }
         #endregion #region ITextureStrategy
 
+
+
+        internal int _glTexture = -1;
+        internal TextureTarget _glTarget;
+        internal TextureUnit _glTextureUnit = TextureUnit.Texture0;
+        internal PixelInternalFormat _glInternalFormat;
+        internal PixelFormat _glFormat;
+        internal PixelType _glType;
+        internal SamplerState _glLastSamplerState;
     }
 }

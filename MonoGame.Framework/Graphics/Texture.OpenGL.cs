@@ -10,44 +10,37 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        internal int _glTexture = -1;
-        internal TextureTarget _glTarget;
-        internal TextureUnit _glTextureUnit = TextureUnit.Texture0;
-        internal PixelInternalFormat _glInternalFormat;
-        internal PixelFormat _glFormat;
-        internal PixelType _glType;
-        internal SamplerState _glLastSamplerState;
 
         private void PlatformGraphicsDeviceResetting()
         {
-            if (_glTexture > 0)
+            if (GetTextureStrategy<ConcreteTexture>()._glTexture > 0)
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    GL.DeleteTexture(_glTexture);
+                    GL.DeleteTexture(GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
             }
-            _glTexture = -1;
+            GetTextureStrategy<ConcreteTexture>()._glTexture = -1;
 
-            _glLastSamplerState = null;
+            GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = null;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
-                if (_glTexture > 0)
+                if (GetTextureStrategy<ConcreteTexture>()._glTexture > 0)
                 {
                     if (!GraphicsDevice.IsDisposed)
                     {
-                        GL.DeleteTexture(_glTexture);
+                        GL.DeleteTexture(GetTextureStrategy<ConcreteTexture>()._glTexture);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
-                _glTexture = -1;
+                GetTextureStrategy<ConcreteTexture>()._glTexture = -1;
 
-                _glLastSamplerState = null;
+                GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = null;
             }
 
             base.Dispose(disposing);

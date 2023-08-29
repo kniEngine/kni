@@ -11,14 +11,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        private Resource _texture;
-
-        internal void SetTextureInternal_DX(Resource textureResource)
-        {
-            _texture = textureResource;
-        }
-
-        private ShaderResourceView _resourceView;
 
 
         /// <summary>
@@ -50,34 +42,34 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal Resource GetTexture()
         {
-            if (_texture != null)
-                return _texture;
+            if (GetTextureStrategy<ConcreteTexture>()._texture != null)
+                return GetTextureStrategy<ConcreteTexture>()._texture;
 
-            _texture = CreateTexture();
-            return _texture;
+            GetTextureStrategy<ConcreteTexture>()._texture = CreateTexture();
+            return GetTextureStrategy<ConcreteTexture>()._texture;
         }
 
         internal ShaderResourceView GetShaderResourceView()
         {
-            if (_resourceView != null)
-                return _resourceView;
+            if (GetTextureStrategy<ConcreteTexture>()._resourceView != null)
+                return GetTextureStrategy<ConcreteTexture>()._resourceView;
 
-            _resourceView = new ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
-            return _resourceView;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
+            return GetTextureStrategy<ConcreteTexture>()._resourceView;
         }
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _resourceView);
-            SharpDX.Utilities.Dispose(ref _texture);
+            SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
+            SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _resourceView);
-                SharpDX.Utilities.Dispose(ref _texture);
+                SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
+                SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
             }
 
             base.Dispose(disposing);

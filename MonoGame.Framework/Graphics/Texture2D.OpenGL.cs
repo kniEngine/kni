@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 #if OPENGL
@@ -22,8 +23,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
-            this._glTarget = TextureTarget.Texture2D;
-            ToGLSurfaceFormat(format, GraphicsDevice, out _glInternalFormat, out _glFormat, out _glType);
+            GetTextureStrategy<ConcreteTexture>()._glTarget = TextureTarget.Texture2D;
+            ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
 
             Threading.EnsureUIThread();
             {
@@ -33,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int level = 0;
                 while (true)
                 {
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
                     {
                         int imageSize = 0;
                         // PVRTC has explicit calculations for imageSize
@@ -55,12 +56,12 @@ namespace Microsoft.Xna.Framework.Graphics
                             int hBlocks = (h + (blockHeight - 1)) / blockHeight;
                             imageSize = wBlocks * hBlocks * blockSize;
                         }
-                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
+                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
                         GraphicsExtensions.CheckGLError();
                     }
                     else
                     {
-                        GL.TexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, _glFormat, _glType, IntPtr.Zero);
+                        GL.TexImage2D(TextureTarget.Texture2D, level, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, w, h, 0, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, IntPtr.Zero);
                         GraphicsExtensions.CheckGLError();
                     }
 
@@ -93,24 +94,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Store the current bound texture.
                 int prevTexture = GetBoundTexture2D();
 
-                if (prevTexture != _glTexture)
+                if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
-
+                    
                 GenerateGLTextureIfRequired();
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
-                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
                     GL.CompressedTexImage2D(
-                        TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
+                        TextureTarget.Texture2D, level, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
                 }
                 else
                 {
                     GL.TexImage2D(
-                        TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, _glFormat, _glType, dataPtr);
+                        TextureTarget.Texture2D, level, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, w, h, 0, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
                 }
                 GraphicsExtensions.CheckGLError();
 
@@ -121,7 +122,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
 #endif
                 // Restore the bound texture.
-                if (prevTexture != _glTexture)
+                if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, prevTexture);
                     GraphicsExtensions.CheckGLError();
@@ -148,26 +149,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // Store the current bound texture.
                 int prevTexture = GetBoundTexture2D();
-                if (prevTexture != _glTexture)
+                if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                    GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
 
                 GenerateGLTextureIfRequired();
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
-                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
                     GL.CompressedTexSubImage2D(
                         TextureTarget.Texture2D, level, rect.X, rect.Y, rect.Width, rect.Height,
-                        _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                        GetTextureStrategy<ConcreteTexture>()._glInternalFormat, elementCount * elementSizeInByte, dataPtr);
                 }
                 else
                 {
                     GL.TexSubImage2D(
                         TextureTarget.Texture2D, level, rect.X, rect.Y, rect.Width, rect.Height,
-                        _glFormat, _glType, dataPtr);
+                        GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
                 }
                 GraphicsExtensions.CheckGLError();
 
@@ -178,7 +179,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
 #endif
                 // Restore the bound texture.
-                if (prevTexture != _glTexture)
+                if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, prevTexture);
                     GraphicsExtensions.CheckGLError();
@@ -203,18 +204,18 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
             GraphicsExtensions.CheckGLError();
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, this._glTexture, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture, 0);
             GraphicsExtensions.CheckGLError();
 
-            GL.ReadPixels(rect.X, rect.Y, rect.Width, rect.Height, this._glFormat, this._glType, data);
+            GL.ReadPixels(rect.X, rect.Y, rect.Width, rect.Height, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, data);
             GraphicsExtensions.CheckGLError();
             GL.DeleteFramebuffer(framebufferId);
 #else
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GL.BindTexture(TextureTarget.Texture2D, this._glTexture);
+            GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSizeInByte, 8));
 
-            if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+            if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int pixelToT = Format.GetSize() / tSizeInByte;
@@ -237,7 +238,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // we need to convert from our format size to the size of T here
                 int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / tSizeInByte;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
-                GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, temp);
+                GL.GetTexImage(TextureTarget.Texture2D, level, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, temp);
                 GraphicsExtensions.CheckGLError();
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
@@ -255,9 +256,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GenerateGLTextureIfRequired()
         {
-            if (this._glTexture < 0)
+            if (GetTextureStrategy<ConcreteTexture>()._glTexture < 0)
             {
-                this._glTexture = GL.GenTexture();
+                GetTextureStrategy<ConcreteTexture>()._glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 
                 // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
@@ -266,7 +267,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                     wrap = TextureWrapMode.ClampToEdge;
 
-                GL.BindTexture(TextureTarget.Texture2D, this._glTexture);
+                GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
                 GraphicsExtensions.CheckGLError();
 
                 GL.TexParameter(

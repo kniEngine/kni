@@ -13,8 +13,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTargetCube : IRenderTargetGL
     {
-        int IRenderTargetGL.GLTexture { get { return _glTexture; } }
-        TextureTarget IRenderTargetGL.GLTarget { get { return _glTarget; } }
+        int IRenderTargetGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
+        TextureTarget IRenderTargetGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
         int IRenderTargetGL.GLColorBuffer { get; set; }
         int IRenderTargetGL.GLDepthBuffer { get; set; }
         int IRenderTargetGL.GLStencilBuffer { get; set; }
