@@ -147,11 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new NotImplementedException();
         }
 
-        private void PlatformReload(Stream textureStream)
-        {
-            throw new NotImplementedException();
-        }
-
         private void GenerateGLTextureIfRequired()
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
