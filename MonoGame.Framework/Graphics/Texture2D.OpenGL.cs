@@ -76,6 +76,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        private IntPtr PlatformGetSharedHandle()
+        {
+            throw new NotImplementedException();
+        }
+
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {

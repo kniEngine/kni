@@ -41,6 +41,12 @@ namespace Microsoft.Xna.Framework.Graphics
             _sampleDescription = new SampleDescription(1, 0);
         }
 
+        private IntPtr PlatformGetSharedHandle()
+        {
+            using (var resource = GetTexture().QueryInterface<SharpDX.DXGI.Resource>())
+                return resource.SharedHandle;
+        }
+
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
             int w, h;
