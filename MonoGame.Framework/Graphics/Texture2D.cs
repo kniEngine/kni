@@ -141,6 +141,20 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
+
+        /// <summary>
+        /// Gets the handle to a shared resource.
+        /// </summary>
+        /// <returns>
+        /// The handle of the shared resource, or <see cref="IntPtr.Zero"/> if the texture was not
+        /// created as a shared resource.
+        /// </returns>
+        public IntPtr GetSharedHandle()
+        {
+            return PlatformGetSharedHandle();
+        }
+
+
         /// <summary>
         /// Changes the pixels of the texture
         /// Throws ArgumentNullException if data is null
