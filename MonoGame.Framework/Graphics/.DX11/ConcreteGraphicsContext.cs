@@ -549,8 +549,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                ThrowIfDisposed();
-
                 if (_d3dContext != null)
                     _d3dContext.Dispose();
                 _d3dContext = null;

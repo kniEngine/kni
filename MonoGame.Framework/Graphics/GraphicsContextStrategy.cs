@@ -431,17 +431,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            ThrowIfDisposed();
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+                _isDisposed = true;
+            }
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ThrowIfDisposed();
-
-                _isDisposed = true;
             }
         }
 

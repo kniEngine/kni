@@ -76,6 +76,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void Dispose(bool disposing)
         {
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
             if (disposing)
             {
 
