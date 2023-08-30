@@ -290,14 +290,25 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (!_strategy.IsDisposed)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+
+                OnDisposing(EventArgs.Empty);
+            }
+        }
+
+        private void OnDisposing(EventArgs e)
+        {
+            var handler = Disposing;
+            if (handler != null)
+                handler(this, e);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_strategy.IsDisposed)
-                return;
+            System.Diagnostics.Debug.Assert(!IsDisposed);
 
             _strategy.Dispose();
 
@@ -342,10 +353,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformDispose();
             }
-
-            var handler = Disposing;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
         }
 
 

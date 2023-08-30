@@ -795,21 +795,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            ThrowIfDisposed();
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+                _isDisposed = true;
+            }
         }
 
         private void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ThrowIfDisposed();
-
                 _strategy.Dispose();
 
                 _strategy = null;
                 _deviceStrategy = null;
-                _isDisposed = true;
             }
         }
 

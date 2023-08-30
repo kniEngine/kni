@@ -722,7 +722,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                ThrowIfDisposed();
 
             }
 

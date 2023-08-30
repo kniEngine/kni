@@ -135,8 +135,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                ThrowIfDisposed();
-
             }
 
             base.Dispose(disposing);

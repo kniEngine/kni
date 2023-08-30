@@ -24,8 +24,8 @@ namespace Microsoft.Xna.Platform.Graphics
         // Use WeakReference for the global resources list as we do not know when a resource
         // may be disposed and collected. We do not want to prevent a resource from being
         // collected by holding a strong reference to it in this list.
-        public readonly List<WeakReference> Resources = new List<WeakReference>();
-        public readonly object ResourcesLock = new object();
+        internal readonly List<WeakReference> Resources = new List<WeakReference>();
+        internal readonly object ResourcesLock = new object();
 
         /// <summary>
         /// The cache of effects from unique byte streams.
@@ -137,22 +137,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (!_isDisposed)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+                _isDisposed = true;
+            }
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_isDisposed)
-                return;
+            System.Diagnostics.Debug.Assert(!IsDisposed);
 
             if (disposing)
             {
 
                 _device = null;
-                _isDisposed = true;
             }
-
         }
 
 
