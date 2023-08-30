@@ -26,6 +26,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public GraphicsDevice GraphicsDevice { get { return _graphicsDevice; } }
 
+        /// <summary>
+        /// Raised when the GraphicsResource is disposed or finalized.
+        /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
 
@@ -36,8 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         ~GraphicsResource()
         {
-            // Do not trigger the event if called from the finalizer
-            // OnDisposing(EventArgs.Empty);
+            OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
