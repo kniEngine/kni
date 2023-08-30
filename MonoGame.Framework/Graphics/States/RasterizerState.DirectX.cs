@@ -99,8 +99,12 @@ namespace Microsoft.Xna.Framework.Graphics
             context.D3dContext.Rasterizer.State = _state;
         }
 
-        partial void PlatformDispose()
+        partial void PlatformDispose(bool disposing)
         {
+            if (disposing)
+            {
+            }
+
             SharpDX.Utilities.Dispose(ref _state);
         }
     }

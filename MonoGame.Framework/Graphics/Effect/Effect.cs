@@ -212,26 +212,25 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (!_isClone)
-                    {
-                        // Only the clone source can dispose the shaders.
-                        if (_shaders != null)
-                        {
-                            foreach (var shader in _shaders)
-                                shader.Dispose();
-                        }
-                    }
+            System.Diagnostics.Debug.Assert(!IsDisposed);
 
-                    if (ConstantBuffers != null)
+            if (disposing)
+            {
+                if (!_isClone)
+                {
+                    // Only the original source can dispose the shaders.
+                    if (_shaders != null)
                     {
-                        foreach (var buffer in ConstantBuffers)
-                            buffer.Dispose();
-                        ConstantBuffers = null;
+                        foreach (var shader in _shaders)
+                            shader.Dispose();
                     }
+                }
+
+                if (ConstantBuffers != null)
+                {
+                    foreach (var buffer in ConstantBuffers)
+                        buffer.Dispose();
+                    ConstantBuffers = null;
                 }
             }
 

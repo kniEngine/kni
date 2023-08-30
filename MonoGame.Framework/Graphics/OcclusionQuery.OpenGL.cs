@@ -48,17 +48,20 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
+            if (disposing)
             {
-                if (_glQueryId > -1)
+            }
+
+            if (_glQueryId > -1)
+            {
+                if (!GraphicsDevice.IsDisposed)
                 {
-                    if (!GraphicsDevice.IsDisposed)
-                    {
-                        GL.DeleteQuery(_glQueryId);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                    _glQueryId = -1;
+                    GL.DeleteQuery(_glQueryId);
+                    GraphicsExtensions.CheckGLError();
                 }
+                _glQueryId = -1;
             }
 
             base.Dispose(disposing);

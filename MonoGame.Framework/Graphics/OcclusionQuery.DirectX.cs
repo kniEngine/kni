@@ -62,10 +62,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
+            if (disposing)
             {
-                if (disposing)
-                    _query.Dispose();
+                _query.Dispose();
             }
 
             base.Dispose(disposing);

@@ -271,14 +271,17 @@ namespace Microsoft.Xna.Framework.Graphics
             return new DepthStencilState(this);
         }
 
-        partial void PlatformDispose();
+        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
+            if (disposing)
             {
-                PlatformDispose();
             }
+
+            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }
