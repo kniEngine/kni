@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal const TextureParameterName TextureParameterNameTextureMaxAnisotropy = (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt;
         internal const TextureParameterName TextureParameterNameTextureMaxLevel = TextureParameterName.TextureMaxLevel;
 
-        internal void Activate(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
+        internal void PlatformApplyState(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
         {
             if (GraphicsDevice == null)
             {
