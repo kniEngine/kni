@@ -18,13 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void PlatformApplyState(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
         {
-            if (GraphicsDevice == null)
-            {
-                // We're now bound to a device...
-                SetGraphicsDevice(context.DeviceStrategy.Device);
-            }
-            else
-                Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
+            Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
             switch (Filter)
             {
