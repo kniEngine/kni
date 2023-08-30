@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This depth stencil state is already bound to a different graphics device.");
 
-            GraphicsDevice = device;
+            BindGraphicsDevice(device);
         }
 
         internal void ThrowIfBound()

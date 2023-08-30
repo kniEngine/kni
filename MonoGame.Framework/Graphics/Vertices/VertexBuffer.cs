@@ -20,14 +20,14 @@ namespace Microsoft.Xna.Framework.Graphics
 		    if (graphicsDevice == null)
 		        throw new ArgumentNullException("graphicsDevice");
 
-		    this.GraphicsDevice = graphicsDevice;
+            SetGraphicsDevice(graphicsDevice);
             this.VertexDeclaration = vertexDeclaration;
             this.VertexCount = vertexCount;
             this.BufferUsage = bufferUsage;
 
             // Make sure the graphics device is assigned in the vertex declaration.
             if (vertexDeclaration.GraphicsDevice != graphicsDevice)
-                vertexDeclaration.GraphicsDevice = graphicsDevice;
+                vertexDeclaration.BindGraphicsDevice(graphicsDevice);
 
             _isDynamic = dynamic;
 

@@ -12,14 +12,14 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private readonly Dictionary<int, VertexDeclarationAttributeInfo> _shaderAttributeInfo = new Dictionary<int, VertexDeclarationAttributeInfo>();
 
-        internal VertexDeclarationAttributeInfo GetAttributeInfo(Shader shader, int programHash)
+        internal VertexDeclarationAttributeInfo GetAttributeInfo(Shader shader, int programHash, int maxVertexBufferSlots)
         {
             VertexDeclarationAttributeInfo attrInfo;
             if (_shaderAttributeInfo.TryGetValue(programHash, out attrInfo))
                 return attrInfo;
 
             // Get the vertex attribute info and cache it
-            attrInfo = new VertexDeclarationAttributeInfo(GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots);
+            attrInfo = new VertexDeclarationAttributeInfo(maxVertexBufferSlots);
 
             foreach (var ve in InternalVertexElements)
             {

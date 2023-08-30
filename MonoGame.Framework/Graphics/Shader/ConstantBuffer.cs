@@ -22,12 +22,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _strategy = new ConcreteConstantBufferStrategy(device, name, parameterIndexes, parameterOffsets, sizeInBytes);
 
-            GraphicsDevice = device;
+            SetGraphicsDevice(device);
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
         {
-            GraphicsDevice = cloneSource.GraphicsDevice;
+            SetGraphicsDevice(cloneSource.GraphicsDevice);
 
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
         }

@@ -370,7 +370,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+                int maxVertexBufferSlots = vertexDeclaration.GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots;
+                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -442,7 +443,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
-            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+            int maxVertexBufferSlots = vertexDeclaration.GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots;
+            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
 
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)
@@ -573,7 +575,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
+            vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
@@ -635,7 +637,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
+            vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
 

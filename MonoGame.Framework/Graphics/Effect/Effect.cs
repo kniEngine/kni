@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
 
-            this.GraphicsDevice = graphicsDevice;
+            SetGraphicsDevice(graphicsDevice);
 		}
 			
 		protected Effect(Effect cloneSource)
