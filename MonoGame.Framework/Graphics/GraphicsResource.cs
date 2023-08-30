@@ -14,9 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private bool _isDisposed;
 
-        // The GraphicsDevice property should only be accessed in Dispose(bool) if
-        // the disposing parameter is true.
-        // If disposing is false, the GraphicsDevice may or may not be disposed yet.
         private GraphicsDevice _graphicsDevice;
 
         private WeakReference _selfReference;
@@ -39,6 +36,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         ~GraphicsResource()
         {
+            // Do not trigger the event if called from the finalizer
+            // OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
@@ -84,8 +83,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (!_isDisposed)
+            {
+                OnDisposing(EventArgs.Empty);
+                Dispose(true);
+                GC.SuppressFinalize(this);
+
+                _isDisposed = true;
+            }
+        }
+
+        private void OnDisposing(EventArgs e)
+        {
+            var handler = Disposing;
+            if (handler != null)
+                handler(this, e);
         }
 
         /// <summary>
@@ -95,29 +107,19 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Native resources should always be released regardless of the value of the disposing parameter.</remarks>
         protected virtual void Dispose(bool disposing)
         {
-            if (!_isDisposed)
+            if (disposing)
             {
-                // Do not trigger the event if called from the finalizer
-                if (disposing)
-                {
-                    var handler = Disposing;
-                    if (handler != null)
-                        handler(this, EventArgs.Empty);
-                }
 
-                if (disposing)
-                {
-                }
-
-                // Remove from the global list of graphics resources
-                if (_graphicsDevice != null)
-                    _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
-
-                _selfReference = null;
-                _graphicsDevice = null;
-                _isDisposed = true;
             }
+
+            // Remove from the global list of graphics resources
+            if (_graphicsDevice != null)
+                _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
+
+            _selfReference = null;
+            _graphicsDevice = null;
         }
+
 
         public override string ToString()
         {
