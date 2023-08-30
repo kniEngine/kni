@@ -52,9 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public SpriteBatch(GraphicsDevice graphicsDevice, int capacity)
         {
             if (graphicsDevice == null)
-            {
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-            }
+                throw new ArgumentNullException("graphicsDevice");
 
             this.GraphicsDevice = graphicsDevice;
 

@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		protected Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
 		{
 		    if (graphicsDevice == null)
-		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+		        throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Texture3D");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 256 || height > 256 || height > 256))

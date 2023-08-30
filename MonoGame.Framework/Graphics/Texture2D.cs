@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
 		{
             if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+                throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
                 throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
