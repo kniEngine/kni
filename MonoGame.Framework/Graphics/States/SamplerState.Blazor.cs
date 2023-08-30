@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (GraphicsDevice == null)
             {
                 // We're now bound to a device...
-                GraphicsDevice = context.DeviceStrategy.Device;
+                SetGraphicsDevice(context.DeviceStrategy.Device);
             }
             else
                 Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
