@@ -193,6 +193,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("You cannot bind a default state object.");
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This depth stencil state is already bound to a different graphics device.");
+
             GraphicsDevice = device;
         }
 

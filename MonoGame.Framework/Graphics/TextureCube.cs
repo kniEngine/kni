@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         protected TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
             if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+                throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && size > 512)
                 throw new NotSupportedException("Reach profile supports a maximum TextureCube size of 512");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && size > 4096)

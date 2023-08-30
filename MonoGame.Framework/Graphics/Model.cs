@@ -60,9 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Model(GraphicsDevice graphicsDevice, List<ModelBone> bones, List<ModelMesh> meshes)
 		{
             if (graphicsDevice == null)
-            {
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-            }
+                throw new ArgumentNullException("graphicsDevice");
 
 			// TODO: Complete member initialization
 			this.graphicsDevice = graphicsDevice;
