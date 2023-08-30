@@ -95,8 +95,12 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        partial void PlatformDispose()
+        partial void PlatformDispose(bool disposing)
         {
+            if (disposing)
+            {
+            }
+
             SharpDX.Utilities.Dispose(ref _state);
         }
     }

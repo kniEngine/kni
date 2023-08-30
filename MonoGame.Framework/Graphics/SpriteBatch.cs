@@ -1394,19 +1394,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
+            if (disposing)
             {
-                if (disposing)
+                if (_spriteEffect != null)
                 {
-                    if (_spriteEffect != null)
-                    {
-                        _spriteEffect.Dispose();
-                        _spriteEffect = null;
-                    }
-                    if (_batcher != null)
-                        _batcher.Dispose();
+                    _spriteEffect.Dispose();
+                    _spriteEffect = null;
+                }
+                if (_batcher != null)
+                {
+                    _batcher.Dispose();
                 }
             }
+
             base.Dispose(disposing);
         }
     }
