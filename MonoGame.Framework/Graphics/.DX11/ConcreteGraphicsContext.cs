@@ -549,6 +549,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
+                if (_userIndexBuffer16 != null)
+                    _userIndexBuffer16.Dispose();
+                if (_userIndexBuffer32 != null)
+                    _userIndexBuffer32.Dispose();
+
+                foreach (DynamicVertexBuffer vb in _userVertexBuffers.Values)
+                    vb.Dispose();
+
                 if (_d3dContext != null)
                     _d3dContext.Dispose();
                 _d3dContext = null;

@@ -1022,70 +1022,6 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        internal void PlatformDispose()
-        {
-            // make sure to release full screen or this might cause issues on exit
-            if (_swapChain != null && _swapChain.IsFullScreen)
-                _swapChain.SetFullscreenState(false, null);
-
-            SharpDX.Utilities.Dispose(ref _renderTargetView);
-            SharpDX.Utilities.Dispose(ref _depthStencilView);
-
-            if (_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._userIndexBuffer16 != null)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._userIndexBuffer16.Dispose();
-            if (_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._userIndexBuffer32 != null)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._userIndexBuffer32.Dispose();
-
-            foreach (DynamicVertexBuffer vb in _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._userVertexBuffers.Values)
-                vb.Dispose();
-
-            SharpDX.Utilities.Dispose(ref _swapChain);
-
-#if WINDOWS_UAP
-
-            if (_bitmapTarget != null)
-            {
-                _bitmapTarget.Dispose();
-                _depthStencilView = null;
-            }
-            if (_d2dDevice != null)
-            {
-                _d2dDevice.Dispose();
-                _d2dDevice = null;
-            }
-            if (_d2dContext != null)
-            {
-                _d2dContext.Target = null;
-                _d2dContext.Dispose();
-                _d2dContext = null;
-            }
-            if (_d2dFactory != null)
-            {
-                _d2dFactory.Dispose();
-                _d2dFactory = null;
-            }
-            if (_dwriteFactory != null)
-            {
-                _dwriteFactory.Dispose();
-                _dwriteFactory = null;
-            }
-            if (_wicFactory != null)
-            {
-                _wicFactory.Dispose();
-                _wicFactory = null;
-            }
-
-#endif
-
-            if (_mainContext != null)
-            {
-                _mainContext.Dispose();
-                _mainContext = null;
-            }
-
-            SharpDX.Utilities.Dispose(ref _d3dDevice);
-        }
-
 
         protected override void Dispose(bool disposing)
         {
@@ -1093,6 +1029,51 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (disposing)
             {
+                // make sure to release full screen or this might cause issues on exit
+                if (_swapChain != null && _swapChain.IsFullScreen)
+                    _swapChain.SetFullscreenState(false, null);
+
+                SharpDX.Utilities.Dispose(ref _renderTargetView);
+                SharpDX.Utilities.Dispose(ref _depthStencilView);
+
+
+                SharpDX.Utilities.Dispose(ref _swapChain);
+
+    #if WINDOWS_UAP
+                if (_bitmapTarget != null)
+                {
+                    _bitmapTarget.Dispose();
+                    _depthStencilView = null;
+                }
+                if (_d2dDevice != null)
+                {
+                    _d2dDevice.Dispose();
+                    _d2dDevice = null;
+                }
+                if (_d2dContext != null)
+                {
+                    _d2dContext.Target = null;
+                    _d2dContext.Dispose();
+                    _d2dContext = null;
+                }
+                if (_d2dFactory != null)
+                {
+                    _d2dFactory.Dispose();
+                    _d2dFactory = null;
+                }
+                if (_dwriteFactory != null)
+                {
+                    _dwriteFactory.Dispose();
+                    _dwriteFactory = null;
+                }
+                if (_wicFactory != null)
+                {
+                    _wicFactory.Dispose();
+                    _wicFactory = null;
+                }
+    #endif
+
+                SharpDX.Utilities.Dispose(ref _d3dDevice);
 
             }
 

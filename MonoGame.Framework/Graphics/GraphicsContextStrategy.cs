@@ -26,10 +26,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal Viewport _viewport;
 
         // states
-        internal BlendState _blendState;
-        internal Color _blendFactor = Color.White;
-        internal DepthStencilState _depthStencilState;
-        internal RasterizerState _rasterizerState;
+        private BlendState _blendState;
+        private Color _blendFactor = Color.White;
+        private DepthStencilState _depthStencilState;
+        private RasterizerState _rasterizerState;
         internal SamplerStateCollection _vertexSamplerStates;
         internal SamplerStateCollection _pixelSamplerStates;
 
@@ -443,6 +443,24 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
+                _blendState = null;
+                _actualBlendState = null;
+                _blendStateAdditive.Dispose();
+                _blendStateAlphaBlend.Dispose();
+                _blendStateNonPremultiplied.Dispose();
+                _blendStateOpaque.Dispose();
+
+                _depthStencilState = null;
+                _actualDepthStencilState = null;
+                _depthStencilStateDefault.Dispose();
+                _depthStencilStateDepthRead.Dispose();
+                _depthStencilStateNone.Dispose();
+
+                _rasterizerState = null;
+                _actualRasterizerState = null;
+                _rasterizerStateCullClockwise.Dispose();
+                _rasterizerStateCullCounterClockwise.Dispose();
+                _rasterizerStateCullNone.Dispose();
             }
         }
 

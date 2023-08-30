@@ -202,10 +202,6 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        internal void PlatformDispose()
-        {
-        }
-
 
         protected override void Dispose(bool disposing)
         {

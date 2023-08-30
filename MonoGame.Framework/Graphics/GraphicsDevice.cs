@@ -310,48 +310,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             System.Diagnostics.Debug.Assert(!IsDisposed);
 
-            _strategy.Dispose();
-
             if (disposing)
             {
-                // Dispose of all remaining graphics resources before disposing of the graphics device
-                lock (_strategy.ResourcesLock)
-                {
-                    for (int i = _strategy.Resources.Count - 1; i >= 0; i--)
-                    {
-                        WeakReference resource = _strategy.Resources[i];
-
-                        IDisposable target = resource.Target as IDisposable;
-                        if (target != null)
-                            target.Dispose();
-                    }
-
-                    _strategy.Resources.Clear();
-                }
-
-                // Clear the effect cache.
-                _strategy.EffectCache.Clear();
-
-                _strategy._mainContext.Strategy._blendState = null;
-                _strategy._mainContext.Strategy._actualBlendState = null;
-                _strategy._mainContext.Strategy._blendStateAdditive.Dispose();
-                _strategy._mainContext.Strategy._blendStateAlphaBlend.Dispose();
-                _strategy._mainContext.Strategy._blendStateNonPremultiplied.Dispose();
-                _strategy._mainContext.Strategy._blendStateOpaque.Dispose();
-
-                _strategy._mainContext.Strategy._depthStencilState = null;
-                _strategy._mainContext.Strategy._actualDepthStencilState = null;
-                _strategy._mainContext.Strategy._depthStencilStateDefault.Dispose();
-                _strategy._mainContext.Strategy._depthStencilStateDepthRead.Dispose();
-                _strategy._mainContext.Strategy._depthStencilStateNone.Dispose();
-
-                _strategy._mainContext.Strategy._rasterizerState = null;
-                _strategy._mainContext.Strategy._actualRasterizerState = null;
-                _strategy._mainContext.Strategy._rasterizerStateCullClockwise.Dispose();
-                _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise.Dispose();
-                _strategy._mainContext.Strategy._rasterizerStateCullNone.Dispose();
-
-                _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformDispose();
+                _strategy.Dispose();
             }
         }
 
