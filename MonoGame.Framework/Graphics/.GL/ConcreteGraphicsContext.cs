@@ -396,7 +396,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+                int maxVertexBufferSlots = vertexDeclaration.GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots;
+                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -467,7 +468,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, IntPtr baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
-            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash);
+            int maxVertexBufferSlots = vertexDeclaration.GraphicsDevice.Strategy.Capabilities.MaxVertexBufferSlots;
+            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
 
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)
