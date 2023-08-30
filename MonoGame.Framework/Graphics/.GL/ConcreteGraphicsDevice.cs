@@ -322,17 +322,6 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        internal void PlatformDispose()
-        {
-            // Free all the cached shader programs.
-            ClearProgramCache();
-
-#if DESKTOPGL
-            _mainContext.Dispose();
-            _mainContext = null;
-#endif
-        }
-
 
         protected override void Dispose(bool disposing)
         {
@@ -341,6 +330,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if (disposing)
             {
             }
+
+            // Free all the cached shader programs.
+            ClearProgramCache();
 
             base.Dispose(disposing);
         }

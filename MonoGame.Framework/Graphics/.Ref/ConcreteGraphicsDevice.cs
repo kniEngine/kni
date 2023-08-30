@@ -69,10 +69,6 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal void PlatformDispose()
-        {
-        }
-
 
         protected override void Dispose(bool disposing)
         {

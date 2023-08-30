@@ -807,7 +807,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                _strategy.Dispose();
+                if (_strategy != null)
+                    _strategy.Dispose();
 
                 _strategy = null;
                 _deviceStrategy = null;
