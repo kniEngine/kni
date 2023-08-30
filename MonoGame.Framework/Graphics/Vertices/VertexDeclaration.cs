@@ -20,13 +20,14 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </remarks>
     public partial class VertexDeclaration : GraphicsResource, IEquatable<VertexDeclaration>
     {
-        // Note for future refactoring:
+        // TODO:
         // For XNA-compatibility VertexDeclaration is derived from GraphicsResource, which means it
-        // has GraphicsDevice, Name, Tag and implements IDisposable. This is unnecessary in
-        // MonoGame. VertexDeclaration.GraphicsDevice is never set.
-        // --> VertexDeclaration should be a lightweight immutable type. No base class, no IDisposable.
-        //     (Use the internal type Data. Do not expose a constructor. Use a factory method to
-        //     cache the vertex declarations.)
+        // has GraphicsDevice, Name, Tag and implements IDisposable. The GraphicsDevice was late-bound
+        // after the first usage.
+        // This is incompatible with KNI because we allow multiple GraphicsDevice instances.
+        // Currently VertexDeclaration.GraphicsDevice is set when used in the constractor of VertexBuffer
+        // and the OpenGL DrawUserPrimitives methods.
+        // VertexDeclaration should be a lightweight immutable type. No base class, no IDisposable.
 
         #region ----- Data shared between structurally identical vertex declarations -----
 

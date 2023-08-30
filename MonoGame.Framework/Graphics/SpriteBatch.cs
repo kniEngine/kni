@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
 
-            this.GraphicsDevice = graphicsDevice;
+            SetGraphicsDevice(graphicsDevice);
 
             _spriteEffect = new SpriteEffect(graphicsDevice);
             _spritePass = _spriteEffect.CurrentTechnique.Passes[0];

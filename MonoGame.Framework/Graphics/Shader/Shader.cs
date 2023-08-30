@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
             ShaderStage stage, byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
         {
-            GraphicsDevice = graphicsDevice;
+            SetGraphicsDevice(graphicsDevice);
 
             this.Stage = stage;
             this.Samplers = samplers;
