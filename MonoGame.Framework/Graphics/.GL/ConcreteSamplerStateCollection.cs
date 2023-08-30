@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GraphicsExtensions.CheckGLError();
 
-                    sampler.Activate(_contextStrategy.Context, texture.GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
+                    sampler.PlatformApplyState(_contextStrategy.Context, texture.GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
                     texture.GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;
                 }
             }

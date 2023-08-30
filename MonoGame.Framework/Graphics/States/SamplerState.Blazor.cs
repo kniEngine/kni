@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class SamplerState
     {
 
-        internal void Activate(GraphicsContext context, WebGLTextureTarget target, bool useMipmaps = false)
+        internal void PlatformApplyState(GraphicsContext context, WebGLTextureTarget target, bool useMipmaps = false)
         {
             if (GraphicsDevice == null)
             {
