@@ -573,7 +573,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
+            vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
@@ -635,7 +635,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this.Context.DeviceStrategy.Device;
+            vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
             PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexOffset);
 
 
