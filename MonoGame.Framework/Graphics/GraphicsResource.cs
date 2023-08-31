@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
         {
-            
+            GraphicsDeviceResetting();
         }
 
         private void GraphicsDevice_Disposing(object sender, EventArgs e)
