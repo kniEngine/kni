@@ -499,6 +499,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        public override void Flush()
+        {            
+            this.D3dContext.Flush();
+        }
+
 
         internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {

@@ -785,6 +785,14 @@ namespace Microsoft.Xna.Framework.Graphics
             unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
         }
 
+        /// <summary>
+        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
+        /// </summary>
+        public void Flush()
+        {
+            Strategy.Flush();
+        }
+
 
         #region IDisposable Members
 

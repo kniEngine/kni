@@ -85,6 +85,11 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
+        public override void Flush()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
 
         internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {
