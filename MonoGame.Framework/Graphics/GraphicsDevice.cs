@@ -635,6 +635,14 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
+        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
+        /// </summary>
+        public void Flush()
+        {
+            CurrentContext.Flush();
+        }
+
+        /// <summary>
         /// Gets the Pixel data of what is currently drawn on screen.
         /// The format is whatever the current format of the backbuffer is.
         /// </summary>

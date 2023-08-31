@@ -20,14 +20,5 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return _strategy.ToConcrete<ConcreteGraphicsDevice>()._d3dDevice; }
         }
-
-        /// <summary>
-        /// Sends queued-up commands in the command buffer to the graphics processing unit (GPU).
-        /// </summary>
-        public void Flush()
-        {
-            CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();
-        }
-
     }
 }

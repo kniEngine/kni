@@ -725,6 +725,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        public override void Flush()
+        {
+            GL.Flush();
+        }
+
 
         internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {
