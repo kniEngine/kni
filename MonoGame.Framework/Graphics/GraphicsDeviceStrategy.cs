@@ -149,23 +149,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(!IsDisposed);
 
+            System.Diagnostics.Debug.Assert(this.Resources.Count == 0);
+
             if (disposing)
             {
-                // Dispose of all remaining graphics resources before disposing of the graphics device
-                lock (this.ResourcesLock)
-                {
-                    for (int i = this.Resources.Count - 1; i >= 0; i--)
-                    {
-                        WeakReference resource = this.Resources[i];
-
-                        IDisposable target = resource.Target as IDisposable;
-                        if (target != null)
-                            target.Dispose();
-                    }
-
-                    this.Resources.Clear();
-                }
-
                 // Clear the effect cache.
                 this.EffectCache.Clear();
 
