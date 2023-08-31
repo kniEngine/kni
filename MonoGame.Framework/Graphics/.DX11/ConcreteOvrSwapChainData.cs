@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using nkast.LibOVR;
-using SharpDX3D11 = SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public readonly static Guid IID_ID3D11Texture2D = new Guid(0x6f15aaf2, 0xd208, 0x4e89, 0x9a, 0xb4, 0x48, 0x95, 0x35, 0xd3, 0x4f, 0x9c);
 
         private OvrTextureSwapChain _swapChain;
-        public SharpDX3D11.Texture2D[] _buckBuffers;
+        public D3D11.Texture2D[] _buckBuffers;
         private RenderTarget2D _renderTarget;
 
         internal override OvrTextureSwapChain SwapChain { get { return _swapChain; } }
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             OvrTextureSwapChain swapChain;
 
-            SharpDX.Direct3D11.Device d3dDevice = (SharpDX.Direct3D11.Device)graphicsDevice.Handle;
+            D3D11.Device d3dDevice = (D3D11.Device)graphicsDevice.Handle;
             ovrResult = ovrSession.CreateTextureSwapChainDX(d3dDevice.NativePointer, desc, out swapChain);
             if (ovrResult < 0)
                 return ovrResult;
@@ -70,12 +70,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 preferredFormat, preferredDepthFormat, preferredMultiSampleCount,
                 RenderTargetUsage.DiscardContents);
 
-            swapChainData._buckBuffers = new SharpDX3D11.Texture2D[texSwapChainCount];
+            swapChainData._buckBuffers = new D3D11.Texture2D[texSwapChainCount];
             for (int i = 0; i < texSwapChainCount; i++)
             {
                 IntPtr pDxTexture3D;
                 ovrResult = swapChain.GetTextureSwapChainBufferDX(i, IID_ID3D11Texture2D, out pDxTexture3D);
-                swapChainData._buckBuffers[i] = new SharpDX3D11.Texture2D(pDxTexture3D);
+                swapChainData._buckBuffers[i] = new D3D11.Texture2D(pDxTexture3D);
             }
 
             outSwapChainData = swapChainData;
@@ -91,11 +91,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (ovrResult < 0)
                 return ovrResult;
 
-            SharpDX3D11.Texture2D dstResource = _buckBuffers[index];
-            SharpDX3D11.Resource srcResource  = (SharpDX3D11.Resource)rt.Handle;
+            D3D11.Texture2D dstResource = _buckBuffers[index];
+            D3D11.Resource srcResource  = (D3D11.Resource)rt.Handle;
 
-            SharpDX.Direct3D11.Device d3dDevice  = (SharpDX.Direct3D11.Device)graphicsDevice.Handle;
-            SharpDX3D11.DeviceContext d3dContext = d3dDevice.ImmediateContext;
+            D3D11.Direct3D11.Device d3dDevice  = (D3D11.Device)graphicsDevice.Handle;
+            D3D11.DeviceContext d3dContext = d3dDevice.ImmediateContext;
 
             d3dContext.CopyResource(srcResource, dstResource);
 
