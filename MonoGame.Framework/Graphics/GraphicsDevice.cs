@@ -22,12 +22,16 @@ namespace Microsoft.Xna.Framework.Graphics
         internal GraphicsContext CurrentContext { get { return _strategy.CurrentContext; } }
 
 
-        // TODO Graphics Device events need implementing
+        // TODO: Graphics Device events need implementing
         public event EventHandler<EventArgs> DeviceLost;
         public event EventHandler<EventArgs> DeviceReset;
         public event EventHandler<EventArgs> DeviceResetting;
         public event EventHandler<ResourceCreatedEventArgs> ResourceCreated;
         public event EventHandler<ResourceDestroyedEventArgs> ResourceDestroyed;
+
+        /// <summary>
+        /// Raised when the GraphicsResource is disposed or finalized.
+        /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
@@ -126,6 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         ~GraphicsDevice()
         {
+            OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
@@ -292,10 +297,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!_strategy.IsDisposed)
             {
+                OnDisposing(EventArgs.Empty);
                 Dispose(true);
                 GC.SuppressFinalize(this);
-
-                OnDisposing(EventArgs.Empty);
             }
         }
 
