@@ -89,6 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         private void GraphicsDeviceDisposing(object sender, EventArgs e)
         {
+            this.Dispose();
         }
 
         private int Initialize(GraphicsDevice graphicsDevice)
