@@ -16,8 +16,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private GraphicsDevice _graphicsDevice;
 
-        private WeakReference _selfReference;
-
         public string Name { get; set; }
 
         public Object Tag { get; set; }
@@ -67,9 +65,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
                     _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
-
-                    _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
-                    _selfReference = null;
                 }
 
                 SetGraphicsDevice(device);
@@ -83,9 +78,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _graphicsDevice = device;
             _graphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
             _graphicsDevice.Disposing += GraphicsDevice_Disposing;
-
-            _selfReference = new WeakReference(this);
-            _graphicsDevice.Strategy.AddResourceReference(_selfReference);
         }
 
         private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
@@ -134,11 +126,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
                 _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
-
-                _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
             }
 
-            _selfReference = null;
             _graphicsDevice = null;
         }
 

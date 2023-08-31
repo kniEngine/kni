@@ -21,12 +21,6 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GraphicsCapabilities _capabilities;
         internal GraphicsContext _mainContext;
 
-        // Use WeakReference for the global resources list as we do not know when a resource
-        // may be disposed and collected. We do not want to prevent a resource from being
-        // collected by holding a strong reference to it in this list.
-        internal readonly List<WeakReference> Resources = new List<WeakReference>();
-        internal readonly object ResourcesLock = new object();
-
         /// <summary>
         /// The cache of effects from unique byte streams.
         /// </summary>
@@ -91,22 +85,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount);
 
-        internal void AddResourceReference(WeakReference resourceReference)
-        {
-            lock (ResourcesLock)
-            {
-                Resources.Add(resourceReference);
-            }
-        }
-
-        internal void RemoveResourceReference(WeakReference resourceReference)
-        {
-            lock (ResourcesLock)
-            {
-                Resources.Remove(resourceReference);
-            }
-        }
-
 
         public abstract void Reset();
         public abstract void Reset(PresentationParameters presentationParameters);
@@ -148,8 +126,6 @@ namespace Microsoft.Xna.Platform.Graphics
         protected virtual void Dispose(bool disposing)
         {
             System.Diagnostics.Debug.Assert(!IsDisposed);
-
-            System.Diagnostics.Debug.Assert(this.Resources.Count == 0);
 
             if (disposing)
             {
