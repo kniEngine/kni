@@ -12,12 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
     {
-
         internal void Android_OnDeviceResetting()
         {
-            var handler = DeviceResetting;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            OnDeviceResetting(EventArgs.Empty);
 
             lock (_strategy.ResourcesLock)
             {
@@ -41,10 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Android_OnDeviceReset()
         {
-            var handler = DeviceReset;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            OnDeviceReset(EventArgs.Empty);
         }
-
     }
 }
