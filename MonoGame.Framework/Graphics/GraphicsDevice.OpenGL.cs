@@ -15,18 +15,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void Android_OnDeviceResetting()
         {
             OnDeviceResetting(EventArgs.Empty);
-
-            lock (_strategy.ResourcesLock)
-            {
-                // Remove references to resources that have been garbage collected.
-                for (int i = _strategy.Resources.Count - 1; i >= 0; i--)
-                {
-                    WeakReference resource = _strategy.Resources[i];
-
-                    if (!resource.IsAlive)
-                        _strategy.Resources.RemoveAt(i);
-                }
-            }
         }
 
         internal void Android_OnDeviceReset()
