@@ -351,9 +351,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
-            Strategy.Reset();
-
             OnDeviceResetting(EventArgs.Empty);
+
+            Strategy.Reset();
 
             // Update the back buffer.
             Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
@@ -367,10 +367,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset(PresentationParameters presentationParameters)
         {
+            OnDeviceResetting(EventArgs.Empty);
+            
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
             Strategy.Reset(presentationParameters);
+                        
+            OnDeviceReset(EventArgs.Empty);
         }
 
         public DisplayMode DisplayMode
