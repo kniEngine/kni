@@ -65,6 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_graphicsDevice != null)
                 {
+                    _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
                     _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
 
                     _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);
@@ -80,10 +81,16 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(device != null);
 
             _graphicsDevice = device;
+            _graphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
             _graphicsDevice.Disposing += GraphicsDevice_Disposing;
 
             _selfReference = new WeakReference(this);
             _graphicsDevice.Strategy.AddResourceReference(_selfReference);
+        }
+
+        private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
+        {
+            
         }
 
         private void GraphicsDevice_Disposing(object sender, EventArgs e)
@@ -125,6 +132,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Remove from the global list of graphics resources
             if (_graphicsDevice != null)
             {
+                _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
                 _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
 
                 _graphicsDevice.Strategy.RemoveResourceReference(_selfReference);

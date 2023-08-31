@@ -223,7 +223,9 @@ namespace Microsoft.Xna.Framework
                     _glContextAvailable = false;
 
                     if (_game.Strategy.GraphicsDevice != null)
+                    {
                         _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
+                    }
                 }
                 
                 _appState = AppState.Exited;
@@ -313,7 +315,9 @@ namespace Microsoft.Xna.Framework
                     contextLost = true;
 
                     if (_game.Strategy.GraphicsDevice != null)
+                    {
                         _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
+                    }
                 }
 
                 CreateGLContext();

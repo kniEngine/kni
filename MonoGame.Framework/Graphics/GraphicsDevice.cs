@@ -335,13 +335,25 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
         }
 
+        private void OnDeviceResetting(EventArgs e)
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnDeviceReset(EventArgs e)
+        {
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(this, e);
+        }
+
         public void Reset()
         {
             Strategy.Reset();
 
-            var deviceResettingHandler = DeviceResetting;
-            if (deviceResettingHandler != null)
-                deviceResettingHandler(this, EventArgs.Empty);
+            OnDeviceResetting(EventArgs.Empty);
 
             // Update the back buffer.
             Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
@@ -350,9 +362,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (presentationChangedHandler != null)
                 presentationChangedHandler(this, new PresentationEventArgs(PresentationParameters));
 
-            var deviceResetHandler = DeviceReset;
-            if (deviceResetHandler != null)
-                deviceResetHandler(this, EventArgs.Empty);
+            OnDeviceReset(EventArgs.Empty);
         }
 
         public void Reset(PresentationParameters presentationParameters)
