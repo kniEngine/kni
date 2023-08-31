@@ -241,6 +241,7 @@
     <Compile Include="Graphics\.DX11\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />

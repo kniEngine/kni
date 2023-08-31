@@ -17,12 +17,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
         /// For usage, convert this to SharpDX.Direct3D11.Resource.
         /// </summary>
+        [Obsolete("Use GetD3D11Resource() method.")]
         public object Handle
         {
-            get
-            {
-                return this.GetTexture();
-            }
+            get { return this.GetD3D11Resource(); }
         }
 
         internal abstract Resource CreateTexture();
