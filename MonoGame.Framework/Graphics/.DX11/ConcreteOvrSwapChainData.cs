@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
             D3D11.Texture2D dstResource = _buckBuffers[index];
             D3D11.Resource srcResource  = (D3D11.Resource)rt.Handle;
 
-            D3D11.Direct3D11.Device d3dDevice  = (D3D11.Device)graphicsDevice.Handle;
+            D3D11.Device d3dDevice  = (D3D11.Device)graphicsDevice.Handle;
             D3D11.DeviceContext d3dContext = d3dDevice.ImmediateContext;
 
             d3dContext.CopyResource(srcResource, dstResource);
