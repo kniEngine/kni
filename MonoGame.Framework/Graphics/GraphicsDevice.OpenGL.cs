@@ -18,13 +18,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_strategy.ResourcesLock)
             {
-                foreach (WeakReference resource in _strategy.Resources)
-                {
-                    GraphicsResource target = resource.Target as GraphicsResource;
-                    if (target != null)
-                        target.GraphicsDeviceResetting();
-                }
-
                 // Remove references to resources that have been garbage collected.
                 for (int i = _strategy.Resources.Count - 1; i >= 0; i--)
                 {
