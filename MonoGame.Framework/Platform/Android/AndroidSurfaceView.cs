@@ -16,6 +16,7 @@ using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework
@@ -224,7 +225,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
+                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceResetting();
                     }
                 }
                 
@@ -316,7 +317,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Android_OnDeviceResetting();
+                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceResetting();
                     }
                 }
 
@@ -835,7 +836,7 @@ namespace Microsoft.Xna.Framework
                         Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                         // DeviceReset events
-                        _game.Strategy.GraphicsDevice.Android_OnDeviceReset();
+                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
 
                         IsResuming = false;
                     });

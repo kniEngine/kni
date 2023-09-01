@@ -41,6 +41,17 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal void Android_OnDeviceResetting()
+        {
+            this.OnDeviceResetting(EventArgs.Empty);
+        }
+
+        internal void Android_OnDeviceReset()
+        {
+            this.OnDeviceReset(EventArgs.Empty);
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

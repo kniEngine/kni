@@ -23,7 +23,6 @@
   <ItemGroup>
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
-    <Compile Include="Graphics\GraphicsDevice.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
