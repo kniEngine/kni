@@ -37,9 +37,10 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformStart(string deviceName, int sampleRate, int sampleSizeInBytes)
+        internal override void PlatformStart(string deviceName)
         {
-            _captureDevice = OpenAL.ALC.CaptureOpenDevice(deviceName, checked((uint)sampleRate), ALFormat.Mono16, sampleSizeInBytes);
+            int sampleSizeInBytes = GetSampleSizeInBytes(BufferDuration);
+            _captureDevice = OpenAL.ALC.CaptureOpenDevice(deviceName, checked((uint)SampleRate), ALFormat.Mono16, sampleSizeInBytes);
             CheckALCError("Failed to open capture device.");
 
             OpenAL.ALC.CaptureStart(_captureDevice);
