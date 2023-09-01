@@ -50,21 +50,20 @@ namespace Microsoft.Xna.Framework.Audio
 
         #region Public Properties
 
-        private TimeSpan _bufferDuration = TimeSpan.FromMilliseconds(1000.0);
-
         /// <summary>
         /// Gets or sets the capture buffer duration. This value must be greater than 100 milliseconds, lower than 1000 milliseconds, and must be 10 milliseconds aligned (BufferDuration % 10 == 10).
         /// </summary>
         public TimeSpan BufferDuration
         {
-            get { return _bufferDuration; }
+            get { return _strategy.BufferDuration; }
             set
             {
                 if (value.TotalMilliseconds < 100 || value.TotalMilliseconds > 1000)
                     throw new ArgumentOutOfRangeException("Buffer duration must be a value between 100 and 1000 milliseconds.");
                 if (value.TotalMilliseconds % 10 != 0)
                     throw new ArgumentOutOfRangeException("Buffer duration must be 10ms aligned (BufferDuration % 10 == 0)");
-                _bufferDuration = value;
+
+                _strategy.BufferDuration = value;
             }
         }
 
@@ -77,15 +76,13 @@ namespace Microsoft.Xna.Framework.Audio
             get { return _strategy.PlatformIsHeadset(); }
         }
 
-        private int _sampleRate = 44100; // XNA default is 44100, don't know if it supports any other rates
-
         /// <summary>
         /// Returns the sample rate of the captured audio.
         /// Note: default value is 44100hz
         /// </summary>
         public int SampleRate
         {
-            get { return _sampleRate; }
+            get { return _strategy.SampleRate; }
         }
 
         private MicrophoneState _state = MicrophoneState.Stopped;
@@ -136,9 +133,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <returns>TimeSpan of the duration.</returns>
         public TimeSpan GetSampleDuration(int sizeInBytes)
         {
-            // this should be 10ms aligned
-            // this assumes 16bit mono data
-            return AudioService.GetSampleDuration(sizeInBytes, _sampleRate, AudioChannels.Mono);
+            return _strategy.GetSampleDuration(sizeInBytes);
         }
 
         /// <summary>
@@ -150,7 +145,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             // this should be 10ms aligned
             // this assumes 16bit mono data
-            return AudioService.GetSampleSizeInBytes(duration, _sampleRate, AudioChannels.Mono);
+            return _strategy.GetSampleSizeInBytes(duration);
         }
 
         /// <summary>
@@ -165,7 +160,7 @@ namespace Microsoft.Xna.Framework.Audio
                     return;
                 case MicrophoneState.Stopped:
                     {
-                        _strategy.PlatformStart(Name, _sampleRate, GetSampleSizeInBytes(_bufferDuration));
+                        _strategy.PlatformStart(Name);
                         _state = MicrophoneState.Started;
                     }
                     return;

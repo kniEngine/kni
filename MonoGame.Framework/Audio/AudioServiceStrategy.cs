@@ -37,11 +37,38 @@ namespace Microsoft.Xna.Platform.Audio
 
     abstract public class MicrophoneStrategy
     {
-        internal abstract void PlatformStart(string deviceName, int sampleRate, int sampleSizeInBytes);
+        private int _sampleRate = 44100;
+        private TimeSpan _bufferDuration = TimeSpan.FromMilliseconds(1000.0);
+
+        public int SampleRate { get { return _sampleRate; } }
+
+        public TimeSpan BufferDuration
+        {
+            get { return _bufferDuration; }
+            set { _bufferDuration = value; }
+        }
+
+
+        internal abstract void PlatformStart(string deviceName);
         internal abstract void PlatformStop();
         internal abstract bool PlatformUpdate();
         internal abstract bool PlatformIsHeadset();
         internal abstract int PlatformGetData(byte[] buffer, int offset, int count);
+
+
+        public TimeSpan GetSampleDuration(int sizeInBytes)
+        {
+            // this should be 10ms aligned
+            // this assumes 16bit mono data
+            return AudioService.GetSampleDuration(sizeInBytes, _sampleRate, AudioChannels.Mono);
+        }
+
+        public int GetSampleSizeInBytes(TimeSpan duration)
+        {
+            // this should be 10ms aligned
+            // this assumes 16bit mono data
+            return AudioService.GetSampleSizeInBytes(duration, _sampleRate, AudioChannels.Mono);
+        }
     }
 
     abstract public class SoundEffectStrategy : IDisposable

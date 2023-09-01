@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Audio
     /// </summary>	
     public sealed class ConcreteMicrophone : MicrophoneStrategy
     {
-        internal override void PlatformStart(string deviceName, int sampleRate, int sampleSizeInBytes)
+        internal override void PlatformStart(string deviceName)
         {
 			throw new NotImplementedException();
         }
