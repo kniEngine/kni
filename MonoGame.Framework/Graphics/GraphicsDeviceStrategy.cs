@@ -27,6 +27,17 @@ namespace Microsoft.Xna.Platform.Graphics
         public readonly Dictionary<int, Effect> EffectCache = new Dictionary<int, Effect>();
 
 
+        /// <summary>
+        /// Raised when the GraphicsResource is disposed or finalized.
+        /// </summary>
+        public event EventHandler<EventArgs> Disposing;
+
+        internal event EventHandler<EventArgs> DeviceReset;
+        internal event EventHandler<EventArgs> DeviceResetting;
+
+        internal event EventHandler<PresentationEventArgs> PresentationChanged;
+
+
         internal GraphicsDevice Device { get { return _device; } }
 
         public bool IsDisposed
@@ -86,6 +97,28 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount);
 
 
+        internal void OnDeviceResetting(EventArgs e)
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        internal void OnPresentationChanged(PresentationEventArgs e)
+        {
+            var handler = PresentationChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        internal void OnDeviceReset(EventArgs e)
+        {
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(this, e);
+        }
+
+
         public abstract void Reset();
         public abstract void Reset(PresentationParameters presentationParameters);
         public abstract void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle);
@@ -121,6 +154,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 GC.SuppressFinalize(this);
                 _isDisposed = true;
             }
+        }
+
+        internal void OnDisposing(EventArgs e)
+        {
+            var handler = Disposing;
+            if (handler != null)
+                handler(this, e);
         }
 
         protected virtual void Dispose(bool disposing)

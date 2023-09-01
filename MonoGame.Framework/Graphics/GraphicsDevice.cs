@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public event EventHandler<ResourceDestroyedEventArgs> ResourceDestroyed;
 
         /// <summary>
-        /// Raised when the GraphicsResource is disposed or finalized.
+        /// Raised when the GraphicsDevice is disposed or finalized.
         /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
@@ -107,6 +107,10 @@ namespace Microsoft.Xna.Framework.Graphics
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
             _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, false, presentationParameters);
+            _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
+            _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
+            _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
+            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
             Initialize();
         }
@@ -124,13 +128,17 @@ namespace Microsoft.Xna.Framework.Graphics
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
             _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
+            _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
+            _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
+            _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
+            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
             Initialize();
         }
 
         ~GraphicsDevice()
         {
-            OnDisposing(EventArgs.Empty);
+            Strategy.OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
@@ -297,7 +305,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!_strategy.IsDisposed)
             {
-                OnDisposing(EventArgs.Empty);
+                Strategy.OnDisposing(EventArgs.Empty);
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
@@ -316,6 +324,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (disposing)
             {
+                _strategy.DeviceResetting -= (sender, e) => { OnDeviceResetting(e); };
+                _strategy.DeviceReset -= (sender, e) => { OnDeviceReset(e); };
+                _strategy.PresentationChanged -= (sender, e) => { OnPresentationChanged(e); };
+                _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
+
                 _strategy.Dispose();
             }
         }
@@ -342,6 +355,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 handler(this, e);
         }
 
+        private void OnPresentationChanged(PresentationEventArgs e)
+        {
+            var handler = PresentationChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
         private void OnDeviceReset(EventArgs e)
         {
             var handler = DeviceReset;
@@ -351,30 +371,28 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
-            OnDeviceResetting(EventArgs.Empty);
+            Strategy.OnDeviceResetting(EventArgs.Empty);
 
             Strategy.Reset();
 
             // Update the back buffer.
             Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
             
-            var presentationChangedHandler = PresentationChanged;
-            if (presentationChangedHandler != null)
-                presentationChangedHandler(this, new PresentationEventArgs(PresentationParameters));
+            Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
 
-            OnDeviceReset(EventArgs.Empty);
+            Strategy.OnDeviceReset(EventArgs.Empty);
         }
 
         public void Reset(PresentationParameters presentationParameters)
         {
-            OnDeviceResetting(EventArgs.Empty);
-            
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
+            Strategy.OnDeviceResetting(EventArgs.Empty);
+
             Strategy.Reset(presentationParameters);
-                        
-            OnDeviceReset(EventArgs.Empty);
+
+            Strategy.OnDeviceReset(EventArgs.Empty);
         }
 
         public DisplayMode DisplayMode
