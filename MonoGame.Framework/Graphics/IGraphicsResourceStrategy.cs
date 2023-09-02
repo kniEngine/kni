@@ -12,5 +12,6 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         public GraphicsDevice GraphicsDevice { get; }
 
+        public event EventHandler<EventArgs> Disposing;
     }
 }

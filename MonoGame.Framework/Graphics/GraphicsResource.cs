@@ -42,13 +42,13 @@ namespace Microsoft.Xna.Framework.Graphics
         internal GraphicsResource()
         {
             _strategy = new GraphicsResourceStrategy();
+            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
         }
 
         ~GraphicsResource()
         {
-            OnDisposing(EventArgs.Empty);
-            Dispose(false);
+             Dispose(false);
         }
 
 
@@ -104,7 +104,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (!IsDisposed)
             {
-                OnDisposing(EventArgs.Empty);
                 Dispose(true);
                 GC.SuppressFinalize(this);
 
@@ -131,6 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (disposing)
             {
                 _strategy.Dispose();
+                _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
 
             }
 
@@ -139,9 +139,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
                 _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
+
+                ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
             }
 
-            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
         }
 
 

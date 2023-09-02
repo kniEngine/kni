@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        public event EventHandler<EventArgs> Disposing;
+
         internal GraphicsResourceStrategy()
         {
         }
@@ -38,13 +40,22 @@ namespace Microsoft.Xna.Platform.Graphics
 
         ~GraphicsResourceStrategy()
         {
+            OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
         public void Dispose()
         {
+            OnDisposing(EventArgs.Empty);
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        internal void OnDisposing(EventArgs e)
+        {
+            var handler = Disposing;
+            if (handler != null)
+                handler(this, e);
         }
 
         protected virtual void Dispose(bool disposing)
