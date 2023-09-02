@@ -67,17 +67,17 @@ namespace MonoGame.Framework
             get { return _isResizable; }
             set
             {
-                if (_isResizable != value)
-                {
-                    _isResizable = value;
-                    Form.MaximizeBox = _isResizable;
+                if (_isResizable == value)
+                    return;
 
-                    if (!_isBorderless)
-                    {
-                        Form.FormBorderStyle = (_isResizable)
-                                             ? FormBorderStyle.Sizable
-                                             : FormBorderStyle.FixedSingle;
-                    }
+                _isResizable = value;
+                Form.MaximizeBox = _isResizable;
+
+                if (!_isBorderless)
+                {
+                    Form.FormBorderStyle = (_isResizable)
+                                            ? FormBorderStyle.Sizable
+                                            : FormBorderStyle.FixedSingle;
                 }
             }
         }
@@ -87,20 +87,20 @@ namespace MonoGame.Framework
             get { return _isBorderless; }
             set
             {
-                if (_isBorderless != value)
-                {
-                    _isBorderless = value;
+                if (_isBorderless == value)
+                    return;
+                                
+                _isBorderless = value;
 
-                    if (!_isBorderless)
-                    {
-                        Form.FormBorderStyle = (_isResizable)
-                                             ? FormBorderStyle.Sizable
-                                             : FormBorderStyle.FixedSingle;
-                    }
-                    else
-                    {
-                        Form.FormBorderStyle = FormBorderStyle.None;
-                    }
+                if (!_isBorderless)
+                {
+                    Form.FormBorderStyle = (_isResizable)
+                                            ? FormBorderStyle.Sizable
+                                            : FormBorderStyle.FixedSingle;
+                }
+                else
+                {
+                    Form.FormBorderStyle = FormBorderStyle.None;
                 }
             }
         }

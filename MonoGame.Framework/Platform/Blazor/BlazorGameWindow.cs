@@ -68,13 +68,13 @@ namespace Microsoft.Xna.Framework
             get { return _isResizable; }
             set
             {
-                if (_isResizable != value)
-                {
-                    _isResizable = value;
+                if (_isResizable == value)
+                    return;
 
-                    if (!_isBorderless)
-                    {
-                    }
+                _isResizable = value;
+
+                if (!_isBorderless)
+                {
                 }
             }
         }
@@ -84,13 +84,13 @@ namespace Microsoft.Xna.Framework
             get { return _isBorderless; }
             set
             {
-                if (_isBorderless != value)
-                {
-                    _isBorderless = value;
+                if (_isBorderless == value)
+                    return;
 
-                    if (!_isBorderless)
-                    {
-                    }
+                _isBorderless = value;
+
+                if (!_isBorderless)
+                {
                 }
             }
         }
