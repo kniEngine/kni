@@ -128,8 +128,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize);
             _strategyTexture = _strategyTexture2D;
-
             SetGraphicsDevice(graphicsDevice);
+
             this.TexelWidth = 1f / (float)width;
             this.TexelHeight = 1f / (float)height;
 

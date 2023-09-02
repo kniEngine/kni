@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract class GraphicsResource : IDisposable
     {
-        protected IGraphicsResourceStrategy _strategy;
+        private IGraphicsResourceStrategy _strategy;
 
         private bool _isDisposed;
 
@@ -41,9 +41,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsResource()
         {
-            _strategy = new GraphicsResourceStrategy();
-            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
+            SetResourceStrategy(new GraphicsResourceStrategy());
+        }
 
+        protected void SetResourceStrategy(IGraphicsResourceStrategy strategy)
+        {
+            _strategy = strategy;
+            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
         }
 
         ~GraphicsResource()
