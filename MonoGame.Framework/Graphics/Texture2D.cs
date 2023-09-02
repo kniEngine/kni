@@ -98,6 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
+            : base()
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
@@ -128,6 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize);
             _strategyTexture = _strategyTexture2D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
             SetGraphicsDevice(graphicsDevice);
 
             this.TexelWidth = 1f / (float)width;

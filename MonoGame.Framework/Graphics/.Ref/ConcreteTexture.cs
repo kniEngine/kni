@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture : ITextureStrategy
+    internal class ConcreteTexture : GraphicsResourceStrategy, ITextureStrategy
     {
-    
+
         internal ConcreteTexture(GraphicsContextStrategy contextStrategy, SurfaceFormat format, int levelCount)
         {
         
