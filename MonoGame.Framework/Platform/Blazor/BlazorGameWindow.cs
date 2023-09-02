@@ -79,6 +79,18 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        public override bool IsBorderless
+        {
+            get { return _isBorderless; }
+            set
+            {
+                if (_isBorderless != value)
+                    _isBorderless = value;
+                else
+                    return;
+            }
+        }
+
         public override bool AllowAltF4
         {
              get { return base.AllowAltF4; }
@@ -97,17 +109,6 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        public override bool IsBorderless
-        {
-            get { return _isBorderless; }
-            set
-            {
-                if (_isBorderless != value)
-                    _isBorderless = value;
-                else
-                    return;
-            }
-        }
 
         public bool IsFullScreen { get; private set; }
         public bool HardwareModeSwitch { get; private set; }

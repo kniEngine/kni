@@ -32,6 +32,16 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        public override bool IsBorderless
+        {
+            get { return _isBorderless; }
+            set
+            {
+                SDL.WINDOW.SetBordered(_handle, value ? 0 : 1);
+                _isBorderless = value;
+            }
+        }
+
         public override Rectangle ClientBounds
         {
             get
@@ -57,15 +67,6 @@ namespace Microsoft.Xna.Framework
             get { return _screenDeviceName; }
         }
 
-        public override bool IsBorderless
-        {
-            get { return _isBorderless; }
-            set
-            {
-                SDL.WINDOW.SetBordered(_handle, value ? 0 : 1);
-                _isBorderless = value;
-            }
-        }
 
         public static GameWindow Instance;
         public uint? Id;

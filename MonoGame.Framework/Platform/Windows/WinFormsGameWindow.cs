@@ -80,6 +80,22 @@ namespace MonoGame.Framework
             }
         }
 
+        public override bool IsBorderless
+        {
+            get { return _isBorderless; }
+            set
+            {
+                if (_isBorderless != value)
+                    _isBorderless = value;
+                else
+                    return;
+                if (_isBorderless)
+                    Form.FormBorderStyle = FormBorderStyle.None;
+                else
+                    Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
+            }
+        }
+
         public override bool AllowAltF4
         {
              get { return base.AllowAltF4; }
@@ -99,21 +115,6 @@ namespace MonoGame.Framework
         {
         }
 
-        public override bool IsBorderless
-        {
-            get { return _isBorderless; }
-            set
-            {
-                if (_isBorderless != value)
-                    _isBorderless = value;
-                else
-                    return;
-                if (_isBorderless)
-                    Form.FormBorderStyle = FormBorderStyle.None;
-                else
-                    Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
-            }
-        }
 
         public bool IsFullScreen { get; private set; }
         public bool HardwareModeSwitch { get; private set; }
