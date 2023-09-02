@@ -29,6 +29,13 @@ namespace Microsoft.Xna.Framework.Graphics
 		public SurfaceFormat Format { get { return _strategyTexture.Format; } }		
 		public int LevelCount { get { return _strategyTexture.LevelCount; } }
 
+
+        protected Texture()
+            : base(true)
+        {
+        }
+
+
         internal protected override void GraphicsDeviceResetting()
         {
             PlatformGraphicsDeviceResetting();

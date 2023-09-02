@@ -9,7 +9,7 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture : ITextureStrategy
+    internal class ConcreteTexture : GraphicsResourceStrategy, ITextureStrategy
     {
         private readonly GraphicsContextStrategy _contextStrategy;
         private readonly SurfaceFormat _format;        

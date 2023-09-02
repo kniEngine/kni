@@ -38,14 +38,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
+        internal GraphicsResource(bool hasStrategy)
+        {
+            Debug.Assert(hasStrategy == true); // parent class will set the _strategy
+        }
 
         internal GraphicsResource()
         {
-            SetResourceStrategy(new GraphicsResourceStrategy());
+            IGraphicsResourceStrategy strategy = new GraphicsResourceStrategy();
+            SetResourceStrategy(strategy);
         }
 
         protected void SetResourceStrategy(IGraphicsResourceStrategy strategy)
         {
+            Debug.Assert(_strategy == null);
+
             _strategy = strategy;
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
         }
