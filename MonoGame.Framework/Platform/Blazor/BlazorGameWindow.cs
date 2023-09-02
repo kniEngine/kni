@@ -68,14 +68,30 @@ namespace Microsoft.Xna.Framework
             get { return _isResizable; }
             set
             {
-                if (_isResizable != value)
+                if (_isResizable == value)
+                    return;
+
+                _isResizable = value;
+
+                if (!_isBorderless)
                 {
-                    _isResizable = value;
                 }
-                else
+            }
+        }
+
+        public override bool IsBorderless
+        {
+            get { return _isBorderless; }
+            set
+            {
+                if (_isBorderless == value)
                     return;
-                if (_isBorderless)
-                    return;
+
+                _isBorderless = value;
+
+                if (!_isBorderless)
+                {
+                }
             }
         }
 
@@ -97,17 +113,6 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        public override bool IsBorderless
-        {
-            get { return _isBorderless; }
-            set
-            {
-                if (_isBorderless != value)
-                    _isBorderless = value;
-                else
-                    return;
-            }
-        }
 
         public bool IsFullScreen { get; private set; }
         public bool HardwareModeSwitch { get; private set; }

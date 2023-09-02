@@ -201,14 +201,8 @@ namespace Microsoft.Xna.Framework
 
         public override bool AllowUserResizing
         {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                // Do nothing; Ignore rather than raising an exception
-            }
+            get { return false; }
+            set { /* Ignore */ }
         }
 
         // A copy of ScreenOrientation from Android 2.3

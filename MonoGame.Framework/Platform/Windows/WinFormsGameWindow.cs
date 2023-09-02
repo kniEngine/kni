@@ -67,16 +67,41 @@ namespace MonoGame.Framework
             get { return _isResizable; }
             set
             {
-                if (_isResizable != value)
+                if (_isResizable == value)
+                    return;
+
+                _isResizable = value;
+                Form.MaximizeBox = _isResizable;
+
+                if (!_isBorderless)
                 {
-                    _isResizable = value;
-                    Form.MaximizeBox = _isResizable;
+                    Form.FormBorderStyle = (_isResizable)
+                                            ? FormBorderStyle.Sizable
+                                            : FormBorderStyle.FixedSingle;
+                }
+            }
+        }
+
+        public override bool IsBorderless
+        {
+            get { return _isBorderless; }
+            set
+            {
+                if (_isBorderless == value)
+                    return;
+                                
+                _isBorderless = value;
+
+                if (!_isBorderless)
+                {
+                    Form.FormBorderStyle = (_isResizable)
+                                            ? FormBorderStyle.Sizable
+                                            : FormBorderStyle.FixedSingle;
                 }
                 else
-                    return;
-                if (_isBorderless)
-                    return;
-                Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
+                {
+                    Form.FormBorderStyle = FormBorderStyle.None;
+                }
             }
         }
 
@@ -99,21 +124,6 @@ namespace MonoGame.Framework
         {
         }
 
-        public override bool IsBorderless
-        {
-            get { return _isBorderless; }
-            set
-            {
-                if (_isBorderless != value)
-                    _isBorderless = value;
-                else
-                    return;
-                if (_isBorderless)
-                    Form.FormBorderStyle = FormBorderStyle.None;
-                else
-                    Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
-            }
-        }
 
         public bool IsFullScreen { get; private set; }
         public bool HardwareModeSwitch { get; private set; }

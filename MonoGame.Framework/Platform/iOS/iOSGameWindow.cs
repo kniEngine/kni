@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework
 		public override bool AllowUserResizing
         {
 			get { return false; }
-			set { /* Do nothing. */ }
+			set { /* Ignore */ }
 		}
 
 		public override Rectangle ClientBounds
