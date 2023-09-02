@@ -29,6 +29,10 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetResizable(_handle, _isResizable);
                 else
                     throw new Exception("SDL " + nonResizeableVersion + " does not support changing resizable parameter of the window after it's already been created, please use a newer version of it.");
+
+                if (!_isBorderless)
+                {
+                }
             }
         }
 
@@ -38,7 +42,15 @@ namespace Microsoft.Xna.Framework
             set
             {
                 _isBorderless = value;
-                SDL.WINDOW.SetBordered(_handle, _isBorderless ? 0 : 1);
+
+                if (!_isBorderless)
+                {
+                    SDL.WINDOW.SetBordered(_handle, 1);
+                }
+                else
+                {
+                    SDL.WINDOW.SetBordered(_handle, 0);
+                }
             }
         }
 
