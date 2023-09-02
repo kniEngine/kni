@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework
 
         public override bool AllowUserResizing
         {
-            get { return !_isBorderless && _isResizable; }
+            get { return _isResizable && !_isBorderless; }
             set
             {
                 _isResizable = value;
