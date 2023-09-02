@@ -6,15 +6,16 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract class GraphicsResource : IDisposable
     {
-        private bool _isDisposed;
+        protected IGraphicsResourceStrategy _strategy;
 
-        private GraphicsDevice _graphicsDevice;
+        private bool _isDisposed;
 
         public string Name { get; set; }
 
@@ -22,7 +23,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsDisposed { get { return _isDisposed; } }
 
-        public GraphicsDevice GraphicsDevice { get { return _graphicsDevice; } }
+        public GraphicsDevice GraphicsDevice
+        { 
+            get 
+            {
+                if (_strategy == null)
+                    return null;
+                return _strategy.GraphicsDevice;
+            } 
+        }
 
         /// <summary>
         /// Raised when the GraphicsResource is disposed or finalized.
@@ -32,6 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsResource()
         {
+            _strategy = new GraphicsResourceStrategy();
 
         }
 
@@ -59,12 +69,12 @@ namespace Microsoft.Xna.Framework.Graphics
         // but only one GraphicsDevice should retain ownership.
         internal void BindGraphicsDevice(GraphicsDevice device)
         {
-            if (_graphicsDevice != device)
+            if (_strategy.GraphicsDevice != device)
             {
-                if (_graphicsDevice != null)
+                if (_strategy.GraphicsDevice != null)
                 {
-                    _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                    _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
+                    _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
+                    _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
                 }
 
                 SetGraphicsDevice(device);
@@ -75,9 +85,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(device != null);
 
-            _graphicsDevice = device;
-            _graphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
-            _graphicsDevice.Disposing += GraphicsDevice_Disposing;
+            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
+            _strategy.GraphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
+            _strategy.GraphicsDevice.Disposing += GraphicsDevice_Disposing;
         }
 
         private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
@@ -92,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Dispose()
         {
-            if (!_isDisposed)
+            if (!IsDisposed)
             {
                 OnDisposing(EventArgs.Empty);
                 Dispose(true);
@@ -116,19 +126,22 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Native resources should always be released regardless of the value of the disposing parameter.</remarks>
         protected virtual void Dispose(bool disposing)
         {
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
             if (disposing)
             {
+                _strategy.Dispose();
 
             }
 
             // Remove from the global list of graphics resources
-            if (_graphicsDevice != null)
+            if (_strategy.GraphicsDevice != null)
             {
-                _graphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                _graphicsDevice.Disposing -= GraphicsDevice_Disposing;
+                _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
+                _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
             }
 
-            _graphicsDevice = null;
+            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
         }
 
 

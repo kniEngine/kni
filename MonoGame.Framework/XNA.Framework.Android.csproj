@@ -287,6 +287,8 @@
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\GraphicsProfile.cs" />
     <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Graphics\GraphicsResourceStrategy.cs" />
+    <Compile Include="Graphics\IGraphicsResourceStrategy.cs" />
     <Compile Include="Graphics\IGraphicsDeviceService.cs" />
     <Compile Include="Graphics\IRenderTarget.cs" />
     <Compile Include="Graphics\IRenderTargetStrategy.cs" />
