@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework
 
         public override bool AllowUserResizing
         {
-            get { return !IsBorderless && _resizable; }
+            get { return !_isBorderless && _isResizable; }
             set
             {
                 var nonResizeableVersion = new Sdl.Version(2, 0, 4);
@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework
                 else
                     throw new Exception("SDL " + nonResizeableVersion + " does not support changing resizable parameter of the window after it's already been created, please use a newer version of it.");
 
-                _resizable = value;
+                _isResizable = value;
             }
         }
 
@@ -59,11 +59,11 @@ namespace Microsoft.Xna.Framework
 
         public override bool IsBorderless
         {
-            get { return _borderless; }
+            get { return _isBorderless; }
             set
             {
                 SDL.WINDOW.SetBordered(_handle, value ? 0 : 1);
-                _borderless = value;
+                _isBorderless = value;
             }
         }
 
@@ -74,7 +74,8 @@ namespace Microsoft.Xna.Framework
         internal readonly Game _game;
         private IntPtr _handle, _icon;
         private bool _disposed;
-        private bool _resizable, _borderless, _mouseVisible, _hardwareSwitch;
+        private bool _isResizable, _isBorderless;
+        private bool _mouseVisible, _hardwareSwitch;
         private string _screenDeviceName;
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
@@ -157,8 +158,8 @@ namespace Microsoft.Xna.Framework
             if (_icon != IntPtr.Zero)
                 SDL.WINDOW.SetIcon(_handle, _icon);
 
-            SDL.WINDOW.SetBordered(_handle, _borderless ? 0 : 1);
-            SDL.WINDOW.SetResizable(_handle, _resizable);
+            SDL.WINDOW.SetBordered(_handle, _isBorderless ? 0 : 1);
+            SDL.WINDOW.SetResizable(_handle, _isResizable);
 
             SetCursorVisible(_mouseVisible);
         }
