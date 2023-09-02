@@ -71,12 +71,11 @@ namespace MonoGame.Framework
                 {
                     _isResizable = value;
                     Form.MaximizeBox = _isResizable;
+
+                    if (_isBorderless)
+                        return;
+                    Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
                 }
-                else
-                    return;
-                if (_isBorderless)
-                    return;
-                Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
             }
         }
 
@@ -86,13 +85,14 @@ namespace MonoGame.Framework
             set
             {
                 if (_isBorderless != value)
+                {
                     _isBorderless = value;
-                else
-                    return;
-                if (_isBorderless)
-                    Form.FormBorderStyle = FormBorderStyle.None;
-                else
-                    Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
+
+                    if (_isBorderless)
+                        Form.FormBorderStyle = FormBorderStyle.None;
+                    else
+                        Form.FormBorderStyle = _isResizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
+                }
             }
         }
 

@@ -71,11 +71,10 @@ namespace Microsoft.Xna.Framework
                 if (_isResizable != value)
                 {
                     _isResizable = value;
+
+                    if (_isBorderless)
+                        return;
                 }
-                else
-                    return;
-                if (_isBorderless)
-                    return;
             }
         }
 
@@ -85,9 +84,9 @@ namespace Microsoft.Xna.Framework
             set
             {
                 if (_isBorderless != value)
+                {
                     _isBorderless = value;
-                else
-                    return;
+                }
             }
         }
 

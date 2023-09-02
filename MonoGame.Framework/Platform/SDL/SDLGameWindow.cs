@@ -22,13 +22,13 @@ namespace Microsoft.Xna.Framework
             get { return !_isBorderless && _isResizable; }
             set
             {
+                _isResizable = value;
+
                 var nonResizeableVersion = new Sdl.Version(2, 0, 4);
                 if (SDL.version > nonResizeableVersion)
-                    SDL.WINDOW.SetResizable(_handle, value);
+                    SDL.WINDOW.SetResizable(_handle, _isResizable);
                 else
                     throw new Exception("SDL " + nonResizeableVersion + " does not support changing resizable parameter of the window after it's already been created, please use a newer version of it.");
-
-                _isResizable = value;
             }
         }
 
@@ -37,8 +37,8 @@ namespace Microsoft.Xna.Framework
             get { return _isBorderless; }
             set
             {
-                SDL.WINDOW.SetBordered(_handle, value ? 0 : 1);
                 _isBorderless = value;
+                SDL.WINDOW.SetBordered(_handle, _isBorderless ? 0 : 1);
             }
         }
 
