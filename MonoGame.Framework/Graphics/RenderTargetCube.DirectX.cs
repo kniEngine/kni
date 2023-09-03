@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -60,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
             depthStencilDesc.SampleDescription = sampleDescription;
             depthStencilDesc.BindFlags = D3D11.BindFlags.DepthStencil;
 
-            if (graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice.FeatureLevel >= SharpDX.Direct3D.FeatureLevel.Level_10_0)
+            if (graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice.FeatureLevel >= D3D.FeatureLevel.Level_10_0)
             {
                 // for feature Level_10_0 the depth buffer is required to be defined as TextureCube with six slices,
                 // and the depth view is required to be Texture2DArray.

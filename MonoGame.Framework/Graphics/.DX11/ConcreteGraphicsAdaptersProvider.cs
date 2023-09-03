@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.Direct3D;
+using D3D = SharpDX.Direct3D;
 using DXGI = SharpDX.DXGI;
 
 

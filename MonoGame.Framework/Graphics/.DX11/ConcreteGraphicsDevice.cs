@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if WINDOWS_UAP
                 // Necessary to enable video playback
-                SharpDX.Direct3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<SharpDX.Direct3D.DeviceMultithread>();
+                D3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<D3D.DeviceMultithread>();
                 multithread.SetMultithreadProtected(true);
 #endif
             }

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.Direct3D;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
-            FeatureLevel highestSupportedLevel;
+            D3D.FeatureLevel highestSupportedLevel;
             try
             {
                 highestSupportedLevel = D3D11.Device.GetSupportedFeatureLevel(_adapter);
@@ -57,17 +57,17 @@ namespace Microsoft.Xna.Platform.Graphics
             switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
-                    return (highestSupportedLevel >= FeatureLevel.Level_9_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_9_1);
                 case GraphicsProfile.HiDef:
-                    return (highestSupportedLevel >= FeatureLevel.Level_9_3);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_9_3);
                 case GraphicsProfile.FL10_0:
-                    return (highestSupportedLevel >= FeatureLevel.Level_10_0);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_10_0);
                 case GraphicsProfile.FL10_1:
-                    return (highestSupportedLevel >= FeatureLevel.Level_10_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_10_1);
                 case GraphicsProfile.FL11_0:
-                    return (highestSupportedLevel >= FeatureLevel.Level_11_0);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_11_0);
                 case GraphicsProfile.FL11_1:
-                    return (highestSupportedLevel >= FeatureLevel.Level_11_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_11_1);
                 default:
                     throw new InvalidOperationException();
             }

@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using Microsoft.Xna.Platform.Graphics;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -13,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructOcclusionQuery()
         {
-            //if (graphicsDevice.D3DDevice.FeatureLevel == SharpDX.Direct3D.FeatureLevel.Level_9_1)
+            //if (graphicsDevice.D3DDevice.FeatureLevel == D3D.FeatureLevel.Level_9_1)
             //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
 
             D3D11.QueryDescription queryDescription = new D3D11.QueryDescription

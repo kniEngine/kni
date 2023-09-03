@@ -10,8 +10,8 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
-using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -266,20 +266,20 @@ namespace Microsoft.Xna.Platform.Graphics
             _lastPrimitiveType = primitiveType;
         }
 
-        private static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
+        private static D3D.PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
         {
             switch (primitiveType)
             {
                 case PrimitiveType.LineList:
-                    return PrimitiveTopology.LineList;
+                    return D3D.PrimitiveTopology.LineList;
                 case PrimitiveType.LineStrip:
-                    return PrimitiveTopology.LineStrip;
+                    return D3D.PrimitiveTopology.LineStrip;
                 case PrimitiveType.TriangleList:
-                    return PrimitiveTopology.TriangleList;
+                    return D3D.PrimitiveTopology.TriangleList;
                 case PrimitiveType.TriangleStrip:
-                    return PrimitiveTopology.TriangleStrip;
+                    return D3D.PrimitiveTopology.TriangleStrip;
                 case PrimitiveType.PointList:
-                    return PrimitiveTopology.PointList;
+                    return D3D.PrimitiveTopology.PointList;
 
                 default:
                     throw new ArgumentException();
