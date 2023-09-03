@@ -225,6 +225,14 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.cs" />
+	  
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
+	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
+    <Compile Include="Graphics\.GL.SDL\OpenGL.SDL.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
@@ -393,17 +401,10 @@
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
-    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
-    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
-	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
-	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.SDL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTargetCube.OpenGL.cs" />

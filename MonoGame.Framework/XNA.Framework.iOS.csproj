@@ -205,6 +205,7 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
@@ -371,8 +372,12 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 
-    <Compile Include="Platform\Graphics\OpenGL.iOS.cs" />
-
+    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />
+	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
+    <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
+	  
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
@@ -380,11 +385,6 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.cs" />
-    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdapter.cs" />
-    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdaptersProvider.cs" />
-	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />
-	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />

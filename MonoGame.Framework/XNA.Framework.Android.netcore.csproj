@@ -40,7 +40,16 @@
   <ItemGroup>
     <Compile Remove="Input\Keyboard.cs" />
   </ItemGroup>
-
+	
+  <ItemGroup>
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
+	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
+	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
+  </ItemGroup>
+	  
   <ItemGroup>
     <Compile Include="Platform\Android\AndroidCompatibility.cs" />
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
@@ -55,12 +64,6 @@
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
-	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
-	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
     <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
