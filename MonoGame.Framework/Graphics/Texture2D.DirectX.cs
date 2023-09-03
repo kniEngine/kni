@@ -24,18 +24,14 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        protected bool Shared { get { return _shared; } }
-        protected bool MipMap { get { return _mipMap; } }
         protected DXGI.SampleDescription SampleDescription { get { return _sampleDescription; } }
 
-        private bool _shared;
-        private bool _mipMap;
         private DXGI.SampleDescription _sampleDescription;
 
         private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
-            _shared = shared;
-            _mipMap = mipMap;
+            ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
+            ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
             _sampleDescription = new DXGI.SampleDescription(1, 0);
         }
 
@@ -253,7 +249,7 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            if (_shared)
+            if (((ConcreteTexture2D)_strategyTexture2D)._shared)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
             return texture2DDesc;

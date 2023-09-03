@@ -14,13 +14,10 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class Texture3D : Texture
 	{
-        private bool renderTarget;
-        private bool mipMap;
-
         private void PlatformConstructTexture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-            this.renderTarget = renderTarget;
-            this.mipMap = mipMap;
+            ((ConcreteTexture3D)_strategyTexture3D)._isRenderTarget = renderTarget;
+            ((ConcreteTexture3D)_strategyTexture3D)._mipMap = mipMap;
 
             // Create texture
             GetTexture();
@@ -40,10 +37,10 @@ namespace Microsoft.Xna.Framework.Graphics
             texture3DDesc.Usage = D3D11.ResourceUsage.Default;
             texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            if (renderTarget)
+            if (((ConcreteTexture3D)_strategyTexture3D)._isRenderTarget)
             {
                 texture3DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
-                if (mipMap)
+                if (((ConcreteTexture3D)_strategyTexture3D)._mipMap)
                 {
                     // Note: XNA 4 does not have a method Texture.GenerateMipMaps() 
                     // because generation of mipmaps is not supported on the Xbox 360.

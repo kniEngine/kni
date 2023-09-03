@@ -12,9 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget3D : IRenderTargetDX11
     {
-        private int _currentSlice;
-        private D3D11.RenderTargetView _renderTargetView;
-        private D3D11.DepthStencilView _depthStencilView;
 
         private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
@@ -49,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
                 depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                 // Create the view for binding to the device.
-                _depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
@@ -57,8 +54,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                DX.Utilities.Dispose(ref _renderTargetView);
-                DX.Utilities.Dispose(ref _depthStencilView);
+                DX.Utilities.Dispose(ref ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView);
+                DX.Utilities.Dispose(ref ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView);
             }
 
             base.Dispose(disposing);
@@ -70,16 +67,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("The arraySlice is out of range for this Texture3D.");
 
             // Dispose the previous target.
-	        if (_currentSlice != arraySlice && _renderTargetView != null)
+	        if (((ConcreteRenderTarget3D)_strategyRenderTarget3D)._currentSlice != arraySlice && ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView != null)
 	        {
-	            _renderTargetView.Dispose();
-	            _renderTargetView = null;
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView.Dispose();
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView = null;
 	        }
 
             // Create the new target view interface.
-	        if (_renderTargetView == null)
+	        if (((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView == null)
 	        {
-	            _currentSlice = arraySlice;
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._currentSlice = arraySlice;
 
                 D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
                 renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
@@ -88,15 +85,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 renderTargetViewDesc.Texture3D.FirstDepthSlice = arraySlice;
                 renderTargetViewDesc.Texture3D.MipSlice = 0;
 
-	            _renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
 	        }
 
-	        return _renderTargetView;
+	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView;
 	    }
 
         D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
 	    {
-	        return _depthStencilView;
+	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView;
 	    }
     }
 }

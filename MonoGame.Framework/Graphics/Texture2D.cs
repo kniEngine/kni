@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private ITexture2DStrategy _strategyTexture2D;
+        internal ITexture2DStrategy _strategyTexture2D;
 
         internal protected enum SurfaceType
         {

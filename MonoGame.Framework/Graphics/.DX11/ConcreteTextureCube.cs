@@ -23,5 +23,8 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Size { get { return _size; } }
         #endregion #region ITextureCubeStrategy
 
+
+        internal bool _mipMap;
+        internal bool _isRenderTarget;
     }
 }

@@ -34,5 +34,8 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture2DStrategy
 
+
+        internal bool _mipMap;
+        internal bool _shared;
     }
 }

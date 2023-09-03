@@ -18,13 +18,10 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class TextureCube
 	{
-        private bool _renderTarget;
-        private bool _mipMap;
-
         private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
         {
-            _renderTarget = renderTarget;
-            _mipMap = mipMap;
+            ((ConcreteTextureCube)_strategyTextureCube)._isRenderTarget = renderTarget;
+            ((ConcreteTextureCube)_strategyTextureCube)._mipMap = mipMap;
 
             // Create texture
             GetTexture();
@@ -45,10 +42,10 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
 
-            if (_renderTarget)
+            if (((ConcreteTextureCube)_strategyTextureCube)._isRenderTarget)
             {
                 texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
-                if (_mipMap)
+                if (((ConcreteTextureCube)_strategyTextureCube)._mipMap)
                     texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
             }
 
