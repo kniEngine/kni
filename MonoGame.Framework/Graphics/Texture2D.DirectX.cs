@@ -8,12 +8,12 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Graphics;
 using SharpDX;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
+using DXGI = SharpDX.DXGI;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using Resource = SharpDX.Direct3D11.Resource;
-using Microsoft.Xna.Platform.Graphics;
 
 #if WINDOWS_UAP
 using Windows.Graphics.Imaging;
@@ -28,22 +28,22 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         protected bool Shared { get { return _shared; } }
         protected bool MipMap { get { return _mipMap; } }
-        protected SampleDescription SampleDescription { get { return _sampleDescription; } }
+        protected DXGI.SampleDescription SampleDescription { get { return _sampleDescription; } }
 
         private bool _shared;
         private bool _mipMap;
-        private SampleDescription _sampleDescription;
+        private DXGI.SampleDescription _sampleDescription;
 
         private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             _shared = shared;
             _mipMap = mipMap;
-            _sampleDescription = new SampleDescription(1, 0);
+            _sampleDescription = new DXGI.SampleDescription(1, 0);
         }
 
         private IntPtr PlatformGetSharedHandle()
         {
-            using (var resource = GetTexture().QueryInterface<SharpDX.DXGI.Resource>())
+            using (DXGI.Resource resource = GetTexture().QueryInterface<DXGI.Resource>())
                 return resource.SharedHandle;
         }
 

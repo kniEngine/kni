@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
 using D2D = SharpDX.Direct2D1;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
-using MonoGame.Framework.Utilities;
 
 #if WINDOWS_UAP
 using System.Runtime.InteropServices;
@@ -901,7 +901,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            SharpDX.DXGI.Format format = GraphicsExtensions.ToDXFormat(surfaceFormat);
+            DXGI.Format format = GraphicsExtensions.ToDXFormat(surfaceFormat);
 
             // Find the maximum supported level starting with the game's requested multisampling level
             // and halving each time until reaching 0 (meaning no multisample support).

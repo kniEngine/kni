@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX.MediaFoundation;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -69,7 +70,7 @@ namespace Microsoft.Xna.Platform.Media
             using (var factory = new MediaEngineClassFactory())
             using (var attributes = new MediaEngineAttributes
             {
-                VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                VideoOutputFormat = (int)DXGI.Format.B8G8R8A8_UNorm,
                 DxgiManager = _devManager
             })
             {

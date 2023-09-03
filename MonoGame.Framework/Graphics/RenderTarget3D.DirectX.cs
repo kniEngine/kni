@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -22,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
             RenderTargetUsage = usage;
 
             // Setup the multisampling description.
-            var multisampleDesc = new SharpDX.DXGI.SampleDescription(1, 0);
+            DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
             if (MultiSampleCount > 1)
             {
                 multisampleDesc.Count = MultiSampleCount;

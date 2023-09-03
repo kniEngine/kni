@@ -6,17 +6,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
     class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
-        internal SharpDX.DXGI.Adapter1 _adapter;
+        internal DXGI.Adapter1 _adapter;
         internal DisplayModeCollection _supportedDisplayModes;
         internal DisplayMode _currentDisplayMode;
 
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             catch (SharpDX.SharpDXException ex)
             {
-                if (ex.ResultCode == SharpDX.DXGI.ResultCode.Unsupported) // No supported feature levels!
+                if (ex.ResultCode == DXGI.ResultCode.Unsupported) // No supported feature levels!
                     return false;
                 throw;
             }

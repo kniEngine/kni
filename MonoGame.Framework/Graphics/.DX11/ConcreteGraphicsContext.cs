@@ -13,6 +13,7 @@ using MonoGame.Framework.Utilities;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
 using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -63,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Clear options for depth/stencil buffer if not attached.
             if (_currentDepthStencilView != null)
             {
-                if (_currentDepthStencilView.Description.Format != SharpDX.DXGI.Format.D24_UNorm_S8_UInt)
+                if (_currentDepthStencilView.Description.Format != DXGI.Format.D24_UNorm_S8_UInt)
                     options &= ~ClearOptions.Stencil;
             }
             else
@@ -186,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.InputAssembler.SetIndexBuffer(
                     Indices.Buffer,
                     Indices.IndexElementSize == IndexElementSize.SixteenBits ?
-                        SharpDX.DXGI.Format.R16_UInt : SharpDX.DXGI.Format.R32_UInt,
+                        DXGI.Format.R16_UInt : DXGI.Format.R32_UInt,
                     0);
                 _indexBufferDirty = false;
             }

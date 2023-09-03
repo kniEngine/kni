@@ -6,8 +6,8 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.DXGI;
 using SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (preferredDepthFormat == DepthFormat.None)
                 return;
 
-            var sampleDescription = new SampleDescription(1, 0);
+            DXGI.SampleDescription sampleDescription = new DXGI.SampleDescription(1, 0);
             if (MultiSampleCount > 1)
             {
                 sampleDescription.Count = MultiSampleCount;

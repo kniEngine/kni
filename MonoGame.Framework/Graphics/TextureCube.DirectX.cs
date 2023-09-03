@@ -7,12 +7,12 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using MapFlags = SharpDX.Direct3D11.MapFlags;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
+using SharpDX;
+using SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
+using MapFlags = SharpDX.Direct3D11.MapFlags;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 MipLevels = 1,
                 ArraySize = 1,
                 Format = GraphicsExtensions.ToDXFormat(this.Format),
-                SampleDescription = new SampleDescription(1, 0),
+                SampleDescription = new DXGI.SampleDescription(1, 0),
                 BindFlags = BindFlags.None,
                 CpuAccessFlags = CpuAccessFlags.Read,
                 Usage = ResourceUsage.Staging,

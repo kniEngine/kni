@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // NOTE: An adapter is a monitor+device combination, so we expect
             // at lease one adapter per connected monitor.
 
-            using (var factory = new SharpDX.DXGI.Factory1())
+            using (DXGI.Factory1 factory = new DXGI.Factory1())
             {
                 var adapterCount = factory.GetAdapterCount();
                 var adapterList = new List<GraphicsAdapter>(adapterCount);
@@ -52,14 +53,14 @@ namespace Microsoft.Xna.Platform.Graphics
             return;
         }
 
-        private static readonly Dictionary<SharpDX.DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<SharpDX.DXGI.Format, SurfaceFormat>
+        private static readonly Dictionary<DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<DXGI.Format, SurfaceFormat>
         {
-            { SharpDX.DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
-            { SharpDX.DXGI.Format.B8G8R8A8_UNorm, SurfaceFormat.Color },
-            { SharpDX.DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
+            { DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
+            { DXGI.Format.B8G8R8A8_UNorm, SurfaceFormat.Color },
+            { DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
         };
 
-        private GraphicsAdapter CreateAdapter(SharpDX.DXGI.Adapter1 device, SharpDX.DXGI.Output monitor)
+        private GraphicsAdapter CreateAdapter(DXGI.Adapter1 device, DXGI.Output monitor)
         {
             var strategy = new ConcreteGraphicsAdapter();
             var adapter = new GraphicsAdapter(strategy);
@@ -80,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             foreach (var formatTranslation in FormatTranslations)
             {
-                SharpDX.DXGI.ModeDescription[] displayModes;
+                DXGI.ModeDescription[] displayModes;
 
                 // This can fail on headless machines, so just assume the desktop size
                 // is a valid mode and return that... so at least our unit tests work.

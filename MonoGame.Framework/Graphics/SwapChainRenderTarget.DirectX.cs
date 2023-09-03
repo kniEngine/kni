@@ -2,10 +2,9 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using SharpDX.DXGI;
-using DXGI = SharpDX.DXGI;
-using D3D11 = SharpDX.Direct3D11;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -21,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private IntPtr _windowHandle;
 
-        private SwapChain _swapChain;
+        private DXGI.SwapChain _swapChain;
         private D3D11.Texture2D _backBuffer;
         //private D3D11.Texture2D _depthBuffer;
 
@@ -55,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             D3D11.Device d3dDevice = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
-            SampleDescription multisampleDesc = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
+            DXGI.SampleDescription multisampleDesc = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
 
             base._renderTargetViews = new D3D11.RenderTargetView[1];
             base._depthStencilViews = new D3D11.DepthStencilView[1];
@@ -70,19 +69,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void CreateSwapChainTexture(D3D11.Device d3dDevice, int width, int height, DXGI.SampleDescription multisampleDesc, DXGI.Format dxgiFormat)
         {
-            SwapChainDescription desc = new SwapChainDescription()
+            DXGI.SwapChainDescription desc = new DXGI.SwapChainDescription()
             {
                 ModeDescription =
                 {
                     Width  = width,
                     Height = height,
                     Format = dxgiFormat,
-                    Scaling = DisplayModeScaling.Stretched,
+                    Scaling = DXGI.DisplayModeScaling.Stretched,
                 },
 
                 OutputHandle = _windowHandle,
                 SampleDescription = multisampleDesc,
-                Usage = Usage.RenderTargetOutput,
+                Usage = DXGI.Usage.RenderTargetOutput,
                 BufferCount = 2,
                 SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentInterval),
                 IsWindowed = true,
@@ -92,9 +91,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // Creates the swap chain 
             using (DXGI.Device1 dxgiDevice = d3dDevice.QueryInterface<DXGI.Device1>())
             using (DXGI.Adapter dxgiAdapter = dxgiDevice.Adapter)
-            using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<Factory1>())
+            using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
             {
-                _swapChain = new SwapChain(dxgiFactory, dxgiDevice, desc);
+                _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
                 // Obtain the backbuffer for this window which will be the final 3D rendertarget.
                 _backBuffer = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0);
                 // Create a view interface on the rendertarget to use on bind.
@@ -149,7 +148,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(PresentInterval), PresentFlags.None);
+                    _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(PresentInterval), DXGI.PresentFlags.None);
                 }
                 catch (SharpDX.SharpDXException)
                 {

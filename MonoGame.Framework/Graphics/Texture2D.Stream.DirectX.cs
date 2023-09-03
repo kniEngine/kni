@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Utilities.Png;
 using SharpDX;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
+using DXGI = SharpDX.DXGI;
 
 using SharpDX.WIC;
 using StbImageSharp;
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.BindFlags = BindFlags.ShaderResource;
             desc.Usage = ResourceUsage.Default;
             desc.CpuAccessFlags = CpuAccessFlags.None;
-            desc.Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm;
+            desc.Format = DXGI.Format.R8G8B8A8_UNorm;
             desc.MipLevels = 1;
             desc.OptionFlags = ResourceOptionFlags.None;
             desc.SampleDescription.Count = 1;
