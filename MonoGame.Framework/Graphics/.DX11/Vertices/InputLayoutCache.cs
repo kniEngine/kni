@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
-using SharpDX.Direct3D11;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         private readonly GraphicsDevice _graphicsDevice;
         private readonly byte[] _shaderByteCode;
-        private readonly Dictionary<VertexInputLayout, InputLayout> _cache;
+        private readonly Dictionary<VertexInputLayout, D3D11.InputLayout> _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputLayoutCache"/> class.
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _graphicsDevice = graphicsDevice;
             _shaderByteCode = shaderByteCode;
-            _cache = new Dictionary<VertexInputLayout, InputLayout>();
+            _cache = new Dictionary<VertexInputLayout, D3D11.InputLayout>();
         }
 
         /// <summary>
@@ -80,21 +80,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="vertexBuffers">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
+        public D3D11.InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
         {
-            InputLayout inputLayout;
+            D3D11.InputLayout inputLayout;
             if (_cache.TryGetValue(vertexBuffers, out inputLayout))
                 return inputLayout;
 
-            var immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
-            var inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
+            ImmutableVertexInputLayout immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
+            D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
-                inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
             }
-            catch (SharpDXException ex)
+            catch (DX.SharpDXException ex)
             {
-                if (ex.Descriptor != Result.InvalidArg)
+                if (ex.Descriptor != DX.Result.InvalidArg)
                     throw;
 
                 // If InputLayout ctor fails with InvalidArg then it's most likely because the 
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                    inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
 
                     // Workaround succeeded? This means that there is a vertex shader that needs
                     // to be updated.
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
 #endif
                 }
-                catch (SharpDXException)
+                catch (DX.SharpDXException)
                 {
                     // Workaround failed.
                     throw new InvalidOperationException(GetInvalidArgMessage(inputElements), ex);
@@ -176,10 +176,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             int count = vertexBuffers.Count;
 
-            var vertexDeclarations = new VertexDeclaration[count];
+            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[count];
             Array.Copy(vertexBuffers.VertexDeclarations, vertexDeclarations, count);
 
-            var instanceFrequencies = new int[count];
+            int[] instanceFrequencies = new int[count];
             Array.Copy(vertexBuffers.InstanceFrequencies, instanceFrequencies, count);
 
             return new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
         {
-            var list = new List<D3D11.InputElement>();
+            List<D3D11.InputElement> list = new List<D3D11.InputElement>();
             for (int i = 0; i < vertexInputLayout.Count; i++)
             {
                 foreach (VertexElement vertexElement in vertexInputLayout.VertexDeclarations[i].InternalVertexElements)
@@ -277,40 +277,40 @@ namespace Microsoft.Xna.Framework.Graphics
             switch (vertexElement.VertexElementFormat)
             {
                 case VertexElementFormat.Single:
-                    element.Format = SharpDX.DXGI.Format.R32_Float;
+                    element.Format = DXGI.Format.R32_Float;
                     break;
                 case VertexElementFormat.Vector2:
-                    element.Format = SharpDX.DXGI.Format.R32G32_Float;
+                    element.Format = DXGI.Format.R32G32_Float;
                     break;
                 case VertexElementFormat.Vector3:
-                    element.Format = SharpDX.DXGI.Format.R32G32B32_Float;
+                    element.Format = DXGI.Format.R32G32B32_Float;
                     break;
                 case VertexElementFormat.Vector4:
-                    element.Format = SharpDX.DXGI.Format.R32G32B32A32_Float;
+                    element.Format = DXGI.Format.R32G32B32A32_Float;
                     break;
                 case VertexElementFormat.Color:
-                    element.Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm;
+                    element.Format = DXGI.Format.R8G8B8A8_UNorm;
                     break;
                 case VertexElementFormat.Byte4:
-                    element.Format = SharpDX.DXGI.Format.R8G8B8A8_UInt;
+                    element.Format = DXGI.Format.R8G8B8A8_UInt;
                     break;
                 case VertexElementFormat.Short2:
-                    element.Format = SharpDX.DXGI.Format.R16G16_SInt;
+                    element.Format = DXGI.Format.R16G16_SInt;
                     break;
                 case VertexElementFormat.Short4:
-                    element.Format = SharpDX.DXGI.Format.R16G16B16A16_SInt;
+                    element.Format = DXGI.Format.R16G16B16A16_SInt;
                     break;
                 case VertexElementFormat.NormalizedShort2:
-                    element.Format = SharpDX.DXGI.Format.R16G16_SNorm;
+                    element.Format = DXGI.Format.R16G16_SNorm;
                     break;
                 case VertexElementFormat.NormalizedShort4:
-                    element.Format = SharpDX.DXGI.Format.R16G16B16A16_SNorm;
+                    element.Format = DXGI.Format.R16G16B16A16_SNorm;
                     break;
                 case VertexElementFormat.HalfVector2:
-                    element.Format = SharpDX.DXGI.Format.R16G16_Float;
+                    element.Format = DXGI.Format.R16G16_Float;
                     break;
                 case VertexElementFormat.HalfVector4:
-                    element.Format = SharpDX.DXGI.Format.R16G16B16A16_Float;
+                    element.Format = DXGI.Format.R16G16B16A16_Float;
                     break;
                 default:
                     throw new NotSupportedException("Unknown vertex element format!");
@@ -321,8 +321,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Note that instancing is only supported in feature level 9.3 and above.
             element.Classification = (instanceFrequency == 0)
-                                     ? SharpDX.Direct3D11.InputClassification.PerVertexData
-                                     : SharpDX.Direct3D11.InputClassification.PerInstanceData;
+                                     ? D3D11.InputClassification.PerVertexData
+                                     : D3D11.InputClassification.PerInstanceData;
             element.InstanceDataStepRate = instanceFrequency;
 
             return element;
@@ -333,9 +333,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="inputElements">The input elements.</param>
         /// <returns>The exception message.</returns>
-        private static string GetInvalidArgMessage(InputElement[] inputElements)
+        private static string GetInvalidArgMessage(D3D11.InputElement[] inputElements)
         {
-            var elements = string.Join(", ", inputElements.Select(x => x.SemanticName + x.SemanticIndex));
+            string elements = string.Join(", ", inputElements.Select(x => x.SemanticName + x.SemanticIndex));
             return "An error occurred while preparing to draw. "
                    + "This is probably because the current vertex declaration does not include all the elements "
                    + "required by the current vertex shader. The current vertex declaration includes these elements: "

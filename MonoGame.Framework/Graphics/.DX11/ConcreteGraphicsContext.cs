@@ -10,9 +10,10 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
-using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
+using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -63,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Clear options for depth/stencil buffer if not attached.
             if (_currentDepthStencilView != null)
             {
-                if (_currentDepthStencilView.Description.Format != SharpDX.DXGI.Format.D24_UNorm_S8_UInt)
+                if (_currentDepthStencilView.Description.Format != DXGI.Format.D24_UNorm_S8_UInt)
                     options &= ~ClearOptions.Stencil;
             }
             else
@@ -128,7 +129,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_blendStateDirty || _blendFactorDirty)
             {
                 D3D11.BlendState blendState = _actualBlendState.GetDxState(this);
-                var blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
+                RawColor4 blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
                 this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 
                 _blendStateDirty = false;
@@ -163,7 +164,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (this.D3dContext != null)
                 {
-                    var viewport = new RawViewportF
+                    RawViewportF viewport = new RawViewportF
                     {
                         X = _viewport.X,
                         Y = _viewport.Y,
@@ -186,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.InputAssembler.SetIndexBuffer(
                     Indices.Buffer,
                     Indices.IndexElementSize == IndexElementSize.SixteenBits ?
-                        SharpDX.DXGI.Format.R16_UInt : SharpDX.DXGI.Format.R32_UInt,
+                        DXGI.Format.R16_UInt : DXGI.Format.R32_UInt,
                     0);
                 _indexBufferDirty = false;
             }
@@ -265,20 +266,20 @@ namespace Microsoft.Xna.Platform.Graphics
             _lastPrimitiveType = primitiveType;
         }
 
-        private static PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
+        private static D3D.PrimitiveTopology ToPrimitiveTopology(PrimitiveType primitiveType)
         {
             switch (primitiveType)
             {
                 case PrimitiveType.LineList:
-                    return PrimitiveTopology.LineList;
+                    return D3D.PrimitiveTopology.LineList;
                 case PrimitiveType.LineStrip:
-                    return PrimitiveTopology.LineStrip;
+                    return D3D.PrimitiveTopology.LineStrip;
                 case PrimitiveType.TriangleList:
-                    return PrimitiveTopology.TriangleList;
+                    return D3D.PrimitiveTopology.TriangleList;
                 case PrimitiveType.TriangleStrip:
-                    return PrimitiveTopology.TriangleStrip;
+                    return D3D.PrimitiveTopology.TriangleStrip;
                 case PrimitiveType.PointList:
-                    return PrimitiveTopology.PointList;
+                    return D3D.PrimitiveTopology.PointList;
 
                 default:
                     throw new ArgumentException();
@@ -311,7 +312,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
-                var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+                int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
             }
         }
@@ -460,7 +461,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -482,7 +483,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -621,13 +622,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             for (int i = 0; i < _currentRenderTargetCount; i++)
             {
-                var binding = _currentRenderTargetBindings[i];
-                var targetDX = (IRenderTargetDX11)binding.RenderTarget;
+                RenderTargetBinding binding = _currentRenderTargetBindings[i];
+                IRenderTargetDX11 targetDX = (IRenderTargetDX11)binding.RenderTarget;
                 _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            var renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
+            IRenderTargetDX11 renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
             _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.

@@ -6,17 +6,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.Direct3D;
+using DX = SharpDX;
+using D3D = SharpDX.Direct3D;
+using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
     class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
-        internal SharpDX.DXGI.Adapter1 _adapter;
+        internal DXGI.Adapter1 _adapter;
         internal DisplayModeCollection _supportedDisplayModes;
         internal DisplayMode _currentDisplayMode;
 
@@ -41,14 +43,14 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
-            FeatureLevel highestSupportedLevel;
+            D3D.FeatureLevel highestSupportedLevel;
             try
             {
-                highestSupportedLevel = SharpDX.Direct3D11.Device.GetSupportedFeatureLevel(_adapter);
+                highestSupportedLevel = D3D11.Device.GetSupportedFeatureLevel(_adapter);
             }
-            catch (SharpDX.SharpDXException ex)
+            catch (DX.SharpDXException ex)
             {
-                if (ex.ResultCode == SharpDX.DXGI.ResultCode.Unsupported) // No supported feature levels!
+                if (ex.ResultCode == DXGI.ResultCode.Unsupported) // No supported feature levels!
                     return false;
                 throw;
             }
@@ -56,17 +58,17 @@ namespace Microsoft.Xna.Platform.Graphics
             switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
-                    return (highestSupportedLevel >= FeatureLevel.Level_9_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_9_1);
                 case GraphicsProfile.HiDef:
-                    return (highestSupportedLevel >= FeatureLevel.Level_9_3);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_9_3);
                 case GraphicsProfile.FL10_0:
-                    return (highestSupportedLevel >= FeatureLevel.Level_10_0);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_10_0);
                 case GraphicsProfile.FL10_1:
-                    return (highestSupportedLevel >= FeatureLevel.Level_10_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_10_1);
                 case GraphicsProfile.FL11_0:
-                    return (highestSupportedLevel >= FeatureLevel.Level_11_0);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_11_0);
                 case GraphicsProfile.FL11_1:
-                    return (highestSupportedLevel >= FeatureLevel.Level_11_1);
+                    return (highestSupportedLevel >= D3D.FeatureLevel.Level_11_1);
                 default:
                     throw new InvalidOperationException();
             }

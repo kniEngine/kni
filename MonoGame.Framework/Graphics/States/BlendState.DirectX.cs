@@ -5,38 +5,40 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState
     {
-        private SharpDX.Direct3D11.BlendState _state;
+        private D3D11.BlendState _state;
 
         protected internal override void GraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
             base.GraphicsDeviceResetting();
         }
 
-        internal SharpDX.Direct3D11.BlendState GetDxState(ConcreteGraphicsContext context)
+        internal D3D11.BlendState GetDxState(ConcreteGraphicsContext context)
         {
             if (_state == null)
             {
                 // Build the description.
-                var desc = new SharpDX.Direct3D11.BlendStateDescription();
-                _targetBlendState[0].GetState(ref desc.RenderTarget[0]);
-                _targetBlendState[1].GetState(ref desc.RenderTarget[1]);
-                _targetBlendState[2].GetState(ref desc.RenderTarget[2]);
-                _targetBlendState[3].GetState(ref desc.RenderTarget[3]);
-                desc.IndependentBlendEnable = _independentBlendEnable;
+                D3D11.BlendStateDescription blendStateDesc = new D3D11.BlendStateDescription();
+                _targetBlendState[0].GetState(ref blendStateDesc.RenderTarget[0]);
+                _targetBlendState[1].GetState(ref blendStateDesc.RenderTarget[1]);
+                _targetBlendState[2].GetState(ref blendStateDesc.RenderTarget[2]);
+                _targetBlendState[3].GetState(ref blendStateDesc.RenderTarget[3]);
+                blendStateDesc.IndependentBlendEnable = _independentBlendEnable;
 
                 // This is a new DX11 feature we should consider 
                 // exposing as part of the extended MonoGame API.
-                desc.AlphaToCoverageEnable = false;
+                blendStateDesc.AlphaToCoverageEnable = false;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.BlendState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.BlendState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, blendStateDesc);
             }
 
 			// Apply the state!
@@ -49,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
         }
     }
 }

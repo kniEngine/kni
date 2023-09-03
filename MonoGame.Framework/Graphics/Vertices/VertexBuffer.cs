@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void GetData<T>(T[] data) where T : struct
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             this.GetData<T>(0, data, 0, data.Length, elementSizeInByte);
         }
 

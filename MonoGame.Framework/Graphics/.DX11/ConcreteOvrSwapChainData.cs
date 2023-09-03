@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int ovrResult = 0;
 
             outSwapChainData = null;
-            var swapChainData = new ConcreteOvrSwapChainData();
+            ConcreteOvrSwapChainData swapChainData = new ConcreteOvrSwapChainData();
 
             OvrTextureSwapChainDesc desc = default(OvrTextureSwapChainDesc);
             desc.Type = OvrTextureType.Texture2D;

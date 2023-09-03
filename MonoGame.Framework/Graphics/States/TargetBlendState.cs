@@ -3,6 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+#if DIRECTX
+using D3D11 = SharpDX.Direct3D11;
+#endif
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -115,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if DIRECTX
 
-        internal void GetState(ref SharpDX.Direct3D11.RenderTargetBlendDescription desc)
+        internal void GetState(ref D3D11.RenderTargetBlendDescription desc)
         {
             // We're blending if we're not in the opaque state.
             desc.IsBlendEnabled =   !(  ColorSourceBlend == Blend.One &&
@@ -134,84 +137,84 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.RenderTargetWriteMask = GetColorWriteMask(ColorWriteChannels);
         }
 
-        static private SharpDX.Direct3D11.BlendOperation GetBlendOperation(BlendFunction blend)
+        static private D3D11.BlendOperation GetBlendOperation(BlendFunction blend)
         {
             switch (blend)
             {
                 case BlendFunction.Add:
-                    return SharpDX.Direct3D11.BlendOperation.Add;
+                    return D3D11.BlendOperation.Add;
 
                 case BlendFunction.Max:
-                    return SharpDX.Direct3D11.BlendOperation.Maximum;
+                    return D3D11.BlendOperation.Maximum;
 
                 case BlendFunction.Min:
-                    return SharpDX.Direct3D11.BlendOperation.Minimum;
+                    return D3D11.BlendOperation.Minimum;
 
                 case BlendFunction.ReverseSubtract:
-                    return SharpDX.Direct3D11.BlendOperation.ReverseSubtract;
+                    return D3D11.BlendOperation.ReverseSubtract;
 
                 case BlendFunction.Subtract:
-                    return SharpDX.Direct3D11.BlendOperation.Subtract;
+                    return D3D11.BlendOperation.Subtract;
 
                 default:
                     throw new ArgumentException("Invalid blend function!");
             }
         }
 
-        static private SharpDX.Direct3D11.BlendOption GetBlendOption(Blend blend, bool alpha)
+        static private D3D11.BlendOption GetBlendOption(Blend blend, bool alpha)
         {
             switch (blend)
             {
                 case Blend.BlendFactor:
-                    return SharpDX.Direct3D11.BlendOption.BlendFactor;
+                    return D3D11.BlendOption.BlendFactor;
 
                 case Blend.DestinationAlpha:
-                    return SharpDX.Direct3D11.BlendOption.DestinationAlpha;
+                    return D3D11.BlendOption.DestinationAlpha;
 
                 case Blend.DestinationColor:
-                    return alpha ? SharpDX.Direct3D11.BlendOption.DestinationAlpha : SharpDX.Direct3D11.BlendOption.DestinationColor;
+                    return alpha ? D3D11.BlendOption.DestinationAlpha : D3D11.BlendOption.DestinationColor;
 
                 case Blend.InverseBlendFactor:
-                    return SharpDX.Direct3D11.BlendOption.InverseBlendFactor;
+                    return D3D11.BlendOption.InverseBlendFactor;
 
                 case Blend.InverseDestinationAlpha:
-                    return SharpDX.Direct3D11.BlendOption.InverseDestinationAlpha;
+                    return D3D11.BlendOption.InverseDestinationAlpha;
 
                 case Blend.InverseDestinationColor:
-                    return alpha ? SharpDX.Direct3D11.BlendOption.InverseDestinationAlpha : SharpDX.Direct3D11.BlendOption.InverseDestinationColor;
+                    return alpha ? D3D11.BlendOption.InverseDestinationAlpha : D3D11.BlendOption.InverseDestinationColor;
 
                 case Blend.InverseSourceAlpha:
-                    return SharpDX.Direct3D11.BlendOption.InverseSourceAlpha;
+                    return D3D11.BlendOption.InverseSourceAlpha;
 
                 case Blend.InverseSourceColor:
-                    return alpha ? SharpDX.Direct3D11.BlendOption.InverseSourceAlpha : SharpDX.Direct3D11.BlendOption.InverseSourceColor;
+                    return alpha ? D3D11.BlendOption.InverseSourceAlpha : D3D11.BlendOption.InverseSourceColor;
 
                 case Blend.One:
-                    return SharpDX.Direct3D11.BlendOption.One;
+                    return D3D11.BlendOption.One;
 
                 case Blend.SourceAlpha:
-                    return SharpDX.Direct3D11.BlendOption.SourceAlpha;
+                    return D3D11.BlendOption.SourceAlpha;
 
                 case Blend.SourceAlphaSaturation:
-                    return SharpDX.Direct3D11.BlendOption.SourceAlphaSaturate;
+                    return D3D11.BlendOption.SourceAlphaSaturate;
 
                 case Blend.SourceColor:
-                    return alpha ? SharpDX.Direct3D11.BlendOption.SourceAlpha : SharpDX.Direct3D11.BlendOption.SourceColor;
+                    return alpha ? D3D11.BlendOption.SourceAlpha : D3D11.BlendOption.SourceColor;
 
                 case Blend.Zero:
-                    return SharpDX.Direct3D11.BlendOption.Zero;
+                    return D3D11.BlendOption.Zero;
 
                 default:
                     throw new ArgumentException("Invalid blend!");
             }
         }
 
-        static private SharpDX.Direct3D11.ColorWriteMaskFlags GetColorWriteMask(ColorWriteChannels mask)
+        static private D3D11.ColorWriteMaskFlags GetColorWriteMask(ColorWriteChannels mask)
         {
-            return  ((mask & ColorWriteChannels.Red) != 0 ? SharpDX.Direct3D11.ColorWriteMaskFlags.Red : 0) |
-                    ((mask & ColorWriteChannels.Green) != 0 ? SharpDX.Direct3D11.ColorWriteMaskFlags.Green : 0) |
-                    ((mask & ColorWriteChannels.Blue) != 0 ? SharpDX.Direct3D11.ColorWriteMaskFlags.Blue : 0) |
-                    ((mask & ColorWriteChannels.Alpha) != 0 ? SharpDX.Direct3D11.ColorWriteMaskFlags.Alpha : 0);
+            return  ((mask & ColorWriteChannels.Red) != 0 ? D3D11.ColorWriteMaskFlags.Red : 0) |
+                    ((mask & ColorWriteChannels.Green) != 0 ? D3D11.ColorWriteMaskFlags.Green : 0) |
+                    ((mask & ColorWriteChannels.Blue) != 0 ? D3D11.ColorWriteMaskFlags.Blue : 0) |
+                    ((mask & ColorWriteChannels.Alpha) != 0 ? D3D11.ColorWriteMaskFlags.Alpha : 0);
         }
 #endif
 

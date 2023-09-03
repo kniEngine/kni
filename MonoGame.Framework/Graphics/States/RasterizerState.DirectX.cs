@@ -5,17 +5,19 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
     {
-        private SharpDX.Direct3D11.RasterizerState _state;
+        private D3D11.RasterizerState _state;
 
         protected internal override void GraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
             base.GraphicsDeviceResetting();
         }
 
@@ -24,28 +26,28 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_state == null)
             {
                 // Build the description.
-                var desc = new SharpDX.Direct3D11.RasterizerStateDescription();
+                D3D11.RasterizerStateDescription rasterizerStateDesc = new D3D11.RasterizerStateDescription();
 
                 switch (CullMode)
                 {
                     case Graphics.CullMode.None:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.None;
+                        rasterizerStateDesc.CullMode = D3D11.CullMode.None;
                         break;
 
                     case Graphics.CullMode.CullClockwiseFace:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.Front;
+                        rasterizerStateDesc.CullMode = D3D11.CullMode.Front;
                         break;
 
                     case Graphics.CullMode.CullCounterClockwiseFace:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.Back;
+                        rasterizerStateDesc.CullMode = D3D11.CullMode.Back;
                         break;
 
                     default:
                         throw new InvalidOperationException("CullMode");
                 }
 
-                desc.IsScissorEnabled = ScissorTestEnable;
-                desc.IsMultisampleEnabled = MultiSampleAntiAlias;
+                rasterizerStateDesc.IsScissorEnabled = ScissorTestEnable;
+                rasterizerStateDesc.IsMultisampleEnabled = MultiSampleAntiAlias;
 
                 // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
                 DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
@@ -69,27 +71,27 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new ArgumentOutOfRangeException();
                 }
 
-                desc.DepthBias = (int) (DepthBias * depthMul);
-                desc.SlopeScaledDepthBias = SlopeScaleDepthBias;
+                rasterizerStateDesc.DepthBias = (int) (DepthBias * depthMul);
+                rasterizerStateDesc.SlopeScaledDepthBias = SlopeScaleDepthBias;
 
                 if (FillMode == Graphics.FillMode.WireFrame)
-                    desc.FillMode = SharpDX.Direct3D11.FillMode.Wireframe;
+                    rasterizerStateDesc.FillMode = D3D11.FillMode.Wireframe;
                 else
-                    desc.FillMode = SharpDX.Direct3D11.FillMode.Solid;
+                    rasterizerStateDesc.FillMode = D3D11.FillMode.Solid;
 
-                desc.IsDepthClipEnabled = DepthClipEnable;
+                rasterizerStateDesc.IsDepthClipEnabled = DepthClipEnable;
 
                 // These are new DX11 features we should consider exposing
                 // as part of the extended MonoGame API.
-                desc.IsFrontCounterClockwise = false;
-                desc.IsAntialiasedLineEnabled = false;
+                rasterizerStateDesc.IsFrontCounterClockwise = false;
+                rasterizerStateDesc.IsAntialiasedLineEnabled = false;
 
                 // To support feature level 9.1 these must 
                 // be set to these exact values.
-                desc.DepthBiasClamp = 0.0f;
+                rasterizerStateDesc.DepthBiasClamp = 0.0f;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.RasterizerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
             }
 
             // NOTE: We make the assumption here that the caller has
@@ -105,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
         }
     }
 }

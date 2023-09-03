@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         /// <summary>
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
-        /// For usage, convert this to SharpDX.Direct3D11.Device.
+        /// For usage, convert this to D3D11.Device.
         /// </summary>
         [Obsolete("Use GetD3D11Device() method.")]
         public object Handle

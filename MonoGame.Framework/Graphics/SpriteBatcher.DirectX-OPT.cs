@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -98,8 +100,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                var oldSize = _batchItemList.Length;
-                var newSize = oldSize + oldSize / 2; // grow by x1.5
+                int oldSize = _batchItemList.Length;
+                int newSize = oldSize + oldSize / 2; // grow by x1.5
                 newSize = (newSize + 63) & (~63); // grow in chunks of 64.
                 Array.Resize(ref _batchItemList, newSize);
                 for (int i = oldSize; i < newSize; i++)
@@ -131,8 +133,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             fixed (short* indexFixedPtr = newIndex)
             {
-                var indexPtr = indexFixedPtr + (start * 6);
-                for (var i = start; i < numBatchItems; i++, indexPtr += 6)
+                short* indexPtr = indexFixedPtr + (start * 6);
+                for (int i = start; i < numBatchItems; i++, indexPtr += 6)
                 {
                     /*
                      *  TL    TR
@@ -157,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _index = newIndex;
 
             if (_vertexBuffer != null) _vertexBuffer.Dispose();
-            var quadCount = (4 * numBatchItems);
+            int quadCount = (4 * numBatchItems);
             quadCount = quadCount * 4; //ensure vertex used 4 times before reset/Discard.
             _vertexBuffer = new DynamicVertexBuffer(_device, VertexPositionColorTexture.VertexDeclaration, quadCount, BufferUsage.WriteOnly);
             _baseQuad = 0;
@@ -213,17 +215,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (_device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     //map vertexBaffer
-                    var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
+                    D3D11.MapMode mode = D3D11.MapMode.WriteNoOverwrite;
                     if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
                     {
-                        mode = SharpDX.Direct3D11.MapMode.WriteDiscard;
+                        mode = D3D11.MapMode.WriteDiscard;
                         _baseQuad = 0;
                     }
-                    var dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
-                    var vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
+                    DX.DataBox dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, D3D11.MapFlags.None);
+                    VertexPositionColorTexture* vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch
                     vertexArrayPtr += _baseQuad * 4;
@@ -247,7 +249,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     SpriteBatchItem item = _batchItemList[batchIndex++];
 
                     // if the texture changed, we need to flush and bind the new texture
-                    var shouldFlush = !ReferenceEquals(item.Texture, tex);
+                    bool shouldFlush = !ReferenceEquals(item.Texture, tex);
                     if (shouldFlush)
                     {
                         if (spriteCount > 0)
@@ -297,8 +299,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else // If the effect is not null, then apply each pass and render the geometry
             {
-                var passes = effect.CurrentTechnique.Passes;
-                foreach (var pass in passes)
+                EffectPassCollection passes = effect.CurrentTechnique.Passes;
+                foreach (EffectPass pass in passes)
                 {
                     pass.Apply();
 

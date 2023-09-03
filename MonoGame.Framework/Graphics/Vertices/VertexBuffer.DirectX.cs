@@ -5,15 +5,17 @@
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexBuffer
     {
-        private SharpDX.Direct3D11.Buffer _buffer;
+        private D3D11.Buffer _buffer;
 
-        internal SharpDX.Direct3D11.Buffer Buffer
+        internal D3D11.Buffer Buffer
         {
             get
             {
@@ -32,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _buffer);
+            DX.Utilities.Dispose(ref _buffer);
         }
 
         void GenerateIfRequired()
@@ -43,34 +45,34 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: To use Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
 
-            var accessflags = SharpDX.Direct3D11.CpuAccessFlags.None;
-            var usage = SharpDX.Direct3D11.ResourceUsage.Default;
+            D3D11.CpuAccessFlags accessflags = D3D11.CpuAccessFlags.None;
+            D3D11.ResourceUsage usage = D3D11.ResourceUsage.Default;
 
             if (_isDynamic)
             {
-                accessflags |= SharpDX.Direct3D11.CpuAccessFlags.Write;
-                usage = SharpDX.Direct3D11.ResourceUsage.Dynamic;
+                accessflags |= D3D11.CpuAccessFlags.Write;
+                usage = D3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
+            _buffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
                                                         VertexDeclaration.VertexStride * VertexCount,
                                                         usage,
-                                                        SharpDX.Direct3D11.BindFlags.VertexBuffer,
+                                                        D3D11.BindFlags.VertexBuffer,
                                                         accessflags,
-                                                        SharpDX.Direct3D11.ResourceOptionFlags.None,
+                                                        D3D11.ResourceOptionFlags.None,
                                                         0  // StructureSizeInBytes
                                                         );
         }
 
-        SharpDX.Direct3D11.Buffer CreateStagingBuffer()
+        D3D11.Buffer CreateStagingBuffer()
         {
-            var stagingDesc = _buffer.Description;
-            stagingDesc.BindFlags = SharpDX.Direct3D11.BindFlags.None;
-            stagingDesc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.Read | SharpDX.Direct3D11.CpuAccessFlags.Write;
-            stagingDesc.Usage = SharpDX.Direct3D11.ResourceUsage.Staging;
-            stagingDesc.OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None;
+            D3D11.BufferDescription stagingDesc = _buffer.Description;
+            stagingDesc.BindFlags = D3D11.BindFlags.None;
+            stagingDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read | D3D11.CpuAccessFlags.Write;
+            stagingDesc.Usage = D3D11.ResourceUsage.Staging;
+            stagingDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            return new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
+            return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride) where T : struct
@@ -83,32 +85,32 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                int TsizeInBytes = SharpDX.Utilities.SizeOf<T>();
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                int TsizeInBytes = DX.Utilities.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
                 try
                 {
-                    var startBytes = startIndex * TsizeInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * TsizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                    using (SharpDX.Direct3D11.Buffer stagingBuffer = CreateStagingBuffer())
+                    using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
                     lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {
-                        SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 
                         // Map the staging resource to a CPU accessible memory
-                        var box = d3dContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
+                        DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
                         if (vertexStride == TsizeInBytes)
                         {
-                            SharpDX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
+                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
                         }
                         else
                         {
                             for (int i = 0; i < elementCount; i++)
-                                SharpDX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
+                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
                         }
 
                         // Make sure that we unmap the resource in case of an exception
@@ -129,23 +131,23 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_isDynamic)
             {
                 // We assume discard by default.
-                var mode = SharpDX.Direct3D11.MapMode.WriteDiscard;
+                D3D11.MapMode mode = D3D11.MapMode.WriteDiscard;
                 if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
-                    mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
+                    mode = D3D11.MapMode.WriteNoOverwrite;
 
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                     if (vertexStride == elementSizeInBytes)
 					{
-                        SharpDX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
+                        DX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
-                            SharpDX.Utilities.Write(dataBox.DataPointer + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                            DX.Utilities.Write(dataBox.DataPointer + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
                     }
 
                     d3dContext.UnmapSubresource(_buffer, 0);
@@ -153,17 +155,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    var startBytes = startIndex * elementSizeInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * elementSizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                     
                     if (vertexStride == elementSizeInBytes)
                     {
-                        var box = new SharpDX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
+                        DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
-                        var region = new SharpDX.Direct3D11.ResourceRegion();
+                        D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                         region.Top = 0;
                         region.Front = 0;
                         region.Back = 1;
@@ -173,26 +175,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                         {
-                            SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                            D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             d3dContext.UpdateSubresource(box, _buffer, 0, region);
                         }
                     }
                     else
                     {
-                        using(SharpDX.Direct3D11.Buffer stagingBuffer = CreateStagingBuffer())
+                        using(D3D11.Buffer stagingBuffer = CreateStagingBuffer())
                         lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                         {
-                            SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                            D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                            // Map the staging resource to a CPU accessible memory
-                            var box = d3dContext.MapSubresource(stagingBuffer, 0, SharpDX.Direct3D11.MapMode.Read,
-                                SharpDX.Direct3D11.MapFlags.None);
+                                // Map the staging resource to a CPU accessible memory
+                                DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
+                                D3D11.MapFlags.None);
 
                             for (int i = 0; i < elementCount; i++)
-                                SharpDX.Utilities.CopyMemory(
+                                    DX.Utilities.CopyMemory(
                                     box.DataPointer + i * vertexStride + offsetInBytes,
                                     dataPtr + i * elementSizeInBytes, elementSizeInBytes);
 
@@ -215,7 +217,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _buffer);
+                DX.Utilities.Dispose(ref _buffer);
             }
 
             base.Dispose(disposing);

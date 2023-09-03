@@ -60,17 +60,16 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_infoQueue.NumStoredMessagesAllowedByRetrievalFilter > 0)
             {
                 // Grab all current messages and put them in the cached messages queue.
-                for (var i = 0; i < _infoQueue.NumStoredMessagesAllowedByRetrievalFilter; i++)
+                for (int i = 0; i < _infoQueue.NumStoredMessagesAllowedByRetrievalFilter; i++)
                 {
-                    var dxMessage = _infoQueue.GetMessage(i);
-                    _cachedMessages.Enqueue(new GraphicsDebugMessage
-                    {
-                        Message = dxMessage.Description,
-                        Id = (int)dxMessage.Id,
-                        IdName = dxMessage.Id.ToString(),
-                        Severity = dxMessage.Severity.ToString(),
-                        Category = dxMessage.Category.ToString()
-                    });
+                    D3D11.Message dxMessage = _infoQueue.GetMessage(i);
+                    GraphicsDebugMessage debugMsg = new GraphicsDebugMessage();
+                    debugMsg.Message = dxMessage.Description;
+                    debugMsg.Id = (int)dxMessage.Id;
+                    debugMsg.IdName = dxMessage.Id.ToString();
+                    debugMsg.Severity = dxMessage.Severity.ToString();
+                    debugMsg.Category = dxMessage.Category.ToString();
+                    _cachedMessages.Enqueue(debugMsg);
                 }
 
                 _infoQueue.ClearStoredMessages();

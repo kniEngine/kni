@@ -5,12 +5,10 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
-using MapFlags = SharpDX.Direct3D11.MapFlags;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
-
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -29,57 +27,55 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        internal override Resource CreateTexture()
-        {
-            var description = new Texture3DDescription
-            {
-                Width = this.Width,
-                Height = this.Height,
-                Depth = this.Depth,
-                MipLevels = this.LevelCount,
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = BindFlags.ShaderResource,
-                CpuAccessFlags = CpuAccessFlags.None,
-                Usage = ResourceUsage.Default,
-                OptionFlags = ResourceOptionFlags.None,
-            };
+        internal override D3D11.Resource CreateTexture()
+        {   
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = this.LevelCount;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             if (renderTarget)
             {
-                description.BindFlags |= BindFlags.RenderTarget;
+                texture3DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
                 if (mipMap)
                 {
                     // Note: XNA 4 does not have a method Texture.GenerateMipMaps() 
                     // because generation of mipmaps is not supported on the Xbox 360.
                     // TODO: New method Texture.GenerateMipMaps() required.
-                    description.OptionFlags |= ResourceOptionFlags.GenerateMipMaps;
+                    texture3DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
                 }
             }
 
-            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
+            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
         }
 
 	    private void PlatformSetData<T>(int level,
                                      int left, int top, int right, int bottom, int front, int back,
                                      T[] data, int startIndex, int elementCount, int width, int height, int depth)
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
                 int rowPitch = Texture.GetPitch(this.Format, width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
-                var box = new DataBox(dataPtr, rowPitch, slicePitch);
+                DX.DataBox box = new DX.DataBox(dataPtr, rowPitch, slicePitch);
 
                 int subresourceIndex = level;
 
-                var region = new ResourceRegion(left, top, front, right, bottom, back);
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion(left, top, front, right, bottom, back);
 
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }
@@ -99,43 +95,41 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Like in Texture2D, we should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var desc = new Texture3DDescription
-            {
-                Width = this.Width,
-                Height = this.Height,
-                Depth = this.Depth,
-                MipLevels = 1,
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = BindFlags.None,
-                CpuAccessFlags = CpuAccessFlags.Read,
-                Usage = ResourceUsage.Staging,
-                OptionFlags = ResourceOptionFlags.None,
-            };
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = 1;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.None;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Staging;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
+            using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc))
             {
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    d3dContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 
                     // Copy the data to the array.
-                    DataStream stream = null;
+                    DX.DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
+                        DX.DataBox databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.
-                        var currentIndex = startIndex;
-                        var elementSize = this.Format.GetSize();
-                        var elementsInRow = right - left;
-                        var rowsInSlice = bottom - top;
-                        for (var slice = front; slice < back; slice++)
+                        int currentIndex = startIndex;
+                        int elementSize = this.Format.GetSize();
+                        int elementsInRow = right - left;
+                        int rowsInSlice = bottom - top;
+                        for (int slice = front; slice < back; slice++)
                         {
-                            for (var row = top; row < bottom; row++)
+                            for (int row = top; row < bottom; row++)
                             {
                                 stream.ReadRange(data, currentIndex, elementsInRow);
                                 stream.Seek(databox.RowPitch - (elementSize * elementsInRow), SeekOrigin.Current);
@@ -146,7 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     finally
                     {
-                        SharpDX.Utilities.Dispose(ref stream);
+                        DX.Utilities.Dispose(ref stream);
                     }
                 }
             }

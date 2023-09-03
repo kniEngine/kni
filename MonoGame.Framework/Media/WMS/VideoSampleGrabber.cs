@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using SharpDX.MediaFoundation;
+using DX = SharpDX;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
-    internal class VideoSampleGrabber : SharpDX.CallbackBase, SampleGrabberSinkCallback
+    internal class VideoSampleGrabber : DX.CallbackBase, SampleGrabberSinkCallback
     {
         internal byte[] TextureData { get; private set; }
 

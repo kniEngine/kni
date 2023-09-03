@@ -6,15 +6,16 @@
 
 using System.IO;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.Direct3D11;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     internal partial class Shader
     {
-        private VertexShader _vertexShader;
-        private PixelShader _pixelShader;
+        private D3D11.VertexShader _vertexShader;
+        private D3D11.PixelShader _pixelShader;
         private byte[] _shaderBytecode;
 
         // Caches the DirectX input layouts for this vertex shader.
@@ -30,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _inputLayouts; }
         }
 
-        internal VertexShader VertexShader
+        internal D3D11.VertexShader VertexShader
         {
             get
             {
@@ -40,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal PixelShader PixelShader
+        internal D3D11.PixelShader PixelShader
         {
             get
             {
@@ -71,18 +72,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _vertexShader);
-            SharpDX.Utilities.Dispose(ref _pixelShader);
-            SharpDX.Utilities.Dispose(ref _inputLayouts);
+            DX.Utilities.Dispose(ref _vertexShader);
+            DX.Utilities.Dispose(ref _pixelShader);
+            DX.Utilities.Dispose(ref _inputLayouts);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _vertexShader);
-                SharpDX.Utilities.Dispose(ref _pixelShader);
-                SharpDX.Utilities.Dispose(ref _inputLayouts);
+                DX.Utilities.Dispose(ref _vertexShader);
+                DX.Utilities.Dispose(ref _pixelShader);
+                DX.Utilities.Dispose(ref _inputLayouts);
             }
 
             base.Dispose(disposing);
@@ -91,13 +92,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private void CreatePixelShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Pixel);
-            _pixelShader = new PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode);
+            _pixelShader = new D3D11.PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode);
         }
 
         private void CreateVertexShader()
         {
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Vertex);
-            _vertexShader = new VertexShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode, null);
+            _vertexShader = new D3D11.VertexShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderBytecode, null);
             _inputLayouts = new InputLayoutCache(GraphicsDevice, Bytecode);
         }
     }

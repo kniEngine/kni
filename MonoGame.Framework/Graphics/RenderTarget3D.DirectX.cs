@@ -4,15 +4,17 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.Direct3D11;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget3D : IRenderTargetDX11
     {
         private int _currentSlice;
-        private RenderTargetView _renderTargetView;
-        private DepthStencilView _depthStencilView;
+        private D3D11.RenderTargetView _renderTargetView;
+        private D3D11.DepthStencilView _depthStencilView;
 
         private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
@@ -22,33 +24,32 @@ namespace Microsoft.Xna.Framework.Graphics
             RenderTargetUsage = usage;
 
             // Setup the multisampling description.
-            var multisampleDesc = new SharpDX.DXGI.SampleDescription(1, 0);
+            DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
             if (MultiSampleCount > 1)
             {
                 multisampleDesc.Count = MultiSampleCount;
-                multisampleDesc.Quality = (int)StandardMultisampleQualityLevels.StandardMultisamplePattern;
+                multisampleDesc.Quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 
             // Create a descriptor for the depth/stencil buffer.
             // Allocate a 2-D surface as the depth/stencil buffer.
             // Create a DepthStencil view on this surface to use on bind.
-            using (var depthBuffer = new SharpDX.Direct3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, new Texture2DDescription
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.Width = width;
+            texture2DDesc.Height = height;
+            texture2DDesc.SampleDescription = multisampleDesc;
+            texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
+
+            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
-                Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat),
-                ArraySize = 1,
-                MipLevels = 1,
-                Width = width,
-                Height = height,
-                SampleDescription = multisampleDesc,
-                BindFlags = BindFlags.DepthStencil,
-            }))
-            {
+                D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
+                depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+                depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                 // Create the view for binding to the device.
-                _depthStencilView = new DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, new DepthStencilViewDescription()
-                {
-                    Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat),
-                    Dimension = DepthStencilViewDimension.Texture2D
-                });
+                _depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
@@ -56,14 +57,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _renderTargetView);
-                SharpDX.Utilities.Dispose(ref _depthStencilView);
+                DX.Utilities.Dispose(ref _renderTargetView);
+                DX.Utilities.Dispose(ref _depthStencilView);
             }
 
             base.Dispose(disposing);
         }
 
-	    RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
+        D3D11.RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
 	    {
             if (arraySlice >= Depth)
                 throw new ArgumentOutOfRangeException("The arraySlice is out of range for this Texture3D.");
@@ -80,25 +81,20 @@ namespace Microsoft.Xna.Framework.Graphics
 	        {
 	            _currentSlice = arraySlice;
 
-	            var desc = new RenderTargetViewDescription
-	            {
-	                Format = GraphicsExtensions.ToDXFormat(this.Format),
-	                Dimension = RenderTargetViewDimension.Texture3D,
-	                Texture3D =
-	                    {
-	                        DepthSliceCount = -1,
-	                        FirstDepthSlice = arraySlice,
-	                        MipSlice = 0,
-	                    }
-	            };
+                D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
+                renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+                renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture3D;
+                renderTargetViewDesc.Texture3D.DepthSliceCount = -1;
+                renderTargetViewDesc.Texture3D.FirstDepthSlice = arraySlice;
+                renderTargetViewDesc.Texture3D.MipSlice = 0;
 
-	            _renderTargetView = new RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), desc);
+	            _renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
 	        }
 
 	        return _renderTargetView;
 	    }
 
-	    DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
+        D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
 	    {
 	        return _depthStencilView;
 	    }
