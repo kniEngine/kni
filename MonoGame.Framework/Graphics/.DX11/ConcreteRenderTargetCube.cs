@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -53,5 +53,9 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region IRenderTarget2DStrategy
 
+
+        internal D3D11.RenderTargetView[] _renderTargetViews;
+        internal D3D11.DepthStencilView[] _depthStencilViews;
+        internal D3D11.Resource _depthTarget;
     }
 }

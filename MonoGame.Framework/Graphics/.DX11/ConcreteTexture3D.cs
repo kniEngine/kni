@@ -29,5 +29,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Depth { get { return _depth; } }
         #endregion #region ITexture3DStrategy
 
+
+        internal bool _mipMap;
+        internal bool _isRenderTarget;
+
     }
 }
