@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -13,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
     internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
     {
-        internal SharpDX.Direct3D11.Buffer _cbuffer;
+        internal D3D11.Buffer _cbuffer;
 
 
         public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
@@ -33,20 +34,20 @@ namespace Microsoft.Xna.Framework.Graphics
             return new ConcreteConstantBufferStrategy(this);
         }
 
-        private SharpDX.Direct3D11.Buffer CreateD3D11Buffer()
+        private D3D11.Buffer CreateD3D11Buffer()
         {
             // Allocate the hardware constant buffer.
-            var desc = new SharpDX.Direct3D11.BufferDescription();
-            desc.Usage = SharpDX.Direct3D11.ResourceUsage.Default;
-            desc.BindFlags = SharpDX.Direct3D11.BindFlags.ConstantBuffer;
-            desc.CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None;
+            D3D11.BufferDescription desc = new D3D11.BufferDescription();
+            desc.Usage = D3D11.ResourceUsage.Default;
+            desc.BindFlags = D3D11.BindFlags.ConstantBuffer;
+            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             desc.SizeInBytes = Buffer.Length;
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                return new SharpDX.Direct3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
         }
 

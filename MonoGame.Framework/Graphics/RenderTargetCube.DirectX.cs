@@ -6,7 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
 
@@ -14,9 +14,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTargetCube : IRenderTargetDX11
     {
-        private SharpDX.Direct3D11.Resource _depthTarget;
-        private RenderTargetView[] _renderTargetViews;
-        private DepthStencilView[] _depthStencilViews;
+        private D3D11.Resource _depthTarget;
+        private D3D11.RenderTargetView[] _renderTargetViews;
+        private D3D11.DepthStencilView[] _depthStencilViews;
 
         private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
         {
@@ -24,19 +24,19 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
             RenderTargetUsage = usage;
 
-            _renderTargetViews = new RenderTargetView[6];
-            _depthStencilViews = new DepthStencilView[6];
+            _renderTargetViews = new D3D11.RenderTargetView[6];
+            _depthStencilViews = new D3D11.DepthStencilView[6];
 
             // Create one render target view per cube map face.          
             for (int i = 0; i < _renderTargetViews.Length; i++)
             {
-                var renderTargetViewDesc = new RenderTargetViewDescription();
-                renderTargetViewDesc.Dimension = RenderTargetViewDimension.Texture2DArray;
+                D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
+                renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture2DArray;
                 renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
                 renderTargetViewDesc.Texture2DArray.ArraySize = 1;
                 renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
                 renderTargetViewDesc.Texture2DArray.MipSlice = 0;
-                _renderTargetViews[i] = new RenderTargetView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
+                _renderTargetViews[i] = new D3D11.RenderTargetView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
             }
 
 
@@ -48,17 +48,17 @@ namespace Microsoft.Xna.Framework.Graphics
             if (MultiSampleCount > 1)
             {
                 sampleDescription.Count = MultiSampleCount;
-                sampleDescription.Quality = (int)StandardMultisampleQualityLevels.StandardMultisamplePattern;
+                sampleDescription.Quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 
-            var depthStencilDesc = new Texture2DDescription();
+            D3D11.Texture2DDescription depthStencilDesc = new D3D11.Texture2DDescription();
             depthStencilDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
             depthStencilDesc.ArraySize = 1;
             depthStencilDesc.MipLevels = 1;
             depthStencilDesc.Width = this.Size;
             depthStencilDesc.Height = this.Size;
             depthStencilDesc.SampleDescription = sampleDescription;
-            depthStencilDesc.BindFlags = BindFlags.DepthStencil;
+            depthStencilDesc.BindFlags = D3D11.BindFlags.DepthStencil;
 
             if (graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice.FeatureLevel >= SharpDX.Direct3D.FeatureLevel.Level_10_0)
             {
@@ -66,18 +66,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 // and the depth view is required to be Texture2DArray.
 
                 depthStencilDesc.ArraySize = 6;
-                depthStencilDesc.OptionFlags = ResourceOptionFlags.TextureCube;
+                depthStencilDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
 
-                _depthTarget = new SharpDX.Direct3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilDesc);
+                _depthTarget = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilDesc);
 
                 for (int i = 0; i < _renderTargetViews.Length; i++)
                 {
-                    var depthStencilViewDesc = new DepthStencilViewDescription();
+                    D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
                     depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
-                    depthStencilViewDesc.Dimension = DepthStencilViewDimension.Texture2DArray;
+                    depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2DArray;
                     depthStencilViewDesc.Texture2DArray.ArraySize = 1;
                     depthStencilViewDesc.Texture2DArray.FirstArraySlice = i;
-                    _depthStencilViews[i] = new DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _depthTarget, depthStencilViewDesc);
+                    _depthStencilViews[i] = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _depthTarget, depthStencilViewDesc);
                 }
             }
             else
@@ -87,12 +87,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 for (int i = 0; i < _renderTargetViews.Length; i++)
                 {
-                    _depthTarget = new SharpDX.Direct3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilDesc);
+                    _depthTarget = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilDesc);
 
-                    var depthStencilViewDesc = new DepthStencilViewDescription();
+                    D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
                     depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
-                    depthStencilViewDesc.Dimension = DepthStencilViewDimension.Texture2D;
-                    _depthStencilViews[i] = new DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _depthTarget, depthStencilViewDesc);
+                    depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
+                    _depthStencilViews[i] = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _depthTarget, depthStencilViewDesc);
                 }
             }
 
@@ -124,12 +124,12 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
+        D3D11.RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
         {
             return _renderTargetViews[arraySlice];
         }
 
-        DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
+        D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
         {
             return _depthStencilViews[arraySlice];
         }

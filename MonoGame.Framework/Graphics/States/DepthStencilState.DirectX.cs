@@ -5,13 +5,14 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState
     {
-        private SharpDX.Direct3D11.DepthStencilState _state;
+        private D3D11.DepthStencilState _state;
 
         protected internal override void GraphicsDeviceResetting()
         {
@@ -24,15 +25,15 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_state == null)
             {
                 // Build the description.
-                var desc = new SharpDX.Direct3D11.DepthStencilStateDescription();
+                D3D11.DepthStencilStateDescription desc = new D3D11.DepthStencilStateDescription();
 
                 desc.IsDepthEnabled = DepthBufferEnable;
                 desc.DepthComparison = DepthBufferFunction.ToDXComparisonFunction();
 
                 if (DepthBufferWriteEnable)
-                    desc.DepthWriteMask = SharpDX.Direct3D11.DepthWriteMask.All;
+                    desc.DepthWriteMask = D3D11.DepthWriteMask.All;
                 else
-                    desc.DepthWriteMask = SharpDX.Direct3D11.DepthWriteMask.Zero;
+                    desc.DepthWriteMask = D3D11.DepthWriteMask.Zero;
 
                 desc.IsStencilEnabled = StencilEnable;
                 desc.StencilReadMask = (byte)StencilMask; // TODO: Should this instead grab the upper 8bits?
@@ -59,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.DepthStencilState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.DepthStencilState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
 
             // NOTE: We make the assumption here that the caller has
@@ -69,26 +70,26 @@ namespace Microsoft.Xna.Framework.Graphics
             context.D3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
         }
 
-        static private SharpDX.Direct3D11.StencilOperation ToDXStencilOp(StencilOperation operation)
+        static private D3D11.StencilOperation ToDXStencilOp(StencilOperation operation)
         {
             switch (operation)
             {
                 case StencilOperation.Decrement:
-                    return SharpDX.Direct3D11.StencilOperation.Decrement;
+                    return D3D11.StencilOperation.Decrement;
                 case StencilOperation.DecrementSaturation:
-                    return SharpDX.Direct3D11.StencilOperation.DecrementAndClamp;
+                    return D3D11.StencilOperation.DecrementAndClamp;
                 case StencilOperation.Increment:
-                    return SharpDX.Direct3D11.StencilOperation.Increment;
+                    return D3D11.StencilOperation.Increment;
                 case StencilOperation.IncrementSaturation:
-                    return SharpDX.Direct3D11.StencilOperation.IncrementAndClamp;
+                    return D3D11.StencilOperation.IncrementAndClamp;
                 case StencilOperation.Invert:
-                    return SharpDX.Direct3D11.StencilOperation.Invert;
+                    return D3D11.StencilOperation.Invert;
                 case StencilOperation.Keep:
-                    return SharpDX.Direct3D11.StencilOperation.Keep;
+                    return D3D11.StencilOperation.Keep;
                 case StencilOperation.Replace:
-                    return SharpDX.Direct3D11.StencilOperation.Replace;
+                    return D3D11.StencilOperation.Replace;
                 case StencilOperation.Zero:
-                    return SharpDX.Direct3D11.StencilOperation.Zero;
+                    return D3D11.StencilOperation.Zero;
 
                 default:
                     throw new ArgumentException("Invalid stencil operation!");

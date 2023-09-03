@@ -5,13 +5,14 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState
     {
-        private SharpDX.Direct3D11.RasterizerState _state;
+        private D3D11.RasterizerState _state;
 
         protected internal override void GraphicsDeviceResetting()
         {
@@ -24,20 +25,20 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_state == null)
             {
                 // Build the description.
-                var desc = new SharpDX.Direct3D11.RasterizerStateDescription();
+                D3D11.RasterizerStateDescription desc = new D3D11.RasterizerStateDescription();
 
                 switch (CullMode)
                 {
                     case Graphics.CullMode.None:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.None;
+                        desc.CullMode = D3D11.CullMode.None;
                         break;
 
                     case Graphics.CullMode.CullClockwiseFace:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.Front;
+                        desc.CullMode = D3D11.CullMode.Front;
                         break;
 
                     case Graphics.CullMode.CullCounterClockwiseFace:
-                        desc.CullMode = SharpDX.Direct3D11.CullMode.Back;
+                        desc.CullMode = D3D11.CullMode.Back;
                         break;
 
                     default:
@@ -73,9 +74,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.SlopeScaledDepthBias = SlopeScaleDepthBias;
 
                 if (FillMode == Graphics.FillMode.WireFrame)
-                    desc.FillMode = SharpDX.Direct3D11.FillMode.Wireframe;
+                    desc.FillMode = D3D11.FillMode.Wireframe;
                 else
-                    desc.FillMode = SharpDX.Direct3D11.FillMode.Solid;
+                    desc.FillMode = D3D11.FillMode.Solid;
 
                 desc.IsDepthClipEnabled = DepthClipEnable;
 
@@ -89,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.DepthBiasClamp = 0.0f;
 
                 // Create the state.
-                _state = new SharpDX.Direct3D11.RasterizerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.RasterizerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
 
             // NOTE: We make the assumption here that the caller has

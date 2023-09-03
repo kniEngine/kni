@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX;
-using SharpDX.Direct3D11;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -26,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         private readonly GraphicsDevice _graphicsDevice;
         private readonly byte[] _shaderByteCode;
-        private readonly Dictionary<VertexInputLayout, InputLayout> _cache;
+        private readonly Dictionary<VertexInputLayout, D3D11.InputLayout> _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputLayoutCache"/> class.
@@ -40,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _graphicsDevice = graphicsDevice;
             _shaderByteCode = shaderByteCode;
-            _cache = new Dictionary<VertexInputLayout, InputLayout>();
+            _cache = new Dictionary<VertexInputLayout, D3D11.InputLayout>();
         }
 
         /// <summary>
@@ -81,9 +80,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="vertexBuffers">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
+        public D3D11.InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
         {
-            InputLayout inputLayout;
+            D3D11.InputLayout inputLayout;
             if (_cache.TryGetValue(vertexBuffers, out inputLayout))
                 return inputLayout;
 
@@ -91,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
-                inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
             }
             catch (SharpDXException ex)
             {
@@ -140,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    inputLayout = new InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                    inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
 
                     // Workaround succeeded? This means that there is a vertex shader that needs
                     // to be updated.
@@ -322,8 +321,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Note that instancing is only supported in feature level 9.3 and above.
             element.Classification = (instanceFrequency == 0)
-                                     ? SharpDX.Direct3D11.InputClassification.PerVertexData
-                                     : SharpDX.Direct3D11.InputClassification.PerInstanceData;
+                                     ? D3D11.InputClassification.PerVertexData
+                                     : D3D11.InputClassification.PerInstanceData;
             element.InstanceDataStepRate = instanceFrequency;
 
             return element;
@@ -334,7 +333,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="inputElements">The input elements.</param>
         /// <returns>The exception message.</returns>
-        private static string GetInvalidArgMessage(InputElement[] inputElements)
+        private static string GetInvalidArgMessage(D3D11.InputElement[] inputElements)
         {
             var elements = string.Join(", ", inputElements.Select(x => x.SemanticName + x.SemanticIndex));
             return "An error occurred while preparing to draw. "

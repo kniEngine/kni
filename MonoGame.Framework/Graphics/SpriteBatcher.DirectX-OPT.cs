@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Platform.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -213,16 +214,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 lock (_device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     //map vertexBaffer
-                    var mode = SharpDX.Direct3D11.MapMode.WriteNoOverwrite;
+                    D3D11.MapMode mode = D3D11.MapMode.WriteNoOverwrite;
                     if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
                     {
-                        mode = SharpDX.Direct3D11.MapMode.WriteDiscard;
+                        mode = D3D11.MapMode.WriteDiscard;
                         _baseQuad = 0;
                     }
-                    var dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, SharpDX.Direct3D11.MapFlags.None);
+                    SharpDX.DataBox dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, D3D11.MapFlags.None);
                     var vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch

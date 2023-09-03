@@ -4,7 +4,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         /// <summary>
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
-        /// For usage, convert this to SharpDX.Direct3D11.Resource.
+        /// For usage, convert this to D3D11.Resource.
         /// </summary>
         [Obsolete("Use GetD3D11Resource() method.")]
         public object Handle
@@ -23,9 +23,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return this.GetD3D11Resource(); }
         }
 
-        internal abstract Resource CreateTexture();
+        internal abstract D3D11.Resource CreateTexture();
 
-        internal Resource GetTexture()
+        internal D3D11.Resource GetTexture()
         {
             if (GetTextureStrategy<ConcreteTexture>()._texture != null)
                 return GetTextureStrategy<ConcreteTexture>()._texture;
@@ -34,12 +34,12 @@ namespace Microsoft.Xna.Framework.Graphics
             return GetTextureStrategy<ConcreteTexture>()._texture;
         }
 
-        internal ShaderResourceView GetShaderResourceView()
+        internal D3D11.ShaderResourceView GetShaderResourceView()
         {
             if (GetTextureStrategy<ConcreteTexture>()._resourceView != null)
                 return GetTextureStrategy<ConcreteTexture>()._resourceView;
 
-            GetTextureStrategy<ConcreteTexture>()._resourceView = new ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
             return GetTextureStrategy<ConcreteTexture>()._resourceView;
         }
 

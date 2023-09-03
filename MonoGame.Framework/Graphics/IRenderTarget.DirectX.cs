@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -16,12 +16,12 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <remarks>
         /// For texture cubes: The array slice is the index of the cube map face.
         /// </remarks>
-        RenderTargetView GetRenderTargetView(int arraySlice);
+        D3D11.RenderTargetView GetRenderTargetView(int arraySlice);
 
         /// <summary>
         /// Gets the <see cref="DepthStencilView"/>.
         /// </summary>
         /// <returns>The <see cref="DepthStencilView"/>. Can be <see langword="null"/>.</returns>
-        DepthStencilView GetDepthStencilView(int arraySlice);
+        D3D11.DepthStencilView GetDepthStencilView(int arraySlice);
     }
 }

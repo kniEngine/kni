@@ -8,14 +8,11 @@ using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Utilities.Png;
 using SharpDX;
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
 using SharpDX.WIC;
 using StbImageSharp;
-
-using MapFlags = SharpDX.Direct3D11.MapFlags;
-using Resource = SharpDX.Direct3D11.Resource;
 
 #if WINDOWS_UAP
 using Windows.Graphics.Imaging;
@@ -123,18 +120,18 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-        static unsafe SharpDX.Direct3D11.Texture2D CreateTex2DFromBitmap(BitmapSource bsource, GraphicsDevice device)
+        static unsafe D3D11.Texture2D CreateTex2DFromBitmap(BitmapSource bsource, GraphicsDevice device)
         {
-            Texture2DDescription desc;
+            D3D11.Texture2DDescription desc;
             desc.Width = bsource.Size.Width;
             desc.Height = bsource.Size.Height;
             desc.ArraySize = 1;
-            desc.BindFlags = BindFlags.ShaderResource;
-            desc.Usage = ResourceUsage.Default;
-            desc.CpuAccessFlags = CpuAccessFlags.None;
+            desc.BindFlags = D3D11.BindFlags.ShaderResource;
+            desc.Usage = D3D11.ResourceUsage.Default;
+            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             desc.Format = DXGI.Format.R8G8B8A8_UNorm;
             desc.MipLevels = 1;
-            desc.OptionFlags = ResourceOptionFlags.None;
+            desc.OptionFlags = D3D11.ResourceOptionFlags.None;
             desc.SampleDescription.Count = 1;
             desc.SampleDescription.Quality = 0;
 
@@ -159,7 +156,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 DataRectangle rect = new DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
-                return new SharpDX.Direct3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
+                return new D3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
             }
         }
 

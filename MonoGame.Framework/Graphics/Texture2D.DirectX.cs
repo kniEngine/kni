@@ -10,10 +10,8 @@ using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX;
-using SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
-using MapFlags = SharpDX.Direct3D11.MapFlags;
-using Resource = SharpDX.Direct3D11.Resource;
 
 #if WINDOWS_UAP
 using Windows.Graphics.Imaging;
@@ -67,7 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var startBytes = startIndex * elementSizeInByte;
                 var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-                var region = new ResourceRegion();
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = 0;
                 region.Front = 0;
                 region.Back = 1;
@@ -79,7 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var subresourceIndex = CalculateSubresourceIndex(0, level);
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
                 }
@@ -99,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 var startBytes = startIndex * elementSizeInByte;
                 var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-                var region = new ResourceRegion();
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = rect.Top;
                 region.Front = 0;
                 region.Back = 1;
@@ -112,7 +110,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
                 }
@@ -134,40 +132,40 @@ namespace Microsoft.Xna.Framework.Graphics
             var levelWidth = Math.Max(this.Width >> level, min);
             var levelHeight = Math.Max(this.Height >> level, min);
 
-            SharpDX.Direct3D11.Texture2D stagingTexture;
+            D3D11.Texture2D stagingTexture;
             {
-                var desc = new Texture2DDescription();
+                D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription();
                 desc.Width = levelWidth;
                 desc.Height = levelHeight;
                 desc.MipLevels = 1;
                 desc.ArraySize = 1;
                 desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
-                desc.BindFlags = BindFlags.None;
-                desc.CpuAccessFlags = CpuAccessFlags.Read;
+                desc.BindFlags = D3D11.BindFlags.None;
+                desc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
                 desc.SampleDescription = SampleDescription;
-                desc.Usage = ResourceUsage.Staging;
-                desc.OptionFlags = ResourceOptionFlags.None;
+                desc.Usage = D3D11.ResourceUsage.Staging;
+                desc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-                stagingTexture = new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                stagingTexture = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
             }
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
-                SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
 
                 // Copy the data from the GPU to the staging texture.
                 var elementsInRow = rect.Width;
                 var rows = rect.Height;
-                var region = new ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
                 d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                 // Copy the data to the array.
                 DataStream stream = null;
                 try
                 {
-                    var databox = d3dContext.MapSubresource(stagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
+                    var databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                     var elementSize = this.Format.GetSize();
                     if (this.Format.IsCompressedFormat())
@@ -243,30 +241,30 @@ namespace Microsoft.Xna.Framework.Graphics
             return arraySlice * this.LevelCount + level;
         }
 
-        protected internal virtual Texture2DDescription GetTexture2DDescription()
+        protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()
         {
-            var desc = new Texture2DDescription();
+            D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription();
             desc.Width = this.Width;
             desc.Height = this.Height;
             desc.MipLevels = this.LevelCount;
             desc.ArraySize = this.ArraySize;
             desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
-            desc.BindFlags = BindFlags.ShaderResource;
-            desc.CpuAccessFlags = CpuAccessFlags.None;
+            desc.BindFlags = D3D11.BindFlags.ShaderResource;
+            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             desc.SampleDescription = SampleDescription;
-            desc.Usage = ResourceUsage.Default;
-            desc.OptionFlags = ResourceOptionFlags.None;
+            desc.Usage = D3D11.ResourceUsage.Default;
+            desc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             if (_shared)
-                desc.OptionFlags |= ResourceOptionFlags.Shared;
+                desc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
             return desc;
         }
-        internal override Resource CreateTexture()
+        internal override D3D11.Resource CreateTexture()
         {
             // TODO: Move this to SetData() if we want to make Immutable textures!
-            var desc = GetTexture2DDescription();
-            return new SharpDX.Direct3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+            D3D11.Texture2DDescription desc = GetTexture2DDescription();
+            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
         }
     }
 }

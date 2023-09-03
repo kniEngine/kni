@@ -5,12 +5,10 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
-using MapFlags = SharpDX.Direct3D11.MapFlags;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
-
+using SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -29,34 +27,34 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        internal override Resource CreateTexture()
+        internal override D3D11.Resource CreateTexture()
         {
-            var description = new Texture3DDescription
+            D3D11.Texture3DDescription description = new D3D11.Texture3DDescription
             {
                 Width = this.Width,
                 Height = this.Height,
                 Depth = this.Depth,
                 MipLevels = this.LevelCount,
                 Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = BindFlags.ShaderResource,
-                CpuAccessFlags = CpuAccessFlags.None,
-                Usage = ResourceUsage.Default,
-                OptionFlags = ResourceOptionFlags.None,
+                BindFlags = D3D11.BindFlags.ShaderResource,
+                CpuAccessFlags = D3D11.CpuAccessFlags.None,
+                Usage = D3D11.ResourceUsage.Default,
+                OptionFlags = D3D11.ResourceOptionFlags.None,
             };
 
             if (renderTarget)
             {
-                description.BindFlags |= BindFlags.RenderTarget;
+                description.BindFlags |= D3D11.BindFlags.RenderTarget;
                 if (mipMap)
                 {
                     // Note: XNA 4 does not have a method Texture.GenerateMipMaps() 
                     // because generation of mipmaps is not supported on the Xbox 360.
                     // TODO: New method Texture.GenerateMipMaps() required.
-                    description.OptionFlags |= ResourceOptionFlags.GenerateMipMaps;
+                    description.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
                 }
             }
 
-            return new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
+            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
         }
 
 	    private void PlatformSetData<T>(int level,
@@ -75,11 +73,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 int subresourceIndex = level;
 
-                var region = new ResourceRegion(left, top, front, right, bottom, back);
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion(left, top, front, right, bottom, back);
 
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
                 }
@@ -99,33 +97,33 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Like in Texture2D, we should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var desc = new Texture3DDescription
+            D3D11.Texture3DDescription desc = new D3D11.Texture3DDescription
             {
                 Width = this.Width,
                 Height = this.Height,
                 Depth = this.Depth,
                 MipLevels = 1,
                 Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = BindFlags.None,
-                CpuAccessFlags = CpuAccessFlags.Read,
-                Usage = ResourceUsage.Staging,
-                OptionFlags = ResourceOptionFlags.None,
+                BindFlags = D3D11.BindFlags.None,
+                CpuAccessFlags = D3D11.CpuAccessFlags.Read,
+                Usage = D3D11.ResourceUsage.Staging,
+                OptionFlags = D3D11.ResourceOptionFlags.None,
             };
 
-            using (var stagingTex = new SharpDX.Direct3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
+            using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
             {
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
-                    SharpDX.Direct3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    d3dContext.CopySubresourceRegion(GetTexture(), level, new ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 
                     // Copy the data to the array.
                     DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, MapMode.Read, MapFlags.None, out stream);
+                        var databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.

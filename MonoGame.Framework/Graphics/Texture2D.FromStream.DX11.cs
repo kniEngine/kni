@@ -7,8 +7,8 @@
 using System.IO;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX;
-using SharpDX.Direct3D11;
 using SharpDX.WIC;
+using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
 
@@ -56,27 +56,27 @@ namespace Microsoft.Xna.Framework.Graphics
             using (decoder)
             {
                 Texture2D texture = new Texture2D(graphicsDevice, bmpSource.Size.Width, bmpSource.Size.Height);
-                
+
                 // TODO: use texture.SetData(...)
-                Texture2DDescription desc;
+                D3D11.Texture2DDescription desc;
                 desc.Width = bmpSource.Size.Width;
                 desc.Height = bmpSource.Size.Height;
                 desc.ArraySize = 1;
-                desc.BindFlags = BindFlags.ShaderResource;
-                desc.Usage = ResourceUsage.Default;
-                desc.CpuAccessFlags = CpuAccessFlags.None;
+                desc.BindFlags = D3D11.BindFlags.ShaderResource;
+                desc.Usage = D3D11.ResourceUsage.Default;
+                desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
                 desc.Format = DXGI.Format.R8G8B8A8_UNorm;
                 desc.MipLevels = 1;
-                desc.OptionFlags = ResourceOptionFlags.None;
+                desc.OptionFlags = D3D11.ResourceOptionFlags.None;
                 desc.SampleDescription.Count = 1;
                 desc.SampleDescription.Quality = 0;
 
-                SharpDX.Direct3D11.Texture2D textureResource;
+                D3D11.Texture2D textureResource;
                 using (DataStream s = new DataStream(bmpSource.Size.Height * bmpSource.Size.Width * 4, true, true))
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, s);
                     DataRectangle rect = new DataRectangle(s.DataPointer, bmpSource.Size.Width * 4);
-                    textureResource = new SharpDX.Direct3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
+                    textureResource = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
                 }
                 texture.GetTextureStrategy<ConcreteTexture>().SetTextureInternal_DX(textureResource);
 

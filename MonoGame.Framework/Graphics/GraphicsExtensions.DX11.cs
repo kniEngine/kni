@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using SharpDX.Mathematics.Interop;
+using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
 
@@ -175,26 +176,26 @@ namespace Microsoft.Xna.Framework.Graphics
             return new RawColor4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
 
-        static public SharpDX.Direct3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)
+        static public D3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
             {
                 case CompareFunction.Always:
-                    return SharpDX.Direct3D11.Comparison.Always;
+                    return D3D11.Comparison.Always;
                 case CompareFunction.Equal:
-                    return SharpDX.Direct3D11.Comparison.Equal;
+                    return D3D11.Comparison.Equal;
                 case CompareFunction.Greater:
-                    return SharpDX.Direct3D11.Comparison.Greater;
+                    return D3D11.Comparison.Greater;
                 case CompareFunction.GreaterEqual:
-                    return SharpDX.Direct3D11.Comparison.GreaterEqual;
+                    return D3D11.Comparison.GreaterEqual;
                 case CompareFunction.Less:
-                    return SharpDX.Direct3D11.Comparison.Less;
+                    return D3D11.Comparison.Less;
                 case CompareFunction.LessEqual:
-                    return SharpDX.Direct3D11.Comparison.LessEqual;
+                    return D3D11.Comparison.LessEqual;
                 case CompareFunction.Never:
-                    return SharpDX.Direct3D11.Comparison.Never;
+                    return D3D11.Comparison.Never;
                 case CompareFunction.NotEqual:
-                    return SharpDX.Direct3D11.Comparison.NotEqual;
+                    return D3D11.Comparison.NotEqual;
 
                 default:
                     throw new ArgumentException("Invalid comparison!");
