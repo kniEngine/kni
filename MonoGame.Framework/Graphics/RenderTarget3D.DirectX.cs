@@ -34,23 +34,22 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create a descriptor for the depth/stencil buffer.
             // Allocate a 2-D surface as the depth/stencil buffer.
             // Create a DepthStencil view on this surface to use on bind.
-            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, new D3D11.Texture2DDescription
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.Width = width;
+            texture2DDesc.Height = height;
+            texture2DDesc.SampleDescription = multisampleDesc;
+            texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
+
+            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
-                Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat),
-                ArraySize = 1,
-                MipLevels = 1,
-                Width = width,
-                Height = height,
-                SampleDescription = multisampleDesc,
-                BindFlags = D3D11.BindFlags.DepthStencil,
-            }))
-            {
+                D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
+                depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+                depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                 // Create the view for binding to the device.
-                _depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, new D3D11.DepthStencilViewDescription()
-                {
-                    Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat),
-                    Dimension = D3D11.DepthStencilViewDimension.Texture2D
-                });
+                _depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
@@ -82,19 +81,14 @@ namespace Microsoft.Xna.Framework.Graphics
 	        {
 	            _currentSlice = arraySlice;
 
-                D3D11.RenderTargetViewDescription desc = new D3D11.RenderTargetViewDescription
-	            {
-	                Format = GraphicsExtensions.ToDXFormat(this.Format),
-	                Dimension = D3D11.RenderTargetViewDimension.Texture3D,
-	                Texture3D =
-	                    {
-	                        DepthSliceCount = -1,
-	                        FirstDepthSlice = arraySlice,
-	                        MipSlice = 0,
-	                    }
-	            };
+                D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
+                renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+                renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture3D;
+                renderTargetViewDesc.Texture3D.DepthSliceCount = -1;
+                renderTargetViewDesc.Texture3D.FirstDepthSlice = arraySlice;
+                renderTargetViewDesc.Texture3D.MipSlice = 0;
 
-	            _renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), desc);
+	            _renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
 	        }
 
 	        return _renderTargetView;

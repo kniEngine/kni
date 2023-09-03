@@ -26,42 +26,42 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_state == null)
             {
                 // Build the description.
-                D3D11.DepthStencilStateDescription desc = new D3D11.DepthStencilStateDescription();
+                D3D11.DepthStencilStateDescription depthStencilStateDesc = new D3D11.DepthStencilStateDescription();
 
-                desc.IsDepthEnabled = DepthBufferEnable;
-                desc.DepthComparison = DepthBufferFunction.ToDXComparisonFunction();
+                depthStencilStateDesc.IsDepthEnabled = DepthBufferEnable;
+                depthStencilStateDesc.DepthComparison = DepthBufferFunction.ToDXComparisonFunction();
 
                 if (DepthBufferWriteEnable)
-                    desc.DepthWriteMask = D3D11.DepthWriteMask.All;
+                    depthStencilStateDesc.DepthWriteMask = D3D11.DepthWriteMask.All;
                 else
-                    desc.DepthWriteMask = D3D11.DepthWriteMask.Zero;
+                    depthStencilStateDesc.DepthWriteMask = D3D11.DepthWriteMask.Zero;
 
-                desc.IsStencilEnabled = StencilEnable;
-                desc.StencilReadMask = (byte)StencilMask; // TODO: Should this instead grab the upper 8bits?
-                desc.StencilWriteMask = (byte)StencilWriteMask;
+                depthStencilStateDesc.IsStencilEnabled = StencilEnable;
+                depthStencilStateDesc.StencilReadMask = (byte)StencilMask; // TODO: Should this instead grab the upper 8bits?
+                depthStencilStateDesc.StencilWriteMask = (byte)StencilWriteMask;
 
                 if (TwoSidedStencilMode)
                 {
-                    desc.BackFace.Comparison = CounterClockwiseStencilFunction.ToDXComparisonFunction();
-                    desc.BackFace.DepthFailOperation = ToDXStencilOp(CounterClockwiseStencilDepthBufferFail);
-                    desc.BackFace.FailOperation = ToDXStencilOp(CounterClockwiseStencilFail);
-                    desc.BackFace.PassOperation = ToDXStencilOp(CounterClockwiseStencilPass);
+                    depthStencilStateDesc.BackFace.Comparison = CounterClockwiseStencilFunction.ToDXComparisonFunction();
+                    depthStencilStateDesc.BackFace.DepthFailOperation = ToDXStencilOp(CounterClockwiseStencilDepthBufferFail);
+                    depthStencilStateDesc.BackFace.FailOperation = ToDXStencilOp(CounterClockwiseStencilFail);
+                    depthStencilStateDesc.BackFace.PassOperation = ToDXStencilOp(CounterClockwiseStencilPass);
                 }
                 else
                 {   //use same settings as frontFace 
-                    desc.BackFace.Comparison = StencilFunction.ToDXComparisonFunction();
-                    desc.BackFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
-                    desc.BackFace.FailOperation = ToDXStencilOp(StencilFail);
-                    desc.BackFace.PassOperation = ToDXStencilOp(StencilPass);
+                    depthStencilStateDesc.BackFace.Comparison = StencilFunction.ToDXComparisonFunction();
+                    depthStencilStateDesc.BackFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
+                    depthStencilStateDesc.BackFace.FailOperation = ToDXStencilOp(StencilFail);
+                    depthStencilStateDesc.BackFace.PassOperation = ToDXStencilOp(StencilPass);
                 }
 
-                desc.FrontFace.Comparison = StencilFunction.ToDXComparisonFunction();
-                desc.FrontFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
-                desc.FrontFace.FailOperation = ToDXStencilOp(StencilFail);
-                desc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
+                depthStencilStateDesc.FrontFace.Comparison = StencilFunction.ToDXComparisonFunction();
+                depthStencilStateDesc.FrontFace.DepthFailOperation = ToDXStencilOp(StencilDepthBufferFail);
+                depthStencilStateDesc.FrontFace.FailOperation = ToDXStencilOp(StencilFail);
+                depthStencilStateDesc.FrontFace.PassOperation = ToDXStencilOp(StencilPass);
 
                 // Create the state.
-                _state = new D3D11.DepthStencilState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.DepthStencilState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilStateDesc);
             }
 
             // NOTE: We make the assumption here that the caller has

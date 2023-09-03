@@ -132,22 +132,20 @@ namespace Microsoft.Xna.Framework.Graphics
             int levelWidth = Math.Max(this.Width >> level, min);
             int levelHeight = Math.Max(this.Height >> level, min);
 
-            D3D11.Texture2D stagingTexture;
-            {
-                D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription();
-                desc.Width = levelWidth;
-                desc.Height = levelHeight;
-                desc.MipLevels = 1;
-                desc.ArraySize = 1;
-                desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
-                desc.BindFlags = D3D11.BindFlags.None;
-                desc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
-                desc.SampleDescription = SampleDescription;
-                desc.Usage = D3D11.ResourceUsage.Staging;
-                desc.OptionFlags = D3D11.ResourceOptionFlags.None;
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = levelWidth;
+            texture2DDesc.Height = levelHeight;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.BindFlags = D3D11.BindFlags.None;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+            texture2DDesc.SampleDescription = this.SampleDescription;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-                stagingTexture = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
-            }
+            D3D11.Texture2D stagingTexture = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
@@ -243,28 +241,28 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()
         {
-            D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription();
-            desc.Width = this.Width;
-            desc.Height = this.Height;
-            desc.MipLevels = this.LevelCount;
-            desc.ArraySize = this.ArraySize;
-            desc.Format = GraphicsExtensions.ToDXFormat(this.Format);
-            desc.BindFlags = D3D11.BindFlags.ShaderResource;
-            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            desc.SampleDescription = SampleDescription;
-            desc.Usage = D3D11.ResourceUsage.Default;
-            desc.OptionFlags = D3D11.ResourceOptionFlags.None;
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = this.Width;
+            texture2DDesc.Height = this.Height;
+            texture2DDesc.MipLevels = this.LevelCount;
+            texture2DDesc.ArraySize = this.ArraySize;
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture2DDesc.SampleDescription = SampleDescription;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             if (_shared)
-                desc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
+                texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
-            return desc;
+            return texture2DDesc;
         }
         internal override D3D11.Resource CreateTexture()
         {
             // TODO: Move this to SetData() if we want to make Immutable textures!
-            D3D11.Texture2DDescription desc = GetTexture2DDescription();
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+            D3D11.Texture2DDescription texture2DDesc = GetTexture2DDescription();
+            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
     }
 }

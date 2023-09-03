@@ -38,17 +38,17 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.Buffer CreateD3D11Buffer()
         {
             // Allocate the hardware constant buffer.
-            D3D11.BufferDescription desc = new D3D11.BufferDescription();
-            desc.Usage = D3D11.ResourceUsage.Default;
-            desc.BindFlags = D3D11.BindFlags.ConstantBuffer;
-            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            desc.SizeInBytes = Buffer.Length;
+            D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
+            bufferDesc.Usage = D3D11.ResourceUsage.Default;
+            bufferDesc.BindFlags = D3D11.BindFlags.ConstantBuffer;
+            bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            bufferDesc.SizeInBytes = Buffer.Length;
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
             }
         }
 

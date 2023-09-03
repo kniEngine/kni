@@ -82,27 +82,24 @@ namespace Microsoft.Xna.Framework.Graphics
             // Create a descriptor for the depth/stencil buffer.
             // Allocate a 2-D surface as the depth/stencil buffer.
             // Create a DepthStencil view on this surface to use on bind.
-            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(d3dDevice, 
-                new D3D11.Texture2DDescription
-                {
-                    Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
-                    ArraySize = 1,
-                    MipLevels = 1,
-                    Width = width,
-                    Height = height,
-                    SampleDescription = multisampleDesc,
-                    BindFlags = D3D11.BindFlags.DepthStencil,
-                }))
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat);
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.Width = width;
+            texture2DDesc.Height = height;
+            texture2DDesc.SampleDescription = multisampleDesc;
+            texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
+
+            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(d3dDevice, texture2DDesc))
             {
                 // Create the view for binding to the device.
-                _depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer,
-                    new D3D11.DepthStencilViewDescription()
-                    {
-                        Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat),
-                        Dimension = (MultiSampleCount > 1)
-                                  ? D3D11.DepthStencilViewDimension.Texture2DMultisampled 
-                                  : D3D11.DepthStencilViewDimension.Texture2D
-                    });
+                D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
+                depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat);
+                depthStencilViewDesc.Dimension = (MultiSampleCount > 1)
+                                               ? D3D11.DepthStencilViewDimension.Texture2DMultisampled
+                                               : D3D11.DepthStencilViewDimension.Texture2D;
+                _depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
@@ -171,15 +168,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected internal override D3D11.Texture2DDescription GetTexture2DDescription()
         {
-            D3D11.Texture2DDescription desc = base.GetTexture2DDescription();
+            D3D11.Texture2DDescription texture2DDesc = base.GetTexture2DDescription();
 
             if (MultiSampleCount == 0 || Shared)
-                desc.BindFlags |= D3D11.BindFlags.RenderTarget;
+                texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
 
             if (MipMap)
-                desc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+                texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
 
-            return desc;
+            return texture2DDesc;
         }
 
         private D3D11.Texture2D GetMSTexture()
@@ -192,24 +189,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal virtual D3D11.Texture2D CreateMSTexture()
         {
-            D3D11.Texture2DDescription desc = GetMSTexture2DDescription();
+            D3D11.Texture2DDescription texture2DDesc = GetMSTexture2DDescription();
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
         internal virtual D3D11.Texture2DDescription GetMSTexture2DDescription()
         {
-            D3D11.Texture2DDescription desc = base.GetTexture2DDescription();
+            D3D11.Texture2DDescription texture2DDesc = base.GetTexture2DDescription();
 
-            desc.BindFlags |= D3D11.BindFlags.RenderTarget;
+            texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
             // the multi sampled texture can never be bound directly
-            desc.BindFlags &= ~D3D11.BindFlags.ShaderResource;
-            desc.SampleDescription = _msSampleDescription;
+            texture2DDesc.BindFlags &= ~D3D11.BindFlags.ShaderResource;
+            texture2DDesc.SampleDescription = _msSampleDescription;
             // mip mapping is applied to the resolved texture, not the multisampled texture
-            desc.MipLevels = 1;
-            desc.OptionFlags &= ~D3D11.ResourceOptionFlags.GenerateMipMaps;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.OptionFlags &= ~D3D11.ResourceOptionFlags.GenerateMipMaps;
 
-            return desc;
+            return texture2DDesc;
         }
     }
 }

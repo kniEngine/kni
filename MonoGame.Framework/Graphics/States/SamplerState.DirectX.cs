@@ -25,36 +25,35 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_state == null)
             {
                 // Build the description.
-                D3D11.SamplerStateDescription desc = new D3D11.SamplerStateDescription();
-
-                desc.AddressU = ToDXTextureAddressMode(AddressU);
-                desc.AddressV = ToDXTextureAddressMode(AddressV);
-                desc.AddressW = ToDXTextureAddressMode(AddressW);
+                D3D11.SamplerStateDescription samplerStateDesc = new D3D11.SamplerStateDescription();
+                samplerStateDesc.AddressU = ToDXTextureAddressMode(AddressU);
+                samplerStateDesc.AddressV = ToDXTextureAddressMode(AddressV);
+                samplerStateDesc.AddressW = ToDXTextureAddressMode(AddressW);
 
 #if WINDOWS_UAP
-				desc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
+				samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
 					BorderColor.R / 255.0f,
 					BorderColor.G / 255.0f,
 					BorderColor.B / 255.0f,
 					BorderColor.A / 255.0f);
 #else
-				desc.BorderColor = BorderColor.ToDXColor4();
+                samplerStateDesc.BorderColor = BorderColor.ToDXColor4();
 #endif
 
-				desc.Filter = ToDXTextureFilter(Filter, FilterMode);
-                desc.MaximumAnisotropy = Math.Min(MaxAnisotropy, context.DeviceStrategy.Capabilities.MaxTextureAnisotropy);
-                desc.MipLodBias = MipMapLevelOfDetailBias;
-                desc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
+				samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
+                samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, context.DeviceStrategy.Capabilities.MaxTextureAnisotropy);
+                samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
+                samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 
                 // TODO: How do i do this?
-                desc.MinimumLod = 0.0f;
+                samplerStateDesc.MinimumLod = 0.0f;
 
                 // To support feature level 9.1 these must 
                 // be set to these exact values.
-                desc.MaximumLod = float.MaxValue;
+                samplerStateDesc.MaximumLod = float.MaxValue;
 
                 // Create the state.
-                _state = new D3D11.SamplerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc);
+                _state = new D3D11.SamplerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, samplerStateDesc);
             }
 
             Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");

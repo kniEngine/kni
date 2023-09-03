@@ -28,33 +28,31 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         internal override D3D11.Resource CreateTexture()
-        {
-            D3D11.Texture3DDescription description = new D3D11.Texture3DDescription
-            {
-                Width = this.Width,
-                Height = this.Height,
-                Depth = this.Depth,
-                MipLevels = this.LevelCount,
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = D3D11.BindFlags.ShaderResource,
-                CpuAccessFlags = D3D11.CpuAccessFlags.None,
-                Usage = D3D11.ResourceUsage.Default,
-                OptionFlags = D3D11.ResourceOptionFlags.None,
-            };
+        {   
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = this.LevelCount;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             if (renderTarget)
             {
-                description.BindFlags |= D3D11.BindFlags.RenderTarget;
+                texture3DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
                 if (mipMap)
                 {
                     // Note: XNA 4 does not have a method Texture.GenerateMipMaps() 
                     // because generation of mipmaps is not supported on the Xbox 360.
                     // TODO: New method Texture.GenerateMipMaps() required.
-                    description.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+                    texture3DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
                 }
             }
 
-            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
+            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
         }
 
 	    private void PlatformSetData<T>(int level,
@@ -97,20 +95,18 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Like in Texture2D, we should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            D3D11.Texture3DDescription desc = new D3D11.Texture3DDescription
-            {
-                Width = this.Width,
-                Height = this.Height,
-                Depth = this.Depth,
-                MipLevels = 1,
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = D3D11.BindFlags.None,
-                CpuAccessFlags = D3D11.CpuAccessFlags.Read,
-                Usage = D3D11.ResourceUsage.Staging,
-                OptionFlags = D3D11.ResourceOptionFlags.None,
-            };
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = 1;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.None;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Staging;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
+            using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc))
             {
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {

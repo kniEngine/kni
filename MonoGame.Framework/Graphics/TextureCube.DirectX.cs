@@ -32,28 +32,27 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override D3D11.Resource CreateTexture()
         {
-            D3D11.Texture2DDescription description = new D3D11.Texture2DDescription
-            {
-                Width = this.Size,
-                Height = this.Size,
-                MipLevels = this.LevelCount,
-                ArraySize = 6, // A texture cube is a 2D texture array with 6 textures.
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                BindFlags = D3D11.BindFlags.ShaderResource,
-                CpuAccessFlags = D3D11.CpuAccessFlags.None,
-                SampleDescription = { Count = 1, Quality = 0 },
-                Usage = D3D11.ResourceUsage.Default,
-                OptionFlags = D3D11.ResourceOptionFlags.TextureCube
-            };
+            DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = this.Size;
+            texture2DDesc.Height = this.Size;
+            texture2DDesc.MipLevels = this.LevelCount;
+            texture2DDesc.ArraySize = 6; // A texture cube is a 2D texture array with 6 textures.
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture2DDesc.SampleDescription = sampleDesc;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
 
             if (_renderTarget)
             {
-                description.BindFlags |= D3D11.BindFlags.RenderTarget;
+                texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
                 if (_mipMap)
-                    description.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+                    texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
             }
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, description);
+            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
         private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
@@ -66,21 +65,20 @@ namespace Microsoft.Xna.Framework.Graphics
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
             int levelSize = Math.Max(this.Size >> level, min);
 
-            D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription
-            {
-                Width = levelSize,
-                Height = levelSize,
-                MipLevels = 1,
-                ArraySize = 1,
-                Format = GraphicsExtensions.ToDXFormat(this.Format),
-                SampleDescription = new DXGI.SampleDescription(1, 0),
-                BindFlags = D3D11.BindFlags.None,
-                CpuAccessFlags = D3D11.CpuAccessFlags.Read,
-                Usage = D3D11.ResourceUsage.Staging,
-                OptionFlags = D3D11.ResourceOptionFlags.None,
-            };
+            DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = levelSize;
+            texture2DDesc.Height = levelSize;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.SampleDescription = sampleDesc;
+            texture2DDesc.BindFlags = D3D11.BindFlags.None;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc))
+            using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {

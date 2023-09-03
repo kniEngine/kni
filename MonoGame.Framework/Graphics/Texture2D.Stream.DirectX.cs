@@ -122,18 +122,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         static unsafe D3D11.Texture2D CreateTex2DFromBitmap(BitmapSource bsource, GraphicsDevice device)
         {
-            D3D11.Texture2DDescription desc;
-            desc.Width = bsource.Size.Width;
-            desc.Height = bsource.Size.Height;
-            desc.ArraySize = 1;
-            desc.BindFlags = D3D11.BindFlags.ShaderResource;
-            desc.Usage = D3D11.ResourceUsage.Default;
-            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            desc.Format = DXGI.Format.R8G8B8A8_UNorm;
-            desc.MipLevels = 1;
-            desc.OptionFlags = D3D11.ResourceOptionFlags.None;
-            desc.SampleDescription.Count = 1;
-            desc.SampleDescription.Quality = 0;
+            D3D11.Texture2DDescription texture2DDesc;
+            texture2DDesc.Width = bsource.Size.Width;
+            texture2DDesc.Height = bsource.Size.Height;
+            texture2DDesc.ArraySize = 1;
+            texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture2DDesc.Format = DXGI.Format.R8G8B8A8_UNorm;
+            texture2DDesc.MipLevels = 1;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+            texture2DDesc.SampleDescription.Count = 1;
+            texture2DDesc.SampleDescription.Quality = 0;
 
             using (DX.DataStream s = new DX.DataStream(bsource.Size.Height * bsource.Size.Width * 4, true, true))
             {
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 DX.DataRectangle rect = new DX.DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
-                return new D3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
+                return new D3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
             }
         }
 

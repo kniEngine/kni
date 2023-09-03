@@ -156,14 +156,14 @@ namespace Microsoft.Xna.Platform.Graphics
             //You can't Map the BackBuffer surface, so we copy to another texture
             using (D3D11.Texture2D backBufferTexture = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0))
             {
-                D3D11.Texture2DDescription desc = backBufferTexture.Description;
-                desc.SampleDescription = new DXGI.SampleDescription(1, 0);
-                desc.BindFlags = D3D11.BindFlags.None;
-                desc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
-                desc.Usage = D3D11.ResourceUsage.Staging;
-                desc.OptionFlags = D3D11.ResourceOptionFlags.None;
+                D3D11.Texture2DDescription texture2DDesc = backBufferTexture.Description;
+                texture2DDesc.SampleDescription = new DXGI.SampleDescription(1, 0);
+                texture2DDesc.BindFlags = D3D11.BindFlags.None;
+                texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
+                texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
+                texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, desc))
+                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                 {
                     lock (_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {
@@ -171,11 +171,11 @@ namespace Microsoft.Xna.Platform.Graphics
                         // if MSAA is enabled we need to first copy to a resource without MSAA
                         if (backBufferTexture.Description.SampleDescription.Count > 1)
                         {
-                            desc.Usage = D3D11.ResourceUsage.Default;
-                            desc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-                            using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(this.D3DDevice, desc))
+                            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+                            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+                            using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                             {
-                                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, desc.Format);
+                                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, texture2DDesc.Format);
                                 if (rect.HasValue)
                                 {
                                     Rectangle r = rect.Value;
@@ -486,15 +486,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void ResizeTargets()
         {
             DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
-            DXGI.ModeDescription descr = new DXGI.ModeDescription
-            {
-                Format = format,
-                Scaling = DXGI.DisplayModeScaling.Unspecified,
-                Width = PresentationParameters.BackBufferWidth,
-                Height = PresentationParameters.BackBufferHeight,
-            };
+            DXGI.ModeDescription modeDesc = new DXGI.ModeDescription();
+            modeDesc.Format = format;
+            modeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
+            modeDesc.Width = PresentationParameters.BackBufferWidth;
+            modeDesc.Height = PresentationParameters.BackBufferHeight;
 
-            _swapChain.ResizeTarget(ref descr);
+            _swapChain.ResizeTarget(ref modeDesc);
         }
 #endif
 
@@ -625,25 +623,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
 
                 // SwapChain description
-                DXGI.SwapChainDescription desc = new DXGI.SwapChainDescription()
-                {
-                    ModeDescription =
-                    {
-                        Format = format,
-                        Scaling = DXGI.DisplayModeScaling.Unspecified,
-                        Width = PresentationParameters.BackBufferWidth,
-                        Height = PresentationParameters.BackBufferHeight,
-                    },
+                DXGI.SwapChainDescription swapChainDesc = new DXGI.SwapChainDescription();
+                swapChainDesc.ModeDescription.Format = format;
+                swapChainDesc.ModeDescription.Scaling = DXGI.DisplayModeScaling.Unspecified;
+                swapChainDesc.ModeDescription.Width = PresentationParameters.BackBufferWidth;
+                swapChainDesc.ModeDescription.Height = PresentationParameters.BackBufferHeight;
 
-                    OutputHandle = PresentationParameters.DeviceWindowHandle,
-                    IsWindowed = true,
+                swapChainDesc.OutputHandle = PresentationParameters.DeviceWindowHandle;
+                swapChainDesc.IsWindowed = true;
 
-                    SampleDescription = multisampleDesc,
-                    Usage = DXGI.Usage.RenderTargetOutput,
-                    BufferCount = 2,
-                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
-                    Flags = swapChainFlags
-                };
+                swapChainDesc.SampleDescription = multisampleDesc;
+                swapChainDesc.Usage = DXGI.Usage.RenderTargetOutput;
+                swapChainDesc.BufferCount = 2;
+                swapChainDesc.SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval);
+                swapChainDesc.Flags = swapChainFlags;
 
                 // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
 
@@ -653,7 +646,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice.Adapter)
                 using (DXGI.Factory1 dxgiFactory = dxgiAdapter.GetParent<DXGI.Factory1>())
                 {
-                    _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, desc);
+                    _swapChain = new DXGI.SwapChain(dxgiFactory, dxgiDevice, swapChainDesc);
                     RefreshAdapter();
                     dxgiFactory.MakeWindowAssociation(PresentationParameters.DeviceWindowHandle, DXGI.WindowAssociationFlags.IgnoreAll);
                     // To reduce latency, ensure that DXGI does not queue more than one frame at a time.
@@ -722,23 +715,21 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // SwapChain description
-                DXGI.SwapChainDescription1 desc = new DXGI.SwapChainDescription1()
-                {
-                    // Automatic sizing
-                    Width = PresentationParameters.BackBufferWidth,
-                    Height = PresentationParameters.BackBufferHeight,
-                    Format = format,
-                    Stereo = false,
-                    // By default we scale the backbuffer to the window 
-                    // rectangle to function more like a WP7 game.
-                    Scaling = DXGI.Scaling.Stretch,
+                DXGI.SwapChainDescription1 swapChainDesc = new DXGI.SwapChainDescription1();
+                // Automatic sizing
+                swapChainDesc.Width = PresentationParameters.BackBufferWidth;
+                swapChainDesc.Height = PresentationParameters.BackBufferHeight;
+                swapChainDesc.Format = format;
+                swapChainDesc.Stereo = false;
+                // By default we scale the backbuffer to the window 
+                // rectangle to function more like a WP7 game.
+                swapChainDesc.Scaling = DXGI.Scaling.Stretch;
 
-                    SampleDescription = multisampleDesc,
-                    Usage = DXGI.Usage.RenderTargetOutput,
-                    BufferCount = 2,
-                    SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval),
-                    Flags = swapChainFlags
-                };
+                swapChainDesc.SampleDescription = multisampleDesc;
+                swapChainDesc.Usage = DXGI.Usage.RenderTargetOutput;
+                swapChainDesc.BufferCount = 2;
+                swapChainDesc.SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval);
+                swapChainDesc.Flags = swapChainFlags;
 
                 // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
 
@@ -753,14 +744,14 @@ namespace Microsoft.Xna.Platform.Graphics
                         // Creates a SwapChain from a CoreWindow pointer.
                         CoreWindow coreWindow = Marshal.GetObjectForIUnknown(PresentationParameters.DeviceWindowHandle) as CoreWindow;
                         using (DX.ComObject comWindow = new DX.ComObject(coreWindow))
-                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref desc);
+                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref swapChainDesc);
                     }
                     else
                     {
                         _swapChainPanel = PresentationParameters.SwapChainPanel;
                         using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
                         {
-                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref desc, null);
+                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref swapChainDesc, null);
                             nativePanel.SwapChain = _swapChain;
 
                             // update swapChain2.MatrixTransform on SizeChanged of SwapChainPanel
@@ -824,17 +815,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 DXGI.Format depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
-                using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(this.D3DDevice, new D3D11.Texture2DDescription()
-                    {
-                        Format = depthFormat,
-                        ArraySize = 1,
-                        MipLevels = 1,
-                        Width = targetSize.X,
-                        Height = targetSize.Y,
-                        SampleDescription = multisampleDesc,
-                        Usage = D3D11.ResourceUsage.Default,
-                        BindFlags = D3D11.BindFlags.DepthStencil,
-                    }))
+                D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+                texture2DDesc.Format = depthFormat;
+                texture2DDesc.ArraySize = 1;
+                texture2DDesc.MipLevels = 1;
+                texture2DDesc.Width = targetSize.X;
+                texture2DDesc.Height = targetSize.Y;
+                texture2DDesc.SampleDescription = multisampleDesc;
+                texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+                texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
+                using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                 {
                     // Create a DepthStencil view on this surface to use on bind.
                     _depthStencilView = new D3D11.DepthStencilView(this.D3DDevice, depthBuffer);

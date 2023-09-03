@@ -17,12 +17,10 @@ namespace Microsoft.Xna.Framework.Graphics
             //if (graphicsDevice.D3DDevice.FeatureLevel == D3D.FeatureLevel.Level_9_1)
             //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
 
-            D3D11.QueryDescription queryDescription = new D3D11.QueryDescription
-            {
-                Flags = D3D11.QueryFlags.None,
-                Type = D3D11.QueryType.Occlusion
-            };
-            _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDescription);
+            D3D11.QueryDescription queryDesc = new D3D11.QueryDescription();
+            queryDesc.Flags = D3D11.QueryFlags.None;
+            queryDesc.Type = D3D11.QueryType.Occlusion;
+            _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
         }
         
         private void PlatformBegin()
