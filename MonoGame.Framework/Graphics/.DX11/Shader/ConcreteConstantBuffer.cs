@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -53,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override void PlatformClear()
         {
-            SharpDX.Utilities.Dispose(ref _cbuffer);
+            DX.Utilities.Dispose(ref _cbuffer);
             Dirty = true;
         }
 
@@ -86,7 +87,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _cbuffer);
+                DX.Utilities.Dispose(ref _cbuffer);
             }
 
             base.Dispose(disposing);

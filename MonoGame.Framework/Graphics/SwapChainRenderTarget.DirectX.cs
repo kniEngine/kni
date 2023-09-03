@@ -3,6 +3,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -150,7 +151,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(PresentInterval), DXGI.PresentFlags.None);
                 }
-                catch (SharpDX.SharpDXException)
+                catch (DX.SharpDXException)
                 {
                 }
             }
@@ -160,9 +161,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                //SharpDX.Utilities.Dispose(ref _backBuffer);
-                //SharpDX.Utilities.Dispose(ref _depthBuffer);
-                SharpDX.Utilities.Dispose(ref _swapChain);
+                //DX.Utilities.Dispose(ref _backBuffer);
+                //DX.Utilities.Dispose(ref _depthBuffer);
+                DX.Utilities.Dispose(ref _swapChain);
             }
 
             base.Dispose(disposing);

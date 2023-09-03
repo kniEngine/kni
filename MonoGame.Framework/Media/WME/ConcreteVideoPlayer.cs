@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Graphics;
 using SharpDX.MediaFoundation;
+using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
 
 
@@ -119,7 +120,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts) && _mediaEngine.ReadyState >= 2)
                 {
                     var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, base.Video.Width, base.Video.Height);
-                    SharpDX.ComObject dstSurfRef = (SharpDX.ComObject)_lastFrame.Handle;
+                    DX.ComObject dstSurfRef = (DX.ComObject)_lastFrame.Handle;
                     _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
                 }
             }

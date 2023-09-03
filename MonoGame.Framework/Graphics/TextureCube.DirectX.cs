@@ -9,7 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
 
                     // Copy the data to the array.
-                    DataStream stream = null;
+                    DX.DataStream stream = null;
                     try
                     {
                         var databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     finally
                     {
-                        SharpDX.Utilities.Dispose(ref stream);
+                        DX.Utilities.Dispose(ref stream);
                     }
                 }
             }
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Graphics
             try
             {
                 var dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
-                var box = new DataBox(dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
+                DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
 
                 var subresourceIndex = CalculateSubresourceIndex(face, level);
 

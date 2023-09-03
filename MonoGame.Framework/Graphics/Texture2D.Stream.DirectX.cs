@@ -7,7 +7,7 @@ using System.IO;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Utilities.Png;
-using SharpDX;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
             desc.SampleDescription.Count = 1;
             desc.SampleDescription.Quality = 0;
 
-            using (DataStream s = new DataStream(bsource.Size.Height * bsource.Size.Width * 4, true, true))
+            using (DX.DataStream s = new DX.DataStream(bsource.Size.Height * bsource.Size.Width * 4, true, true))
             {
                 bsource.CopyPixels(bsource.Size.Width * 4, s);
 
@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 */
 
-                DataRectangle rect = new DataRectangle(s.DataPointer, bsource.Size.Width * 4);
+                DX.DataRectangle rect = new DX.DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
                 return new D3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
             }

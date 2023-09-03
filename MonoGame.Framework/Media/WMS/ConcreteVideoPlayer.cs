@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-using SharpDX;
+using DX = SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using MediaFoundation = SharpDX.MediaFoundation;
@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Platform.Media
             // Get the volume interface.
             IntPtr volumeObjectPtr;
             MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, audioStreamVolumeGuid, out volumeObjectPtr);
-            _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
+            _volumeController = DX.CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
 
             SetChannelVolumes();
         }
@@ -344,7 +344,7 @@ namespace Microsoft.Xna.Platform.Media
                 SourceResolver resolver = new SourceResolver();
 
                 ObjectType otype;
-                ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource, null, out otype);
+                DX.ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource, null, out otype);
                 mediaSource = source.QueryInterface<MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();

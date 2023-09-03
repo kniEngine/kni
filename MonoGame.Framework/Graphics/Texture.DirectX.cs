@@ -4,6 +4,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -45,16 +46,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
-            SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
+            DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
+            DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
-                SharpDX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
+                DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
+                DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
             }
 
             base.Dispose(disposing);

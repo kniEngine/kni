@@ -6,6 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -31,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _buffer);
+            DX.Utilities.Dispose(ref _buffer);
         }
 
         void GenerateIfRequired()
@@ -89,22 +90,22 @@ namespace Microsoft.Xna.Framework.Graphics
                         d3dContext.CopyResource(_buffer, stagingBuffer);
                     }
 
-                    int TsizeInBytes = SharpDX.Utilities.SizeOf<T>();
+                    int TsizeInBytes = DX.Utilities.SizeOf<T>();
                     var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                     try
                     {
                         var startBytes = startIndex * TsizeInBytes;
                         var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-                        SharpDX.DataPointer DataPointer = new SharpDX.DataPointer(dataPtr, elementCount * TsizeInBytes);
+                        DX.DataPointer DataPointer = new DX.DataPointer(dataPtr, elementCount * TsizeInBytes);
 
                         lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                         {
                             D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             // Map the staging resource to a CPU accessible memory
-                            var box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                            DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
-                            SharpDX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, elementCount * TsizeInBytes);
+                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, elementCount * TsizeInBytes);
 
                             // Make sure that we unmap the resource in case of an exception
                             d3dContext.UnmapSubresource(stagingBuffer, 0);
@@ -134,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-                    SharpDX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
+                    DX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
                                             elementCount);
                     d3dContext.UnmapSubresource(_buffer, 0);
                 }
@@ -148,7 +149,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     var startBytes = startIndex * elementSizeInBytes;
                     var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                    var box = new SharpDX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
+                    DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
                     var region = new D3D11.ResourceRegion();
                     region.Top = 0;
@@ -175,7 +176,7 @@ namespace Microsoft.Xna.Framework.Graphics
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                SharpDX.Utilities.Dispose(ref _buffer);
+                DX.Utilities.Dispose(ref _buffer);
 
             base.Dispose(disposing);
         }

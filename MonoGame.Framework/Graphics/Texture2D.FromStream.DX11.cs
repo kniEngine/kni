@@ -6,8 +6,8 @@
 
 using System.IO;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
 using SharpDX.WIC;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -72,10 +72,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 desc.SampleDescription.Quality = 0;
 
                 D3D11.Texture2D textureResource;
-                using (DataStream s = new DataStream(bmpSource.Size.Height * bmpSource.Size.Width * 4, true, true))
+                using (DX.DataStream s = new DX.DataStream(bmpSource.Size.Height * bmpSource.Size.Width * 4, true, true))
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, s);
-                    DataRectangle rect = new DataRectangle(s.DataPointer, bmpSource.Size.Width * 4);
+                    DX.DataRectangle rect = new DX.DataRectangle(s.DataPointer, bmpSource.Size.Width * 4);
                     textureResource = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, desc, rect);
                 }
                 texture.GetTextureStrategy<ConcreteTexture>().SetTextureInternal_DX(textureResource);

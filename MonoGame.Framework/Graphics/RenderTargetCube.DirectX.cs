@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
@@ -119,7 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     _depthStencilViews = null;
                 }
 
-                SharpDX.Utilities.Dispose(ref _depthTarget);
+                DX.Utilities.Dispose(ref _depthTarget);
             }
 
             base.Dispose(disposing);

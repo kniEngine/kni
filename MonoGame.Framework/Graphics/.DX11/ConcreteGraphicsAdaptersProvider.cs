@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DX = SharpDX;
 using D3D = SharpDX.Direct3D;
 using DXGI = SharpDX.DXGI;
 
@@ -89,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     displayModes = monitor.GetDisplayModeList(formatTranslation.Key, 0);
                 }
-                catch (SharpDX.SharpDXException)
+                catch (DX.SharpDXException)
                 {
                     var mode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
                     modes.Add(mode);

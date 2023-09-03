@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -92,9 +92,9 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
             }
-            catch (SharpDXException ex)
+            catch (DX.SharpDXException ex)
             {
-                if (ex.Descriptor != Result.InvalidArg)
+                if (ex.Descriptor != DX.Result.InvalidArg)
                     throw;
 
                 // If InputLayout ctor fails with InvalidArg then it's most likely because the 
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
 #endif
                 }
-                catch (SharpDXException)
+                catch (DX.SharpDXException)
                 {
                     // Workaround failed.
                     throw new InvalidOperationException(GetInvalidArgMessage(inputElements), ex);

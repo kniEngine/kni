@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -16,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected internal override void GraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
             base.GraphicsDeviceResetting();
         }
 
@@ -106,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            SharpDX.Utilities.Dispose(ref _state);
+            DX.Utilities.Dispose(ref _state);
         }
     }
 }

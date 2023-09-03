@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -33,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGraphicsDeviceResetting()
         {
-            SharpDX.Utilities.Dispose(ref _buffer);
+            DX.Utilities.Dispose(ref _buffer);
         }
 
         void GenerateIfRequired()
@@ -84,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                int TsizeInBytes = SharpDX.Utilities.SizeOf<T>();
+                int TsizeInBytes = DX.Utilities.SizeOf<T>();
                 var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
                 try
@@ -99,17 +100,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                        // Map the staging resource to a CPU accessible memory
-                        var box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                            // Map the staging resource to a CPU accessible memory
+                            DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
                         if (vertexStride == TsizeInBytes)
                         {
-                            SharpDX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
+                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
                         }
                         else
                         {
                             for (int i = 0; i < elementCount; i++)
-                                SharpDX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
+                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
                         }
 
                         // Make sure that we unmap the resource in case of an exception
@@ -141,12 +142,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                     if (vertexStride == elementSizeInBytes)
 					{
-                        SharpDX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
+                        DX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
-                            SharpDX.Utilities.Write(dataBox.DataPointer + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                            DX.Utilities.Write(dataBox.DataPointer + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
                     }
 
                     d3dContext.UnmapSubresource(_buffer, 0);
@@ -162,7 +163,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     
                     if (vertexStride == elementSizeInBytes)
                     {
-                        var box = new SharpDX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
+                        DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
                         var region = new D3D11.ResourceRegion();
                         region.Top = 0;
@@ -188,12 +189,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                            // Map the staging resource to a CPU accessible memory
-                            var box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
+                                // Map the staging resource to a CPU accessible memory
+                                DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
                                 D3D11.MapFlags.None);
 
                             for (int i = 0; i < elementCount; i++)
-                                SharpDX.Utilities.CopyMemory(
+                                    DX.Utilities.CopyMemory(
                                     box.DataPointer + i * vertexStride + offsetInBytes,
                                     dataPtr + i * elementSizeInBytes, elementSizeInBytes);
 
@@ -216,7 +217,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _buffer);
+                DX.Utilities.Dispose(ref _buffer);
             }
 
             base.Dispose(disposing);

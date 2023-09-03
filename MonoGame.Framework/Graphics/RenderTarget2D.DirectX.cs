@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -116,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_depthStencilViews != null)
             {
                 for (int i = 0; i < _depthStencilViews.Length; i++)
-                    SharpDX.Utilities.Dispose(ref _depthStencilViews[i]);
+                    DX.Utilities.Dispose(ref _depthStencilViews[i]);
                 _depthStencilViews = null;
             }
         }
@@ -134,10 +135,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (_depthStencilViews != null)
                 {
                     for (int i = 0; i < _depthStencilViews.Length; i++)
-                        SharpDX.Utilities.Dispose(ref _depthStencilViews[i]);
+                        DX.Utilities.Dispose(ref _depthStencilViews[i]);
                     _depthStencilViews = null;
-                }                
-                SharpDX.Utilities.Dispose(ref _msTexture);
+                }
+                DX.Utilities.Dispose(ref _msTexture);
             }
 
             base.Dispose(disposing);

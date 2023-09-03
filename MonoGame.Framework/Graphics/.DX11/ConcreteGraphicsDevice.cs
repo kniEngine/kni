@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _swapChain.Present(syncInterval, presentFlags);
                 }
             }
-            catch (SharpDX.SharpDXException ex)
+            catch (DX.SharpDXException ex)
             {
                 // TODO: How should we deal with a device lost case here?
 
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                         finally
                         {
-                            SharpDX.Utilities.Dispose( ref stream);
+                            DX.Utilities.Dispose( ref stream);
                         }
                     }
                 }
@@ -1033,13 +1033,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_swapChain != null && _swapChain.IsFullScreen)
                     _swapChain.SetFullscreenState(false, null);
 
-                SharpDX.Utilities.Dispose(ref _renderTargetView);
-                SharpDX.Utilities.Dispose(ref _depthStencilView);
+                DX.Utilities.Dispose(ref _renderTargetView);
+                DX.Utilities.Dispose(ref _depthStencilView);
 
 
-                SharpDX.Utilities.Dispose(ref _swapChain);
+                DX.Utilities.Dispose(ref _swapChain);
 
-    #if WINDOWS_UAP
+#if WINDOWS_UAP
                 if (_bitmapTarget != null)
                 {
                     _bitmapTarget.Dispose();
@@ -1071,9 +1071,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     _wicFactory.Dispose();
                     _wicFactory = null;
                 }
-    #endif
+#endif
 
-                SharpDX.Utilities.Dispose(ref _d3dDevice);
+                DX.Utilities.Dispose(ref _d3dDevice);
 
             }
 

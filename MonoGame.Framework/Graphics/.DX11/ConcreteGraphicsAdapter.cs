@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DX = SharpDX;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
@@ -47,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 highestSupportedLevel = D3D11.Device.GetSupportedFeatureLevel(_adapter);
             }
-            catch (SharpDX.SharpDXException ex)
+            catch (DX.SharpDXException ex)
             {
                 if (ex.ResultCode == DXGI.ResultCode.Unsupported) // No supported feature levels!
                     return false;

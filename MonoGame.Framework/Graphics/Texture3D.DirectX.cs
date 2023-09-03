@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 int rowPitch = Texture.GetPitch(this.Format, width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
-                var box = new DataBox(dataPtr, rowPitch, slicePitch);
+                DX.DataBox box = new DX.DataBox(dataPtr, rowPitch, slicePitch);
 
                 int subresourceIndex = level;
 
@@ -120,20 +120,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     d3dContext.CopySubresourceRegion(GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 
                     // Copy the data to the array.
-                    DataStream stream = null;
+                    DX.DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                        DX.DataBox databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.
-                        var currentIndex = startIndex;
-                        var elementSize = this.Format.GetSize();
-                        var elementsInRow = right - left;
-                        var rowsInSlice = bottom - top;
-                        for (var slice = front; slice < back; slice++)
+                        int currentIndex = startIndex;
+                        int elementSize = this.Format.GetSize();
+                        int elementsInRow = right - left;
+                        int rowsInSlice = bottom - top;
+                        for (int slice = front; slice < back; slice++)
                         {
-                            for (var row = top; row < bottom; row++)
+                            for (int row = top; row < bottom; row++)
                             {
                                 stream.ReadRange(data, currentIndex, elementsInRow);
                                 stream.Seek(databox.RowPitch - (elementSize * elementsInRow), SeekOrigin.Current);
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     finally
                     {
-                        SharpDX.Utilities.Dispose(ref stream);
+                        DX.Utilities.Dispose(ref stream);
                     }
                 }
             }

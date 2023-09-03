@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Platform.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -223,7 +224,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         mode = D3D11.MapMode.WriteDiscard;
                         _baseQuad = 0;
                     }
-                    SharpDX.DataBox dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, D3D11.MapFlags.None);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(_vertexBuffer.Buffer, 0, mode, D3D11.MapFlags.None);
                     var vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch
