@@ -227,6 +227,8 @@
     <Compile Include="Content\LzxDecoder.cs" />
 
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
@@ -432,9 +434,7 @@
     <Compile Include="Graphics\Texture3D.DirectX.cs" />
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.DirectX.cs" />
-    <Compile Include="Platform\Graphics\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.DirectX.cs" />
-    <Compile Include="Platform\Graphics\Vertices\InputLayoutCache.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.DirectX.cs" />
 
     <Compile Include="Input\Buttons.cs" />

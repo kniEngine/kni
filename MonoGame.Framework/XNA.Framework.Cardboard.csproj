@@ -230,6 +230,7 @@
     <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
@@ -396,21 +397,6 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 
-    <Compile Include="Platform\Graphics\OpenGL.Android.cs" />
-
-    <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
-    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
-    <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.cs" />
-    <Compile Include="Platform\Graphics\OpenGL.Common.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
@@ -418,6 +404,21 @@
     <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
+
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
+	  
+    <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
+    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
+    <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
+    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
+    <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
