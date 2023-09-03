@@ -86,8 +86,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_cache.TryGetValue(vertexBuffers, out inputLayout))
                 return inputLayout;
 
-            var immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
-            var inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
+            ImmutableVertexInputLayout immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
+            D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
                 inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
@@ -176,10 +176,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             int count = vertexBuffers.Count;
 
-            var vertexDeclarations = new VertexDeclaration[count];
+            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[count];
             Array.Copy(vertexBuffers.VertexDeclarations, vertexDeclarations, count);
 
-            var instanceFrequencies = new int[count];
+            int[] instanceFrequencies = new int[count];
             Array.Copy(vertexBuffers.InstanceFrequencies, instanceFrequencies, count);
 
             return new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
         {
-            var list = new List<D3D11.InputElement>();
+            List<D3D11.InputElement> list = new List<D3D11.InputElement>();
             for (int i = 0; i < vertexInputLayout.Count; i++)
             {
                 foreach (VertexElement vertexElement in vertexInputLayout.VertexDeclarations[i].InternalVertexElements)
@@ -335,7 +335,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>The exception message.</returns>
         private static string GetInvalidArgMessage(D3D11.InputElement[] inputElements)
         {
-            var elements = string.Join(", ", inputElements.Select(x => x.SemanticName + x.SemanticIndex));
+            string elements = string.Join(", ", inputElements.Select(x => x.SemanticName + x.SemanticIndex));
             return "An error occurred while preparing to draw. "
                    + "This is probably because the current vertex declaration does not include all the elements "
                    + "required by the current vertex shader. The current vertex declaration includes these elements: "

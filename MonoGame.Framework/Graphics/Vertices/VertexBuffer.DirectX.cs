@@ -45,8 +45,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: To use Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
 
-            var accessflags = D3D11.CpuAccessFlags.None;
-            var usage = D3D11.ResourceUsage.Default;
+            D3D11.CpuAccessFlags accessflags = D3D11.CpuAccessFlags.None;
+            D3D11.ResourceUsage usage = D3D11.ResourceUsage.Default;
 
             if (_isDynamic)
             {
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         D3D11.Buffer CreateStagingBuffer()
         {
-            var stagingDesc = _buffer.Description;
+            D3D11.BufferDescription stagingDesc = _buffer.Description;
             stagingDesc.BindFlags = D3D11.BindFlags.None;
             stagingDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read | D3D11.CpuAccessFlags.Write;
             stagingDesc.Usage = D3D11.ResourceUsage.Staging;
@@ -86,12 +86,12 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 int TsizeInBytes = DX.Utilities.SizeOf<T>();
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
                 try
                 {
-                    var startBytes = startIndex * TsizeInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * TsizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                     using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
                     lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
@@ -100,8 +100,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                            // Map the staging resource to a CPU accessible memory
-                            DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                        // Map the staging resource to a CPU accessible memory
+                        DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
                         if (vertexStride == TsizeInBytes)
                         {
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                     if (vertexStride == elementSizeInBytes)
 					{
                         DX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
@@ -155,17 +155,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    var startBytes = startIndex * elementSizeInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * elementSizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                     
                     if (vertexStride == elementSizeInBytes)
                     {
                         DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
-                        var region = new D3D11.ResourceRegion();
+                        D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                         region.Top = 0;
                         region.Front = 0;
                         region.Back = 1;

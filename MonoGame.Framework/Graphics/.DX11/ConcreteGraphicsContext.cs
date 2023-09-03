@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_blendStateDirty || _blendFactorDirty)
             {
                 D3D11.BlendState blendState = _actualBlendState.GetDxState(this);
-                var blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
+                RawColor4 blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
                 this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 
                 _blendStateDirty = false;
@@ -164,7 +164,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (this.D3dContext != null)
                 {
-                    var viewport = new RawViewportF
+                    RawViewportF viewport = new RawViewportF
                     {
                         X = _viewport.X,
                         Y = _viewport.Y,
@@ -312,7 +312,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
-                var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+                int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
             }
         }
@@ -461,7 +461,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // TODO: Do not set public VertexBuffers and Indices.
             //       Bind directly to d3dContext and set dirty flags.
-            var indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
@@ -622,13 +622,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             for (int i = 0; i < _currentRenderTargetCount; i++)
             {
-                var binding = _currentRenderTargetBindings[i];
-                var targetDX = (IRenderTargetDX11)binding.RenderTarget;
+                RenderTargetBinding binding = _currentRenderTargetBindings[i];
+                IRenderTargetDX11 targetDX = (IRenderTargetDX11)binding.RenderTarget;
                 _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            var renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
+            IRenderTargetDX11 renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
             _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.

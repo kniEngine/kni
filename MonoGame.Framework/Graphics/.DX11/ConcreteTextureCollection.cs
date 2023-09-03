@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // locked the d3dContext for us to use.
 
             // Make one pass across all the texture slots.
-            for (var i = 0; i < _textures.Length; i++)
+            for (int i = 0; i < _textures.Length; i++)
             {
                 if (_textures[i] == null)
                     continue;
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
         {
-            for (var i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
                 if ((_dirty & mask) == 0)

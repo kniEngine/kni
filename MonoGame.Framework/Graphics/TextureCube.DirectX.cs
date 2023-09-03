@@ -63,8 +63,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: Like in Texture2D, we should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var min = this.Format.IsCompressedFormat() ? 4 : 1;
-            var levelSize = Math.Max(this.Size >> level, min);
+            int min = this.Format.IsCompressedFormat() ? 4 : 1;
+            int levelSize = Math.Max(this.Size >> level, min);
 
             D3D11.Texture2DDescription desc = new D3D11.Texture2DDescription
             {
@@ -87,9 +87,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    var subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
-                    var elementsInRow = rect.Width;
-                    var rows = rect.Height;
+                    int subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
+                    int elementsInRow = rect.Width;
+                    int rows = rect.Height;
                     D3D11.ResourceRegion region = new D3D11.ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
                     d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
 
@@ -97,9 +97,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     DX.DataStream stream = null;
                     try
                     {
-                        var databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                        DX.DataBox databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
-                        var elementSize = this.Format.GetSize();
+                        int elementSize = this.Format.GetSize();
                         if (this.Format.IsCompressedFormat())
                         {
                             // for 4x4 block compression formats an element is one block, so elementsInRow
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             elementsInRow /= 4;
                             rows /= 4;
                         }
-                        var rowSize = elementSize * elementsInRow;
+                        int rowSize = elementSize * elementsInRow;
                         if (rowSize == databox.RowPitch)
                             stream.ReadRange(data, startIndex, elementCount);
                         else
@@ -116,8 +116,8 @@ namespace Microsoft.Xna.Framework.Graphics
                             // We need to copy each row separatly and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
-                            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                            for (var row = 0; row < rows; row++)
+                            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                            for (int row = 0; row < rows; row++)
                             {
                                 int i;
                                 for (i = row * rowSize / elementSizeInByte; i < (row + 1) * rowSize / elementSizeInByte; i++)
@@ -140,15 +140,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                var dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
+                IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
                 DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
 
-                var subresourceIndex = CalculateSubresourceIndex(face, level);
+                int subresourceIndex = CalculateSubresourceIndex(face, level);
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion
                 {

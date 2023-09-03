@@ -885,7 +885,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Note: this will return an incorrect, but large value
                 // for very large numbers. That doesn't matter because
                 // the number will get clamped below anyway in this case.
-                var msc = multiSampleCount;
+                int msc = multiSampleCount;
                 msc = msc | (msc >> 1);
                 msc = msc | (msc >> 2);
                 msc = msc | (msc >> 4);

@@ -107,14 +107,14 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_renderTargetViews != null)
                 {
-                    for (var i = 0; i < _renderTargetViews.Length; i++)
+                    for (int i = 0; i < _renderTargetViews.Length; i++)
                         _renderTargetViews[i].Dispose();
                     _renderTargetViews = null;
                 }
 
                 if (_depthStencilViews != null)
                 {
-                    for (var i = 0; i < _depthStencilViews.Length; i++)
+                    for (int i = 0; i < _depthStencilViews.Length; i++)
                         if (_depthStencilViews[i] != null)
                             _depthStencilViews[i].Dispose();
                     _depthStencilViews = null;

@@ -27,19 +27,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
             using (DXGI.Factory1 factory = new DXGI.Factory1())
             {
-                var adapterCount = factory.GetAdapterCount();
-                var adapterList = new List<GraphicsAdapter>(adapterCount);
+                int adapterCount = factory.GetAdapterCount();
+                List<GraphicsAdapter> adapterList = new List<GraphicsAdapter>(adapterCount);
 
-                for (var i = 0; i < adapterCount; i++)
+                for (int i = 0; i < adapterCount; i++)
                 {
-                    var device = factory.GetAdapter1(i);
+                    DXGI.Adapter1 device = factory.GetAdapter1(i);
 
-                    var monitorCount = device.GetOutputCount();
-                    for (var j = 0; j < monitorCount; j++)
+                    int monitorCount = device.GetOutputCount();
+                    for (int j = 0; j < monitorCount; j++)
                     {
-                        using (var monitor = device.GetOutput(j))
+                        using (DXGI.Output monitor = device.GetOutput(j))
                         {
-                            var adapter = CreateAdapter(device, monitor);
+                            GraphicsAdapter adapter = CreateAdapter(device, monitor);
                             adapterList.Add(adapter);
                         }                        
                     }
@@ -63,8 +63,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private GraphicsAdapter CreateAdapter(DXGI.Adapter1 device, DXGI.Output monitor)
         {
-            var strategy = new ConcreteGraphicsAdapter();
-            var adapter = new GraphicsAdapter(strategy);
+            ConcreteGraphicsAdapter strategy = new ConcreteGraphicsAdapter();
+            GraphicsAdapter adapter = new GraphicsAdapter(strategy);
             strategy._adapter = device;
 
             strategy.Platform_DeviceName = monitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
@@ -75,8 +75,8 @@ namespace Microsoft.Xna.Platform.Graphics
             strategy.Platform_SubSystemId = device.Description1.SubsystemId;
             strategy.Platform_MonitorHandle = monitor.Description.MonitorHandle;
 
-            var desktopWidth = monitor.Description.DesktopBounds.Right - monitor.Description.DesktopBounds.Left;
-            var desktopHeight = monitor.Description.DesktopBounds.Bottom - monitor.Description.DesktopBounds.Top;
+            int desktopWidth = monitor.Description.DesktopBounds.Right - monitor.Description.DesktopBounds.Left;
+            int desktopHeight = monitor.Description.DesktopBounds.Bottom - monitor.Description.DesktopBounds.Top;
 
             var modes = new List<DisplayMode>();
 
@@ -92,16 +92,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 catch (DX.SharpDXException)
                 {
-                    var mode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+                    DisplayMode mode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
                     modes.Add(mode);
                     strategy._currentDisplayMode = mode;
                     break;
                 }
 
 
-                foreach (var displayMode in displayModes)
+                foreach (DXGI.ModeDescription displayMode in displayModes)
                 {
-                    var mode = new DisplayMode(displayMode.Width, displayMode.Height, formatTranslation.Value);
+                    DisplayMode mode = new DisplayMode(displayMode.Width, displayMode.Height, formatTranslation.Value);
 
                     // Skip duplicate modes with the same width/height/formats.
                     if (modes.Contains(mode))

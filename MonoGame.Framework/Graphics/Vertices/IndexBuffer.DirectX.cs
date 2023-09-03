@@ -43,10 +43,10 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: To use true Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
 
-            var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-            var accessflags = D3D11.CpuAccessFlags.None;
-            var resUsage = D3D11.ResourceUsage.Default;
+            D3D11.CpuAccessFlags accessflags = D3D11.CpuAccessFlags.None;
+            D3D11.ResourceUsage resUsage = D3D11.ResourceUsage.Default;
 
             if (_isDynamic)
             {
@@ -76,12 +76,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
 
                 // Copy the texture to a staging resource
-                var stagingDesc = _buffer.Description;
+                D3D11.BufferDescription stagingDesc = _buffer.Description;
                 stagingDesc.BindFlags = D3D11.BindFlags.None;
                 stagingDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read | D3D11.CpuAccessFlags.Write;
                 stagingDesc.Usage = D3D11.ResourceUsage.Staging;
                 stagingDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
-                using (var stagingBuffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
+                using (D3D11.Buffer stagingBuffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
                 {
                     lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                     {
@@ -91,11 +91,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
 
                     int TsizeInBytes = DX.Utilities.SizeOf<T>();
-                    var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                    GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                     try
                     {
-                        var startBytes = startIndex * TsizeInBytes;
-                        var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                        int startBytes = startIndex * TsizeInBytes;
+                        IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                         DX.DataPointer DataPointer = new DX.DataPointer(dataPtr, elementCount * TsizeInBytes);
 
                         lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    var dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                     DX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
                                             elementCount);
                     d3dContext.UnmapSubresource(_buffer, 0);
@@ -142,16 +142,16 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                var elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
-                var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    var startBytes = startIndex * elementSizeInBytes;
-                    var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    int startBytes = startIndex * elementSizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                     DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
-                    var region = new D3D11.ResourceRegion();
+                    D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                     region.Top = 0;
                     region.Front = 0;
                     region.Back = 1;

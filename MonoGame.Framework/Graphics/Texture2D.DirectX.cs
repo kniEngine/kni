@@ -58,13 +58,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 h = (h + 3) & ~3;
             }
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                var startBytes = startIndex * elementSizeInByte;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                int startBytes = startIndex * elementSizeInByte;
+                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = 0;
                 region.Front = 0;
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 region.Right = w;
 
                 // TODO: We need to deal with threaded contexts here!
-                var subresourceIndex = CalculateSubresourceIndex(0, level);
+                int subresourceIndex = CalculateSubresourceIndex(0, level);
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -90,13 +90,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
         {
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                var startBytes = startIndex * elementSizeInByte;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                int startBytes = startIndex * elementSizeInByte;
+                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = rect.Top;
                 region.Front = 0;
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
                 // TODO: We need to deal with threaded contexts here!
-                var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -128,9 +128,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: We should probably be pooling these staging resources
             // and not creating a new one each time.
             //
-            var min = this.Format.IsCompressedFormat() ? 4 : 1;
-            var levelWidth = Math.Max(this.Width >> level, min);
-            var levelHeight = Math.Max(this.Height >> level, min);
+            int min = this.Format.IsCompressedFormat() ? 4 : 1;
+            int levelWidth = Math.Max(this.Width >> level, min);
+            int levelHeight = Math.Max(this.Height >> level, min);
 
             D3D11.Texture2D stagingTexture;
             {
@@ -153,11 +153,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
 
                 // Copy the data from the GPU to the staging texture.
-                var elementsInRow = rect.Width;
-                var rows = rect.Height;
+                int elementsInRow = rect.Width;
+                int rows = rect.Height;
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
                 d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
@@ -165,9 +165,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 DX.DataStream stream = null;
                 try
                 {
-                    var databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                    DX.DataBox databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
-                    var elementSize = this.Format.GetSize();
+                    int elementSize = this.Format.GetSize();
                     if (this.Format.IsCompressedFormat())
                     {
                         // for 4x4 block compression formats an element is one block, so elementsInRow
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         elementsInRow /= 4;
                         rows /= 4;
                     }
-                    var rowSize = elementSize * elementsInRow;
+                    int rowSize = elementSize * elementsInRow;
                     if (rowSize == databox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
                     else if (level == 0 && arraySlice == 0 &&
@@ -188,8 +188,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         if (elementSize2 == 1) // byte[]
                             elementsInRow = elementsInRow * elementSize;
 
-                        var currentIndex = 0;
-                        for (var row = 0; row < rows; row++)
+                        int currentIndex = 0;
+                        for (int row = 0; row < rows; row++)
                         {
                             stream.ReadRange(data, currentIndex, elementsInRow);
                             stream.Seek((databox.RowPitch - rowSize), SeekOrigin.Current);
@@ -202,8 +202,8 @@ namespace Microsoft.Xna.Framework.Graphics
                         // We need to copy each row separatly and skip trailing zeros.
                         stream.Seek(0, SeekOrigin.Begin);
 
-                        var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                        for (var row = 0; row < rows; row++)
+                        int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                        for (int row = 0; row < rows; row++)
                         {
                             int i;
                             int maxElements =  (row + 1) * rowSize / elementSizeInByte;
