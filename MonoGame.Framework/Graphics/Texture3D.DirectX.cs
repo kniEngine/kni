@@ -54,8 +54,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private void PlatformSetData<T>(int level,
                                      int left, int top, int right, int bottom, int front, int back,
-                                     T[] data, int startIndex, int elementCount, int width, int height, int depth)
+                                     T[] data, int startIndex, int elementCount)
         {
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

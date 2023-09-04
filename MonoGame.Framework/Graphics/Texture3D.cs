@@ -77,12 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		                       T[] data, int startIndex, int elementCount) where T : struct
 		{
             ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-
-            int width = right - left;
-            int height = bottom - top;
-            int depth = back - front;
-
-            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
+            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
 		}
 
         /// <summary>
