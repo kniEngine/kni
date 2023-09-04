@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected void PlatformCreateRenderTarget(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             var GL = deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -165,7 +165,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
             if (color != null)
                 renderTargetGL.GLColorBuffer = color;
             else
@@ -174,13 +173,12 @@ namespace Microsoft.Xna.Framework.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        protected void PlatformDeleteRenderTarget(GraphicsDeviceStrategy deviceStrategy)
+        internal static void PlatformDeleteRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
         {
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
 
-            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
@@ -203,7 +201,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
+                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
             }
         }
 

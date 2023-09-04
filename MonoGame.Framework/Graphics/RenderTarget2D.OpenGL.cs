@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Threading.EnsureUIThread();
             {
-                base.PlatformCreateRenderTarget(deviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                Texture.PlatformCreateRenderTarget(this, deviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (GraphicsDevice != null)
                 {
-                    base.PlatformDeleteRenderTarget(GraphicsDevice.Strategy);
+                    Texture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
                 }
             }
 

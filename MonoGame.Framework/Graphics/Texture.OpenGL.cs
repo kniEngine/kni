@@ -317,7 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected void PlatformCreateRenderTarget(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             int color = 0;
             int depth = 0;
@@ -418,7 +418,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
             if (color != 0)
                 renderTargetGL.GLColorBuffer = color;
             else
@@ -427,13 +426,12 @@ namespace Microsoft.Xna.Framework.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        protected void PlatformDeleteRenderTarget(GraphicsDeviceStrategy deviceStrategy)
+        internal static void PlatformDeleteRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
         {
             int color = 0;
             int depth = 0;
             int stencil = 0;
 
-            IRenderTargetGL renderTargetGL = (IRenderTargetGL)this;
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
@@ -457,7 +455,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
+                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
             }
         }
 

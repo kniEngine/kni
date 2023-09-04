@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             }
 
-            base.PlatformDeleteRenderTarget(GraphicsDevice.Strategy);
+            Texture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
 
             base.Dispose(disposing);
         }
