@@ -337,7 +337,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
             int startIndex, int elementCount, out Rectangle checkedRect) where T : struct
         {
-            var textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
             checkedRect = rect ?? textureBounds;
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
@@ -349,8 +349,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
             if (data == null)
                 throw new ArgumentNullException("data");
-            var tSize = ReflectionHelpers.SizeOf<T>();
-            var fSize = Format.GetSize();
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
             if (startIndex < 0 || startIndex >= data.Length)
@@ -366,8 +366,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 int blockWidthMinusOne = blockWidth - 1;
                 int blockHeightMinusOne = blockHeight - 1;
                 // round x and y down to next multiple of block size; width and height up to next multiple of block size
-                var roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
-                var roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+                int roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+                int roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
                 checkedRect = new Rectangle(checkedRect.X & ~blockWidthMinusOne, checkedRect.Y & ~blockHeightMinusOne,
 #if OPENGL
                     // OpenGL only: The last two mip levels require the width and height to be
