@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
         {
             throw new PlatformNotSupportedException();
         }

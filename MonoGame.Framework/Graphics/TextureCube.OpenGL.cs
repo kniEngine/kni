@@ -107,13 +107,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             Threading.EnsureUIThread();
 
 #if OPENGL && DESKTOPGL
-            TextureTarget target = GetGLCubeFace(cubeMapFace);
+            TextureTarget target = GetGLCubeFace(face);
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
             GL.BindTexture(TextureTarget.TextureCubeMap, GetTextureStrategy<ConcreteTexture>()._glTexture);
 

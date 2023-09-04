@@ -70,7 +70,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 region.Right = w;
 
                 // TODO: We need to deal with threaded contexts here!
-                int subresourceIndex = CalculateSubresourceIndex(0, level);
+                int arraySlice = 0;
+                int subresourceIndex = arraySlice * this.LevelCount + level;
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -103,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
                 // TODO: We need to deal with threaded contexts here!
-                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = arraySlice * this.LevelCount + level;
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -147,7 +148,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = arraySlice * this.LevelCount + level;
 
                 // Copy the data from the GPU to the staging texture.
                 int elementsInRow = checkedRect.Width;
@@ -228,11 +229,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             base.Dispose(disposing);
-        }
-
-        private int CalculateSubresourceIndex(int arraySlice, int level)
-        {
-            return arraySlice * this.LevelCount + level;
         }
 
         protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()

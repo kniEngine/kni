@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
-        private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
         {
             // Create a temp staging resource for copying the data.
             // 
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    int subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
+                    int subresourceIndex = (int)face * this.LevelCount + level;
                     int elementsInRow = checkedRect.Width;
                     int rows = checkedRect.Height;
                     D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
                 DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
 
-                int subresourceIndex = CalculateSubresourceIndex(face, level);
+                int subresourceIndex = (int)face * this.LevelCount + level;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion
                 {
@@ -167,11 +167,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 dataHandle.Free();
             }
         }
-
-	    private int CalculateSubresourceIndex(CubeMapFace face, int level)
-	    {
-	        return (int) face * this.LevelCount + level;
-	    }
 	}
 }
 
