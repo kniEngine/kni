@@ -107,8 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGetData<T>(
-            CubeMapFace cubeMapFace, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             Threading.EnsureUIThread();
@@ -127,11 +126,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.GetCompressedTexImage(target, level, temp);
                 GraphicsExtensions.CheckGLError();
 
-                int rowCount = rect.Height / 4;
-                int tRectWidth = rect.Width / 4 * Format.GetSize() / tSizeInByte;
+                int rowCount = checkedRect.Height / 4;
+                int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
                 for (int r = 0; r < rowCount; r++)
                 {
-                    int tempStart = rect.X / 4 * pixelToT + (rect.Top / 4 + r) * tFullWidth;
+                    int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
                     int dataStart = startIndex + r * tRectWidth;
                     Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
@@ -145,11 +144,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 GraphicsExtensions.CheckGLError();
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
-                int rowCount = rect.Height;
-                int tRectWidth = rect.Width * pixelToT;
+                int rowCount = checkedRect.Height;
+                int tRectWidth = checkedRect.Width * pixelToT;
                 for (int r = 0; r < rowCount; r++)
                 {
-                    int tempStart = rect.X * pixelToT + (r + rect.Top) * tFullWidth;
+                    int tempStart = checkedRect.X * pixelToT + (r + checkedRect.Top) * tFullWidth;
                     int dataStart = startIndex + r * tRectWidth;
                     Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
@@ -159,7 +158,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
         {
             Threading.EnsureUIThread();
 
@@ -179,14 +178,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
                     {
                         GL.CompressedTexSubImage2D(
-                            target, level, rect.X, rect.Y, rect.Width, rect.Height,
+                            target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                             GetTextureStrategy<ConcreteTexture>()._glInternalFormat, elementCount * elementSizeInByte, dataPtr);
                         GraphicsExtensions.CheckGLError();
                     }
                     else
                     {
                         GL.TexSubImage2D(
-                            target, level, rect.X, rect.Y, rect.Width, rect.Height, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
+                            target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
                         GraphicsExtensions.CheckGLError();
                     }
                 }
