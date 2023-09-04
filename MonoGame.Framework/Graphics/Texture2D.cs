@@ -279,8 +279,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         public void GetData<T>(T[] data) where T : struct
 		{
-		    if (data == null)
-		        throw new ArgumentNullException("data");
 			this.GetData<T>(0, null, data, 0, data.Length);
 		}
 

@@ -66,8 +66,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">The data.</param>
         public void GetData<T>(CubeMapFace cubeMapFace, T[] data) where T : struct
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
             GetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
         }
 
@@ -85,8 +83,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetData<T>(CubeMapFace face, T[] data) where T : struct
 		{
-            if (data == null)
-                throw new ArgumentNullException("data");
             SetData<T>(face, 0, null, data, 0, data.Length);
 		}
 

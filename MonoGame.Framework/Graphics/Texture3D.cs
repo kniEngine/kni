@@ -61,9 +61,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetData<T>(T[] data) where T : struct
 		{
-            if (data == null)
-                throw new ArgumentNullException("data");
-
 			SetData<T>(data, 0, data.Length);
 		}
 
@@ -121,9 +118,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         public void GetData<T>(T[] data) where T : struct
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
-
             GetData<T>(data, 0, data.Length);
         }
 
