@@ -55,9 +55,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
         {
             // Create a temp staging resource for copying the data.
-            // 
-            // TODO: Like in Texture2D, we should probably be pooling these staging resources
-            // and not creating a new one each time.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
             int levelSize = Math.Max(this.Size >> level, min);

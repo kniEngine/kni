@@ -121,9 +121,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
         {
             // Create a temp staging resource for copying the data.
-            // 
-            // TODO: We should probably be pooling these staging resources
-            // and not creating a new one each time.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
             int levelWidth = Math.Max(this.Width >> level, min);
