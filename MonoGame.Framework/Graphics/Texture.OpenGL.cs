@@ -317,13 +317,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        protected void PlatformCreateRenderTarget(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             int color = 0;
             int depth = 0;
             int stencil = 0;
 
-            if (preferredMultiSampleCount > 0 && graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 color = GL.GenRenderbuffer();
                 GraphicsExtensions.CheckGLError();
@@ -351,22 +351,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if GLES
                     case DepthFormat.Depth24:
-                        if (graphicsDevice.Strategy.Capabilities.SupportsDepth24)
+                        if (deviceStrategy.Capabilities.SupportsDepth24)
                             depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                        else if (graphicsDevice.Strategy.Capabilities.SupportsDepthNonLinear)
+                        else if (deviceStrategy.Capabilities.SupportsDepthNonLinear)
                             depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                         else
                             depthInternalFormat = RenderbufferStorage.DepthComponent16;
                         break;
 
                     case DepthFormat.Depth24Stencil8:
-                        if (graphicsDevice.Strategy.Capabilities.SupportsPackedDepthStencil)
+                        if (deviceStrategy.Capabilities.SupportsPackedDepthStencil)
                             depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
                         else
                         {
-                            if (graphicsDevice.Strategy.Capabilities.SupportsDepth24)
+                            if (deviceStrategy.Capabilities.SupportsDepth24)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                            else if (graphicsDevice.Strategy.Capabilities.SupportsDepthNonLinear)
+                            else if (deviceStrategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16;
@@ -427,7 +427,7 @@ namespace Microsoft.Xna.Framework.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        protected void PlatformDeleteRenderTarget()
+        protected void PlatformDeleteRenderTarget(GraphicsDeviceStrategy deviceStrategy)
         {
             int color = 0;
             int depth = 0;
@@ -457,7 +457,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                GraphicsDevice.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
+                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
             }
         }
 

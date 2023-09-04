@@ -1,17 +1,18 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget3D
     {
 
-        private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             throw new PlatformNotSupportedException();
         }

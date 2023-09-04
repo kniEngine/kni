@@ -96,15 +96,15 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        protected void PlatformCreateRenderTarget(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            var GL = graphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
 
-            if (preferredMultiSampleCount > 0 && graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (preferredMultiSampleCount > 0 && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        protected void PlatformDeleteRenderTarget()
+        protected void PlatformDeleteRenderTarget(GraphicsDeviceStrategy deviceStrategy)
         {
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
@@ -203,7 +203,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                GraphicsDevice.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
+                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)this);
             }
         }
 

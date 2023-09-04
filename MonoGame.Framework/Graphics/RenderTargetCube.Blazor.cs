@@ -22,11 +22,11 @@ namespace Microsoft.Xna.Framework.Graphics
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }
 
-        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap,
+        private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             throw new NotImplementedException();
         }
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             }
 
-            base.PlatformDeleteRenderTarget();
+            base.PlatformDeleteRenderTarget(GraphicsDevice.Strategy);
 
             base.Dispose(disposing);
         }

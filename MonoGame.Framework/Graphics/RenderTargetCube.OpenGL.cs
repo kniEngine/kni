@@ -24,16 +24,15 @@ namespace Microsoft.Xna.Framework.Graphics
             return TextureTarget.TextureCubeMapPositiveX + arraySlice;
         }
 
-        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap,
+        private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             Threading.EnsureUIThread();
             {
-                base.PlatformCreateRenderTarget(
-                    graphicsDevice, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                base.PlatformCreateRenderTarget(deviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 
@@ -43,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (GraphicsDevice != null)
                 {
-                    base.PlatformDeleteRenderTarget();
+                    base.PlatformDeleteRenderTarget(GraphicsDevice.Strategy);
                 }
             }
 
