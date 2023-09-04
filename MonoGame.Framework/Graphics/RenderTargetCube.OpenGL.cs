@@ -24,17 +24,16 @@ namespace Microsoft.Xna.Framework.Graphics
             return TextureTarget.TextureCubeMapPositiveX + arraySlice;
         }
 
-        private void PlatformConstructRenderTargetCube(
-            GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
-            RenderTargetUsage = usage;
 
             Threading.EnsureUIThread();
             {
                 base.PlatformCreateRenderTarget(
-                    graphicsDevice, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount, usage);
+                    graphicsDevice, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 

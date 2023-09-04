@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		public int MultiSampleCount { get; private set; }
 		
-		public RenderTargetUsage RenderTargetUsage { get; private set; }
+		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget3D.RenderTargetUsage; } }
 
         public bool IsContentLost
         {
@@ -32,13 +32,13 @@ namespace Microsoft.Xna.Framework.Graphics
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
 		{
-            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap);
+            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage);
 
             // If we don't need a depth buffer then we're done.
             if (preferredDepthFormat == DepthFormat.None)
                 return;
 
-            PlatformConstructRenderTarget3D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
+            PlatformConstructRenderTarget3D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

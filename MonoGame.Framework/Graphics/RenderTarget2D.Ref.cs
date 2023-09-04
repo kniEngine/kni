@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
 
         private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
             throw new PlatformNotSupportedException();
         }

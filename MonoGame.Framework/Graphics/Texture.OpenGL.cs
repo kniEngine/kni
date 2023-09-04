@@ -317,7 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        protected void PlatformCreateRenderTarget(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             int color = 0;
             int depth = 0;

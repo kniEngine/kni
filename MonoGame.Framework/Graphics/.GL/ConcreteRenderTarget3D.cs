@@ -10,9 +10,11 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTarget3D : IRenderTarget3DStrategy, ITexture3DStrategy
     {
-        internal ConcreteRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap)
-        {
+        private RenderTargetUsage _renderTargetUsage;
 
+        internal ConcreteRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, RenderTargetUsage usage)
+        {
+            this._renderTargetUsage = usage;
         }
 
 
@@ -60,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public RenderTargetUsage RenderTargetUsage
         {
-            get { throw new NotImplementedException(); }
+            get { return _renderTargetUsage; }
         }
         #endregion #region IRenderTarget2DStrategy
 

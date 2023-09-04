@@ -10,9 +10,11 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy
     {
-        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize)
-        {
+        private RenderTargetUsage _renderTargetUsage;
 
+        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
+        {
+            this._renderTargetUsage = usage;
         }
 
 
@@ -65,7 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public RenderTargetUsage RenderTargetUsage
         {
-            get { throw new NotImplementedException(); }
+            get { return _renderTargetUsage; }
         }
         #endregion #region IRenderTarget2DStrategy
 
