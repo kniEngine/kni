@@ -19,7 +19,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             GetTextureStrategy<ConcreteTexture>()._glTarget = WebGLTextureTarget.TEXTURE_2D;
-            ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType, out GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture);
+            ConcreteTexture.ToGLSurfaceFormat(format, GraphicsDevice,
+                out GetTextureStrategy<ConcreteTexture>()._glInternalFormat,
+                out GetTextureStrategy<ConcreteTexture>()._glFormat,
+                out GetTextureStrategy<ConcreteTexture>()._glType,
+                out GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture);
 
             {
                 GenerateGLTextureIfRequired();

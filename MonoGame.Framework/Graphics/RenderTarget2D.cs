@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage);
 
-            PlatformConstructRenderTarget2D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
+            PlatformConstructRenderTarget2D(graphicsDevice.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
 	    }
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

@@ -13,11 +13,11 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget3D : IRenderTargetDX11
     {
 
-        private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             // Setup the multisampling description.
             DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
@@ -39,13 +39,13 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.SampleDescription = multisampleDesc;
             texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
 
-            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
+            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
                 D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
                 depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
                 depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                 // Create the view for binding to the device.
-                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView = new D3D11.DepthStencilView(graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView = new D3D11.DepthStencilView(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 

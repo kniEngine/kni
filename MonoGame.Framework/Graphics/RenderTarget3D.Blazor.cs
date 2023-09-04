@@ -22,11 +22,11 @@ namespace Microsoft.Xna.Framework.Graphics
             return GetTextureStrategy<ConcreteTexture>()._glTarget;
         }
 
-        private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             throw new NotImplementedException();
         }
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 
             }
 
-            base.PlatformDeleteRenderTarget();
+            ConcreteTexture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
 
             base.Dispose(disposing);
         }

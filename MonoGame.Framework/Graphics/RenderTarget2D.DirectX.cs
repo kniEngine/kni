@@ -17,15 +17,15 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.Texture2D _msTexture;
         private DXGI.SampleDescription _msSampleDescription;
 
-        private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget2D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
             DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
-            D3D11.Device d3dDevice = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
+            D3D11.Device d3dDevice = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
-            _msSampleDescription = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
+            _msSampleDescription = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
 
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews = new D3D11.DepthStencilView[1];

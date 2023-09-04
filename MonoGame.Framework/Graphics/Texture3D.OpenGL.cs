@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BindTexture(GetTextureStrategy<ConcreteTexture>()._glTarget, GetTextureStrategy<ConcreteTexture>()._glTexture);
                 GraphicsExtensions.CheckGLError();
 
-                ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
+                ConcreteTexture.ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
 
                 GL.TexImage3D(GetTextureStrategy<ConcreteTexture>()._glTarget, 0, GetTextureStrategy<ConcreteTexture>()._glInternalFormat, width, height, depth, 0, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, IntPtr.Zero);
                 GraphicsExtensions.CheckGLError();
