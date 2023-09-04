@@ -83,7 +83,8 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new NotImplementedException();
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -118,7 +119,7 @@ namespace Microsoft.Xna.Framework.Graphics
             //GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -142,7 +143,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 GL.TexSubImage2D(
-                    WebGLTextureTarget.TEXTURE_2D, level, rect.X, rect.Y, rect.Width, rect.Height,
+                    WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                     GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, data);
             }
             GraphicsExtensions.CheckGLError();
@@ -151,7 +152,8 @@ namespace Microsoft.Xna.Framework.Graphics
             //GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             throw new NotImplementedException();
         }

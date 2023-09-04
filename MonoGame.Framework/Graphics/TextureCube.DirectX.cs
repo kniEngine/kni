@@ -52,12 +52,10 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
-        private void PlatformGetData<T>(CubeMapFace cubeMapFace, int level, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             // Create a temp staging resource for copying the data.
-            // 
-            // TODO: Like in Texture2D, we should probably be pooling these staging resources
-            // and not creating a new one each time.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
             int levelSize = Math.Max(this.Size >> level, min);
@@ -82,10 +80,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    int subresourceIndex = CalculateSubresourceIndex(cubeMapFace, level);
-                    int elementsInRow = rect.Width;
-                    int rows = rect.Height;
-                    D3D11.ResourceRegion region = new D3D11.ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
+                    int subresourceIndex = (int)face * this.LevelCount + level;
+                    int elementsInRow = checkedRect.Width;
+                    int rows = checkedRect.Height;
+                    D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
                     d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
 
                     // Copy the data to the array.
@@ -133,7 +131,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -141,18 +140,18 @@ namespace Microsoft.Xna.Framework.Graphics
             try
             {
                 IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
-                DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
+                DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
 
-                int subresourceIndex = CalculateSubresourceIndex(face, level);
+                int subresourceIndex = (int)face * this.LevelCount + level;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion
                 {
-                    Top = rect.Top,
+                    Top = checkedRect.Top,
                     Front = 0,
                     Back = 1,
-                    Bottom = rect.Bottom,
-                    Left = rect.Left,
-                    Right = rect.Right
+                    Bottom = checkedRect.Bottom,
+                    Left = checkedRect.Left,
+                    Right = checkedRect.Right
                 };
 
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
@@ -167,11 +166,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 dataHandle.Free();
             }
         }
-
-	    private int CalculateSubresourceIndex(CubeMapFace face, int level)
-	    {
-	        return (int) face * this.LevelCount + level;
-	    }
 	}
 }
 

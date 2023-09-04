@@ -41,7 +41,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 return resource.SharedHandle;
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -70,7 +71,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 region.Right = w;
 
                 // TODO: We need to deal with threaded contexts here!
-                int subresourceIndex = CalculateSubresourceIndex(0, level);
+                int arraySlice = 0;
+                int subresourceIndex = arraySlice * this.LevelCount + level;
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -84,7 +86,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -94,21 +97,21 @@ namespace Microsoft.Xna.Framework.Graphics
                 int startBytes = startIndex * elementSizeInByte;
                 IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
-                region.Top = rect.Top;
+                region.Top = checkedRect.Top;
                 region.Front = 0;
                 region.Back = 1;
-                region.Bottom = rect.Bottom;
-                region.Left = rect.Left;
-                region.Right = rect.Right;
+                region.Bottom = checkedRect.Bottom;
+                region.Left = checkedRect.Left;
+                region.Right = checkedRect.Right;
 
 
                 // TODO: We need to deal with threaded contexts here!
-                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = arraySlice * this.LevelCount + level;
                 lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, rect.Width), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
                 }
             }
             finally
@@ -117,12 +120,10 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             // Create a temp staging resource for copying the data.
-            // 
-            // TODO: We should probably be pooling these staging resources
-            // and not creating a new one each time.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
             int levelWidth = Math.Max(this.Width >> level, min);
@@ -147,12 +148,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                int subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
+                int subresourceIndex = arraySlice * this.LevelCount + level;
 
                 // Copy the data from the GPU to the staging texture.
-                int elementsInRow = rect.Width;
-                int rows = rect.Height;
-                D3D11.ResourceRegion region = new D3D11.ResourceRegion(rect.Left, rect.Top, 0, rect.Right, rect.Bottom, 1);
+                int elementsInRow = checkedRect.Width;
+                int rows = checkedRect.Height;
+                D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
                 d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                 // Copy the data to the array.
@@ -173,8 +174,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (rowSize == databox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
                     else if (level == 0 && arraySlice == 0 &&
-                             rect.X == 0 && rect.Y == 0 &&
-                             rect.Width == this.Width && rect.Height == this.Height &&
+                             checkedRect.X == 0 && checkedRect.Y == 0 &&
+                             checkedRect.Width == this.Width && checkedRect.Height == this.Height &&
                              startIndex == 0 && elementCount == data.Length)
                     {
                         // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
@@ -228,11 +229,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             base.Dispose(disposing);
-        }
-
-        private int CalculateSubresourceIndex(int arraySlice, int level)
-        {
-            return arraySlice * this.LevelCount + level;
         }
 
         protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()

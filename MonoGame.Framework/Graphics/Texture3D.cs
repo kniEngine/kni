@@ -59,30 +59,25 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }
 
-        public void SetData<T>(T[] data) where T : struct
+        public void SetData<T>(T[] data)
+            where T : struct
 		{
-            if (data == null)
-                throw new ArgumentNullException("data");
-
-			SetData(data, 0, data.Length);
+			SetData<T>(data, 0, data.Length);
 		}
 
-		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
-			SetData(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
+			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
 		public void SetData<T>(int level,
 		                       int left, int top, int right, int bottom, int front, int back,
-		                       T[] data, int startIndex, int elementCount) where T : struct
+		                       T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-
-            var width = right - left;
-            var height = bottom - top;
-            var depth = back - front;
-
-            PlatformSetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
 		}
 
         /// <summary>
@@ -101,10 +96,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to get.</param>
         public void GetData<T>(int level,
                                int left, int top, int right, int bottom, int front, int back,
-                               T[] data, int startIndex, int elementCount) where T : struct
+                               T[] data, int startIndex, int elementCount)
+            where T : struct
         {
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-            PlatformGetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            PlatformGetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -114,9 +110,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         /// <param name="startIndex">Index of the first element to get.</param>
         /// <param name="elementCount">Number of elements to get.</param>
-        public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+        public void GetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
         {
-            GetData(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -124,24 +121,23 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <typeparam name="T">The type of the elements in the array.</typeparam>
         /// <param name="data">Array of data.</param>
-        public void GetData<T>(T[] data) where T : struct
+        public void GetData<T>(T[] data)
+            where T : struct
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
-
-            GetData(data, 0, data.Length);
+            GetData<T>(data, 0, data.Length);
         }
 
         private void ValidateParams<T>(int level,
 		                               int left, int top, int right, int bottom, int front, int back,
-		                               T[] data, int startIndex, int elementCount) where T : struct
+		                               T[] data, int startIndex, int elementCount)
+            where T : struct
         {
-            var texWidth = Math.Max(Width >> level, 1);
-            var texHeight = Math.Max(Height >> level, 1);
-            var texDepth = Math.Max(Depth >> level, 1);
-            var width = right - left;
-            var height = bottom - top;
-            var depth = back - front;
+            int texWidth = Math.Max(Width >> level, 1);
+            int texHeight = Math.Max(Height >> level, 1);
+            int texDepth = Math.Max(Depth >> level, 1);
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
 
             if (left < 0 || top < 0 || back < 0 || right > texWidth || bottom > texHeight || front > texDepth)
                 throw new ArgumentException("Area must remain inside texture bounds");
@@ -152,8 +148,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.");
             if (data == null)
                 throw new ArgumentNullException("data");
-            var tSize = ReflectionHelpers.SizeOf<T>();
-            var fSize = Format.GetSize();
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
             if (startIndex < 0 || startIndex >= data.Length)
@@ -161,7 +157,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data array is too small.");
 
-            var dataByteSize = width*height*depth*fSize;
+            int dataByteSize = width*height*depth*fSize;
             if (elementCount * tSize != dataByteSize)
                 throw new ArgumentException(string.Format("elementCount is not the right size, " +
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",

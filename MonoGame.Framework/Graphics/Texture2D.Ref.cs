@@ -18,18 +18,20 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             throw new PlatformNotSupportedException();
         }
