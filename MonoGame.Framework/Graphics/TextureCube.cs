@@ -68,38 +68,38 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            GetData(cubeMapFace, 0, null, data, 0, data.Length);
+            GetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
         }
 
 	    public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount) where T : struct
 	    {
-	        GetData(cubeMapFace, 0, null, data, startIndex, elementCount);
+	        GetData<T>(cubeMapFace, 0, null, data, startIndex, elementCount);
 	    }
 
 	    public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
 	    {
             Rectangle checkedRect;
-            ValidateParams(level, rect, data, startIndex, elementCount, out checkedRect);
-	        PlatformGetData(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
+            ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
+	        PlatformGetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
 	    }
 
 		public void SetData<T>(CubeMapFace face, T[] data) where T : struct
 		{
             if (data == null)
                 throw new ArgumentNullException("data");
-            SetData(face, 0, null, data, 0, data.Length);
+            SetData<T>(face, 0, null, data, 0, data.Length);
 		}
 
         public void SetData<T>(CubeMapFace face, T[] data, int startIndex, int elementCount) where T : struct
 		{
-            SetData(face, 0, null, data, startIndex, elementCount);
+            SetData<T>(face, 0, null, data, startIndex, elementCount);
 		}
 		
         public void SetData<T>(CubeMapFace face, int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
             Rectangle checkedRect;
-            ValidateParams(level, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData(face, level, checkedRect, data, startIndex, elementCount);
+            ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
+            PlatformSetData<T>(face, level, checkedRect, data, startIndex, elementCount);
 		}
 
         private void ValidateParams<T>(int level, Rectangle? rect, T[] data, int startIndex,

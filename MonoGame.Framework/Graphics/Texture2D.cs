@@ -172,8 +172,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
             Rectangle checkedRect;
-            ValidateParams(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            PlatformSetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -188,11 +188,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct 
         {
             Rectangle checkedRect;
-            ValidateParams(level, 0, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
             if (rect.HasValue)
-                PlatformSetData(level, 0, checkedRect, data, startIndex, elementCount);
+                PlatformSetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
             else
-                PlatformSetData(level, data, startIndex, elementCount);
+                PlatformSetData<T>(level, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -205,8 +205,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
             Rectangle checkedRect;
-            ValidateParams(0, 0, null, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData(0, data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
+            PlatformSetData<T>(0, data, startIndex, elementCount);
         }
 
 		/// <summary>
@@ -217,8 +217,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		public void SetData<T>(T[] data) where T : struct
 		{
             Rectangle checkedRect;
-            ValidateParams(0, 0, null, data, 0, data.Length, out checkedRect);
-            PlatformSetData(0, data, 0, data.Length);
+            ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
+            PlatformSetData<T>(0, data, 0, data.Length);
         }
 
         /// <summary>
@@ -236,8 +236,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
             Rectangle checkedRect;
-            ValidateParams(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformGetData(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            PlatformGetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of pixels to read</param>
         public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
         {
-            this.GetData(level, 0, rect, data, startIndex, elementCount);
+            this.GetData<T>(level, 0, rect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of pixels to read</param>
 		public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
 		{
-			this.GetData(0, null, data, startIndex, elementCount);
+			this.GetData<T>(0, null, data, startIndex, elementCount);
 		}
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 		    if (data == null)
 		        throw new ArgumentNullException("data");
-			this.GetData(0, null, data, 0, data.Length);
+			this.GetData<T>(0, null, data, 0, data.Length);
 		}
 
         /// <summary>

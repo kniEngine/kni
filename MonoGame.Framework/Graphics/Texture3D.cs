@@ -64,25 +64,25 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data == null)
                 throw new ArgumentNullException("data");
 
-			SetData(data, 0, data.Length);
+			SetData<T>(data, 0, data.Length);
 		}
 
 		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
 		{
-			SetData(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
+			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
 		public void SetData<T>(int level,
 		                       int left, int top, int right, int bottom, int front, int back,
 		                       T[] data, int startIndex, int elementCount) where T : struct
 		{
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
 
             var width = right - left;
             var height = bottom - top;
             var depth = back - front;
 
-            PlatformSetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
+            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
 		}
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                int left, int top, int right, int bottom, int front, int back,
                                T[] data, int startIndex, int elementCount) where T : struct
         {
-            ValidateParams(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-            PlatformGetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            PlatformGetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to get.</param>
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
-            GetData(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            GetData(data, 0, data.Length);
+            GetData<T>(data, 0, data.Length);
         }
 
         private void ValidateParams<T>(int level,
