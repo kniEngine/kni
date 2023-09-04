@@ -37,6 +37,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (surfaceType != SurfaceType.SwapChainRenderTarget)
                 throw new InvalidOperationException();
 
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, 1);
+
             DepthStencilFormat = depthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(format, preferredMultiSampleCount);
             RenderTargetUsage = usage;
