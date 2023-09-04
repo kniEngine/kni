@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Gets the usage mode of this render target.
         /// </summary>
         /// <value>The usage mode of the render target.</value>
-        public RenderTargetUsage RenderTargetUsage { get; private set; }
+        public RenderTargetUsage RenderTargetUsage { get { return _strategyTargetCube.RenderTargetUsage; } }
 
         /// <inheritdoc/>
         int IRenderTarget.Width { get { return this.Size; } }
@@ -74,9 +74,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
             : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
         {
-            _strategyTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap);
+            _strategyTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage);
 
-            PlatformConstructRenderTargetCube(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage);
+            PlatformConstructRenderTargetCube(graphicsDevice, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

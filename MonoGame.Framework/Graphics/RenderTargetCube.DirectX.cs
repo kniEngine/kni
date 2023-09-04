@@ -17,11 +17,11 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTargetCube : IRenderTargetDX11
     {
 
-        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+        private void PlatformConstructRenderTargetCube(GraphicsDevice graphicsDevice, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
-            RenderTargetUsage = usage;
 
             ((ConcreteRenderTargetCube)_strategyTargetCube)._renderTargetViews = new D3D11.RenderTargetView[6];
             ((ConcreteRenderTargetCube)_strategyTargetCube)._depthStencilViews = new D3D11.DepthStencilView[6];

@@ -14,11 +14,10 @@ namespace Microsoft.Xna.Framework.Graphics
     {
 
         private void PlatformConstructRenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
-            RenderTargetUsage = usage;
 
             // Setup the multisampling description.
             DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);

@@ -18,11 +18,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private DXGI.SampleDescription _msSampleDescription;
 
         private void PlatformConstructRenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
-            RenderTargetUsage = usage;
 
             D3D11.Device d3dDevice = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 

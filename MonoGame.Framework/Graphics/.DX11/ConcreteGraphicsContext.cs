@@ -536,19 +536,19 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
         {
-            return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize);
+            return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize, usage);
         }
 
-        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap)
+        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage)
         {
-            return new ConcreteRenderTarget3D(this, width, height, depth, mipMap);
+            return new ConcreteRenderTarget3D(this, width, height, depth, mipMap, usage);
         }
 
-        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap)
+        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage)
         {
-            return new ConcreteRenderTargetCube(this, size, mipMap);
+            return new ConcreteRenderTargetCube(this, size, mipMap, usage);
         }
 
         protected override void Dispose(bool disposing)

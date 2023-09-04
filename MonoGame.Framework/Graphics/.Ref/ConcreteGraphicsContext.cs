@@ -121,17 +121,17 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
         {
             throw new NotImplementedException();
         }
 
-        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap)
+        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage)
         {
             throw new NotImplementedException();
         }
 
-        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap)
+        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage)
         {
             throw new NotImplementedException();
         }

@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		public int MultiSampleCount { get; private set; }
 		
-		public RenderTargetUsage RenderTargetUsage { get; private set; }
+		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget2D.RenderTargetUsage; } }
 
         public bool IsContentLost
         {
@@ -37,19 +37,18 @@ namespace Microsoft.Xna.Framework.Graphics
             if (surfaceType != SurfaceType.SwapChainRenderTarget)
                 throw new InvalidOperationException();
 
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, 1);
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, 1, usage);
 
             DepthStencilFormat = depthFormat;
             MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(format, preferredMultiSampleCount);
-            RenderTargetUsage = usage;
         }
 
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
 	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, SurfaceType.RenderTarget)
 	    {
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize);
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage);
 
-            PlatformConstructRenderTarget2D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
+            PlatformConstructRenderTarget2D(graphicsDevice, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
 	    }
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)
