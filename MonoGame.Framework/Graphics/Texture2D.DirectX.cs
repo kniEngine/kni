@@ -41,7 +41,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 return resource.SharedHandle;
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -85,7 +86,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -118,7 +120,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             // Create a temp staging resource for copying the data.
             //

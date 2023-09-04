@@ -55,6 +55,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	    private void PlatformSetData<T>(int level,
                                      int left, int top, int right, int bottom, int front, int back,
                                      T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int width = right - left;
             int height = bottom - top;

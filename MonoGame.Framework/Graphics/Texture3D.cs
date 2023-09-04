@@ -59,19 +59,22 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }
 
-        public void SetData<T>(T[] data) where T : struct
+        public void SetData<T>(T[] data)
+            where T : struct
 		{
 			SetData<T>(data, 0, data.Length);
 		}
 
-		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
 			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
 		public void SetData<T>(int level,
 		                       int left, int top, int right, int bottom, int front, int back,
-		                       T[] data, int startIndex, int elementCount) where T : struct
+		                       T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
             ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
             PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
@@ -93,7 +96,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to get.</param>
         public void GetData<T>(int level,
                                int left, int top, int right, int bottom, int front, int back,
-                               T[] data, int startIndex, int elementCount) where T : struct
+                               T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
             PlatformGetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
@@ -106,7 +110,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         /// <param name="startIndex">Index of the first element to get.</param>
         /// <param name="elementCount">Number of elements to get.</param>
-        public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+        public void GetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
@@ -116,14 +121,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <typeparam name="T">The type of the elements in the array.</typeparam>
         /// <param name="data">Array of data.</param>
-        public void GetData<T>(T[] data) where T : struct
+        public void GetData<T>(T[] data)
+            where T : struct
         {
             GetData<T>(data, 0, data.Length);
         }
 
         private void ValidateParams<T>(int level,
 		                               int left, int top, int right, int bottom, int front, int back,
-		                               T[] data, int startIndex, int elementCount) where T : struct
+		                               T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int texWidth = Math.Max(Width >> level, 1);
             int texHeight = Math.Max(Height >> level, 1);

@@ -52,7 +52,8 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
-        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             // Create a temp staging resource for copying the data.
             //
@@ -131,6 +132,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);

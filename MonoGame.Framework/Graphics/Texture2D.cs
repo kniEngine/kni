@@ -169,7 +169,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">New data for the texture</param>
         /// <param name="startIndex">Start position of data</param>
         /// <param name="elementCount"></param>
-        public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+        public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
@@ -185,7 +186,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">New data for the texture</param>
         /// <param name="startIndex">Start position of data</param>
         /// <param name="elementCount"></param>
-        public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct 
+        public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct 
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
@@ -202,7 +204,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">New data for the texture</param>
         /// <param name="startIndex">Start position of data</param>
         /// <param name="elementCount"></param>
-		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
@@ -214,7 +217,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <typeparam name="T">New data for the texture</typeparam>
         /// <param name="data"></param>
-		public void SetData<T>(T[] data) where T : struct
+		public void SetData<T>(T[] data)
+            where T : struct
 		{
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
@@ -233,7 +237,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the data</param>
         /// <param name="startIndex">Starting index of data where to write the pixel data</param>
         /// <param name="elementCount">Number of pixels to read</param>
-        public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+        public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
@@ -251,7 +256,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         /// <param name="startIndex">First position in data where to write the pixel data</param>
         /// <param name="elementCount">Number of pixels to read</param>
-        public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+        public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             this.GetData<T>(level, 0, rect, data, startIndex, elementCount);
         }
@@ -265,7 +271,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         /// <param name="startIndex">First position in data where to write the pixel data</param>
         /// <param name="elementCount">Number of pixels to read</param>
-		public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+		public void GetData<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
 			this.GetData<T>(0, null, data, startIndex, elementCount);
 		}
@@ -277,7 +284,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data">Destination array for the texture data</param>
-        public void GetData<T>(T[] data) where T : struct
+        public void GetData<T>(T[] data)
+            where T : struct
 		{
 			this.GetData<T>(0, null, data, 0, data.Length);
 		}
@@ -333,7 +341,8 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         
         private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
-            int startIndex, int elementCount, out Rectangle checkedRect) where T : struct
+            int startIndex, int elementCount, out Rectangle checkedRect)
+            where T : struct
         {
             Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
             checkedRect = rect ?? textureBounds;

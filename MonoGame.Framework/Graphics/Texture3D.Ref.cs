@@ -30,6 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
             T[] data,
             int startIndex,
             int elementCount)
+            where T : struct
         {
             throw new PlatformNotSupportedException();
         }
@@ -44,7 +45,8 @@ namespace Microsoft.Xna.Framework.Graphics
             int back, 
             T[] data, 
             int startIndex, 
-            int elementCount) where T : struct
+            int elementCount)
+            where T : struct
         {
             throw new PlatformNotSupportedException();
         }

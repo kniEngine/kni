@@ -159,6 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             Threading.EnsureUIThread();
 

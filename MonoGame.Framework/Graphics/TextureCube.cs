@@ -64,34 +64,40 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <typeparam name="T"></typeparam>
         /// <param name="cubeMapFace">The cube map face.</param>
         /// <param name="data">The data.</param>
-        public void GetData<T>(CubeMapFace cubeMapFace, T[] data) where T : struct
+        public void GetData<T>(CubeMapFace cubeMapFace, T[] data)
+            where T : struct
         {
             GetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
         }
 
-	    public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount) where T : struct
+	    public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
+            where T : struct
 	    {
 	        GetData<T>(cubeMapFace, 0, null, data, startIndex, elementCount);
 	    }
 
-	    public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+	    public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct
 	    {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
 	        PlatformGetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
 	    }
 
-		public void SetData<T>(CubeMapFace face, T[] data) where T : struct
+		public void SetData<T>(CubeMapFace face, T[] data)
+            where T : struct
 		{
             SetData<T>(face, 0, null, data, 0, data.Length);
 		}
 
-        public void SetData<T>(CubeMapFace face, T[] data, int startIndex, int elementCount) where T : struct
+        public void SetData<T>(CubeMapFace face, T[] data, int startIndex, int elementCount)
+            where T : struct
 		{
             SetData<T>(face, 0, null, data, startIndex, elementCount);
 		}
 		
-        public void SetData<T>(CubeMapFace face, int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+        public void SetData<T>(CubeMapFace face, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+            where T : struct
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
@@ -99,7 +105,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
         private void ValidateParams<T>(int level, Rectangle? rect, T[] data, int startIndex,
-            int elementCount, out Rectangle checkedRect) where T : struct
+            int elementCount, out Rectangle checkedRect)
+            where T : struct
         {
             Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Size >> level, 1), Math.Max(Size >> level, 1));
             checkedRect = rect ?? textureBounds;
