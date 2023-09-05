@@ -97,5 +97,30 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
 	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView;
 	    }
+
+        protected override D3D11.Resource CreateTexture()
+        {
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = this.LevelCount;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+
+            if (((ConcreteTexture3D)_strategyTexture3D)._mipMap)
+            {
+                // Note: XNA 4 does not have a method Texture.GenerateMipMaps() 
+                // because generation of mipmaps is not supported on the Xbox 360.
+                // TODO: New method Texture.GenerateMipMaps() required.
+                texture3DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+            }
+
+            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+        }
+
     }
 }

@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="preferredMultiSampleCount">The preferred number of multisample locations.</param>
         /// <param name="usage">The usage mode of the render target.</param>
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
-            : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
+            : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat))
         {
             _strategyTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage);
 

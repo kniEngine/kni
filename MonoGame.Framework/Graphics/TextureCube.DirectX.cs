@@ -14,9 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class TextureCube
 	{
-        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
         {
-            ((ConcreteTextureCube)_strategyTextureCube)._isRenderTarget = renderTarget;
             ((ConcreteTextureCube)_strategyTextureCube)._mipMap = mipMap;
 
             D3D11.Resource texture = CreateTexture();
@@ -24,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
-        internal override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture()
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -38,13 +37,6 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.SampleDescription = sampleDesc;
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
-
-            if (((ConcreteTextureCube)_strategyTextureCube)._isRenderTarget)
-            {
-                texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
-                if (((ConcreteTextureCube)_strategyTextureCube)._mipMap)
-                    texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
-            }
 
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }

@@ -151,6 +151,5 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         internal bool _mipMap;
-        internal bool _isRenderTarget;
     }
 }

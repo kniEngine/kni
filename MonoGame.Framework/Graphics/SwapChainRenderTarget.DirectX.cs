@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                      int preferredMultiSampleCount,
                                      RenderTargetUsage usage,
                                      PresentInterval presentInterval)
-            : base(graphicsDevice, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, usage,
+            : base(graphicsDevice, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, usage, false, 1,
                    SurfaceType.SwapChainRenderTarget)
         {
             this._windowHandle = windowHandle;
@@ -117,10 +117,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 ((ConcreteRenderTarget2D)base._strategyRenderTarget2D)._depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer);
             }
         }
-        
-        internal override D3D11.Resource CreateTexture()
+
+        protected override D3D11.Resource CreateTexture()
         {
-            return (MultiSampleCount > 1) ? base.CreateTexture() : _backBuffer;
+            if (MultiSampleCount > 1)
+                return base.CreateTexture();
+            else
+                return _backBuffer;
         }
 
         internal override void ResolveSubresource()

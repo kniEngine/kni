@@ -31,16 +31,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Allows child class to specify the surface type, eg: a swap chain.
         /// </summary>
-        protected RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat depthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, SurfaceType surfaceType)
-            : base(graphicsDevice, width, height, mipMap, format, surfaceType)
+      protected RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize, SurfaceType surfaceType)
+            : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, surfaceType)
         {
             if (surfaceType != SurfaceType.SwapChainRenderTarget)
                 throw new InvalidOperationException();
 
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, 1, usage);
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage);
 
-            DepthStencilFormat = depthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(format, preferredMultiSampleCount);
+            DepthStencilFormat = preferredDepthFormat;
+            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(preferredFormat, preferredMultiSampleCount);
         }
 
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
