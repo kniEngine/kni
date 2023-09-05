@@ -33,13 +33,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return GetTextureStrategy<ConcreteTexture>()._texture;
         }
 
-        internal D3D11.ShaderResourceView GetShaderResourceView()
-        {
-            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._resourceView != null);
-
-            return GetTextureStrategy<ConcreteTexture>()._resourceView;
-        }
-
         private void PlatformGraphicsDeviceResetting()
         {
             DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
