@@ -44,6 +44,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
@@ -89,6 +92,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
@@ -123,6 +129,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.GetData<T>(...)
+
             // Create a temp staging resource for copying the data.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;

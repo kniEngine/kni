@@ -32,6 +32,21 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return new Rectangle(0, 0, this._width, this._height); }
         }
+
+        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
+
+        public void SetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
+
+        public void GetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
         #endregion #region ITexture2DStrategy
 
     }

@@ -21,6 +21,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
         #region ITextureCubeStrategy
         public int Size { get { return _size; } }
+
+        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
         #endregion #region ITextureCubeStrategy
 
     }

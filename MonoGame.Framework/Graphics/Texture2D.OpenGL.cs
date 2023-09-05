@@ -84,6 +84,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             Threading.EnsureUIThread();
 
             int w, h;
@@ -142,6 +145,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             Threading.EnsureUIThread();
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
@@ -199,6 +205,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.GetData<T>(...)
+
             Threading.EnsureUIThread();
 
 #if GLES

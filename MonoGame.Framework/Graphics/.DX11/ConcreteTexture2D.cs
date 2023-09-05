@@ -2,8 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -31,6 +36,21 @@ namespace Microsoft.Xna.Platform.Graphics
         public Rectangle Bounds
         {
             get { return new Rectangle(0, 0, this._width, this._height); }
+        }
+
+        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
+
+        public void SetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
+
+        public void GetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
         }
         #endregion #region ITexture2DStrategy
 

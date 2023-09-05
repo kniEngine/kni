@@ -53,6 +53,24 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new NotImplementedException(); }
         }
+
+        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
         #endregion #region ITexture2DStrategy
 
 
