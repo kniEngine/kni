@@ -26,13 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal abstract D3D11.Resource CreateTexture();
 
-        internal D3D11.Resource GetTexture()
-        {
-            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._texture != null);
-
-            return GetTextureStrategy<ConcreteTexture>()._texture;
-        }
-
         private void PlatformGraphicsDeviceResetting()
         {
             DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);

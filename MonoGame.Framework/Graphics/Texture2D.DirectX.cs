@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private IntPtr PlatformGetSharedHandle()
         {
-            using (DXGI.Resource resource = GetTexture().QueryInterface<DXGI.Resource>())
+            using (DXGI.Resource resource = this.GetTextureStrategy<ConcreteTexture>().GetTexture().QueryInterface<DXGI.Resource>())
                 return resource.SharedHandle;
         }
 
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
+                    d3dContext.UpdateSubresource(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
                 }
             }
             finally
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
+                    d3dContext.UpdateSubresource(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
                 }
             }
             finally
@@ -167,7 +167,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int elementsInRow = checkedRect.Width;
                 int rows = checkedRect.Height;
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
-                d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTexture, 0);
+                d3dContext.CopySubresourceRegion(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                 // Copy the data to the array.
                 DX.DataStream stream = null;

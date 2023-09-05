@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public static object GetD3D11Resource(this Texture texture)
         {
-            D3D11.Resource d3dResource = texture.GetTexture();
+            D3D11.Resource d3dResource = texture.GetTextureStrategy<ConcreteTexture>().GetTexture();
             return d3dResource;
         }
     }

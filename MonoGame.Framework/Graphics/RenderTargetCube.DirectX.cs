@@ -35,7 +35,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 renderTargetViewDesc.Texture2DArray.ArraySize = 1;
                 renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
                 renderTargetViewDesc.Texture2DArray.MipSlice = 0;
-                ((ConcreteRenderTargetCube)_strategyTargetCube)._renderTargetViews[i] = new D3D11.RenderTargetView(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
+                ((ConcreteRenderTargetCube)_strategyTargetCube)._renderTargetViews[i] = new D3D11.RenderTargetView(
+                    deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
+                    this.GetTextureStrategy<ConcreteTexture>().GetTexture(),
+                    renderTargetViewDesc);
             }
 
 

@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     int elementsInRow = checkedRect.Width;
                     int rows = checkedRect.Height;
                     D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
-                    d3dContext.CopySubresourceRegion(GetTexture(), subresourceIndex, region, stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, stagingTex, 0);
 
                     // Copy the data to the array.
                     DX.DataStream stream = null;
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                    d3dContext.UpdateSubresource(box, this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region);
                 }
             }
             finally
