@@ -84,24 +84,24 @@ namespace Microsoft.Xna.Framework.Graphics
 	        PlatformGetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
 	    }
 
-		public void SetData<T>(CubeMapFace face, T[] data)
+		public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
 		{
-            SetData<T>(face, 0, null, data, 0, data.Length);
+            SetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
 		}
 
-        public void SetData<T>(CubeMapFace face, T[] data, int startIndex, int elementCount)
+        public void SetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
 		{
-            SetData<T>(face, 0, null, data, startIndex, elementCount);
+            SetData<T>(cubeMapFace, 0, null, data, startIndex, elementCount);
 		}
 		
-        public void SetData<T>(CubeMapFace face, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public void SetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData<T>(face, level, checkedRect, data, startIndex, elementCount);
+            PlatformSetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
 		}
 
         private void ValidateParams<T>(int level, Rectangle? rect, T[] data, int startIndex,
