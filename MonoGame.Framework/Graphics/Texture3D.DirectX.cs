@@ -19,8 +19,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteTexture3D)_strategyTexture3D)._isRenderTarget = renderTarget;
             ((ConcreteTexture3D)_strategyTexture3D)._mipMap = mipMap;
 
-            // Create texture
-            GetTexture();
+            D3D11.Resource texture = CreateTexture();
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
 
@@ -81,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(box, GetTexture(), subresourceIndex, region);
+                    d3dContext.UpdateSubresource(box, this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region);
                 }
             }
             finally
@@ -117,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    d3dContext.CopySubresourceRegion(GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
 
                     // Copy the data to the array.
                     DX.DataStream stream = null;

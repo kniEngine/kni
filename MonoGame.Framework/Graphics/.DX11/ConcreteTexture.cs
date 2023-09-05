@@ -37,6 +37,18 @@ namespace Microsoft.Xna.Platform.Graphics
             _texture = textureResource;
         }
 
+        internal D3D11.Resource GetTexture()
+        {
+            System.Diagnostics.Debug.Assert(_texture != null);
 
+            return _texture;
+        }
+
+        internal D3D11.ShaderResourceView GetShaderResourceView()
+        {
+            System.Diagnostics.Debug.Assert(_resourceView != null);
+
+            return _resourceView;
+        }
     }
 }

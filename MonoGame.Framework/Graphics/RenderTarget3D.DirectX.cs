@@ -84,7 +84,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 renderTargetViewDesc.Texture3D.FirstDepthSlice = arraySlice;
                 renderTargetViewDesc.Texture3D.MipSlice = 0;
 
-                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView = new D3D11.RenderTargetView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture(), renderTargetViewDesc);
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView = new D3D11.RenderTargetView(
+                    GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
+                    this.GetTextureStrategy<ConcreteTexture>().GetTexture(),
+                    renderTargetViewDesc);
 	        }
 
 	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetView;

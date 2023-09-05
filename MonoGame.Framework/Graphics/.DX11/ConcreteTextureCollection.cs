@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (tex != null && !tex.IsDisposed)
                 {
-                    shaderStage.SetShaderResource(i, tex.GetShaderResourceView());
+                    shaderStage.SetShaderResource(i, tex.GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
 
                     unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
                 }

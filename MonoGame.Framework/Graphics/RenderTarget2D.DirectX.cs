@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void CreateRenderTarget(D3D11.Device d3dDevice, int width, int height)
         {
-            D3D11.Resource viewTex = MultiSampleCount > 1 ? GetMSTexture() : GetTexture();
+            D3D11.Resource viewTex = MultiSampleCount > 1 ? GetMSTexture() : this.GetTextureStrategy<ConcreteTexture>().GetTexture();
 
             // Create a view interface on the rendertarget to use on bind.
             if (this.ArraySize > 1)
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 d3dContext.ResolveSubresource(
                     GetMSTexture(),
                     0,
-                    GetTexture(),
+                    this.GetTextureStrategy<ConcreteTexture>().GetTexture(),
                     0,
                     GraphicsExtensions.ToDXFormat(this.Format));
             }

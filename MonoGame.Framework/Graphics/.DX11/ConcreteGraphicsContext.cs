@@ -587,7 +587,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     lock (this.D3dContext)
                     {
-                        this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetShaderResourceView());
+                        this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
                     }
                 }
             }

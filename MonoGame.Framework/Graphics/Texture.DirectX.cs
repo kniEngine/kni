@@ -26,24 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal abstract D3D11.Resource CreateTexture();
 
-        internal D3D11.Resource GetTexture()
-        {
-            if (GetTextureStrategy<ConcreteTexture>()._texture != null)
-                return GetTextureStrategy<ConcreteTexture>()._texture;
-
-            GetTextureStrategy<ConcreteTexture>()._texture = CreateTexture();
-            return GetTextureStrategy<ConcreteTexture>()._texture;
-        }
-
-        internal D3D11.ShaderResourceView GetShaderResourceView()
-        {
-            if (GetTextureStrategy<ConcreteTexture>()._resourceView != null)
-                return GetTextureStrategy<ConcreteTexture>()._resourceView;
-
-            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, GetTexture());
-            return GetTextureStrategy<ConcreteTexture>()._resourceView;
-        }
-
         private void PlatformGraphicsDeviceResetting()
         {
             DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
