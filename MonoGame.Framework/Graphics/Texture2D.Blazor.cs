@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 out GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture);
 
             {
-                GenerateGLTextureIfRequired();
+                CreateGLTexture2D();
 
                 var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -100,10 +100,10 @@ namespace Microsoft.Xna.Framework.Graphics
             if (startIndex != 0 && !GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture)
                 throw new NotImplementedException("startIndex");
 
+            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture == null);
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
             GraphicsExtensions.CheckGLError();
 
-            GenerateGLTextureIfRequired();
             GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
             GraphicsExtensions.CheckGLError();
 
@@ -136,10 +136,10 @@ namespace Microsoft.Xna.Framework.Graphics
             if (startIndex != 0)
                 throw new NotImplementedException("startIndex");
 
+            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture == null);
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
             GraphicsExtensions.CheckGLError();
 
-            GenerateGLTextureIfRequired();
             GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
 
             if (GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture)
@@ -164,57 +164,56 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
-        private void GenerateGLTextureIfRequired()
+        private void CreateGLTexture2D()
         {
+            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture == null);
+
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            if (GetTextureStrategy<ConcreteTexture>()._glTexture == null)
+            GetTextureStrategy<ConcreteTexture>()._glTexture = GL.CreateTexture();
+            GraphicsExtensions.CheckGLError();
+
+            // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
+            // dimension is not a power of two.
+            var wrap = WebGLTexParam.REPEAT;
+            if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
+                wrap = WebGLTexParam.CLAMP_TO_EDGE;
+
+            GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(
+                WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MIN_FILTER,
+                (this.LevelCount > 1) ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(
+                WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MAG_FILTER,
+                WebGLTexParam.LINEAR);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_S, wrap);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_T, wrap);
+            GraphicsExtensions.CheckGLError();
+
+            // Set mipMap levels
+            //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
+            //GraphicsExtensions.CheckGLError();
+            if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
             {
-                GetTextureStrategy<ConcreteTexture>()._glTexture = GL.CreateTexture();
-                GraphicsExtensions.CheckGLError();
-
-                // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
-                // dimension is not a power of two.
-                var wrap = WebGLTexParam.REPEAT;
-                if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
-                    wrap = WebGLTexParam.CLAMP_TO_EDGE;
-
-                GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
-                GraphicsExtensions.CheckGLError();
-
-                GL.TexParameter(
-                    WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MIN_FILTER,
-                    (this.LevelCount > 1) ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
-                GraphicsExtensions.CheckGLError();
-
-                GL.TexParameter(
-                    WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MAG_FILTER,
-                    WebGLTexParam.LINEAR);
-                GraphicsExtensions.CheckGLError();
-
-                GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_S, wrap);
-                GraphicsExtensions.CheckGLError();
-
-                GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_T, wrap);
-                GraphicsExtensions.CheckGLError();
-
-                // Set mipMap levels
-                //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
-                //GraphicsExtensions.CheckGLError();
-                if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
+                if (this.LevelCount > 0)
                 {
-                    if (this.LevelCount > 0)
-                    {
-                        throw new NotImplementedException();
-                        // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                        // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, 1000);
-                    }
-                    GraphicsExtensions.CheckGLError();
+                    throw new NotImplementedException();
+                    // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);
                 }
+                else
+                {
+                    throw new NotImplementedException();
+                    // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, 1000);
+                }
+                GraphicsExtensions.CheckGLError();
             }
         }
 
