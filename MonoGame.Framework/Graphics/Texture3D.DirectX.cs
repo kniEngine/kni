@@ -49,19 +49,6 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
         }
 
-	    private void PlatformSetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-                                        T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-        }
-
-        private void PlatformGetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-                                        T[] data, int startIndex, int elementCount)
-             where T : struct
-        {
-            _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-        }
 	}
 }
 

@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
 		{
             ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
 		}
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-            PlatformGetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);                       
+            _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
         /// <summary>

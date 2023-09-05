@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -192,9 +192,9 @@ namespace Microsoft.Xna.Framework.Graphics
             Rectangle checkedRect;
             ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
             if (rect.HasValue)
-                PlatformSetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
-            else
-                PlatformSetData<T>(level, data, startIndex, elementCount);
+                _strategyTexture2D.SetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
+            else           
+                _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData<T>(0, data, startIndex, elementCount);
+            _strategyTexture2D.SetData<T>(0, data, startIndex, elementCount);
         }
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
-            PlatformSetData<T>(0, data, 0, data.Length);
+            _strategyTexture2D.SetData<T>(0, data, 0, data.Length);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformGetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>

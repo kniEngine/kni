@@ -81,8 +81,8 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
-	        PlatformGetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
-	    }
+            _strategyTextureCube.GetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
+        }
 
 		public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
@@ -101,8 +101,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
-            PlatformSetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
-		}
+            _strategyTextureCube.SetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
+        }
 
         private void ValidateParams<T>(int level, Rectangle? rect, T[] data, int startIndex,
             int elementCount, out Rectangle checkedRect)
