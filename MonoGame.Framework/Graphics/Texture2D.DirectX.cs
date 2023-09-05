@@ -33,6 +33,10 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
             ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
             _sampleDescription = new DXGI.SampleDescription(1, 0);
+
+            D3D11.Resource texture = CreateTexture();
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
         private IntPtr PlatformGetSharedHandle()

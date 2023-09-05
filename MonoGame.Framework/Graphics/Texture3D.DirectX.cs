@@ -19,8 +19,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteTexture3D)_strategyTexture3D)._isRenderTarget = renderTarget;
             ((ConcreteTexture3D)_strategyTexture3D)._mipMap = mipMap;
 
-            // Create texture
-            GetTexture();
+            D3D11.Resource texture = CreateTexture();
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
 

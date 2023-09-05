@@ -23,8 +23,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteTextureCube)_strategyTextureCube)._isRenderTarget = renderTarget;
             ((ConcreteTextureCube)_strategyTextureCube)._mipMap = mipMap;
 
-            // Create texture
-            GetTexture();
+            D3D11.Resource texture = CreateTexture();
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
         internal override D3D11.Resource CreateTexture()
