@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	public partial class TextureCube
 	{
 
-        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
         {
             throw new PlatformNotSupportedException();
         }

@@ -135,5 +135,27 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             return ((ConcreteRenderTargetCube)_strategyTargetCube)._depthStencilViews[arraySlice];
         }
+
+
+        protected override D3D11.Resource CreateTexture()
+        {
+            DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = this.Size;
+            texture2DDesc.Height = this.Size;
+            texture2DDesc.MipLevels = this.LevelCount;
+            texture2DDesc.ArraySize = 6; // A texture cube is a 2D texture array with 6 textures.
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.BindFlags = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture2DDesc.SampleDescription = sampleDesc;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
+
+            if (((ConcreteTextureCube)_strategyTextureCube)._mipMap)
+                texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+            
+            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+        }
     }
 }

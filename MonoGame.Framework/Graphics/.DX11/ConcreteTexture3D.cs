@@ -131,9 +131,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture3DStrategy
 
-
         internal bool _mipMap;
-        internal bool _isRenderTarget;
 
     }
 }

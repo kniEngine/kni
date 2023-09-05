@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
             ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()
+        protected override D3D11.Resource CreateTexture()
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -57,12 +57,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if (((ConcreteTexture2D)_strategyTexture2D)._shared)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
-            return texture2DDesc;
-        }
-        internal override D3D11.Resource CreateTexture()
-        {
-            // TODO: Move this to SetData() if we want to make Immutable textures!
-            D3D11.Texture2DDescription texture2DDesc = GetTexture2DDescription();
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
     }

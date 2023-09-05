@@ -82,20 +82,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : this(graphicsDevice, width, height, mipMap, format, false, arraySize, SurfaceType.Texture)
         {
         }
-
-        /// <summary>
-        ///  Creates a new texture of a given size with a surface format and optional mipmaps.
-        /// </summary>
-        /// <param name="graphicsDevice"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="mipMap"></param>
-        /// <param name="format"></param>
-        /// <param name="surfaceType"></param>
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, SurfaceType surfaceType)
-            : this(graphicsDevice, width, height, mipMap, format, false, 1, surfaceType)
-        {
-        }
         
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
             : base()
@@ -139,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    if (surfaceType == SurfaceType.SwapChainRenderTarget)
 		        return;
 
-            PlatformConstructTexture2D(width, height, mipMap, format, surfaceType, shared);
+            PlatformConstructTexture2D(width, height, mipMap, format, shared);
         }
 
 
