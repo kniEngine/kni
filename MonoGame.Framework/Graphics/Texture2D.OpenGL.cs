@@ -78,24 +78,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new NotImplementedException();
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
-        }
-
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-        }
-
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-        }
-
         private void CreateGLTexture2D()
         {
             System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture < 0);

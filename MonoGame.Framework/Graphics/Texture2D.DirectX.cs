@@ -36,24 +36,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 return resource.SharedHandle;
         }
 
-        private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
-        }
-
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-        }
-
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
