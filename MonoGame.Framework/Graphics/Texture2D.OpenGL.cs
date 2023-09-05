@@ -28,7 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Threading.EnsureUIThread();
             {
-                GenerateGLTextureIfRequired();
+                CreateGLTexture2D();
+
                 int w = width;
                 int h = height;
                 int level = 0;
@@ -99,16 +100,17 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 int startBytes = startIndex * elementSizeInByte;
                 IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+
                 // Store the current bound texture.
                 int prevTexture = GetBoundTexture2D();
 
+                System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture < 0);
                 if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
-                    
-                GenerateGLTextureIfRequired();
+
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
                 if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
@@ -160,13 +162,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // Store the current bound texture.
                 int prevTexture = GetBoundTexture2D();
+
+                System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture < 0);
                 if (prevTexture != GetTextureStrategy<ConcreteTexture>()._glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
 
-                GenerateGLTextureIfRequired();
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
                 if (GetTextureStrategy<ConcreteTexture>()._glFormat == GLPixelFormat.CompressedTextureFormats)
@@ -268,55 +271,54 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-        private void GenerateGLTextureIfRequired()
+        private void CreateGLTexture2D()
         {
-            if (GetTextureStrategy<ConcreteTexture>()._glTexture < 0)
-            {
-                GetTextureStrategy<ConcreteTexture>()._glTexture = GL.GenTexture();
-                GraphicsExtensions.CheckGLError();
+            System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture < 0);
 
-                // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
-                // dimension is not a power of two.
-                TextureWrapMode wrap = TextureWrapMode.Repeat;
-                if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
-                    wrap = TextureWrapMode.ClampToEdge;
+            GetTextureStrategy<ConcreteTexture>()._glTexture = GL.GenTexture();
+            GraphicsExtensions.CheckGLError();
 
-                GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
-                GraphicsExtensions.CheckGLError();
+            // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
+            // dimension is not a power of two.
+            TextureWrapMode wrap = TextureWrapMode.Repeat;
+            if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
+                wrap = TextureWrapMode.ClampToEdge;
 
-                GL.TexParameter(
-                    TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                    (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
-                GraphicsExtensions.CheckGLError();
+            GL.BindTexture(TextureTarget.Texture2D, GetTextureStrategy<ConcreteTexture>()._glTexture);
+            GraphicsExtensions.CheckGLError();
 
-                GL.TexParameter(
-                    TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                    (int)TextureMagFilter.Linear);
-                GraphicsExtensions.CheckGLError();
+            GL.TexParameter(
+                TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
+            GraphicsExtensions.CheckGLError();
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrap);
-                GraphicsExtensions.CheckGLError();
+            GL.TexParameter(
+                TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Linear);
+            GraphicsExtensions.CheckGLError();
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
-                GraphicsExtensions.CheckGLError();
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrap);
+            GraphicsExtensions.CheckGLError();
 
-                // Set mipMap levels
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
+            GraphicsExtensions.CheckGLError();
+
+            // Set mipMap levels
 #if !GLES
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 #endif
-                GraphicsExtensions.CheckGLError();
-                if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
+            GraphicsExtensions.CheckGLError();
+            if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
+            {
+                if (this.LevelCount > 0)
                 {
-                    if (this.LevelCount > 0)
-                    {
-                        GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
-                    }
-                    else
-                    {
-                        GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, 1000);
-                    }
-                    GraphicsExtensions.CheckGLError();
+                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
                 }
+                else
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, 1000);
+                }
+                GraphicsExtensions.CheckGLError();
             }
         }
 
