@@ -5,11 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics;
-using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -24,15 +20,10 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        protected DXGI.SampleDescription SampleDescription { get { return _sampleDescription; } }
-
-        private DXGI.SampleDescription _sampleDescription;
-
         private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, SurfaceType type, bool shared)
         {
             ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
             ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
-            _sampleDescription = new DXGI.SampleDescription(1, 0);
 
             D3D11.Resource texture = CreateTexture();
             GetTextureStrategy<ConcreteTexture>()._texture = texture;
@@ -49,190 +40,18 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
-            //TODO: move code to _strategyTexture2D.SetData<T>(...)
-
-            int w, h;
-            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
-
-            // For DXT compressed formats the width and height must be
-            // a multiple of 4 for the complete mip level to be set.
-            if (this.Format.IsCompressedFormat())
-            {
-                w = (w + 3) & ~3;
-                h = (h + 3) & ~3;
-            }
-
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            // Use try..finally to make sure dataHandle is freed in case of an error
-            try
-            {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-                D3D11.ResourceRegion region = new D3D11.ResourceRegion();
-                region.Top = 0;
-                region.Front = 0;
-                region.Back = 1;
-                region.Bottom = h;
-                region.Left = 0;
-                region.Right = w;
-
-                // TODO: We need to deal with threaded contexts here!
-                int arraySlice = 0;
-                int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
-                {
-                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                    d3dContext.UpdateSubresource(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
-                }
-            }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-            //TODO: move code to _strategyTexture2D.SetData<T>(...)
-
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            // Use try..finally to make sure dataHandle is freed in case of an error
-            try
-            {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-                D3D11.ResourceRegion region = new D3D11.ResourceRegion();
-                region.Top = checkedRect.Top;
-                region.Front = 0;
-                region.Back = 1;
-                region.Bottom = checkedRect.Bottom;
-                region.Left = checkedRect.Left;
-                region.Right = checkedRect.Right;
-
-
-                // TODO: We need to deal with threaded contexts here!
-                int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
-                {
-                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                    d3dContext.UpdateSubresource(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
-                }
-            }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
-            //TODO: move code to _strategyTexture2D.GetData<T>(...)
-
-            // Create a temp staging resource for copying the data.
-            //
-            int min = this.Format.IsCompressedFormat() ? 4 : 1;
-            int levelWidth = Math.Max(this.Width >> level, min);
-            int levelHeight = Math.Max(this.Height >> level, min);
-
-            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
-            texture2DDesc.Width = levelWidth;
-            texture2DDesc.Height = levelHeight;
-            texture2DDesc.MipLevels = 1;
-            texture2DDesc.ArraySize = 1;
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
-            texture2DDesc.BindFlags = D3D11.BindFlags.None;
-            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
-            texture2DDesc.SampleDescription = this.SampleDescription;
-            texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
-            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
-
-            D3D11.Texture2D stagingTexture = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
-
-
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
-            {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                int subresourceIndex = arraySlice * this.LevelCount + level;
-
-                // Copy the data from the GPU to the staging texture.
-                int elementsInRow = checkedRect.Width;
-                int rows = checkedRect.Height;
-                D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
-                d3dContext.CopySubresourceRegion(this.GetTextureStrategy<ConcreteTexture>().GetTexture(), subresourceIndex, region, stagingTexture, 0);
-
-                // Copy the data to the array.
-                DX.DataStream stream = null;
-                try
-                {
-                    DX.DataBox databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
-
-                    int elementSize = this.Format.GetSize();
-                    if (this.Format.IsCompressedFormat())
-                    {
-                        // for 4x4 block compression formats an element is one block, so elementsInRow
-                        // and number of rows are 1/4 of number of pixels in width and height of the rectangle
-                        elementsInRow /= 4;
-                        rows /= 4;
-                    }
-                    int rowSize = elementSize * elementsInRow;
-                    if (rowSize == databox.RowPitch)
-                        stream.ReadRange(data, startIndex, elementCount);
-                    else if (level == 0 && arraySlice == 0 &&
-                             checkedRect.X == 0 && checkedRect.Y == 0 &&
-                             checkedRect.Width == this.Width && checkedRect.Height == this.Height &&
-                             startIndex == 0 && elementCount == data.Length)
-                    {
-                        // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
-                        int elementSize2 = DX.Utilities.SizeOf<T>();
-                        if (elementSize2 == 1) // byte[]
-                            elementsInRow = elementsInRow * elementSize;
-
-                        int currentIndex = 0;
-                        for (int row = 0; row < rows; row++)
-                        {
-                            stream.ReadRange(data, currentIndex, elementsInRow);
-                            stream.Seek((databox.RowPitch - rowSize), SeekOrigin.Current);
-                            currentIndex += elementsInRow;
-                        }
-                    }
-                    else
-                    {
-                        // Some drivers may add pitch to rows.
-                        // We need to copy each row separatly and skip trailing zeros.
-                        stream.Seek(0, SeekOrigin.Begin);
-
-                        int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                        for (int row = 0; row < rows; row++)
-                        {
-                            int i;
-                            int maxElements =  (row + 1) * rowSize / elementSizeInByte;
-                            for (i = row * rowSize / elementSizeInByte; i < maxElements; i++)
-                                data[i + startIndex] = stream.Read<T>();
-
-                            if (i >= elementCount)
-                                break;
-
-                            stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
-                        }
-                    }
-                }
-                finally
-                {
-                    DX.Utilities.Dispose( ref stream);
-
-                    d3dContext.UnmapSubresource(stagingTexture, 0);                    
-                    DX.Utilities.Dispose(ref stagingTexture);
-                }
-            }
         }
 
         protected override void Dispose(bool disposing)
@@ -246,6 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected internal virtual D3D11.Texture2DDescription GetTexture2DDescription()
         {
+            DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
             texture2DDesc.Width = this.Width;
             texture2DDesc.Height = this.Height;
@@ -254,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
             texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            texture2DDesc.SampleDescription = SampleDescription;
+            texture2DDesc.SampleDescription = sampleDesc;
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
