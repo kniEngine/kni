@@ -50,6 +50,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public IntPtr GetSharedHandle()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {

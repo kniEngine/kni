@@ -54,6 +54,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new NotImplementedException(); }
         }
 
+        public IntPtr GetSharedHandle()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {

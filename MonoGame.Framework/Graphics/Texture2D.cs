@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </returns>
         public IntPtr GetSharedHandle()
         {
-            return PlatformGetSharedHandle();
+            return _strategyTexture2D.GetSharedHandle();
         }
 
 

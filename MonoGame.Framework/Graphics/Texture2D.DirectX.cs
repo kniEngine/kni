@@ -30,12 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
-        private IntPtr PlatformGetSharedHandle()
-        {
-            using (DXGI.Resource resource = this.GetTextureStrategy<ConcreteTexture>().GetTexture().QueryInterface<DXGI.Resource>())
-                return resource.SharedHandle;
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

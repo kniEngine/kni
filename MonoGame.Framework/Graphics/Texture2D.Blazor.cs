@@ -76,11 +76,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private IntPtr PlatformGetSharedHandle()
-        {
-            throw new NotImplementedException();
-        }
-
         private void CreateGLTexture2D()
         {
             System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture == null);

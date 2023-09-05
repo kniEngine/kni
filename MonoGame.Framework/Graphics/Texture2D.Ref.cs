@@ -13,11 +13,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private IntPtr PlatformGetSharedHandle()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
     }
 }
 
