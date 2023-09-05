@@ -86,6 +86,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int w, h;
@@ -122,6 +125,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTexture2D.SetData<T>(...)
+
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
@@ -155,7 +161,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new NotImplementedException();
+            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         private void GenerateGLTextureIfRequired()

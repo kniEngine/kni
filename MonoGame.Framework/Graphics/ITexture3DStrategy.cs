@@ -15,5 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
         int Height { get; }
         int Depth { get; }
 
+        void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct;
+        void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct;
     }
 }

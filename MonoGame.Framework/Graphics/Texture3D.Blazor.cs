@@ -20,40 +20,18 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new NotImplementedException();
         }
 
-        private void PlatformSetData<T>(
-            int level,
-            int left, 
-            int top, 
-            int right, 
-            int bottom, 
-            int front, 
-            int back,
-            T[] data,
-            int startIndex,
-            int elementCount)
+        private void PlatformSetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                                        T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int width = right - left;
-            int height = bottom - top;
-            int depth = back - front;
-
-            throw new NotImplementedException();
+            _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
-        private void PlatformGetData<T>(
-            int level,
-            int left,
-            int top,
-            int right,
-            int bottom,
-            int front,
-            int back, 
-            T[] data, 
-            int startIndex, 
-            int elementCount)
+        private void PlatformGetData<T>(int level, int left, int top, int right, int bottom, int front, int back, 
+                                        T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new NotImplementedException();
+            _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 	}
 }

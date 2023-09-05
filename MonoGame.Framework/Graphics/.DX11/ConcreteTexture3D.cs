@@ -2,8 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
+using DX = SharpDX;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -27,6 +32,18 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Width { get { return _width; } }
         public int Height { get { return _height; } }
         public int Depth { get { return _depth; } }
+
+        public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+        }
+
+        public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
+             where T : struct
+        {
+        }
         #endregion #region ITexture3DStrategy
 
 

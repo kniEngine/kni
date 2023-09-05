@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -34,6 +35,18 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Size
         {
             get { throw new NotImplementedException(); }
+        }
+
+        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new NotImplementedException();
         }
         #endregion #region ITextureCubeStrategy
 

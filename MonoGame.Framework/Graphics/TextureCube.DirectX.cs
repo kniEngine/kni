@@ -55,6 +55,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTextureCube.GetData<T>(face, level, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTextureCube.GetData<T>(...)
+
             // Create a temp staging resource for copying the data.
             //
             int min = this.Format.IsCompressedFormat() ? 4 : 1;
@@ -134,6 +137,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            _strategyTextureCube.SetData<T>(face, level, checkedRect, data, startIndex, elementCount);
+            //TODO: move code to _strategyTextureCube.SetData<T>(...)
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error

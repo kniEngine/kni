@@ -27,6 +27,24 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Width { get { return _width; } }
         public int Height { get { return _height; } }
         public int Depth { get { return _depth; } }
+
+        public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
+
+            throw new NotImplementedException();
+        }
+
+        public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
+             where T : struct
+        {
+            throw new NotImplementedException();
+        }
         #endregion #region ITexture3DStrategy
 
     }

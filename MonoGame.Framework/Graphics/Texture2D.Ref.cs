@@ -21,19 +21,19 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new PlatformNotSupportedException();
+            _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
         }
 
         private void PlatformSetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new PlatformNotSupportedException();
+            _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new PlatformNotSupportedException();
+            _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
     }

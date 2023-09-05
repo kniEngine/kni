@@ -3,9 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
-using MonoGame.Framework.Utilities;
 using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -36,44 +34,18 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
        
-        private void PlatformSetData<T>(
-            int level,
-            int left, int top, int right, int bottom, int front, int back,
-            T[] data, int startIndex, int elementCount)
+        private void PlatformSetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                                        T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int width = right - left;
-            int height = bottom - top;
-            int depth = back - front;
-
-            Threading.EnsureUIThread();
-
-            {
-                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
-                {
-                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
-
-                    GL.BindTexture(GetTextureStrategy<ConcreteTexture>()._glTarget, GetTextureStrategy<ConcreteTexture>()._glTexture);
-                    GraphicsExtensions.CheckGLError();
-
-                    GL.TexSubImage3D(GetTextureStrategy<ConcreteTexture>()._glTarget, level, left, top, front, width, height, depth, GetTextureStrategy<ConcreteTexture>()._glFormat, GetTextureStrategy<ConcreteTexture>()._glType, dataPtr);
-                    GraphicsExtensions.CheckGLError();
-                }
-                finally
-                {
-                    dataHandle.Free();
-                }
-            }
-
+            _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
-        private void PlatformGetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount)
+        private void PlatformGetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                                        T[] data, int startIndex, int elementCount)
              where T : struct
         {
-
-            throw new NotImplementedException();
+            _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
     }
 }

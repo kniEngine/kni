@@ -22,6 +22,17 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
+        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
         #endregion #region ITextureCubeStrategy
 
     }

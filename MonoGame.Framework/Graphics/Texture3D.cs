@@ -71,8 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
 		}
 
-		public void SetData<T>(int level,
-		                       int left, int top, int right, int bottom, int front, int back,
+		public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
 		                       T[] data, int startIndex, int elementCount)
             where T : struct
 		{
@@ -94,8 +93,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Array of data.</param>
         /// <param name="startIndex">Index of the first element to get.</param>
         /// <param name="elementCount">Number of elements to get.</param>
-        public void GetData<T>(int level,
-                               int left, int top, int right, int bottom, int front, int back,
+        public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
