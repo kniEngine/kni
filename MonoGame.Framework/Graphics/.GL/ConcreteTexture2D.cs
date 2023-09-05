@@ -41,6 +41,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return new Rectangle(0, 0, this._width, this._height); }
         }
 
+        public IntPtr GetSharedHandle()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
