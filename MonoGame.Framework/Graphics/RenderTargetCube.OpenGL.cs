@@ -27,8 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTargetCube)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             Threading.EnsureUIThread();
             {

@@ -10,7 +10,10 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy
     {
-        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
+        internal int _multiSampleCount;
+
+        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage,
+            DepthFormat preferredDepthFormat)
         {
 
         }

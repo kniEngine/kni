@@ -10,7 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTargetCube : IRenderTargetCubeStrategy, ITextureCubeStrategy
     {
-        internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage)
+        internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
+            DepthFormat preferredDepthFormat)
         {
 
         }

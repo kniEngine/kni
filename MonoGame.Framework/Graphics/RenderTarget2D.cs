@@ -14,9 +14,9 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         internal IRenderTarget2DStrategy _strategyRenderTarget2D;
 
-		public DepthFormat DepthStencilFormat { get; private set; }
+		public DepthFormat DepthStencilFormat { get { return _strategyRenderTarget2D.DepthStencilFormat; } }
 		
-		public int MultiSampleCount { get; private set; }
+		public int MultiSampleCount { get { return _strategyRenderTarget2D.MultiSampleCount; } }
 		
 		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget2D.RenderTargetUsage; } }
 
@@ -37,16 +37,17 @@ namespace Microsoft.Xna.Framework.Graphics
             if (surfaceType != SurfaceType.SwapChainRenderTarget)
                 throw new InvalidOperationException();
 
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage);
-
-            DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(preferredFormat, preferredMultiSampleCount);
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage,
+                preferredDepthFormat);
+            
+            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = graphicsDevice.Strategy.GetClampedMultiSampleCount(preferredFormat, preferredMultiSampleCount);
         }
 
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
 	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, SurfaceType.RenderTarget)
 	    {
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage);
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage,
+                preferredDepthFormat);
 
             PlatformConstructRenderTarget2D(graphicsDevice.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
 	    }

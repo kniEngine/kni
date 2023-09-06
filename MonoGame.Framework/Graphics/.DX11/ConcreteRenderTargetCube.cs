@@ -10,11 +10,15 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTargetCube : IRenderTargetCubeStrategy, ITextureCubeStrategy
     {
-        private RenderTargetUsage _renderTargetUsage;
+        private readonly DepthFormat _depthStencilFormat;
+        internal int _multiSampleCount;
+        private readonly RenderTargetUsage _renderTargetUsage;
 
-        internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage)
+        internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
+            DepthFormat preferredDepthFormat)
         {
             this._renderTargetUsage = usage;
+            this._depthStencilFormat = preferredDepthFormat;
         }
 
 
@@ -54,12 +58,12 @@ namespace Microsoft.Xna.Platform.Graphics
         #region IRenderTargetStrategy
         public DepthFormat DepthStencilFormat
         {
-            get { throw new NotImplementedException(); }
+            get { return _depthStencilFormat; }
         }
 
         public int MultiSampleCount
         {
-            get { throw new NotImplementedException(); }
+            get { return _multiSampleCount; }
         }
 
         public RenderTargetUsage RenderTargetUsage

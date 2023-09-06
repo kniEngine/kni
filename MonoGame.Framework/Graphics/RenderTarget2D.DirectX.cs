@@ -20,8 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTarget2D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
-            DepthStencilFormat = preferredDepthFormat;
-            MultiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             D3D11.Device d3dDevice = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
