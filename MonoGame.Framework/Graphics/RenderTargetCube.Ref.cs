@@ -8,7 +8,8 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTargetCube
     {
 
-        private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             throw new PlatformNotSupportedException();
         }

@@ -25,14 +25,14 @@ namespace Microsoft.Xna.Framework.Graphics
             return GetTextureStrategy<ConcreteTexture>()._glTarget;
         }
 
-        private void PlatformConstructRenderTarget2D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             //Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget(this, deviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget(this, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 

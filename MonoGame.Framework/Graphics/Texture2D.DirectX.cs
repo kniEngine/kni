@@ -20,14 +20,14 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
             ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
 
-            D3D11.Resource texture = CreateTexture();
+            D3D11.Resource texture = CreateTexture(contextStrategy);
             GetTextureStrategy<ConcreteTexture>()._texture = texture;
-            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
         protected override void Dispose(bool disposing)
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        protected override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (((ConcreteTexture2D)_strategyTexture2D)._shared)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            return new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
     }
 }

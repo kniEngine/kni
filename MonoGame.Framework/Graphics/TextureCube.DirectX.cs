@@ -14,16 +14,16 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class TextureCube
 	{
-        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+        private void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
             ((ConcreteTextureCube)_strategyTextureCube)._mipMap = mipMap;
 
-            D3D11.Resource texture = CreateTexture();
+            D3D11.Resource texture = CreateTexture(contextStrategy);
             GetTextureStrategy<ConcreteTexture>()._texture = texture;
-            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
-        protected override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            return new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
 	}

@@ -24,14 +24,14 @@ namespace Microsoft.Xna.Framework.Graphics
             return TextureTarget.TextureCubeMapPositiveX + arraySlice;
         }
 
-        private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap,
+        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTargetCube)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTargetCube)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget(this, deviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget(this, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 

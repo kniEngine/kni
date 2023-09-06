@@ -14,19 +14,19 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class Texture2D : Texture
     {
 
-        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             GetTextureStrategy<ConcreteTexture>()._glTarget = WebGLTextureTarget.TEXTURE_2D;
-            ConcreteTexture.ToGLSurfaceFormat(format, GraphicsDevice,
+            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy,
                 out GetTextureStrategy<ConcreteTexture>()._glInternalFormat,
                 out GetTextureStrategy<ConcreteTexture>()._glFormat,
                 out GetTextureStrategy<ConcreteTexture>()._glType,
                 out GetTextureStrategy<ConcreteTexture>()._glIsCompressedTexture);
 
             {
-                CreateGLTexture2D();
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                CreateGLTexture2D(contextStrategy);
 
                 int w = width;
                 int h = height;
@@ -76,11 +76,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void CreateGLTexture2D()
+        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
         {
             System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture == null);
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GetTextureStrategy<ConcreteTexture>()._glTexture = GL.CreateTexture();
             GraphicsExtensions.CheckGLError();
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // Set mipMap levels
             //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
             //GraphicsExtensions.CheckGLError();
-            if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
+            if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
                 {

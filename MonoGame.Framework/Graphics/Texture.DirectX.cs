@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return this.GetD3D11Resource(); }
         }
 
-        protected abstract D3D11.Resource CreateTexture();
+        protected abstract D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy);
 
         private void PlatformGraphicsDeviceResetting()
         {

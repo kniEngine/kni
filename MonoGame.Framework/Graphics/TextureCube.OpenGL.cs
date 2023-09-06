@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class TextureCube
     {
-        private void PlatformConstructTextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+        private void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
             GetTextureStrategy<ConcreteTexture>()._glTarget = TextureTarget.TextureCubeMap;
 
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
                 GraphicsExtensions.CheckGLError();
 
-                ConcreteTexture.ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
 
                 for (int i = 0; i < 6; i++)
                 {

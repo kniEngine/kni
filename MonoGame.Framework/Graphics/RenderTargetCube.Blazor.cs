@@ -22,10 +22,10 @@ namespace Microsoft.Xna.Framework.Graphics
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }
 
-        private void PlatformConstructRenderTargetCube(GraphicsDeviceStrategy deviceStrategy, bool mipMap,
+        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTargetCube)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTargetCube)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             throw new NotImplementedException();
         }

@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (preferredDepthFormat == DepthFormat.None)
                 return;
 
-            PlatformConstructRenderTarget3D(graphicsDevice.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount);
+            PlatformConstructRenderTarget3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)

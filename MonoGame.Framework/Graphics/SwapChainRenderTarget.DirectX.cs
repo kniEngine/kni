@@ -118,12 +118,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             if (MultiSampleCount > 1)
-                return base.CreateTexture();
+            {
+                return base.CreateTexture(contextStrategy);
+            }
             else
+            {
+                System.Diagnostics.Debug.Assert(_backBuffer != null);
                 return _backBuffer;
+            }
         }
 
         internal override void ResolveSubresource()
