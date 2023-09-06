@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public interface IRenderTarget3DStrategy : IRenderTargetStrategy
+    public interface IRenderTarget3DStrategy : ITexture3DStrategy, IRenderTargetStrategy
     {
 
 
