@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;
         internal static void ToGLSurfaceFormat(SurfaceFormat format,
-            GraphicsDevice graphicsDevice,
+            GraphicsDeviceStrategy deviceStrategy,
             out PixelInternalFormat glInternalFormat,
             out PixelFormat glFormat,
             out PixelType glType)
@@ -54,16 +54,16 @@ namespace Microsoft.Xna.Platform.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = graphicsDevice.Strategy.Capabilities.SupportsSRgb;
-            bool supportsS3tc = graphicsDevice.Strategy.Capabilities.SupportsS3tc;
-            bool supportsPvrtc = graphicsDevice.Strategy.Capabilities.SupportsPvrtc;
-            bool supportsEtc1 = graphicsDevice.Strategy.Capabilities.SupportsEtc1;
-            bool supportsEtc2 = graphicsDevice.Strategy.Capabilities.SupportsEtc2;
-            bool supportsAtitc = graphicsDevice.Strategy.Capabilities.SupportsAtitc;
-            bool supportsFloat = graphicsDevice.Strategy.Capabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = graphicsDevice.Strategy.Capabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = graphicsDevice.Strategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
+            bool supportsSRgb = deviceStrategy.Capabilities.SupportsSRgb;
+            bool supportsS3tc = deviceStrategy.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = deviceStrategy.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = deviceStrategy.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = deviceStrategy.Capabilities.SupportsEtc2;
+            bool supportsAtitc = deviceStrategy.Capabilities.SupportsAtitc;
+            bool supportsFloat = deviceStrategy.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = deviceStrategy.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = deviceStrategy.Capabilities.SupportsNormalized;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
 
             switch (format)
             {

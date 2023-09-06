@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
             SetGraphicsDevice(graphicsDevice);
 
-            PlatformConstructTextureCube(graphicsDevice, size, mipMap, format);
+            PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
         }
 
         /// <summary>

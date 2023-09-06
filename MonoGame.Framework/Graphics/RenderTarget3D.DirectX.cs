@@ -13,10 +13,10 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget3D : IRenderTargetDX11
     {
 
-        private void PlatformConstructRenderTarget3D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTarget3D)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTarget3D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             // Setup the multisampling description.
             DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
@@ -38,13 +38,13 @@ namespace Microsoft.Xna.Framework.Graphics
             texture2DDesc.SampleDescription = multisampleDesc;
             texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
 
-            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
+            using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
                 D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
                 depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
                 depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                 // Create the view for binding to the device.
-                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView = new D3D11.DepthStencilView(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
+                ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView = new D3D11.DepthStencilView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilView;
 	    }
 
-        protected override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
             texture3DDesc.Width = this.Width;
@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 texture3DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
             }
 
-            return new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+            return new D3D11.Texture3D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
         }
 
     }

@@ -17,14 +17,14 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             GetTextureStrategy<ConcreteTexture>()._glTarget = TextureTarget.Texture2D;
-            ConcreteTexture.ToGLSurfaceFormat(format, GraphicsDevice, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
+            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);
 
             Threading.EnsureUIThread();
             {
-                CreateGLTexture2D();
+                CreateGLTexture2D(contextStrategy);
 
                 int w = width;
                 int h = height;
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void CreateGLTexture2D()
+        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
         {
             System.Diagnostics.Debug.Assert(GetTextureStrategy<ConcreteTexture>()._glTexture < 0);
 
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 #endif
             GraphicsExtensions.CheckGLError();
-            if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
+            if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
                 {

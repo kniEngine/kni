@@ -17,14 +17,14 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.Texture2D _msTexture;
         private DXGI.SampleDescription _msSampleDescription;
 
-        private void PlatformConstructRenderTarget2D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
-            D3D11.Device d3dDevice = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
+            D3D11.Device d3dDevice = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
-            _msSampleDescription = deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
+            _msSampleDescription = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
 
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews = new D3D11.DepthStencilView[1];
@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected override D3D11.Resource CreateTexture()
+        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (((ConcreteTexture2D)_strategyTexture2D)._mipMap)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            return new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
         private D3D11.Texture2D GetMSTexture()

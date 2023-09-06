@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
             SetGraphicsDevice(graphicsDevice);
 
-            PlatformConstructTexture3D(graphicsDevice, width, height, depth, mipMap, format);
+            PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
         }
 
         public void SetData<T>(T[] data)

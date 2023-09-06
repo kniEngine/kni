@@ -22,10 +22,10 @@ namespace Microsoft.Xna.Framework.Graphics
             return GetTextureStrategy<ConcreteTexture>()._glTarget;
         }
 
-        private void PlatformConstructRenderTarget3D(GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap,
+        private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTarget3D)._multiSampleCount = deviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget2D)_strategyRenderTarget3D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             throw new NotImplementedException();
         }
