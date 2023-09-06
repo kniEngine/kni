@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy
+    internal class ConcreteRenderTarget2D : ConcreteTexture2D, IRenderTarget2DStrategy, IRenderTargetStrategy
     {
         private readonly DepthFormat _depthStencilFormat;
         internal int _multiSampleCount;
@@ -16,69 +16,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+            : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared)
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
         }
-
-
-        #region ITextureStrategy
-        public SurfaceFormat Format
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int LevelCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-        #endregion #region ITextureStrategy
-
-
-        #region ITexture2DStrategy
-        public int Width
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int Height
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int ArraySize
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Rectangle Bounds
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IntPtr GetSharedHandle()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new NotImplementedException();
-        }
-        #endregion #region ITexture2DStrategy
 
 
         #region IRenderTargetStrategy
