@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _arraySize;
 
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;

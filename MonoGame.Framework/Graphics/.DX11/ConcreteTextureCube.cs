@@ -22,10 +22,14 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly int _size;
 
+        internal readonly bool _mipMap;
+
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
+
+            this._mipMap = mipMap;
         }
 
 
@@ -150,6 +154,5 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion #region ITextureCubeStrategy
 
 
-        internal bool _mipMap;
     }
 }

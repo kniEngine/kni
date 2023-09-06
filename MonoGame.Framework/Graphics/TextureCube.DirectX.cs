@@ -16,8 +16,6 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
-            ((ConcreteTextureCube)_strategyTextureCube)._mipMap = mipMap;
-
             D3D11.Resource texture = CreateTexture(contextStrategy);
             GetTextureStrategy<ConcreteTexture>()._texture = texture;
             GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);

@@ -24,12 +24,18 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _arraySize;
 
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
+        internal readonly bool _mipMap;
+        internal readonly bool _shared;
+
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
+
+            this._mipMap = mipMap;
+            this._shared = shared;
         }
 
 
@@ -234,7 +240,5 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion #region ITexture2DStrategy
 
 
-        internal bool _mipMap;
-        internal bool _shared;
     }
 }
