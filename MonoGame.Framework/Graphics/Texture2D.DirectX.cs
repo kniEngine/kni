@@ -23,7 +23,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             ((ConcreteTexture2D)_strategyTexture2D)._shared = shared;
-            ((ConcreteTexture2D)_strategyTexture2D)._mipMap = mipMap;
 
             D3D11.Resource texture = CreateTexture(contextStrategy);
             GetTextureStrategy<ConcreteTexture>()._texture = texture;

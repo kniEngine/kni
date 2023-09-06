@@ -23,12 +23,16 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _depth;
 
+        internal readonly bool _mipMap;
+
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;
             this._depth = depth;
+
+            this._mipMap = mipMap;
         }
 
 
@@ -131,7 +135,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture3DStrategy
 
-        internal bool _mipMap;
 
     }
 }
