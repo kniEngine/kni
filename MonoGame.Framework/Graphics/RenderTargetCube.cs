@@ -75,17 +75,14 @@ namespace Microsoft.Xna.Framework.Graphics
             : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
         {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
+            _strategyRenderTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage,
+                preferredDepthFormat);
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
             SetGraphicsDevice(graphicsDevice);
 
             PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
-
-
-            _strategyRenderTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage,
-                preferredDepthFormat);
-
             PlatformConstructRenderTargetCube(graphicsDevice.Strategy.MainContext.Strategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
         

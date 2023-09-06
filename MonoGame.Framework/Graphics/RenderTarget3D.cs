@@ -33,22 +33,17 @@ namespace Microsoft.Xna.Framework.Graphics
 			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
 		{
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
+            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage,
+                preferredDepthFormat);
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
             SetGraphicsDevice(graphicsDevice);
 
             PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
-
-
-            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage,
-                preferredDepthFormat);
-
             // If we don't need a depth buffer then we're done.
-            if (preferredDepthFormat == DepthFormat.None)
-                return;
-
-            PlatformConstructRenderTarget3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount);
+            if (preferredDepthFormat != DepthFormat.None)
+                PlatformConstructRenderTarget3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)
