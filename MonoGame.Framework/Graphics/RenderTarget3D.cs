@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage,
-                preferredDepthFormat);
+                format, preferredDepthFormat);
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);

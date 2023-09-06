@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int _multiSampleCount;
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage,
-            DepthFormat preferredDepthFormat)
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
         {
 
         }
