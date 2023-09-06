@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException();
 
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage,
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
                 format, preferredDepthFormat);
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
             _strategyTexture = _strategyTexture2D;
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, true)
 	    {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
-            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage,
+            _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
                 format, preferredDepthFormat);
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
             _strategyTexture = _strategyTexture2D;
