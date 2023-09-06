@@ -23,6 +23,18 @@ namespace Microsoft.Xna.Framework.Graphics
         public int Depth { get { return _strategyTexture3D.Depth; } }
 
 		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+            : this(graphicsDevice, width, height, depth, mipMap, format, true)
+        {
+            _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
+            _strategyTexture = _strategyTexture3D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
+            SetGraphicsDevice(graphicsDevice);
+
+            PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
+        }
+
+        internal Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format,
+            bool isInternal)
             : base()
 		{
 		    if (graphicsDevice == null)
@@ -46,12 +58,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if (depth <= 0)
                 throw new ArgumentOutOfRangeException("depth","Texture depth must be greater than zero");
 
-            _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
-            _strategyTexture = _strategyTexture3D;
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
-            SetGraphicsDevice(graphicsDevice);
-
-            PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
         }
 
         public void SetData<T>(T[] data)

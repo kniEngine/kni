@@ -32,8 +32,18 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Allows child class to specify the surface type, eg: a swap chain.
         /// </summary>
       protected RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize, SurfaceType surfaceType)
-            : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, surfaceType)
+            : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, surfaceType, true)
         {
+            SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
+            _strategyTexture = _strategyTexture2D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
+            SetGraphicsDevice(graphicsDevice);
+
+            if (surfaceType != SurfaceType.SwapChainRenderTarget) // Texture will be assigned by the swap chain.
+                PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+
+
             if (surfaceType != SurfaceType.SwapChainRenderTarget)
                 throw new InvalidOperationException();
 
@@ -44,8 +54,18 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
-	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, SurfaceType.RenderTarget)
+	        : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, SurfaceType.RenderTarget, true)
 	    {
+            SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
+            _strategyTexture = _strategyTexture2D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
+            SetGraphicsDevice(graphicsDevice);
+
+            if (SurfaceType.RenderTarget != SurfaceType.SwapChainRenderTarget) // Texture will be assigned by the swap chain.
+                PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+
+
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, usage,
                 preferredDepthFormat);
 

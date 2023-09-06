@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             GetTextureStrategy<ConcreteTexture>()._glTarget = TextureTarget.Texture2D;
             ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out GetTextureStrategy<ConcreteTexture>()._glInternalFormat, out GetTextureStrategy<ConcreteTexture>()._glFormat, out GetTextureStrategy<ConcreteTexture>()._glType);

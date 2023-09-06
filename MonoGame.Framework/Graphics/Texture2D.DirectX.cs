@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        private void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             D3D11.Resource texture = CreateTexture(contextStrategy);
             GetTextureStrategy<ConcreteTexture>()._texture = texture;

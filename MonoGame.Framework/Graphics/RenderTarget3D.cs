@@ -30,8 +30,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
-			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat))
+			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), true)
 		{
+            SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
+            _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
+            _strategyTexture = _strategyTexture3D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
+            SetGraphicsDevice(graphicsDevice);
+
+            PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
+
+
             _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage,
                 preferredDepthFormat);
 

@@ -84,6 +84,19 @@ namespace Microsoft.Xna.Framework.Graphics
         }
         
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
+            : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, surfaceType, true)
+        {
+            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
+            _strategyTexture = _strategyTexture2D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
+            SetGraphicsDevice(graphicsDevice);
+
+            if (surfaceType != SurfaceType.SwapChainRenderTarget) // Texture will be assigned by the swap chain.
+                PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+        }
+
+        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType,
+            bool isInternal)
             : base()
 		{
             if (graphicsDevice == null)
@@ -113,19 +126,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
-            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
-            _strategyTexture = _strategyTexture2D;
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
-            SetGraphicsDevice(graphicsDevice);
-
             this.TexelWidth = 1f / (float)width;
             this.TexelHeight = 1f / (float)height;
 
-            // Texture will be assigned by the swap chain.
-		    if (surfaceType == SurfaceType.SwapChainRenderTarget)
-		        return;
-
-            PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
         }
 
 
