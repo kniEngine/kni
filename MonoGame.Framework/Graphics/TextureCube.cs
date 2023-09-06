@@ -22,6 +22,18 @@ namespace Microsoft.Xna.Framework.Graphics
         public int Size { get { return _strategyTextureCube.Size; } }
 		
 		public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+            : this(graphicsDevice, size, mipMap, format, true)
+        {
+            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
+            _strategyTexture = _strategyTextureCube;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
+            SetGraphicsDevice(graphicsDevice);
+
+            PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
+        }
+
+        internal TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, 
+            bool isInternal)
             : base()
         {
             if (graphicsDevice == null)
@@ -45,12 +57,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if (size <= 0)
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");
 
-            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
-            _strategyTexture = _strategyTextureCube;
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
-            SetGraphicsDevice(graphicsDevice);
-
-            PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
         }
 
         /// <summary>
