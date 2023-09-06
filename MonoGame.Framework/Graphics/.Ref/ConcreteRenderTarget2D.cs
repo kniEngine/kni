@@ -8,74 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteRenderTarget2D : IRenderTarget2DStrategy, ITexture2DStrategy
+    internal class ConcreteRenderTarget2D : ConcreteTexture2D, IRenderTarget2DStrategy, IRenderTargetStrategy
     {
         internal int _multiSampleCount;
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+            : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared)
         {
 
         }
-
-
-        #region ITextureStrategy
-        public SurfaceFormat Format
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public int LevelCount
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-        #endregion #region ITextureStrategy
-
-
-        #region ITexture2DStrategy
-        public int Width
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public int Height
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public int ArraySize
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public Rectangle Bounds
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-        public IntPtr GetSharedHandle()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
-            where T : struct
-        {
-            throw new PlatformNotSupportedException();
-        }
-        #endregion #region ITexture2DStrategy
 
 
         #region IRenderTargetStrategy
