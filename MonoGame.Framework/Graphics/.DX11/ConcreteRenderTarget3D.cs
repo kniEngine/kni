@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly RenderTargetUsage _renderTargetUsage;
 
         internal ConcreteRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, RenderTargetUsage usage,
-            DepthFormat preferredDepthFormat)
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
