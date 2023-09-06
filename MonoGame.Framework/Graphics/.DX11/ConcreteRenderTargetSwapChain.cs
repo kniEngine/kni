@@ -12,11 +12,15 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteRenderTargetSwapChain : IRenderTarget2DStrategy, ITexture2DStrategy
     {
-        private RenderTargetUsage _renderTargetUsage;
+        private readonly DepthFormat _depthStencilFormat;
+        internal int _multiSampleCount;
+        private readonly RenderTargetUsage _renderTargetUsage;
 
-        internal ConcreteRenderTargetSwapChain(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
+        internal ConcreteRenderTargetSwapChain(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage,
+            DepthFormat preferredDepthFormat)
         {
             this._renderTargetUsage = usage;
+            this._depthStencilFormat = preferredDepthFormat;
         }
 
 
@@ -82,12 +86,12 @@ namespace Microsoft.Xna.Platform.Graphics
         #region IRenderTargetStrategy
         public DepthFormat DepthStencilFormat
         {
-            get { throw new NotImplementedException(); }
+            get { return _depthStencilFormat; }
         }
 
         public int MultiSampleCount
         {
-            get { throw new NotImplementedException(); }
+            get { return _multiSampleCount; }
         }
 
         public RenderTargetUsage RenderTargetUsage
