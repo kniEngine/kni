@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
 
-        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage,
+        internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
         {
             this._renderTargetUsage = usage;
