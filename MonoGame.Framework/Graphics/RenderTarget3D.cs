@@ -14,9 +14,9 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private IRenderTarget3DStrategy _strategyRenderTarget3D;
 
-		public DepthFormat DepthStencilFormat { get; private set; }
+		public DepthFormat DepthStencilFormat { get { return _strategyRenderTarget3D.DepthStencilFormat; } }
 		
-		public int MultiSampleCount { get; private set; }
+		public int MultiSampleCount { get { return _strategyRenderTarget3D.MultiSampleCount; } }
 		
 		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget3D.RenderTargetUsage; } }
 
@@ -32,7 +32,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		public RenderTarget3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 			:base(graphicsDevice, width, height, depth, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat))
 		{
-            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage);
+            _strategyRenderTarget3D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget3DStrategy(width, height, depth, mipMap, usage,
+                preferredDepthFormat);
 
             // If we don't need a depth buffer then we're done.
             if (preferredDepthFormat == DepthFormat.None)

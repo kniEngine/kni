@@ -536,19 +536,19 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, RenderTargetUsage usage, DepthFormat preferredDepthFormat)
         {
-            return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize, usage);
+            return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize, usage, preferredDepthFormat);
         }
 
-        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage)
+        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, DepthFormat preferredDepthFormat)
         {
-            return new ConcreteRenderTarget3D(this, width, height, depth, mipMap, usage);
+            return new ConcreteRenderTarget3D(this, width, height, depth, mipMap, usage, preferredDepthFormat);
         }
 
-        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage)
+        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, DepthFormat preferredDepthFormat)
         {
-            return new ConcreteRenderTargetCube(this, size, mipMap, usage);
+            return new ConcreteRenderTargetCube(this, size, mipMap, usage, preferredDepthFormat);
         }
 
         protected override void Dispose(bool disposing)

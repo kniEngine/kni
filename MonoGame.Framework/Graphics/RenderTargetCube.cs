@@ -15,25 +15,25 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public partial class RenderTargetCube : TextureCube, IRenderTarget
     {
-        private IRenderTargetCubeStrategy _strategyTargetCube;
+        private IRenderTargetCubeStrategy _strategyRenderTargetCube;
 
         /// <summary>
         /// Gets the depth-stencil buffer format of this render target.
         /// </summary>
         /// <value>The format of the depth-stencil buffer.</value>
-        public DepthFormat DepthStencilFormat { get; private set; }
+        public DepthFormat DepthStencilFormat { get { return _strategyRenderTargetCube.DepthStencilFormat; } }
 
         /// <summary>
         /// Gets the number of multisample locations.
         /// </summary>
         /// <value>The number of multisample locations.</value>
-        public int MultiSampleCount { get; private set; }
+        public int MultiSampleCount { get { return _strategyRenderTargetCube.MultiSampleCount; } }
 
         /// <summary>
         /// Gets the usage mode of this render target.
         /// </summary>
         /// <value>The usage mode of the render target.</value>
-        public RenderTargetUsage RenderTargetUsage { get { return _strategyTargetCube.RenderTargetUsage; } }
+        public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTargetCube.RenderTargetUsage; } }
 
         /// <inheritdoc/>
         int IRenderTarget.Width { get { return this.Size; } }
@@ -74,7 +74,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
             : base(graphicsDevice, size, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat))
         {
-            _strategyTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage);
+            _strategyRenderTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage,
+                preferredDepthFormat);
 
             PlatformConstructRenderTargetCube(graphicsDevice.Strategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
