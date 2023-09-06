@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="width"></param>
         /// <param name="height"></param>
         public Texture2D(GraphicsDevice graphicsDevice, int width, int height)
-            : this(graphicsDevice, width, height, false, SurfaceFormat.Color, false, 1, SurfaceType.Texture)
+            : this(graphicsDevice, width, height, false, SurfaceFormat.Color, false, 1)
         {
         }
 
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="mipMap"></param>
         /// <param name="format"></param>
         public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format)
-            : this(graphicsDevice, width, height, mipMap, format, false, 1, SurfaceType.Texture)
+            : this(graphicsDevice, width, height, mipMap, format, false, 1)
         {
         }
 
@@ -79,23 +79,22 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="format"></param>
         /// <param name="arraySize"></param>
         public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, int arraySize)
-            : this(graphicsDevice, width, height, mipMap, format, false, arraySize, SurfaceType.Texture)
+            : this(graphicsDevice, width, height, mipMap, format, false, arraySize)
         {
         }
         
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType)
-            : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, surfaceType, true)
+        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize)
+            : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, true)
         {
             _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
             SetGraphicsDevice(graphicsDevice);
 
-            if (surfaceType != SurfaceType.SwapChainRenderTarget) // Texture will be assigned by the swap chain.
-                PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+            PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
         }
 
-        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize, SurfaceType surfaceType,
+        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
             bool isInternal)
             : base()
 		{
