@@ -44,8 +44,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
 
-        internal D3D11.RenderTargetView _renderTargetView;
-        internal D3D11.DepthStencilView _depthStencilView;
+        internal D3D11.RenderTargetView[] _renderTargetViews;
+        internal D3D11.DepthStencilView[] _depthStencilViews;
         internal int _currentSlice;
     }
 }
