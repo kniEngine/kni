@@ -623,12 +623,12 @@ namespace Microsoft.Xna.Platform.Graphics
             for (int i = 0; i < _currentRenderTargetCount; i++)
             {
                 RenderTargetBinding binding = _currentRenderTargetBindings[i];
-                IRenderTargetDX11 targetDX = (IRenderTargetDX11)binding.RenderTarget;
+                IRenderTargetStrategyDX11 targetDX = (IRenderTargetStrategyDX11)binding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
                 _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            IRenderTargetDX11 renderTargetDX = (IRenderTargetDX11)_currentRenderTargetBindings[0].RenderTarget;
+            IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)_currentRenderTargetBindings[0].RenderTarget.GetTextureStrategy<ITextureStrategy>();
             _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.

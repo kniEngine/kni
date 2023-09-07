@@ -12,7 +12,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget2D : IRenderTargetDX11
+    public partial class RenderTarget2D
     {
         private D3D11.Texture2D _msTexture;
         private DXGI.SampleDescription _msSampleDescription;
@@ -136,16 +136,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             base.Dispose(disposing);
-        }
-
-        D3D11.RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
-        {
-            return ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews[arraySlice];
-        }
-
-        D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
-        {
-            return ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews[0];
         }
 
         internal virtual void ResolveSubresource()

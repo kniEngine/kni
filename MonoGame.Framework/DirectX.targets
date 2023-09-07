@@ -23,6 +23,7 @@
 	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
+    <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
   </ItemGroup>
 	  
   <ItemGroup>
@@ -31,7 +32,6 @@
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
-    <Compile Include="Graphics\IRenderTarget.DirectX.cs" />
     <Compile Include="Graphics\OcclusionQuery.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget2D.DirectX.cs" />
     <Compile Include="Graphics\RenderTarget3D.DirectX.cs" />
