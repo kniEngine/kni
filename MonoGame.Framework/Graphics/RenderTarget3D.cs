@@ -38,7 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture3D = _strategyRenderTarget3D;
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
-            SetGraphicsDevice(graphicsDevice);
 
             PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
             // If we don't need a depth buffer then we're done.

@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _levelCount;
 
         internal ConcreteTexture(GraphicsContextStrategy contextStrategy, SurfaceFormat format, int levelCount)
+            : base(contextStrategy)
         {
             this._contextStrategy = contextStrategy;
             this._format = format;
