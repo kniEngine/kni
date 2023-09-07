@@ -25,6 +25,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public event EventHandler<EventArgs> Disposing;
 
+        public event EventHandler<EventArgs> DeviceResetting;
+        public event EventHandler<EventArgs> DeviceDisposing;
+
         internal GraphicsResourceStrategy()
         {
         }
@@ -32,7 +35,46 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void SetGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
         {
+            if (_deviceStrategy == deviceStrategy)
+                return;
+
+            if (_deviceStrategy != null)
+            {
+                _deviceStrategy.DeviceResetting -= GraphicsDeviceStrategy_DeviceResetting;
+                _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
+            }
+
             _deviceStrategy = deviceStrategy;
+
+            if (_deviceStrategy != null)
+            {
+                _deviceStrategy.DeviceResetting += GraphicsDeviceStrategy_DeviceResetting;
+                _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
+            }
+        }
+
+        private void GraphicsDeviceStrategy_DeviceResetting(object sender, EventArgs e)
+        {
+            OnDeviceResetting(e);
+        }
+
+        private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
+        {
+            OnDeviceDisposing(e);
+        }
+
+        private void OnDeviceResetting(EventArgs e)
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnDeviceDisposing(EventArgs e)
+        {
+            var handler = DeviceDisposing;
+            if (handler != null)
+                handler(this, e);
         }
 
 
@@ -62,7 +104,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-
+                SetGraphicsDevice(null);
                 _deviceStrategy = null;
             }
 

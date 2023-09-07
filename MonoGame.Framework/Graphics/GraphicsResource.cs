@@ -55,6 +55,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = strategy;
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
+
+            ((GraphicsResourceStrategy)_strategy).DeviceResetting += GraphicsResourceStrategy_DeviceResetting;
+            ((GraphicsResourceStrategy)_strategy).DeviceDisposing += GraphicsResourceStrategy_DeviceDisposing;
         }
 
         ~GraphicsResource()
@@ -82,12 +85,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_strategy.GraphicsDevice != device)
             {
-                if (_strategy.GraphicsDevice != null)
-                {
-                    _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                    _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
-                }
-
                 SetGraphicsDevice(device);
             }
         }
@@ -97,16 +94,14 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(device != null);
 
             ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
-            _strategy.GraphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
-            _strategy.GraphicsDevice.Disposing += GraphicsDevice_Disposing;
         }
 
-        private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
+        private void GraphicsResourceStrategy_DeviceResetting(object sender, EventArgs e)
         {
             GraphicsDeviceResetting();
         }
 
-        private void GraphicsDevice_Disposing(object sender, EventArgs e)
+        private void GraphicsResourceStrategy_DeviceDisposing(object sender, EventArgs e)
         {
             this.Dispose();
         }
@@ -143,14 +138,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy.Dispose();
                 _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
 
+                ((GraphicsResourceStrategy)_strategy).DeviceResetting -= GraphicsResourceStrategy_DeviceResetting;
+                ((GraphicsResourceStrategy)_strategy).DeviceDisposing -= GraphicsResourceStrategy_DeviceDisposing;
             }
 
             // Remove from the global list of graphics resources
             if (_strategy.GraphicsDevice != null)
             {
-                _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
-
                 ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
             }
 
