@@ -10,7 +10,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget3D : IRenderTargetDX11
+    public partial class RenderTarget3D
     {
 
         private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
@@ -97,16 +97,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             base.Dispose(disposing);
         }
-
-        D3D11.RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
-	    {
-	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._renderTargetViews[arraySlice];
-	    }
-
-        D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
-	    {
-	        return ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._depthStencilViews[0];
-	    }
 
         protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {

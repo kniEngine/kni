@@ -14,7 +14,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTargetCube : IRenderTargetDX11
+    public partial class RenderTargetCube
     {
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
@@ -123,16 +123,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             base.Dispose(disposing);
-        }
-
-        D3D11.RenderTargetView IRenderTargetDX11.GetRenderTargetView(int arraySlice)
-        {
-            return ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._renderTargetViews[arraySlice];
-        }
-
-        D3D11.DepthStencilView IRenderTargetDX11.GetDepthStencilView(int arraySlice)
-        {
-            return ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews[arraySlice];
         }
 
 

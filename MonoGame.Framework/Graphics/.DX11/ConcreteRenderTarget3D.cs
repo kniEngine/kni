@@ -10,7 +10,8 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteRenderTarget3D : ConcreteTexture3D, IRenderTarget3DStrategy, IRenderTargetStrategy
+    internal class ConcreteRenderTarget3D : ConcreteTexture3D, IRenderTarget3DStrategy, IRenderTargetStrategy,
+        IRenderTargetStrategyDX11
     {
         private readonly DepthFormat _depthStencilFormat;
         internal int _multiSampleCount;
@@ -47,5 +48,17 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.RenderTargetView[] _renderTargetViews;
         internal D3D11.DepthStencilView[] _depthStencilViews;
         internal int _currentSlice;
+
+        D3D11.RenderTargetView IRenderTargetStrategyDX11.GetRenderTargetView(int arraySlice)
+	    {
+	        return _renderTargetViews[arraySlice];
+	    }
+
+        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView(int arraySlice)
+	    {
+	        return _depthStencilViews[0];
+	    }
+
+
     }
 }
