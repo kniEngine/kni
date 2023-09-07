@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            ((ConcreteRenderTarget2D)_strategyRenderTarget3D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
 
             // Setup the multisampling description.
             DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
