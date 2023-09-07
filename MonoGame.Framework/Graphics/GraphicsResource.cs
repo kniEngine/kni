@@ -85,12 +85,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_strategy.GraphicsDevice != device)
             {
-                if (_strategy.GraphicsDevice != null)
-                {
-                    _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                    _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
-                }
-
                 SetGraphicsDevice(device);
             }
         }
@@ -100,26 +94,16 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(device != null);
 
             ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
-            _strategy.GraphicsDevice.DeviceResetting += GraphicsDevice_DeviceResetting;
-            _strategy.GraphicsDevice.Disposing += GraphicsDevice_Disposing;
-        }
-
-        private void GraphicsDevice_DeviceResetting(object sender, EventArgs e)
-        {
-            GraphicsDeviceResetting();
-        }
-
-        private void GraphicsDevice_Disposing(object sender, EventArgs e)
-        {
-            this.Dispose();
         }
 
         private void GraphicsResourceStrategy_DeviceResetting(object sender, EventArgs e)
         {
+            GraphicsDeviceResetting();
         }
 
         private void GraphicsResourceStrategy_DeviceDisposing(object sender, EventArgs e)
         {
+            this.Dispose();
         }
 
         public void Dispose()
@@ -161,9 +145,6 @@ namespace Microsoft.Xna.Framework.Graphics
             // Remove from the global list of graphics resources
             if (_strategy.GraphicsDevice != null)
             {
-                _strategy.GraphicsDevice.DeviceResetting -= GraphicsDevice_DeviceResetting;
-                _strategy.GraphicsDevice.Disposing -= GraphicsDevice_Disposing;
-
                 ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
             }
 
