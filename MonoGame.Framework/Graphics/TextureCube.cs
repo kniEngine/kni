@@ -27,7 +27,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
-            SetGraphicsDevice(graphicsDevice);
 
             PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
         }

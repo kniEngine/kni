@@ -12,6 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
 
         internal ConcreteTexture(GraphicsContextStrategy contextStrategy, SurfaceFormat format, int levelCount)
+            : base(contextStrategy)
         {
         
         }
