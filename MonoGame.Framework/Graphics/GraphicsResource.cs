@@ -55,6 +55,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = strategy;
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
+
+            ((GraphicsResourceStrategy)_strategy).DeviceResetting += GraphicsResourceStrategy_DeviceResetting;
+            ((GraphicsResourceStrategy)_strategy).DeviceDisposing += GraphicsResourceStrategy_DeviceDisposing;
         }
 
         ~GraphicsResource()
@@ -111,6 +114,14 @@ namespace Microsoft.Xna.Framework.Graphics
             this.Dispose();
         }
 
+        private void GraphicsResourceStrategy_DeviceResetting(object sender, EventArgs e)
+        {
+        }
+
+        private void GraphicsResourceStrategy_DeviceDisposing(object sender, EventArgs e)
+        {
+        }
+
         public void Dispose()
         {
             if (!IsDisposed)
@@ -143,6 +154,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy.Dispose();
                 _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
 
+                ((GraphicsResourceStrategy)_strategy).DeviceResetting -= GraphicsResourceStrategy_DeviceResetting;
+                ((GraphicsResourceStrategy)_strategy).DeviceDisposing -= GraphicsResourceStrategy_DeviceDisposing;
             }
 
             // Remove from the global list of graphics resources
