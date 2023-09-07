@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void CreateDepthStencilView(D3D11.Device d3dDevice, int width, int height, int depth, DepthFormat preferredDepthFormat, SampleDescription multisampleDesc)
+        private void CreateDepthStencilView(D3D11.Device d3dDevice, int width, int height, int depth, DepthFormat preferredDepthFormat, DXGI.SampleDescription multisampleDesc)
         {
 
             // Create a descriptor for the depth/stencil buffer.
