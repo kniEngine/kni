@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Store the current bound texture.
                 int prevTexture = ConcreteTexture2D.GetBoundTexture2D();
 
-                System.Diagnostics.Debug.Assert(_glTexture < 0);
+                System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 if (prevTexture != _glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Store the current bound texture.
                 int prevTexture = ConcreteTexture2D.GetBoundTexture2D();
 
-                System.Diagnostics.Debug.Assert(_glTexture < 0);
+                System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 if (prevTexture != _glTexture)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, _glTexture);
