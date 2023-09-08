@@ -315,7 +315,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             int color = 0;
             int depth = 0;
@@ -424,7 +424,7 @@ namespace Microsoft.Xna.Platform.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        internal static void PlatformDeleteRenderTarget(IRenderTargetGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
+        internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
         {
             int color = 0;
             int depth = 0;

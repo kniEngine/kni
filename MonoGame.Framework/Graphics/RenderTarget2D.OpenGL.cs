@@ -8,15 +8,15 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget2D : IRenderTargetGL
+    public partial class RenderTarget2D : IRenderTargetStrategyGL
     {
-        int IRenderTargetGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        TextureTarget IRenderTargetGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        int IRenderTargetGL.GLColorBuffer { get; set; }
-        int IRenderTargetGL.GLDepthBuffer { get; set; }
-        int IRenderTargetGL.GLStencilBuffer { get; set; }
+        int IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
+        TextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
+        int IRenderTargetStrategyGL.GLColorBuffer { get; set; }
+        int IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
+        int IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
 
-        TextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
+        TextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
         {
             if (arraySlice != 0)
                 throw new NotImplementedException("arraySlice is not implemented for Texture2D");

@@ -8,16 +8,16 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTargetCube : IRenderTargetGL
+    public partial class RenderTargetCube : IRenderTargetStrategyGL
     {
 
-        WebGLTexture IRenderTargetGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        WebGLTextureTarget IRenderTargetGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        WebGLTexture IRenderTargetGL.GLColorBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLDepthBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLStencilBuffer { get; set; }
+        WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
+        WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
+        WebGLTexture IRenderTargetStrategyGL.GLColorBuffer { get; set; }
+        WebGLRenderbuffer IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
+        WebGLRenderbuffer IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
 
-        WebGLTextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
+        WebGLTextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
         {
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }

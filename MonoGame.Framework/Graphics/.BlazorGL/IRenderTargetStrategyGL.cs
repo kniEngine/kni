@@ -4,7 +4,7 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IRenderTargetGL
+    internal interface IRenderTargetStrategyGL
     {
         WebGLTexture GLTexture { get; }
         WebGLTextureTarget GLTarget { get; }

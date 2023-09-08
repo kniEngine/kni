@@ -8,16 +8,16 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget3D : IRenderTargetGL
+    public partial class RenderTarget3D : IRenderTargetStrategyGL
     {
 
-        WebGLTexture IRenderTargetGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        WebGLTextureTarget IRenderTargetGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        WebGLTexture IRenderTargetGL.GLColorBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLDepthBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLStencilBuffer { get; set; }
+        WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
+        WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
+        WebGLTexture IRenderTargetStrategyGL.GLColorBuffer { get; set; }
+        WebGLRenderbuffer IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
+        WebGLRenderbuffer IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
 
-        WebGLTextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
+        WebGLTextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
         {
             return GetTextureStrategy<ConcreteTexture>()._glTarget;
         }

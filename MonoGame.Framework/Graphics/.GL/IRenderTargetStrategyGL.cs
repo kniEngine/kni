@@ -8,7 +8,7 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IRenderTargetGL
+    internal interface IRenderTargetStrategyGL
     {
         int GLTexture { get; }
         TextureTarget GLTarget { get; }
