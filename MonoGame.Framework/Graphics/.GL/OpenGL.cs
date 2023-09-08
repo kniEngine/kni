@@ -754,7 +754,7 @@ namespace MonoGame.OpenGL
         internal static unsafe int GenRenderbuffer()
         {
             int renderBuffer;
-            GL.GenFramebuffers(1, &renderBuffer);
+            GL.GenRenderbuffers(1, &renderBuffer);
             return renderBuffer;
         }
 
@@ -809,7 +809,7 @@ namespace MonoGame.OpenGL
 
         internal static unsafe void DeleteFramebuffer(int frameBuffer)
         {
-            DeleteBuffers(1, &frameBuffer);
+            DeleteFramebuffers(1, &frameBuffer);
         }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
