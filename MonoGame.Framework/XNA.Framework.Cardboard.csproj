@@ -404,6 +404,7 @@
     <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
+    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
 
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
@@ -415,7 +416,6 @@
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

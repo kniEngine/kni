@@ -8,22 +8,8 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget2D : IRenderTargetGL
+    public partial class RenderTarget2D
     {
-
-        WebGLTexture IRenderTargetGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        WebGLTextureTarget IRenderTargetGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        WebGLTexture IRenderTargetGL.GLColorBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLDepthBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetGL.GLStencilBuffer { get; set; }
-
-        WebGLTextureTarget IRenderTargetGL.GetFramebufferTarget(int arraySlice)
-        {
-            if (arraySlice != 0)
-                throw new NotImplementedException("arraySlice is not implemented for Texture2D");
-
-            return GetTextureStrategy<ConcreteTexture>()._glTarget;
-        }
 
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
@@ -32,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             //Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget(this, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget2D, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 
@@ -48,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget2D, GraphicsDevice.Strategy);
 
             base.Dispose(disposing);
         }

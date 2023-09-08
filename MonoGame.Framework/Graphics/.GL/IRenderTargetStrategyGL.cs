@@ -2,11 +2,13 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IRenderTargetGL
+    internal interface IRenderTargetStrategyGL
     {
         int GLTexture { get; }
         TextureTarget GLTarget { get; }
