@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (startIndex != 0 && !_glIsCompressedTexture)
                 throw new NotImplementedException("startIndex");
 
-            System.Diagnostics.Debug.Assert(_glTexture == null);
+            System.Diagnostics.Debug.Assert(_glTexture != null);
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (startIndex != 0)
                 throw new NotImplementedException("startIndex");
 
-            System.Diagnostics.Debug.Assert(_glTexture == null);
+            System.Diagnostics.Debug.Assert(_glTexture != null);
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 
