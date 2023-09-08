@@ -811,7 +811,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < _currentRenderTargetCount; i++)
                     {
-                        var renderTargetGL = (IRenderTargetStrategyGL)_currentRenderTargetBindings[i].RenderTarget;
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)_currentRenderTargetBindings[i].RenderTarget;
 
                         FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
                         TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
@@ -871,7 +871,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
-                    var renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                    IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
                     GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
                     GraphicsExtensions.CheckGLError();
                     GL.GenerateMipmap(renderTargetGL.GLTarget);
@@ -903,7 +903,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
-                var renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
 
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
                 GraphicsExtensions.CheckGLError();
