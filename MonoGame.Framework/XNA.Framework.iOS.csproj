@@ -205,6 +205,7 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
@@ -381,7 +382,6 @@
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

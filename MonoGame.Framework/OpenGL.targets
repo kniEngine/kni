@@ -18,6 +18,7 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
     <Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
   </ItemGroup>
 
@@ -25,7 +26,6 @@
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\IRenderTarget.OpenGL.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\RenderTarget3D.OpenGL.cs" />
