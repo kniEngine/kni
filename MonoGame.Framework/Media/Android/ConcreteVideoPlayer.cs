@@ -123,13 +123,10 @@ namespace Microsoft.Xna.Platform.Media
                 _surfaceTexture.UpdateTexImage();
 
                 // Create a framebuffer
-                // We need to Generate/Delete the framebuffer with the system's GLES20 methods.
-                int[] framebuffers = new int[1];
-                Android.Opengl.GLES20.GlGenFramebuffers(1, framebuffers, 0);
-                //framebuffers[0] = GL.GenFramebuffer();
-                //GraphicsExtensions.CheckGLError();
+                int framebuffer = GL.GenFramebuffer();
+                GraphicsExtensions.CheckGLError();
 
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffers[0]);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
                 GraphicsExtensions.CheckGLError();
 
                 // Attach the texture to the framebuffer
@@ -145,9 +142,8 @@ namespace Microsoft.Xna.Platform.Media
                 GraphicsExtensions.CheckGLError();
 
                 // cleanup
-                Android.Opengl.GLES20.GlDeleteFramebuffers(1, framebuffers, 0);
-                //GL.DeleteFramebuffer(framebuffers[0]);
-                //GraphicsExtensions.CheckGLError();
+                GL.DeleteFramebuffer(framebuffer);
+                GraphicsExtensions.CheckGLError();
 
                 _lastFrame.SetData(_frameData);
             }
