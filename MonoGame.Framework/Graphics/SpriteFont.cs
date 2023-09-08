@@ -17,14 +17,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	public sealed class SpriteFont 
     {
-		internal static class Errors 
-        {
-			public const string TextContainsUnresolvableCharacters =
-				"Text contains characters that cannot be resolved by this SpriteFont.";
-			public const string UnresolvableCharacter =
-				"Character cannot be resolved by this SpriteFont.";
-		}
-
         private readonly char[] _characters;
         private readonly Glyph[] _glyphs;
         private readonly CharacterRegion[] _regions;
@@ -152,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (value.HasValue)
                 {
                     if(!TryGetGlyphIndex(value.Value, out _defaultGlyphIndex))
-                        throw new ArgumentException(Errors.UnresolvableCharacter);
+                        throw new ArgumentException(UnresolvableCharacterErrorMessage(value.Value));
                 }
                 else
                     _defaultGlyphIndex = -1;
@@ -233,7 +225,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 int currentGlyphIndex = pGlyphIndices[i];
                 if (currentGlyphIndex == -1)
-                    throw new ArgumentException(Errors.TextContainsUnresolvableCharacters, "text");
+                    throw new ArgumentException(UnresolvableCharacterErrorMessage(c), "text");
 
                 Debug.Assert(currentGlyphIndex >= 0 && currentGlyphIndex < InternalGlyphs.Length, "currentGlyphIndex was outside the bounds of the array.");
                 var pCurrentGlyph = pGlyphs + currentGlyphIndex;
@@ -338,6 +330,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
             }
+        }
+
+        internal static string UnresolvableCharacterErrorMessage(char ch)
+        {
+            return String.Format("Character '{0}' (#{1}) cannot be resolved by this SpriteFont.", ch,(int)ch);
         }
 
         /// <summary>
