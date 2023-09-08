@@ -8,21 +8,8 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTarget2D : IRenderTargetStrategyGL
+    public partial class RenderTarget2D
     {
-        int IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        TextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        int IRenderTargetStrategyGL.GLColorBuffer { get; set; }
-        int IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
-        int IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
-
-        TextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
-        {
-            if (arraySlice != 0)
-                throw new NotImplementedException("arraySlice is not implemented for Texture2D");
-
-            return GetTextureStrategy<ConcreteTexture>()._glTarget;
-        }
 
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
@@ -31,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget(this, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget2D, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 
@@ -45,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (GraphicsDevice != null)
                 {
-                    ConcreteTexture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
+                    ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget2D, GraphicsDevice.Strategy);
                 }
             }
 

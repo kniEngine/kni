@@ -871,7 +871,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
-                    IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                    IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
                     GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
                     GraphicsExtensions.CheckGLError();
                     GL.GenerateMipmap(renderTargetGL.GLTarget);
@@ -903,7 +903,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
-                IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
 
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
                 GraphicsExtensions.CheckGLError();
@@ -914,7 +914,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
-                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetStrategyGL;
+                    renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     var attachement = (FramebufferAttachment.ColorAttachment0 + i);
 
                     if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)

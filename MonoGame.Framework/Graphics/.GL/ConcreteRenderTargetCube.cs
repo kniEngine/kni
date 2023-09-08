@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteRenderTargetCube : ConcreteTextureCube, IRenderTargetCubeStrategy, IRenderTargetStrategy
+    internal class ConcreteRenderTargetCube : ConcreteTextureCube, IRenderTargetCubeStrategy, IRenderTargetStrategy,
+        IRenderTargetStrategyGL
     {
         private readonly DepthFormat _depthStencilFormat;
         internal int _multiSampleCount;
@@ -39,6 +41,36 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _renderTargetUsage; }
         }
         #endregion #region IRenderTarget2DStrategy
+
+
+        int _glColorBuffer;
+        int _glDepthBuffer;
+        int _glStencilBuffer;
+
+        #region IRenderTargetStrategyGL
+        int IRenderTargetStrategyGL.GLTexture { get { return _glTexture; } }
+        TextureTarget IRenderTargetStrategyGL.GLTarget { get { return _glTarget; } }
+        int IRenderTargetStrategyGL.GLColorBuffer
+        {
+            get { return _glColorBuffer; }
+            set { _glColorBuffer = value; }
+        }
+        int IRenderTargetStrategyGL.GLDepthBuffer
+        {
+            get { return _glDepthBuffer; }
+            set { _glDepthBuffer = value; }
+        }
+        int IRenderTargetStrategyGL.GLStencilBuffer
+        {
+            get { return _glStencilBuffer; }
+            set { _glStencilBuffer = value; }
+        }
+
+        TextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
+        {
+            return TextureTarget.TextureCubeMapPositiveX + arraySlice;
+        }
+        #endregion #region IRenderTargetStrategyGL
 
     }
 }

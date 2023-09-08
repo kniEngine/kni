@@ -8,19 +8,8 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTargetCube : IRenderTargetStrategyGL
+    public partial class RenderTargetCube
     {
-
-        WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        WebGLTexture IRenderTargetStrategyGL.GLColorBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
-        WebGLRenderbuffer IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
-
-        WebGLTextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
-        {
-            return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
-        }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
@@ -37,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTargetCube, GraphicsDevice.Strategy);
 
             base.Dispose(disposing);
         }

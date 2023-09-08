@@ -757,7 +757,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
-                    IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                    IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
                     GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
                     GraphicsExtensions.CheckGLError();
                     GL.GenerateMipmap(renderTargetGL.GLTarget);
@@ -789,7 +789,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
                 var renderTargetBinding = _currentRenderTargetBindings[0];
-                IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget;
+                IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
 
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
                 GraphicsExtensions.CheckGLError();
@@ -799,8 +799,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
-                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
-                    renderTargetGL = renderTargetBinding.RenderTarget as IRenderTargetStrategyGL;
+                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
+                    renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     var attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
 
                     if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)

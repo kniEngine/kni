@@ -11,18 +11,8 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RenderTargetCube : IRenderTargetStrategyGL
+    public partial class RenderTargetCube
     {
-        int IRenderTargetStrategyGL.GLTexture { get { return GetTextureStrategy<ConcreteTexture>()._glTexture; } }
-        TextureTarget IRenderTargetStrategyGL.GLTarget { get { return GetTextureStrategy<ConcreteTexture>()._glTarget; } }
-        int IRenderTargetStrategyGL.GLColorBuffer { get; set; }
-        int IRenderTargetStrategyGL.GLDepthBuffer { get; set; }
-        int IRenderTargetStrategyGL.GLStencilBuffer { get; set; }
-
-        TextureTarget IRenderTargetStrategyGL.GetFramebufferTarget(int arraySlice)
-        {
-            return TextureTarget.TextureCubeMapPositiveX + arraySlice;
-        }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
@@ -31,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget(this, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTargetCube, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
             }
         }
 
@@ -41,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (GraphicsDevice != null)
                 {
-                    ConcreteTexture.PlatformDeleteRenderTarget(this, GraphicsDevice.Strategy);
+                    ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTargetCube, GraphicsDevice.Strategy);
                 }
             }
 
