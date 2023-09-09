@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
+    internal partial class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
     {
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))

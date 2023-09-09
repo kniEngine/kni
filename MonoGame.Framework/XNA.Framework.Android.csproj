@@ -230,6 +230,7 @@
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />

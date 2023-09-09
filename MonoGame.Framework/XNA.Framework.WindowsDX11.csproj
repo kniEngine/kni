@@ -244,6 +244,7 @@
     <Compile Include="Graphics\.DX11\ConcreteRenderTargetSwapChain.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTexture.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTexture2D.Stream.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />

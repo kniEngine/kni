@@ -18,7 +18,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
+    internal partial class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
     {
         private readonly int _width;
         private readonly int _height;

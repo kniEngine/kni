@@ -313,6 +313,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="height"></param>
         public void SaveAsJpeg(Stream stream, int width, int height)
         {
+            _strategyTexture2D.SaveAsJpeg(stream, width, height);
             PlatformSaveAsJpeg(stream, width, height);
         }
 
@@ -324,6 +325,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="height"></param>
         public void SaveAsPng(Stream stream, int width, int height)
         {
+            _strategyTexture2D.SaveAsPng(stream, width, height);
             PlatformSaveAsPng(stream, width, height);
         }
         
