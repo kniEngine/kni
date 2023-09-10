@@ -12,14 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
-            D3D11.Resource texture = CreateTexture(contextStrategy);
-            GetTextureStrategy<ConcreteTexture>()._texture = texture;
-            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
-        }
-
-
-        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
-        {   
             D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
             texture3DDesc.Width = this.Width;
             texture3DDesc.Height = this.Height;
@@ -31,7 +23,9 @@ namespace Microsoft.Xna.Framework.Graphics
             texture3DDesc.Usage = D3D11.ResourceUsage.Default;
             texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            return new D3D11.Texture3D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+            D3D11.Resource texture = new D3D11.Texture3D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
 	}

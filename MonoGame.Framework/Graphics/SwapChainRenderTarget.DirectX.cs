@@ -118,11 +118,31 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected override D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
+        private D3D11.Resource CreateTexture(GraphicsContextStrategy contextStrategy)
         {
             if (MultiSampleCount > 1)
             {
-                return base.CreateTexture(contextStrategy);
+                DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
+                D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+                texture2DDesc.Width = this.Width;
+                texture2DDesc.Height = this.Height;
+                texture2DDesc.MipLevels = this.LevelCount;
+                texture2DDesc.ArraySize = this.ArraySize;
+                texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+                texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+                texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+                texture2DDesc.SampleDescription = sampleDesc;
+                texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+                texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+
+                if (((ConcreteTexture2D)_strategyTexture2D)._shared)
+                    texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
+                if (MultiSampleCount == 0 || ((ConcreteTexture2D)_strategyTexture2D)._shared)
+                    texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
+                if (((ConcreteTexture2D)_strategyTexture2D)._mipMap)
+                    texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
+
+                return new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
             }
             else
             {
