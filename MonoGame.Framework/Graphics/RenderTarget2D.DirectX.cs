@@ -17,6 +17,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.Texture2D _msTexture;
         private DXGI.SampleDescription _msSampleDescription;
 
+        private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        {
+            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
+        }
+
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
         {

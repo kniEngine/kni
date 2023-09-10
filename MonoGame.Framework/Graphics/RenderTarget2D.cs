@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
 
             // Texture will be assigned by the swap chain.
-            //PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+            //PlatformConstructTexture2D_rt(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
 
         }
 
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
 
-            PlatformConstructTexture2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+            PlatformConstructTexture2D_rt(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
             PlatformConstructRenderTarget2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
 	    }
         
