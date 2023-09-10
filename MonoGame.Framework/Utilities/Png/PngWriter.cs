@@ -12,28 +12,29 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace MonoGame.Utilities.Png
 {
     public class PngWriter
     {
-        private const int bitsPerSample = 8;
-        private ColorType colorType;
-        private Color[] colorData;
-        private int width;
-        private int height;
+        private const int _bitsPerSample = 8;
+        private ColorType _colorType;
+        private Color[] _colorData;
+        private int _width;
+        private int _height;
 
         public PngWriter()
         {
-            colorType = ColorType.RgbWithAlpha;
+            _colorType = ColorType.RgbWithAlpha;
         }
 
-        public void Write(Texture2D texture2D, Stream outputStream)
+        public void Write(ITexture2DStrategy texture2D, Stream outputStream)
         {
-            width = texture2D.Width;
-            height = texture2D.Height;
+            _width = texture2D.Width;
+            _height = texture2D.Height;
 
-            colorData = texture2D.GetColorData();
+            _colorData = Texture2D.GetColorData(texture2D);
 
             // write PNG signature
             outputStream.Write(HeaderChunk.PngSignature, 0, HeaderChunk.PngSignature.Length);
@@ -43,7 +44,7 @@ namespace MonoGame.Utilities.Png
             headerChunk.Width = (uint)texture2D.Width;
             headerChunk.Height = (uint)texture2D.Height;
             headerChunk.BitDepth = 8;
-            headerChunk.ColorType = colorType;
+            headerChunk.ColorType = _colorType;
             headerChunk.CompressionMethod = 0;
             headerChunk.FilterMethod = 0;
             headerChunk.InterlaceMethod = 0;
@@ -52,7 +53,7 @@ namespace MonoGame.Utilities.Png
             outputStream.Write(headerChunkBytes, 0, headerChunkBytes.Length);
 
             // write data chunks
-            var encodedPixelData = EncodePixelData(texture2D);
+            var encodedPixelData = EncodePixelData();
             var compressedPixelData = new MemoryStream();
 
             try
@@ -78,14 +79,14 @@ namespace MonoGame.Utilities.Png
             outputStream.Write(endChunkBytes, 0, endChunkBytes.Length);
         }
 
-        private byte[] EncodePixelData(Texture2D texture2D)
+        private byte[] EncodePixelData()
         {
             List<byte[]> filteredScanlines = new List<byte[]>();
 
             int bytesPerPixel = CalculateBytesPerPixel();
-            byte[] previousScanline = new byte[width * bytesPerPixel];
+            byte[] previousScanline = new byte[_width * bytesPerPixel];
 
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
                 var rawScanline = GetRawScanline(y);
 
@@ -165,11 +166,11 @@ namespace MonoGame.Utilities.Png
 
         private byte[] GetRawScanline(int y)
         {
-            var rawScanline = new byte[4 * width];
+            var rawScanline = new byte[4 * _width];
             
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < _width; x++)
             {
-                var color = colorData[(y * width) + x];
+                var color = _colorData[(y * _width) + x];
 
                 rawScanline[4 * x] = color.R;
                 rawScanline[(4 * x) + 1] = color.G;
@@ -182,22 +183,22 @@ namespace MonoGame.Utilities.Png
 
         private int CalculateBytesPerPixel()
         {
-            switch (colorType)
+            switch (_colorType)
             {
                 case ColorType.Grayscale:
-                    return bitsPerSample / 8;
+                    return _bitsPerSample / 8;
 
                 case ColorType.GrayscaleWithAlpha:
-                    return (2 * bitsPerSample) / 8;
+                    return (2 * _bitsPerSample) / 8;
 
                 case ColorType.Palette:
-                    return bitsPerSample / 8;
+                    return _bitsPerSample / 8;
 
                 case ColorType.Rgb:
-                    return (3 * bitsPerSample) / 8;
+                    return (3 * _bitsPerSample) / 8;
 
                 case ColorType.RgbWithAlpha:
-                    return (4 * bitsPerSample) / 8;
+                    return (4 * _bitsPerSample) / 8;
 
                 default:
                     return -1;

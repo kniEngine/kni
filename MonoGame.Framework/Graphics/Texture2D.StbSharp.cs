@@ -2,10 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using StbImageSharp;
-using StbImageWriteSharp;
 using System;
 using System.IO;
+using StbImageSharp;
+using StbImageWriteSharp;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -42,63 +42,5 @@ namespace Microsoft.Xna.Framework.Graphics
             return texture;
         }
 
-        private void PlatformSaveAsJpeg(Stream stream, int width, int height)
-        {
-            SaveAsImage(stream, width, height, ImageWriterFormat.Jpg);
-        }
-
-        private void PlatformSaveAsPng(Stream stream, int width, int height)
-        {
-            SaveAsImage(stream, width, height, ImageWriterFormat.Png);
-        }
-
-        private enum ImageWriterFormat
-        {
-            Jpg,
-            Png
-        }
-
-        private unsafe void SaveAsImage(Stream stream, int width, int height, ImageWriterFormat format)
-        {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream", "'stream' cannot be null (Nothing in Visual Basic)");
-            }
-            if (width <= 0)
-            {
-                throw new ArgumentOutOfRangeException("width", width, "'width' cannot be less than or equal to zero");
-            }
-            if (height <= 0)
-            {
-                throw new ArgumentOutOfRangeException("height", height, "'height' cannot be less than or equal to zero");
-            }
-            Color[] data = null;
-            try
-            {
-                data = GetColorData();
-
-                // Write
-                fixed (Color* ptr = &data[0])
-                {
-                    var writer = new ImageWriter();
-                    switch (format)
-                    {
-                        case ImageWriterFormat.Jpg:
-                            writer.WriteJpg(ptr, width, height, StbImageWriteSharp.ColorComponents.RedGreenBlueAlpha, stream, 90);
-                            break;
-                        case ImageWriterFormat.Png:
-                            writer.WritePng(ptr, width, height, StbImageWriteSharp.ColorComponents.RedGreenBlueAlpha, stream);
-                            break;
-                    }
-                }
-            }
-            finally
-            {
-                if (data != null)
-                {
-                    data = null;
-                }
-            }
-        }
     }
 }

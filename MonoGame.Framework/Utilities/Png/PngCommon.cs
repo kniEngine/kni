@@ -13,31 +13,31 @@ namespace MonoGame.Utilities.Png
 {
     internal class Palette
     {
-        private IList<Color> colors;
+        private IList<Color> _colors;
 
         internal Palette()
         {
-            colors = new List<Color>();
+            _colors = new List<Color>();
         }
 
         internal Color this[int index]
         {
             get
             {
-                return colors[index];
+                return _colors[index];
             }
         }
 
         internal void AddColor(Color color)
         {
-            colors.Add(color);
+            _colors.Add(color);
         }
 
         internal void AddAlphaToColorAtIndex(int colorIndex, byte alpha)
         {
-            var oldColor = colors[colorIndex];
+            var oldColor = _colors[colorIndex];
 
-            colors[colorIndex] = new Color(oldColor.R, oldColor.G, oldColor.B, alpha);
+            _colors[colorIndex] = new Color(oldColor.R, oldColor.G, oldColor.B, alpha);
         }
 
         internal void AddAlphaToColors(IList<byte> alphas)
