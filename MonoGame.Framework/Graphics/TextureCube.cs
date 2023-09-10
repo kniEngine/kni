@@ -11,7 +11,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class TextureCube : Texture
+	public class TextureCube : Texture
 	{
         protected ITextureCubeStrategy _strategyTextureCube;
 

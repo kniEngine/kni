@@ -12,7 +12,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class Texture3D : Texture
+	public class Texture3D : Texture
 	{
         protected ITexture3DStrategy _strategyTexture3D;
 
