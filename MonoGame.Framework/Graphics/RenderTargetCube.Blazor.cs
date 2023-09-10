@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
-            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
+            ((ConcreteTextureCube)_strategyTextureCube).PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
         }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,

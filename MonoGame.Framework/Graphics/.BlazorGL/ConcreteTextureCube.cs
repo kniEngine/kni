@@ -35,5 +35,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITextureCubeStrategy
 
+
+        internal void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -73,5 +73,29 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture3DStrategy
 
+
+        internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        {
+            _glTarget = TextureTarget.Texture3D;
+
+            Threading.EnsureUIThread();
+            {
+                _glTexture = GL.GenTexture();
+                GraphicsExtensions.CheckGLError();
+
+                GL.BindTexture(_glTarget, _glTexture);
+                GraphicsExtensions.CheckGLError();
+
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+
+                GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
+                GraphicsExtensions.CheckGLError();
+            }
+
+            if (mipMap)
+                throw new NotImplementedException("Texture3D does not yet support mipmaps.");
+        }
+
+
     }
 }

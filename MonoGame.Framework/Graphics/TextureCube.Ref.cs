@@ -8,11 +8,6 @@ namespace Microsoft.Xna.Framework.Graphics
 	public partial class TextureCube
 	{
 
-        internal void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
 	}
 }
 

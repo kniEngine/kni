@@ -144,5 +144,99 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new ArgumentException();
             }
         }
+
+
+        internal void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            _glTarget = TextureTarget.TextureCubeMap;
+
+            Threading.EnsureUIThread();
+            {
+                _glTexture = GL.GenTexture();
+                GraphicsExtensions.CheckGLError();
+
+                GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
+                GraphicsExtensions.CheckGLError();
+
+                GL.TexParameter(
+                    TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter,
+                    mipMap ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
+                GraphicsExtensions.CheckGLError();
+
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GraphicsExtensions.CheckGLError();
+
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GraphicsExtensions.CheckGLError();
+
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                GraphicsExtensions.CheckGLError();
+
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+
+                for (int i = 0; i < 6; i++)
+                {
+                    TextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
+
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    {
+                        int imageSize = 0;
+                        switch (format)
+                        {
+                            case SurfaceFormat.RgbPvrtc2Bpp:
+                            case SurfaceFormat.RgbaPvrtc2Bpp:
+                                imageSize = (Math.Max(size, 16) * Math.Max(size, 8) * 2 + 7) / 8;
+                                break;
+                            case SurfaceFormat.RgbPvrtc4Bpp:
+                            case SurfaceFormat.RgbaPvrtc4Bpp:
+                                imageSize = (Math.Max(size, 8) * Math.Max(size, 8) * 4 + 7) / 8;
+                                break;
+                            case SurfaceFormat.Dxt1:
+                            case SurfaceFormat.Dxt1a:
+                            case SurfaceFormat.Dxt1SRgb:
+                            case SurfaceFormat.Dxt3:
+                            case SurfaceFormat.Dxt3SRgb:
+                            case SurfaceFormat.Dxt5:
+                            case SurfaceFormat.Dxt5SRgb:
+                            case SurfaceFormat.RgbEtc1:
+                            case SurfaceFormat.Rgb8Etc2:
+                            case SurfaceFormat.Srgb8Etc2:
+                            case SurfaceFormat.Rgb8A1Etc2:
+                            case SurfaceFormat.Srgb8A1Etc2:
+                            case SurfaceFormat.Rgba8Etc2:
+                            case SurfaceFormat.SRgb8A8Etc2:
+                            case SurfaceFormat.RgbaAtcExplicitAlpha:
+                            case SurfaceFormat.RgbaAtcInterpolatedAlpha:
+                                imageSize = (size + 3) / 4 * ((size + 3) / 4) * format.GetSize();
+                                break;
+                            default:
+                                throw new NotSupportedException();
+                        }
+                        GL.CompressedTexImage2D(target, 0, _glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, 0, _glFormat, _glType, IntPtr.Zero);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                }
+
+                if (mipMap)
+                {
+                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == _glTarget);
+#if IOS || TVOS || ANDROID
+                    GL.GenerateMipmap(TextureTarget.TextureCubeMap);
+                    GraphicsExtensions.CheckGLError();
+#else
+                    GL.GenerateMipmap(_glTarget);
+                    GraphicsExtensions.CheckGLError();
+                    // This updates the mipmaps after a change in the base texture
+                    GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
+#endif
+                }
+            }
+        }
+
     }
 }

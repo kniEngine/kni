@@ -62,5 +62,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture2DStrategy
 
+
+        internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
     }
 }

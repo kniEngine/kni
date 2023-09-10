@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
-            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
+            ((ConcreteTexture2D)_strategyTexture2D).PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
 
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
