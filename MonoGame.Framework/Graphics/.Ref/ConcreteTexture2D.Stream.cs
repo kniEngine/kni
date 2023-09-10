@@ -14,10 +14,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void SaveAsPng(Stream stream, int width, int height)
         {
+            throw new PlatformNotSupportedException();
         }
 
         public void SaveAsJpeg(Stream stream, int width, int height)
         {
+            throw new PlatformNotSupportedException();
         }
     }
 }

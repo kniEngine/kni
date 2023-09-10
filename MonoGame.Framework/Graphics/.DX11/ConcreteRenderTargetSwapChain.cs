@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using D3D11 = SharpDX.Direct3D11;
@@ -78,6 +79,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITexture2DStrategy.SaveAsJpeg(Stream stream, int width, int height)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITexture2DStrategy.SaveAsPng(Stream stream, int width, int height)
         {
             throw new NotImplementedException();
         }

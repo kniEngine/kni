@@ -11,16 +11,5 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             throw new PlatformNotSupportedException();
         }
-
-        private void PlatformSaveAsJpeg(Stream stream, int width, int height)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private void PlatformSaveAsPng(Stream stream, int width, int height)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
     }
 }

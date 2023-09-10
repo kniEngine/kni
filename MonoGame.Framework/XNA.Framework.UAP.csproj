@@ -431,7 +431,6 @@
     <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
-    <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
     <Compile Include="Graphics\Texture3D.DirectX.cs" />
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.DirectX.cs" />

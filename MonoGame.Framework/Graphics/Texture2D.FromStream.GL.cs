@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Framework.Utilities;
 using MonoGame.Utilities.Png;
+using StbImageSharp;
 
 #if IOS || TVOS
 using UIKit;
@@ -31,6 +32,44 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D
     {
+
+        private unsafe static Texture2D PlatformFromStream(GraphicsDevice graphicsDevice, Stream stream)
+        {
+            // Rewind stream if it is at end
+            if (stream.CanSeek && stream.Length == stream.Position)
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+
+#if IOS || TVOS
+             return PlatformFromStream_IOS(graphicsDevice, stream);
+#elif ANDROID
+            return PlatformFromStream_ANDROID(graphicsDevice, stream);
+#elif DESKTOPGL && (NET40 || NET40_OR_GREATER)
+            return PlatformFromStream_DESKTOPGL(graphicsDevice, stream);
+#else
+            byte[] bytes;
+
+            // Copy it's data to memory
+            // As some platforms dont provide full stream functionality and thus streams can't be read as it is
+            using (var ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                bytes = ms.ToArray();
+            }
+
+            // The data returned is always four channel BGRA
+            var result = ImageResult.FromMemory(bytes, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
+
+            Texture2D texture = null;
+            texture = new Texture2D(graphicsDevice, result.Width, result.Height);
+            texture.SetData(result.Data);
+
+            return texture;
+#endif
+        }
+
+
         #region IOS || TVOS
 #if IOS || TVOS
         private unsafe static Texture2D PlatformFromStream_IOS(GraphicsDevice graphicsDevice, Stream stream)

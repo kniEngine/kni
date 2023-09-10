@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Graphics\.DX11\ConcreteRenderTargetSwapChain.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
-    <Compile Include="Graphics\Texture2D.Stream.DirectX.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Input\GamePad.XInput.cs" />
     <Compile Include="Input\Joystick.Default.cs" />

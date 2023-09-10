@@ -17,23 +17,23 @@ namespace MonoGame.Utilities.Png
 {
     public class PngReader
     {
-        private int width;
-        private int height;
-        private int bitsPerSample;
-        private int bytesPerSample;
-        private int bytesPerPixel;
-        private int bytesPerScanline;
-        private IList<PngChunk> chunks;
-        private IList<PngChunk> dataChunks;
-        private ColorType colorType;
-        private Palette palette;
-        private Texture2D texture;
-        private Color[] data;
+        private int _width;
+        private int _height;
+        private int _bitsPerSample;
+        private int _bytesPerSample;
+        private int _bytesPerPixel;
+        private int _bytesPerScanline;
+        private IList<PngChunk> _chunks;
+        private IList<PngChunk> _dataChunks;
+        private ColorType _colorType;
+        private Palette _palette;
+        private Texture2D _texture;
+        private Color[] _data;
         
         public PngReader()
         {
-            chunks = new List<PngChunk>();
-            dataChunks = new List<PngChunk>();
+            _chunks = new List<PngChunk>();
+            _dataChunks = new List<PngChunk>();
         }
 
         public Texture2D Read(Stream inputStream, GraphicsDevice graphicsDevice)
@@ -61,10 +61,10 @@ namespace MonoGame.Utilities.Png
 
             UnpackDataChunks();
 
-            texture = new Texture2D(graphicsDevice, width, height, false, SurfaceFormat.Color);
-            texture.SetData<Color>(data);
+            _texture = new Texture2D(graphicsDevice, _width, _height, false, SurfaceFormat.Color);
+            _texture.SetData<Color>(_data);
 
-            return texture;
+            return _texture;
         }
 
         public static bool IsPngImage(Stream stream)
@@ -91,11 +91,11 @@ namespace MonoGame.Utilities.Png
 
                     var headerChunk = new HeaderChunk();
                     headerChunk.Decode(chunkBytes);
-                    width = (int)headerChunk.Width;
-                    height = (int)headerChunk.Height;
-                    bitsPerSample = (int)headerChunk.BitDepth;
-                    colorType = headerChunk.ColorType;
-                    chunks.Add(headerChunk);
+                    _width = (int)headerChunk.Width;
+                    _height = (int)headerChunk.Height;
+                    _bitsPerSample = (int)headerChunk.BitDepth;
+                    _colorType = headerChunk.ColorType;
+                    _chunks.Add(headerChunk);
 
                     break;
 
@@ -103,8 +103,8 @@ namespace MonoGame.Utilities.Png
 
                     var paletteChunk = new PaletteChunk();
                     paletteChunk.Decode(chunkBytes);
-                    palette = paletteChunk.Palette;
-                    chunks.Add(paletteChunk);
+                    _palette = paletteChunk.Palette;
+                    _chunks.Add(paletteChunk);
 
                     break;
 
@@ -112,14 +112,14 @@ namespace MonoGame.Utilities.Png
 
                     var transparencyChunk = new TransparencyChunk();
                     transparencyChunk.Decode(chunkBytes);
-                    palette.AddAlphaToColors(transparencyChunk.PaletteTransparencies);
+                    _palette.AddAlphaToColors(transparencyChunk.PaletteTransparencies);
                     break;
 
                 case "IDAT":
 
                     var dataChunk = new DataChunk();
                     dataChunk.Decode(chunkBytes);
-                    dataChunks.Add(dataChunk);
+                    _dataChunks.Add(dataChunk);
 
                     break;
 
@@ -132,7 +132,7 @@ namespace MonoGame.Utilities.Png
         {
             var dataByteList = new List<byte>();
 
-            foreach (var dataChunk in dataChunks)
+            foreach (var dataChunk in _dataChunks)
             {
                 if (dataChunk.Type == "IDAT")
                 {
@@ -163,12 +163,12 @@ namespace MonoGame.Utilities.Png
 
         private byte[][] DeserializePixelData(byte[] pixelData)
         {
-            bytesPerPixel = CalculateBytesPerPixel();
-            bytesPerSample = bitsPerSample / 8;
-            bytesPerScanline = (bytesPerPixel * width) + 1;
-            int scanlineCount = pixelData.Length / bytesPerScanline;
+            _bytesPerPixel = CalculateBytesPerPixel();
+            _bytesPerSample = _bitsPerSample / 8;
+            _bytesPerScanline = (_bytesPerPixel * _width) + 1;
+            int scanlineCount = pixelData.Length / _bytesPerScanline;
 
-            if (pixelData.Length % bytesPerScanline != 0)
+            if (pixelData.Length % _bytesPerScanline != 0)
             {
                 throw new Exception("Malformed pixel data - total length of pixel data not multiple of ((bytesPerPixel * width) + 1)");
             }
@@ -177,11 +177,11 @@ namespace MonoGame.Utilities.Png
 
             for (int y = 0; y < scanlineCount; y++)
             {
-                result[y] = new byte[bytesPerScanline];
+                result[y] = new byte[_bytesPerScanline];
                 
-                for (int x = 0; x < bytesPerScanline; x++)
+                for (int x = 0; x < _bytesPerScanline; x++)
                 {
-                    result[y][x] = pixelData[y * bytesPerScanline + x];
+                    result[y][x] = pixelData[y * _bytesPerScanline + x];
                 }
             }
             
@@ -190,11 +190,11 @@ namespace MonoGame.Utilities.Png
 
         private void DecodePixelData(byte[][] pixelData)
         {
-            data = new Color[width * height];
+            _data = new Color[_width * _height];
             
-            byte[] previousScanline = new byte[bytesPerScanline];
+            byte[] previousScanline = new byte[_bytesPerScanline];
 
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
                 var scanline = pixelData[y];
 
@@ -211,7 +211,7 @@ namespace MonoGame.Utilities.Png
 
                     case FilterType.Sub:
 
-                        defilteredScanline = SubFilter.Decode(scanline, bytesPerPixel);
+                        defilteredScanline = SubFilter.Decode(scanline, _bytesPerPixel);
 
                         break;
 
@@ -223,13 +223,13 @@ namespace MonoGame.Utilities.Png
 
                     case FilterType.Average:
 
-                        defilteredScanline = AverageFilter.Decode(scanline, previousScanline, bytesPerPixel);
+                        defilteredScanline = AverageFilter.Decode(scanline, previousScanline, _bytesPerPixel);
 
                         break;
 
                     case FilterType.Paeth:
 
-                        defilteredScanline = PaethFilter.Decode(scanline, previousScanline, bytesPerPixel);
+                        defilteredScanline = PaethFilter.Decode(scanline, previousScanline, _bytesPerPixel);
 
                         break;
 
@@ -244,73 +244,73 @@ namespace MonoGame.Utilities.Png
 
         private void ProcessDefilteredScanline(byte[] defilteredScanline, int y)
         {
-            switch (colorType)
+            switch (_colorType)
             {
                 case ColorType.Grayscale:
 
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        int offset = 1 + (x * bytesPerPixel);
+                        int offset = 1 + (x * _bytesPerPixel);
 
                         byte intensity = defilteredScanline[offset];
 
-                        data[(y * width) + x] = new Color(intensity, intensity, intensity);
+                        _data[(y * _width) + x] = new Color(intensity, intensity, intensity);
                     }
 
                     break;
 
                 case ColorType.GrayscaleWithAlpha:
 
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        int offset = 1 + (x * bytesPerPixel);
+                        int offset = 1 + (x * _bytesPerPixel);
 
                         byte intensity = defilteredScanline[offset];
-                        byte alpha = defilteredScanline[offset + bytesPerSample];
+                        byte alpha = defilteredScanline[offset + _bytesPerSample];
 
-                        data[(y * width) + x] = new Color(intensity, intensity, intensity, alpha);
+                        _data[(y * _width) + x] = new Color(intensity, intensity, intensity, alpha);
                     }
 
                     break;
 
                 case ColorType.Palette:
 
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        var pixelColor = palette[defilteredScanline[x + 1]];
+                        var pixelColor = _palette[defilteredScanline[x + 1]];
 
-                        data[(y * width) + x] = pixelColor;
+                        _data[(y * _width) + x] = pixelColor;
                     }
 
                     break;
 
                 case ColorType.Rgb:
 
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        int offset = 1 + (x * bytesPerPixel);
+                        int offset = 1 + (x * _bytesPerPixel);
                         
                         int red = defilteredScanline[offset];
-                        int green = defilteredScanline[offset + bytesPerSample];
-                        int blue = defilteredScanline[offset + 2 * bytesPerSample];
+                        int green = defilteredScanline[offset + _bytesPerSample];
+                        int blue = defilteredScanline[offset + 2 * _bytesPerSample];
 
-                        data[(y * width) + x] = new Color(red, green, blue);
+                        _data[(y * _width) + x] = new Color(red, green, blue);
                     }
 
                     break;
 
                 case ColorType.RgbWithAlpha:
 
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        int offset = 1 + (x * bytesPerPixel);
+                        int offset = 1 + (x * _bytesPerPixel);
 
                         int red = defilteredScanline[offset];
-                        int green = defilteredScanline[offset + bytesPerSample];
-                        int blue = defilteredScanline[offset + 2 * bytesPerSample];
-                        int alpha = defilteredScanline[offset + 3 * bytesPerSample];
+                        int green = defilteredScanline[offset + _bytesPerSample];
+                        int blue = defilteredScanline[offset + 2 * _bytesPerSample];
+                        int alpha = defilteredScanline[offset + 3 * _bytesPerSample];
 
-                        data[(y * width) + x] = new Color(red, green, blue, alpha);
+                        _data[(y * _width) + x] = new Color(red, green, blue, alpha);
                     }
 
                     break;
@@ -322,22 +322,22 @@ namespace MonoGame.Utilities.Png
 
         private int CalculateBytesPerPixel()
         {
-            switch (colorType)
+            switch (_colorType)
             {
                 case ColorType.Grayscale:
-                    return bitsPerSample / 8;
+                    return _bitsPerSample / 8;
 
                 case ColorType.GrayscaleWithAlpha:
-                    return (2 * bitsPerSample) / 8;
+                    return (2 * _bitsPerSample) / 8;
 
                 case ColorType.Palette:
-                    return bitsPerSample / 8;
+                    return _bitsPerSample / 8;
 
                 case ColorType.Rgb:
-                    return (3 * bitsPerSample) / 8;
+                    return (3 * _bitsPerSample) / 8;
 
                 case ColorType.RgbWithAlpha:
-                    return (4 * bitsPerSample) / 8;
+                    return (4 * _bitsPerSample) / 8;
 
                 default:
                     throw new Exception("Unknown color type.");

@@ -314,7 +314,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SaveAsJpeg(Stream stream, int width, int height)
         {
             _strategyTexture2D.SaveAsJpeg(stream, width, height);
-            PlatformSaveAsJpeg(stream, width, height);
         }
 
         /// <summary>
@@ -326,7 +325,6 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SaveAsPng(Stream stream, int width, int height)
         {
             _strategyTexture2D.SaveAsPng(stream, width, height);
-            PlatformSaveAsPng(stream, width, height);
         }
         
         private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
@@ -397,16 +395,17 @@ namespace Microsoft.Xna.Framework.Graphics
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
 
-        internal Color[] GetColorData()
-        {
-            int colorDataLength = Width * Height;
-            var colorData = new Color[colorDataLength];
 
-            switch (Format)
+        internal static Color[] GetColorData(ITexture2DStrategy texture2D)
+        {
+            int colorDataLength = texture2D.Width * texture2D.Height;
+            Color[] colorData = new Color[colorDataLength];
+
+            switch (texture2D.Format)
             {
                 case SurfaceFormat.Single:
-                    var floatData = new float[colorDataLength];
-                    GetData(floatData);
+                    float[] floatData = new float[colorDataLength];
+                    texture2D.GetData<float>(0, 0, texture2D.Bounds, floatData, 0, floatData.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
                     {
@@ -417,138 +416,103 @@ namespace Microsoft.Xna.Framework.Graphics
                     break;
 
                 case SurfaceFormat.Color:
-                    GetData(colorData);
+                    texture2D.GetData<Color>(0, 0, texture2D.Bounds, colorData, 0, colorData.Length);
                     break;
 
                 case SurfaceFormat.Alpha8:
-                    var alpha8Data = new Alpha8[colorDataLength];
-                    GetData(alpha8Data);
+                    Alpha8[] alpha8Data = new Alpha8[colorDataLength];
+                    texture2D.GetData<Alpha8>(0, 0, texture2D.Bounds, alpha8Data, 0, alpha8Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(alpha8Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Bgr565:
-                    var bgr565Data = new Bgr565[colorDataLength];
-                    GetData(bgr565Data);
+                    Bgr565[] bgr565Data = new Bgr565[colorDataLength];
+                    texture2D.GetData<Bgr565>(0, 0, texture2D.Bounds, bgr565Data, 0, bgr565Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(bgr565Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Bgra4444:
-                    var bgra4444Data = new Bgra4444[colorDataLength];
-                    GetData(bgra4444Data);
+                    Bgra4444[] bgra4444Data = new Bgra4444[colorDataLength];
+                    texture2D.GetData<Bgra4444>(0, 0, texture2D.Bounds, bgra4444Data, 0, bgra4444Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(bgra4444Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Bgra5551:
-                    var bgra5551Data = new Bgra5551[colorDataLength];
-                    GetData(bgra5551Data);
+                    Bgra5551[] bgra5551Data = new Bgra5551[colorDataLength];
+                    texture2D.GetData<Bgra5551>(0, 0, texture2D.Bounds, bgra5551Data, 0, bgra5551Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(bgra5551Data[i].ToVector4());
-                    }
                     break;
 
                 case SurfaceFormat.HalfSingle:
-                    var halfSingleData = new HalfSingle[colorDataLength];
-                    GetData(halfSingleData);
+                    HalfSingle[] halfSingleData = new HalfSingle[colorDataLength];
+                    texture2D.GetData<HalfSingle>(0, 0, texture2D.Bounds, halfSingleData, 0, halfSingleData.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(halfSingleData[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.HalfVector2:
-                    var halfVector2Data = new HalfVector2[colorDataLength];
-                    GetData(halfVector2Data);
+                    HalfVector2[] halfVector2Data = new HalfVector2[colorDataLength];
+                    texture2D.GetData<HalfVector2>(0, 0, texture2D.Bounds, halfVector2Data, 0, halfVector2Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(halfVector2Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.HalfVector4:
-                    var halfVector4Data = new HalfVector4[colorDataLength];
-                    GetData(halfVector4Data);
+                    HalfVector4[] halfVector4Data = new HalfVector4[colorDataLength];
+                    texture2D.GetData<HalfVector4>(0, 0, texture2D.Bounds, halfVector4Data, 0, halfVector4Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(halfVector4Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.NormalizedByte2:
-                    var normalizedByte2Data = new NormalizedByte2[colorDataLength];
-                    GetData(normalizedByte2Data);
+                    NormalizedByte2[] normalizedByte2Data = new NormalizedByte2[colorDataLength];
+                    texture2D.GetData<NormalizedByte2>(0, 0, texture2D.Bounds, normalizedByte2Data, 0, normalizedByte2Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(normalizedByte2Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.NormalizedByte4:
-                    var normalizedByte4Data = new NormalizedByte4[colorDataLength];
-                    GetData(normalizedByte4Data);
+                    NormalizedByte4[] normalizedByte4Data = new NormalizedByte4[colorDataLength];
+                    texture2D.GetData<NormalizedByte4>(0, 0, texture2D.Bounds, normalizedByte4Data, 0, normalizedByte4Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(normalizedByte4Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Rg32:
-                    var rg32Data = new Rg32[colorDataLength];
-                    GetData(rg32Data);
+                    Rg32[] rg32Data = new Rg32[colorDataLength];
+                    texture2D.GetData<Rg32>(0, 0, texture2D.Bounds, rg32Data, 0, rg32Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(rg32Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Rgba64:
-                    var rgba64Data = new Rgba64[colorDataLength];
-                    GetData(rgba64Data);
+                    Rgba64[] rgba64Data = new Rgba64[colorDataLength];
+                    texture2D.GetData<Rgba64>(0, 0, texture2D.Bounds, rgba64Data, 0, rgba64Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(rgba64Data[i].ToVector4());
-                    }
-
                     break;
 
                 case SurfaceFormat.Rgba1010102:
-                    var rgba1010102Data = new Rgba1010102[colorDataLength];
-                    GetData(rgba1010102Data);
+                    Rgba1010102[] rgba1010102Data = new Rgba1010102[colorDataLength];
+                    texture2D.GetData<Rgba1010102>(0, 0, texture2D.Bounds, rgba1010102Data, 0, rgba1010102Data.Length);
 
                     for (int i = 0; i < colorDataLength; i++)
-                    {
                         colorData[i] = new Color(rgba1010102Data[i].ToVector4());
-                    }
-
                     break;
 
                 default:
@@ -557,5 +521,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return colorData;
         }
+
+
     }
 }

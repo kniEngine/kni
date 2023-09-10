@@ -67,7 +67,6 @@
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
-    <Compile Include="Graphics\Texture2D.Stream.OpenGL.cs" />
     <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
