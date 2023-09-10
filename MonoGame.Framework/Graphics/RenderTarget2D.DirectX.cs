@@ -19,7 +19,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
-            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
+            D3D11.Resource texture = CreateTexture(contextStrategy);
+            GetTextureStrategy<ConcreteTexture>()._texture = texture;
+            GetTextureStrategy<ConcreteTexture>()._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+
         }
 
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
