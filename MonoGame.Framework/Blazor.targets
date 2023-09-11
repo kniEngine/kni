@@ -38,9 +38,6 @@
     <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />
     <Compile Include="Graphics\States\SamplerState.Blazor.cs" />
     <Compile Include="Graphics\Texture.Blazor.cs" />
-    <Compile Include="Graphics\Texture2D.Blazor.cs" />
-    <Compile Include="Graphics\Texture3D.Blazor.cs" />
-    <Compile Include="Graphics\TextureCube.Blazor.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Blazor.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Blazor.cs" />
         

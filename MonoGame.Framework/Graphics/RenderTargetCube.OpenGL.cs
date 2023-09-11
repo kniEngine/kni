@@ -13,6 +13,10 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTargetCube
     {
+        private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            ((ConcreteTextureCube)_strategyTextureCube).PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
+        }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)

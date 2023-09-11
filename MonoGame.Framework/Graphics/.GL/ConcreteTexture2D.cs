@@ -22,12 +22,26 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _arraySize;
 
+
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, mipMap, format, arraySize, shared)
+        {
+            this._width  = width;
+            this._height = height;
+            this._arraySize = arraySize;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
+
+            this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
 
 
@@ -235,5 +249,114 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.LogGLError("GetBoundTexture2D(), GL.GetInteger()");
             return currentBoundTexture2D;
         }
+
+        internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        {
+            _glTarget = TextureTarget.Texture2D;
+            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+
+            Threading.EnsureUIThread();
+            {
+                CreateGLTexture2D(contextStrategy);
+
+                int w = width;
+                int h = height;
+                int level = 0;
+                while (true)
+                {
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    {
+                        int imageSize = 0;
+                        // PVRTC has explicit calculations for imageSize
+                        // https://www.khronos.org/registry/OpenGL/extensions/IMG/IMG_texture_compression_pvrtc.txt
+                        if (format == SurfaceFormat.RgbPvrtc2Bpp || format == SurfaceFormat.RgbaPvrtc2Bpp)
+                        {
+                            imageSize = (Math.Max(w, 16) * Math.Max(h, 8) * 2 + 7) / 8;
+                        }
+                        else if (format == SurfaceFormat.RgbPvrtc4Bpp || format == SurfaceFormat.RgbaPvrtc4Bpp)
+                        {
+                            imageSize = (Math.Max(w, 8) * Math.Max(h, 8) * 4 + 7) / 8;
+                        }
+                        else
+                        {
+                            int blockSize = format.GetSize();
+                            int blockWidth, blockHeight;
+                            format.GetBlockSize(out blockWidth, out blockHeight);
+                            int wBlocks = (w + (blockWidth - 1)) / blockWidth;
+                            int hBlocks = (h + (blockHeight - 1)) / blockHeight;
+                            imageSize = wBlocks * hBlocks * blockSize;
+                        }
+                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
+                        GraphicsExtensions.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.TexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, _glFormat, _glType, IntPtr.Zero);
+                        GraphicsExtensions.CheckGLError();
+                    }
+
+                    if ((w == 1 && h == 1) || !mipMap)
+                        break;
+                    if (w > 1)
+                        w = w / 2;
+                    if (h > 1)
+                        h = h / 2;
+                    ++level;
+                }
+            }
+        }
+       private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
+        {
+            System.Diagnostics.Debug.Assert(_glTexture < 0);
+
+            _glTexture = GL.GenTexture();
+            GraphicsExtensions.CheckGLError();
+
+            // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
+            // dimension is not a power of two.
+            TextureWrapMode wrap = TextureWrapMode.Repeat;
+            if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
+                wrap = TextureWrapMode.ClampToEdge;
+
+            GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(
+                TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(
+                TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Linear);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrap);
+            GraphicsExtensions.CheckGLError();
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
+            GraphicsExtensions.CheckGLError();
+
+            // Set mipMap levels
+#if !GLES
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+#endif
+            GraphicsExtensions.CheckGLError();
+            if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
+            {
+                if (this.LevelCount > 0)
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
+                }
+                else
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, 1000);
+                }
+                GraphicsExtensions.CheckGLError();
+            }
+        }
+
+
+
     }
 }

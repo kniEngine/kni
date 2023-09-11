@@ -10,10 +10,19 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ConcreteTexture3D : ConcreteTexture, ITexture3DStrategy
     {
+        internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, depth, mipMap, format)
+        {
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
 
+            this.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
 
 
@@ -48,5 +57,9 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture3DStrategy
 
+        internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

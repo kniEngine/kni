@@ -11,7 +11,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class TextureCube : Texture
+	public class TextureCube : Texture
 	{
         protected ITextureCubeStrategy _strategyTextureCube;
 
@@ -27,8 +27,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
-
-            PlatformConstructTextureCube(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
         }
 
         internal TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, 

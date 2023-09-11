@@ -12,10 +12,22 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly int _size;
 
+
+        internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format,
+                                     bool isRenderTarget)
+            : this(contextStrategy, size, mipMap, format)
+        {
+            this._size = size;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
+
+            this.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
         }
 
 
@@ -34,6 +46,12 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
         #endregion #region ITextureCubeStrategy
+
+
+        internal void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

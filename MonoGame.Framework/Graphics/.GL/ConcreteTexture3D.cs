@@ -21,12 +21,26 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _depth;
 
+
+        internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, depth, mipMap, format)
+        {
+            this._width = width;
+            this._height = height;
+            this._depth = depth;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;
             this._depth = depth;
+
+            this.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
 
 
@@ -72,6 +86,30 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
         #endregion #region ITexture3DStrategy
+
+
+        internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        {
+            _glTarget = TextureTarget.Texture3D;
+
+            Threading.EnsureUIThread();
+            {
+                _glTexture = GL.GenTexture();
+                GraphicsExtensions.CheckGLError();
+
+                GL.BindTexture(_glTarget, _glTexture);
+                GraphicsExtensions.CheckGLError();
+
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+
+                GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
+                GraphicsExtensions.CheckGLError();
+            }
+
+            if (mipMap)
+                throw new NotImplementedException("Texture3D does not yet support mipmaps.");
+        }
+
 
     }
 }

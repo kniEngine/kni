@@ -25,6 +25,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal readonly bool _mipMap;
 
+
+        internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, depth, mipMap, format)
+        {
+            this._width = width;
+            this._height = height;
+            this._depth = depth;
+
+            this._mipMap = mipMap;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
@@ -33,6 +47,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depth = depth;
 
             this._mipMap = mipMap;
+
+            this.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
 
 
@@ -135,6 +151,23 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture3DStrategy
 
+        internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        {
+            D3D11.Texture3DDescription texture3DDesc = new D3D11.Texture3DDescription();
+            texture3DDesc.Width = this.Width;
+            texture3DDesc.Height = this.Height;
+            texture3DDesc.Depth = this.Depth;
+            texture3DDesc.MipLevels = this.LevelCount;
+            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture3DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+
+            D3D11.Resource texture = new D3D11.Texture3D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+            _texture = texture;
+            _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+        }
 
     }
 }

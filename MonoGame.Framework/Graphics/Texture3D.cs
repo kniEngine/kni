@@ -12,7 +12,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class Texture3D : Texture
+	public class Texture3D : Texture
 	{
         protected ITexture3DStrategy _strategyTexture3D;
 
@@ -28,8 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
-
-            PlatformConstructTexture3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, format);
         }
 
         internal Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format,

@@ -27,6 +27,21 @@ namespace Microsoft.Xna.Platform.Graphics
         internal readonly bool _mipMap;
         internal readonly bool _shared;
 
+
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, mipMap, format, arraySize, shared)
+        {
+            this._width  = width;
+            this._height = height;
+            this._arraySize = arraySize;
+
+            this._mipMap = mipMap;
+            this._shared = shared;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
@@ -36,6 +51,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             this._mipMap = mipMap;
             this._shared = shared;
+
+            this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
 
 
@@ -239,6 +256,28 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion #region ITexture2DStrategy
 
+        internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        {
+            DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
+            D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
+            texture2DDesc.Width = this.Width;
+            texture2DDesc.Height = this.Height;
+            texture2DDesc.MipLevels = this.LevelCount;
+            texture2DDesc.ArraySize = this.ArraySize;
+            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+            texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            texture2DDesc.SampleDescription = sampleDesc;
+            texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+            texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+
+            if (this._shared)
+                texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
+
+            D3D11.Resource texture = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            _texture = texture;
+            _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+        }
 
     }
 }
