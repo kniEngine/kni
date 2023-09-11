@@ -127,6 +127,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
+        private Texture2D(GraphicsContext context, Stream stream)
+        {
+            _strategyTexture2D = context.Strategy.CreateTexture2DStrategy(stream);
+            _strategyTexture = _strategyTexture2D;
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
+
+            this.TexelWidth = 1f / (float)this.Width;
+            this.TexelHeight = 1f / (float)this.Height;
+        }
 
 
         /// <summary>
@@ -295,7 +304,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                return PlatformFromStream(graphicsDevice, stream);
+                return new Texture2D(graphicsDevice.Strategy.MainContext, stream);
             }
             catch(Exception e)
             {

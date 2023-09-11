@@ -57,7 +57,6 @@
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
     <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
 	  
-    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />

@@ -429,7 +429,6 @@
     <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />
     <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
     <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
-    <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.DirectX.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.DirectX.cs" />

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -135,6 +136,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new NotImplementedException();
         }
+
+        internal override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
+        {
+            return new ConcreteTexture2D(this, stream);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

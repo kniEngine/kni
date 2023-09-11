@@ -410,7 +410,6 @@
     <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
     <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
-    <Compile Include="Graphics\Texture2D.FromStream.DX11.cs" />
     <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />

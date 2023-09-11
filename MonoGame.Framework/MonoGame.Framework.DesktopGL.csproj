@@ -60,7 +60,6 @@
 	
   <ItemGroup>
     <Compile Include="TitleContainer.Desktop.cs" />
-    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
     <Compile Include="Platform\SDL\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />

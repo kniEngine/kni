@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
@@ -722,6 +723,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcreteRenderTargetCube(this, size, mipMap, usage, preferredSurfaceFormat, preferredDepthFormat);
         }
+
+        internal override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
+        {
+            return new ConcreteTexture2D(this, stream);
+        }
+
 
         protected override void Dispose(bool disposing)
         {
