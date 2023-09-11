@@ -40,6 +40,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
+
+            this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
 
 

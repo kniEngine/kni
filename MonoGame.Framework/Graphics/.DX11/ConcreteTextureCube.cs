@@ -42,6 +42,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._size = size;
 
             this._mipMap = mipMap;
+
+            this.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
         }
 
 

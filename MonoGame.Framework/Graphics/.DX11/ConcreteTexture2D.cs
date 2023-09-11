@@ -51,6 +51,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             this._mipMap = mipMap;
             this._shared = shared;
+
+            this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
 
 

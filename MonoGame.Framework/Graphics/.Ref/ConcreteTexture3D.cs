@@ -22,7 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
         {
 
+            this.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
+
 
         #region ITexture3DStrategy
         public int Width

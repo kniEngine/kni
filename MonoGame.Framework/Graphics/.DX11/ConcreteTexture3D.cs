@@ -47,6 +47,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depth = depth;
 
             this._mipMap = mipMap;
+
+            this.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
 
 

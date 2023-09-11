@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
+
+            this.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
         }
 
 
