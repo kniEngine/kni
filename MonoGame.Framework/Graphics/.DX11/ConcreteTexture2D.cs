@@ -27,6 +27,21 @@ namespace Microsoft.Xna.Platform.Graphics
         internal readonly bool _mipMap;
         internal readonly bool _shared;
 
+
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, mipMap, format, arraySize, shared)
+        {
+            this._width  = width;
+            this._height = height;
+            this._arraySize = arraySize;
+
+            this._mipMap = mipMap;
+            this._shared = shared;
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {

@@ -10,6 +10,15 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D : ConcreteTexture, ITexture2DStrategy
     {
+
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
+                                   bool isRenderTarget)
+            : this(contextStrategy, width, height, mipMap, format, arraySize, shared)
+        {
+
+            System.Diagnostics.Debug.Assert(isRenderTarget);
+        }
+
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
             : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {

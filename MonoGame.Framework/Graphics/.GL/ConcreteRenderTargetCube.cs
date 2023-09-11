@@ -18,7 +18,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
-            : base(contextStrategy, size, mipMap, preferredSurfaceFormat)
+            : base(contextStrategy, size, mipMap, preferredSurfaceFormat,
+                   isRenderTarget: true)
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
