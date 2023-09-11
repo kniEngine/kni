@@ -28,6 +28,117 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+            : base(contextStrategy, SurfaceFormat.Color, 1)
+        {
+            this._arraySize = 1;
+            
+            // Rewind stream if it is at end
+            if (stream.CanSeek && stream.Length == stream.Position)
+                stream.Seek(0, SeekOrigin.Begin);
+
+            if (stream.CanSeek)
+            {
+                PlatformFromStream_DX(contextStrategy, stream, out this._width, out this._height);
+            }
+            else
+            {
+                // If stream doesn't provide seek functionality, use MemoryStream instead
+                using (Stream ms = new MemoryStream())
+                {
+                    stream.CopyTo(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    PlatformFromStream_ImageSharp(contextStrategy, ms, out this._width, out this._height);
+                 }
+            }
+        }
+
+        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        {
+            // The data returned is always four channel BGRA
+            StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
+            width = result.Width;
+            height = result.Height;
+            ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+
+            this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
+            this.SetData<byte>(0, result.Data, 0, result.Data.Length);
+        }
+
+        private static WIC.BitmapSource LoadBitmap_DX(Stream stream, out WIC.BitmapDecoder decoder)
+        {
+            using (WIC.ImagingFactory imgfactory = new WIC.ImagingFactory())
+            {
+                decoder = new WIC.BitmapDecoder(imgfactory, stream, WIC.DecodeOptions.CacheOnDemand);
+
+                WIC.FormatConverter fconv = new WIC.FormatConverter(imgfactory);
+
+                using (WIC.BitmapFrameDecode frame = decoder.GetFrame(0))
+                {
+                    fconv.Initialize(
+                        frame,
+                        WIC.PixelFormat.Format32bppRGBA,
+                        WIC.BitmapDitherType.None,
+                        null,
+                        0.0,
+                        WIC.BitmapPaletteType.Custom);
+                }
+                return fconv;
+            }
+        }
+
+        private unsafe void PlatformFromStream_DX(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        {
+            // For reference this implementation was ultimately found through this post:
+            // http://stackoverflow.com/questions/9602102/loading-textures-with-sharpdx-in-metro 
+
+            WIC.BitmapDecoder decoder;
+            using (WIC.BitmapSource bmpSource = LoadBitmap_DX(stream, out decoder))
+            using (decoder)
+            {
+                width = bmpSource.Size.Width;
+                height = bmpSource.Size.Height;
+                ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+
+                // TODO: use texture.SetData(...)
+                D3D11.Texture2DDescription texture2DDesc;
+                texture2DDesc.Width = width;
+                texture2DDesc.Height = height;
+                texture2DDesc.ArraySize = 1;
+                texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
+                texture2DDesc.Usage = D3D11.ResourceUsage.Default;
+                texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+                texture2DDesc.Format = DXGI.Format.R8G8B8A8_UNorm;
+                texture2DDesc.MipLevels = 1;
+                texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+                texture2DDesc.SampleDescription.Count = 1;
+                texture2DDesc.SampleDescription.Quality = 0;
+
+                using (DX.DataStream dataStream = new DX.DataStream(bmpSource.Size.Height * bmpSource.Size.Width * 4, true, true))
+                {
+                    bmpSource.CopyPixels(bmpSource.Size.Width * 4, dataStream);
+                    DX.DataRectangle rect = new DX.DataRectangle(dataStream.DataPointer, bmpSource.Size.Width * 4);
+                    _texture = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
+                    _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _texture);
+                }
+            }
+        }
+
+        private static unsafe void ValidateBounds(GraphicsDeviceStrategy deviceStrategy, int width, int height)
+        {
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
+                throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
+                throw new NotSupportedException("HiDef profile supports a maximum Texture2D size of 4096");
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
+                throw new NotSupportedException("FL10_0 profile supports a maximum Texture2D size of 8192");
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
+                throw new NotSupportedException("FL10_1 profile supports a maximum Texture2D size of 8192");
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
+                throw new NotSupportedException("FL11_0 profile supports a maximum Texture2D size of 16384");
+            if (deviceStrategy.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
+                throw new NotSupportedException("FL11_1 profile supports a maximum Texture2D size of 16384");
+        }
 
         public void SaveAsPng(Stream stream, int width, int height)
         {

@@ -11,6 +11,12 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+            : base(contextStrategy, SurfaceFormat.Color, 1)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
 
         public void SaveAsPng(Stream stream, int width, int height)
         {

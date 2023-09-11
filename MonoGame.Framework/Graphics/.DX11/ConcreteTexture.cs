@@ -33,11 +33,6 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.Resource _texture;
         internal D3D11.ShaderResourceView _resourceView;
 
-        internal void SetTextureInternal_DX(D3D11.Resource textureResource)
-        {
-            _texture = textureResource;
-        }
-
         internal D3D11.Resource GetTexture()
         {
             System.Diagnostics.Debug.Assert(_texture != null);

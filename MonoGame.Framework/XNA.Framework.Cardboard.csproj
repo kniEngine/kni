@@ -431,7 +431,6 @@
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Texture.OpenGL.cs" />
-    <Compile Include="Graphics\Texture2D.FromStream.GL.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />

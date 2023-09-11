@@ -7,11 +7,21 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
 
+#if ANDROID //FromStream
+//using Android.Graphics;
+#endif
+
+#if IOS || TVOS //FromStream
+using UIKit;
+using CoreGraphics;
+using Foundation;
+#endif
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -775,6 +785,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcreteRenderTargetCube(this, size, mipMap, usage, preferredSurfaceFormat, preferredDepthFormat);
         }
+
+        internal override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
+        {
+            return new ConcreteTexture2D(this, stream);
+        }
+
 
         protected override void Dispose(bool disposing)
         {
