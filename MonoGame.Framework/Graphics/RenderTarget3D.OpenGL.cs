@@ -8,14 +8,6 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget3D
     {
 
-        private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
-        {
-            ((ConcreteRenderTarget3D)_strategyRenderTarget3D)._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
-
-            throw new PlatformNotSupportedException();
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

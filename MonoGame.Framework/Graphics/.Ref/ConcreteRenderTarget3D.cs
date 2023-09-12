@@ -17,6 +17,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
 
             PlatformConstructTexture3D_rt(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat);
+
+            // If we don't need a depth buffer then we're done.
+            if (preferredDepthFormat != DepthFormat.None)
+                PlatformConstructRenderTarget3D(contextStrategy, width, height, depth, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
 
@@ -43,5 +47,10 @@ namespace Microsoft.Xna.Platform.Graphics
             base.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
         }
 
+        private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        {
+            throw new PlatformNotSupportedException();
+        }
     }
 }
