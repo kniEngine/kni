@@ -29,6 +29,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
             ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews = new D3D11.DepthStencilView[1];
 
+            if (MultiSampleCount > 1)
+                _msTexture = CreateMSTexture();
+
             CreateRenderTargetView(d3dDevice, width, height);
             if (DepthStencilFormat != DepthFormat.None)
                 CreateDepthStencilView(d3dDevice, width, height);
@@ -37,8 +40,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private void CreateRenderTargetView(D3D11.Device d3dDevice, int width, int height)
         {
             D3D11.Resource viewTex = (MultiSampleCount > 1)
-                                   ? GetMSTexture()
+                                   ? _msTexture
                                    : this.GetTextureStrategy<ConcreteTexture>().GetTexture();
+
+            System.Diagnostics.Debug.Assert(viewTex != null);
 
             // Create a view interface on the rendertarget to use on bind.
             if (this.ArraySize > 1)
@@ -144,8 +149,10 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
+                System.Diagnostics.Debug.Assert(_msTexture != null);
+
                 d3dContext.ResolveSubresource(
-                    GetMSTexture(),
+                    _msTexture,
                     0,
                     this.GetTextureStrategy<ConcreteTexture>().GetTexture(),
                     0,
@@ -153,17 +160,10 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private D3D11.Texture2D GetMSTexture()
+        private D3D11.Texture2D CreateMSTexture()
         {
-            if (_msTexture != null)
-                return _msTexture;
-            
-            _msTexture = CreateMSTexture();
-            return _msTexture;
-        }
+            System.Diagnostics.Debug.Assert(_msTexture == null);
 
-        internal virtual D3D11.Texture2D CreateMSTexture()
-        {
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
             texture2DDesc.Width = this.Width;
             texture2DDesc.Height = this.Height;
