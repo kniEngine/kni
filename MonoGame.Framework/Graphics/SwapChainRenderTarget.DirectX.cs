@@ -43,8 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                      int preferredMultiSampleCount,
                                      RenderTargetUsage usage,
                                      PresentInterval presentInterval)
-            : base(graphicsDevice, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, usage, false, 1,
-                   SurfaceType.RenderTargetSwapChain)
+            : base(graphicsDevice, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, usage, false, 1)
         {
             this._windowHandle = windowHandle;
             this.PresentInterval = presentInterval;

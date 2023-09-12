@@ -33,6 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
 
+            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
         }
 
 
@@ -91,5 +92,17 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
+
+        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
+        {
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+
+            //Threading.EnsureUIThread();
+            {
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+            }
+        }
+
     }
 }
