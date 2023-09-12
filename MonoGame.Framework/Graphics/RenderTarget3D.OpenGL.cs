@@ -8,14 +8,5 @@ namespace Microsoft.Xna.Framework.Graphics
     public partial class RenderTarget3D
     {
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {                
-            }
-
-            base.Dispose(disposing);
-        }
-
     }
 }

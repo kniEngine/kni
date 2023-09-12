@@ -16,29 +16,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTargetCube
     {
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (((ConcreteRenderTargetCube)_strategyRenderTargetCube)._renderTargetViews != null)
-                {
-                    for (int i = 0; i < ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._renderTargetViews.Length; i++)
-                        ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._renderTargetViews[i].Dispose();
-                    ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._renderTargetViews = null;
-                }
-
-                if (((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews != null)
-                {
-                    for (int i = 0; i < ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews.Length; i++)
-                        if (((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews[i] != null)
-                            ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews[i].Dispose();
-                    ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthStencilViews = null;
-                }
-
-                DX.Utilities.Dispose(ref ((ConcreteRenderTargetCube)_strategyRenderTargetCube)._depthTarget);
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }

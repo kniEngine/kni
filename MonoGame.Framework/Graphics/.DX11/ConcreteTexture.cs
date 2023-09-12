@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -45,6 +46,17 @@ namespace Microsoft.Xna.Platform.Graphics
             System.Diagnostics.Debug.Assert(_resourceView != null);
 
             return _resourceView;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DX.Utilities.Dispose(ref _resourceView);
+                DX.Utilities.Dispose(ref _texture);
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

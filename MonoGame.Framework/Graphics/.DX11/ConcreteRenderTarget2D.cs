@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
@@ -210,5 +211,29 @@ namespace Microsoft.Xna.Platform.Graphics
 
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_renderTargetViews != null)
+                {
+                    for (int i = 0; i < _renderTargetViews.Length; i++)
+                        _renderTargetViews[i].Dispose();
+                    _renderTargetViews = null;
+                }
+                if (_depthStencilViews != null)
+                {
+                    for (int i = 0; i < _depthStencilViews.Length; i++)
+                        DX.Utilities.Dispose(ref _depthStencilViews[i]);
+                    _depthStencilViews = null;
+                }
+                DX.Utilities.Dispose(ref _msTexture);
+            }
+
+            base.Dispose(disposing);
+        }
+
+
     }
 }

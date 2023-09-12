@@ -53,5 +53,16 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy);
+
+            base.Dispose(disposing);
+        }
     }
 }

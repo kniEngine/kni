@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DX = SharpDX;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
@@ -80,12 +81,12 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.TextureCube;
 
-            if (this._mipMap)
+            if (_mipMap)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
 
             D3D11.Resource texture = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
-            this._texture = texture;
-            this._resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+            _texture = texture;
+            _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
@@ -171,5 +172,30 @@ namespace Microsoft.Xna.Platform.Graphics
             return;
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_renderTargetViews != null)
+                {
+                    for (int i = 0; i < _renderTargetViews.Length; i++)
+                        _renderTargetViews[i].Dispose();
+                    _renderTargetViews = null;
+                }
+
+                if (_depthStencilViews != null)
+                {
+                    for (int i = 0; i < _depthStencilViews.Length; i++)
+                        if (_depthStencilViews[i] != null)
+                            _depthStencilViews[i].Dispose();
+                    _depthStencilViews = null;
+                }
+
+                DX.Utilities.Dispose(ref _depthTarget);
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

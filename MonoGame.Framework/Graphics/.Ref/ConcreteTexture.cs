@@ -23,5 +23,14 @@ namespace Microsoft.Xna.Platform.Graphics
         public int LevelCount { get { throw new PlatformNotSupportedException(); } }
         #endregion ITextureStrategy
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }            
+
+            base.Dispose(disposing);
+        }
     }
 }

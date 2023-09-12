@@ -31,28 +31,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews != null)
-                {
-                    for (int i = 0; i < ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews.Length; i++)
-                        ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews[i].Dispose();
-                    ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._renderTargetViews = null;
-                }
-                if (((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews != null)
-                {
-                    for (int i = 0; i < ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews.Length; i++)
-                        DX.Utilities.Dispose(ref ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews[i]);
-                    ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._depthStencilViews = null;
-                }
-                DX.Utilities.Dispose(ref ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._msTexture);
-            }
-
-            base.Dispose(disposing);
-        }
-
         internal virtual void ResolveSubresource()
         {
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)

@@ -13,18 +13,5 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGraphicsDeviceResetting()
         {
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (GraphicsDevice != null)
-                {
-                    ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget2D, GraphicsDevice.Strategy);
-                }
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }

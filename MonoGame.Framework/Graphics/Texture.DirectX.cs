@@ -30,16 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
             DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
-                DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }
 

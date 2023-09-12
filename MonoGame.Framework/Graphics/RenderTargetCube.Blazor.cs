@@ -10,16 +10,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTargetCube
     {
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-
-            }
-
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTargetCube, GraphicsDevice.Strategy);
-
-            base.Dispose(disposing);
-        }
     }
 }

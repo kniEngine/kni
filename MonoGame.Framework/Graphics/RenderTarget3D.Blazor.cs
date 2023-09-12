@@ -10,18 +10,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget3D
     {
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                
-            }
-
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this._strategyRenderTarget3D, GraphicsDevice.Strategy);
-
-            base.Dispose(disposing);
-        }
-
     }
 }
