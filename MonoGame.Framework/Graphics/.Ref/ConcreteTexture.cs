@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
         #region ITextureStrategy
         public SurfaceFormat Format { get { throw new PlatformNotSupportedException(); } }
         public int LevelCount { get { throw new PlatformNotSupportedException(); } }
-        #endregion #region ITextureStrategy
+        #endregion ITextureStrategy
 
     }
 }

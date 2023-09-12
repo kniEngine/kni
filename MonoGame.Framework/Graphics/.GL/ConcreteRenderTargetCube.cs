@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _renderTargetUsage; }
         }
-        #endregion #region IRenderTarget2DStrategy
+        #endregion IRenderTarget2DStrategy
 
 
         int _glColorBuffer;
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return TextureTarget.TextureCubeMapPositiveX + arraySlice;
         }
-        #endregion #region IRenderTargetStrategyGL
+        #endregion IRenderTargetStrategyGL
 
     }
 }

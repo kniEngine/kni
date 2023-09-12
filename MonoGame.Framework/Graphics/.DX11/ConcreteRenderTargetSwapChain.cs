@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new NotImplementedException(); }
         }
-        #endregion #region ITextureStrategy
+        #endregion ITextureStrategy
 
 
         #region ITexture2DStrategy
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new NotImplementedException();
         }
-        #endregion #region ITexture2DStrategy
+        #endregion ITexture2DStrategy
 
 
         #region IRenderTargetStrategy
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _renderTargetUsage; }
         }
-        #endregion #region IRenderTarget2DStrategy
+        #endregion IRenderTarget2DStrategy
 
 
         internal D3D11.RenderTargetView[] _renderTargetViews;

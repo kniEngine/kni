@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _renderTargetUsage; }
         }
-        #endregion #region IRenderTarget2DStrategy
+        #endregion IRenderTarget2DStrategy
 
 
         WebGLTexture _glColorBuffer;
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }
-        #endregion #region IRenderTargetStrategyGL
+        #endregion IRenderTargetStrategyGL
 
     }
 }

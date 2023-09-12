@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
         }
-        #endregion #region ITexture2DStrategy
+        #endregion ITexture2DStrategy
 
 
         private static int GetBoundTexture2D()

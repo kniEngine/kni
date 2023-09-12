@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
 #endif
         }
-        #endregion #region ITextureCubeStrategy
+        #endregion ITextureCubeStrategy
 
 
 

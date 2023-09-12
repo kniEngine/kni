@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _renderTargetUsage; }
         }
-        #endregion #region IRenderTarget2DStrategy
+        #endregion IRenderTarget2DStrategy
 
 
         internal D3D11.RenderTargetView[] _renderTargetViews;
