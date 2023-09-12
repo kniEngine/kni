@@ -17,12 +17,21 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly RenderTargetUsage _renderTargetUsage;
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
-            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat,
+              Texture2D.SurfaceType surfaceType)
             : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared,
                    isRenderTarget: true)
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
+
+            if (surfaceType == Texture2D.SurfaceType.RenderTargetSwapChain)
+            {
+                // Texture will be created by the RenderTargetSwapChain.
+                return;
+            }
+
+            PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
         }
 
 
@@ -76,5 +85,10 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion IRenderTargetStrategyGL
 
+
+        private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        {
+            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
+        }
     }
 }

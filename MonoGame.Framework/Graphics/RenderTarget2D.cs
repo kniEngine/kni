@@ -34,19 +34,24 @@ namespace Microsoft.Xna.Framework.Graphics
       protected RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize, SurfaceType surfaceType)
             : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), shared, arraySize, true)
         {
-            if (surfaceType != SurfaceType.SwapChainRenderTarget)
+            if (surfaceType != SurfaceType.RenderTargetSwapChain)
                 throw new InvalidOperationException();
 
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
-                format, preferredDepthFormat);
+                format, preferredDepthFormat,
+                surfaceType: SurfaceType.RenderTargetSwapChain);
             _strategyTexture2D = _strategyRenderTarget2D;
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
 
-            // Texture will be assigned by the swap chain.
-            //PlatformConstructTexture2D_rt(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
+            if (surfaceType == SurfaceType.RenderTargetSwapChain)
+            {
+                // Texture will be created by the RenderTargetSwapChain.
+                return;
+            }
 
+            //PlatformConstructRenderTarget2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
         }
 
         public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
@@ -54,12 +59,12 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
-                format, preferredDepthFormat);
+                format, preferredDepthFormat,
+                surfaceType: Texture2D.SurfaceType.RenderTarget);
             _strategyTexture2D = _strategyRenderTarget2D;
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
 
-            PlatformConstructTexture2D_rt(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, format, shared);
             PlatformConstructRenderTarget2D(graphicsDevice.Strategy.MainContext.Strategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
 	    }
         

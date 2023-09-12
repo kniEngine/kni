@@ -81,7 +81,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
 
-            PlatformConstructTextureCube_rt(graphicsDevice.Strategy.MainContext.Strategy, size, mipMap, format);
             PlatformConstructRenderTargetCube(graphicsDevice.Strategy.MainContext.Strategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
         

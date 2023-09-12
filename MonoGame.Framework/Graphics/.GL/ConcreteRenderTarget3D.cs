@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
+
+            PlatformConstructTexture3D_rt(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat);
         }
 
 
@@ -77,5 +79,9 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion IRenderTargetStrategyGL
 
 
+        private void PlatformConstructTexture3D_rt(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        {
+            base.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Texture,
             RenderTarget,
-            SwapChainRenderTarget,
+            RenderTargetSwapChain,
         }
                 
         internal float TexelWidth { get; private set; }

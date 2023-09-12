@@ -16,6 +16,7 @@ namespace Microsoft.Xna.Platform.Graphics
                    isRenderTarget: true)
         {
 
+            PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
         }
 
 
@@ -35,6 +36,12 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
         #endregion IRenderTarget2DStrategy
+
+
+        private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
+        }
 
     }
 }
