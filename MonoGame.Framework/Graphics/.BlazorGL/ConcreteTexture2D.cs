@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new NotImplementedException();
         }
-        #endregion #region ITexture2DStrategy
+        #endregion ITexture2DStrategy
 
 
         internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)

@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
-        #endregion #region IRenderTarget2DStrategy
+        #endregion IRenderTarget2DStrategy
 
     }
 }

@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
         #region ITextureStrategy
         public SurfaceFormat Format { get { return _format; } }
         public int LevelCount { get { return _levelCount; } }
-        #endregion #region ITextureStrategy
+        #endregion ITextureStrategy
 
 
         internal WebGLTexture _glTexture;

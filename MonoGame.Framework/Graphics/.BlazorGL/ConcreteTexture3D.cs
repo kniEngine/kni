@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new NotImplementedException();
         }
-        #endregion #region ITexture3DStrategy
+        #endregion ITexture3DStrategy
 
         internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
