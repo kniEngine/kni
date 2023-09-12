@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
-                format, preferredDepthFormat,
+                format, preferredDepthFormat, preferredMultiSampleCount,
                 surfaceType: SurfaceType.RenderTargetSwapChain);
             _strategyTexture2D = _strategyRenderTarget2D;
             _strategyTexture = _strategyTexture2D;
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
-                format, preferredDepthFormat,
+                format, preferredDepthFormat, preferredMultiSampleCount,
                 surfaceType: Texture2D.SurfaceType.RenderTarget);
             _strategyTexture2D = _strategyRenderTarget2D;
             _strategyTexture = _strategyTexture2D;

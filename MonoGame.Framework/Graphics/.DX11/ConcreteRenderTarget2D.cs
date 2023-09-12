@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly RenderTargetUsage _renderTargetUsage;
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
-            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat,
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
               Texture2D.SurfaceType surfaceType)
             : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared,
                    isRenderTarget: true)

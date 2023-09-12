@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly RenderTargetUsage _renderTargetUsage;
 
         internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
-            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
             : base(contextStrategy, size, mipMap, preferredSurfaceFormat,
                    isRenderTarget: true)
         {

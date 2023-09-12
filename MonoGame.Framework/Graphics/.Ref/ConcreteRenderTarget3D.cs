@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
     internal class ConcreteRenderTarget3D : ConcreteTexture3D, IRenderTarget3DStrategy, IRenderTargetStrategy
     {
         internal ConcreteRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, RenderTargetUsage usage,
-            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+            SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
             : base(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat,
                    isRenderTarget: true)
         {

@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTargetCube = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTargetCubeStrategy(size, mipMap, usage,
-                format, preferredDepthFormat);
+                format, preferredDepthFormat, preferredMultiSampleCount);
             _strategyTextureCube = _strategyRenderTargetCube;
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
