@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
+
+            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
         }
 
 
@@ -50,6 +52,12 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
+        }
+
+        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
+        {
+            throw new PlatformNotSupportedException();
         }
     }
 }
