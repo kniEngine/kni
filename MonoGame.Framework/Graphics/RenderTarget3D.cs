@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class RenderTarget3D : Texture3D, IRenderTarget
+	public class RenderTarget3D : Texture3D, IRenderTarget
 	{
         private IRenderTarget3DStrategy _strategyRenderTarget3D;
 
