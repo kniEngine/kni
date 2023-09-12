@@ -25,6 +25,10 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depthStencilFormat = preferredDepthFormat;
 
             PlatformConstructTexture3D_rt(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat);
+
+            // If we don't need a depth buffer then we're done.
+            if (preferredDepthFormat != DepthFormat.None)
+                PlatformConstructRenderTarget3D(contextStrategy, width, height, depth, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
 
@@ -79,6 +83,14 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructTexture3D_rt(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
             base.PlatformConstructTexture3D(contextStrategy, width, height, depth, mipMap, format);
+        }
+
+        private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        {
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+
+            throw new NotImplementedException();
         }
     }
 }

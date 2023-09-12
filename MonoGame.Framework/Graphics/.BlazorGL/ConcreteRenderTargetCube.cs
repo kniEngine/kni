@@ -25,6 +25,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depthStencilFormat = preferredDepthFormat;
 
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
+
+            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
 
@@ -79,6 +81,14 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
         {
             base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
+        }
+
+        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
+            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        {
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+
+            throw new NotImplementedException();
         }
 
     }

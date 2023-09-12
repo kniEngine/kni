@@ -38,10 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture3D = _strategyRenderTarget3D;
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
-
-            // If we don't need a depth buffer then we're done.
-            if (preferredDepthFormat != DepthFormat.None)
-                PlatformConstructRenderTarget3D(graphicsDevice.Strategy.MainContext.Strategy, width, height, depth, mipMap, preferredDepthFormat, preferredMultiSampleCount);
         }
 
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)
