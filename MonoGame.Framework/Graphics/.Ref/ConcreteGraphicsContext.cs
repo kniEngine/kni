@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat)
+        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, Texture2D.SurfaceType surfaceType)
         {
             throw new NotImplementedException();
         }

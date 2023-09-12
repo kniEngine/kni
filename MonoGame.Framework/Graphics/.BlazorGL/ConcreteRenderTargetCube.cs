@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
+
+            PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
         }
 
 
@@ -72,6 +74,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return WebGLTextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X + arraySlice;
         }
         #endregion IRenderTargetStrategyGL
+
+
+        private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        {
+            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
+        }
 
     }
 }
