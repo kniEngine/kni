@@ -212,6 +212,23 @@ namespace Microsoft.Xna.Platform.Graphics
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
+        internal virtual void ResolveSubresource()
+        {
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            {
+                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+
+                System.Diagnostics.Debug.Assert(_msTexture != null);
+
+                d3dContext.ResolveSubresource(
+                    _msTexture,
+                    0,
+                    this.GetTexture(),
+                    0,
+                    GraphicsExtensions.ToDXFormat(this.Format));
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -31,22 +31,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal virtual void ResolveSubresource()
-        {
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
-            {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                System.Diagnostics.Debug.Assert(((ConcreteRenderTarget2D)_strategyRenderTarget2D)._msTexture != null);
-
-                d3dContext.ResolveSubresource(
-                    ((ConcreteRenderTarget2D)_strategyRenderTarget2D)._msTexture,
-                    0,
-                    this.GetTextureStrategy<ConcreteTexture>().GetTexture(),
-                    0,
-                    GraphicsExtensions.ToDXFormat(this.Format));
-            }
-        }
-
     }
 }
