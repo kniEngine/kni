@@ -588,7 +588,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Resolve MSAA render targets
                 RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
                 if (renderTarget != null && renderTarget.MultiSampleCount > 1)
-                    renderTarget.ResolveSubresource();
+                    ((ConcreteRenderTarget2D)renderTarget._strategyRenderTarget2D).ResolveSubresource();
 
                 // Generate mipmaps.
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
