@@ -50,6 +50,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+        
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }            
 
+            base.Dispose(disposing);
+        }
     }
 }

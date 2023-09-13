@@ -457,5 +457,27 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+            
+            if (_glTexture > 0)
+            {
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    GL.DeleteTexture(_glTexture);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+            _glTexture = -1;
+
+            _glLastSamplerState = null;
+
+            base.Dispose(disposing);
+        }
+
     }
 }

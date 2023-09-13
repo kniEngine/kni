@@ -30,8 +30,6 @@
     <Compile Include="Graphics\GraphicsExtensions.Blazor.cs" />
     <Compile Include="Graphics\OcclusionQuery.Blazor.cs" />
     <Compile Include="Graphics\RenderTarget2D.Blazor.cs" />
-    <Compile Include="Graphics\RenderTarget3D.Blazor.cs" />
-    <Compile Include="Graphics\RenderTargetCube.Blazor.cs" />
     <Compile Include="Graphics\Shader\Shader.Blazor.cs" />
     <Compile Include="Graphics\States\BlendState.Blazor.cs" />
     <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />

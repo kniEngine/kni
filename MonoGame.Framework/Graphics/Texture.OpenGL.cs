@@ -26,26 +26,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = null;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (GetTextureStrategy<ConcreteTexture>()._glTexture > 0)
-                {
-                    if (!GraphicsDevice.IsDisposed)
-                    {
-                        GL.DeleteTexture(GetTextureStrategy<ConcreteTexture>()._glTexture);
-                        GraphicsExtensions.CheckGLError();
-                    }
-                }
-                GetTextureStrategy<ConcreteTexture>()._glTexture = -1;
-
-                GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = null;
-            }
-
-            base.Dispose(disposing);
-        }
-
     }
 }
 

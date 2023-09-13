@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Represents a texture cube that can be used as a render target.
     /// </summary>
-    public partial class RenderTargetCube : TextureCube, IRenderTarget
+    public class RenderTargetCube : TextureCube, IRenderTarget
     {
         private IRenderTargetCubeStrategy _strategyRenderTargetCube;
 
