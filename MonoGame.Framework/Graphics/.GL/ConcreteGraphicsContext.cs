@@ -741,6 +741,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        internal override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
+        {
+            return new ConcreteOcclusionQuery(this);
+        }
+
         internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {
             return new ConcreteGraphicsDebug(this);

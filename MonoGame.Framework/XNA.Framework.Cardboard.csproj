@@ -228,6 +228,7 @@
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.GL\ConcreteOcclusionQuery.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Graphics\ModelMeshPart.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
     <Compile Include="Graphics\OcclusionQuery.cs" />
+    <Compile Include="Graphics\OcclusionQueryStrategy.cs" />
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
     <Compile Include="Graphics\PackedVector\Bgra4444.cs" />
@@ -420,7 +422,6 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ShaderProgram.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />

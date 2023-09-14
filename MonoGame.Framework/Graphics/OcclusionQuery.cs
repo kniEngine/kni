@@ -3,15 +3,15 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class OcclusionQuery : GraphicsResource
+    public class OcclusionQuery : GraphicsResource
     {
-        private bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
-        private bool _queryPerformed;  // true if Begin+End were called at least once.
-        private bool _isComplete;      // true if the result is available in _pixelCount.
-        private int _pixelCount;       // The query result.
+        private OcclusionQueryStrategy _strategy;
+
+        internal OcclusionQueryStrategy Strategy { get { return _strategy; } }
 
         /// <summary>
         /// Gets a value indicating whether the occlusion query has completed.
@@ -20,21 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <see langword="true"/> if the occlusion query has completed; otherwise,
         /// <see langword="false"/>.
         /// </value>
-        public bool IsComplete
-        {
-            get
-            {
-                if (_isComplete)
-                    return true;
-
-                if (!_queryPerformed || _inBeginEndPair)
-                    return false;
-
-                _isComplete = PlatformGetResult(out _pixelCount);
-
-                return _isComplete;
-            }
-        }
+        public bool IsComplete { get { return _strategy.IsComplete; } }
 
         /// <summary>
         /// Gets the number of visible pixels.
@@ -51,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!IsComplete)
                     throw new InvalidOperationException("The occlusion query has not yet completed. Check IsComplete before reading the result.");
 
-                return _pixelCount;
+                return _strategy.PixelCount;
             }
         }
 
@@ -66,15 +52,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// The current graphics profile does not support occlusion queries.
         /// </exception>
         public OcclusionQuery(GraphicsDevice graphicsDevice)
+            : base(true)
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("The Reach profile does not support occlusion queries.");
 
-            SetGraphicsDevice(graphicsDevice);
-
-            PlatformConstructOcclusionQuery();
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateOcclusionQueryStrategy();
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         /// <summary>
@@ -85,13 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public void Begin()
         {
-            if (_inBeginEndPair)
-                throw new InvalidOperationException("End() must be called before calling Begin() again.");
-
-            _inBeginEndPair = true;
-            _isComplete = false;
-
-            PlatformBegin();
+            _strategy.PlatformBegin();
         }
 
         /// <summary>
@@ -102,13 +82,20 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public void End()
         {
-            if (!_inBeginEndPair)
-                throw new InvalidOperationException("Begin() must be called before calling End().");
+            _strategy.PlatformEnd();
+        }
 
-            _inBeginEndPair = false;
-            _queryPerformed = true;
+        protected override void Dispose(bool disposing)
+        {
+            System.Diagnostics.Debug.Assert(!IsDisposed);
 
-            PlatformEnd();
+            if (disposing)
+            {
+                if (_strategy != null)
+                    _strategy.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

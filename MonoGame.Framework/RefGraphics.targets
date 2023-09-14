@@ -7,6 +7,7 @@
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTargetCube.cs" />
@@ -19,7 +20,6 @@
 	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
-    <Compile Include="Graphics\OcclusionQuery.Ref.cs" />
     <Compile Include="Graphics\Shader\Shader.Ref.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Ref.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Ref.cs" />

@@ -1,18 +1,50 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using Microsoft.Xna.Platform.Graphics;
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    partial class OcclusionQuery
+    public class ConcreteOcclusionQuery : OcclusionQueryStrategy
     {
+        private bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
+        private bool _queryPerformed;  // true if Begin+End were called at least once.
+        private bool _isComplete;      // true if the result is available in _pixelCount.
+        private int _pixelCount;       // The query result.
+
         private D3D11.Query _query;
 
-        private void PlatformConstructOcclusionQuery()
+
+        public override int PixelCount { get { return _pixelCount; } }
+
+        public override bool IsComplete
+        {
+            get
+            {
+                if (_isComplete)
+                    return true;
+
+                if (!_queryPerformed || _inBeginEndPair)
+                    return false;
+
+                return PlatformGetResult();
+
+                return _isComplete;
+            }
+        }
+
+
+        internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
+            : base(contextStrategy)
         {
             //if (graphicsDevice.D3DDevice.FeatureLevel == D3D.FeatureLevel.Level_9_1)
             //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
@@ -22,9 +54,15 @@ namespace Microsoft.Xna.Framework.Graphics
             queryDesc.Type = D3D11.QueryType.Occlusion;
             _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
         }
-        
-        private void PlatformBegin()
+
+        public override void PlatformBegin()
         {
+            if (_inBeginEndPair)
+                throw new InvalidOperationException("End() must be called before calling Begin() again.");
+
+            _inBeginEndPair = true;
+            _isComplete = false;
+
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -33,8 +71,14 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformEnd()
+        public override void PlatformEnd()
         {
+            if (!_inBeginEndPair)
+                throw new InvalidOperationException("Begin() must be called before calling End().");
+
+            _inBeginEndPair = false;
+            _queryPerformed = true;
+
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
@@ -43,26 +87,23 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private bool PlatformGetResult(out int pixelCount)
+        private bool PlatformGetResult()
         {
-            ulong count;
-            bool isComplete;
-
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                isComplete = d3dContext.GetData(_query, out count);
+                ulong count;
+                _isComplete = d3dContext.GetData(_query, out count);
+                _pixelCount = (int)count;
             }
 
-            pixelCount = (int)count;
-            return isComplete;
+            return _isComplete;
         }
+
 
         protected override void Dispose(bool disposing)
         {
-            System.Diagnostics.Debug.Assert(!IsDisposed);
-
             if (disposing)
             {
                 _query.Dispose();
@@ -72,4 +113,3 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 }
-
