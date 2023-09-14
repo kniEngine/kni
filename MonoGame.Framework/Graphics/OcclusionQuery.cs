@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Framework.Graphics
                     return false;
 
                 _strategy._isComplete = _strategy.PlatformGetResult(out _strategy._pixelCount);
-                _strategy._isComplete = PlatformGetResult(out _strategy._pixelCount);
 
                 return _strategy._isComplete;
             }
@@ -78,7 +77,6 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 
             _strategy.PlatformConstructOcclusionQuery();
-            PlatformConstructOcclusionQuery();
         }
 
         /// <summary>
@@ -96,7 +94,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy._isComplete = false;
 
             _strategy.PlatformBegin();
-            PlatformBegin();
         }
 
         /// <summary>
@@ -114,7 +111,19 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy._queryPerformed = true;
 
             _strategy.PlatformEnd();
-            PlatformEnd();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            System.Diagnostics.Debug.Assert(!IsDisposed);
+
+            if (disposing)
+            {
+                if (_strategy != null)
+                    _strategy.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -6,23 +6,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     partial class OcclusionQuery
     {
-        private void PlatformConstructOcclusionQuery()
-        {
-        }
-
-        private void PlatformBegin()
-        {
-        }
-
-        private void PlatformEnd()
-        {
-        }
-
-        private bool PlatformGetResult(out int pixelCount)
-        {
-            pixelCount = 0;
-            return false;
-        }
     }
 }
-

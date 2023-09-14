@@ -17,20 +17,22 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void PlatformBegin()
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void PlatformEnd()
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void PlatformConstructOcclusionQuery()
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override bool PlatformGetResult(out int pixelCount)
         {
-            pixelCount = 0;
-            return false;
+            throw new PlatformNotSupportedException();
         }
 
 
