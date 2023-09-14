@@ -422,7 +422,6 @@
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
-    <Compile Include="Graphics\OcclusionQuery.DirectX.cs" />
     <Compile Include="Graphics\Shader\Shader.DirectX.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
     <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />

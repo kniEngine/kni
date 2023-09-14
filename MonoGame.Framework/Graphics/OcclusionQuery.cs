@@ -7,7 +7,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class OcclusionQuery : GraphicsResource
+    public class OcclusionQuery : GraphicsResource
     {
         private OcclusionQueryStrategy _strategy;
 

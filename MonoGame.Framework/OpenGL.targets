@@ -28,7 +28,6 @@
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ShaderProgram.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
