@@ -7,6 +7,7 @@
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.Ref\ConcreteRenderTargetCube.cs" />

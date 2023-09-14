@@ -238,6 +238,7 @@
     <Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.DX11\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.DX11\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.DX11\ConcreteRenderTargetCube.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Graphics\ModelMeshPart.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
     <Compile Include="Graphics\OcclusionQuery.cs" />
+    <Compile Include="Graphics\OcclusionQueryStrategy.cs" />
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
     <Compile Include="Graphics\PackedVector\Bgra4444.cs" />

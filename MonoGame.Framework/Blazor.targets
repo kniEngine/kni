@@ -11,6 +11,7 @@
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.BlazorGL\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteRenderTargetCube.cs" />

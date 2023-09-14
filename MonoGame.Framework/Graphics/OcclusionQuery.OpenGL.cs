@@ -52,6 +52,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (disposing)
             {
+                if (_strategy != null)
+                    _strategy.Dispose();
             }
 
             if (_glQueryId > -1)

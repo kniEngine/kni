@@ -216,6 +216,7 @@
 	<Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.GL\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="Graphics\ModelMeshPart.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
     <Compile Include="Graphics\OcclusionQuery.cs" />
+    <Compile Include="Graphics\OcclusionQueryStrategy.cs" />
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
     <Compile Include="Graphics\PackedVector\Bgra4444.cs" />

@@ -407,6 +407,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void Flush();
 
 
+        internal abstract OcclusionQueryStrategy CreateOcclusionQueryStrategy();
         internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy();
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
