@@ -25,8 +25,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract void PlatformEnd();
 
-        public abstract void PlatformConstructOcclusionQuery();
-
         public abstract bool PlatformGetResult(out int pixelCount);
 
         protected override void Dispose(bool disposing)

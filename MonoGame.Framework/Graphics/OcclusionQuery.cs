@@ -75,8 +75,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateOcclusionQueryStrategy();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-
-            _strategy.PlatformConstructOcclusionQuery();
         }
 
         /// <summary>

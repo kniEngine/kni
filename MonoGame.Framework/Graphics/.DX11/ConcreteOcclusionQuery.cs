@@ -21,6 +21,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
+            //if (graphicsDevice.D3DDevice.FeatureLevel == D3D.FeatureLevel.Level_9_1)
+            //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
+
+            D3D11.QueryDescription queryDesc = new D3D11.QueryDescription();
+            queryDesc.Flags = D3D11.QueryFlags.None;
+            queryDesc.Type = D3D11.QueryType.Occlusion;
+            _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
         }
 
         public override void PlatformBegin()
@@ -42,17 +49,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 d3dContext.End(_query);
             }
         }
-
-        public override void PlatformConstructOcclusionQuery()
-        {
-            //if (graphicsDevice.D3DDevice.FeatureLevel == D3D.FeatureLevel.Level_9_1)
-            //    throw new NotSupportedException("The Reach profile does not support occlusion queries.");
-
-            D3D11.QueryDescription queryDesc = new D3D11.QueryDescription();
-            queryDesc.Flags = D3D11.QueryFlags.None;
-            queryDesc.Type = D3D11.QueryType.Occlusion;
-            _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
-         }
 
         public override bool PlatformGetResult(out int pixelCount)
         {

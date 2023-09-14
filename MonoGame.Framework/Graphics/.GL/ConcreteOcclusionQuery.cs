@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
+            _glQueryId = GL.GenQuery();
+            GraphicsExtensions.CheckGLError();
         }
 
         public override void PlatformBegin()
@@ -31,12 +33,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void PlatformEnd()
         {
             GL.EndQuery(QueryTarget.SamplesPassed);
-            GraphicsExtensions.CheckGLError();
-        }
-
-        public override void PlatformConstructOcclusionQuery()
-        {
-            _glQueryId = GL.GenQuery();
             GraphicsExtensions.CheckGLError();
         }
 

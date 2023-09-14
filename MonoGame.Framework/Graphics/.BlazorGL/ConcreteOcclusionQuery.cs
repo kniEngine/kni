@@ -25,11 +25,6 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        public override void PlatformConstructOcclusionQuery()
-        {
-            throw new NotImplementedException();
-        }
-
         public override bool PlatformGetResult(out int pixelCount)
         {
             throw new NotImplementedException();

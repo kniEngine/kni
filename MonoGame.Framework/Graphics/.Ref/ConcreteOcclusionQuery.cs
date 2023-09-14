@@ -13,6 +13,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void PlatformBegin()
@@ -21,11 +22,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public override void PlatformEnd()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformConstructOcclusionQuery()
         {
             throw new PlatformNotSupportedException();
         }
