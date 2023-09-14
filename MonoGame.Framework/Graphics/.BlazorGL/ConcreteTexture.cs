@@ -210,6 +210,19 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            if (_glTexture != null)
+            {
+                _glTexture.Dispose();
+            }
+            _glTexture = null;
+            _glLastSamplerState = null;
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

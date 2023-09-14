@@ -104,5 +104,12 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            throw new NotImplementedException();
+
+            base.PlatformGraphicsDeviceResetting();
+        }
     }
 }

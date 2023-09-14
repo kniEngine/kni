@@ -7,10 +7,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new PlatformNotSupportedException();
-        }
     }
 }
 

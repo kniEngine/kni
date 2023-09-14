@@ -12,8 +12,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-
-
         /// <summary>
         /// Returns a handle to internal device object. Valid only on DirectX platforms.
         /// For usage, convert this to D3D11.Resource.
@@ -23,13 +21,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return this.GetD3D11Resource(); }
         }
-
-        private void PlatformGraphicsDeviceResetting()
-        {
-            DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._resourceView);
-            DX.Utilities.Dispose(ref GetTextureStrategy<ConcreteTexture>()._texture);
-        }
-
     }
 }
 

@@ -35,11 +35,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-
-        internal protected override void GraphicsDeviceResetting()
-        {
-            PlatformGraphicsDeviceResetting();
-        }
         
         internal T GetTextureStrategy<T>() where T : ITextureStrategy
         {

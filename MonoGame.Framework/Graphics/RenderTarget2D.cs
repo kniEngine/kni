@@ -81,10 +81,5 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
         }
 
-        protected internal override void GraphicsDeviceResetting()
-        {
-            PlatformGraphicsDeviceResetting();
-            base.GraphicsDeviceResetting();
-        }        
 	}
 }

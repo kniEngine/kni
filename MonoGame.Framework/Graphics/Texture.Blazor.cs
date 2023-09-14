@@ -10,16 +10,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public abstract partial class Texture
     {
-
-        private void PlatformGraphicsDeviceResetting()
-        {
-            if (GetTextureStrategy<ConcreteTexture>()._glTexture != null)
-                GetTextureStrategy<ConcreteTexture>()._glTexture.Dispose();
-            GetTextureStrategy<ConcreteTexture>()._glTexture = null;
-            GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = null;
-        }
-
     }
-
 }
 

@@ -457,6 +457,22 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            if (_glTexture > 0)
+            {
+                if (!GraphicsDevice.IsDisposed)
+                {
+                    GL.DeleteTexture(_glTexture);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+            _glTexture = -1;
+            _glLastSamplerState = null; 
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
