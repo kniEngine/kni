@@ -11,10 +11,9 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         internal readonly GraphicsContextStrategy _contextStrategy;
 
-        internal bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
-        internal bool _queryPerformed;  // true if Begin+End were called at least once.
-        internal bool _isComplete;      // true if the result is available in _pixelCount.
-        internal int _pixelCount;       // The query result.
+
+        public abstract int PixelCount { get; }
+        public abstract bool IsComplete { get; }
 
         internal OcclusionQueryStrategy(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
@@ -24,8 +23,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void PlatformBegin();
 
         public abstract void PlatformEnd();
-
-        public abstract bool PlatformGetResult(out int pixelCount);
 
         protected override void Dispose(bool disposing)
         {

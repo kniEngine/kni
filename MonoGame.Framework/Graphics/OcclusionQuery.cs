@@ -20,21 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <see langword="true"/> if the occlusion query has completed; otherwise,
         /// <see langword="false"/>.
         /// </value>
-        public bool IsComplete
-        {
-            get
-            {
-                if (_strategy._isComplete)
-                    return true;
-
-                if (!_strategy._queryPerformed || _strategy._inBeginEndPair)
-                    return false;
-
-                _strategy._isComplete = _strategy.PlatformGetResult(out _strategy._pixelCount);
-
-                return _strategy._isComplete;
-            }
-        }
+        public bool IsComplete { get { return _strategy.IsComplete; } }
 
         /// <summary>
         /// Gets the number of visible pixels.
@@ -51,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!IsComplete)
                     throw new InvalidOperationException("The occlusion query has not yet completed. Check IsComplete before reading the result.");
 
-                return _strategy._pixelCount;
+                return _strategy.PixelCount;
             }
         }
 
@@ -85,12 +71,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public void Begin()
         {
-            if (_strategy._inBeginEndPair)
-                throw new InvalidOperationException("End() must be called before calling Begin() again.");
-
-            _strategy._inBeginEndPair = true;
-            _strategy._isComplete = false;
-
             _strategy.PlatformBegin();
         }
 
@@ -102,12 +82,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public void End()
         {
-            if (!_strategy._inBeginEndPair)
-                throw new InvalidOperationException("Begin() must be called before calling End().");
-
-            _strategy._inBeginEndPair = false;
-            _strategy._queryPerformed = true;
-
             _strategy.PlatformEnd();
         }
 

@@ -10,6 +10,11 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteOcclusionQuery : OcclusionQueryStrategy
     {
+        
+        public override int PixelCount { get { throw new NotImplementedException(); } }
+
+        public override bool IsComplete { get { throw new NotImplementedException(); } }
+
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
@@ -21,11 +26,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public override void PlatformEnd()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool PlatformGetResult(out int pixelCount)
         {
             throw new NotImplementedException();
         }

@@ -15,7 +15,30 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteOcclusionQuery : OcclusionQueryStrategy
     {
+        private bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
+        private bool _queryPerformed;  // true if Begin+End were called at least once.
+        private bool _isComplete;      // true if the result is available in _pixelCount.
+        private int _pixelCount;       // The query result.
+
         private int _glQueryId = -1;
+
+        public override int PixelCount { get { return _pixelCount; } }
+
+        public override bool IsComplete
+        {
+            get
+            {
+                if (_isComplete)
+                    return true;
+
+                if (!_queryPerformed || _inBeginEndPair)
+                    return false;
+
+                return PlatformGetResult();
+
+                return _isComplete;
+            }
+        }
 
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
@@ -26,17 +49,29 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void PlatformBegin()
         {
+            if (_inBeginEndPair)
+                throw new InvalidOperationException("End() must be called before calling Begin() again.");
+
+            _inBeginEndPair = true;
+            _isComplete = false;
+
             GL.BeginQuery(QueryTarget.SamplesPassed, _glQueryId);
             GraphicsExtensions.CheckGLError();
         }
 
         public override void PlatformEnd()
         {
+            if (!_inBeginEndPair)
+                throw new InvalidOperationException("Begin() must be called before calling End().");
+
+            _inBeginEndPair = false;
+            _queryPerformed = true;
+
             GL.EndQuery(QueryTarget.SamplesPassed);
             GraphicsExtensions.CheckGLError();
         }
 
-        public override bool PlatformGetResult(out int pixelCount)
+        private bool PlatformGetResult()
         {
             int resultReady = 0;
             GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResultAvailable, out resultReady);
@@ -44,14 +79,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (resultReady == 0)
             {
-                pixelCount = 0;
-                return false;
+                _pixelCount = 0;
+                _isComplete = false;
+            }
+            else
+            {
+                GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out _pixelCount);
+                GraphicsExtensions.CheckGLError();
+                _isComplete = true;
             }
 
-            GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out pixelCount);
-            GraphicsExtensions.CheckGLError();
-
-            return true;
+            return _isComplete;
         }
 
 
