@@ -24,6 +24,13 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion ITextureStrategy
 
 
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            throw new PlatformNotSupportedException();
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

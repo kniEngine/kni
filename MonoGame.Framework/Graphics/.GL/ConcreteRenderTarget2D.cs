@@ -104,6 +104,13 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -60,6 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void GraphicsDeviceStrategy_DeviceResetting(object sender, EventArgs e)
         {
             OnDeviceResetting(e);
+            PlatformGraphicsDeviceResetting();
         }
 
         private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
@@ -79,6 +80,11 @@ namespace Microsoft.Xna.Platform.Graphics
             var handler = DeviceDisposing;
             if (handler != null)
                 handler(this, e);
+        }
+
+        internal virtual void PlatformGraphicsDeviceResetting()
+        {
+
         }
 
 

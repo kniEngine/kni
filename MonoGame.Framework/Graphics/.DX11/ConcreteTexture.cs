@@ -48,6 +48,14 @@ namespace Microsoft.Xna.Platform.Graphics
             return _resourceView;
         }
 
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            DX.Utilities.Dispose(ref _resourceView);
+            DX.Utilities.Dispose(ref _texture);
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

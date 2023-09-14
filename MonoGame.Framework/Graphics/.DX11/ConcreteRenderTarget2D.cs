@@ -229,6 +229,24 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal override void PlatformGraphicsDeviceResetting()
+        {
+            if (_renderTargetViews != null)
+            {
+                for (int i = 0; i < _renderTargetViews.Length; i++)
+                    _renderTargetViews[i].Dispose();
+                _renderTargetViews = null;
+            }
+            if (_depthStencilViews != null)
+            {
+                for (int i = 0; i < _depthStencilViews.Length; i++)
+                    DX.Utilities.Dispose(ref _depthStencilViews[i]);
+                _depthStencilViews = null;
+            }
+
+            base.PlatformGraphicsDeviceResetting();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

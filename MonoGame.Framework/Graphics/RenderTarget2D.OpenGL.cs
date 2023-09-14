@@ -10,8 +10,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RenderTarget2D
     {
-        private void PlatformGraphicsDeviceResetting()
-        {
-        }
     }
 }
