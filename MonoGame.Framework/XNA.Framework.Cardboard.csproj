@@ -421,14 +421,12 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Graphics\OcclusionQuery.OpenGL.cs" />
-    <Compile Include="Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Graphics\Shader\ShaderProgram.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
-    <Compile Include="Graphics\Texture.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
