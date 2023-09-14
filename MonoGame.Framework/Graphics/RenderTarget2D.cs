@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class RenderTarget2D : Texture2D, IRenderTarget
+	public class RenderTarget2D : Texture2D, IRenderTarget
 	{
         internal IRenderTarget2DStrategy _strategyRenderTarget2D;
 

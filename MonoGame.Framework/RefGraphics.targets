@@ -20,9 +20,7 @@
     <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
     <Compile Include="Graphics\OcclusionQuery.Ref.cs" />
-    <Compile Include="Graphics\RenderTarget2D.Ref.cs" />
     <Compile Include="Graphics\Shader\Shader.Ref.cs" />
-    <Compile Include="Graphics\Texture.Ref.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Ref.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Ref.cs" />
   </ItemGroup>
