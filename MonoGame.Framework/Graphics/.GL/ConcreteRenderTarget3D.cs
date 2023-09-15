@@ -91,7 +91,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.Capabilities.MaxMultiSampleCount;
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             throw new PlatformNotSupportedException();
         }

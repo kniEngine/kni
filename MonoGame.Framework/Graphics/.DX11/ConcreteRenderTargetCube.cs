@@ -93,7 +93,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.Capabilities.MaxMultiSampleCount;
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             _renderTargetViews = new D3D11.RenderTargetView[6];
             _depthStencilViews = new D3D11.DepthStencilView[6];

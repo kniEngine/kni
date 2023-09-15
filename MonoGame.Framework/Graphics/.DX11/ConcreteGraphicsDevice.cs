@@ -536,8 +536,9 @@ namespace Microsoft.Xna.Platform.Graphics
         private void CreateSizeDependentResources()
         {
             // Clamp MultiSampleCount
+            int maxMultiSampleCount = Capabilities.MaxMultiSampleCount;
             PresentationParameters.MultiSampleCount =
-                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount);
+                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
@@ -866,8 +867,10 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
-        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
+        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
         {
+            maxMultiSampleCount = Capabilities.MaxMultiSampleCount;
+
             if (multiSampleCount > 1)
             {
                 // Round down MultiSampleCount to the nearest power of two
@@ -880,9 +883,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 msc = msc | (msc >> 2);
                 msc = msc | (msc >> 4);
                 msc -= (msc >> 1);
+
                 // and clamp it to what the device can handle
-                if (msc > Capabilities.MaxMultiSampleCount)
-                    msc = Capabilities.MaxMultiSampleCount;
+                msc = Math.Min(msc, maxMultiSampleCount);
 
                 return msc;
             }

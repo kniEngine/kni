@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        internal abstract int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount);
+        internal abstract int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount);
 
 
         internal void OnDeviceResetting(EventArgs e)
