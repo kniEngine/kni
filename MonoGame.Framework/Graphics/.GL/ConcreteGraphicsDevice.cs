@@ -288,31 +288,6 @@ namespace Microsoft.Xna.Platform.Graphics
             _programCache.Clear();
         }
 
-        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
-        {
-            maxMultiSampleCount = Capabilities.MaxMultiSampleCount;
-
-            if (multiSampleCount > 1)
-            {
-                // Round down MultiSampleCount to the nearest power of two
-                // hack from http://stackoverflow.com/a/2681094
-                // Note: this will return an incorrect, but large value
-                // for very large numbers. That doesn't matter because
-                // the number will get clamped below anyway in this case.
-                int msc = multiSampleCount;
-                msc = msc | (msc >> 1);
-                msc = msc | (msc >> 2);
-                msc = msc | (msc >> 4);
-                msc -= (msc >> 1);
-
-                // and clamp it to what the device can handle
-                msc = Math.Min(msc, maxMultiSampleCount);
-
-                return msc;
-            }
-            else return 0;
-        }
-
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
