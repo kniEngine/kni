@@ -1,16 +1,16 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
 
     internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
     {
-
         private ShaderProgram _shaderProgram = null;
         private WebGLUniformLocation _location;
 
