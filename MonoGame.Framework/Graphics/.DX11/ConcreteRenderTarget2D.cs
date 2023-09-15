@@ -209,9 +209,6 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            if (_shared)
-                texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
-
             return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
