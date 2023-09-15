@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format,
                                      bool isRenderTarget)
-            : this(contextStrategy, size, mipMap, format)
+            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
         {
 
             System.Diagnostics.Debug.Assert(isRenderTarget);
