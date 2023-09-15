@@ -26,11 +26,14 @@ namespace Microsoft.Xna.Platform.Graphics
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
 
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
+            this._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+
             PlatformConstructTexture3D_rt(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat);
 
             // If we don't need a depth buffer then we're done.
             if (preferredDepthFormat != DepthFormat.None)
-                PlatformConstructRenderTarget3D(contextStrategy, width, height, depth, mipMap, preferredDepthFormat, preferredMultiSampleCount);
+                PlatformConstructRenderTarget3D(contextStrategy, width, height, depth, mipMap, preferredDepthFormat, _multiSampleCount);
         }
 
 
@@ -96,19 +99,16 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         private void PlatformConstructRenderTarget3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+            DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
-
             _renderTargetViews = new D3D11.RenderTargetView[depth];
             _depthStencilViews = new D3D11.DepthStencilView[1];
 
             // Setup the multisampling description.
             DXGI.SampleDescription multisampleDesc = new DXGI.SampleDescription(1, 0);
-            if (MultiSampleCount > 1)
+            if (multiSampleCount > 1)
             {
-                multisampleDesc.Count = MultiSampleCount;
+                multisampleDesc.Count = multiSampleCount;
                 multisampleDesc.Quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 

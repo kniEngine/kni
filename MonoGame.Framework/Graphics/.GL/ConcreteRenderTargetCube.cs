@@ -24,9 +24,12 @@ namespace Microsoft.Xna.Platform.Graphics
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
 
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
+            this._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
 
-            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
+            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
         }
 
 
@@ -84,14 +87,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+            DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
-
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, MultiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
             }
         }
 

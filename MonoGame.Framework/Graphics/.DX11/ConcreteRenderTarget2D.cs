@@ -33,9 +33,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
             }
 
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
+            this._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+
+
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
 
-            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, preferredMultiSampleCount, shared);
+            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, _multiSampleCount, shared);
         }
 
 
@@ -104,19 +108,16 @@ namespace Microsoft.Xna.Platform.Graphics
         private DXGI.SampleDescription _msSampleDescription;
 
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount, bool shared)
+            DepthFormat preferredDepthFormat, int multiSampleCount, bool shared)
         {
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
-
             D3D11.Device d3dDevice = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
-            _msSampleDescription = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), this.MultiSampleCount);
+            _msSampleDescription = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), multiSampleCount);
 
             _renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
             _depthStencilViews = new D3D11.DepthStencilView[1];
 
-            if (MultiSampleCount > 1)
+            if (multiSampleCount > 1)
                 _msTexture = CreateMSTexture();
 
             CreateRenderTargetView(d3dDevice, width, height);

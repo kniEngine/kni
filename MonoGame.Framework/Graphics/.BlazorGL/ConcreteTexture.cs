@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
             var GL = deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
 
-            if (preferredMultiSampleCount > 0 && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (multiSampleCount > 0 && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 throw new NotImplementedException();
             }
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
                     GraphicsExtensions.CheckGLError();
-                    if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                    if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
                         throw new NotImplementedException();
                     else
                         GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             GraphicsExtensions.CheckGLError();
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
                             GraphicsExtensions.CheckGLError();
-                            if (preferredMultiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                            if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
                                 throw new NotImplementedException();
                             else
                                 GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);

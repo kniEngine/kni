@@ -26,9 +26,12 @@ namespace Microsoft.Xna.Platform.Graphics
             this._renderTargetUsage = usage;
             this._depthStencilFormat = preferredDepthFormat;
 
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
+            this._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
 
-            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, preferredMultiSampleCount);
+            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
         }
 
 
@@ -91,11 +94,8 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
-            DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+            DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
-
             _renderTargetViews = new D3D11.RenderTargetView[6];
             _depthStencilViews = new D3D11.DepthStencilView[6];
 
@@ -120,9 +120,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
 
             DXGI.SampleDescription sampleDescription = new DXGI.SampleDescription(1, 0);
-            if (MultiSampleCount > 1)
+            if (multiSampleCount > 1)
             {
-                sampleDescription.Count = MultiSampleCount;
+                sampleDescription.Count = multiSampleCount;
                 sampleDescription.Quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
             }
 
