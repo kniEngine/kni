@@ -536,7 +536,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void CreateSizeDependentResources()
         {
             // Clamp MultiSampleCount
-            int maxMultiSampleCount = Capabilities.MaxMultiSampleCount;
+            int maxMultiSampleCount = GetMaxMultiSampleCount(this.PresentationParameters.BackBufferFormat);
             PresentationParameters.MultiSampleCount =
                 GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
 

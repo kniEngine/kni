@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
@@ -120,10 +121,19 @@ namespace Microsoft.Xna.Platform
             // always initialize MultiSampleCount to the maximum, if users want to overwrite
             // this they have to respond to the PreparingDeviceSettingsEvent and modify
             // args.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount
+            int maxMultiSampleCount = 0;
             if (this.PreferMultiSampling)
-                presentationParameters.MultiSampleCount = (GraphicsDevice != null) ? GraphicsDevice.Strategy.Capabilities.MaxMultiSampleCount : 32;
-            else
-                presentationParameters.MultiSampleCount = 0;
+            {
+                if (GraphicsDevice != null)
+                {
+                    maxMultiSampleCount = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(GraphicsDevice.Strategy.PresentationParameters.BackBufferFormat);
+                }
+                else
+                {
+                    maxMultiSampleCount = 32;
+                }
+            }
+            presentationParameters.MultiSampleCount = maxMultiSampleCount;
 
             return presentationParameters;
         }

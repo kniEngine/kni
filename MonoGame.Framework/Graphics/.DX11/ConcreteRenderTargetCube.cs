@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.Capabilities.MaxMultiSampleCount;
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
             _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             _renderTargetViews = new D3D11.RenderTargetView[6];

@@ -147,8 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
             _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
 
-            GL.GetInteger((GetPName)GetParamName.MaxSamples, out _maxMultiSampleCount);
-
             SupportsInstancing = GL.VertexAttribDivisor != null;
 
             SupportsBaseIndexInstancing = GL.DrawElementsInstancedBaseInstance != null;

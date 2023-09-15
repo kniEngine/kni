@@ -288,6 +288,13 @@ namespace Microsoft.Xna.Platform.Graphics
             _programCache.Clear();
         }
 
+        internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
+        {
+            int maxMultiSampleCount = 0;
+            GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);
+            return maxMultiSampleCount;
+        }
+
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL

@@ -162,6 +162,14 @@ namespace Microsoft.Xna.Platform.Graphics
             _programCache.Clear();
         }
 
+        internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
+        {
+            var GL = CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            int maxMultiSampleCount = 0;
+            return maxMultiSampleCount;
+        }
+
 
         internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
