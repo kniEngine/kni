@@ -222,6 +222,7 @@
     <Compile Include="Content\ResourceContentManager.cs" />
 	  
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
@@ -419,7 +420,6 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
-    <Compile Include="Graphics\Shader\ShaderProgram.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
