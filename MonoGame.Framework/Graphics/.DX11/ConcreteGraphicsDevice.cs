@@ -536,8 +536,9 @@ namespace Microsoft.Xna.Platform.Graphics
         private void CreateSizeDependentResources()
         {
             // Clamp MultiSampleCount
+            int maxMultiSampleCount = GetMaxMultiSampleCount(this.PresentationParameters.BackBufferFormat);
             PresentationParameters.MultiSampleCount =
-                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount);
+                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
@@ -864,29 +865,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // ensure proper rendering of text on intermediate surfaces.
             _d2dContext.TextAntialiasMode = D2D.TextAntialiasMode.Grayscale;
 #endif
-        }
-
-        internal override int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount)
-        {
-            if (multiSampleCount > 1)
-            {
-                // Round down MultiSampleCount to the nearest power of two
-                // hack from http://stackoverflow.com/a/2681094
-                // Note: this will return an incorrect, but large value
-                // for very large numbers. That doesn't matter because
-                // the number will get clamped below anyway in this case.
-                int msc = multiSampleCount;
-                msc = msc | (msc >> 1);
-                msc = msc | (msc >> 2);
-                msc = msc | (msc >> 4);
-                msc -= (msc >> 1);
-                // and clamp it to what the device can handle
-                if (msc > Capabilities.MaxMultiSampleCount)
-                    msc = Capabilities.MaxMultiSampleCount;
-
-                return msc;
-            }
-            else return 0;
         }
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)

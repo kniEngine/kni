@@ -512,7 +512,7 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void TooHighMultiSampleCountClampedToMaxSupported()
         {
-            var maxMultiSampleCount = gd.Strategy.Capabilities.MaxMultiSampleCount;
+            int maxMultiSampleCount = gd.Strategy.ToConcrete<Microsoft.Xna.Platform.Graphics.ConcreteGraphicsDevice>().GetMaxMultiSampleCount(gd.Strategy.PresentationParameters.BackBufferFormat);
             gdm.PreferMultiSampling = true;
 
             gdm.PreparingDeviceSettings += (sender, args) =>

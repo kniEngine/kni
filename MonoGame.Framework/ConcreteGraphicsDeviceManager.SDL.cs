@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
 using ColorFormat = MonoGame.OpenGL.ColorFormat;
 
 namespace Microsoft.Xna.Platform
@@ -120,18 +121,16 @@ namespace Microsoft.Xna.Platform
             presentationParameters.DisplayOrientation = this.Game.Window.CurrentOrientation;
             presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
 
-            presentationParameters.MultiSampleCount = 0;
+            int maxMultiSampleCount = 0;
             if (this.PreferMultiSampling)
-            {   
-                if ((GraphicsDevice != null))
+            {
+                if (GraphicsDevice != null)
                 {
-                    presentationParameters.MultiSampleCount = GraphicsDevice.Strategy.Capabilities.MaxMultiSampleCount;
-                }
-                else
-                {
-                    presentationParameters.MultiSampleCount = 0;
+                    maxMultiSampleCount = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(GraphicsDevice.Strategy.PresentationParameters.BackBufferFormat);
                 }
             }
+            presentationParameters.MultiSampleCount = maxMultiSampleCount;
+
 
             return presentationParameters;
         }

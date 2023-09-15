@@ -119,13 +119,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal int MaxTextureAnisotropy { get; private set; }
 
-        private int _maxMultiSampleCount;
-
-        internal int MaxMultiSampleCount
-        {
-            get { return _maxMultiSampleCount; }
-        }
-
         internal bool SupportsInstancing { get; private set; }
 
         internal bool SupportsBaseIndexInstancing { get; private set; }

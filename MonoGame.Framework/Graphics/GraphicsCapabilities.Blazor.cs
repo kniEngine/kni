@@ -72,13 +72,6 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsSeparateBlendStates = true;
 
             MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
-
-            _maxMultiSampleCount = GetMaxMultiSampleCount(deviceStrategy);
-        }
-
-        private int GetMaxMultiSampleCount(GraphicsDeviceStrategy deviceStrategy)
-        {
-            return 0;
         }
     }
 }

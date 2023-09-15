@@ -32,7 +32,8 @@ namespace Microsoft.Xna.Platform.Graphics
             _windowHandle = windowHandle;
             _presentInterval = presentInterval;
 
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount);
+            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
+            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
 
             ((ConcreteRenderTarget2D)this)._renderTargetViews = new D3D11.RenderTargetView[1];
