@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
                                    bool isRenderTarget)
-            : this(contextStrategy, width, height, mipMap, format, arraySize, shared)
+            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
@@ -274,6 +274,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this._shared)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
 
+            System.Diagnostics.Debug.Assert(_texture == null);
             D3D11.Resource texture = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
             _texture = texture;
             _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
