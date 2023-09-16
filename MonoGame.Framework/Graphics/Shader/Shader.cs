@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.IO;
@@ -45,11 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class Shader : GraphicsResource
 	{
         /// <summary>
-        /// Returns the platform specific shader profile identifier.
-        /// </summary>
-        public static ShaderProfileType Profile { get { return PlatformProfile(); } }
-
-        /// <summary>
         /// A hash value which can be used to compare shaders.
         /// </summary>
         internal int HashKey { get; private set; }
@@ -64,8 +59,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal Shader(GraphicsDevice graphicsDevice,
             ShaderStage stage, byte[] shaderBytecode,
-            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
+            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
+            ShaderProfileType profile)
         {
+            PlatformValidateProfile(profile);
+
             SetGraphicsDevice(graphicsDevice);
 
             this.Stage = stage;

@@ -2,10 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
@@ -20,9 +19,10 @@ namespace Microsoft.Xna.Framework.Graphics
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
 
-        private static ShaderProfileType PlatformProfile()
+        private void PlatformValidateProfile(ShaderProfileType profile)
         {
-            return ShaderProfileType.OpenGL_Mojo;
+            if (profile != ShaderProfileType.OpenGL_Mojo)
+                throw new Exception("This effect was built for a different platform.");
         }
 
         private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)

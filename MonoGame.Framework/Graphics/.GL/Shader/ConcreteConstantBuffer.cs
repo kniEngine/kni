@@ -29,6 +29,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
             : base(contextStrategy.Context.DeviceStrategy.Device, name, parameters, offsets, sizeInBytes, profile)
         {
+            if (profile != ShaderProfileType.OpenGL_Mojo)
+                throw new Exception("This effect was built for a different platform.");
+
             HashKey = ComputeHashKey();
         }
 
