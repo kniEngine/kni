@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -77,7 +78,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                                 name,
                                                 parameters,
                                                 offsets,
-                                                sizeInBytes);
+                                                sizeInBytes,
+                                                _header.Profile);
                 return buffer;
             }
 

@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private int[] _parameters;
         private int[] _offsets;
         private byte[] _buffer;
+        private ShaderProfileType _profile;
         private bool _dirty;
         private ulong _stateKey;
 
@@ -31,8 +32,12 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _stateKey; }
             set { _stateKey = value; }
         }
+        protected ShaderProfileType Profile
+        {
+            get { return _profile; }
+        }
 
-        protected ConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+        protected ConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
         {
             this.GraphicsDevice = graphicsDevice;
 
@@ -40,6 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._parameters = parameters;
             this._offsets = offsets;
             this._buffer = new byte[sizeInBytes];
+            this._profile = profile;
         }
 
         protected ConstantBufferStrategy(ConstantBufferStrategy source)
@@ -52,6 +58,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // copies
             this._buffer = (byte[])source._buffer.Clone();
+            this._profile = source._profile;
         }
 
         public abstract object Clone();

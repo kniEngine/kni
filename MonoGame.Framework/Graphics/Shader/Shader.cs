@@ -6,15 +6,10 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-
-    internal enum ShaderProfileType
-    {
-        OpenGL_Mojo = 0,
-        DirectX_11  = 1,
-    }
 
     // TODO: We should convert the types below 
     // into the start of a Shader reflection API.

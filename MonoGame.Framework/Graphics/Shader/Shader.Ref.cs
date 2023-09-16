@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics

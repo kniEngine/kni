@@ -1,21 +1,22 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
+    internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
-            : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
+            : base(contextStrategy.Context.DeviceStrategy.Device, name, parameters, offsets, sizeInBytes, profile)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
+        private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
             throw new PlatformNotSupportedException();
