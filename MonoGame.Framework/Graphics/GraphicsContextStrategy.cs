@@ -422,7 +422,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
 
-        internal abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes);
+        internal abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
 
 
         internal T ToConcrete<T>() where T : GraphicsContextStrategy

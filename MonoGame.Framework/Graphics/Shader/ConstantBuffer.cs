@@ -18,9 +18,10 @@ namespace Microsoft.Xna.Framework.Graphics
                               string name,
                               int[] parameterIndexes,
                               int[] parameterOffsets,
-                              int sizeInBytes)
+                              int sizeInBytes,
+                              ShaderProfileType profile)
         {
-            _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes);
+            _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
 
             SetGraphicsDevice(device);
         }

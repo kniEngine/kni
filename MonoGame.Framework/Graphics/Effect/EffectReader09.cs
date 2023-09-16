@@ -78,7 +78,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                                 name,
                                                 parameters,
                                                 offsets,
-                                                sizeInBytes);
+                                                sizeInBytes,
+                                                _header.Profile);
                 return buffer;
             }
 
