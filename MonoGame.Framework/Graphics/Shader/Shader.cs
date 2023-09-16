@@ -11,37 +11,6 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
 
-    // TODO: We should convert the types below 
-    // into the start of a Shader reflection API.
-
-    internal enum SamplerType
-    {
-        Sampler2D = 0,
-        SamplerCube = 1,
-        SamplerVolume = 2,
-        Sampler1D = 3,
-    }
-
-    internal struct SamplerInfo
-    {
-        public SamplerType type;
-        public int textureSlot;
-        public int samplerSlot;
-        public string name;
-		public SamplerState state;
-
-        // TODO: This should be moved to EffectPass.
-        public int parameter;
-    }
-
-    internal struct VertexAttribute
-    {
-        public VertexElementUsage usage;
-        public int index;
-        public string name;
-        public int location;
-    }
-
     internal partial class Shader : GraphicsResource
 	{
         private ShaderStrategy _strategy;

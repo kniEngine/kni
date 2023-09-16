@@ -358,10 +358,12 @@
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
+    <Compile Include="Graphics\Shader\SamplerInfo.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
     <Compile Include="Graphics\Shader\ShaderStrategy.cs" />
     <Compile Include="Graphics\Shader\ShaderProfileType.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
+    <Compile Include="Graphics\Shader\VertexAttribute.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
     <Compile Include="Graphics\SpriteBatcher.cs" />
     <Compile Include="Graphics\SpriteBatchItem.cs" />
