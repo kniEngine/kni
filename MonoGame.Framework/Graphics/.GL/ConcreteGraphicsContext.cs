@@ -797,6 +797,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTexture2D(this, stream);
         }
 
+        internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes)
+        {
+            return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

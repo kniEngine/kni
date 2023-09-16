@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
                               int[] parameterOffsets,
                               int sizeInBytes)
         {
-            _strategy = new ConcreteConstantBuffer(device, name, parameterIndexes, parameterOffsets, sizeInBytes);
+            _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes);
 
             SetGraphicsDevice(device);
         }

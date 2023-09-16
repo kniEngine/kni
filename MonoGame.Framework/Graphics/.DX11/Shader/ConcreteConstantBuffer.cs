@@ -19,8 +19,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.Buffer _cbuffer;
 
 
-        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
-            : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes)
+            : base(contextStrategy.Context.DeviceStrategy.Device, name, parameters, offsets, sizeInBytes)
         {
             _cbuffer = CreateD3D11Buffer();
         }

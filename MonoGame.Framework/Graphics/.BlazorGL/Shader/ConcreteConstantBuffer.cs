@@ -17,8 +17,8 @@ namespace Microsoft.Xna.Platform.Graphics
         static ConcreteConstantBuffer _lastConstantBufferApplied = null;
 
 
-        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
-            : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes)
+            : base(contextStrategy.Context.DeviceStrategy.Device, name, parameters, offsets, sizeInBytes)
         {
             
         }
