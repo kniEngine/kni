@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
 using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -20,15 +19,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// A hash value which can be used to compare shaders.
         /// </summary>
-        internal int HashKey { get; private set; }
+        internal int HashKey { get { return _strategy.HashKey; } }
 
-        public SamplerInfo[] Samplers { get; private set; }
+        public SamplerInfo[] Samplers { get { return _strategy.Samplers; } }
 
-	    public int[] CBuffers { get; private set; }
+        public int[] CBuffers { get { return _strategy.CBuffers; } }
 
-        public ShaderStage Stage { get; private set; }
+        public ShaderStage Stage { get { return _strategy.Stage; } }
 
-        public VertexAttribute[] Attributes { get; private set; }
+        public VertexAttribute[] Attributes { get { return _strategy.Attributes; } }
+
 
         internal Shader(GraphicsDevice graphicsDevice,
             ShaderStage stage, byte[] shaderBytecode,
@@ -38,11 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateShaderStrategy(stage, shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-            
-            this.Stage = stage;
-            this.Samplers = samplers;
-            this.CBuffers = cBuffers;
-            this.Attributes = attributes;
 
             PlatformConstructShader(stage, shaderBytecode);
         }

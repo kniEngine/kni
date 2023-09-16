@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
-            HashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
+            _strategy._hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
         }
 
         internal int GetShaderHandle()
