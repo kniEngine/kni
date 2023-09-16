@@ -44,6 +44,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
     internal partial class Shader : GraphicsResource
 	{
+        private ShaderStrategy _strategy;
+
+        internal ShaderStrategy Strategy { get { return _strategy; } }
+        
         /// <summary>
         /// A hash value which can be used to compare shaders.
         /// </summary>
@@ -61,17 +65,19 @@ namespace Microsoft.Xna.Framework.Graphics
             ShaderStage stage, byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
+            : base(true)
         {
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateShaderStrategy(stage, shaderBytecode, samplers, cBuffers, attributes, profile);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
+            
             PlatformValidateProfile(profile);
-
-            SetGraphicsDevice(graphicsDevice);
 
             this.Stage = stage;
             this.Samplers = samplers;
             this.CBuffers = cBuffers;
             this.Attributes = attributes;
 
-            PlatformConstructShader(Stage, shaderBytecode);
+            PlatformConstructShader(stage, shaderBytecode);
         }
 
         internal protected override void GraphicsDeviceResetting()

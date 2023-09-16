@@ -225,6 +225,7 @@
     <Compile Include="Content\ResourceContentManager.cs" />
 	  
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
@@ -345,6 +346,7 @@
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
+    <Compile Include="Graphics\Shader\ShaderStrategy.cs" />
     <Compile Include="Graphics\Shader\ShaderProfileType.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
