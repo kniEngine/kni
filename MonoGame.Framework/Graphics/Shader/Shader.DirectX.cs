@@ -2,9 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
-using System.IO;
+using System;
 using Microsoft.Xna.Platform.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
@@ -51,9 +51,10 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private ShaderProfileType PlatformProfile()
+        private void PlatformValidateProfile(ShaderProfileType profile)
         {
-            return ShaderProfileType.DirectX_11;
+            if (profile != ShaderProfileType.DirectX_11)
+                throw new Exception("This effect was built for a different platform.");
         }
 
         private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)

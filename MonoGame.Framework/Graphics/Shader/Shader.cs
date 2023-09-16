@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.IO;
@@ -62,8 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
         {
-            if (profile != PlatformProfile())
-                throw new Exception("This effect was built for a different platform.");
+            PlatformValidateProfile(profile);
 
             SetGraphicsDevice(graphicsDevice);
 
