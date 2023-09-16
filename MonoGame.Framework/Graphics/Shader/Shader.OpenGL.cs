@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
 
-        private static ShaderProfileType PlatformProfile()
+        private ShaderProfileType PlatformProfile()
         {
             return ShaderProfileType.OpenGL_Mojo;
         }

@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class Shader
     {
 
-        private static ShaderProfileType PlatformProfile()
+        private ShaderProfileType PlatformProfile()
         {
             throw new PlatformNotSupportedException();
         }

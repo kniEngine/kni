@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static ShaderProfileType PlatformProfile()
+        private ShaderProfileType PlatformProfile()
         {
             return ShaderProfileType.DirectX_11;
         }
