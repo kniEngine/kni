@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.Diagnostics;
@@ -105,18 +105,18 @@ namespace Microsoft.Xna.Framework.Graphics
             //Read the header
             MGFXHeader header = new MGFXHeader(effectCode, index);
             if (header.Signature != MGFXHeader.MGFXSignature)
-                throw new Exception("This does not appear to be a MonoGame MGFX file!");
+                throw new Exception("This does not appear to be an MGFX effect file.");
             if (header.Profile != Shader.Profile)
-                throw new Exception("This MGFX effect was built for a different platform!");
+                throw new Exception("This effect was built for a different platform.");
             if (header.Version > MGFXHeader.MGFXVersion)
-                throw new Exception("This MGFX effect seems to be for a newer release of MonoGame.");
-            if (header.Version == 8) //TNC: fallback to version 8
-            {    System.Diagnostics.Debug.WriteLine("This MGFX effect is for an older release of MonoGame and needs to be rebuilt."); }
-            else if (header.Version == 9) //TNC: fallback to version 9
+                throw new Exception("This effect seems to be for a newer version of KNI.");
+            if (header.Version == 8) // fallback to version 8
+            {    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
+            else if (header.Version == 9) // fallback to version 9
             { }
             else
             if (header.Version < MGFXHeader.MGFXVersion)
-                throw new Exception("This MGFX effect is for an older release of MonoGame and needs to be rebuilt.");
+                throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
 
             // First look for it in the cache.
             //
