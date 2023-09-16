@@ -51,12 +51,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformValidateProfile(ShaderProfileType profile)
-        {
-            if (profile != ShaderProfileType.DirectX_11)
-                throw new Exception("This effect was built for a different platform.");
-        }
-
         private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
         {
             // We need the bytecode later for allocating the

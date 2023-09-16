@@ -70,8 +70,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateShaderStrategy(stage, shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
             
-            PlatformValidateProfile(profile);
-
             this.Stage = stage;
             this.Samplers = samplers;
             this.CBuffers = cBuffers;

@@ -19,12 +19,6 @@ namespace Microsoft.Xna.Framework.Graphics
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
 
-        private void PlatformValidateProfile(ShaderProfileType profile)
-        {
-            if (profile != ShaderProfileType.OpenGL_Mojo)
-                throw new Exception("This effect was built for a different platform.");
-        }
-
         private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
         {
             _glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
