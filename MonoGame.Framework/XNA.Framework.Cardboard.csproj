@@ -345,6 +345,7 @@
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
+    <Compile Include="Graphics\Shader\ShaderProfileType.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
     <Compile Include="Graphics\SpriteBatcher.cs" />

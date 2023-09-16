@@ -7,8 +7,8 @@
 using System;
 using System.IO;
 using System.Diagnostics;
-using nkast.Wasm.Canvas.WebGL;
 using Microsoft.Xna.Platform.Graphics;
+using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
