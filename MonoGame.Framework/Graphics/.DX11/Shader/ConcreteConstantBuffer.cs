@@ -14,18 +14,18 @@ using D3D11 = SharpDX.Direct3D11;
 namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
+    internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
         internal D3D11.Buffer _cbuffer;
 
 
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
             _cbuffer = CreateD3D11Buffer();
         }
 
-        private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
+        private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
             _cbuffer = CreateD3D11Buffer();
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override object Clone()
         {
-            return new ConcreteConstantBufferStrategy(this);
+            return new ConcreteConstantBuffer(this);
         }
 
         private D3D11.Buffer CreateD3D11Buffer()

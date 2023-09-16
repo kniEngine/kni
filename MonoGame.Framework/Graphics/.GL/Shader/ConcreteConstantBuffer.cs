@@ -13,12 +13,12 @@ using MonoGame.OpenGL;
 namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
+    internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
         private ShaderProgram _shaderProgram = null;
         private int _location;
 
-        static ConcreteConstantBufferStrategy _lastConstantBufferApplied = null;
+        static ConcreteConstantBuffer _lastConstantBufferApplied = null;
 
         /// <summary>
         /// A hash value which can be used to compare constant buffers.
@@ -26,13 +26,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal readonly int HashKey;
 
 
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
             HashKey = ComputeHashKey();
         }
 
-        private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
+        private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
             HashKey = source.HashKey;
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override object Clone()
         {
-            return new ConcreteConstantBufferStrategy(this);
+            return new ConcreteConstantBuffer(this);
         }
 
         private int ComputeHashKey()

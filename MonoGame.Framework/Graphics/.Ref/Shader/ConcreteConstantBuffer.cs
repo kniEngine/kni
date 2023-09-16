@@ -8,15 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
+    internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
+        private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
             throw new PlatformNotSupportedException();

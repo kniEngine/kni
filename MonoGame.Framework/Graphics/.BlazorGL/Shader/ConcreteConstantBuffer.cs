@@ -9,21 +9,21 @@ using nkast.Wasm.Canvas.WebGL;
 namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class ConcreteConstantBufferStrategy : ConstantBufferStrategy
+    internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
         private ShaderProgram _shaderProgram = null;
         private WebGLUniformLocation _location;
 
-        static ConcreteConstantBufferStrategy _lastConstantBufferApplied = null;
+        static ConcreteConstantBuffer _lastConstantBufferApplied = null;
 
 
-        public ConcreteConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
+        public ConcreteConstantBuffer(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes)
             : base(graphicsDevice, name, parameters, offsets, sizeInBytes)
         {
             
         }
 
-        private ConcreteConstantBufferStrategy(ConcreteConstantBufferStrategy source)
+        private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
         
@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override object Clone()
         {
-            return new ConcreteConstantBufferStrategy(this);
+            return new ConcreteConstantBuffer(this);
         }
 
         internal override void PlatformClear()
