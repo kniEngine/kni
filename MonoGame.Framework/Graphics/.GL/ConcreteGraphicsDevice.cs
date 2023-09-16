@@ -233,10 +233,10 @@ namespace Microsoft.Xna.Platform.Graphics
             int program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, vertexShader.GetShaderHandle());
+            GL.AttachShader(program, ((ConcreteShader)vertexShader.Strategy).GetShaderHandle());
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, pixelShader.GetShaderHandle());
+            GL.AttachShader(program, ((ConcreteShader)pixelShader.Strategy).GetShaderHandle());
             GraphicsExtensions.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
@@ -247,9 +247,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GraphicsExtensions.CheckGLError();
 
-            vertexShader.GetVertexAttributeLocations(program);
+            ((ConcreteShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
 
-            pixelShader.ApplySamplerTextureUnits(program);
+            ((ConcreteShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
 
             int linkStatus;
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
@@ -263,8 +263,8 @@ namespace Microsoft.Xna.Platform.Graphics
             { 
                 var log = GL.GetProgramInfoLog(program);
                 Console.WriteLine(log);
-                GL.DetachShader(program, vertexShader.GetShaderHandle());
-                GL.DetachShader(program, pixelShader.GetShaderHandle());
+                GL.DetachShader(program, ((ConcreteShader)vertexShader.Strategy).GetShaderHandle());
+                GL.DetachShader(program, ((ConcreteShader)pixelShader.Strategy).GetShaderHandle());
                 
                 if (GL.IsProgram(program))
                 {
