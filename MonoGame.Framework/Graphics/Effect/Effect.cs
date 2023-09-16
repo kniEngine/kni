@@ -106,8 +106,6 @@ namespace Microsoft.Xna.Framework.Graphics
             MGFXHeader header = new MGFXHeader(effectCode, index);
             if (header.Signature != MGFXHeader.MGFXSignature)
                 throw new Exception("This does not appear to be an MGFX effect file.");
-            if (header.Profile != Shader.Profile)
-                throw new Exception("This effect was built for a different platform.");
             if (header.Version > MGFXHeader.MGFXVersion)
                 throw new Exception("This effect seems to be for a newer version of KNI.");
             if (header.Version == 8) // fallback to version 8

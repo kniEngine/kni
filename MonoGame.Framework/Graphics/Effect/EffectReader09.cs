@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using System.Diagnostics;
@@ -132,7 +132,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new Shader(_graphicsDevice,
                                   stage, shaderBytecode,
-                                  samplers, cBuffers, attributes);
+                                  samplers, cBuffers, attributes,
+                                  _header.Profile);
             }
 
             private SamplerState ReadSamplerState()
