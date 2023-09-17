@@ -6,6 +6,7 @@
 
   <ItemGroup>
 	<Compile Include="Graphics\.BlazorGL\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.BlazorGL\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ShaderProgram.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsAdaptersProvider.cs" />
@@ -30,7 +31,6 @@
     <Compile Include="Graphics\Effect\EffectResource.Blazor.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Blazor.cs" />
     <Compile Include="Graphics\GraphicsExtensions.Blazor.cs" />
-    <Compile Include="Graphics\Shader\Shader.Blazor.cs" />
     <Compile Include="Graphics\States\BlendState.Blazor.cs" />
     <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
     <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />

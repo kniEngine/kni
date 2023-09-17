@@ -1,43 +1,45 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal partial class Shader
+    public class ConcreteShader : ShaderStrategy
     {
         // The shader handle.
         private int _shaderHandle = -1;
 
         // We keep this around for recompiling on context lost and debugging.
         private string _glslCode;
-
-        private void PlatformValidateProfile(ShaderProfileType profile)
+    
+        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+            : base(contextStrategy, stage, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
-        }
 
-        private void PlatformConstructShader(ShaderStage stage, byte[] shaderBytecode)
-        {
             _glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
-            HashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
-        }
+            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
+         }
+
 
         internal int GetShaderHandle()
         {
             // If the shader has already been created then return it.
             if (_shaderHandle != -1)
                 return _shaderHandle;
-            
+
             //
             _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? ShaderType.VertexShader : ShaderType.FragmentShader);
             GraphicsExtensions.CheckGLError();
@@ -103,33 +105,34 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsDeviceResetting()
         {
             if (_shaderHandle != -1)
             {
-                if (!GraphicsDevice.IsDisposed)
+                if (GL.IsShader(_shaderHandle))
                 {
-                    if (GL.IsShader(_shaderHandle))
-                    {
-                        GL.DeleteShader(_shaderHandle);
-                        GraphicsExtensions.CheckGLError();
-                    }
+                    GL.DeleteShader(_shaderHandle);
+                    GraphicsExtensions.CheckGLError();
                 }
                 _shaderHandle = -1;
             }
+
+            base.PlatformGraphicsDeviceResetting();
         }
+
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed && _shaderHandle != -1)
+            if (disposing)
             {
-                if (!GraphicsDevice.IsDisposed)
+            }
+
+            if (_shaderHandle != -1)
+            {
+                if (GL.IsShader(_shaderHandle))
                 {
-                    if (GL.IsShader(_shaderHandle))
-                    {
-                        GL.DeleteShader(_shaderHandle);
-                        GraphicsExtensions.CheckGLError();
-                    }
+                    GL.DeleteShader(_shaderHandle);
+                    GraphicsExtensions.CheckGLError();
                 }
                 _shaderHandle = -1;
             }

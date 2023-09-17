@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
@@ -29,7 +30,6 @@
     <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
-    <Compile Include="Graphics\Shader\Shader.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />

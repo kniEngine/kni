@@ -227,20 +227,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(VertexShader.VertexShader);
+                this.D3dContext.VertexShader.Set(((ConcreteShader)VertexShader.Strategy).VertexShader);
 
                 unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = VertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = ((ConcreteShader)VertexShader.Strategy).InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(PixelShader.PixelShader);
+                this.D3dContext.PixelShader.Set(((ConcreteShader)PixelShader.Strategy).PixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
@@ -563,6 +563,10 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTexture2D(this, stream);
         }
 
+        internal override ShaderStrategy CreateShaderStrategy(ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        {
+            return new ConcreteShader(this, stage, shaderBytecode, samplers, cBuffers, attributes, profile);
+        }
         internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);

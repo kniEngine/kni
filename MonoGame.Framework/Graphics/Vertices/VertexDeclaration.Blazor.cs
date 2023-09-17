@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             foreach (var ve in InternalVertexElements)
             {
-                var attributeLocation = shader.GetAttribLocation(ve.VertexElementUsage, ve.UsageIndex);
+                var attributeLocation = ((ConcreteShader)shader.Strategy).GetAttribLocation(ve.VertexElementUsage, ve.UsageIndex);
                 // XNA appears to ignore usages it can't find a match for, so we will do the same
                 if (attributeLocation < 0)
                     continue;
