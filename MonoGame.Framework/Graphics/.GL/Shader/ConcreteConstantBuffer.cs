@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         static ConcreteConstantBuffer _lastConstantBufferApplied = null;
 
-        /// <summary>
-        /// A hash value which can be used to compare constant buffers.
-        /// </summary>
-        internal readonly int HashKey;
-
 
         public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
             : base(contextStrategy.Context.DeviceStrategy.Device, name, parameters, offsets, sizeInBytes, profile)
@@ -32,29 +27,16 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
 
-            HashKey = ComputeHashKey();
         }
 
         private ConcreteConstantBuffer(ConcreteConstantBuffer source)
             : base(source)
         {
-            HashKey = source.HashKey;
         }
 
         public override object Clone()
         {
             return new ConcreteConstantBuffer(this);
-        }
-
-        private int ComputeHashKey()
-        {
-            var data = new byte[Parameters.Length];
-            for (var i = 0; i < Parameters.Length; i++)
-            {
-                unchecked { data[i] = (byte)(Parameters[i] | Offsets[i]); }
-            }
-
-            return MonoGame.Framework.Utilities.Hash.ComputeHash(data);
         }
 
         internal override void PlatformClear()
