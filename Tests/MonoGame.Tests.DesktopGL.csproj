@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj" />
+    <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj" />
     <ProjectReference Include="..\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
   </ItemGroup>
 
