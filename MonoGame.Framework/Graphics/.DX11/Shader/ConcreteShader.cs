@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
-using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 
 
@@ -17,10 +16,10 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteShader : ShaderStrategy
     {
-        private D3D11.VertexShader _vertexShader;
-        private D3D11.PixelShader _pixelShader;
         private byte[] _shaderBytecode;
 
+        private D3D11.PixelShader _pixelShader;
+        private D3D11.VertexShader _vertexShader;
         // Caches the DirectX input layouts for this vertex shader.
         private InputLayoutCache _inputLayouts;
 
@@ -73,11 +72,11 @@ namespace Microsoft.Xna.Platform.Graphics
             switch (Stage)
             {
                 case ShaderStage.Vertex:
+                    DX.Utilities.Dispose(ref _inputLayouts);
                     DX.Utilities.Dispose(ref _vertexShader);
                     break;
                 case ShaderStage.Pixel:
                     DX.Utilities.Dispose(ref _pixelShader);
-                    DX.Utilities.Dispose(ref _inputLayouts);
                     break;
             }
 
@@ -92,11 +91,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 switch (Stage)
                 {
                     case ShaderStage.Vertex:
+                        DX.Utilities.Dispose(ref _inputLayouts);
                         DX.Utilities.Dispose(ref _vertexShader);
                         break;
                     case ShaderStage.Pixel:
                         DX.Utilities.Dispose(ref _pixelShader);
-                        DX.Utilities.Dispose(ref _inputLayouts);
                         break;
                 }
             }
