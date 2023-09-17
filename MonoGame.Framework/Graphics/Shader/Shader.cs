@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
 
-    internal partial class Shader : GraphicsResource
+    internal class Shader : GraphicsResource
 	{
         private ShaderStrategy _strategy;
 
@@ -38,13 +38,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateShaderStrategy(stage, shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-
-            PlatformConstructShader(stage, shaderBytecode);
         }
 
         internal protected override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
         }
 	}
 }
