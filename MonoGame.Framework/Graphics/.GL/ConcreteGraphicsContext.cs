@@ -397,7 +397,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
+        private void PlatformApplyVertexBuffersAttribs(Shader vertexShader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
@@ -407,7 +407,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 var vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
+                var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -475,11 +475,11 @@ namespace Microsoft.Xna.Platform.Graphics
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, IntPtr baseVertex)
+        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader vertexShader, IntPtr baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
+            var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)

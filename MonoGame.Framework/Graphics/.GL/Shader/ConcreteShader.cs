@@ -16,12 +16,16 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class ConcreteShader : ShaderStrategy
     {
+        // We keep this around for recompiling on context lost and debugging.
+        private byte[] _shaderBytecode;
+
         // The shader handle.
         private int _shaderHandle = -1;
 
-        // We keep this around for recompiling on context lost and debugging.
-        private byte[] _shaderBytecode;
-    
+        internal byte[] ShaderBytecode { get { return _shaderBytecode; } }
+        protected int ShaderHandle { get { return _shaderHandle; } }
+
+
         internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, stage, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
@@ -32,15 +36,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
          }
 
-
-        internal int GetShaderHandle()
+        internal void CreateShader(ShaderType shaderType)
         {
-            // If the shader has already been created then return it.
-            if (_shaderHandle != -1)
-                return _shaderHandle;
-
-            //
-            _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? ShaderType.VertexShader : ShaderType.FragmentShader);
+            _shaderHandle = GL.CreateShader(shaderType);
             GraphicsExtensions.CheckGLError();
             GL.ShaderSource(_shaderHandle, _shaderBytecode);
             GraphicsExtensions.CheckGLError();
@@ -51,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.CheckGLError();
             if (compiled != (int)Bool.True)
             {
-                var log = GL.GetShaderInfoLog(_shaderHandle);
+                string log = GL.GetShaderInfoLog(_shaderHandle);
                 Debug.WriteLine(log);
 
                 if (!GraphicsDevice.IsDisposed)
@@ -65,42 +63,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderHandle = -1;
 
                 throw new InvalidOperationException("Shader Compilation Failed");
-            }
-
-            return _shaderHandle;
-        }
-
-        internal void GetVertexAttributeLocations(int program)
-        {
-            for (int i = 0; i < Attributes.Length; i++)
-            {
-                Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
-                GraphicsExtensions.CheckGLError();
-            }
-        }
-
-        internal int GetAttribLocation(VertexElementUsage usage, int index)
-        {
-            for (int i = 0; i < Attributes.Length; i++)
-            {
-                if ((Attributes[i].usage == usage) && (Attributes[i].index == index))
-                    return Attributes[i].location;
-            }
-            return -1;
-        }
-
-        internal void ApplySamplerTextureUnits(int program)
-        {
-            // Assign the texture unit index to the sampler uniforms.
-            foreach (var sampler in Samplers)
-            {
-                var loc = GL.GetUniformLocation(program, sampler.name);
-                GraphicsExtensions.CheckGLError();
-                if (loc != -1)
-                {
-                    GL.Uniform1(loc, sampler.textureSlot);
-                    GraphicsExtensions.CheckGLError();
-                }
             }
         }
 

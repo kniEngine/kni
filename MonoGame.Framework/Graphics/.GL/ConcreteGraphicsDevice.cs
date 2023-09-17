@@ -233,10 +233,10 @@ namespace Microsoft.Xna.Platform.Graphics
             int program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, ((ConcreteShader)vertexShader.Strategy).GetShaderHandle());
+            GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, ((ConcreteShader)pixelShader.Strategy).GetShaderHandle());
+            GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
             GraphicsExtensions.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
@@ -247,9 +247,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GraphicsExtensions.CheckGLError();
 
-            ((ConcreteShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
+            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
 
-            ((ConcreteShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
+            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
 
             int linkStatus;
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
@@ -263,8 +263,8 @@ namespace Microsoft.Xna.Platform.Graphics
             { 
                 var log = GL.GetProgramInfoLog(program);
                 Console.WriteLine(log);
-                GL.DetachShader(program, ((ConcreteShader)vertexShader.Strategy).GetShaderHandle());
-                GL.DetachShader(program, ((ConcreteShader)pixelShader.Strategy).GetShaderHandle());
+                GL.DetachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
+                GL.DetachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
                 
                 if (GL.IsProgram(program))
                 {

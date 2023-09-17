@@ -21,6 +21,36 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        internal int GetVertexShaderHandle()
+        {
+            // If the shader has already been created then return it.
+            if (base.ShaderHandle != -1)
+                return base.ShaderHandle;
+
+            base.CreateShader(ShaderType.VertexShader);
+            return base.ShaderHandle;
+        }
+
+        internal void GetVertexAttributeLocations(int program)
+        {
+            for (int i = 0; i < Attributes.Length; i++)
+            {
+                Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
+                GraphicsExtensions.CheckGLError();
+            }
+        }
+
+        internal int GetAttributeLocation(VertexElementUsage usage, int index)
+        {
+            for (int i = 0; i < Attributes.Length; i++)
+            {
+                if ((Attributes[i].usage == usage) && (Attributes[i].index == index))
+                    return Attributes[i].location;
+            }
+            return -1;
+        }
+
+
         internal override void PlatformGraphicsDeviceResetting()
         {
 
