@@ -7,8 +7,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private readonly Effect _effect;
 
-		private readonly Shader _pixelShader;
-        private readonly Shader _vertexShader;
+		private readonly PixelShader _pixelShader;
+        private readonly VertexShader _vertexShader;
 
         private readonly BlendState _blendState;
         private readonly DepthStencilState _depthStencilState;
@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal EffectPass(    Effect effect, 
                                 string name,
-                                Shader vertexShader, 
-                                Shader pixelShader, 
+                                VertexShader vertexShader, 
+                                PixelShader pixelShader,
                                 BlendState blendState, 
                                 DepthStencilState depthStencilState, 
                                 RasterizerState rasterizerState,

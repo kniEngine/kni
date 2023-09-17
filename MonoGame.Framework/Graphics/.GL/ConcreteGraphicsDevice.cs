@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal ShaderProgram GetProgram(Shader vertexShader, Shader pixelShader, int shaderProgramHash)
+        internal ShaderProgram GetProgram(VertexShader vertexShader, PixelShader pixelShader, int shaderProgramHash)
         {
             ShaderProgram shaderProgram;
             if (_programCache.TryGetValue(shaderProgramHash, out shaderProgram))
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return shaderProgram;
         }
 
-        private ShaderProgram CreateProgram(Shader vertexShader, Shader pixelShader)
+        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
         {
             int program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();

@@ -10,9 +10,9 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
 
-    internal class Shader : GraphicsResource
+    internal abstract class Shader : GraphicsResource
 	{
-        private ShaderStrategy _strategy;
+        internal ShaderStrategy _strategy;
 
         internal ShaderStrategy Strategy { get { return _strategy; } }
         
@@ -31,25 +31,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         internal Shader(GraphicsDevice graphicsDevice,
-            ShaderStage stage, byte[] shaderBytecode,
+            byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
             : base(true)
         {
-            switch (stage)
-            {
-                case ShaderStage.Vertex:
-                    _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
-                    break;
-                case ShaderStage.Pixel:
-                    _strategy = graphicsDevice.CurrentContext.Strategy.CreatePixelShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
-                    break;
-
-                default:
-                    throw new InvalidOperationException("stage");
-            }
-
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal protected override void GraphicsDeviceResetting()

@@ -94,8 +94,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private Shader ReadShader()
             {
-                var isVertexShader = ReadBoolean();
-                var stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
+                bool isVertexShader = ReadBoolean();
+                ShaderStage stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
 
                 var shaderLength = ReadInt32();
                 var shaderBytecode = ReadBytes(shaderLength);
@@ -130,10 +130,22 @@ namespace Microsoft.Xna.Framework.Graphics
                     attributes[a].location = ReadInt16();
                 }
 
-                return new Shader(_graphicsDevice,
-                                  stage, shaderBytecode,
+                switch (stage)
+                {
+                    case ShaderStage.Vertex:
+                        return new VertexShader(_graphicsDevice,
+                                  shaderBytecode,
                                   samplers, cBuffers, attributes,
                                   _header.Profile);
+                    case ShaderStage.Pixel:
+                        return new PixelShader(_graphicsDevice,
+                                  shaderBytecode,
+                                  samplers, cBuffers, attributes,
+                                  _header.Profile);
+
+                    default:
+                        throw new InvalidOperationException("stage");
+                }
             }
 
             private SamplerState ReadSamplerState()
@@ -283,15 +295,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 var annotations = ReadAnnotations();
 
                 // Get the vertex and pixel shader.
-                Shader vertexShader = null;
-                Shader pixelShader = null;
+                VertexShader vertexShader = null;
+                PixelShader pixelShader = null;
                 {
                     var vertexShaderIndex = (int)ReadByte();
                     var pixelShaderIndex = (int)ReadByte();
                     if (vertexShaderIndex != 255)
-                        vertexShader = effect._shaders[vertexShaderIndex];
+                        vertexShader = (VertexShader)effect._shaders[vertexShaderIndex];
                     if (pixelShaderIndex != 255)
-                        pixelShader = effect._shaders[pixelShaderIndex];
+                        pixelShader = (PixelShader)effect._shaders[pixelShaderIndex];
                 }
 
                 BlendState blend = ReadBoolean() ? ReadBlendState() : null;

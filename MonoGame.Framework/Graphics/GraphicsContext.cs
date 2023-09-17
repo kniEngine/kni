@@ -171,13 +171,13 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.SetVertexBuffers(vertexBuffers);
         }
 
-        internal Shader VertexShader
+        internal VertexShader VertexShader
         {
             get { return Strategy.VertexShader; }
             set { Strategy.VertexShader = value; }
         }
 
-        internal Shader PixelShader
+        internal PixelShader PixelShader
         {
             get { return Strategy.PixelShader; }
             set { Strategy.PixelShader = value; }
