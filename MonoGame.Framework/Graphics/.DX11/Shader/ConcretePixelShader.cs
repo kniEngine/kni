@@ -16,22 +16,34 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public sealed class ConcretePixelShader : ConcreteShader
     {
+        private D3D11.PixelShader _pixelShader;
+
+        internal D3D11.PixelShader PixelShader { get { return _pixelShader; } }
+
+
         internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, ShaderStage.Pixel, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
+            CreatePixelShader();
         }
 
         internal override void PlatformGraphicsDeviceResetting()
         {
+            DX.Utilities.Dispose(ref _pixelShader);
 
             base.PlatformGraphicsDeviceResetting();
         }
 
+        private void CreatePixelShader()
+        {
+            _pixelShader = new D3D11.PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode);
+        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                DX.Utilities.Dispose(ref _pixelShader);
             }
 
             base.Dispose(disposing);

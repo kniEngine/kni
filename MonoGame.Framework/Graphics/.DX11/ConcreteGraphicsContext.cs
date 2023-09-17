@@ -227,20 +227,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(((ConcreteShader)VertexShader.Strategy).VertexShader);
+                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).VertexShader);
 
                 unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = ((ConcreteShader)VertexShader.Strategy).InputLayouts.GetOrCreate(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = ((ConcreteVertexShader)VertexShader.Strategy).InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(((ConcreteShader)PixelShader.Strategy).PixelShader);
+                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).PixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }

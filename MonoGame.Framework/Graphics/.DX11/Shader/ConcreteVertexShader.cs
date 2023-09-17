@@ -16,13 +16,30 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public sealed class ConcreteVertexShader : ConcreteShader
     {
+        private D3D11.VertexShader _vertexShader;
+        // Caches the DirectX input layouts for this vertex shader.
+        private InputLayoutCache _inputLayouts;
+
+        internal InputLayoutCache InputLayouts { get { return _inputLayouts; } }
+        internal D3D11.VertexShader VertexShader { get { return _vertexShader; } }
+ 
+
         internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, ShaderStage.Vertex, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
+                CreateVertexShader();
+        }
+
+        private void CreateVertexShader()
+        {
+            _vertexShader = new D3D11.VertexShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode, null);
+            _inputLayouts = new InputLayoutCache(GraphicsDevice, ShaderBytecode);
         }
 
         internal override void PlatformGraphicsDeviceResetting()
         {
+            DX.Utilities.Dispose(ref _inputLayouts);
+            DX.Utilities.Dispose(ref _vertexShader);
 
             base.PlatformGraphicsDeviceResetting();
         }
@@ -32,6 +49,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
+                DX.Utilities.Dispose(ref _inputLayouts);
+                DX.Utilities.Dispose(ref _vertexShader);
             }
 
             base.Dispose(disposing);
