@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _shaderHandle = -1;
 
         // We keep this around for recompiling on context lost and debugging.
-        private string _glslCode;
+        private byte[] _shaderBytecode;
     
         internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, stage, shaderBytecode, samplers, cBuffers, attributes, profile)
@@ -28,9 +28,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
 
-            _glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-
-            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
+            _shaderBytecode = shaderBytecode;
+            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
          }
 
 
@@ -43,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //
             _shaderHandle = GL.CreateShader(Stage == ShaderStage.Vertex ? ShaderType.VertexShader : ShaderType.FragmentShader);
             GraphicsExtensions.CheckGLError();
-            GL.ShaderSource(_shaderHandle, _glslCode);
+            GL.ShaderSource(_shaderHandle, _shaderBytecode);
             GraphicsExtensions.CheckGLError();
             GL.CompileShader(_shaderHandle);
             GraphicsExtensions.CheckGLError();
