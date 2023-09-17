@@ -14,37 +14,38 @@ using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public abstract class ConcreteShader : ShaderStrategy
+    public sealed class ConcretePixelShader : ConcreteShader
     {
-        private byte[] _shaderBytecode;
+        private D3D11.PixelShader _pixelShader;
 
-        internal byte[] ShaderBytecode { get { return _shaderBytecode; } }
+        internal D3D11.PixelShader PixelShader { get { return _pixelShader; } }
+
+        public override ShaderStage Stage { get { return ShaderStage.Pixel; } }
 
 
-        internal ConcreteShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-            if (profile != ShaderProfileType.DirectX_11)
-                throw new Exception("This effect was built for a different platform.");
-
-            // We need the bytecode later for allocating the
-            // input layout from the vertex declaration.
-            _shaderBytecode = shaderBytecode;
-            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
+            CreatePixelShader();
         }
-
 
         internal override void PlatformGraphicsDeviceResetting()
         {
+            DX.Utilities.Dispose(ref _pixelShader);
 
             base.PlatformGraphicsDeviceResetting();
         }
 
+        private void CreatePixelShader()
+        {
+            _pixelShader = new D3D11.PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode);
+        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                DX.Utilities.Dispose(ref _pixelShader);
             }
 
             base.Dispose(disposing);

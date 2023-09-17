@@ -362,7 +362,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(Shader shader, int baseVertex)
+        private void PlatformApplyVertexBuffersAttribs(Shader vertexShader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
@@ -372,7 +372,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
+                var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -441,11 +441,11 @@ namespace Microsoft.Xna.Platform.Graphics
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader shader, int baseVertex)
+        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader vertexShader, int baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
             int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-            var attrInfo = vertexDeclaration.GetAttributeInfo(shader, programHash, maxVertexBufferSlots);
+            var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)
@@ -735,9 +735,13 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTexture2D(this, stream);
         }
 
-        internal override ShaderStrategy CreateShaderStrategy(ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        internal override ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
         {
-            return new ConcreteShader(this, stage, shaderBytecode, samplers, cBuffers, attributes, profile);
+            return new ConcreteVertexShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
+        }
+        internal override ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        {
+            return new ConcretePixelShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
         }
         internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {

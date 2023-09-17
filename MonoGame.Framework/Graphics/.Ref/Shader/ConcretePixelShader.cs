@@ -8,14 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public abstract class ConcreteShader : ShaderStrategy
+    public sealed class ConcretePixelShader : ConcreteShader
     {
-    
-        internal ConcreteShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        public override ShaderStage Stage { get { return ShaderStage.Pixel; } }
+
+        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-            throw new PlatformNotSupportedException();
-
         }
 
 

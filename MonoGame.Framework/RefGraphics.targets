@@ -3,6 +3,8 @@
   <ItemGroup>
     <Compile Include="Graphics\.Ref\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConcreteShader.cs" />
+    <Compile Include="Graphics\.Ref\Shader\ConcreteVertexShader.cs" />
+    <Compile Include="Graphics\.Ref\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />

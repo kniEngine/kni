@@ -58,8 +58,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal RasterizerState _rasterizerStateCullNone;
 
         // shaders
-        private Shader _vertexShader;
-        private Shader _pixelShader;
+        private VertexShader _vertexShader;
+        private PixelShader _pixelShader;
         internal readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
         internal readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal Shader VertexShader
+        internal VertexShader VertexShader
         {
             get { return _vertexShader; }
             set
@@ -296,7 +296,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal Shader PixelShader
+        internal PixelShader PixelShader
         {
             get { return _pixelShader; }
             set
@@ -422,7 +422,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
 
-        internal abstract ShaderStrategy CreateShaderStrategy(ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        internal abstract ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        internal abstract ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
         internal abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
 
 
