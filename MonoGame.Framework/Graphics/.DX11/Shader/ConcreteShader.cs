@@ -14,7 +14,7 @@ using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteShader : ShaderStrategy
+    public abstract class ConcreteShader : ShaderStrategy
     {
         private byte[] _shaderBytecode;
 
@@ -103,7 +103,4 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dispose(disposing);
         }
     }
-
 }
-
-

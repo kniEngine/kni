@@ -14,7 +14,7 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteShader : ShaderStrategy
+    public abstract class ConcreteShader : ShaderStrategy
     {
         // The shader handle.
         private int _shaderHandle = -1;

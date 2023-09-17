@@ -422,7 +422,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
 
-        internal abstract ShaderStrategy CreateShaderStrategy(ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        internal abstract ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        internal abstract ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
         internal abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
 
 

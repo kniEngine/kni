@@ -36,7 +36,19 @@ namespace Microsoft.Xna.Framework.Graphics
             ShaderProfileType profile)
             : base(true)
         {
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateShaderStrategy(stage, shaderBytecode, samplers, cBuffers, attributes, profile);
+            switch (stage)
+            {
+                case ShaderStage.Vertex:
+                    _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
+                    break;
+                case ShaderStage.Pixel:
+                    _strategy = graphicsDevice.CurrentContext.Strategy.CreatePixelShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("stage");
+            }
+
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

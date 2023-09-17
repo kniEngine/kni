@@ -563,9 +563,13 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTexture2D(this, stream);
         }
 
-        internal override ShaderStrategy CreateShaderStrategy(ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        internal override ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
         {
-            return new ConcreteShader(this, stage, shaderBytecode, samplers, cBuffers, attributes, profile);
+            return new ConcreteVertexShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
+        }
+        internal override ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        {
+            return new ConcretePixelShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
         }
         internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {

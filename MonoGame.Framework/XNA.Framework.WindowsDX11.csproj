@@ -232,6 +232,8 @@
 	  
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
+    <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
+    <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />

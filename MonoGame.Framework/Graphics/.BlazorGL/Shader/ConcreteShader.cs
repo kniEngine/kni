@@ -9,7 +9,7 @@ using nkast.Wasm.Canvas.WebGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteShader : ShaderStrategy
+    public abstract class ConcreteShader : ShaderStrategy
     {
         // The shader handle.
         private WebGLShader _shaderHandle = null;
