@@ -11,23 +11,21 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         internal readonly GraphicsContextStrategy _contextStrategy;
 
-        private ShaderStage _stage;
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
         private VertexAttribute[] _attributes;
         internal int _hashKey;
 
-        public ShaderStage Stage { get { return _stage; } }
+        public abstract ShaderStage Stage { get; }
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
         internal int HashKey { get { return _hashKey; } }
 
 
-        internal ShaderStrategy(GraphicsContextStrategy contextStrategy, ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        internal ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy)
         {
-            this._stage = stage;
             this._samplers = samplers;
             this._CBuffers = cBuffers;
             this._attributes = attributes;

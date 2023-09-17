@@ -11,8 +11,10 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public sealed class ConcreteVertexShader : ConcreteShader
     {
+        public override ShaderStage Stage { get { return ShaderStage.Vertex; } }
+
         internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, ShaderStage.Vertex, shaderBytecode, samplers, cBuffers, attributes, profile)
+            : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
         }
 

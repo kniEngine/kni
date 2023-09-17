@@ -26,8 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
         protected int ShaderHandle { get { return _shaderHandle; } }
 
 
-        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderStage stage, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, stage, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcreteShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+            : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
