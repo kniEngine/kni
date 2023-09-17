@@ -1184,6 +1184,10 @@
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
+      <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
+      <Name>Xna.Framework.Design</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
       <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>XNA.Framework.WindowsDX11</Name>
