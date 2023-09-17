@@ -16,6 +16,33 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        internal WebGLShader GetPixelShaderHandle()
+        {
+            // If the shader has already been created then return it.
+            if (ShaderHandle != null)
+                return ShaderHandle;
+
+            base.CreateShader(WebGLShaderType.FRAGMENT);
+            return ShaderHandle;
+        }
+
+        internal void ApplySamplerTextureUnits(WebGLProgram program)
+        {
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            // Assign the texture unit index to the sampler uniforms.
+            foreach (SamplerInfo sampler in Samplers)
+            {
+                WebGLUniformLocation loc = GL.GetUniformLocation(program, sampler.name);
+                GraphicsExtensions.CheckGLError();
+                if (loc != null)
+                {
+                    GL.Uniform1i(loc, sampler.textureSlot);
+                    GraphicsExtensions.CheckGLError();
+                }
+            }
+        }
+
         internal override void PlatformGraphicsDeviceResetting()
         {
 

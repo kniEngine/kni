@@ -16,6 +16,37 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        internal WebGLShader GetVertexShaderHandle()
+        {
+            // If the shader has already been created then return it.
+            if (ShaderHandle != null)
+                return ShaderHandle;
+
+            base.CreateShader(WebGLShaderType.VERTEX);
+            return ShaderHandle;
+        }
+
+        internal void GetVertexAttributeLocations(WebGLProgram program)
+        {
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            for (int i = 0; i < Attributes.Length; i++)
+            {
+                Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
+                GraphicsExtensions.CheckGLError();
+            }
+        }
+
+        internal int GetAttributeLocation(VertexElementUsage usage, int index)
+        {
+            for (int i = 0; i < Attributes.Length; i++)
+            {
+                if ((Attributes[i].usage == usage) && (Attributes[i].index == index))
+                    return Attributes[i].location;
+            }
+            return -1;
+        }
+
         internal override void PlatformGraphicsDeviceResetting()
         {
 

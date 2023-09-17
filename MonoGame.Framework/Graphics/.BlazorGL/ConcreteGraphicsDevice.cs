@@ -118,10 +118,10 @@ namespace Microsoft.Xna.Platform.Graphics
             var program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, ((ConcreteShader)vertexShader.Strategy).GetShaderHandle());
+            GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
             GraphicsExtensions.CheckGLError();
 
-            GL.AttachShader(program, ((ConcreteShader)pixelShader.Strategy).GetShaderHandle());
+            GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
             GraphicsExtensions.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
@@ -132,9 +132,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GraphicsExtensions.CheckGLError();
 
-            ((ConcreteShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
+            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
 
-            ((ConcreteShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
+            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
 
             bool linkStatus;
             linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);

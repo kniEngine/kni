@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private readonly Dictionary<int, VertexDeclarationAttributeInfo> _shaderAttributeInfo = new Dictionary<int, VertexDeclarationAttributeInfo>();
 
-        internal VertexDeclarationAttributeInfo GetAttributeInfo(Shader shader, int programHash, int maxVertexBufferSlots)
+        internal VertexDeclarationAttributeInfo GetAttributeInfo(Shader vertexShader, int programHash, int maxVertexBufferSlots)
         {
             VertexDeclarationAttributeInfo attrInfo;
             if (_shaderAttributeInfo.TryGetValue(programHash, out attrInfo))
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             foreach (var ve in InternalVertexElements)
             {
-                var attributeLocation = ((ConcreteShader)shader.Strategy).GetAttribLocation(ve.VertexElementUsage, ve.UsageIndex);
+                var attributeLocation = ((ConcreteVertexShader)vertexShader.Strategy).GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
                 // XNA appears to ignore usages it can't find a match for, so we will do the same
                 if (attributeLocation < 0)
                     continue;
