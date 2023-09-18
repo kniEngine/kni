@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -159,6 +161,21 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
+        public abstract Assembly ConcreteAssembly { get; }
+        public abstract string ResourceNameAlphaTestEffect { get; }
+        public abstract string ResourceNameBasicEffect { get; }
+        public abstract string ResourceNameDualTextureEffect { get; }
+        public abstract string ResourceNameEnvironmentMapEffect { get; }
+        public abstract string ResourceNameSkinnedEffect { get; }
+        public abstract string ResourceNameSpriteEffect { get; }
+
+        internal byte[] GetResourceStreamBytes(string resourceName)
+        {
+            Stream stream = ConcreteAssembly.GetManifestResourceStream(resourceName);
+            byte[] bytecode = new byte[stream.Length];
+            stream.Read(bytecode, 0, (int)stream.Length);
+            return bytecode;
+        }
 
         #region IDisposable Members
 

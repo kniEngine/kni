@@ -241,7 +241,6 @@
     <Compile Include="Graphics\Effect\EffectParameterType.cs" />
     <Compile Include="Graphics\Effect\EffectPassCollection.cs" />
     <Compile Include="Graphics\Effect\EffectPass.cs" />
-    <Compile Include="Graphics\Effect\EffectResource.cs" />
     <Compile Include="Graphics\Effect\EffectTechniqueCollection.cs" />
     <Compile Include="Graphics\Effect\EffectTechnique.cs" />
     <Compile Include="Graphics\Effect\EnvironmentMapEffect.cs" />
@@ -392,7 +391,6 @@
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
     <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
 	  
-    <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />

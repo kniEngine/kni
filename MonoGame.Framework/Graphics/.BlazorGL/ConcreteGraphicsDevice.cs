@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Canvas.WebGL;
 
@@ -181,6 +182,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
             return new ConcreteGraphicsContext(context, glContext);
         }
+
+        public override System.Reflection.Assembly ConcreteAssembly
+        {
+            get { return ReflectionHelpers.GetAssembly(typeof(ConcreteGraphicsDevice)); }
+        }
+
+        public override string ResourceNameAlphaTestEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ogl.fxo"; } }
+        public override string ResourceNameBasicEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ogl.fxo"; } }
+        public override string ResourceNameDualTextureEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.DualTextureEffect.ogl.fxo"; } }
+        public override string ResourceNameEnvironmentMapEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.EnvironmentMapEffect.ogl.fxo"; } }
+        public override string ResourceNameSkinnedEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ogl.fxo"; } }
+        public override string ResourceNameSpriteEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.fxo"; } }
 
         internal void OnPresentationChanged()
         {

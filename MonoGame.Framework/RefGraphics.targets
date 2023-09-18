@@ -21,7 +21,6 @@
     <Compile Include="Graphics\.Ref\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
-    <Compile Include="Graphics\Effect\EffectResource.Ref.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Ref.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Ref.cs" />

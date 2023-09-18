@@ -33,7 +33,6 @@
 	  
   <ItemGroup>
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\Effect\EffectResource.DirectX.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Framework.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -58,6 +59,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcreteGraphicsContext(context);
         }
+
+        public override System.Reflection.Assembly ConcreteAssembly
+        {
+            get { return ReflectionHelpers.GetAssembly(typeof(ConcreteGraphicsDevice)); }
+        }
+
+        public override string ResourceNameAlphaTestEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ref.fxo"; } }
+        public override string ResourceNameBasicEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ref.fxo"; } }
+        public override string ResourceNameDualTextureEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.DualTextureEffect.ref.fxo"; } }
+        public override string ResourceNameEnvironmentMapEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.EnvironmentMapEffect.ref.fxo"; } }
+        public override string ResourceNameSkinnedEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ref.fxo"; } }
+        public override string ResourceNameSpriteEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ref.fxo"; } }
+
 
         internal void OnPresentationChanged()
         {

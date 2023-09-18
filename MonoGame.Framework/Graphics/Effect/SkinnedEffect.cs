@@ -345,7 +345,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new SkinnedEffect with default parameter settings.
         /// </summary>
         public SkinnedEffect(GraphicsDevice device)
-            : base(device, EffectResource.SkinnedEffect.Bytecode)
+            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameSkinnedEffect))
         {
             CacheEffectParameters(null);
 
