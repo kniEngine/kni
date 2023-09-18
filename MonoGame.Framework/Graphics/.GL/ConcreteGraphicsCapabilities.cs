@@ -5,15 +5,14 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.OpenGL;
 using GetParamName = MonoGame.OpenGL.GetPName;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-
-    internal partial class GraphicsCapabilities
+    internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
         /// <summary>
         /// True, if GL_ARB_framebuffer_object is supported; false otherwise.

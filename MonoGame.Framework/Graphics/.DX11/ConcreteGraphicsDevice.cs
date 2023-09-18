@@ -360,8 +360,8 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-            _capabilities = new GraphicsCapabilities();
-            _capabilities.PlatformInitialize(this);
+            _capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this);
 
 #if WINDOWS_UAP
             this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;

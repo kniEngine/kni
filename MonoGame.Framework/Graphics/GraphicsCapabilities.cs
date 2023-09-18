@@ -6,87 +6,88 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     /// <summary>
     /// Provides information about the capabilities of the
     /// current graphics device. A very useful thread for investigating GL extenion names
     /// http://stackoverflow.com/questions/3881197/opengl-es-2-0-extensions-on-android-devices
     /// </summary>
-    internal partial class GraphicsCapabilities
+    public abstract class GraphicsCapabilities
     {
 
         /// <summary>
         /// Whether the device fully supports non power-of-two textures, including
         /// mip maps and wrap modes other than CLAMP_TO_EDGE
         /// </summary>
-        internal bool SupportsNonPowerOfTwo { get; private set; }
+        public bool SupportsNonPowerOfTwo { get; protected set; }
 
         /// <summary>
         /// Whether the device supports anisotropic texture filtering
         /// </summary>
-		internal bool SupportsTextureFilterAnisotropic { get; private set; }
+		public bool SupportsTextureFilterAnisotropic { get; protected set; }
 
-        internal bool SupportsDepth24 { get; private set; }
+        public bool SupportsDepth24 { get; protected set; }
 
-        internal bool SupportsPackedDepthStencil { get; private set; }
+        public bool SupportsPackedDepthStencil { get; protected set; }
 
-        internal bool SupportsDepthNonLinear { get; private set; }
+        public bool SupportsDepthNonLinear { get; protected set; }
 
         /// <summary>
         /// Gets the support for DXT1
         /// </summary>
-        internal bool SupportsDxt1 { get; private set; }
+        public bool SupportsDxt1 { get; protected set; }
 
         /// <summary>
         /// Gets the support for S3TC (DXT1, DXT3, DXT5)
         /// </summary>
-        internal bool SupportsS3tc { get; private set; }
+        public bool SupportsS3tc { get; protected set; }
 
         /// <summary>
         /// Gets the support for PVRTC
         /// </summary>
-        internal bool SupportsPvrtc { get; private set; }
+        public bool SupportsPvrtc { get; protected set; }
 
         /// <summary>
         /// Gets the support for ETC1
         /// </summary>
-        internal bool SupportsEtc1 { get; private set; }
+        public bool SupportsEtc1 { get; protected set; }
 
         /// <summary>
         /// Gets the support for ETC2
         /// </summary>
-        internal bool SupportsEtc2 { get; private set; }
+        public bool SupportsEtc2 { get; protected set; }
 
         /// <summary>
         /// Gets the support for ATITC
         /// </summary>
-        internal bool SupportsAtitc { get; private set; }
+        public bool SupportsAtitc { get; protected set; }
 
-        internal bool SupportsTextureMaxLevel { get; private set; }
+        public bool SupportsTextureMaxLevel { get; protected set; }
 
         /// <summary>
         /// True, if sRGB is supported. On Direct3D platforms, this is always <code>true</code>.
         /// On OpenGL platforms, it is <code>true</code> if both framebuffer sRGB
         /// and texture sRGB are supported.
         /// </summary>
-        internal bool SupportsSRgb { get; private set; }
+        public bool SupportsSRgb { get; protected set; }
 
-        internal bool SupportsTextureArrays { get; private set; }
+        public bool SupportsTextureArrays { get; protected set; }
 
-        internal bool SupportsDepthClamp { get; private set; }
+        public bool SupportsDepthClamp { get; protected set; }
 
-        private int _maxTextureSize;
-        private int _maxTextureSlots;
-        private int _maxVertexTextureSlots;
+        protected int _maxTextureSize;
+        protected int _maxTextureSlots;
+        protected int _maxVertexTextureSlots;
 
         internal int MaxTextureSize { get { return _maxTextureSize; } }
         internal int MaxTextureSlots { get { return _maxTextureSlots; } }
         internal int MaxVertexTextureSlots { get { return _maxVertexTextureSlots; } }
 
-        private int _maxVertexBufferSlots;
+        protected int _maxVertexBufferSlots;
 
         internal int MaxVertexBufferSlots { get { return _maxVertexBufferSlots; } }
 
@@ -98,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// If the requested format is not supported an <code>NotSupportedException</code>
         /// will be thrown.
         /// </summary>
-        internal bool SupportsFloatTextures { get; private set; }
+        public bool SupportsFloatTextures { get; protected set; }
 
         /// <summary>
         /// True, if the underlying platform supports half floating point textures. 
@@ -108,21 +109,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// If the requested format is not supported an <code>NotSupportedException</code>
         /// will be thrown.
         /// </summary>
-        internal bool SupportsHalfFloatTextures { get; private set; }
+        public bool SupportsHalfFloatTextures { get; protected set; }
 
-        internal bool SupportsNormalized { get; private set; }
+        public bool SupportsNormalized { get; protected set; }
 
         /// <summary>
         /// Gets the max texture anisotropy. This value typically lies
         /// between 0 and 16, where 0 means anisotropic filtering is not
         /// supported.
         /// </summary>
-        internal int MaxTextureAnisotropy { get; private set; }
+        public int MaxTextureAnisotropy { get; protected set; }
 
-        internal bool SupportsInstancing { get; private set; }
+        public bool SupportsInstancing { get; protected set; }
 
-        internal bool SupportsBaseIndexInstancing { get; private set; }
+        public bool SupportsBaseIndexInstancing { get; protected set; }
 
-        internal bool SupportsSeparateBlendStates { get; private set; }
+        public bool SupportsSeparateBlendStates { get; protected set; }
     }
 }

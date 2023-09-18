@@ -226,6 +226,7 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
@@ -421,7 +422,6 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 	  
-    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />

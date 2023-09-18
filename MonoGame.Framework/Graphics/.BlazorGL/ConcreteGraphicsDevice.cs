@@ -60,8 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsExtensions.GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
-            _capabilities = new GraphicsCapabilities();
-            _capabilities.PlatformInitialize(this);
+            _capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this);
 
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];

@@ -408,6 +408,7 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 
+    <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
@@ -425,7 +426,6 @@
     <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
 	  
-    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs" />
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />

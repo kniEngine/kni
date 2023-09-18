@@ -234,6 +234,7 @@
     <Compile Include="Graphics\.DX11\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdaptersProvider.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsCapabilities.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
@@ -426,7 +427,6 @@
     <Compile Include="Color.cs" />
 
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
