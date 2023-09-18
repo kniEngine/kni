@@ -310,7 +310,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new BasicEffect with default parameter settings.
         /// </summary>
         public BasicEffect(GraphicsDevice device)
-            : base(device, EffectResource.BasicEffect.Bytecode)
+            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameBasicEffect))
         {
             CacheEffectParameters(null);
 
