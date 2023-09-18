@@ -7,6 +7,7 @@
     <Compile Include="Graphics\.Ref\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsAdaptersProvider.cs" />
+    <Compile Include="Graphics\.Ref\ConcreteGraphicsCapabilities.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.Ref\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteGraphicsDevice.cs" />
@@ -21,7 +22,6 @@
     <Compile Include="Graphics\.Ref\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
-    <Compile Include="Graphics\GraphicsCapabilities.Ref.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.Ref.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.Ref.cs" />
   </ItemGroup>

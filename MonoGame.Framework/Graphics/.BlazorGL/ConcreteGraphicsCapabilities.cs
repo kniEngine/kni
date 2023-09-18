@@ -1,19 +1,19 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
 // Copyright (C)2023 Nick Kastellanos
 
-using Microsoft.Xna.Platform.Graphics;
+using System;
+using Microsoft.Xna.Framework.Graphics;
+using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal partial class GraphicsCapabilities
+    internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
 
         internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy)
         {
+            IWebGLRenderingContext GL = deviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
             _maxTextureSize = 2048;
@@ -29,7 +29,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _maxTextureSize = 16384;
 
             SupportsNonPowerOfTwo = profile >= GraphicsProfile.HiDef;
-            SupportsTextureFilterAnisotropic = true;
+
+            SupportsTextureFilterAnisotropic = false; // TODO: check for TEXTURE_MAX_ANISOTROPY_EXT
 
             SupportsDepth24 = false;
             SupportsPackedDepthStencil = false;
@@ -37,24 +38,31 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsTextureMaxLevel = false;
 
             // Texture compression
-            SupportsDxt1 = true;
-            SupportsS3tc = true;
+            SupportsS3tc = GL.GetExtension("WEBGL_compressed_texture_s3tc");
+            SupportsDxt1 = GL.GetExtension("WEBGL_compressed_texture_s3tc");
 
             SupportsSRgb = true;
 
-            SupportsTextureArrays = profile >= GraphicsProfile.FL10_0;
+            SupportsTextureArrays = profile >= GraphicsProfile.HiDef;
             SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
-
-            _maxTextureSlots = 16;
-            _maxVertexTextureSlots = (profile >= GraphicsProfile.FL10_0) ? 16 : 0;
-
-            _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
-
             SupportsFloatTextures = profile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = profile >= GraphicsProfile.HiDef;
             SupportsNormalized = profile >= GraphicsProfile.HiDef;
+            
+            _maxTextureSlots = 8;
+            _maxVertexTextureSlots = 0;
+            // fix for bad GL drivers
+            int maxCombinedTextureImageUnits;
+            maxCombinedTextureImageUnits = 8;
+            _maxTextureSlots = Math.Min(_maxTextureSlots, maxCombinedTextureImageUnits);
+            _maxVertexTextureSlots = Math.Min(_maxVertexTextureSlots, maxCombinedTextureImageUnits);
+            // limit texture slots to Reach profile limit until we implement profile detection.
+            _maxTextureSlots = Math.Min(_maxTextureSlots, 16);
+            _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
-            SupportsInstancing = true;
+            _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
+
+            SupportsInstancing = false;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;

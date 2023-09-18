@@ -116,13 +116,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glMinorVersion = 1;
             }
 
-            _capabilities = new GraphicsCapabilities();
-            _capabilities.PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
+            _capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
 
 #if DESKTOPGL
             // Initialize draw buffer attachment array
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[this.Capabilities.MaxDrawBuffers];
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
 			for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
                 _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 #endif
@@ -134,8 +134,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            if (this.Capabilities.SupportsFramebufferObjectARB
-            || this.Capabilities.SupportsFramebufferObjectEXT)
+            if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
+            ||  ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectEXT)
             {
                 _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
@@ -169,8 +169,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ClearProgramCache();
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._shaderProgram = null;
 
-            if (this.Capabilities.SupportsFramebufferObjectARB
-            ||  this.Capabilities.SupportsFramebufferObjectEXT)
+            if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
+            ||  ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectEXT)
             {
                 _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
