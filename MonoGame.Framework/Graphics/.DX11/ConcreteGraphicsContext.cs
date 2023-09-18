@@ -346,94 +346,91 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDecl)
+        private int SetUserVertexBuffer<T>(T[] vertexData, int vertexOffset, int vertexCount, VertexDeclaration vertexDeclaration)
             where T : struct
         {
-            DynamicVertexBuffer buffer;
+            DynamicVertexBuffer userVertexBuffer;
+            _userVertexBuffers.TryGetValue(vertexDeclaration, out userVertexBuffer);
 
-            if (!_userVertexBuffers.TryGetValue(vertexDecl, out buffer) || buffer.VertexCount < vertexCount)
+            if (userVertexBuffer == null || userVertexBuffer.VertexCount < vertexCount)
             {
                 // Dispose the previous buffer if we have one.
-                if (buffer != null)
-                    buffer.Dispose();
+                if (userVertexBuffer != null)
+                    userVertexBuffer.Dispose();
 
                 int requiredVertexCount = Math.Max(vertexCount, 4 * 256);
                 requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
-                buffer = new DynamicVertexBuffer(this.Context.DeviceStrategy.Device, vertexDecl, requiredVertexCount, BufferUsage.WriteOnly);
-                _userVertexBuffers[vertexDecl] = buffer;
+                userVertexBuffer = new DynamicVertexBuffer(this.Context.DeviceStrategy.Device, vertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
+                _userVertexBuffers[vertexDeclaration] = userVertexBuffer;
             }
 
-            int startVertex = buffer.UserOffset;
+            int startVertex = userVertexBuffer.UserOffset;
 
-
-            if ((vertexCount + buffer.UserOffset) < buffer.VertexCount)
+            SetDataOptions setDataOptions = SetDataOptions.NoOverwrite;
+            if ((startVertex + vertexCount) >= userVertexBuffer.VertexCount)
             {
-                buffer.UserOffset += vertexCount;
-                buffer.SetData(startVertex * vertexDecl.VertexStride, vertexData, vertexOffset, vertexCount, vertexDecl.VertexStride, SetDataOptions.NoOverwrite);
-            }
-            else
-            {
-                buffer.UserOffset = vertexCount;
-                buffer.SetData(vertexData, vertexOffset, vertexCount, SetDataOptions.Discard);
+                setDataOptions = SetDataOptions.Discard;
                 startVertex = 0;
             }
 
-            SetVertexBuffer(buffer);
+            userVertexBuffer.SetData(startVertex * vertexDeclaration.VertexStride, vertexData, vertexOffset, vertexCount, vertexDeclaration.VertexStride, setDataOptions);
+            SetVertexBuffer(userVertexBuffer);
 
+            userVertexBuffer.UserOffset = startVertex + vertexCount;
             return startVertex;
         }
 
-        private int SetUserIndexBuffer<T>(T[] indexData, int indexOffset, int indexCount)
+        private int SetUserIndexBuffer<T>(T[] indexData, int indexOffset, int indexCount, DynamicIndexBuffer userIndexBuffer, int startIndex, int indexSize)
             where T : struct
         {
-            DynamicIndexBuffer buffer;
-
-            int indexSize = ReflectionHelpers.SizeOf<T>();
-            IndexElementSize indexElementSize = indexSize == 2 ? IndexElementSize.SixteenBits : IndexElementSize.ThirtyTwoBits;
-
-            int requiredIndexCount = Math.Max(indexCount, 6 * 512);
-            requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
-            if (indexElementSize == IndexElementSize.SixteenBits)
+            SetDataOptions setDataOptions = SetDataOptions.NoOverwrite;
+            if ((startIndex + indexCount) >= userIndexBuffer.IndexCount)
             {
-                if (_userIndexBuffer16 == null || _userIndexBuffer16.IndexCount < requiredIndexCount)
-                {
-                    if (_userIndexBuffer16 != null)
-                        _userIndexBuffer16.Dispose();
-
-                    _userIndexBuffer16 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
-                }
-
-                buffer = _userIndexBuffer16;
-            }
-            else
-            {
-                if (_userIndexBuffer32 == null || _userIndexBuffer32.IndexCount < requiredIndexCount)
-                {
-                    if (_userIndexBuffer32 != null)
-                        _userIndexBuffer32.Dispose();
-
-                    _userIndexBuffer32 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, indexElementSize, requiredIndexCount, BufferUsage.WriteOnly);
-                }
-
-                buffer = _userIndexBuffer32;
-            }
-
-            int startIndex = buffer.UserOffset;
-
-            if ((indexCount + buffer.UserOffset) < buffer.IndexCount)
-            {
-                buffer.UserOffset += indexCount;
-                buffer.SetData(startIndex * indexSize, indexData, indexOffset, indexCount, SetDataOptions.NoOverwrite);
-            }
-            else
-            {
+                setDataOptions = SetDataOptions.Discard;
                 startIndex = 0;
-                buffer.UserOffset = indexCount;
-                buffer.SetData(indexData, indexOffset, indexCount, SetDataOptions.Discard);
             }
 
-            Indices = buffer;
+            userIndexBuffer.SetData(startIndex * indexSize, indexData, indexOffset, indexCount, setDataOptions);
+            Indices = userIndexBuffer;
 
+            return startIndex;
+        }
+
+        private int SetUserIndexBuffer16(short[] indexData, int indexOffset, int indexCount)
+        {
+            if (_userIndexBuffer16 == null || _userIndexBuffer16.IndexCount < indexCount)
+            {
+                if (_userIndexBuffer16 != null)
+                    _userIndexBuffer16.Dispose();
+
+                int requiredIndexCount = Math.Max(indexCount, 6 * 512);
+                requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
+                _userIndexBuffer16 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
+            }
+
+            int startIndex = SetUserIndexBuffer<short>(indexData, indexOffset, indexCount,
+                _userIndexBuffer16, _userIndexBuffer16.UserOffset, sizeof(short));
+
+            _userIndexBuffer16.UserOffset = startIndex + indexCount;
+            return startIndex;
+        }
+
+        private int SetUserIndexBuffer32(int[] indexData, int indexOffset, int indexCount)
+        {
+            if (_userIndexBuffer32 == null || _userIndexBuffer32.IndexCount < indexCount)
+            {
+                if (_userIndexBuffer32 != null)
+                    _userIndexBuffer32.Dispose();
+
+                int requiredIndexCount = Math.Max(indexCount, 6 * 512);
+                requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
+                _userIndexBuffer32 = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, IndexElementSize.ThirtyTwoBits, requiredIndexCount, BufferUsage.WriteOnly);
+            }
+
+            int startIndex = SetUserIndexBuffer<int>(indexData, indexOffset, indexCount,
+                _userIndexBuffer32, _userIndexBuffer32.UserOffset, sizeof(int));
+
+            _userIndexBuffer32.UserOffset = startIndex + indexCount;
             return startIndex;
         }
 
@@ -464,7 +461,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //       Bind directly to d3dContext and set dirty flags.
             int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
-            int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+            int startIndex = SetUserIndexBuffer16(indexData, indexOffset, indexCount);
 
             lock (this.D3dContext)
             {
@@ -486,7 +483,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //       Bind directly to d3dContext and set dirty flags.
             int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
-            int startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
+            int startIndex = SetUserIndexBuffer32(indexData, indexOffset, indexCount);
 
             lock (this.D3dContext)
             {
