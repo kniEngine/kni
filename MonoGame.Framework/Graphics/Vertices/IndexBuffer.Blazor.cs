@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (ibo != null)
                 return;
 
-            var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
             ibo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
@@ -52,10 +52,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GenerateIfRequired();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var sizeInBytes = elementSizeInByte * elementCount;
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int sizeInBytes = elementSizeInByte * elementCount;
 
-            var bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
             GraphicsExtensions.CheckGLError();
