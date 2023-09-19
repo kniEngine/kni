@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
@@ -20,20 +21,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-                GenerateIfRequired();
+                Debug.Assert(_buffer != null);
                 return _buffer;
             }
         }
 
         private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
-            GenerateIfRequired();
-        }
-
-        void GenerateIfRequired()
-        {
-            if (_buffer != null)
-                return;
+            Debug.Assert(_buffer == null);
 
             // TODO: To use true Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
@@ -59,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
-            GenerateIfRequired();
+            Debug.Assert(_buffer != null);
 
             if (_isDynamic)
             {
@@ -114,7 +109,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct
         {
-            GenerateIfRequired();
+           Debug.Assert(_buffer != null);
 
             if (_isDynamic)
             {

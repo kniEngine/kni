@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using MonoGame.OpenGL;
 using MonoGame.Framework.Utilities;
@@ -17,16 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructVertexBuffer()
         {
             Threading.EnsureUIThread();
-            GenerateIfRequired();
-        }
 
-        /// <summary>
-        /// If the VBO does not exist, create it.
-        /// </summary>
-        void GenerateIfRequired()
-        {
-            if (_vbo != 0)
-                return;
+            Debug.Assert(_vbo == 0);
 
             //this._vao = GLExt.Oes.GenVertexArray();
             //GLExt.Oes.BindVertexArray(this._vao);
@@ -52,6 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #else
             Threading.EnsureUIThread();
 
+            Debug.Assert(_vbo != 0);
             GetBufferData(offsetInBytes, data, startIndex, elementCount, vertexStride);
 #endif
         }
@@ -113,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Threading.EnsureUIThread();
 
-            GenerateIfRequired();
+            Debug.Assert(_vbo != 0);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GraphicsExtensions.CheckGLError();

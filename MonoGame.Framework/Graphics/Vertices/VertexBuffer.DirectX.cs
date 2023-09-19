@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using DX = SharpDX;
@@ -19,23 +20,14 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get
             {
-                if (_buffer != null)
-                    return _buffer;
-                
-                GenerateIfRequired();
+                Debug.Assert(_buffer != null);
                 return _buffer;
             }
         }
 
         private void PlatformConstructVertexBuffer()
         {
-            GenerateIfRequired();
-        }
-
-        void GenerateIfRequired()
-        {
-            if (_buffer != null)
-                return;
+            Debug.Assert(_buffer == null);
 
             // TODO: To use Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
@@ -70,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride) where T : struct
         {
-            GenerateIfRequired();
+            Debug.Assert(_buffer != null);
 
             if (_isDynamic)
             {
@@ -119,7 +111,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes) where T : struct
         {
-            GenerateIfRequired();
+            Debug.Assert(_buffer != null);
 
             if (_isDynamic)
             {

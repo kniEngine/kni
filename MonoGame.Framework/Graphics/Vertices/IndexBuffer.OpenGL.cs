@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using MonoGame.OpenGL;
@@ -17,16 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
             Threading.EnsureUIThread();
-            GenerateIfRequired();
-        }
 
-        /// <summary>
-        /// If the IBO does not exist, create it.
-        /// </summary>
-        void GenerateIfRequired()
-        {
-            if (_ibo != 0)
-                return;
+            Debug.Assert(_ibo == 0);
 
             int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
@@ -50,6 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #else
             Threading.EnsureUIThread();
 
+            Debug.Assert(_ibo != 0);
             GetBufferData(offsetInBytes, data, startIndex, elementCount);
 #endif
         }
@@ -92,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Threading.EnsureUIThread();
 
-            GenerateIfRequired();
+            Debug.Assert(_ibo != 0);
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             int sizeInBytes = elementSizeInByte * elementCount;
