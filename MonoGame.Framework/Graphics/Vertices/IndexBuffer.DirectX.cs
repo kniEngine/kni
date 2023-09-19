@@ -30,11 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            DX.Utilities.Dispose(ref _buffer);
-        }
-
         void GenerateIfRequired()
         {
             if (_buffer != null)
@@ -171,6 +166,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     dataHandle.Free();
                 }
             }
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            DX.Utilities.Dispose(ref _buffer);
         }
 
         protected override void Dispose(bool disposing)

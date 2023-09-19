@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new NotImplementedException();
-        }
-
         void GenerateIfRequired()
         {
             if (vbo == null)
@@ -85,6 +80,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotImplementedException();
             }
 
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)

@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new NotImplementedException();
-        }
-
         void GenerateIfRequired()
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -78,6 +73,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
             GraphicsExtensions.CheckGLError();
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)

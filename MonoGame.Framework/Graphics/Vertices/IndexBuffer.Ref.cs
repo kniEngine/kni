@@ -14,11 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
             throw new PlatformNotSupportedException();
@@ -26,6 +21,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private void PlatformGraphicsDeviceResetting()
         {
             throw new PlatformNotSupportedException();
         }

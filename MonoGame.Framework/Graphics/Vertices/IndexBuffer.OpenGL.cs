@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            _ibo = 0;
-        }
-
         /// <summary>
         /// If the IBO does not exist, create it.
         /// </summary>
@@ -130,6 +125,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 dataHandle.Free();
             }
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            _ibo = 0;
         }
 
         protected override void Dispose(bool disposing)

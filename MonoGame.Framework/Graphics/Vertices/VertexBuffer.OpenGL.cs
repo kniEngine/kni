@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            _vbo = 0;
-        }
-
         /// <summary>
         /// If the VBO does not exist, create it.
         /// </summary>
@@ -177,6 +172,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            _vbo = 0;
         }
 
         protected override void Dispose(bool disposing)

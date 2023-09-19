@@ -14,11 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
             where T : struct
         {
@@ -32,6 +27,11 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new PlatformNotSupportedException();
         }
         
+        private void PlatformGraphicsDeviceResetting()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
