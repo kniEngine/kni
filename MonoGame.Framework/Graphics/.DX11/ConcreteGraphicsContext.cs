@@ -603,13 +603,18 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                if (_userIndexBuffer16 != null)
-                    _userIndexBuffer16.Dispose();
-                if (_userIndexBuffer32 != null)
-                    _userIndexBuffer32.Dispose();
+                if (_userIndexBuffer16.Buffer != null)
+                    _userIndexBuffer16.Buffer.Dispose();
+                _userIndexBuffer16.Buffer = null;
+                if (_userIndexBuffer32.Buffer != null)
+                    _userIndexBuffer32.Buffer.Dispose();
+                _userIndexBuffer32.Buffer = null;
 
-                foreach (DynamicVertexBuffer vb in _userVertexBuffers.Values)
-                    vb.Dispose();
+                foreach (UserVertexBuffer uvb in _userVertexBuffers.Values)
+                {
+                    uvb.Buffer.Dispose();
+                    uvb.Buffer = null;
+                }
 
                 if (_d3dContext != null)
                     _d3dContext.Dispose();
