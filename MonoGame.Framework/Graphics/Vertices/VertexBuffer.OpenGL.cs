@@ -25,21 +25,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         void GenerateIfRequired()
         {
-            if (_vbo == 0)
-            {
-                //this._vao = GLExt.Oes.GenVertexArray();
-                //GLExt.Oes.BindVertexArray(this._vao);
-                this._vbo = GL.GenBuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
-                GraphicsExtensions.CheckGLError();
-                this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+            if (_vbo != 0)
+                return;
 
-                GL.BufferData(BufferTarget.ArrayBuffer,
-                              new IntPtr(VertexDeclaration.VertexStride * VertexCount), IntPtr.Zero,
-                              _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
-                GraphicsExtensions.CheckGLError();
-            }
+            //this._vao = GLExt.Oes.GenVertexArray();
+            //GLExt.Oes.BindVertexArray(this._vao);
+            this._vbo = GL.GenBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
+            GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+
+            GL.BufferData(BufferTarget.ArrayBuffer,
+                          new IntPtr(VertexDeclaration.VertexStride * VertexCount), IntPtr.Zero,
+                          _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)

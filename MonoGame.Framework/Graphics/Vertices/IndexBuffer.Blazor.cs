@@ -24,20 +24,20 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            if (ibo == null)
-            {
-                var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            if (ibo != null)
+                return;
 
-                ibo = GL.CreateBuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
-                GraphicsExtensions.CheckGLError();
-                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+            var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                              sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-                GraphicsExtensions.CheckGLError();
-            }
+            ibo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
+            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                          sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
