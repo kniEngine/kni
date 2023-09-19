@@ -20,30 +20,25 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            _ibo = 0;
-        }
-
         /// <summary>
         /// If the IBO does not exist, create it.
         /// </summary>
         void GenerateIfRequired()
         {
-            if (_ibo == 0)
-            {
-                int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            if (_ibo != 0)
+                return;
 
-                _ibo = GL.GenBuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
-                GraphicsExtensions.CheckGLError();
-                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                GL.BufferData(BufferTarget.ElementArrayBuffer,
-                              (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
-                GraphicsExtensions.CheckGLError();
-            }
+            _ibo = GL.GenBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
+            GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
+            GL.BufferData(BufferTarget.ElementArrayBuffer,
+                          (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
@@ -130,6 +125,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 dataHandle.Free();
             }
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            _ibo = 0;
         }
 
         protected override void Dispose(bool disposing)

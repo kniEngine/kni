@@ -32,11 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            DX.Utilities.Dispose(ref _buffer);
-        }
-
         void GenerateIfRequired()
         {
             if (_buffer != null)
@@ -45,23 +40,21 @@ namespace Microsoft.Xna.Framework.Graphics
             // TODO: To use Immutable resources we would need to delay creation of 
             // the Buffer until SetData() and recreate them if set more than once.
 
-            D3D11.CpuAccessFlags accessflags = D3D11.CpuAccessFlags.None;
-            D3D11.ResourceUsage usage = D3D11.ResourceUsage.Default;
+            D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
+            bufferDesc.SizeInBytes = VertexDeclaration.VertexStride * VertexCount;
+            bufferDesc.Usage = D3D11.ResourceUsage.Default;
+            bufferDesc.BindFlags = D3D11.BindFlags.VertexBuffer;
+            bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
+            bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+            bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
 
             if (_isDynamic)
             {
-                accessflags |= D3D11.CpuAccessFlags.Write;
-                usage = D3D11.ResourceUsage.Dynamic;
+                bufferDesc.CpuAccessFlags |= D3D11.CpuAccessFlags.Write;
+                bufferDesc.Usage = D3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice,
-                                                        VertexDeclaration.VertexStride * VertexCount,
-                                                        usage,
-                                                        D3D11.BindFlags.VertexBuffer,
-                                                        accessflags,
-                                                        D3D11.ResourceOptionFlags.None,
-                                                        0  // StructureSizeInBytes
-                                                        );
+            _buffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
         D3D11.Buffer CreateStagingBuffer()
@@ -211,6 +204,11 @@ namespace Microsoft.Xna.Framework.Graphics
                     dataHandle.Free();
                 }
             }
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            DX.Utilities.Dispose(ref _buffer);
         }
 
         protected override void Dispose(bool disposing)

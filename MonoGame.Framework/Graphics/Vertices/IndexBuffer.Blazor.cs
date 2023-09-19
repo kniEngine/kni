@@ -20,29 +20,24 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new NotImplementedException();
-        }
-
         void GenerateIfRequired()
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            if (ibo == null)
-            {
-                var sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            if (ibo != null)
+                return;
 
-                ibo = GL.CreateBuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
-                GraphicsExtensions.CheckGLError();
-                this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-                GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                              sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-                GraphicsExtensions.CheckGLError();
-            }
+            ibo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
+
+            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                          sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
@@ -57,10 +52,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GenerateIfRequired();
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            var sizeInBytes = elementSizeInByte * elementCount;
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int sizeInBytes = elementSizeInByte * elementCount;
 
-            var bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
             GraphicsExtensions.CheckGLError();
@@ -78,6 +73,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
             GraphicsExtensions.CheckGLError();
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)

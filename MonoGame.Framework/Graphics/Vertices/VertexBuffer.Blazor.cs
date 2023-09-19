@@ -20,28 +20,23 @@ namespace Microsoft.Xna.Framework.Graphics
             GenerateIfRequired();
         }
 
-        private void PlatformGraphicsDeviceResetting()
-        {
-            throw new NotImplementedException();
-        }
-
         void GenerateIfRequired()
         {
-            if (vbo == null)
-            {
-                var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            if (vbo != null)
+                return;
 
-                vbo = GL.CreateBuffer();
-                GraphicsExtensions.CheckGLError();
-                GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
-                GraphicsExtensions.CheckGLError();
-                this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                GL.BufferData(WebGLBufferType.ARRAY,
-                              (VertexDeclaration.VertexStride * VertexCount),
-                              (_isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-                GraphicsExtensions.CheckGLError();
-            }
+            vbo = GL.CreateBuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GraphicsExtensions.CheckGLError();
+            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+
+            GL.BufferData(WebGLBufferType.ARRAY,
+                          (VertexDeclaration.VertexStride * VertexCount),
+                          (_isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
@@ -85,6 +80,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotImplementedException();
             }
 
+        }
+
+        private void PlatformGraphicsDeviceResetting()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)
