@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
@@ -16,14 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformConstructVertexBuffer()
         {
-
-            GenerateIfRequired();
-        }
-
-        void GenerateIfRequired()
-        {
-            if (vbo != null)
-                return;
+            Debug.Assert(vbo == null);
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -42,6 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
             where T : struct
         {
+            Debug.Assert(vbo != null);
             throw new NotImplementedException();
         }
 
@@ -49,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
             where T : struct
         {
-            GenerateIfRequired();
+            Debug.Assert(vbo != null);
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
