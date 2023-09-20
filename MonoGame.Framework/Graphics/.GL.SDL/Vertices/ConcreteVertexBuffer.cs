@@ -18,8 +18,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteVertexBuffer : ConcreteVertexBufferGL
     {
-        public ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
-            : base(contextStrategy, vertexDeclaration, vertexCount, bufferUsage, isDynamic)
+        public ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage, isDynamic)
         {
         }
 

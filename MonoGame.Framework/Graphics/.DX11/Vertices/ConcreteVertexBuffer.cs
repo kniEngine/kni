@@ -31,8 +31,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
-            : base(contextStrategy, vertexDeclaration, vertexCount, bufferUsage)
+        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
             this._isDynamic = isDynamic;
 

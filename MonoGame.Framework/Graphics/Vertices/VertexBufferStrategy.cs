@@ -33,12 +33,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
-        internal VertexBufferStrategy(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage)
+        internal VertexBufferStrategy(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
             : base(contextStrategy)
         {
             this._vertexDeclaration = vertexDeclaration;
             this._vertexCount = vertexCount;
-            this._bufferUsage = bufferUsage;
+            this._bufferUsage = usage;
 
         }
 

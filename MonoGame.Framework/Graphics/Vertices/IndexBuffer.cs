@@ -48,8 +48,8 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 		}
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, indexElementSize, indexCount, bufferUsage, false)
+		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage) :
+			this(graphicsDevice, indexElementSize, indexCount, usage, false)
 		{
 		}
 

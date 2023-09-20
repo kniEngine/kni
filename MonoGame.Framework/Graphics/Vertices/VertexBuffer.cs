@@ -31,13 +31,13 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return Strategy.BufferUsage; }
         }
 		
-		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
             : base(true)
         {
 		    if (graphicsDevice == null)
 		        throw new ArgumentNullException("graphicsDevice");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, bufferUsage, isDynamic);
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage, isDynamic);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 
             // Make sure the graphics device is assigned in the vertex declaration.
@@ -45,13 +45,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 vertexDeclaration.BindGraphicsDevice(graphicsDevice);
 		}
 
-        public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, false)
+        public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) :
+			this(graphicsDevice, vertexDeclaration, vertexCount, usage, false)
         {
         }
 		
-		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
+		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage) :
+			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage, false)
 		{
         }
 
