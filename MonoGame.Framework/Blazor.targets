@@ -38,8 +38,6 @@
     <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
     <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />
     <Compile Include="Graphics\States\SamplerState.Blazor.cs" />
-    <Compile Include="Graphics\Vertices\IndexBuffer.Blazor.cs" />
-    <Compile Include="Graphics\Vertices\VertexBuffer.Blazor.cs" />
         
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />

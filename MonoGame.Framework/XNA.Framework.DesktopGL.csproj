@@ -425,8 +425,6 @@
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
-    <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
-    <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
     <Compile Include="Graphics\Threading.OpenGL.cs" />
     <Compile Include="Color.cs" />

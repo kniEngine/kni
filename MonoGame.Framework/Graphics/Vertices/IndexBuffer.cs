@@ -10,7 +10,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class IndexBuffer : GraphicsResource
+    public class IndexBuffer : GraphicsResource
     {
         internal IndexBufferStrategy _strategy;
 
@@ -46,8 +46,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage, isDynamic);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-            
-            PlatformConstructIndexBuffer(indexElementSize, indexCount);
 		}
 
 		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
@@ -81,14 +79,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /// <summary>
-        /// The GraphicsDevice is resetting, so GPU resources must be recreated.
-        /// </summary>
-        internal protected override void GraphicsDeviceResetting()
-        {
-            PlatformGraphicsDeviceResetting();
-        }
-
         public void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
             if (data == null)
@@ -98,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (BufferUsage == BufferUsage.WriteOnly)
                 throw new NotSupportedException("This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
 
-            PlatformGetData<T>(offsetInBytes, data, startIndex, elementCount);
+            Strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -133,7 +123,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data.Length < (startIndex + elementCount))
                 throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
 
-            PlatformSetData<T>(offsetInBytes, data, startIndex, elementCount, options);
+            Strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
 	}
 }
