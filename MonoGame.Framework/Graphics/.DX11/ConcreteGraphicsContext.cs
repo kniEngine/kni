@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_indexBufferDirty)
             {
                 this.D3dContext.InputAssembler.SetIndexBuffer(
-                    Indices.Buffer,
+                    Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DXIndexBuffer,
                     Indices.IndexElementSize == IndexElementSize.SixteenBits ?
                         DXGI.Format.R16_UInt : DXGI.Format.R32_UInt,
                     0);
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     int vertexStride = vertexDeclaration.VertexStride;
                     int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
                     this.D3dContext.InputAssembler.SetVertexBuffers(
-                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
+                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, vertexStride, vertexOffsetInBytes));
                 }
 
                 // TODO: do we need to reset the previously set slots?
