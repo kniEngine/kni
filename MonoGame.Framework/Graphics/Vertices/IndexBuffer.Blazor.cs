@@ -13,74 +13,30 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class IndexBuffer
     {
-        internal WebGLBuffer ibo { get; private set; }
 
         private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            Debug.Assert(ibo == null);
-
-            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
-
-            ibo = GL.CreateBuffer();
-            GraphicsExtensions.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
-            GraphicsExtensions.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
-
-            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                          sizeInBytes, Strategy.ToConcrete<ConcreteIndexBuffer>()._isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-            GraphicsExtensions.CheckGLError();
         }
 
         private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
-            Debug.Assert(ibo != null);
-            throw new NotImplementedException();
+            Strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount);
         }
 
         private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
             where T : struct
         {
-            Debug.Assert(ibo != null);
-
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            int sizeInBytes = elementSizeInByte * elementCount;
-
-            int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
-
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
-            GraphicsExtensions.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
-
-            if (options == SetDataOptions.Discard)
-            {
-                // By assigning NULL data to the buffer this gives a hint
-                // to the device to discard the previous content.
-                    GL.BufferData(
-                        WebGLBufferType.ELEMENT_ARRAY,
-                        bufferSize,
-                        Strategy.ToConcrete<ConcreteIndexBuffer>()._isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-            }
-
-            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
-            GraphicsExtensions.CheckGLError();
+            Strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
 
         private void PlatformGraphicsDeviceResetting()
         {
-            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ibo.Dispose();
-                ibo = null;
             }
 
             base.Dispose(disposing);
