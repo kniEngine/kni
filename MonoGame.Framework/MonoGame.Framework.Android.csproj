@@ -45,6 +45,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />

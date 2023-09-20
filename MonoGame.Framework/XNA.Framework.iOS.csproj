@@ -390,6 +390,8 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 
+    <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />

@@ -16,7 +16,7 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteVertexBuffer : VertexBufferStrategy
+    public abstract class ConcreteVertexBufferGL : VertexBufferStrategy
     {
         internal bool _isDynamic;
 
@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GLVertexBuffer { get { return _vbo; } }
 
-        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+        internal ConcreteVertexBufferGL(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
             : base(contextStrategy, vertexDeclaration, vertexCount, bufferUsage)
         {
             this._isDynamic = isDynamic;
@@ -116,71 +116,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
         }
-
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
-        {
-#if GLES
-            // Buffers are write-only on OpenGL ES 1.1 and 2.0.  See the GL_OES_mapbuffer extension for more information.
-            // http://www.khronos.org/registry/gles/extensions/OES/OES_mapbuffer.txt
-            throw new NotSupportedException("Vertex buffers are write-only on OpenGL ES platforms");
-#else
-            GetData_SDL(offsetInBytes, data, startIndex, elementCount, vertexStride);
-#endif
-        }
-
-#if !GLES
-        private void GetData_SDL<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
-            where T : struct
-        {
-            Threading.EnsureUIThread();
-
-            Debug.Assert(GLVertexBuffer != 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
-            GraphicsExtensions.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
-
-            // Pointer to the start of data in the vertex buffer
-            IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
-            GraphicsExtensions.CheckGLError();
-
-            ptr = (IntPtr)(ptr.ToInt64() + offsetInBytes);
-
-            if (typeof(T) == typeof(byte) && vertexStride == 1)
-            {
-                // If data is already a byte[] and stride is 1 we can skip the temporary buffer
-                byte[] buffer = data as byte[];
-                Marshal.Copy(ptr, buffer, startIndex * vertexStride, elementCount * vertexStride);
-            }
-            else
-            {
-                // Temporary buffer to store the copied section of data
-                byte[] tmp = new byte[elementCount * vertexStride];
-                // Copy from the vertex buffer to the temporary buffer
-                Marshal.Copy(ptr, tmp, 0, tmp.Length);
-
-                // Copy from the temporary buffer to the destination array
-                GCHandle tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
-                try
-                {
-                    IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
-                    for (int i = 0; i < elementCount; i++)
-                    {
-                        data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
-                        tmpPtr = (IntPtr)(tmpPtr.ToInt64() + vertexStride);
-                    }
-                }
-                finally
-                {
-                    tmpHandle.Free();
-                }
-            }
-
-            GL.UnmapBuffer(BufferTarget.ArrayBuffer);
-            GraphicsExtensions.CheckGLError();
-        }
-
-#endif
 
         internal override void PlatformGraphicsDeviceResetting()
         {

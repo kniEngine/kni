@@ -237,6 +237,8 @@
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
 	  
+    <Compile Include="Graphics\.GL.SDL\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.SDL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />

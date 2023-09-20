@@ -16,7 +16,7 @@ using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteIndexBuffer : IndexBufferStrategy
+    public abstract class ConcreteIndexBufferGL : IndexBufferStrategy
     {
         internal bool _isDynamic;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GLIndexBuffer { get { return _ibo; } }
 
-        internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+        internal ConcreteIndexBufferGL(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
             this._isDynamic = isDynamic;
@@ -89,55 +89,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 dataHandle.Free();
             }
         }
-
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
-        {
-#if GLES
-            // Buffers are write-only on OpenGL ES 1.1 and 2.0.  See the GL_OES_mapbuffer extension for more information.
-            // http://www.khronos.org/registry/gles/extensions/OES/OES_mapbuffer.txt
-            throw new NotSupportedException("Index buffers are write-only on OpenGL ES platforms");
-#else
-            GetData_SDL(offsetInBytes, data, startIndex, elementCount);
-#endif
-        }
-
-
-#if !GLES
-
-        private void GetData_SDL<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
-        {
-            Threading.EnsureUIThread();
-
-            Debug.Assert(GLIndexBuffer != 0);
-
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
-            GraphicsExtensions.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
-
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
-            // Pointer to the start of data to read in the index buffer
-            ptr = new IntPtr(ptr.ToInt64() + offsetInBytes);
-            if (typeof(T) == typeof(byte))
-            {
-                byte[] buffer = data as byte[];
-                // If data is already a byte[] we can skip the temporary buffer
-                // Copy from the index buffer to the destination array
-                Marshal.Copy(ptr, buffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
-            }
-            else
-            {
-                // Temporary buffer to store the copied section of data
-                byte[] buffer = new byte[elementCount * elementSizeInByte];
-                // Copy from the index buffer to the temporary buffer
-                Marshal.Copy(ptr, buffer, 0, buffer.Length);
-                // Copy from the temporary buffer to the destination array
-                Buffer.BlockCopy(buffer, 0, data, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
-            }
-            GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
-            GraphicsExtensions.CheckGLError();
-        }
-#endif
 
         internal override void PlatformGraphicsDeviceResetting()
         {
