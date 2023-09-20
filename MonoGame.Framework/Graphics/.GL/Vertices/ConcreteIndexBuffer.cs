@@ -27,12 +27,19 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteIndexBufferGL(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
+            Debug.Assert(isDynamic == true);
             this._isDynamic = isDynamic;
+        }
+
+        internal ConcreteIndexBufferGL(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+            : base(contextStrategy, indexElementSize, indexCount, usage)
+        {
+            this._isDynamic = false;
 
             PlatformConstructIndexBuffer();
         }
 
-        private void PlatformConstructIndexBuffer()
+        internal void PlatformConstructIndexBuffer()
         {
             Threading.EnsureUIThread();
 

@@ -9,6 +9,8 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicIndexBuffer.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />

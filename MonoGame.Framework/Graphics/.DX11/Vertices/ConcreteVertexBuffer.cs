@@ -34,13 +34,20 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
+            Debug.Assert(isDynamic == true);
             this._isDynamic = isDynamic;
+        }
+
+        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage)
+        {
+            this._isDynamic = false;
 
             PlatformConstructVertexBuffer();
         }
 
 
-        private void PlatformConstructVertexBuffer()
+        internal void PlatformConstructVertexBuffer()
         {
             Debug.Assert(_buffer == null);
 

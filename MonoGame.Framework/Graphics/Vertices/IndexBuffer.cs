@@ -5,6 +5,7 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
@@ -31,32 +32,31 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return Strategy.IndexElementSize; }
         }
 
-   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool isDynamic)
-            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, isDynamic)
-        {
-        }
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
-            : base(true)
+		public IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
+			this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage)
+		{
+		}
+
+		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+			: base(true)
         {
-			if (graphicsDevice == null)
+            if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage, isDynamic);
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-		}
+        }
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage) :
-			this(graphicsDevice, indexElementSize, indexCount, usage, false)
-		{
-		}
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
-			this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, false)
-		{
-		}
+		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+            : base(true)
+        {
+            Debug.Assert(isDynamic == true);
+        }
+
 
         /// <summary>
         /// Gets the relevant IndexElementSize enum value for the given type.
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="type">The type to use for the index buffer</param>
         /// <returns>The IndexElementSize enum value that matches the type</returns>
-        static IndexElementSize SizeForType(GraphicsDevice graphicsDevice, Type type)
+        internal static IndexElementSize SizeForType(GraphicsDevice graphicsDevice, Type type)
         {
             switch (ReflectionHelpers.SizeOf(type))
             {

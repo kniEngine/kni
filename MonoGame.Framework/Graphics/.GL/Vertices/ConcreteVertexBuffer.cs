@@ -28,12 +28,19 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteVertexBufferGL(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
+            Debug.Assert(isDynamic == true);
             this._isDynamic = isDynamic;
+        }
+
+        internal ConcreteVertexBufferGL(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage)
+        {
+            this._isDynamic = false;
 
             PlatformConstructVertexBuffer();
         }
 
-        private void PlatformConstructVertexBuffer()
+        internal void PlatformConstructVertexBuffer()
         {
             Threading.EnsureUIThread();
 

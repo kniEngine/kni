@@ -10,6 +10,8 @@
     <Compile Include="Graphics\.BlazorGL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ShaderProgram.cs" />
+    <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicIndexBuffer.cs" />
+    <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\ConcreteGraphicsAdapter.cs" />

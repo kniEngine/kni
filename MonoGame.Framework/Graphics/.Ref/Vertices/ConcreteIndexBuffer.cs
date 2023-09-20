@@ -16,9 +16,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
+            Debug.Assert(isDynamic == true);
             throw new PlatformNotSupportedException();
         }
-        
+
+        internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+            : base(contextStrategy, indexElementSize, indexCount, usage)
+        {
+            throw new PlatformNotSupportedException();
+        }
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
