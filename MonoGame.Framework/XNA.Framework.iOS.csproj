@@ -197,6 +197,8 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
 	<Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
@@ -364,10 +366,12 @@
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
     <Compile Include="Graphics\Vertices\DynamicVertexBuffer.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\IndexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\IndexElementSize.cs" />
     <Compile Include="Graphics\Vertices\IVertexType.cs" />
     <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\VertexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBinding.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />

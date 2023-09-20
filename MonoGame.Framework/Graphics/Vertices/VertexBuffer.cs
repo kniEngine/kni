@@ -2,34 +2,47 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+﻿// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexBuffer : GraphicsResource
     {
-        private readonly bool _isDynamic;
+        internal VertexBufferStrategy _strategy;
 
-		public int VertexCount { get; private set; }
-		public VertexDeclaration VertexDeclaration { get; private set; }
-		public BufferUsage BufferUsage { get; private set; }
+        internal VertexBufferStrategy Strategy { get { return _strategy; } }
+
+		public int VertexCount
+        {
+            get { return Strategy.VertexCount; }
+        }
+
+		public VertexDeclaration VertexDeclaration
+        {
+            get { return Strategy.VertexDeclaration; }
+        }
+
+		public BufferUsage BufferUsage
+        {
+            get { return Strategy.BufferUsage; }
+        }
 		
-		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
-		{
+		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+            : base(true)
+        {
 		    if (graphicsDevice == null)
 		        throw new ArgumentNullException("graphicsDevice");
 
-            SetGraphicsDevice(graphicsDevice);
-            this.VertexDeclaration = vertexDeclaration;
-            this.VertexCount = vertexCount;
-            this.BufferUsage = bufferUsage;
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, bufferUsage, isDynamic);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 
             // Make sure the graphics device is assigned in the vertex declaration.
             if (vertexDeclaration.GraphicsDevice != graphicsDevice)
                 vertexDeclaration.BindGraphicsDevice(graphicsDevice);
-
-            _isDynamic = dynamic;
 
             PlatformConstructVertexBuffer();
 		}

@@ -230,6 +230,8 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ImmutableVertexInputLayout.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
@@ -404,10 +406,12 @@
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
     <Compile Include="Graphics\Vertices\DynamicVertexBuffer.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\IndexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\IndexElementSize.cs" />
     <Compile Include="Graphics\Vertices\IVertexType.cs" />
     <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\VertexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBinding.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />

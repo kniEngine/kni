@@ -2,38 +2,51 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+﻿// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class IndexBuffer : GraphicsResource
     {
-        private readonly bool _isDynamic;
+        internal IndexBufferStrategy _strategy;
 
-        public BufferUsage BufferUsage { get; private set; }
-        public int IndexCount { get; private set; }
-        public IndexElementSize IndexElementSize { get; private set; }
+        internal IndexBufferStrategy Strategy { get { return _strategy; } }
 
-   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
-            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
+        public BufferUsage BufferUsage
+        {
+            get { return Strategy.BufferUsage; }
+        }
+
+        public int IndexCount
+        {
+            get { return Strategy.IndexCount; }
+        }
+
+        public IndexElementSize IndexElementSize
+        {
+            get { return Strategy.IndexElementSize; }
+        }
+
+   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool isDynamic)
+            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, isDynamic)
         {
         }
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
+		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+            : base(true)
         {
 			if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
-            SetGraphicsDevice(graphicsDevice);
-			this.IndexElementSize = indexElementSize;	
-            this.IndexCount = indexCount;
-            this.BufferUsage = usage;
-			
-            _isDynamic = dynamic;
-
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage, isDynamic);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
+            
             PlatformConstructIndexBuffer(indexElementSize, indexCount);
 		}
 

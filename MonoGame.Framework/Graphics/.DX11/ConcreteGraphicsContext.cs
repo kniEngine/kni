@@ -598,6 +598,15 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
         }
 
+        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+        {
+            return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage, isDynamic);
+        }
+        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+        {
+            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, bufferUsage, isDynamic);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

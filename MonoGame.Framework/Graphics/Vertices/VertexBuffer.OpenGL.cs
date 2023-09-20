@@ -5,8 +5,9 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
+using MonoGame.OpenGL;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -31,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BufferData(BufferTarget.ArrayBuffer,
                           new IntPtr(VertexDeclaration.VertexStride * VertexCount), IntPtr.Zero,
-                          _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                          Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -121,7 +122,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     BufferTarget.ArrayBuffer,
                     (IntPtr)bufferSize,
                     IntPtr.Zero,
-                    _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                    Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
                 GraphicsExtensions.CheckGLError();
             }
 

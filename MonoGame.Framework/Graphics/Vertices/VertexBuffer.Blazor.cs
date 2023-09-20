@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GL.BufferData(WebGLBufferType.ARRAY,
                           (VertexDeclaration.VertexStride * VertexCount),
-                          (_isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          (Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 GL.BufferData(
                     WebGLBufferType.ARRAY,
                     bufferSize,
-                    _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                    Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
                 GraphicsExtensions.CheckGLError();
             }
 

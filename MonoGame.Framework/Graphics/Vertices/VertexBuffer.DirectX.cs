@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
             bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
             bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
 
-            if (_isDynamic)
+            if (Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic)
             {
                 bufferDesc.CpuAccessFlags |= D3D11.CpuAccessFlags.Write;
                 bufferDesc.Usage = D3D11.ResourceUsage.Dynamic;
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(_buffer != null);
 
-            if (_isDynamic)
+            if (Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic)
             {
                 throw new NotImplementedException();
             }
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(_buffer != null);
 
-            if (_isDynamic)
+            if (Strategy.ToConcrete<ConcreteVertexBuffer>()._isDynamic)
             {
                 // We assume discard by default.
                 D3D11.MapMode mode = D3D11.MapMode.WriteDiscard;
