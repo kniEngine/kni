@@ -22,14 +22,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
+            throw new PlatformNotSupportedException();
         }
 
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
+            throw new PlatformNotSupportedException();
         }
 
         internal override void PlatformGraphicsDeviceResetting()
         {
+            throw new PlatformNotSupportedException();
         }
 
 
