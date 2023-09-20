@@ -14,13 +14,13 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException("IsContentLost"); }
         }
 
-        public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage)
-            : base(graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, true)
+        public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+            : base(graphicsDevice, vertexDeclaration, vertexCount, usage, true)
         {
         }
 		
-		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage)
-            : base(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, true)
+		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
+            : base(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage, true)
         {
         }
 

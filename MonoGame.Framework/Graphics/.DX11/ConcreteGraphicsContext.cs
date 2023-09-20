@@ -602,9 +602,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage, isDynamic);
         }
-        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
         {
-            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, bufferUsage, isDynamic);
+            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, usage, isDynamic);
         }
 
 
