@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices._ibo);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
                 GraphicsExtensions.CheckGLError();
                 _indexBufferDirty = false;
             }
@@ -417,12 +417,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     _bufferBindingInfos[slot].VertexOffset == offset &&
                     ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
                     _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
-                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer._vbo)
+                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
                     continue;
 
                 bindingsChanged = true;
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer._vbo);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
                 GraphicsExtensions.CheckGLError();
 
                 for (int e = 0; e < attrInfo.Elements.Count; e++)
@@ -452,7 +452,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _bufferBindingInfos[slot].VertexOffset = offset;
                 _bufferBindingInfos[slot].AttributeInfo = attrInfo;
                 _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer._vbo;
+                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
             }
 
             _attribsDirty = false;
@@ -808,6 +808,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
+        }
+
+        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+        {
+            return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage, isDynamic);
+        }
+        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+        {
+            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, bufferUsage, isDynamic);
         }
 
 

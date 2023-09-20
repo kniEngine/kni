@@ -51,6 +51,8 @@
     <Compile Include="Platform\iOS\iOSGameWindow.cs" />
     <Compile Include="Platform\iOS\OrientationConverter.cs" />
 
+    <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdaptersProvider.cs" />
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />

@@ -1,54 +1,59 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class VertexBuffer
+    public class ConcreteVertexBuffer : VertexBufferStrategy
     {
-        internal WebGLBuffer vbo { get; private set; }
+        internal bool _isDynamic;
+
+        internal WebGLBuffer _vbo;
+
+        internal WebGLBuffer GLVertexBuffer { get { return _vbo; } }
+
+        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+            : base(contextStrategy, vertexDeclaration, vertexCount, bufferUsage)
+        {
+            this._isDynamic = isDynamic;
+
+            PlatformConstructVertexBuffer();
+        }
 
         private void PlatformConstructVertexBuffer()
         {
-            Debug.Assert(vbo == null);
+            Debug.Assert(_vbo == null);
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = this.GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            vbo = GL.CreateBuffer();
+            _vbo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GL.BindBuffer(WebGLBufferType.ARRAY, _vbo);
             GraphicsExtensions.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             GL.BufferData(WebGLBufferType.ARRAY,
-                          (VertexDeclaration.VertexStride * VertexCount),
+                          (this.VertexDeclaration.VertexStride * this.VertexCount),
                           (_isDynamic) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
             GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
-            where T : struct
-        {
-            Debug.Assert(vbo != null);
-            throw new NotImplementedException();
-        }
 
-        private void PlatformSetData<T>(
-            int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
-            where T : struct
+        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
-            Debug.Assert(vbo != null);
+            Debug.Assert(GLVertexBuffer != null);
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
             GraphicsExtensions.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
@@ -74,23 +79,33 @@ namespace Microsoft.Xna.Framework.Graphics
                 // else we must copy each element separately
                 throw new NotImplementedException();
             }
-
         }
 
-        private void PlatformGraphicsDeviceResetting()
+        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        {
+            Debug.Assert(GLVertexBuffer != null);
+            throw new NotImplementedException();
+        }
+
+        internal override void PlatformGraphicsDeviceResetting()
         {
             throw new NotImplementedException();
         }
+
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                vbo.Dispose();
-                vbo = null;
+                if (_vbo != null)
+                {
+                    _vbo.Dispose();
+                    _vbo = null;
+                }
             }
 
             base.Dispose(disposing);
         }
     }
+
 }

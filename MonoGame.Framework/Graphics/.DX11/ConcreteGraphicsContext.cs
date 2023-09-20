@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_indexBufferDirty)
             {
                 this.D3dContext.InputAssembler.SetIndexBuffer(
-                    Indices.Buffer,
+                    Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DXIndexBuffer,
                     Indices.IndexElementSize == IndexElementSize.SixteenBits ?
                         DXGI.Format.R16_UInt : DXGI.Format.R32_UInt,
                     0);
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     int vertexStride = vertexDeclaration.VertexStride;
                     int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
                     this.D3dContext.InputAssembler.SetVertexBuffers(
-                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Buffer, vertexStride, vertexOffsetInBytes));
+                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, vertexStride, vertexOffsetInBytes));
                 }
 
                 // TODO: do we need to reset the previously set slots?
@@ -596,6 +596,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
+        }
+
+        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+        {
+            return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage, isDynamic);
+        }
+        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+        {
+            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, bufferUsage, isDynamic);
         }
 
 

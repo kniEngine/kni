@@ -2,21 +2,27 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class VertexBuffer
+    public class ConcreteVertexBuffer : VertexBufferStrategy
     {
+        internal bool _isDynamic;
+
         private D3D11.Buffer _buffer;
 
-        internal D3D11.Buffer Buffer
+        internal D3D11.Buffer DXVertexBuffer
         {
             get
             {
@@ -24,6 +30,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 return _buffer;
             }
         }
+
+        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool isDynamic)
+            : base(contextStrategy, vertexDeclaration, vertexCount, bufferUsage)
+        {
+            this._isDynamic = isDynamic;
+
+            PlatformConstructVertexBuffer();
+        }
+
 
         private void PlatformConstructVertexBuffer()
         {
@@ -33,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
             // the Buffer until SetData() and recreate them if set more than once.
 
             D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
-            bufferDesc.SizeInBytes = VertexDeclaration.VertexStride * VertexCount;
+            bufferDesc.SizeInBytes = this.VertexDeclaration.VertexStride * this.VertexCount;
             bufferDesc.Usage = D3D11.ResourceUsage.Default;
             bufferDesc.BindFlags = D3D11.BindFlags.VertexBuffer;
             bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
@@ -46,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 bufferDesc.Usage = D3D11.ResourceUsage.Dynamic;
             }
 
-            _buffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+            _buffer = new D3D11.Buffer(this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
         D3D11.Buffer CreateStagingBuffer()
@@ -60,56 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
         }
 
-        private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride) where T : struct
-        {
-            Debug.Assert(_buffer != null);
-
-            if (_isDynamic)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                int TsizeInBytes = DX.Utilities.SizeOf<T>();
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-
-                try
-                {
-                    int startBytes = startIndex * TsizeInBytes;
-                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
-
-                    using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
-                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
-                    {
-                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                        d3dContext.CopyResource(_buffer, stagingBuffer);
-
-                        // Map the staging resource to a CPU accessible memory
-                        DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
-
-                        if (vertexStride == TsizeInBytes)
-                        {
-                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
-                        }
-                        else
-                        {
-                            for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
-                        }
-
-                        // Make sure that we unmap the resource in case of an exception
-                        d3dContext.UnmapSubresource(stagingBuffer, 0);
-                    }
-                }
-                finally
-                {
-                    dataHandle.Free();
-                }
-            }
-        }
-
-        private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes) where T : struct
+        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             Debug.Assert(_buffer != null);
 
@@ -198,10 +164,60 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGraphicsDeviceResetting()
+        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        {
+            Debug.Assert(_buffer != null);
+
+            if (_isDynamic)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                int TsizeInBytes = DX.Utilities.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+
+                try
+                {
+                    int startBytes = startIndex * TsizeInBytes;
+                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+
+                    using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
+                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                    {
+                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+
+                        d3dContext.CopyResource(_buffer, stagingBuffer);
+
+                        // Map the staging resource to a CPU accessible memory
+                        DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+
+                        if (vertexStride == TsizeInBytes)
+                        {
+                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < elementCount; i++)
+                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
+                        }
+
+                        // Make sure that we unmap the resource in case of an exception
+                        d3dContext.UnmapSubresource(stagingBuffer, 0);
+                    }
+                }
+                finally
+                {
+                    dataHandle.Free();
+                }
+            }
+        }
+
+        internal override void PlatformGraphicsDeviceResetting()
         {
             DX.Utilities.Dispose(ref _buffer);
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -213,4 +229,5 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
     }
+
 }

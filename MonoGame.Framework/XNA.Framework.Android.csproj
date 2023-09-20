@@ -226,6 +226,8 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
@@ -244,6 +246,8 @@
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
 
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
@@ -400,10 +404,12 @@
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
     <Compile Include="Graphics\Vertices\DynamicVertexBuffer.cs" />
     <Compile Include="Graphics\Vertices\IndexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\IndexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\IndexElementSize.cs" />
     <Compile Include="Graphics\Vertices\IVertexType.cs" />
     <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\VertexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBinding.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />
@@ -430,8 +436,6 @@
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
-    <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs" />
-    <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
     <Compile Include="Graphics\Threading.OpenGL.cs" />
 

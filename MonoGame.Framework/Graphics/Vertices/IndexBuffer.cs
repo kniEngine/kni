@@ -2,39 +2,50 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+﻿// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class IndexBuffer : GraphicsResource
+    public class IndexBuffer : GraphicsResource
     {
-        private readonly bool _isDynamic;
+        internal IndexBufferStrategy _strategy;
 
-        public BufferUsage BufferUsage { get; private set; }
-        public int IndexCount { get; private set; }
-        public IndexElementSize IndexElementSize { get; private set; }
+        internal IndexBufferStrategy Strategy { get { return _strategy; } }
 
-   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
-            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
+        public BufferUsage BufferUsage
+        {
+            get { return Strategy.BufferUsage; }
+        }
+
+        public int IndexCount
+        {
+            get { return Strategy.IndexCount; }
+        }
+
+        public IndexElementSize IndexElementSize
+        {
+            get { return Strategy.IndexElementSize; }
+        }
+
+   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool isDynamic)
+            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, isDynamic)
         {
         }
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
+		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+            : base(true)
         {
 			if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
-            SetGraphicsDevice(graphicsDevice);
-			this.IndexElementSize = indexElementSize;	
-            this.IndexCount = indexCount;
-            this.BufferUsage = usage;
-			
-            _isDynamic = dynamic;
-
-            PlatformConstructIndexBuffer(indexElementSize, indexCount);
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage, isDynamic);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 		}
 
 		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
@@ -68,14 +79,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /// <summary>
-        /// The GraphicsDevice is resetting, so GPU resources must be recreated.
-        /// </summary>
-        internal protected override void GraphicsDeviceResetting()
-        {
-            PlatformGraphicsDeviceResetting();
-        }
-
         public void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
         {
             if (data == null)
@@ -85,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (BufferUsage == BufferUsage.WriteOnly)
                 throw new NotSupportedException("This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
 
-            PlatformGetData<T>(offsetInBytes, data, startIndex, elementCount);
+            Strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -120,7 +123,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data.Length < (startIndex + elementCount))
                 throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
 
-            PlatformSetData<T>(offsetInBytes, data, startIndex, elementCount, options);
+            Strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
 	}
 }

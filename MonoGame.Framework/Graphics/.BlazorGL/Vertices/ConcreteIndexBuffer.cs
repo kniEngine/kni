@@ -1,31 +1,44 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class IndexBuffer
+    public class ConcreteIndexBuffer : IndexBufferStrategy
     {
-        internal WebGLBuffer ibo { get; private set; }
+        internal bool _isDynamic;
 
-        private void PlatformConstructIndexBuffer(IndexElementSize indexElementSize, int indexCount)
+        private WebGLBuffer _ibo;
+
+        internal WebGLBuffer GLIndexBuffer { get { return _ibo; } }
+
+        internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+            : base(contextStrategy, indexElementSize, indexCount, usage)
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            this._isDynamic = isDynamic;
 
-            Debug.Assert(ibo == null);
+            PlatformConstructIndexBuffer();
+        }
 
-            int sizeInBytes = IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+        private void PlatformConstructIndexBuffer()
+        {
+            var GL = this.GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            ibo = GL.CreateBuffer();
+            Debug.Assert(_ibo == null);
+
+            int sizeInBytes = this.IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+
+            _ibo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
             GraphicsExtensions.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
@@ -34,16 +47,9 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformGetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
+        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
-            Debug.Assert(ibo != null);
-            throw new NotImplementedException();
-        }
-
-        private void PlatformSetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
-            where T : struct
-        {
-            Debug.Assert(ibo != null);
+            Debug.Assert(GLIndexBuffer != null);
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -52,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
 
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
             GraphicsExtensions.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
@@ -70,20 +76,31 @@ namespace Microsoft.Xna.Framework.Graphics
             GraphicsExtensions.CheckGLError();
         }
 
-        private void PlatformGraphicsDeviceResetting()
+        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        {
+            Debug.Assert(GLIndexBuffer != null);
+            throw new NotImplementedException();
+        }
+
+        internal override void PlatformGraphicsDeviceResetting()
         {
             throw new NotImplementedException();
         }
+
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ibo.Dispose();
-                ibo = null;
+                if (_ibo != null)
+                {
+                    _ibo.Dispose();
+                    _ibo = null;
+                }
             }
 
             base.Dispose(disposing);
         }
     }
+
 }
