@@ -12,7 +12,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsContentLost
         {
-            get { throw new NotImplementedException("IsContentLost"); }
+            get
+            {
+
+                throw new NotImplementedException("IsContentLost");
+            }
         }
 
    		public DynamicIndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
