@@ -14,23 +14,22 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteIndexBuffer : IndexBufferStrategy
     {
-        internal bool _isDynamic;
-
+        private readonly WebGLBufferUsageHint _usageHint;
         private WebGLBuffer _ibo;
-
+        
         internal WebGLBuffer GLIndexBuffer { get { return _ibo; } }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
             Debug.Assert(isDynamic == true);
-            this._isDynamic = isDynamic;
+            _usageHint= WebGLBufferUsageHint.DYNAMIC_DRAW;
         }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
-            this._isDynamic = false;
+            _usageHint = WebGLBufferUsageHint.STATIC_DRAW;
 
             PlatformConstructIndexBuffer();
         }
@@ -50,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                          sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          sizeInBytes, _usageHint);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -76,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BufferData(
                         WebGLBufferType.ELEMENT_ARRAY,
                         bufferSize,
-                        _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                        _usageHint);
             }
 
             GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);

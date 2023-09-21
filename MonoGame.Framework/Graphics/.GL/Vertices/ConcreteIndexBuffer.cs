@@ -18,8 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class ConcreteIndexBufferGL : IndexBufferStrategy
     {
-        internal bool _isDynamic;
-
+        private readonly BufferUsageHint _usageHint;
         private int _ibo;
 
         internal int GLIndexBuffer { get { return _ibo; } }
@@ -28,13 +27,13 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
             Debug.Assert(isDynamic == true);
-            this._isDynamic = isDynamic;
+            _usageHint = BufferUsageHint.DynamicDraw;
         }
 
         internal ConcreteIndexBufferGL(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
-            this._isDynamic = false;
+            _usageHint = BufferUsageHint.StaticDraw;
 
             PlatformConstructIndexBuffer();
         }
@@ -54,7 +53,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             GL.BufferData(BufferTarget.ElementArrayBuffer,
-                          (IntPtr)sizeInBytes, IntPtr.Zero, _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                          (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -84,7 +83,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         BufferTarget.ElementArrayBuffer,
                         (IntPtr)bufferSize,
                         IntPtr.Zero,
-                        _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                        _usageHint);
                     GraphicsExtensions.CheckGLError();
                 }
 

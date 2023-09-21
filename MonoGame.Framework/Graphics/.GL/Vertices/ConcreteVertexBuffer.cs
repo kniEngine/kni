@@ -18,8 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class ConcreteVertexBufferGL : VertexBufferStrategy
     {
-        internal bool _isDynamic;
-
+        private readonly BufferUsageHint _usageHint;
         //private uint _vao;
         private int _vbo;
 
@@ -29,13 +28,13 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
             Debug.Assert(isDynamic == true);
-            this._isDynamic = isDynamic;
+            _usageHint = BufferUsageHint.DynamicDraw;
         }
 
         internal ConcreteVertexBufferGL(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
             : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
-            this._isDynamic = false;
+            _usageHint = BufferUsageHint.StaticDraw;
 
             PlatformConstructVertexBuffer();
         }
@@ -56,7 +55,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             GL.BufferData(BufferTarget.ArrayBuffer,
                           new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
-                         _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                         _usageHint);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -78,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     BufferTarget.ArrayBuffer,
                     (IntPtr)bufferSize,
                     IntPtr.Zero,
-                    _isDynamic ? BufferUsageHint.DynamicDraw : BufferUsageHint.StaticDraw);
+                    _usageHint);
                 GraphicsExtensions.CheckGLError();
             }
 

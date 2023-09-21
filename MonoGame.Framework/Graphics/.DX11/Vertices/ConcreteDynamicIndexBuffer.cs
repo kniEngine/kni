@@ -27,7 +27,47 @@ namespace Microsoft.Xna.Platform.Graphics
         
         private void PlatformConstructDynamicIndexBuffer()
         {
-            base.PlatformConstructIndexBuffer();
+            Debug.Assert(_buffer == null);
+
+            int sizeInBytes = this.IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+
+            D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
+            bufferDesc.SizeInBytes = sizeInBytes;
+            bufferDesc.Usage = D3D11.ResourceUsage.Dynamic;
+            bufferDesc.BindFlags = D3D11.BindFlags.IndexBuffer;
+            bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Write;
+            bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
+            bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
+
+            _buffer = new D3D11.Buffer(this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+        }
+
+
+        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        {
+            Debug.Assert(_buffer != null);
+
+            // We assume discard by default.
+            D3D11.MapMode mode = D3D11.MapMode.WriteDiscard;
+            if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
+                mode = D3D11.MapMode.WriteNoOverwrite;
+
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            {
+                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+
+                DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
+                DX.Utilities.Write(IntPtr.Add(dataBox.DataPointer, offsetInBytes), data, startIndex,
+                                        elementCount);
+                d3dContext.UnmapSubresource(_buffer, 0);
+            }
+        }
+
+        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        {
+            Debug.Assert(_buffer != null);
+
+            throw new NotImplementedException();
         }
 
     }
