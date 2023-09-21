@@ -15,5 +15,6 @@ namespace Microsoft.Xna.Platform.Graphics
         int MultiSampleCount { get; }
         RenderTargetUsage RenderTargetUsage { get; }
 
+        bool IsContentLost { get; }
     }
 }

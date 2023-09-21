@@ -39,7 +39,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
-        #endregion IRenderTarget2DStrategy
+
+        public bool IsContentLost
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+        #endregion IRenderTargetStrategy
 
 
         private void PlatformConstructTexture3D_rt(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
