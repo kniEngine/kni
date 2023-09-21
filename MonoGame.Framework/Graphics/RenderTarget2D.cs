@@ -20,10 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget2D.RenderTargetUsage; } }
 
-        public bool IsContentLost
-        {
-            get { throw new NotImplementedException("IsContentLost"); }
-        }
+        public bool IsContentLost { get { return _strategyRenderTarget2D.IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;
 

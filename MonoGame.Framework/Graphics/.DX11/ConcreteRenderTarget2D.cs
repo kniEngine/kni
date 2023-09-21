@@ -17,6 +17,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly DepthFormat _depthStencilFormat;
         internal int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
+        private bool _isContentLost;
+
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
@@ -58,7 +60,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _renderTargetUsage; }
         }
-        #endregion IRenderTarget2DStrategy
+
+        public bool IsContentLost
+        {
+            get
+            {
+                throw new NotImplementedException("IsContentLost");
+                return _isContentLost;
+            }
+        }
+        #endregion IRenderTargetStrategy
 
 
         internal D3D11.RenderTargetView[] _renderTargetViews;

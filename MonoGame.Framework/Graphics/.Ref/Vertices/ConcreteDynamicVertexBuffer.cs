@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public class ConcreteDynamicVertexBuffer : ConcreteVertexBuffer
+    public class ConcreteDynamicVertexBuffer : ConcreteVertexBuffer, IDynamicVertexBufferStrategy
     {
 
         internal ConcreteDynamicVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
@@ -18,6 +18,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+
+
+        #region IDynamicIndexBufferStrategy
+        public bool IsContentLost
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+        #endregion IDynamicIndexBufferStrategy
 
     }
 

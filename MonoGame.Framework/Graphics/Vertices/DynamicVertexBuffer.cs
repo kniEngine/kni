@@ -12,7 +12,10 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         public bool IsContentLost
         {
-            get { throw new NotImplementedException("IsContentLost"); }
+            get
+            {
+                throw new NotImplementedException("IsContentLost");
+            }
         }
 
 		

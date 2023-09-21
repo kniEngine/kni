@@ -41,10 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <inheritdoc/>
         int IRenderTarget.Height { get { return this.Size; } }
 
-		public bool IsContentLost
-        {
-            get { throw new NotImplementedException("IsContentLost"); }
-        }
+		public bool IsContentLost { get { return _strategyRenderTargetCube.IsContentLost; } }
 
 		public event EventHandler<EventArgs> ContentLost;
 		

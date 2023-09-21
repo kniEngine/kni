@@ -8,13 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public interface IRenderTargetStrategy
+    internal interface IDynamicIndexBufferStrategy
     {
-
-        DepthFormat DepthStencilFormat { get; }
-        int MultiSampleCount { get; }
-        RenderTargetUsage RenderTargetUsage { get; }
-
         bool IsContentLost { get; }
     }
 }
