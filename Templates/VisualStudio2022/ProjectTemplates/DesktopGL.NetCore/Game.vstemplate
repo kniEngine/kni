@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Cross Platform Desktop Project (.NET Framework)</Name>
+    <Name>KNI Cross Platform Desktop Project (.net6)</Name>
     <Description>A KNI game project for Windows, Mac and Linux using OpenGL.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
@@ -12,7 +12,7 @@
     <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>desktop</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <SortOrder>43300</SortOrder>
+    <SortOrder>43301</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>

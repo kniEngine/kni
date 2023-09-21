@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Windows Project (.NET Framework)</Name>
+    <Name>KNI Windows Project (.net6)</Name>
     <Description>A KNI game project for the Windows desktop using DirectX.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
@@ -10,7 +10,7 @@
     <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>desktop</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <SortOrder>43100</SortOrder>
+    <SortOrder>43101</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>

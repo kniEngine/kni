@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Content Pipeline Extension Project (.NET Framework)</Name>
+    <Name>KNI Content Pipeline Extension Project (.NetStandard)</Name>
     <Description>A KNI project for creating a custom content importer and processor</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
@@ -13,7 +13,7 @@
     <ProjectTypeTag>library</ProjectTypeTag>
     <ProjectTypeTag>extension</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <SortOrder>43200</SortOrder>
+    <SortOrder>43201</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>KniContentPipelineExtension</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>

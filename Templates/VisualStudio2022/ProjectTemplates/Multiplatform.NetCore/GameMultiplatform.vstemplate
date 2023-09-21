@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
   <TemplateData>
-    <Name>KNI Multiplatform Project (.NET Framework,Xamarin)</Name>
+    <Name>KNI Multiplatform Project (.net6)</Name>
     <Description>A KNI project for multiple platforms with shared content.</Description>
-    <TemplateID>Kni.CS.MultiplatformGame</TemplateID>
+    <TemplateID>Kni.CS.MultiplatformGame.Net6</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
@@ -16,7 +16,7 @@
     <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>desktop</ProjectTypeTag>
     <ProjectTypeTag>mobile</ProjectTypeTag>
-    <SortOrder>43100</SortOrder>
+    <SortOrder>43101</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
     <Icon>TemplateIcon.png</Icon>
