@@ -51,9 +51,9 @@ namespace Microsoft.Xna.Platform.Graphics
         private DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
 
         // FBO cache, we create 1 FBO per RenderTargetBinding combination
-        internal Dictionary<RenderTargetBinding[], int> _glFramebuffers = new Dictionary<RenderTargetBinding[], int>(new ConcreteGraphicsContextGL.RenderTargetBindingArrayComparer());
+        internal Dictionary<RenderTargetBinding[], int> _glFramebuffers = new Dictionary<RenderTargetBinding[], int>(new RenderTargetBindingArrayComparer());
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
-        internal Dictionary<RenderTargetBinding[], int> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], int>(new ConcreteGraphicsContextGL.RenderTargetBindingArrayComparer());
+        internal Dictionary<RenderTargetBinding[], int> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], int>(new RenderTargetBindingArrayComparer());
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
@@ -407,7 +407,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 var vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
+                VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -427,7 +427,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 for (int e = 0; e < attrInfo.Elements.Count; e++)
                 {
-                    var element = attrInfo.Elements[e];
+                    VertexDeclarationAttributeInfoElement element = attrInfo.Elements[e];
                     GL.VertexAttribPointer(element.AttributeLocation,
                         element.NumberOfElements,
                         element.VertexAttribPointerType,
@@ -465,7 +465,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
                     {
-                        var element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
+                        VertexDeclarationAttributeInfoElement element = _bufferBindingInfos[slot].AttributeInfo.Elements[e];
                         _newEnabledVertexAttributes[element.AttributeLocation] = true;
                     }
                 }
@@ -479,12 +479,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             int programHash = GetCurrentShaderProgramHash();
             int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-            var attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
+            VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)
             {
-                var element = attrInfo.Elements[i];
+                VertexDeclarationAttributeInfoElement element = attrInfo.Elements[i];
                 GL.VertexAttribPointer(element.AttributeLocation,
                     element.NumberOfElements,
                     element.VertexAttribPointerType,
@@ -1037,67 +1037,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     _glResolveFramebuffers.Remove(bindings);
                 }
-            }
-        }
-
-        // Holds information for caching
-        internal class BufferBindingInfo
-        {
-            public VertexDeclaration.VertexDeclarationAttributeInfo AttributeInfo;
-            public IntPtr VertexOffset;
-            public int InstanceFrequency;
-            public int Vbo;
-
-            public BufferBindingInfo(VertexDeclaration.VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, int vbo)
-            {
-                AttributeInfo = attributeInfo;
-                VertexOffset = vertexOffset;
-                InstanceFrequency = instanceFrequency;
-                Vbo = vbo;
-            }
-        }
-
-        private class RenderTargetBindingArrayComparer : IEqualityComparer<RenderTargetBinding[]>
-        {
-            public bool Equals(RenderTargetBinding[] first, RenderTargetBinding[] second)
-            {
-                if (object.ReferenceEquals(first, second))
-                    return true;
-
-                if (first == null || second == null)
-                    return false;
-
-                if (first.Length != second.Length)
-                    return false;
-
-                for (int i = 0; i < first.Length; i++)
-                {
-                    if ((first[i].RenderTarget != second[i].RenderTarget) || (first[i].ArraySlice != second[i].ArraySlice))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            public int GetHashCode(RenderTargetBinding[] array)
-            {
-                if (array != null)
-                {
-                    unchecked
-                    {
-                        int hash = 17;
-                        foreach (var item in array)
-                        {
-                            if (item.RenderTarget != null)
-                                hash = hash * 23 + item.RenderTarget.GetHashCode();
-                            hash = hash * 23 + item.ArraySlice.GetHashCode();
-                        }
-                        return hash;
-                    }
-                }
-                return 0;
             }
         }
 

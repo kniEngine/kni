@@ -201,6 +201,7 @@
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\VertexDeclarationAttributeInfo.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
 	<Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
