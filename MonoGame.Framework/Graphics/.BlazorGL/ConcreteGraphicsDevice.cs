@@ -95,9 +95,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
             _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new ConcreteGraphicsContext.BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new ConcreteGraphicsContext.BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
 
         internal ShaderProgram GetProgram(VertexShader vertexShader, PixelShader pixelShader, int shaderProgramHash)

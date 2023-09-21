@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (attributeLocation < 0)
                     continue;
 
-                attrInfo.Elements.Add(new VertexDeclarationAttributeInfo.Element
+                attrInfo.Elements.Add(new VertexDeclarationAttributeInfoElement
                 {
                     AttributeLocation = attributeLocation,
                     NumberOfElements = ToGLNumberOfElements(ve.VertexElementFormat),
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentException();
             }
         }
-        
+
         private static VertexAttribPointerType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
         {
             switch (elementFormat)
@@ -142,29 +142,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /// <summary>
-        /// Vertex attribute information for a particular shader/vertex declaration combination.
-        /// </summary>
-        internal class VertexDeclarationAttributeInfo
-        {
-            internal bool[] EnabledAttributes;
-
-            internal class Element
-            {
-                public int AttributeLocation;
-                public int NumberOfElements;
-                public VertexAttribPointerType VertexAttribPointerType;
-                public bool Normalized;
-                public int Offset;
-            }
-
-            internal List<Element> Elements;
-
-            internal VertexDeclarationAttributeInfo(int maxVertexAttributes)
-            {
-                EnabledAttributes = new bool[maxVertexAttributes];
-                Elements = new List<Element>();
-            }
-        }
     }
 }
