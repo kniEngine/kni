@@ -160,13 +160,21 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
         }
 
-        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
         {
-            return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage, isDynamic);
+            return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage);
         }
-        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
+        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
         {
-            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, usage, isDynamic);
+            return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, usage);
+        }
+        internal override IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+        {
+            return new ConcreteDynamicIndexBuffer(this, indexElementSize, indexCount, usage);
+        }
+        internal override VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+        {
+            return new ConcreteDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
         }
 
 

@@ -16,6 +16,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, vertexDeclaration, vertexCount, usage)
         {
+            Debug.Assert(isDynamic == true);
+            throw new PlatformNotSupportedException();
+        }
+
+        internal ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage)
+        {
             throw new PlatformNotSupportedException();
         }
 

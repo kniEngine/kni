@@ -23,6 +23,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        public ConcreteVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+            : base(contextStrategy, vertexDeclaration, vertexCount, usage)
+        {
+        }
+
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             Threading.EnsureUIThread();

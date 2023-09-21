@@ -226,6 +226,8 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />

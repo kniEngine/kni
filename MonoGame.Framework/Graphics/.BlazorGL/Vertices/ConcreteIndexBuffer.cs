@@ -14,21 +14,27 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteIndexBuffer : IndexBufferStrategy
     {
-        internal bool _isDynamic;
-
+        private readonly WebGLBufferUsageHint _usageHint;
         private WebGLBuffer _ibo;
-
+        
         internal WebGLBuffer GLIndexBuffer { get { return _ibo; } }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
-            this._isDynamic = isDynamic;
+            Debug.Assert(isDynamic == true);
+            _usageHint= WebGLBufferUsageHint.DYNAMIC_DRAW;
+        }
+
+        internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+            : base(contextStrategy, indexElementSize, indexCount, usage)
+        {
+            _usageHint = WebGLBufferUsageHint.STATIC_DRAW;
 
             PlatformConstructIndexBuffer();
         }
 
-        private void PlatformConstructIndexBuffer()
+        internal void PlatformConstructIndexBuffer()
         {
             var GL = this.GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
@@ -43,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                          sizeInBytes, _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                          sizeInBytes, _usageHint);
             GraphicsExtensions.CheckGLError();
         }
 
@@ -69,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BufferData(
                         WebGLBufferType.ELEMENT_ARRAY,
                         bufferSize,
-                        _isDynamic ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+                        _usageHint);
             }
 
             GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);

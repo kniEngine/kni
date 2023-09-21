@@ -5,6 +5,7 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
@@ -31,29 +32,32 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return Strategy.BufferUsage; }
         }
 		
-		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
-            : base(true)
-        {
-		    if (graphicsDevice == null)
-		        throw new ArgumentNullException("graphicsDevice");
+		
+		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage) :
+			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
+		{
+        }
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage, isDynamic);
+        public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) :
+            base(true)
+        {
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
+
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
 
             // Make sure the graphics device is assigned in the vertex declaration.
             if (vertexDeclaration.GraphicsDevice != graphicsDevice)
                 vertexDeclaration.BindGraphicsDevice(graphicsDevice);
+        }
+
+        protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
+            : base(true)
+        {
+            Debug.Assert(isDynamic == true);
 		}
 
-        public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) :
-			this(graphicsDevice, vertexDeclaration, vertexCount, usage, false)
-        {
-        }
-		
-		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage) :
-			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage, false)
-		{
-        }
 
         /// <summary>
         /// Get the vertex data froom this VertexBuffer.

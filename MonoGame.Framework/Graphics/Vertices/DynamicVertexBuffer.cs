@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -14,14 +15,24 @@ namespace Microsoft.Xna.Framework.Graphics
             get { throw new NotImplementedException("IsContentLost"); }
         }
 
+		
+		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
+            : this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
+        {
+        }
+
         public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
             : base(graphicsDevice, vertexDeclaration, vertexCount, usage, true)
         {
-        }
-		
-		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
-            : base(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage, true)
-        {
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
+
+            _strategy = graphicsDevice.CurrentContext.Strategy.CreateDynamicVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
+
+            // Make sure the graphics device is assigned in the vertex declaration.
+            if (vertexDeclaration.GraphicsDevice != graphicsDevice)
+                vertexDeclaration.BindGraphicsDevice(graphicsDevice);
         }
 
         public void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options) where T : struct

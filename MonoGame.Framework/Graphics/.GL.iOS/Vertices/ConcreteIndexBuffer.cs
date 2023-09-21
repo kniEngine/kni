@@ -18,10 +18,16 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteIndexBuffer : ConcreteIndexBufferGL
     {
-        public ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic) : base(contextStrategy, indexElementSize, indexCount, usage, isDynamic)
+        public ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+            : base(contextStrategy, indexElementSize, indexCount, usage, isDynamic)
         {
         }
 
+
+        public ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+            : base(contextStrategy, indexElementSize, indexCount, usage)
+        {
+        }
 
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
