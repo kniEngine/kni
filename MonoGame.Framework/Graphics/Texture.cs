@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         protected Texture()
-            : base()
+            : base(true)
         {
         }
 
