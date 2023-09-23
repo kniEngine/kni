@@ -27,6 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
+            : base(true)
         {
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
