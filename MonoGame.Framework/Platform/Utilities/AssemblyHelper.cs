@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Reflection;
 
@@ -11,31 +13,27 @@ namespace MonoGame.Framework.Utilities
     {
         public static string GetDefaultWindowTitle()
         {
-            // Set the window title.
-            string windowTitle = string.Empty;
-
-            // When running unit tests this can return null.
-            var assembly = Assembly.GetEntryAssembly();
-            if (assembly != null)
+            // When running NUnit tests entry assembly can return null.
+            var entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly != null)
             {
                 // Use the Title attribute of the Assembly if possible.
                 try
                 {
-                    var assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
-                    if (assemblyTitleAtt != null)
-                        windowTitle = assemblyTitleAtt.Title;
+                    AssemblyTitleAttribute assemblyTitleAttrib = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute)));
+                    if (assemblyTitleAttrib != null)
+                    {
+                        if (!string.IsNullOrEmpty(assemblyTitleAttrib.Title))
+                            return assemblyTitleAttrib.Title;
+                    }
                 }
-                catch
-                {
-                    // Nope, wasn't possible :/
-                }
+                catch { /* Nope, wasn't possible */ }
 
                 // Otherwise, fallback to the Name of the assembly.
-                if (string.IsNullOrEmpty(windowTitle))
-                    windowTitle = assembly.GetName().Name;
+                return entryAssembly.GetName().Name;
             }
 
-            return windowTitle;
+            return string.Empty;
         }
     }
 }
