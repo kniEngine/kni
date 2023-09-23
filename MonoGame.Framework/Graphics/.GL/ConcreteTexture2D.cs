@@ -76,15 +76,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 int startBytes = startIndex * elementSizeInByte;
                 IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                // Store the current bound texture.
-                int prevTexture = ConcreteTexture2D.GetBoundTexture2D();
-
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                if (prevTexture != _glTexture)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                    GraphicsExtensions.CheckGLError();
-                }
+                this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+                GL.ActiveTexture(TextureUnit.Texture0 + 0);
+                GraphicsExtensions.CheckGLError();
+                GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                GraphicsExtensions.CheckGLError();
 
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
@@ -106,12 +103,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Finish();
                 GraphicsExtensions.CheckGLError();
 #endif
-                // Restore the bound texture.
-                if (prevTexture != _glTexture)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, prevTexture);
-                    GraphicsExtensions.CheckGLError();
-                }
             }
             finally
             {
@@ -132,15 +123,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 int startBytes = startIndex * elementSizeInByte;
                 IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                // Store the current bound texture.
-                int prevTexture = ConcreteTexture2D.GetBoundTexture2D();
-
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                if (prevTexture != _glTexture)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                    GraphicsExtensions.CheckGLError();
-                }
+                this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+                GL.ActiveTexture(TextureUnit.Texture0 + 0);
+                GraphicsExtensions.CheckGLError();
+                GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                GraphicsExtensions.CheckGLError();
 
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
@@ -164,12 +152,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Finish();
                 GraphicsExtensions.CheckGLError();
 #endif
-                // Restore the bound texture.
-                if (prevTexture != _glTexture)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, prevTexture);
-                    GraphicsExtensions.CheckGLError();
-                }
             }
             finally
             {
@@ -198,6 +180,10 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.DeleteFramebuffer(framebufferId);
 #else
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
+
+            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(TextureUnit.Texture0 + 0);
+            GraphicsExtensions.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSizeInByte, 8));
 
@@ -241,14 +227,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
         #endregion ITexture2DStrategy
 
-
-        private static int GetBoundTexture2D()
-        {
-            int currentBoundTexture2D = 0;
-            GL.GetInteger(GetPName.TextureBinding2D, out currentBoundTexture2D);
-            GraphicsExtensions.LogGLError("GetBoundTexture2D(), GL.GetInteger()");
-            return currentBoundTexture2D;
-        }
 
         internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
@@ -318,6 +296,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = TextureWrapMode.ClampToEdge;
 
+            contextStrategy.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 

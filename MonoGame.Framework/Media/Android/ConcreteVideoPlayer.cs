@@ -77,6 +77,9 @@ namespace Microsoft.Xna.Platform.Media
 
             _glVideoSurfaceTexture = GL.GenTexture();
             GraphicsExtensions.CheckGLError();
+            base.Video.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(TextureUnit.Texture0 + 0);
+            GraphicsExtensions.CheckGLError();
             GL.BindTexture((TextureTarget)GL_TEXTURE_EXTERNAL_OES, _glVideoSurfaceTexture);
             GraphicsExtensions.CheckGLError();
             GL.TexParameter((TextureTarget)GL_TEXTURE_EXTERNAL_OES, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
