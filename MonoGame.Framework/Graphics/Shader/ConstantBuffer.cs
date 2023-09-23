@@ -22,15 +22,13 @@ namespace Microsoft.Xna.Framework.Graphics
                               ShaderProfileType profile)
         {
             _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
-
-            SetGraphicsDevice(device);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
         {
-            SetGraphicsDevice(cloneSource.GraphicsDevice);
-
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
 

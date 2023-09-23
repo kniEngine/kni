@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
 		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
-			: base(true)
+			: base()
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
@@ -51,10 +51,9 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
-            : base(true)
+		protected IndexBuffer()
+            : base()
         {
-            Debug.Assert(isDynamic == true);
         }
 
 

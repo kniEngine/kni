@@ -61,11 +61,8 @@ namespace Microsoft.Xna.Framework.Graphics
 	    private readonly bool _isClone;
 
         internal Effect(GraphicsDevice graphicsDevice)
+            : base(graphicsDevice)
 		{
-            if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice");
-
-            SetGraphicsDevice(graphicsDevice);
 		}
 			
 		protected Effect(Effect cloneSource)

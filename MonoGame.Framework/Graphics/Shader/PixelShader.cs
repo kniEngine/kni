@@ -16,8 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
             byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
-            : base(graphicsDevice, shaderBytecode,
-                   samplers, cBuffers, attributes, profile)
+            : base()
         {
             _strategy = graphicsDevice.CurrentContext.Strategy.CreatePixelShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);

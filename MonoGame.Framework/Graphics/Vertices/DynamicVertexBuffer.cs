@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public DynamicVertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
-            : base(graphicsDevice, vertexDeclaration, vertexCount, usage, true)
+            : base()
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");

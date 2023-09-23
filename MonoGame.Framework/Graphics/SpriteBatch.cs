@@ -50,12 +50,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="capacity">The initial capacity of the internal array holding batch items (the value will be rounded to the next multiple of 64).</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graphicsDevice"/> is null.</exception>
         public SpriteBatch(GraphicsDevice graphicsDevice, int capacity)
+            : base(graphicsDevice)
         {
-            if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice");
-
-            SetGraphicsDevice(graphicsDevice);
-
             _spriteEffect = new SpriteEffect(graphicsDevice);
             _spritePass = _spriteEffect.CurrentTechnique.Passes[0];
 
