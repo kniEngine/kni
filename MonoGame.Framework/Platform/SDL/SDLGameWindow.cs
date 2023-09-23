@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework
                     stream = entryAssembly.GetManifestResourceStream("Icon.bmp");
             }
             if (stream == null)
-                stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MonoGame.bmp");
+                stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Kni.bmp");
 
             try
             {
