@@ -69,6 +69,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException("startIndex");
 
             System.Diagnostics.Debug.Assert(_glTexture != null);
+            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
+            GraphicsExtensions.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 
@@ -102,6 +105,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException("startIndex");
 
             System.Diagnostics.Debug.Assert(_glTexture != null);
+            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
+            GraphicsExtensions.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 
@@ -208,6 +214,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = WebGLTexParam.CLAMP_TO_EDGE;
 
+            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
+            GraphicsExtensions.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GraphicsExtensions.CheckGLError();
 
