@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SetGraphicsDevice(contextStrategy.Context.DeviceStrategy);
         }
 
-        public GraphicsResourceStrategy(ConstantBufferStrategy source)
+        public GraphicsResourceStrategy(GraphicsResourceStrategy source)
         {
             SetGraphicsDevice(source._deviceStrategy);
         }
