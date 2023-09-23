@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
             byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
-            : base(true)
+            : base()
         {
         }
 
