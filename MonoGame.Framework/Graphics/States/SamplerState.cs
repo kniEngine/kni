@@ -160,6 +160,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public SamplerState()
+            : base()
         {
             Filter = TextureFilter.Linear;
             AddressU = TextureAddressMode.Wrap;

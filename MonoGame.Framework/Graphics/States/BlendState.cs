@@ -193,6 +193,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly BlendState Opaque;
 
         public BlendState()
+            : base()
         {
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this);

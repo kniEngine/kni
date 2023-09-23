@@ -206,6 +206,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public DepthStencilState()
+            : base()
 		{
             DepthBufferEnable = true;
             DepthBufferWriteEnable = true;
