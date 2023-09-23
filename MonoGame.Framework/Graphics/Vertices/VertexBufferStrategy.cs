@@ -40,6 +40,9 @@ namespace Microsoft.Xna.Platform.Graphics
             this._vertexCount = vertexCount;
             this._bufferUsage = usage;
 
+            // Make sure the graphics device is assigned in the vertex declaration.
+            if (vertexDeclaration.GraphicsDevice != contextStrategy.Context.DeviceStrategy.Device)
+                vertexDeclaration.BindGraphicsDevice(contextStrategy.Context.DeviceStrategy.Device);
         }
 
         public abstract void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes) where T : struct;
