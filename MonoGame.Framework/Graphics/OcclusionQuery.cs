@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// The current graphics profile does not support occlusion queries.
         /// </exception>
         public OcclusionQuery(GraphicsDevice graphicsDevice)
-            : base()
+            : base(true)
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");

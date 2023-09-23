@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
                               int[] parameterOffsets,
                               int sizeInBytes,
                               ShaderProfileType profile)
+            : base(true)
         {
             _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);

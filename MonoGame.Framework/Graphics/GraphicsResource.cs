@@ -38,9 +38,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
+        protected GraphicsResource(bool hasStrategy)
+        {
+            Debug.Assert(hasStrategy == true); // parent class will set the _strategy
+        }
+
         internal GraphicsResource()
         {
-            // parent class will set the _strategy
+            IGraphicsResourceStrategy strategy = new GraphicsResourceStrategy();
+            SetResourceStrategy(strategy);
         }
 
         protected GraphicsResource(GraphicsDevice device)

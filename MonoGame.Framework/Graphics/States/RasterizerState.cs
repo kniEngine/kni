@@ -111,6 +111,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly RasterizerState CullNone;
 
         public RasterizerState()
+            : base()
 		{
 			CullMode = CullMode.CullCounterClockwiseFace;
 			FillMode = FillMode.Solid;
