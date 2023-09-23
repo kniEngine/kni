@@ -727,8 +727,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MonoGame.bmp">
-      <LogicalName>MonoGame.bmp</LogicalName>
+    <EmbeddedResource Include="Kni.bmp">
+      <LogicalName>Kni.bmp</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\ThirdParty\SDL_GameControllerDB\gamecontrollerdb.txt">
       <LogicalName>gamecontrollerdb.txt</LogicalName>

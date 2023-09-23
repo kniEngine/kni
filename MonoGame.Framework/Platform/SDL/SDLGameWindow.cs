@@ -85,7 +85,8 @@ namespace Microsoft.Xna.Framework
         public bool IsFullScreen;
 
         internal readonly Game _game;
-        private IntPtr _handle, _icon;
+        private IntPtr _handle;
+        private IntPtr _pIcon;
         private bool _disposed;
         private bool _isResizable, _isBorderless;
         private bool _mouseVisible, _hardwareSwitch;
@@ -106,35 +107,45 @@ namespace Microsoft.Xna.Framework
             SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
             SDL.SetHint("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1");
 
-            // load app icon
-            Assembly entryAssembly = Assembly.GetEntryAssembly();
-            // when running NUnit tests entry assembly can be null
-            if (Assembly.GetEntryAssembly() != null)
-            {
-                using (
-                    Stream stream =
-                        entryAssembly.GetManifestResourceStream(entryAssembly.GetName().Name + ".Icon.bmp") ??
-                        entryAssembly.GetManifestResourceStream("Icon.bmp") ??
-                        Assembly.GetExecutingAssembly().GetManifestResourceStream("MonoGame.bmp"))
-                {
-                    if (stream != null)
-                        using (BinaryReader br = new BinaryReader(stream))
-                        {
-                            try
-                            {
-                                IntPtr src = SDL.RwFromMem(br.ReadBytes((int)stream.Length), (int)stream.Length);
-                                _icon = SDL.LoadBMP_RW(src, 1);
-                            }
-                            catch { }
-                        }
-                }
-            }
+            _pIcon = LoadAppIcon();
 
             _handle = SDL.WINDOW.Create("", 0, 0,
                 GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight,
                 Sdl.Window.State.Hidden | Sdl.Window.State.FullscreenDesktop);
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
+        }
+
+        private IntPtr LoadAppIcon()
+        {
+            Stream stream = null;
+            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly != null) // when running NUnit tests entry assembly can be null
+            {
+                stream = entryAssembly.GetManifestResourceStream(entryAssembly.GetName().Name + ".Icon.bmp");
+                if (stream == null)
+                    stream = entryAssembly.GetManifestResourceStream("Icon.bmp");
+            }
+            if (stream == null)
+                stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Kni.bmp");
+
+            try
+            {
+                if (stream != null)
+                {
+                    using (stream)
+                    {
+                        byte[] data = new byte[stream.Length];
+                        stream.Read(data, 0, data.Length);
+                        IntPtr pSrc = SDL.RwFromMem(data, data.Length);
+                        IntPtr pIcon = SDL.LoadBMP_RW(pSrc, 1);
+                        return pIcon;
+                    }
+                }
+            }
+            catch { }
+
+            return IntPtr.Zero;
         }
 
         internal void CreateWindow()
@@ -168,8 +179,8 @@ namespace Microsoft.Xna.Framework
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
-            if (_icon != IntPtr.Zero)
-                SDL.WINDOW.SetIcon(_handle, _icon);
+            if (_pIcon != IntPtr.Zero)
+                SDL.WINDOW.SetIcon(_handle, _pIcon);
 
             SDL.WINDOW.SetBordered(_handle, _isBorderless ? 0 : 1);
             SDL.WINDOW.SetResizable(_handle, _isResizable);
@@ -332,8 +343,8 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.Destroy(_handle);
             _handle = IntPtr.Zero;
 
-            if (_icon != IntPtr.Zero)
-                SDL.FreeSurface(_icon);
+            if (_pIcon != IntPtr.Zero)
+                SDL.FreeSurface(_pIcon);
 
             _disposed = true;
         }
