@@ -46,10 +46,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
-
-            // Make sure the graphics device is assigned in the vertex declaration.
-            if (vertexDeclaration.GraphicsDevice != graphicsDevice)
-                vertexDeclaration.BindGraphicsDevice(graphicsDevice);
         }
 
         protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
