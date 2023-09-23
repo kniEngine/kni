@@ -30,10 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public VertexAttribute[] Attributes { get { return _strategy.Attributes; } }
 
 
-        internal Shader(GraphicsDevice graphicsDevice,
-            byte[] shaderBytecode,
-            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
-            ShaderProfileType profile)
+        internal Shader()
             : base()
         {
         }

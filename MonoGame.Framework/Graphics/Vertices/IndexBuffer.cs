@@ -51,10 +51,9 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
+		protected IndexBuffer()
             : base()
         {
-            Debug.Assert(isDynamic == true);
         }
 
 

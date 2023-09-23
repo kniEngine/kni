@@ -48,10 +48,9 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
-        protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage, bool isDynamic)
+        protected VertexBuffer()
             : base()
         {
-            Debug.Assert(isDynamic == true);
 		}
 
 

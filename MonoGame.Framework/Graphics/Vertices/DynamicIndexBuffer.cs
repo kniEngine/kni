@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public DynamicIndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage) :
-			base(graphicsDevice, indexElementSize, indexCount, usage, true)
+			base()
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
