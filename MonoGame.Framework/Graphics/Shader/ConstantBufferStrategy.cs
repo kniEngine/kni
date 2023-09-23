@@ -6,10 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    public abstract class ConstantBufferStrategy : ICloneable, IDisposable
+    public abstract class ConstantBufferStrategy : GraphicsResourceStrategy, ICloneable, IDisposable
     {
-        public GraphicsDevice GraphicsDevice { get; private set; }
-
         private string _name;
         private int[] _parameters;
         private int[] _offsets;
@@ -37,10 +35,9 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _profile; }
         }
 
-        protected ConstantBufferStrategy(GraphicsDevice graphicsDevice, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
+        protected ConstantBufferStrategy(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
+            : base(contextStrategy)
         {
-            this.GraphicsDevice = graphicsDevice;
-
             this._name = name;
             this._parameters = parameters;
             this._offsets = offsets;
@@ -49,9 +46,9 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         protected ConstantBufferStrategy(ConstantBufferStrategy source)
+            : base(source)
         {
             // shared
-            this.GraphicsDevice = source.GraphicsDevice;
             this._name = source._name;
             this._parameters = source._parameters;
             this._offsets = source._offsets;
@@ -67,24 +64,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         #region IDisposable
-        ~ConstantBufferStrategy()
-        {
-            Dispose(false);
-        }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {                
-                GraphicsDevice = null;
-
+            {
                 _name = null;
                 _parameters = null;
                 _offsets = null;
@@ -92,6 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _dirty = true;
             }
 
+            base.Dispose(disposing);
         }
         #endregion
     }
