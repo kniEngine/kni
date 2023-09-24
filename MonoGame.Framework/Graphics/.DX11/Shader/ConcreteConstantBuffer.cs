@@ -16,7 +16,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
     internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
-        internal D3D11.Buffer _cbuffer;
+        private D3D11.Buffer _cbuffer;
+
+        internal D3D11.Buffer DXcbuffer { get { return _cbuffer; } }
 
 
         public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
@@ -54,22 +56,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
             }
-        }
-
-        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, D3D11.CommonShaderStage shaderStage)
-        {
-            // NOTE: We make the assumption here that the caller has
-            // locked the CurrentD3DContext for us to use.
-
-            // Update the hardware buffer.
-            if (Dirty)
-            {
-                contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(this.BufferData, _cbuffer);
-                Dirty = false;
-            }
-
-            // Set the buffer to the shader stage.
-            shaderStage.SetConstantBuffer(slot, _cbuffer);
         }
 
         internal override void PlatformDeviceResetting()

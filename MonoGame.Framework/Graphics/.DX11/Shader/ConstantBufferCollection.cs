@@ -52,8 +52,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy, D3D11.CommonShaderStage shaderStage)
+        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
         {
+            // NOTE: We make the assumption here that the caller has
+            // locked the CurrentD3DContext for us to use.
+
             uint validMask = _valid;
 
             for (var slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
@@ -61,7 +64,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 var buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, slot, shaderStage);
+                    var constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    // Update the hardware buffer.
+                    if (constantBuffer.Dirty)
+                    {
+                        contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(constantBuffer.BufferData, constantBuffer.DXcbuffer);
+
+                        constantBuffer.Dirty = false;
+                    }
+
+                    // Set the buffer to the shader stage.
+                    {
+                        shaderStage.SetConstantBuffer(slot, constantBuffer.DXcbuffer);
+                    }
                 }
 
                 uint mask = ((uint)1) << slot;

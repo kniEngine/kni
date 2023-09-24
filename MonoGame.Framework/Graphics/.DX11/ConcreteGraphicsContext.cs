@@ -293,8 +293,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            _vertexConstantBuffers.Apply(this, this.D3dContext.VertexShader);
-            _pixelConstantBuffers.Apply(this, this.D3dContext.PixelShader);
+            _vertexConstantBuffers.Apply(this, VertexShader.Strategy, this.D3dContext.VertexShader);
+            _pixelConstantBuffers.Apply(this, PixelShader.Strategy, this.D3dContext.PixelShader);
 
 
             // Apply Shader Buffers
