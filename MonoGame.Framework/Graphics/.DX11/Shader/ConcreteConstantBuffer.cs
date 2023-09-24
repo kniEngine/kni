@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.Usage = D3D11.ResourceUsage.Default;
             bufferDesc.BindFlags = D3D11.BindFlags.ConstantBuffer;
             bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            bufferDesc.SizeInBytes = Buffer.Length;
+            bufferDesc.SizeInBytes = this.BufferData.Length;
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Update the hardware buffer.
             if (Dirty)
             {
-                contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(Buffer, _cbuffer);
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(this.BufferData, _cbuffer);
                 Dirty = false;
             }
 

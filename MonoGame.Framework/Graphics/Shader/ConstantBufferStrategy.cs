@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private string _name;
         private int[] _parameters;
         private int[] _offsets;
-        private byte[] _buffer;
+        private byte[] _bufferData;
         private ShaderProfileType _profile;
         private bool _dirty;
         private ulong _stateKey;
@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public string Name { get { return _name; } }
         public int[] Parameters { get { return _parameters; } }
         public int[] Offsets { get { return _offsets; } }
-        public byte[] Buffer { get { return _buffer; } }
+        public byte[] BufferData { get { return _bufferData; } }
         public virtual bool Dirty
         {
             get { return _dirty; }
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._name = name;
             this._parameters = parameters;
             this._offsets = offsets;
-            this._buffer = new byte[sizeInBytes];
+            this._bufferData = new byte[sizeInBytes];
             this._profile = profile;
         }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._offsets = source._offsets;
 
             // copies
-            this._buffer = (byte[])source._buffer.Clone();
+            this._bufferData = (byte[])source._bufferData.Clone();
             this._profile = source._profile;
         }
 
@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _name = null;
                 _parameters = null;
                 _offsets = null;
-                _buffer = null;
+                _bufferData = null;
                 _dirty = true;
             }
 

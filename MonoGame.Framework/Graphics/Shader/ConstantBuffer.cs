@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (data is Array)
                 {
                     Array source = data as Array;
-                    Buffer.BlockCopy(source, 0, _strategy.Buffer, offset, elementSize);
+                    Buffer.BlockCopy(source, 0, _strategy.BufferData, offset, elementSize);
                 }
                 else
                 {
@@ -142,16 +142,16 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Array source = data as Array;
                 int stride = (columns * elementSize);
-                Buffer.BlockCopy(source, 0, _strategy.Buffer, offset, rows * stride);
+                Buffer.BlockCopy(source, 0, _strategy.BufferData, offset, rows * stride);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
                 Array source = data as Array;
                 int stride = (columns*elementSize);
-                Buffer.BlockCopy(source, stride*0, _strategy.Buffer, offset + (rowSize*0), stride);
-                Buffer.BlockCopy(source, stride*1, _strategy.Buffer, offset + (rowSize*1), stride);
-                Buffer.BlockCopy(source, stride*2, _strategy.Buffer, offset + (rowSize*2), stride);
+                Buffer.BlockCopy(source, stride*0, _strategy.BufferData, offset + (rowSize*0), stride);
+                Buffer.BlockCopy(source, stride*1, _strategy.BufferData, offset + (rowSize*1), stride);
+                Buffer.BlockCopy(source, stride*2, _strategy.BufferData, offset + (rowSize*2), stride);
             }
             else
             {
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int stride = (columns*elementSize);
                 for (int y = 0; y < rows; y++)
                 {
-                    Buffer.BlockCopy(source, stride * y, _strategy.Buffer, offset + (rowSize * y), stride);
+                    Buffer.BlockCopy(source, stride * y, _strategy.BufferData, offset + (rowSize * y), stride);
                 }
             }
         }
