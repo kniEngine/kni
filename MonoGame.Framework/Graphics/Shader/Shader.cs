@@ -25,8 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public int[] CBuffers { get { return _strategy.CBuffers; } }
 
-        public ShaderStage Stage { get { return _strategy.Stage; } }
-
         public VertexAttribute[] Attributes { get { return _strategy.Attributes; } }
 
 

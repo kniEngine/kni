@@ -233,6 +233,7 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
+    <Compile Include="Graphics\.DX11\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicVertexBuffer.cs" />
@@ -372,7 +373,6 @@
     <Compile Include="Graphics\SamplerStateCollection.cs" />
     <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
-    <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\SamplerInfo.cs" />

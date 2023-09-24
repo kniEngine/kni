@@ -8,6 +8,7 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />

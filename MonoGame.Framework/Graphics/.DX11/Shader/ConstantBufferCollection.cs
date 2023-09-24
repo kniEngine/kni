@@ -5,28 +5,22 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConstantBufferCollection
     {
-        private ShaderStage _stage;
-
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
 
-        private ShaderStage Stage { get { return _stage; } }
-
-
-        internal ConstantBufferCollection(ShaderStage stage, int capacity)
+        internal ConstantBufferCollection(int capacity)
         {
             // hard limit of 32 because of _valid flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
-
-            _stage = stage;
 
             _buffers = new ConstantBuffer[capacity];
             _valid = 0;
@@ -52,26 +46,41 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Clear()
         {
-            for (int i = 0; i < _buffers.Length; i++)
-                _buffers[i] = null;
+            for (int slot = 0; slot < _buffers.Length; slot++)
+                _buffers[slot] = null;
 
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy)
+        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
         {
+            // NOTE: We make the assumption here that the caller has
+            // locked the CurrentD3DContext for us to use.
+
             uint validMask = _valid;
 
-            for (var i = 0; validMask != 0 && i < _buffers.Length; i++)
+            for (var slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
             {
-
-                var buffer = _buffers[i];
+                var buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Apply(contextStrategy, _stage, i);
+                    var constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    // Update the hardware buffer.
+                    if (constantBuffer.Dirty)
+                    {
+                        contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(constantBuffer.BufferData, constantBuffer.DXcbuffer);
+
+                        constantBuffer.Dirty = false;
+                    }
+
+                    // Set the buffer to the shader stage.
+                    {
+                        shaderStage.SetConstantBuffer(slot, constantBuffer.DXcbuffer);
+                    }
                 }
 
-                uint mask = ((uint)1) << i;
+                uint mask = ((uint)1) << slot;
                 // clear buffer bit
                 validMask &= ~mask;
             }

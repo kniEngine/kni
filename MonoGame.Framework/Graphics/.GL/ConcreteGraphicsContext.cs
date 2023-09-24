@@ -255,13 +255,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 _vertexShaderDirty = false;
                 _pixelShaderDirty = false;
             }
-        }
 
-        private void PlatformApplyShaderBuffers()
-        {
+
+            // Apply Constant Buffers
             _vertexConstantBuffers.Apply(this);
             _pixelConstantBuffers.Apply(this);
 
+
+            // Apply Shader Buffers
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
             this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
             this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
@@ -531,7 +532,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
@@ -550,7 +550,6 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -578,7 +577,6 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -619,7 +617,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -654,7 +651,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -698,7 +694,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             // Unbind current VBOs.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);

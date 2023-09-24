@@ -16,7 +16,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
     internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
-        internal D3D11.Buffer _cbuffer;
+        private D3D11.Buffer _cbuffer;
+
+        internal D3D11.Buffer DXcbuffer { get { return _cbuffer; } }
 
 
         public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
@@ -46,34 +48,13 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.Usage = D3D11.ResourceUsage.Default;
             bufferDesc.BindFlags = D3D11.BindFlags.ConstantBuffer;
             bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
-            bufferDesc.SizeInBytes = Buffer.Length;
+            bufferDesc.SizeInBytes = this.BufferData.Length;
 
             lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
-            }
-        }
-
-        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
-        {
-            // NOTE: We make the assumption here that the caller has
-            // locked the CurrentD3DContext for us to use.
-
-            // Update the hardware buffer.
-            if (Dirty)
-            {
-                contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(Buffer, _cbuffer);
-                Dirty = false;
-            }
-
-            // Set the buffer to the right stage.
-            switch (stage)
-            {
-                case ShaderStage.Pixel: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
-                case ShaderStage.Vertex: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
-                default: throw new System.ArgumentException();
             }
         }
 

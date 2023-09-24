@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).VertexShader);
+                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).DXVertexShader);
 
                 unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
@@ -285,18 +285,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).PixelShader);
+                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).DXPixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
             }
-        }
 
-        private void PlatformApplyShaderBuffers()
-        {
-            _vertexConstantBuffers.Apply(this);
-            _pixelConstantBuffers.Apply(this);
 
+            // Apply Constant Buffers
+            _vertexConstantBuffers.Apply(this, VertexShader.Strategy, this.D3dContext.VertexShader);
+            _pixelConstantBuffers.Apply(this, PixelShader.Strategy, this.D3dContext.PixelShader);
+
+
+            // Apply Shader Buffers
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.VertexShader);
             this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.VertexShader);
             this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.PixelShader);
@@ -340,7 +341,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, vertexStart);
@@ -355,7 +355,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -372,7 +371,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -472,7 +470,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, startVertex);
@@ -494,7 +491,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
@@ -516,7 +512,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);

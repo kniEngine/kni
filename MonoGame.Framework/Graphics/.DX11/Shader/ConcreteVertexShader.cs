@@ -21,9 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private InputLayoutCache _inputLayouts;
 
         internal InputLayoutCache InputLayouts { get { return _inputLayouts; } }
-        internal D3D11.VertexShader VertexShader { get { return _vertexShader; } }
-
-        public override ShaderStage Stage { get { return ShaderStage.Vertex; } }
+        internal D3D11.VertexShader DXVertexShader { get { return _vertexShader; } }
 
 
         internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
