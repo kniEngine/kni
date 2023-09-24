@@ -36,41 +36,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        public void Update(EffectParameterCollection parameters)
-        {
-            // TODO:  We should be doing some sort of dirty state 
-            // testing here.
-            //
-            // It should let us skip all parameter updates if
-            // nothing has changed.  It should not be per-parameter
-            // as that is why you should use multiple constant
-            // buffers.
-
-            // If our state key becomes larger than the 
-            // next state key then the keys have rolled 
-            // over and we need to reset.
-            if (_strategy.StateKey > EffectParameter.NextStateKey)
-                _strategy.StateKey = 0;
-            
-            for (var p = 0; p < _strategy.Parameters.Length; p++)
-            {
-                var index = _strategy.Parameters[p];
-                var param = parameters[index];
-
-                if (param.StateKey < _strategy.StateKey)
-                    continue;
-
-                var offset = _strategy.Offsets[p];
-                _strategy.Dirty = true;
-
-                _strategy.SetParameter(param, offset);
-            }
-
-            _strategy.StateKey = EffectParameter.NextStateKey;
-        }
-
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

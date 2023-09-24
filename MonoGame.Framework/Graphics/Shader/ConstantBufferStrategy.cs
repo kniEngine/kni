@@ -63,7 +63,41 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
-        internal int SetParameter(EffectParameter param, int offset)
+
+        public void Update(EffectParameterCollection parameters)
+        {
+            // TODO:  We should be doing some sort of dirty state 
+            // testing here.
+            //
+            // It should let us skip all parameter updates if
+            // nothing has changed.  It should not be per-parameter
+            // as that is why you should use multiple constant
+            // buffers.
+
+            // If our state key becomes larger than the 
+            // next state key then the keys have rolled 
+            // over and we need to reset.
+            if (this.StateKey > EffectParameter.NextStateKey)
+                this.StateKey = 0;
+            
+            for (var p = 0; p < this.Parameters.Length; p++)
+            {
+                var index = this.Parameters[p];
+                var param = parameters[index];
+
+                if (param.StateKey < this.StateKey)
+                    continue;
+
+                var offset = this.Offsets[p];
+                this.Dirty = true;
+
+                this.SetParameter(param, offset);
+            }
+
+            this.StateKey = EffectParameter.NextStateKey;
+        }
+
+        private int SetParameter(EffectParameter param, int offset)
         {
             const int elementSize = 4;
             const int rowSize = elementSize * 4;
