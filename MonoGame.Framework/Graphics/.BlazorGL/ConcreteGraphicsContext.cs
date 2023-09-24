@@ -220,6 +220,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 _vertexShaderDirty = false;
                 _pixelShaderDirty = false;
             }
+
+            PlatformApplyShaderBuffers();
         }
 
         private void PlatformApplyShaderBuffers()
@@ -496,7 +498,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
@@ -515,7 +516,6 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
 
@@ -543,7 +543,6 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyIndexBuffer();
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             throw new NotImplementedException();
         }
@@ -555,7 +554,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             // TODO: reimplement without creating new buffers
 
@@ -601,7 +599,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             // TODO: reimplement without creating new buffers
 
@@ -668,7 +665,6 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
-            PlatformApplyShaderBuffers();
 
             throw new NotImplementedException();
         }

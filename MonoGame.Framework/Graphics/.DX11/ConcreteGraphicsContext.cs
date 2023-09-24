@@ -290,6 +290,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
             }
+
+            PlatformApplyShaderBuffers();
         }
 
         private void PlatformApplyShaderBuffers()
@@ -340,7 +342,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, vertexStart);
@@ -355,7 +356,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -372,7 +372,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers();
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -472,7 +471,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 //PlatformApplyIndexBuffer();
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, startVertex);
@@ -494,7 +492,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
@@ -516,7 +513,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
                 PlatformApplyVertexBuffers(); // SetUserVertexBuffer() overwrites the vertexBuffer
                 PlatformApplyShaders();
-                PlatformApplyShaderBuffers();
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
