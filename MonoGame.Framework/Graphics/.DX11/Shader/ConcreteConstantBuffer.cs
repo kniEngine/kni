@@ -68,13 +68,22 @@ namespace Microsoft.Xna.Platform.Graphics
                 Dirty = false;
             }
 
-            // Set the buffer to the right stage.
+            // Set the buffer to the shader stage.
+            D3D11.CommonShaderStage shader;
             switch (stage)
             {
-                case ShaderStage.Pixel: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer); break;
-                case ShaderStage.Vertex: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
-                default: throw new System.ArgumentException();
+                case ShaderStage.Pixel:
+                    shader = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.PixelShader;
+                    break;
+                case ShaderStage.Vertex:
+                    shader = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader;
+                    break;
+
+                default:
+                    throw new System.ArgumentException();
             }
+
+            shader.SetConstantBuffer(slot, _cbuffer);
         }
 
         internal override void PlatformDeviceResetting()
