@@ -33,9 +33,9 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (_buffers[index] != value)
                 {
+                    uint mask = ((uint)1) << index;
                     _buffers[index] = value;
 
-                    uint mask = ((uint)1) << index;
                     if (value != null)
                         _valid |= mask;
                     else
@@ -59,9 +59,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             uint validMask = _valid;
 
-            for (var slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
+            for (int slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
             {
-                var buffer = _buffers[slot];
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
                     var constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
@@ -80,7 +82,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
 
-                uint mask = ((uint)1) << slot;
                 // clear buffer bit
                 validMask &= ~mask;
             }

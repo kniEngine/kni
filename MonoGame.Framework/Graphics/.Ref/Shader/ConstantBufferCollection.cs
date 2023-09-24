@@ -5,10 +5,10 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConstantBufferCollection
     {
@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_buffers[index] != value)
                 {
+                    uint mask = ((uint)1) << index;
                     _buffers[index] = value;
 
-                    uint mask = ((uint)1) << index;
                     if (value != null)
                         _valid |= mask;
                     else
@@ -55,15 +55,16 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             uint validMask = _valid;
 
-            for (var slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
+            for (int slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
             {
-                var buffer = _buffers[slot];
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
                     buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, slot);
                 }
 
-                uint mask = ((uint)1) << slot;
                 // clear buffer bit
                 validMask &= ~mask;
             }
