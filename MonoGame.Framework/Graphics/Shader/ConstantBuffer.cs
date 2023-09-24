@@ -36,11 +36,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
-        {
-            _strategy.PlatformApply(contextStrategy, stage, slot);
-        }
-
         public void Update(EffectParameterCollection parameters)
         {
             // TODO:  We should be doing some sort of dirty state 

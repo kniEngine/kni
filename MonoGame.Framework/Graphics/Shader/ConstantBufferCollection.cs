@@ -64,11 +64,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             for (var i = 0; validMask != 0 && i < _buffers.Length; i++)
             {
-
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Apply(contextStrategy, _stage, i);
+                    buffer.Strategy.PlatformApply(contextStrategy, _stage, i);
                 }
 
                 uint mask = ((uint)1) << i;
