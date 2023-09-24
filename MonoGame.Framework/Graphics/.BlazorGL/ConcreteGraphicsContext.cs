@@ -224,8 +224,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyShaderBuffers()
         {
-            _vertexConstantBuffers.Apply(this);
-            _pixelConstantBuffers.Apply(this);
+            _vertexConstantBuffers.Apply(this, ShaderStage.Vertex);
+            _pixelConstantBuffers.Apply(this, ShaderStage.Pixel);
 
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
             this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();

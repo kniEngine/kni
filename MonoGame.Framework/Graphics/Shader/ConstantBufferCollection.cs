@@ -12,21 +12,14 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal sealed class ConstantBufferCollection
     {
-        private ShaderStage _stage;
-
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
 
-        private ShaderStage Stage { get { return _stage; } }
-
-
-        internal ConstantBufferCollection(ShaderStage stage, int capacity)
+        internal ConstantBufferCollection(int capacity)
         {
             // hard limit of 32 because of _valid flags being 32bits.
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
-
-            _stage = stage;
 
             _buffers = new ConstantBuffer[capacity];
             _valid = 0;
@@ -58,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy)
+        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage)
         {
             uint validMask = _valid;
 
@@ -67,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.PlatformApply(contextStrategy, _stage, i);
+                    buffer.Strategy.PlatformApply(contextStrategy, stage, i);
                 }
 
                 uint mask = ((uint)1) << i;
