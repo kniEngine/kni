@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.PlatformApply(contextStrategy, i, stage);
+                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i, stage);
                 }
 
                 uint mask = ((uint)1) << i;

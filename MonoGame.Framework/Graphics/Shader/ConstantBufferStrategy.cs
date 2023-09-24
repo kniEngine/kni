@@ -58,8 +58,12 @@ namespace Microsoft.Xna.Platform.Graphics
             this._profile = source._profile;
         }
 
+        internal T ToConcrete<T>() where T : ConstantBufferStrategy
+        {
+            return (T)this;
+        }
+
         public abstract object Clone();
-        internal abstract void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, ShaderStage stage);
         internal abstract void PlatformDeviceResetting();
 
 
