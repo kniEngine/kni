@@ -256,14 +256,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 _pixelShaderDirty = false;
             }
 
-            PlatformApplyShaderBuffers();
-        }
 
-        private void PlatformApplyShaderBuffers()
-        {
+            // Apply Constant Buffers
             _vertexConstantBuffers.Apply(this, ShaderStage.Vertex);
             _pixelConstantBuffers.Apply(this, ShaderStage.Pixel);
 
+
+            // Apply Shader Buffers
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
             this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
             this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();

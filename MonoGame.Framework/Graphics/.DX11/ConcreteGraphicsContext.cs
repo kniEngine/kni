@@ -291,14 +291,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
             }
 
-            PlatformApplyShaderBuffers();
-        }
 
-        private void PlatformApplyShaderBuffers()
-        {
+            // Apply Constant Buffers
             _vertexConstantBuffers.Apply(this, ShaderStage.Vertex);
             _pixelConstantBuffers.Apply(this, ShaderStage.Pixel);
 
+
+            // Apply Shader Buffers
             this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.VertexShader);
             this.VertexSamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.VertexShader);
             this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.PixelShader);
