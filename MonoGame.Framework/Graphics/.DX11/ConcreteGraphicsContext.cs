@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).VertexShader);
+                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).DXVertexShader);
 
                 unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).PixelShader);
+                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).DXPixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }

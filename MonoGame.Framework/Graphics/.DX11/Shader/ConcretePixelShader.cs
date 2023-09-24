@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private D3D11.PixelShader _pixelShader;
 
-        internal D3D11.PixelShader PixelShader { get { return _pixelShader; } }
+        internal D3D11.PixelShader DXPixelShader { get { return _pixelShader; } }
 
         public override ShaderStage Stage { get { return ShaderStage.Pixel; } }
 
