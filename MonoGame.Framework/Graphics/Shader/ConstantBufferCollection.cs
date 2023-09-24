@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.PlatformApply(contextStrategy, stage, i);
+                    buffer.Strategy.PlatformApply(contextStrategy, i, stage);
                 }
 
                 uint mask = ((uint)1) << i;

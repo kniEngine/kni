@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this);
         }
 
-        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, ShaderStage stage)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 

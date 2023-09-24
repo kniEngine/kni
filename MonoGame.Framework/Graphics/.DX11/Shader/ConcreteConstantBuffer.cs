@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
+        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, ShaderStage stage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
