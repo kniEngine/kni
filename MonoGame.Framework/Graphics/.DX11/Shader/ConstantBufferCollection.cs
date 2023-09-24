@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using D3D11 = SharpDX.Direct3D11;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -51,7 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage)
+        internal void Apply(GraphicsContextStrategy contextStrategy, D3D11.CommonShaderStage shaderStage)
         {
             uint validMask = _valid;
 
@@ -60,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i, stage);
+                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i, shaderStage);
                 }
 
                 uint mask = ((uint)1) << i;

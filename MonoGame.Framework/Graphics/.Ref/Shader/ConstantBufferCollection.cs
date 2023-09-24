@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage)
+        internal void Apply(GraphicsContextStrategy contextStrategy)
         {
             uint validMask = _valid;
 
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 var buffer = _buffers[i];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i, stage);
+                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i);
                 }
 
                 uint mask = ((uint)1) << i;

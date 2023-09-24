@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, ShaderStage stage)
+        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, D3D11.CommonShaderStage shaderStage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
@@ -69,21 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Set the buffer to the shader stage.
-            D3D11.CommonShaderStage shader;
-            switch (stage)
-            {
-                case ShaderStage.Pixel:
-                    shader = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.PixelShader;
-                    break;
-                case ShaderStage.Vertex:
-                    shader = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader;
-                    break;
-
-                default:
-                    throw new System.ArgumentException();
-            }
-
-            shader.SetConstantBuffer(slot, _cbuffer);
+            shaderStage.SetConstantBuffer(slot, _cbuffer);
         }
 
         internal override void PlatformDeviceResetting()

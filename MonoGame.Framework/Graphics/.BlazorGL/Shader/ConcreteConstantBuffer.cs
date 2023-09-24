@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this);
         }
 
-        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot, ShaderStage stage)
+        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
