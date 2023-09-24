@@ -96,12 +96,12 @@ namespace Microsoft.Xna.Framework.Graphics
                         // TODO: HLSL can be told to use row-major. We should handle that too.
                         if (param.ParameterClass == EffectParameterClass.Matrix)
                         {
-                            SetData(offset, param.ColumnCount, param.RowCount, param.Data);
+                            Strategy.SetData(offset, param.ColumnCount, param.RowCount, param.Data);
                             return (param.ColumnCount * rowSize);
                         }
                         else
                         {
-                            SetData(offset, param.RowCount, param.ColumnCount, param.Data);
+                            Strategy.SetData(offset, param.RowCount, param.ColumnCount, param.Data);
                             return (param.RowCount * rowSize);
                         }
                     default:
@@ -111,56 +111,6 @@ namespace Microsoft.Xna.Framework.Graphics
             else
             {
                 return 0;
-            }
-        }
-
-        private void SetData(int offset, int rows, int columns, object data)
-        {
-            // Shader registers are always 4 bytes and all the
-            // incoming data objects should be 4 bytes per element.
-            const int elementSize = 4;
-            const int rowSize = elementSize * 4;
-
-            // Take care of a single element.
-            if (rows == 1 && columns == 1)
-            {
-                // EffectParameter stores all values in arrays by default.
-                if (data is Array)
-                {
-                    Array source = data as Array;
-                    Buffer.BlockCopy(source, 0, _strategy.BufferData, offset, elementSize);
-                }
-                else
-                {
-                    // TODO: When we eventually expose the internal Shader 
-                    // API then we will need to deal with non-array elements.
-                    throw new NotImplementedException();
-                }
-            }
-            // Take care of the single copy case!
-            else if (rows == 1 || (rows == 4 && columns == 4))
-            {
-                Array source = data as Array;
-                int stride = (columns * elementSize);
-                Buffer.BlockCopy(source, 0, _strategy.BufferData, offset, rows * stride);
-            }
-            // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
-            else if (rows == 3 && (columns == 3 || columns == 4))
-            {
-                Array source = data as Array;
-                int stride = (columns*elementSize);
-                Buffer.BlockCopy(source, stride*0, _strategy.BufferData, offset + (rowSize*0), stride);
-                Buffer.BlockCopy(source, stride*1, _strategy.BufferData, offset + (rowSize*1), stride);
-                Buffer.BlockCopy(source, stride*2, _strategy.BufferData, offset + (rowSize*2), stride);
-            }
-            else
-            {
-                Array source = data as Array;
-                int stride = (columns*elementSize);
-                for (int y = 0; y < rows; y++)
-                {
-                    Buffer.BlockCopy(source, stride * y, _strategy.BufferData, offset + (rowSize * y), stride);
-                }
             }
         }
 
