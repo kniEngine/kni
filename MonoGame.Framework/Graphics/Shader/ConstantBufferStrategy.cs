@@ -80,15 +80,15 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this.StateKey > EffectParameter.NextStateKey)
                 this.StateKey = 0;
             
-            for (var p = 0; p < this.Parameters.Length; p++)
+            for (int p = 0; p < this.Parameters.Length; p++)
             {
-                var index = this.Parameters[p];
-                var param = parameters[index];
+                int index = this.Parameters[p];
+                EffectParameter param = parameters[index];
 
                 if (param.StateKey < this.StateKey)
                     continue;
 
-                var offset = this.Offsets[p];
+                int offset = this.Offsets[p];
                 this.Dirty = true;
 
                 this.SetParameter(param, offset);
@@ -102,11 +102,11 @@ namespace Microsoft.Xna.Platform.Graphics
             const int elementSize = 4;
             const int rowSize = elementSize * 4;
 
-            var elements = param.Elements;
+            EffectParameterCollection elements = param.Elements;
             if (elements.Count > 0)
             {
                 int elementByteCount = 0;
-                for (var i=0; i < elements.Count; i++)
+                for (int i = 0; i < elements.Count; i++)
                 {
                     int subElementByteCount = SetParameter(elements[i], offset + elementByteCount);
                     elementByteCount += subElementByteCount;
