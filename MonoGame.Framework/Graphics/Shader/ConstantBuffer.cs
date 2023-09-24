@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private ConstantBufferStrategy _strategy;
         
+        internal ConstantBufferStrategy Strategy { get { return _strategy; } }
+
         public ConstantBuffer(GraphicsDevice device,
                               string name,
                               int[] parameterIndexes,
@@ -37,11 +39,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
             _strategy.PlatformApply(contextStrategy, stage, slot);
-        }
-
-        internal void Clear()
-        {
-            _strategy.PlatformClear();
         }
 
         public void Update(EffectParameterCollection parameters)

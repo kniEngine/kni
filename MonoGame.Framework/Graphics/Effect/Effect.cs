@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal protected override void GraphicsDeviceResetting()
         {
             for (var i = 0; i < ConstantBuffers.Length; i++)
-                ConstantBuffers[i].Clear();
+                ConstantBuffers[i].Strategy.PlatformDeviceResetting();
         }
 
     }

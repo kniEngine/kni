@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract object Clone();
         internal abstract void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot);
-        internal abstract void PlatformClear();
+        internal abstract void PlatformDeviceResetting();
 
 
         #region IDisposable
