@@ -63,56 +63,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 var offset = _strategy.Offsets[p];
                 _strategy.Dirty = true;
 
-                SetParameter(param, offset);
+                _strategy.SetParameter(param, offset);
             }
 
             _strategy.StateKey = EffectParameter.NextStateKey;
         }
 
-        private int SetParameter(EffectParameter param, int offset)
-        {
-            const int elementSize = 4;
-            const int rowSize = elementSize * 4;
-
-            var elements = param.Elements;
-            if (elements.Count > 0)
-            {
-                int elementByteCount = 0;
-                for (var i=0; i < elements.Count; i++)
-                {
-                    int subElementByteCount = SetParameter(elements[i], offset + elementByteCount);
-                    elementByteCount += subElementByteCount;
-                }
-                return elementByteCount;
-            }
-            else if (param.Data != null)
-            {
-                switch (param.ParameterType)
-                {
-                    case EffectParameterType.Single:
-                    case EffectParameterType.Int32:
-                    case EffectParameterType.Bool:
-                        // HLSL assumes matrices are column-major, whereas in-memory we use row-major.
-                        // TODO: HLSL can be told to use row-major. We should handle that too.
-                        if (param.ParameterClass == EffectParameterClass.Matrix)
-                        {
-                            Strategy.SetData(offset, param.ColumnCount, param.RowCount, param.Data);
-                            return (param.ColumnCount * rowSize);
-                        }
-                        else
-                        {
-                            Strategy.SetData(offset, param.RowCount, param.ColumnCount, param.Data);
-                            return (param.RowCount * rowSize);
-                        }
-                    default:
-                        throw new NotSupportedException("Not supported!");
-                }
-            }
-            else
-            {
-                return 0;
-            }
-        }
 
 
         protected override void Dispose(bool disposing)
