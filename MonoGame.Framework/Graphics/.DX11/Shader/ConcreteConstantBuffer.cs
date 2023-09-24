@@ -56,12 +56,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformClear()
-        {
-            DX.Utilities.Dispose(ref _cbuffer);
-            Dirty = true;
-        }
-
         internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
             if (_cbuffer == null)
@@ -84,6 +78,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 case ShaderStage.Vertex: contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer); break;
                 default: throw new System.ArgumentException();
             }
+        }
+
+        internal override void PlatformDeviceResetting()
+        {
+            DX.Utilities.Dispose(ref _cbuffer);
+            Dirty = true;
         }
 
 

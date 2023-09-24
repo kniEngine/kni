@@ -39,12 +39,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this);
         }
 
-        internal override void PlatformClear()
-        {
-            // Force the uniform location to be looked up again
-            _shaderProgram = null;
-        }
-
         internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
@@ -90,6 +84,12 @@ namespace Microsoft.Xna.Platform.Graphics
             Dirty = false;
 
             _lastConstantBufferApplied = this;
+        }
+
+        internal override void PlatformDeviceResetting()
+        {
+            // Force the uniform location to be looked up again
+            _shaderProgram = null;
         }
 
 

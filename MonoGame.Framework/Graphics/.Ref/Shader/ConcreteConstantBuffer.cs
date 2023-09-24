@@ -27,12 +27,12 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformClear()
+        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal unsafe override void PlatformApply(GraphicsContextStrategy contextStrategy, ShaderStage stage, int slot)
+        internal override void PlatPlatformDeviceResettingformClear()
         {
             throw new PlatformNotSupportedException();
         }
