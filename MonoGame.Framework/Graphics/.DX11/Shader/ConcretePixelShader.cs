@@ -20,8 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal D3D11.PixelShader DXPixelShader { get { return _pixelShader; } }
 
-        public override ShaderStage Stage { get { return ShaderStage.Pixel; } }
-
 
         internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)

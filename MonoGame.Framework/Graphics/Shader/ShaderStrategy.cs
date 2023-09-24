@@ -16,7 +16,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private VertexAttribute[] _attributes;
         internal int _hashKey;
 
-        public abstract ShaderStage Stage { get; }
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
