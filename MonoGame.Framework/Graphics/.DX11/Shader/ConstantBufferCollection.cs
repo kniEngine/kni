@@ -46,8 +46,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void Clear()
         {
-            for (int i = 0; i < _buffers.Length; i++)
-                _buffers[i] = null;
+            for (int slot = 0; slot < _buffers.Length; slot++)
+                _buffers[slot] = null;
 
             _valid = 0;
         }
@@ -56,15 +56,15 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             uint validMask = _valid;
 
-            for (var i = 0; validMask != 0 && i < _buffers.Length; i++)
+            for (var slot = 0; validMask != 0 && slot < _buffers.Length; slot++)
             {
-                var buffer = _buffers[i];
+                var buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, i, shaderStage);
+                    buffer.Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, slot, shaderStage);
                 }
 
-                uint mask = ((uint)1) << i;
+                uint mask = ((uint)1) << slot;
                 // clear buffer bit
                 validMask &= ~mask;
             }
