@@ -1502,75 +1502,68 @@ namespace MonoGame.OpenGL
         {
 #if __ANDROID__
             Android.Util.Log.Verbose("GL","Supported Extensions");
-            foreach (var ext in Extensions)
+            foreach (string ext in Extensions)
                 Android.Util.Log.Verbose("GL", "   " + ext);
 #endif
         }
 
         internal static void LoadExtensions()
         {
-            if (Extensions.Count == 0)
-            {
-                string extstring = GL.GetString(StringName.Extensions);
-                var error = GL.GetError();
-                if (!string.IsNullOrEmpty(extstring) && error == ErrorCode.NoError)
-                    Extensions.AddRange(extstring.Split(' '));
-            }
+            if (Extensions.Count >= 0)
+                return;
+   
+            string extstring = GL.GetString(StringName.Extensions);
+            ErrorCode error = GL.GetError();
+            if (error != ErrorCode.NoError || string.IsNullOrEmpty(extstring))
+                return;
+            Extensions.AddRange(extstring.Split(' '));
             LogExtensions();
-            // now load Extensions :)
-            if (GL.GenRenderbuffers == null && Extensions.Contains("GL_EXT_framebuffer_object"))
-            {
-                GL.LoadFrameBufferObjectEXTEntryPoints();
-            }
-            if (GL.RenderbufferStorageMultisample == null)
-            {                
-                if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
-                {
-                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleAPPLE");
-                    GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glResolveMultisampleFramebufferAPPLE");
-                }
-                else if (Extensions.Contains("GL_EXT_multisampled_render_to_texture"))
-                {
-                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
-                    GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleEXT");
 
-                }
-                else if (Extensions.Contains("GL_IMG_multisampled_render_to_texture"))
-                {
-                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleIMG");
-                    GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleIMG");
-                }
-                else if (Extensions.Contains("GL_NV_framebuffer_multisample"))
-                {
-                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleNV");
-                    GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glBlitFramebufferNV");
-                }
-            }
-            if (GL.BlendFuncSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
+            if (Extensions.Contains("GL_EXT_framebuffer_object"))
             {
+                GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffersEXT");
+                BindRenderbuffer = LoadFunctionOrNull<BindRenderbufferDelegate>("glBindRenderbufferEXT");
+                DeleteRenderbuffers = LoadFunctionOrNull<DeleteRenderbuffersDelegate>("glDeleteRenderbuffersEXT");
+                GenFramebuffers = LoadFunctionOrNull<GenFramebuffersDelegate>("glGenFramebuffersEXT");
+                BindFramebuffer = LoadFunctionOrNull<BindFramebufferDelegate>("glBindFramebufferEXT");
+                DeleteFramebuffers = LoadFunctionOrNull<DeleteFramebuffersDelegate>("glDeleteFramebuffersEXT");
+                FramebufferTexture2D = LoadFunctionOrNull<FramebufferTexture2DDelegate>("glFramebufferTexture2DEXT");
+                FramebufferRenderbuffer = LoadFunctionOrNull<FramebufferRenderbufferDelegate>("glFramebufferRenderbufferEXT");
+                RenderbufferStorage = LoadFunctionOrNull<RenderbufferStorageDelegate>("glRenderbufferStorageEXT");
+                RenderbufferStorageMultisample = LoadFunctionOrNull<RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
+                GenerateMipmap = LoadFunctionOrNull<GenerateMipmapDelegate>("glGenerateMipmapEXT");
+                BlitFramebuffer = LoadFunctionOrNull<BlitFramebufferDelegate>("glBlitFramebufferEXT");
+                CheckFramebufferStatus = LoadFunctionOrNull<CheckFramebufferStatusDelegate>("glCheckFramebufferStatusEXT");
+            }
+
+            // load RenderbufferStorageMultisample
+            if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
+            {
+                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleAPPLE");
+                GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glResolveMultisampleFramebufferAPPLE");
+            }
+            else if (Extensions.Contains("GL_EXT_multisampled_render_to_texture"))
+            {
+                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
+                GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleEXT");
+            }
+            else if (Extensions.Contains("GL_IMG_multisampled_render_to_texture"))
+            {
+                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleIMG");
+                GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleIMG");
+            }
+            else if (Extensions.Contains("GL_NV_framebuffer_multisample"))
+            {
+                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleNV");
+                GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glBlitFramebufferNV");
+            }
+
+            if (Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 GL.BlendFuncSeparatei = LoadFunctionOrNull<GL.BlendFuncSeparateiDelegate>("BlendFuncSeparateiARB");
-            }
-            if (GL.BlendEquationSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
-            {
-                GL.BlendEquationSeparatei = LoadFunctionOrNull<GL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
-            }
-        }
 
-        internal static void LoadFrameBufferObjectEXTEntryPoints()
-        {
-            GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffersEXT");
-            BindRenderbuffer = LoadFunctionOrNull<BindRenderbufferDelegate>("glBindRenderbufferEXT");
-            DeleteRenderbuffers = LoadFunctionOrNull<DeleteRenderbuffersDelegate>("glDeleteRenderbuffersEXT");
-            GenFramebuffers = LoadFunctionOrNull<GenFramebuffersDelegate>("glGenFramebuffersEXT");
-            BindFramebuffer = LoadFunctionOrNull<BindFramebufferDelegate>("glBindFramebufferEXT");
-            DeleteFramebuffers = LoadFunctionOrNull<DeleteFramebuffersDelegate>("glDeleteFramebuffersEXT");
-            FramebufferTexture2D = LoadFunctionOrNull<FramebufferTexture2DDelegate>("glFramebufferTexture2DEXT");
-            FramebufferRenderbuffer = LoadFunctionOrNull<FramebufferRenderbufferDelegate>("glFramebufferRenderbufferEXT");
-            RenderbufferStorage = LoadFunctionOrNull<RenderbufferStorageDelegate>("glRenderbufferStorageEXT");
-            RenderbufferStorageMultisample = LoadFunctionOrNull<RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
-            GenerateMipmap = LoadFunctionOrNull<GenerateMipmapDelegate>("glGenerateMipmapEXT");
-            BlitFramebuffer = LoadFunctionOrNull<BlitFramebufferDelegate>("glBlitFramebufferEXT");
-            CheckFramebufferStatus = LoadFunctionOrNull<CheckFramebufferStatusDelegate>("glCheckFramebufferStatusEXT");
+            if (Extensions.Contains("GL_ARB_draw_buffers_blend"))
+                GL.BlendEquationSeparatei = LoadFunctionOrNull<GL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
+
         }
 
         static partial void LoadPlatformEntryPoints();
