@@ -556,13 +556,29 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+            if (GL.DrawElementsBaseVertex != null)
+            {
+                PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
-            GL.DrawElements(target,
-                            indexElementCount,
-                            indexElementType,
-                            indexOffsetInBytes);
-            GraphicsExtensions.CheckGLError();
+                GL.DrawElementsBaseVertex(target,
+                                  indexElementCount,
+                                  indexElementType,
+                                  indexOffsetInBytes,
+                                  baseVertex);
+                GraphicsExtensions.CheckGLError();
+            }
+            else
+            {
+                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+
+                GL.DrawElements(target,
+                                indexElementCount,
+                                indexElementType,
+                                indexOffsetInBytes);
+                GraphicsExtensions.CheckGLError();
+
+            }
+
         }
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
@@ -580,12 +596,12 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
-
             if (baseInstance > 0)
             {
                 if (!this.Context.DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
+
+                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
 
                 GL.DrawElementsInstancedBaseInstance(target,
                                                      indexElementCount,
@@ -595,11 +611,15 @@ namespace Microsoft.Xna.Platform.Graphics
                                                      baseInstance);
             }
             else
+            {
+                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+
                 GL.DrawElementsInstanced(target,
                                          indexElementCount,
                                          indexElementType,
                                          indexOffsetInBytes,
                                          instanceCount);
+            }
 
             GraphicsExtensions.CheckGLError();
         }
