@@ -742,6 +742,12 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void DrawElementsBaseVertexDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType, IntPtr offset, int baseVertex);
+        internal static DrawElementsBaseVertexDelegate DrawElementsBaseVertex; // OpenGL 3.2, GLES 3.2, or GL_ARB_draw_elements_base_vertex
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void DrawArraysDelegate(GLPrimitiveType primitiveType, int offset, int count);
         internal static DrawArraysDelegate DrawArrays;
 
@@ -1353,6 +1359,7 @@ namespace MonoGame.OpenGL
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
 
+
             // uniforms OpenGL Version >= 2.0
             Uniform1i = LoadFunctionOrNull<Uniform1iDelegate>("glUniform1i");
             Uniform1f = LoadFunctionOrNull<Uniform1fDelegate>("glUniform1f");
@@ -1566,6 +1573,8 @@ namespace MonoGame.OpenGL
             if (GL.BlendEquationSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 GL.BlendEquationSeparatei = LoadFunctionOrNull<GL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
 
+            if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+                DrawElementsBaseVertex = LoadFunctionOrNull<DrawElementsBaseVertexDelegate>("glDrawElementsBaseVertex");
         }
 
         static partial void LoadPlatformEntryPoints();

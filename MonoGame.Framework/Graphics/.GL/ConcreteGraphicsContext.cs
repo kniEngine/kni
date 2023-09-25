@@ -556,13 +556,29 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+            if (GL.DrawElementsBaseVertex != null)
+            {
+                PlatformApplyVertexBuffersAttribs(VertexShader, 0);
 
-            GL.DrawElements(target,
-                            indexElementCount,
-                            indexElementType,
-                            indexOffsetInBytes);
-            GraphicsExtensions.CheckGLError();
+                GL.DrawElementsBaseVertex(target,
+                                  indexElementCount,
+                                  indexElementType,
+                                  indexOffsetInBytes,
+                                  baseVertex);
+                GraphicsExtensions.CheckGLError();
+            }
+            else
+            {
+                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+
+                GL.DrawElements(target,
+                                indexElementCount,
+                                indexElementType,
+                                indexOffsetInBytes);
+                GraphicsExtensions.CheckGLError();
+
+            }
+
         }
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
