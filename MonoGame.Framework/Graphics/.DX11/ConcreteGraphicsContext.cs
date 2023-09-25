@@ -58,7 +58,6 @@ namespace Microsoft.Xna.Platform.Graphics
             public int Count;
             public int Offset;
             public DynamicIndexBuffer Buffer;
-            public readonly int ElementSizeInBytes;
             public readonly IndexElementSize ElementSize;
 
             public UserIndexBuffer(IndexElementSize indexElementSize)
@@ -67,17 +66,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.Offset = 0;
                 this.Buffer = null;
                 this.ElementSize = indexElementSize;
-                switch (ElementSize)
-                {
-                    case IndexElementSize.SixteenBits:
-                        this.ElementSizeInBytes = sizeof(Int16);
-                        break;
-                    case IndexElementSize.ThirtyTwoBits:
-                        this.ElementSizeInBytes = sizeof(Int32);
-                        break;
-                    default:
-                        throw new InvalidOperationException("IndexElementSize");
-                }
             }
         }
 
@@ -232,8 +220,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 this.D3dContext.InputAssembler.SetIndexBuffer(
                     Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DXIndexBuffer,
-                    Indices.IndexElementSize == IndexElementSize.SixteenBits ?
-                        DXGI.Format.R16_UInt : DXGI.Format.R32_UInt,
+                    Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType,
                     0);
                 _indexBufferDirty = false;
             }
@@ -450,7 +437,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 startIndex = 0;
             }
 
-            userIndexBuffer.Buffer.SetData<T>(startIndex * userIndexBuffer.ElementSizeInBytes, indexData, indexOffset, indexCount, setDataOptions);
+            userIndexBuffer.Buffer.SetData<T>(startIndex * userIndexBuffer.Buffer.Strategy.ElementSizeInBytes, indexData, indexOffset, indexCount, setDataOptions);
             userIndexBuffer.Offset = startIndex + indexCount;
 
             Indices = userIndexBuffer.Buffer;

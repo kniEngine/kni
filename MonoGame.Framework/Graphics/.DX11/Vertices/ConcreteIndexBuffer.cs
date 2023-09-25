@@ -13,14 +13,17 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
+using DXGI = SharpDX.DXGI;
 
 
 namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConcreteIndexBuffer : IndexBufferStrategy
     {
+        private readonly DXGI.Format _drawElementsType;
         internal D3D11.Buffer _buffer;
 
+        internal DXGI.Format DrawElementsType { get { return _drawElementsType; } }
         internal D3D11.Buffer DXIndexBuffer
         {
             get
@@ -34,11 +37,25 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
             Debug.Assert(isDynamic == true);
+
+            switch (indexElementSize)
+            {
+                case IndexElementSize.SixteenBits: _drawElementsType = DXGI.Format.R16_UInt; break;
+                case IndexElementSize.ThirtyTwoBits: _drawElementsType = DXGI.Format.R32_UInt; break;
+                default: throw new InvalidOperationException();
+            }
         }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
+            switch (indexElementSize)
+            {
+                case IndexElementSize.SixteenBits: _drawElementsType = DXGI.Format.R16_UInt; break;
+                case IndexElementSize.ThirtyTwoBits: _drawElementsType = DXGI.Format.R32_UInt; break;
+                default: throw new InvalidOperationException();
+            }
+
             PlatformConstructIndexBuffer();
         }
 
@@ -46,7 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(_buffer == null);
 
-            int sizeInBytes = this.IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
             D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
             bufferDesc.SizeInBytes = sizeInBytes;

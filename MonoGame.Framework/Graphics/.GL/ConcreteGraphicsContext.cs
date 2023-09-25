@@ -551,11 +551,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
-
-            var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
-            int indexElementSize = shortIndices ? 2 : 4;
-            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -578,11 +575,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
-
-            var indexElementType = shortIndices ? DrawElementsType.UnsignedShort : DrawElementsType.UnsignedInt;
-            int indexElementSize = shortIndices ? 2 : 4;
-            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * indexElementSize);
+            DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
