@@ -398,6 +398,29 @@ namespace Microsoft.Xna.Framework.Graphics
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
+        // internal DrawIndexedPrimitives without checks, used by SpriteBatcher.
+        internal void SB_DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        {
+            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            {
+                for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
+                {
+                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    if (tx2D != null)
+                    {
+                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        || Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
+            Strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+
+            unchecked { _graphicsMetrics._drawCount++; }
+            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+        }
+
         /// <summary>
         /// Draw primitives of the specified type from the data in an array of vertices without indexing.
         /// </summary>
