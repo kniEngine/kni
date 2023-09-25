@@ -1509,9 +1509,9 @@ namespace MonoGame.OpenGL
 
         internal static void LoadExtensions()
         {
-            if (Extensions.Count >= 0)
+            if (Extensions.Count > 0)
                 return;
-   
+
             string extstring = GL.GetString(StringName.Extensions);
             ErrorCode error = GL.GetError();
             if (error != ErrorCode.NoError || string.IsNullOrEmpty(extstring))
@@ -1519,7 +1519,7 @@ namespace MonoGame.OpenGL
             Extensions.AddRange(extstring.Split(' '));
             LogExtensions();
 
-            if (Extensions.Contains("GL_EXT_framebuffer_object"))
+            if (GL.GenRenderbuffers == null && Extensions.Contains("GL_EXT_framebuffer_object"))
             {
                 GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffersEXT");
                 BindRenderbuffer = LoadFunctionOrNull<BindRenderbufferDelegate>("glBindRenderbufferEXT");
@@ -1534,34 +1534,36 @@ namespace MonoGame.OpenGL
                 GenerateMipmap = LoadFunctionOrNull<GenerateMipmapDelegate>("glGenerateMipmapEXT");
                 BlitFramebuffer = LoadFunctionOrNull<BlitFramebufferDelegate>("glBlitFramebufferEXT");
                 CheckFramebufferStatus = LoadFunctionOrNull<CheckFramebufferStatusDelegate>("glCheckFramebufferStatusEXT");
+
+            }
+            if (GL.RenderbufferStorageMultisample == null)
+            {                
+                if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
+                {
+                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleAPPLE");
+                    GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glResolveMultisampleFramebufferAPPLE");
+                }
+                else if (Extensions.Contains("GL_EXT_multisampled_render_to_texture"))
+                {
+                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
+                    GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleEXT");
+                }
+                else if (Extensions.Contains("GL_IMG_multisampled_render_to_texture"))
+                {
+                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleIMG");
+                    GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleIMG");
+                }
+                else if (Extensions.Contains("GL_NV_framebuffer_multisample"))
+                {
+                    GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleNV");
+                    GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glBlitFramebufferNV");
+                }
             }
 
-            // load RenderbufferStorageMultisample
-            if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
-            {
-                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleAPPLE");
-                GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glResolveMultisampleFramebufferAPPLE");
-            }
-            else if (Extensions.Contains("GL_EXT_multisampled_render_to_texture"))
-            {
-                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleEXT");
-                GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleEXT");
-            }
-            else if (Extensions.Contains("GL_IMG_multisampled_render_to_texture"))
-            {
-                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleIMG");
-                GL.FramebufferTexture2DMultiSample = LoadFunctionOrNull<GL.FramebufferTexture2DMultiSampleDelegate>("glFramebufferTexture2DMultisampleIMG");
-            }
-            else if (Extensions.Contains("GL_NV_framebuffer_multisample"))
-            {
-                GL.RenderbufferStorageMultisample = LoadFunctionOrNull<GL.RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisampleNV");
-                GL.BlitFramebuffer = LoadFunctionOrNull<GL.BlitFramebufferDelegate>("glBlitFramebufferNV");
-            }
-
-            if (Extensions.Contains("GL_ARB_draw_buffers_blend"))
+            if (GL.BlendFuncSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 GL.BlendFuncSeparatei = LoadFunctionOrNull<GL.BlendFuncSeparateiDelegate>("BlendFuncSeparateiARB");
 
-            if (Extensions.Contains("GL_ARB_draw_buffers_blend"))
+            if (GL.BlendEquationSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 GL.BlendEquationSeparatei = LoadFunctionOrNull<GL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
 
         }
