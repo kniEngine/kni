@@ -15,6 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
+        private uint _dirty;
 
         internal ConstantBufferCollection(int capacity)
         {
@@ -40,6 +41,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         _valid |= mask;
                     else
                         _valid &= ~mask;
+
+                    _dirty |= mask;
                 }
             }
         }
@@ -77,8 +80,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
 
                     // Set the buffer to the shader stage.
+                    if ((_dirty & mask) != 0)
                     {
                         shaderStage.SetConstantBuffer(slot, constantBuffer.DXcbuffer);
+                        _dirty &= ~mask;
                     }
                 }
 
