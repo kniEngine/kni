@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _indexCount;
         private BufferUsage _bufferUsage;
 
+        private readonly int _elementSizeInBytes;
+
         public IndexElementSize IndexElementSize
         {
             get { return _indexElementSize; }
@@ -26,6 +28,11 @@ namespace Microsoft.Xna.Platform.Graphics
         public BufferUsage BufferUsage
         {
             get { return _bufferUsage; }
+        }
+
+        public int ElementSizeInBytes
+        {
+            get { return _elementSizeInBytes; }
         }
 
         internal T ToConcrete<T>() where T : IndexBufferStrategy
@@ -40,6 +47,12 @@ namespace Microsoft.Xna.Platform.Graphics
             this._indexCount = indexCount;
             this._bufferUsage = usage;
 
+            switch (indexElementSize)
+            {
+                case IndexElementSize.SixteenBits:   this._elementSizeInBytes = sizeof(Int16); break;
+                case IndexElementSize.ThirtyTwoBits: this._elementSizeInBytes = sizeof(Int32); break;
+                default: throw new InvalidOperationException();
+            }
         }
 
         public abstract void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct;

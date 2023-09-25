@@ -15,8 +15,10 @@ namespace Microsoft.Xna.Platform.Graphics
     public class ConcreteIndexBuffer : IndexBufferStrategy
     {
         private readonly WebGLBufferUsageHint _usageHint;
+        private readonly WebGLDataType _drawElementsType;
         private WebGLBuffer _ibo;
-        
+
+        internal WebGLDataType DrawElementsType { get { return _drawElementsType; } }
         internal WebGLBuffer GLIndexBuffer { get { return _ibo; } }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool isDynamic)
@@ -24,12 +26,26 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(isDynamic == true);
             _usageHint= WebGLBufferUsageHint.DYNAMIC_DRAW;
+
+            switch (indexElementSize)
+            {
+                case IndexElementSize.SixteenBits:   this._drawElementsType = WebGLDataType.SHORT; break;
+                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.INT; break;
+                default: throw new InvalidOperationException();
+            }
         }
 
         internal ConcreteIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy, indexElementSize, indexCount, usage)
         {
             _usageHint = WebGLBufferUsageHint.STATIC_DRAW;
+
+            switch (indexElementSize)
+            {
+                case IndexElementSize.SixteenBits: this._drawElementsType = WebGLDataType.SHORT; break;
+                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.INT; break;
+                default: throw new InvalidOperationException();
+            }
 
             PlatformConstructIndexBuffer();
         }
@@ -40,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(_ibo == null);
 
-            int sizeInBytes = this.IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
             _ibo = GL.CreateBuffer();
             GraphicsExtensions.CheckGLError();
@@ -62,7 +78,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             int sizeInBytes = elementSizeInByte * elementCount;
 
-            int bufferSize = IndexCount * (IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int bufferSize = IndexCount * base.ElementSizeInBytes;
 
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
             GraphicsExtensions.CheckGLError();

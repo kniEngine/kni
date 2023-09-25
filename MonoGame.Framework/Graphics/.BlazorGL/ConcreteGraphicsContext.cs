@@ -516,11 +516,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            bool shortIndices = Indices.IndexElementSize == IndexElementSize.SixteenBits;
-
-            var indexElementType = shortIndices ? WebGLDataType.USHORT : WebGLDataType.UINT;
-            int indexElementSize = shortIndices ? 2 : 4;
-            int indexOffsetInBytes = (startIndex * indexElementSize);
+            WebGLDataType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            int indexOffsetInBytes = (startIndex * Indices.Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 

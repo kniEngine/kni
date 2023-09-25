@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(_buffer == null);
 
-            int sizeInBytes = this.IndexCount * (this.IndexElementSize == IndexElementSize.SixteenBits ? 2 : 4);
+            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
             D3D11.BufferDescription bufferDesc = new D3D11.BufferDescription();
             bufferDesc.SizeInBytes = sizeInBytes;
