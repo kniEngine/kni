@@ -1281,6 +1281,13 @@ namespace MonoGame.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void DrawElementsInstancedBaseVertexDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType,
+            IntPtr offset, int instanceCount, int baseVertex);
+        internal static DrawElementsInstancedBaseVertexDelegate DrawElementsInstancedBaseVertex; // OpenGL 3.2, GLES 3.2.
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void DrawElementsInstancedBaseInstanceDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType,
             IntPtr offset, int instanceCount, int baseInstance);
         internal static DrawElementsInstancedBaseInstanceDelegate DrawElementsInstancedBaseInstance;
