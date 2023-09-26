@@ -19,7 +19,7 @@
     <Icon>TemplateIcon.png</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="KniWindowsApplication.csproj" File="MonoGameWindowsApplication.csproj" ReplaceParameters="true">
+    <Project TargetFileName="KniWindowsApplication.csproj" File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.ico">Icon.ico</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>

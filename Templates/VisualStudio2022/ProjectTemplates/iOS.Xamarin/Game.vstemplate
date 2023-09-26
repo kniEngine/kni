@@ -19,7 +19,7 @@
     <Icon>TemplateIcon.png</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Game1.csproj">
+    <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Application.csproj">
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Default.png">Default.png</ProjectItem>

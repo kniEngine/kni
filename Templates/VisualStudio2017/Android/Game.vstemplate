@@ -15,7 +15,7 @@
     <PreviewImage>TemplatePreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="AndroidApplication1.csproj" File="AndroidApplication1.csproj" ReplaceParameters="true">
+    <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Activity.cs">Activity.cs</ProjectItem>
       <Folder Name="Assets" TargetFolderName="Assets">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutAssets.txt">AboutAssets.txt</ProjectItem>

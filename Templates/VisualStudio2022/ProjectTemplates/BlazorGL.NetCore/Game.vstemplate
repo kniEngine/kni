@@ -20,7 +20,7 @@
 	<CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="$safeprojectname$Application.csproj" File="BlazorGLApplication.csproj" ReplaceParameters="true">
+    <Project TargetFileName="$safeprojectname$Application.csproj" File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="_Imports.razor">_Imports.razor</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.razor">App.razor</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
