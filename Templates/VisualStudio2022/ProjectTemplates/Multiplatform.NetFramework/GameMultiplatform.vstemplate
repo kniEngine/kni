@@ -3,7 +3,7 @@
 	<TemplateData>
 		<Name>KNI Multiplatform Project (.NET Framework,Xamarin)</Name>
     <Description>A KNI project for multiple platforms with shared content.</Description>
-	<TemplateID>MonoGame.Multiplatform</TemplateID>
+	<TemplateID>Kni.CS.MultiplatformGame</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
