@@ -16,7 +16,6 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
@@ -30,7 +29,6 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
@@ -43,7 +41,6 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
@@ -58,7 +55,6 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseSGen>true</MtouchUseSGen>
@@ -70,7 +66,6 @@
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
@@ -84,7 +79,6 @@
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseSGen>true</MtouchUseSGen>

@@ -25,7 +25,6 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE;ANDROID</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
@@ -34,7 +33,6 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;ANDROID</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
