@@ -30,7 +30,7 @@
   <TemplateContent PreferedSolutionConfiguration="Debug|x86">
     <Project File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\Default.rd.xml">Default.rd.xml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package-managed.appxmanifest</ProjectItem>

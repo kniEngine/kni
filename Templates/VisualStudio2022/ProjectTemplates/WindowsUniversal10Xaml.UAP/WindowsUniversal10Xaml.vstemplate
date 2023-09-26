@@ -32,7 +32,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml">App.xaml</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="!blend" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="blend" TargetFileName="GamePage.xaml">GamePage.xaml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game1.cs</ProjectItem>    
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>    
       <ProjectItem ReplaceParameters="true" TargetFileName="GamePage.xaml.cs">GamePage.xaml.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\Default.rd.xml">Default.rd.xml</ProjectItem>

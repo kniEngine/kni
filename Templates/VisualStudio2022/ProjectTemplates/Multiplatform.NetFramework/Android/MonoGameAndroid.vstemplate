@@ -19,7 +19,7 @@
   <TemplateContent>
     <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
       
-      <ProjectItem ReplaceParameters="true" TargetFileName="$ext_safeprojectname$Activity.cs">Activity1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$ext_safeprojectname$Activity.cs">Activity.cs</ProjectItem>
       
       <Folder Name="Assets" TargetFolderName="Assets">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutAssets.txt">AboutAssets.txt</ProjectItem>

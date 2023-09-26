@@ -17,7 +17,7 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="KniDesktopGLApplication.csproj" File="MonoGameDesktopGLApplication.csproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.ico">Icon.ico</ProjectItem>
 	  <ProjectItem ReplaceParameters="false" TargetFileName="Icon.bmp">Icon.bmp</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>

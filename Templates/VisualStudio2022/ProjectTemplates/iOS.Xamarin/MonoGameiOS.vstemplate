@@ -21,7 +21,7 @@
   <TemplateContent>
     <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Game1.csproj">
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Default.png">Default.png</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Entitlements.plist">Entitlements.plist</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="GameThumbnail.png">GameThumbnail.png</ProjectItem>

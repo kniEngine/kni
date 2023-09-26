@@ -24,7 +24,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="_Imports.razor">_Imports.razor</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.razor">App.razor</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game1.cs</ProjectItem>      
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>      
       <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor">MainLayout.razor</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor.css">MainLayout.razor.css</ProjectItem>      
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>

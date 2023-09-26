@@ -16,11 +16,11 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="AndroidApplication1.csproj" File="AndroidApplication1.csproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Activity.cs">Activity1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Activity.cs">Activity.cs</ProjectItem>
       <Folder Name="Assets" TargetFolderName="Assets">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutAssets.txt">AboutAssets.txt</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
