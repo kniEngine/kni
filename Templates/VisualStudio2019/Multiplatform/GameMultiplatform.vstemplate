@@ -31,24 +31,12 @@
  	<TemplateContent>
  		<ProjectCollection>
 			<SolutionFolder Name="$projectname$">
-				<ProjectTemplateLink ProjectName="$projectname$.Shared" CopyParameters="true">
-					Shared\Shared.vstemplate
-				</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.Android" CopyParameters="true">
-					Android\MonoGameAndroid.vstemplate
-				</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">
-					WindowsDX\MonoGameWindowsDX.vstemplate
-				</ProjectTemplateLink>	
-				<ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">
-					DesktopGL\MonoGameDesktopGL.vstemplate
-				</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWP.Xaml" CopyParameters="true">
-					UWP.Xaml\UWP.Xaml.vstemplate
-				</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWP.Core" CopyParameters="true">
-					UWP.Core\UWP.Core.vstemplate
-				</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.Shared"    CopyParameters="true">Shared\Shared.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.Android"   CopyParameters="true">Android\Game.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">WindowsDX\Game.vstemplate</ProjectTemplateLink>	
+				<ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">DesktopGL\Game.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.UWP.Xaml"  CopyParameters="true">UWP.Xaml\Game.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.UWP.Core"  CopyParameters="true">UWP.Core\Game.vstemplate</ProjectTemplateLink>
 			</SolutionFolder>
  		</ProjectCollection>
 	</TemplateContent>
