@@ -12,7 +12,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE;WINDOWSDX</DefineConstants>

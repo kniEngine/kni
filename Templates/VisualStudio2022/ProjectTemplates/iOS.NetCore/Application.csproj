@@ -11,7 +11,6 @@
     <KniPlatform>iOS</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
@@ -34,7 +33,6 @@
     <MtouchUseSGen>true</MtouchUseSGen>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>

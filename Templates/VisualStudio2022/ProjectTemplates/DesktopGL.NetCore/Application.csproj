@@ -11,7 +11,6 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE;DESKTOPGL</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
