@@ -240,7 +240,7 @@ Section "VS2017 Templates" VS2017
   IfFileExists `$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\KNI"
-    File /r '..\..\Templates\VisualStudio2017\*.zip'
+    File /r '..\..\Templates\VisualStudio2017\ProjectTemplates\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2017 not found"
@@ -253,7 +253,7 @@ Section "VS2019 Templates" VS2019
   IfFileExists `$DOCUMENTS\Visual Studio 2019\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
     SetOutPath "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\KNI"
-    File /r '..\..\Templates\VisualStudio2019\*.zip'
+    File /r '..\..\Templates\VisualStudio2019\ProjectTemplates\*.zip'
     GOTO EndTemplates
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2019 not found"

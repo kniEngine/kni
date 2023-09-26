@@ -3,17 +3,17 @@
 	<description>Default Ion Automated Build script</description>
 	<property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
 
-	<target name="build" description="Build Visual Studio Templates">
+	<target name="build" description="Build Visual Studio 2017 Templates">
 		<delete><fileset><include name="*.zip" /></fileset></delete>
 		<!-- Find any applications that have valid build scripts, configure their references and then build them -->
-		<foreach item="Folder" property="folder" in="./">
-			
+		<foreach item="Folder" property="folder" in="ProjectTemplates/">
 			<zip zipfile="${folder}.zip">
-			  <fileset basedir="${folder}">			    
+			  <fileset basedir="${folder}">
 			     <include name="**/*" />
 			  </fileset>
 			</zip>
 		</foreach>
+
 	</target>
 	
 </project>
