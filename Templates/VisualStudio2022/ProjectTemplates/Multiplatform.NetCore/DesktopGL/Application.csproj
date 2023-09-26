@@ -12,12 +12,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>TRACE;DESKTOPGL</DefineConstants>
+    <DefineConstants>DESKTOPGL</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>TRACE;DESKTOPGL</DefineConstants>
+    <DefineConstants>DESKTOPGL</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
