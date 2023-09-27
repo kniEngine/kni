@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //GraphicsExtensions.CheckGLError();
         }
 
-        public void GetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount)
+        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             throw new NotImplementedException();
