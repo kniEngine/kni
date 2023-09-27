@@ -132,7 +132,21 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new NotImplementedException();
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            // TODO: check for non renderable formats (formats that can't be attached to FBO)
+
+            WebGLFramebuffer glFramebuffer;
+            glFramebuffer = GL.CreateFramebuffer();
+            GraphicsExtensions.CheckGLError();
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+            GraphicsExtensions.CheckGLError();
+            GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture);
+            GraphicsExtensions.CheckGLError();
+
+            GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+            GraphicsExtensions.CheckGLError();
+            glFramebuffer.Dispose();
         }
         #endregion ITexture2DStrategy
 
