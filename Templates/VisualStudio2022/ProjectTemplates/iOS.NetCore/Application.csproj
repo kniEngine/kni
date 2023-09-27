@@ -8,11 +8,11 @@
     <RootNamespace>$safeprojectname$</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>$safeprojectname$</AssemblyName>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
     <KniPlatform>iOS</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <DefineConstants></DefineConstants>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <DefineConstants></DefineConstants>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
