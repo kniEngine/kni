@@ -29,8 +29,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             switch (indexElementSize)
             {
-                case IndexElementSize.SixteenBits:   this._drawElementsType = WebGLDataType.SHORT; break;
-                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.INT; break;
+                case IndexElementSize.SixteenBits:   this._drawElementsType = WebGLDataType.USHORT; break;
+                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.UINT; break;
                 default: throw new InvalidOperationException();
             }
         }
@@ -42,8 +42,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             switch (indexElementSize)
             {
-                case IndexElementSize.SixteenBits: this._drawElementsType = WebGLDataType.SHORT; break;
-                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.INT; break;
+                case IndexElementSize.SixteenBits: this._drawElementsType = WebGLDataType.USHORT; break;
+                case IndexElementSize.ThirtyTwoBits: this._drawElementsType = WebGLDataType.UINT; break;
                 default: throw new InvalidOperationException();
             }
 
