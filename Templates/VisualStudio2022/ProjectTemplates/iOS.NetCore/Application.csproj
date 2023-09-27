@@ -8,11 +8,11 @@
     <RootNamespace>$safeprojectname$</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>$safeprojectname$</AssemblyName>
+    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <KniPlatform>iOS</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
@@ -23,7 +23,6 @@
     <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
@@ -31,7 +30,6 @@
     <MtouchUseSGen>true</MtouchUseSGen>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
@@ -43,7 +41,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseSGen>true</MtouchUseSGen>
@@ -52,7 +49,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
@@ -63,7 +59,6 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <MtouchUseSGen>true</MtouchUseSGen>
