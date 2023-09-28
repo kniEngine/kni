@@ -6,15 +6,20 @@
 
 using System;
 using Microsoft.Xna.Framework.Media;
+using WasmDom = nkast.Wasm.Dom;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
+        WasmDom.Audio _webPlayer;
+        private Song _playingSong;
 
         internal ConcreteMediaPlayerStrategy()
         {
+            _webPlayer = new WasmDom.Audio();
+            _webPlayer.OnEnded += Player_OnEnded;
         }
 
         #region Properties
@@ -25,16 +30,18 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformIsMuted = value;
-
-                if (Queue.Count > 0)
-                    SetChannelVolumes();
+                _webPlayer.Muted = value;
             }
         }
 
         internal override bool PlatformIsRepeating
         {
             get { return base.PlatformIsRepeating; }
-            set { base.PlatformIsRepeating = value; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+                _webPlayer.Loop = value;
+            }
         }
 
         internal override bool PlatformIsShuffled
@@ -59,9 +66,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformVolume = value;
-
-                if (Queue.ActiveSong != null)
-                    SetChannelVolumes();
+                _webPlayer.Volume = value;
             }
         }
 
@@ -72,35 +77,74 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        private void SetChannelVolumes()
-        {
-            float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
-            
-            foreach (Song queuedSong in Queue.Songs)
-            {
-                ((ConcreteSongStrategy)queuedSong.Strategy).Volume = innerVolume;
-            }
-        }
-
         internal override void PlatformPlaySong(Song song)
         {
-            throw new NotImplementedException();
+            if (Queue.ActiveSong != null)
+            {
+                ConcreteSongStrategy songStrategy = (ConcreteSongStrategy)song.Strategy;
+
+                _webPlayer.Src = songStrategy.StreamSource.OriginalString;
+                _webPlayer.Load();
+
+                _webPlayer.Volume = this.PlatformVolume;
+                _webPlayer.Muted = this.PlatformIsMuted;
+                _webPlayer.Loop = this.PlatformIsShuffled;
+                _playingSong = song;
+
+                _webPlayer.Play();
+                song.Strategy.PlayCount++;
+            }
         }
 
         internal override void PlatformPause()
         {
-            throw new NotImplementedException();
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong != null)
+            {
+                _webPlayer.Pause();
+            }
         }
 
         internal override void PlatformResume()
         {
-            throw new NotImplementedException();
+            Song activeSong = Queue.ActiveSong;
+            if (activeSong != null)
+            {
+                _webPlayer.Play();
+            }
         }
 
         internal override void PlatformStop()
         {
-            throw new NotImplementedException();
+            foreach (Song queuedSong in Queue.Songs)
+            {
+                Song activeSong = Queue.ActiveSong;
+                _webPlayer.Pause();
+                _webPlayer.Src = "";
+                _playingSong = null;
+                activeSong.Strategy.PlayCount = 0;
+            }
         }
 
+
+        private void Player_OnEnded(object sender, EventArgs e)
+        {
+            if (_playingSong != null)
+            {
+                _playingSong = null;
+                base.OnSongFinishedPlaying();
+            }
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _webPlayer.OnEnded -= Player_OnEnded;
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
