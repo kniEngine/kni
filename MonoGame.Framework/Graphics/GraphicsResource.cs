@@ -67,6 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = strategy;
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
+            ((GraphicsResourceStrategy)_strategy).ContextLost += GraphicsResourceStrategy_ContextLost;
             ((GraphicsResourceStrategy)_strategy).DeviceResetting += GraphicsResourceStrategy_DeviceResetting;
             ((GraphicsResourceStrategy)_strategy).DeviceDisposing += GraphicsResourceStrategy_DeviceDisposing;
         }
@@ -109,6 +110,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GraphicsResourceStrategy_DeviceResetting(object sender, EventArgs e)
         {
+        }
+
+        private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
+        {
             GraphicsDeviceResetting();
         }
 
@@ -149,6 +154,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy.Dispose();
                 _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
 
+                ((GraphicsResourceStrategy)_strategy).ContextLost -= GraphicsResourceStrategy_ContextLost;
                 ((GraphicsResourceStrategy)_strategy).DeviceResetting -= GraphicsResourceStrategy_DeviceResetting;
                 ((GraphicsResourceStrategy)_strategy).DeviceDisposing -= GraphicsResourceStrategy_DeviceDisposing;
             }

@@ -25,6 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public event EventHandler<EventArgs> Disposing;
 
+        public event EventHandler<EventArgs> ContextLost;
         public event EventHandler<EventArgs> DeviceResetting;
         public event EventHandler<EventArgs> DeviceDisposing;
 
@@ -71,6 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
         {
+            OnContextLost(e);
             PlatformGraphicsContextLost();
         }
 
@@ -82,6 +84,13 @@ namespace Microsoft.Xna.Platform.Graphics
         private void OnDeviceResetting(EventArgs e)
         {
             var handler = DeviceResetting;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnContextLost(EventArgs e)
+        {
+            var handler = ContextLost;
             if (handler != null)
                 handler(this, e);
         }
