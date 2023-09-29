@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformDeviceResetting()
+        internal override void PlatformContextLost()
         {
             throw new PlatformNotSupportedException();
         }

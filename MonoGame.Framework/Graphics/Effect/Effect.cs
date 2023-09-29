@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal protected override void GraphicsContextLost()
         {
             for (var i = 0; i < ConstantBuffers.Length; i++)
-                ConstantBuffers[i].Strategy.PlatformDeviceResetting();
+                ConstantBuffers[i].Strategy.PlatformContextLost();
         }
 
     }
