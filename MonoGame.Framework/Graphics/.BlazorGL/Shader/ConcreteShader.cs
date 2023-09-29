@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             if (_shaderHandle != null)
             {
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderHandle = null;
             }
 
-            base.PlatformGraphicsDeviceResetting();
+            base.PlatformGraphicsContextLost();
         }
 
 

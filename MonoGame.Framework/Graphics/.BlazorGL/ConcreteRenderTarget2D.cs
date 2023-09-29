@@ -117,11 +117,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             throw new NotImplementedException();
 
-            base.PlatformGraphicsDeviceResetting();
+            base.PlatformGraphicsContextLost();
         }
     }
 }

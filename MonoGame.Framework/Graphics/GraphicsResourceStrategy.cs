@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
         {
-            PlatformGraphicsDeviceResetting();
+            PlatformGraphicsContextLost();
         }
 
         private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 handler(this, e);
         }
 
-        internal virtual void PlatformGraphicsDeviceResetting()
+        internal virtual void PlatformGraphicsContextLost()
         {
 
         }

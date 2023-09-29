@@ -27,11 +27,11 @@ namespace Microsoft.Xna.Platform.Graphics
             CreatePixelShader();
         }
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _pixelShader);
 
-            base.PlatformGraphicsDeviceResetting();
+            base.PlatformGraphicsContextLost();
         }
 
         private void CreatePixelShader()

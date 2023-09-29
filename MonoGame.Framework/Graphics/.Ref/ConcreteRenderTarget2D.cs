@@ -65,11 +65,11 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             throw new PlatformNotSupportedException();
 
-            base.PlatformGraphicsDeviceResetting();
+            base.PlatformGraphicsContextLost();
         }
 
         protected override void Dispose(bool disposing)
