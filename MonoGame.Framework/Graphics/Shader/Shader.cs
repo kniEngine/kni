@@ -33,9 +33,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal protected override void GraphicsContextLost()
-        {
-        }
 	}
 }
 

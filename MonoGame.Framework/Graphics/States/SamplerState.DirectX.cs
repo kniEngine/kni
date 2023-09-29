@@ -14,11 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private D3D11.SamplerState _state;
 
-        protected internal override void GraphicsContextLost()
-        {
-            DX.Utilities.Dispose(ref _state);
-            base.GraphicsContextLost();
-        }
 
         internal D3D11.SamplerState GetState(GraphicsContext context)
         {
