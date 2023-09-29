@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void Android_OnContextLost()
         {
-            this.OnDeviceResetting(EventArgs.Empty);
+            this.OnContextLost(EventArgs.Empty);
         }
 
         internal void Android_OnDeviceReset()

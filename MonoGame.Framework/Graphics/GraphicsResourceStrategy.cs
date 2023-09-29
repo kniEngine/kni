@@ -49,6 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_deviceStrategy != null)
             {
+                _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.DeviceResetting -= GraphicsDeviceStrategy_DeviceResetting;
                 _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
             }
@@ -57,6 +58,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_deviceStrategy != null)
             {
+                _deviceStrategy.ContextLost += GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.DeviceResetting += GraphicsDeviceStrategy_DeviceResetting;
                 _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
             }
@@ -65,6 +67,10 @@ namespace Microsoft.Xna.Platform.Graphics
         private void GraphicsDeviceStrategy_DeviceResetting(object sender, EventArgs e)
         {
             OnDeviceResetting(e);
+        }
+
+        private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
+        {
             PlatformGraphicsDeviceResetting();
         }
 
