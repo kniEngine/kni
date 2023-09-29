@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceResetting();
+                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
                 
@@ -317,7 +317,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceResetting();
+                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
 
