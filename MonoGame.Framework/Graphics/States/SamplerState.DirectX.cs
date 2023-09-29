@@ -14,11 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private D3D11.SamplerState _state;
 
-        protected internal override void GraphicsDeviceResetting()
-        {
-            DX.Utilities.Dispose(ref _state);
-            base.GraphicsDeviceResetting();
-        }
 
         internal D3D11.SamplerState GetState(GraphicsContext context)
         {

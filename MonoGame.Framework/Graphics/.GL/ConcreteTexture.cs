@@ -457,7 +457,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             if (_glTexture > 0)
             {
@@ -470,7 +470,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _glTexture = -1;
             _glLastSamplerState = null; 
 
-            base.PlatformGraphicsDeviceResetting();
+            base.PlatformGraphicsContextLost();
         }
 
         protected override void Dispose(bool disposing)

@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsDeviceResetting()
+        internal override void PlatformGraphicsContextLost()
         {
             _ibo = 0;
         }

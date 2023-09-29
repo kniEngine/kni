@@ -233,10 +233,10 @@ namespace Microsoft.Xna.Framework.Graphics
             base.Dispose(disposing);
         }
 
-        internal protected override void GraphicsDeviceResetting()
+        internal protected override void GraphicsContextLost()
         {
             for (var i = 0; i < ConstantBuffers.Length; i++)
-                ConstantBuffers[i].Strategy.PlatformDeviceResetting();
+                ConstantBuffers[i].Strategy.PlatformContextLost();
         }
 
     }

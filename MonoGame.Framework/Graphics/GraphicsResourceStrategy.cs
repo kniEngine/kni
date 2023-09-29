@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public event EventHandler<EventArgs> Disposing;
 
-        public event EventHandler<EventArgs> DeviceResetting;
+        public event EventHandler<EventArgs> ContextLost;
         public event EventHandler<EventArgs> DeviceDisposing;
 
         internal GraphicsResourceStrategy()
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_deviceStrategy != null)
             {
-                _deviceStrategy.DeviceResetting -= GraphicsDeviceStrategy_DeviceResetting;
+                _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
             }
 
@@ -57,15 +57,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_deviceStrategy != null)
             {
-                _deviceStrategy.DeviceResetting += GraphicsDeviceStrategy_DeviceResetting;
+                _deviceStrategy.ContextLost += GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
             }
         }
 
-        private void GraphicsDeviceStrategy_DeviceResetting(object sender, EventArgs e)
+        private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
         {
-            OnDeviceResetting(e);
-            PlatformGraphicsDeviceResetting();
+            OnContextLost(e);
+            PlatformGraphicsContextLost();
         }
 
         private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
@@ -73,9 +73,9 @@ namespace Microsoft.Xna.Platform.Graphics
             OnDeviceDisposing(e);
         }
 
-        private void OnDeviceResetting(EventArgs e)
+        private void OnContextLost(EventArgs e)
         {
-            var handler = DeviceResetting;
+            var handler = ContextLost;
             if (handler != null)
                 handler(this, e);
         }
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 handler(this, e);
         }
 
-        internal virtual void PlatformGraphicsDeviceResetting()
+        internal virtual void PlatformGraphicsContextLost()
         {
 
         }

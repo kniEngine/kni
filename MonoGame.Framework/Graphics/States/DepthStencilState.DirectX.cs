@@ -15,11 +15,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private D3D11.DepthStencilState _state;
 
-        protected internal override void GraphicsDeviceResetting()
-        {
-            DX.Utilities.Dispose(ref _state);
-            base.GraphicsDeviceResetting();
-        }
 
         internal void PlatformApplyState(ConcreteGraphicsContext context)
         {
