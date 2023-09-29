@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public event EventHandler<EventArgs> Disposing;
 
         public event EventHandler<EventArgs> ContextLost;
-        public event EventHandler<EventArgs> DeviceResetting;
         public event EventHandler<EventArgs> DeviceDisposing;
 
         internal GraphicsResourceStrategy()
@@ -51,7 +50,6 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_deviceStrategy != null)
             {
                 _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
-                _deviceStrategy.DeviceResetting -= GraphicsDeviceStrategy_DeviceResetting;
                 _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
             }
 
@@ -60,14 +58,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_deviceStrategy != null)
             {
                 _deviceStrategy.ContextLost += GraphicsDeviceStrategy_ContextLost;
-                _deviceStrategy.DeviceResetting += GraphicsDeviceStrategy_DeviceResetting;
                 _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
             }
-        }
-
-        private void GraphicsDeviceStrategy_DeviceResetting(object sender, EventArgs e)
-        {
-            OnDeviceResetting(e);
         }
 
         private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
@@ -79,13 +71,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
         {
             OnDeviceDisposing(e);
-        }
-
-        private void OnDeviceResetting(EventArgs e)
-        {
-            var handler = DeviceResetting;
-            if (handler != null)
-                handler(this, e);
         }
 
         private void OnContextLost(EventArgs e)

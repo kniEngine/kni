@@ -68,7 +68,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
             ((GraphicsResourceStrategy)_strategy).ContextLost += GraphicsResourceStrategy_ContextLost;
-            ((GraphicsResourceStrategy)_strategy).DeviceResetting += GraphicsResourceStrategy_DeviceResetting;
             ((GraphicsResourceStrategy)_strategy).DeviceDisposing += GraphicsResourceStrategy_DeviceDisposing;
         }
 
@@ -106,10 +105,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(device != null);
 
             ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
-        }
-
-        private void GraphicsResourceStrategy_DeviceResetting(object sender, EventArgs e)
-        {
         }
 
         private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
@@ -155,7 +150,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
 
                 ((GraphicsResourceStrategy)_strategy).ContextLost -= GraphicsResourceStrategy_ContextLost;
-                ((GraphicsResourceStrategy)_strategy).DeviceResetting -= GraphicsResourceStrategy_DeviceResetting;
                 ((GraphicsResourceStrategy)_strategy).DeviceDisposing -= GraphicsResourceStrategy_DeviceDisposing;
             }
 
