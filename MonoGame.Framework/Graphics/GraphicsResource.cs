@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Warning: This may be called after a call to Dispose() up until
         /// the resource is garbage collected.
         /// </summary>
-        internal protected virtual void GraphicsDeviceResetting()
+        internal protected virtual void GraphicsContextLost()
         {
 
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
         {
-            GraphicsDeviceResetting();
+            GraphicsContextLost();
         }
 
         private void GraphicsResourceStrategy_DeviceDisposing(object sender, EventArgs e)

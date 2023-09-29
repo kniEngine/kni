@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
 
-        internal protected override void GraphicsDeviceResetting()
+        internal protected override void GraphicsContextLost()
         {
         }
 	}

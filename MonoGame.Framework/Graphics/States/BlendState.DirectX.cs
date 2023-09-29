@@ -15,10 +15,10 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private D3D11.BlendState _state;
 
-        protected internal override void GraphicsDeviceResetting()
+        protected internal override void GraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _state);
-            base.GraphicsDeviceResetting();
+            base.GraphicsContextLost();
         }
 
         internal D3D11.BlendState GetDxState(ConcreteGraphicsContext context)
