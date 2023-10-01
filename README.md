@@ -77,4 +77,4 @@ The Kni project is under the [Microsoft Public License](https://opensource.org/l
 While KNI is free and open-source, maintaining and expanding the framework requires ongoing effort and resources. We rely on the support of our community to continue delivering top-notch updates, features, and support.
 By [becoming a Sponsor](https://github.com/sponsors/nkast), you can directly contribute to the growth and sustainability of the KNI Game Framework. 
 
-<!-- sponsors --><a href="https://github.com/damian-666"><img src="https://github.com/damian-666.png" width="60px" alt="Damian" /></a><a href="https://github.com/KeithRiskey"><img src="https://github.com/KeithRiskey.png" width="60px" alt="Keith Riskey" /></a><!-- sponsors -->
+<!-- sponsors --><a href="https://github.com/KeithRiskey"><img src="https://github.com/KeithRiskey.png" width="60px" alt="Keith Riskey" /></a><a href="https://github.com/AristurtleDev"><img src="https://github.com/AristurtleDev.png" width="60px" alt="Christopher Whitley" /></a><!-- sponsors -->
