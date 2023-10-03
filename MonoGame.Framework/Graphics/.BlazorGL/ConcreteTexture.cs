@@ -45,8 +45,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 out WebGLTexelType glType,
                 out bool glIsCompressedTexture)
         {
-            var supportsS3tc = deviceStrategy.Capabilities.SupportsS3tc;
-            //var isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
+            bool supportsS3tc = deviceStrategy.Capabilities.SupportsS3tc;
+            //bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
 
             switch (format)
             {
@@ -147,10 +147,14 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
                     GraphicsExtensions.CheckGLError();
                     if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                    {
                         throw new NotImplementedException();
+                    }
                     else
+                    {
                         GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
-                    GraphicsExtensions.CheckGLError();
+                        GraphicsExtensions.CheckGLError();
+                    }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         stencil = depth;
@@ -161,10 +165,14 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
                             GraphicsExtensions.CheckGLError();
                             if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                            {
                                 throw new NotImplementedException();
+                            }
                             else
+                            {
                                 GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);
-                            GraphicsExtensions.CheckGLError();
+                                GraphicsExtensions.CheckGLError();
+                            }
                         }
                     }
                 }

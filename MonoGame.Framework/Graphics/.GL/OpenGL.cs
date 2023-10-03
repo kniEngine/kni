@@ -1312,7 +1312,7 @@ namespace MonoGame.OpenGL
 
         static void DebugMessageCallbackHandler(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam)
         {
-            var errorMessage = Marshal.PtrToStringAnsi(message);
+            string errorMessage = Marshal.PtrToStringAnsi(message);
             System.Diagnostics.Debug.WriteLine(errorMessage);
             if (OnError != null)
                 OnError(errorMessage);
@@ -1388,7 +1388,6 @@ namespace MonoGame.OpenGL
             DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
 
             // Render Target Support. These might be null if they are not supported
-            // see GraphicsDevice.OpenGL.FramebufferHelper.cs for handling other extensions.
             GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffers");
             BindRenderbuffer = LoadFunctionOrNull<BindRenderbufferDelegate>("glBindRenderbuffer");
             DeleteRenderbuffers = LoadFunctionOrNull<DeleteRenderbuffersDelegate>("glDeleteRenderbuffers");
@@ -1660,7 +1659,7 @@ namespace MonoGame.OpenGL
         {
             int length = 0;
             GetProgram(programId, GetProgramParameterName.LogLength, out length);
-            var sb = new StringBuilder(length, length);
+            StringBuilder sb = new StringBuilder(length, length);
             GetProgramInfoLogInternal(programId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
@@ -1669,7 +1668,7 @@ namespace MonoGame.OpenGL
         {
             int length = 0;
             GetShader(shaderId, ShaderParameter.LogLength, out length);
-            var sb = new StringBuilder(length, length);
+            StringBuilder sb = new StringBuilder(length, length);
             GetShaderInfoLogInternal(shaderId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
@@ -1679,7 +1678,7 @@ namespace MonoGame.OpenGL
             int codeLength = shaderBytecode.Length;
             fixed (void* pData = shaderBytecode)
             {
-                var ppData = &pData;
+                void** ppData = &pData;
                 ShaderSourceInternal(shaderId, 1, new IntPtr(&pData), &codeLength);
             }
         }
@@ -1736,7 +1735,7 @@ namespace MonoGame.OpenGL
 
         internal static void GetTexImage<T>(TextureTarget target, int level, PixelFormat format, PixelType type, T[] pixels) where T : struct
         {
-            var pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
+            GCHandle pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
             try
             {
                 GetTexImageInternal(target, level, format, type, pixelsPtr.AddrOfPinnedObject());
@@ -1749,7 +1748,7 @@ namespace MonoGame.OpenGL
 
         internal static void GetCompressedTexImage<T>(TextureTarget target, int level, T[] pixels) where T : struct
         {
-            var pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
+            GCHandle pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
             try
             {
                 GetCompressedTexImageInternal(target, level, pixelsPtr.AddrOfPinnedObject());
@@ -1762,7 +1761,7 @@ namespace MonoGame.OpenGL
 
         public static void ReadPixels<T>(int x, int y, int width, int height, PixelFormat format, PixelType type, T[] data)
         {
-            var dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
                 ReadPixelsInternal(x, y, width, height, format, type, dataPtr.AddrOfPinnedObject());

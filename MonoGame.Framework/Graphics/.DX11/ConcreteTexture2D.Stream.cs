@@ -221,8 +221,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 // XNA blacks out any pixels with an alpha of zero.
                 /* TNC: Disable XNA behavior.
                 // TNC: We either preserve the original data or premultiply the entire image.
-                var data = (byte*)s.DataPointer;
-                for (var i = 0; i < s.Length; i+=4)
+                byte* data = (byte*)s.DataPointer;
+                for (int i = 0; i < s.Length; i+=4)
                 {
                     if (data[i + 3] == 0)
                     {
@@ -253,9 +253,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 WIC.DecodeOptions.CacheOnDemand
                 );
 
-            var fconv = new WIC.FormatConverter(imgfactory);
+            WIC.FormatConverter fconv = new WIC.FormatConverter(imgfactory);
 
-            using (var frame = decoder.GetFrame(0))
+            using (WIC.BitmapFrameDecode frame = decoder.GetFrame(0))
             {
                 fconv.Initialize(
                     frame,

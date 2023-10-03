@@ -273,7 +273,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             { 
-                var log = GL.GetProgramInfoLog(program);
+                string log = GL.GetProgramInfoLog(program);
                 Console.WriteLine(log);
                 GL.DetachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
                 GL.DetachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());

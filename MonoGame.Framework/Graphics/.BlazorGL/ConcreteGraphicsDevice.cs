@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            var program = GL.CreateProgram();
+            WebGLProgram program = GL.CreateProgram();
             GraphicsExtensions.CheckGLError();
 
             GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                var log = GL.GetProgramInfoLog(program);
+                string log = GL.GetProgramInfoLog(program);
                 vertexShader.Dispose();
                 pixelShader.Dispose();
                 program.Dispose();
