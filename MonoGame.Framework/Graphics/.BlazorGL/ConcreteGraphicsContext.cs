@@ -782,7 +782,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0)
             {
                 throw new NotImplementedException();
             }
