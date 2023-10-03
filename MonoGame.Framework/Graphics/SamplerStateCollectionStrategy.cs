@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Static state properties never actually get bound;
                 // instead we use our GraphicsDevice-specific version of them.
-                var newSamplerState = value;
+                SamplerState newSamplerState = value;
                 if (ReferenceEquals(value, SamplerState.AnisotropicClamp))
                     newSamplerState = _samplerStateAnisotropicClamp;
                 else if (ReferenceEquals(value, SamplerState.AnisotropicWrap))
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public virtual void Clear()
         {
-            for (var i = 0; i < _samplers.Length; i++)
+            for (int i = 0; i < _samplers.Length; i++)
             {
                 _samplers[i] = SamplerState.LinearWrap;
 

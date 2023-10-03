@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return Empty;
 
             var parameters = new EffectParameter[_parameters.Length];
-            for (var i = 0; i < _parameters.Length; i++)
+            for (int i = 0; i < _parameters.Length; i++)
                 parameters[i] = new EffectParameter(_parameters[i]);
 
             return new EffectParameterCollection(parameters, _indexLookup);

@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Static state properties never actually get bound;
                 // instead we use our GraphicsDevice-specific version of them.
-                var newBlendState = _blendState;
+                BlendState newBlendState = _blendState;
                 if (ReferenceEquals(_blendState, BlendState.Additive))
                     newBlendState = _blendStateAdditive;
                 else if (ReferenceEquals(_blendState, BlendState.AlphaBlend))
@@ -197,7 +197,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Static state properties never actually get bound;
                 // instead we use our GraphicsDevice-specific version of them.
-                var newDepthStencilState = _depthStencilState;
+                DepthStencilState newDepthStencilState = _depthStencilState;
                 if (ReferenceEquals(_depthStencilState, DepthStencilState.Default))
                     newDepthStencilState = _depthStencilStateDefault;
                 else if (ReferenceEquals(_depthStencilState, DepthStencilState.DepthRead))
@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Static state properties never actually get bound;
                 // instead we use our GraphicsDevice-specific version of them.
-                var newRasterizerState = _rasterizerState;
+                RasterizerState newRasterizerState = _rasterizerState;
                 if (ReferenceEquals(_rasterizerState, RasterizerState.CullClockwise))
                     newRasterizerState = _rasterizerStateCullClockwise;
                 else if (ReferenceEquals(_rasterizerState, RasterizerState.CullCounterClockwise))
@@ -362,7 +362,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    var message = string.Format("Max number of vertex buffers is {0}.", this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots);
+                    string message = String.Format("Max number of vertex buffers is {0}.", this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }

@@ -211,9 +211,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Avoid the array checking overhead by using pointer indexing!
                 fixed (VertexPositionColorTexture* vertexArrayFixedPtr = _vertexArray)
                 {
-                    var vertexArrayPtr = vertexArrayFixedPtr;
+                    VertexPositionColorTexture* vertexArrayPtr = vertexArrayFixedPtr;
 
-                    var mode = SetDataOptions.NoOverwrite;
+                    SetDataOptions mode = SetDataOptions.NoOverwrite;
                     if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
                     {
                         mode = SetDataOptions.Discard;
@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         *(vertexArrayPtr + 3) = item.vertexBR;
                     }
 
-                    var stride = VertexPositionColorTexture.VertexDeclaration.VertexStride;
+                    int stride = VertexPositionColorTexture.VertexDeclaration.VertexStride;
                     _vertexBuffer.SetData(_baseQuad * 4 * stride,
                         _vertexArray, 0, numBatchesToProcess * 4,
                         stride, mode);

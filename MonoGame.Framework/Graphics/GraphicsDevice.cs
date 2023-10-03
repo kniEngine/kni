@@ -733,8 +733,8 @@ namespace Microsoft.Xna.Framework.Graphics
         // uniformly scales down the given rectangle by 10%
         internal static Rectangle GetDefaultTitleSafeArea(int x, int y, int width, int height)
         {
-            var marginX = (width + 19) / 20;
-            var marginY = (height + 19) / 20;
+            int marginX = (width + 19) / 20;
+            int marginY = (height + 19) / 20;
             x += marginX;
             y += marginY;
 

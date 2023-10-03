@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
         [DebuggerHidden]
         public static void CheckGLError()
         {
-            var error = GL.GetError();
+            ErrorCode error = GL.GetError();
             //Console.WriteLine(error);
             if (error != ErrorCode.NoError)
                 throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
         [Conditional("DEBUG")]
         public static void CheckFramebufferStatus()
         {
-            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             switch (status)
             {
                 case FramebufferErrorCode.FramebufferComplete:

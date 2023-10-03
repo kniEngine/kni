@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         protected internal override void OnApply()
         {
-            var vp = GraphicsDevice.Viewport;
+            Viewport vp = GraphicsDevice.Viewport;
             if ((vp.Width != _lastViewport.Width) || (vp.Height != _lastViewport.Height))
             {
                 // Normal 3D cameras look into the -z direction (z = 1 is in front of z = 0). The
@@ -80,8 +80,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (GraphicsDevice.UseHalfPixelOffset)
                 {
-                    var texelW = (1f / vp.Width);
-                    var texelH = (1f / vp.Height);
+                    float texelW = (1f / vp.Width);
+                    float texelH = (1f / vp.Height);
                     _projection.M11 =  (2f * texelW);
                     _projection.M22 = -(2f * texelH);
                     _projection.M41 = -(1f + texelW);
