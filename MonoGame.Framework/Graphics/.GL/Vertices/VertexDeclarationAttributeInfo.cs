@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 unchecked
                 {
                     int hash = 17;
-                    foreach (var item in array)
+                    foreach (RenderTargetBinding item in array)
                     {
                         if (item.RenderTarget != null)
                             hash = hash * 23 + item.RenderTarget.GetHashCode();

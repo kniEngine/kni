@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // uniform again and apply the state.
             if (_shaderProgram != program)
             {
-                var location = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GetUniformLocation(program, Name);
+                WebGLUniformLocation location = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GetUniformLocation(program, Name);
                 if (location == null)
                     return;
 

@@ -62,9 +62,9 @@ namespace Microsoft.Xna.Platform.Graphics
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
-            var startBytes = startIndex * elementSizeInByte;
+            int startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0 && !_glIsCompressedTexture)
                 throw new NotImplementedException("startIndex");
 
@@ -98,9 +98,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            var elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
-            var startBytes = startIndex * elementSizeInByte;
+            int startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0)
                 throw new NotImplementedException("startIndex");
 
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             int hBlocks = (h + (blockHeight - 1)) / blockHeight;
                             imageSize = wBlocks * hBlocks * blockSize;
                         }
-                        var data = new byte[imageSize]; // WebGL CompressedTexImage2D requires data.
+                        byte[] data = new byte[imageSize]; // WebGL CompressedTexImage2D requires data.
                         GL.CompressedTexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data);
                         GraphicsExtensions.CheckGLError();
                     }
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
             // dimension is not a power of two.
-            var wrap = WebGLTexParam.REPEAT;
+            WebGLTexParam wrap = WebGLTexParam.REPEAT;
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = WebGLTexParam.CLAMP_TO_EDGE;
 

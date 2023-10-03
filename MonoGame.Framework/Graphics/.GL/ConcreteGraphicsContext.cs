@@ -89,15 +89,15 @@ namespace Microsoft.Xna.Platform.Graphics
             // So overwrite these states with what is needed to perform
             // the clear correctly and restore it afterwards.
             //
-            Rectangle prevScissorRect = ScissorRectangle;
-            DepthStencilState prevDepthStencilState = DepthStencilState;
-            BlendState prevBlendState = BlendState;
-            ScissorRectangle = _viewport.Bounds;
+            Rectangle prevScissorRect = this.ScissorRectangle;
+            DepthStencilState prevDepthStencilState = this.DepthStencilState;
+            BlendState prevBlendState = this.BlendState;
+            this.ScissorRectangle = _viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
-            DepthStencilState = _clearDepthStencilState;
-            BlendState = BlendState.Opaque;
+            this.DepthStencilState = _clearDepthStencilState;
+            this.BlendState = BlendState.Opaque;
             PlatformApplyState();
 
             ClearBufferMask bufferMask = 0;
@@ -405,7 +405,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
             {
-                var vertexBufferBinding = _vertexBuffers.Get(slot);
+                VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
                 VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
@@ -554,7 +554,7 @@ namespace Microsoft.Xna.Platform.Graphics
             DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+            GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             if (GL.DrawElementsBaseVertex != null)
             {
@@ -594,7 +594,7 @@ namespace Microsoft.Xna.Platform.Graphics
             DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
             IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
-            var target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+            GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
             if (baseInstance > 0)
             {
@@ -858,8 +858,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!this.IsRenderTargetBound)
                 return;
 
-            var renderTargetBinding = _currentRenderTargetBindings[0];
-            var renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+            RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
+            IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
             if (renderTarget.MultiSampleCount > 0 && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
             {
                 int glResolveFramebuffer = 0;
@@ -963,7 +963,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GraphicsExtensions.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GraphicsExtensions.CheckGLError();
-                var renderTargetBinding = _currentRenderTargetBindings[0];
+                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
                 IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
 
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
@@ -974,9 +974,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
-                    var renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
+                    IRenderTarget renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget;
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
-                    var attachement = (FramebufferAttachment.ColorAttachment0 + i);
+                    FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
 
                     if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
                     {

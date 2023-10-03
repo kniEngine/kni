@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 ConstantBuffer buffer = _buffers[slot];
                 if (buffer != null && !buffer.IsDisposed)
                 {
-                    var constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
+                    ConcreteConstantBuffer constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
 
                     // Update the hardware buffer.
                     if (constantBuffer.Dirty)
