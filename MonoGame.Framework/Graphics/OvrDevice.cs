@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             int ovrResult = 0;
 
-            var detectResults = OvrClient.Detect(0);
+            OvrDetectResult detectResults = OvrClient.Detect(0);
             if (detectResults.IsServiceRunning != OvrBool.True || detectResults.IsHMDConnected != OvrBool.True)
                 return -1;
 
@@ -265,7 +265,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private unsafe void OnDisplayLost()
         {
-            var prevGraphicsLuid = _ovrSession.GraphicsLuid;
+            OvrGraphicsLuid prevGraphicsLuid = _ovrSession.GraphicsLuid;
 
             // destroy session
             _ovrSession.Dispose();

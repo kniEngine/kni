@@ -373,7 +373,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -405,7 +405,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -464,7 +464,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -477,7 +477,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
             if (vertexOffset + vertexCount > vertexData.Length)
                 throw new ArgumentOutOfRangeException("primitiveCount");
@@ -516,7 +516,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -534,7 +534,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (Strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawPrimitives.");
 
-            var vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
 
             Strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
@@ -607,7 +607,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -708,7 +708,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 for (int i = 0; i < this.DeviceStrategy.Capabilities.MaxTextureSlots; i++)
                 {
-                    var tx2D = Strategy.Textures[i] as Texture2D;
+                    Texture2D tx2D = Strategy.Textures[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)

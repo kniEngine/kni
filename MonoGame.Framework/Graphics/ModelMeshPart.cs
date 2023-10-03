@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (_effect != null)
                 {
                     // First check to see any other parts are also using this effect.
-                    var removeEffect = true;
-                    foreach (var part in parent.MeshParts)
+                    bool removeEffect = true;
+                    foreach (ModelMeshPart part in parent.MeshParts)
                     {
                         if (part != this && part._effect == _effect)
                         {

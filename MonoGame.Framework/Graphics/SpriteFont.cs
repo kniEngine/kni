@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _glyphs = new Glyph[characters.Count];
             var regions = new Stack<CharacterRegion>();
 
-			for (var i = 0; i < characters.Count; i++) 
+			for (int i = 0; i < characters.Count; i++) 
             {
 				_glyphs[i] = new Glyph 
                 {
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 } 
                 else if(characters[i] == (regions.Peek().End+1))
                 {
-                    var currentRegion = regions.Pop();
+                    CharacterRegion currentRegion = regions.Pop();
                     // include character in currentRegion
                     currentRegion.End++;
                     regions.Push(currentRegion);
@@ -199,16 +199,16 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (charsCount == 0)
 				return Vector2.Zero;
 
-			var width = 0.0f;
-			var finalLineHeight = (float)LineSpacing;
+			float width = 0.0f;
+            float finalLineHeight = (float)LineSpacing;
             
-			var offset = Vector2.Zero;
-            var firstGlyphOfLine = true;
+            Vector2 offset = Vector2.Zero;
+            bool firstGlyphOfLine = true;
 
             fixed (Glyph* pGlyphs = InternalGlyphs)
-            for (var i = 0; i < charsCount; i++)
+            for (int i = 0; i < charsCount; i++)
             {
-                var c = pChars[i];
+                char c = pChars[i];
 
                 if (c == '\r')
                     continue;
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentException(UnresolvableCharacterErrorMessage(c), "text");
 
                 Debug.Assert(currentGlyphIndex >= 0 && currentGlyphIndex < InternalGlyphs.Length, "currentGlyphIndex was outside the bounds of the array.");
-                var pCurrentGlyph = pGlyphs + currentGlyphIndex;
+                Glyph* pCurrentGlyph = pGlyphs + currentGlyphIndex;
 
                 // The first character on a line might have a negative left side bearing.
                 // In this scenario, SpriteBatch/SpriteFont normally offset the text to the right,
@@ -245,7 +245,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 offset.X += pCurrentGlyph->Width;
 
-                var proposedWidth = offset.X + Math.Max(pCurrentGlyph->RightSideBearing, 0);
+                float proposedWidth = offset.X + Math.Max(pCurrentGlyph->RightSideBearing, 0);
                 if (proposedWidth > width)
                     width = proposedWidth;
 
@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     finalLineHeight = pCurrentGlyph->Cropping.Height;
             }
 
-            var height = offset.Y + finalLineHeight;
+            float height = offset.Y + finalLineHeight;
             return new Vector2(width, height);
 		}
         
@@ -269,11 +269,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Get region Index
             int regionIdx = -1;
-            var l = 0;
-            var r = _regions.Length - 1;
+            int l = 0;
+            int r = _regions.Length - 1;
             while (l <= r)
             {
-                var m = (l + r) >> 1;
+                int m = (l + r) >> 1;
                 Debug.Assert(m >= 0 && m < _regions.Length, "Index was outside the bounds of the array.");
                 if (pRegions[m].End < c)
                 {
@@ -306,7 +306,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             fixed (CharacterRegion* pRegions = _regions)
             {
-                for (var i = 0; i < charsCount; i++)
+                for (int i = 0; i < charsCount; i++)
                 {
                     pChars[i] = text[i];
                     if (!TryGetGlyphIndex(pRegions, pChars[i], out pGlyphIndices[i]))
@@ -321,7 +321,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             fixed (CharacterRegion* pRegions = _regions)
             {
-                for (var i = 0; i < charsCount; i++)
+                for (int i = 0; i < charsCount; i++)
                 {
                     pChars[i] = text[i];
                     if (!TryGetGlyphIndex(pRegions, pChars[i], out pGlyphIndices[i]))
@@ -506,7 +506,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     get
                     {
-                        var key = _keys[i];
+                        char key = _keys[i];
                         return new KeyValuePair<char, Glyph>(key, _collection[key]);
                     }
                 }
@@ -524,7 +524,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     get
                     {
-                        var key = _keys[i];
+                        char key = _keys[i];
                         return new KeyValuePair<char, Glyph>(key, _collection[key]);
                     }
                 }

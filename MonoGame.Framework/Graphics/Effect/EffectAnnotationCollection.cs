@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get 
             {
-				foreach (var annotation in _annotations) 
+				foreach (EffectAnnotation annotation in _annotations) 
                 {
 					if (annotation.Name == name)
 						return annotation;

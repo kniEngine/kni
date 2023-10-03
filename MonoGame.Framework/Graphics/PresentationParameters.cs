@@ -183,8 +183,8 @@ namespace Microsoft.Xna.Framework.Graphics
             backBufferFormat = SurfaceFormat.Color;
 #if IOS || TVOS
 			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-			var width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-			var height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
+			int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
+			int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
 			
 			// Flip the dimensions if we need to.
 			if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||

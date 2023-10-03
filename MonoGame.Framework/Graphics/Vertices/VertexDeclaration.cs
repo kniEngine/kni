@@ -183,9 +183,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private static int GetVertexStride(VertexElement[] elements)
 		{
 			int max = 0;
-			for (var i = 0; i < elements.Length; i++)
+			for (int i = 0; i < elements.Length; i++)
 			{
-                var start = elements[i].Offset + elements[i].VertexElementFormat.GetSize();
+                int start = elements[i].Offset + elements[i].VertexElementFormat.GetSize();
 				if (max < start)
 					max = start;
 			}
@@ -212,13 +212,13 @@ namespace Microsoft.Xna.Framework.Graphics
 				throw new ArgumentException("Must be value type", "vertexType");
 			}
 
-            var type = Activator.CreateInstance(vertexType) as IVertexType;
+            IVertexType type = Activator.CreateInstance(vertexType) as IVertexType;
 			if (type == null)
 			{
 				throw new ArgumentException("vertexData does not inherit IVertexType");
 			}
 
-            var vertexDeclaration = type.VertexDeclaration;
+            VertexDeclaration vertexDeclaration = type.VertexDeclaration;
 			if (vertexDeclaration == null)
 			{
 				throw new Exception("VertexDeclaration cannot be null");

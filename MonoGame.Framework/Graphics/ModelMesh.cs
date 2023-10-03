@@ -73,8 +73,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		{	
 			for(int i = 0; i < MeshParts.Count; i++)
 			{
-				var part = MeshParts[i];
-				var effect = part.Effect;
+				ModelMeshPart part = MeshParts[i];
+				Effect effect = part.Effect;
 				
 				if (part.PrimitiveCount > 0)
 				{

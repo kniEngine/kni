@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             unchecked
             {
-                var hashCode = Position.GetHashCode();
+                int hashCode = Position.GetHashCode();
                 hashCode = (hashCode * 397) ^ Normal.GetHashCode();
                 hashCode = (hashCode * 397) ^ TextureCoordinate.GetHashCode();
                 return hashCode;

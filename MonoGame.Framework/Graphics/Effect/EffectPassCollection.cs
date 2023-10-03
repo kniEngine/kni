@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal EffectPassCollection Clone(Effect effect)
         {
             var passes = new EffectPass[_passes.Length];
-            for (var i = 0; i < _passes.Length; i++)
+            for (int i = 0; i < _passes.Length; i++)
                 passes[i] = new EffectPass(effect, _passes[i]);
 
             return new EffectPassCollection(passes);

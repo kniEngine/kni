@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal EffectTechniqueCollection Clone(Effect effect)
         {
             var techniques = new EffectTechnique[_techniques.Length];
-            for (var i = 0; i < _techniques.Length; i++)
+            for (int i = 0; i < _techniques.Length; i++)
                 techniques[i] = new EffectTechnique(effect, _techniques[i]);
 
             return new EffectTechniqueCollection(techniques);

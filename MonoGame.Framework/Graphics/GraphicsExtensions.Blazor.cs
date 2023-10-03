@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Graphics
         [Conditional("DEBUG")]
         public static void CheckFramebufferStatus()
         {
-            var status = GL.CheckFramebufferStatus(WebGLFramebufferType.FRAMEBUFFER);
+            WebGLFramebufferStatus status = GL.CheckFramebufferStatus(WebGLFramebufferType.FRAMEBUFFER);
             switch (status)
             {
                 case WebGLFramebufferStatus.FRAMEBUFFER_COMPLETE:

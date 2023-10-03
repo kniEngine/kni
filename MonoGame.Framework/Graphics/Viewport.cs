@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Framework.Graphics
             float w = (source.X * projection.M14) + (source.Y * projection.M24) + (source.Z * projection.M34) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
 
-            var invW = 1 / w;
+            float invW = 1 / w;
             source.X = source.X * invW;
             source.Y = source.Y * invW;
             source.Z = source.Z * invW;
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Graphics
             float w = (source.X * projection.M14) + (source.Y * projection.M24) + (source.Z * projection.M34) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
 		    
-            var invW = 1 / w;
+            float invW = 1 / w;
             source.X = source.X * invW;
             source.Y = source.Y * invW;
             source.Z = source.Z * invW;
