@@ -860,7 +860,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0 && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (renderTarget.MultiSampleCount > 0)
             {
                 int glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
@@ -907,6 +907,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                     GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
                     GraphicsExtensions.CheckGLError();
+                    Debug.Assert(this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer);
                     GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height,
                                        0, 0, renderTarget.Width, renderTarget.Height,
                                        ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);

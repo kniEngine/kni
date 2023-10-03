@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
 
-            if (multiSampleCount > 0 && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer)
+            if (multiSampleCount > 0)
             {
                 throw new NotImplementedException();
             }
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
                     GraphicsExtensions.CheckGLError();
-                    if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                    if (multiSampleCount > 0)
                     {
                         throw new NotImplementedException();
                     }
@@ -164,8 +164,9 @@ namespace Microsoft.Xna.Platform.Graphics
                             GraphicsExtensions.CheckGLError();
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
                             GraphicsExtensions.CheckGLError();
-                            if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                            if (multiSampleCount > 0)
                             {
+                                /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
                                 throw new NotImplementedException();
                             }
                             else
