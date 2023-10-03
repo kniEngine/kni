@@ -1388,7 +1388,6 @@ namespace MonoGame.OpenGL
             DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
 
             // Render Target Support. These might be null if they are not supported
-            // see GraphicsDevice.OpenGL.FramebufferHelper.cs for handling other extensions.
             GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffers");
             BindRenderbuffer = LoadFunctionOrNull<BindRenderbufferDelegate>("glBindRenderbuffer");
             DeleteRenderbuffers = LoadFunctionOrNull<DeleteRenderbuffersDelegate>("glDeleteRenderbuffers");

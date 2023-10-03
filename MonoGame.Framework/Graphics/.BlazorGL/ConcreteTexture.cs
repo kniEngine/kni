@@ -147,10 +147,14 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
                     GraphicsExtensions.CheckGLError();
                     if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                    {
                         throw new NotImplementedException();
+                    }
                     else
+                    {
                         GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
-                    GraphicsExtensions.CheckGLError();
+                        GraphicsExtensions.CheckGLError();
+                    }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         stencil = depth;
@@ -161,10 +165,14 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
                             GraphicsExtensions.CheckGLError();
                             if (multiSampleCount > 0 /*&& GL.RenderbufferStorageMultisample != null*/)
+                            {
                                 throw new NotImplementedException();
+                            }
                             else
+                            {
                                 GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);
-                            GraphicsExtensions.CheckGLError();
+                                GraphicsExtensions.CheckGLError();
+                            }
                         }
                     }
                 }

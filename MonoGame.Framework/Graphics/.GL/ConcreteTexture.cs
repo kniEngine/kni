@@ -328,10 +328,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
                 GraphicsExtensions.CheckGLError();
                 if (multiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                {
                     GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                    GraphicsExtensions.CheckGLError();
+                }
                 else
+                {
                     GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
-                GraphicsExtensions.CheckGLError();
+                    GraphicsExtensions.CheckGLError();
+                }
             }
 
             if (preferredDepthFormat != DepthFormat.None)
@@ -393,10 +398,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
                     GraphicsExtensions.CheckGLError();
                     if (multiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                    {
                         GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
+                        GraphicsExtensions.CheckGLError();
+                    }
                     else
+                    {
                         GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
-                    GraphicsExtensions.CheckGLError();
+                        GraphicsExtensions.CheckGLError();
+                    }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         stencil = depth;
@@ -407,10 +417,15 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
                             GraphicsExtensions.CheckGLError();
                             if (multiSampleCount > 0 && GL.RenderbufferStorageMultisample != null)
+                            {
                                 GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
+                                GraphicsExtensions.CheckGLError();
+                            }
                             else
+                            {
                                 GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
-                            GraphicsExtensions.CheckGLError();
+                                GraphicsExtensions.CheckGLError();
+                            }
                         }
                     }
                 }
