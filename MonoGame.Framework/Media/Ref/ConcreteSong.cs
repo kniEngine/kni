@@ -14,17 +14,6 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
-		internal float Volume
-		{
-			get { throw new PlatformNotSupportedException(); }
-			set { throw new PlatformNotSupportedException(); }			
-		}
-
-        internal TimeSpan Position
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
         public override Album Album
         {
             get { throw new PlatformNotSupportedException(); }
