@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             string name = Path.GetFileNameWithoutExtension(path);
-            Uri streamSource = new Uri(path);
+            Uri streamSource = new Uri(path, UriKind.RelativeOrAbsolute);
             return existingInstance ?? new Song(name, streamSource, durationMs);
         }
     }

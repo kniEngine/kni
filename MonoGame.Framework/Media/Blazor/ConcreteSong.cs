@@ -22,65 +22,44 @@ namespace Microsoft.Xna.Platform.Media
             this._streamSource = streamSource;
         }
 
-		internal float Volume
-		{
-			get
-			{
-                throw new NotImplementedException();
-            }
-			
-			set
-			{
-                throw new NotImplementedException();
-            }			
-		}
-
-        internal TimeSpan Position
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public override Album Album
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Album; }
         }
 
         public override Artist Artist
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Artist; }
         }
 
         public override Genre Genre
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Genre; }
         }
 
         public override TimeSpan Duration
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Duration; }
         }
 
         public override bool IsProtected
         {
-            get { throw new NotImplementedException(); }
+            get { return base.IsProtected; }
         }
 
         public override bool IsRated
         {
-            get { throw new NotImplementedException(); }
+            get { return base.IsRated; }
         }
 
         internal override string Filename
         {
-            get { throw new NotImplementedException(); }
+            get { return StreamSource.OriginalString; }
         }
 
         public override string Name
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Name; }
         }
 
         public override int PlayCount
