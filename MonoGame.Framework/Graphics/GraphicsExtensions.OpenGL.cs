@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.OpenGL;
 
 
@@ -69,11 +70,4 @@ namespace Microsoft.Xna.Framework.Graphics
 
     }
         
-    internal class OpenGLException : Exception
-    {
-        public OpenGLException(string message)
-            : base(message)
-        {
-        }
-    }
 }

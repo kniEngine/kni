@@ -1073,4 +1073,13 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
     }
+
+
+    internal class OpenGLException : Exception
+    {
+        public OpenGLException(string message)
+            : base(message)
+        {
+        }
+    }
 }
