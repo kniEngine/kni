@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                try { return MonoGame.OpenGL.GL.GetString(MonoGame.OpenGL.StringName.Renderer); }
+                try { return OpenGL.GL.GetString(OpenGL.StringName.Renderer); }
                 catch { return string.Empty; }
             }
             set { }

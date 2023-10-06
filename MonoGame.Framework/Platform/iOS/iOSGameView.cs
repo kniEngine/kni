@@ -81,7 +81,7 @@ using CoreGraphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Graphics;
 
 

@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Graphics;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Framework.Graphics
