@@ -44,7 +44,9 @@ namespace Microsoft.Xna.Framework.Graphics
             ErrorCode error = GL.GetError();
             //Console.WriteLine(error);
             if (error != ErrorCode.NoError)
-                throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
+            {
+                throw new OpenGLException("GL.GetError() returned " + error.ToString());
+            }
         }
 
         [Conditional("DEBUG")]
@@ -54,13 +56,13 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 GraphicsExtensions.CheckGLError();
             }
-            catch (MonoGameGLException ex)
+            catch (OpenGLException ex)
             {
 #if ANDROID
-                // Todo: Add generic MonoGame logging interface
-                Android.Util.Log.Debug("MonoGame", "MonoGameGLException at " + location + " - " + ex.Message);
+                // Todo: Add generic logging interface
+                Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
 #else
-                Debug.WriteLine("MonoGameGLException at " + location + " - " + ex.Message);
+                Debug.WriteLine("OpenGLException at " + location + " - " + ex.Message);
 #endif
             }
         }
@@ -89,9 +91,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
     }
         
-    internal class MonoGameGLException : Exception
+    internal class OpenGLException : Exception
     {
-        public MonoGameGLException(string message)
+        public OpenGLException(string message)
             : base(message)
         {
         }

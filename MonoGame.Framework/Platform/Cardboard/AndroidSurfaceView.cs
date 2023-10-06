@@ -404,9 +404,9 @@ namespace Microsoft.Xna.Framework
                 if (handler != null)
                     handler(this, EventArgs.Empty);
             }
-            catch (MonoGameGLException ex)
+            catch (OpenGLException ex)
             {
-                Log.Error("AndroidGameView", "GL Exception occurred during RunIteration {0}", ex.Message);
+                Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
             }
         }
 
