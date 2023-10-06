@@ -39,13 +39,13 @@ namespace Microsoft.Xna.Platform.Graphics
         internal SamplerState _glLastSamplerState;
 
         internal static void ToGLSurfaceFormat(SurfaceFormat format,
-                GraphicsDeviceStrategy deviceStrategy,
+                GraphicsContextStrategy contextStrategy,
                 out WebGLInternalFormat glInternalFormat,
                 out WebGLFormat glFormat,
                 out WebGLTexelType glType,
                 out bool glIsCompressedTexture)
         {
-            bool supportsS3tc = deviceStrategy.Capabilities.SupportsS3tc;
+            bool supportsS3tc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsS3tc;
             //bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
 
             switch (format)
@@ -101,9 +101,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            var GL = deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
+        internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
@@ -215,7 +215,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
             }
         }
 

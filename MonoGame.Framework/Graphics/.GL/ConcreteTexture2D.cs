@@ -231,7 +231,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             _glTarget = TextureTarget.Texture2D;
-            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
+                out _glInternalFormat,
+                out _glFormat,
+                out _glType);
 
             Threading.EnsureUIThread();
             {

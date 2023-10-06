@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy.Context.DeviceStrategy, width, height, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, width, height, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
             }
         }
 
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy.CurrentContext.Strategy);
 
             base.Dispose(disposing);
         }
