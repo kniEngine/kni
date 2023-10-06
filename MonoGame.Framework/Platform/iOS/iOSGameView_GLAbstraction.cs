@@ -66,7 +66,7 @@ non-infringement.
 */
 #endregion License
 
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 using System;
 
 namespace Microsoft.Xna.Framework

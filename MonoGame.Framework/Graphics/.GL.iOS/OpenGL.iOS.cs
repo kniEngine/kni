@@ -8,7 +8,7 @@ using ObjCRuntime;
 using System.Security;
 using OpenGLES;
 
-namespace MonoGame.OpenGL
+namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     internal partial class GL
 	{

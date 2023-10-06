@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
-using MonoGame.OpenGL;
-using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 
 
 namespace Microsoft.Xna.Platform.Graphics

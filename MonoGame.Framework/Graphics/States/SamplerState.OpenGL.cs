@@ -4,8 +4,8 @@
 
 using System;
 using System.Diagnostics;
-using MonoGame.OpenGL;
-using ExtTextureFilterAnisotropic = MonoGame.OpenGL.TextureParameterName;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using ExtTextureFilterAnisotropic = Microsoft.Xna.Platform.Graphics.OpenGL.TextureParameterName;
 
 namespace Microsoft.Xna.Framework.Graphics
 {

@@ -6,8 +6,8 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.OpenGL;
-using GetParamName = MonoGame.OpenGL.GetPName;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 
 
 namespace Microsoft.Xna.Platform.Graphics

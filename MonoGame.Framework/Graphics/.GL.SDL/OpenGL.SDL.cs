@@ -6,7 +6,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 
-namespace MonoGame.OpenGL
+namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     partial class GL
     {
