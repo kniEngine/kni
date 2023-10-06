@@ -10,14 +10,9 @@ namespace Microsoft.Xna.Framework.Graphics
 	public class DynamicIndexBuffer : IndexBuffer
 	{
 
-        public bool IsContentLost
-        {
-            get
-            {
+        public bool IsContentLost { get { return _strategy.ToConcrete<ConcreteDynamicIndexBuffer>().IsContentLost; } }
 
-                throw new NotImplementedException("IsContentLost");
-            }
-        }
+        public event EventHandler<EventArgs> ContentLost;
 
    		public DynamicIndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
             this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage)

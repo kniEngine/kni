@@ -10,15 +10,11 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public class DynamicVertexBuffer : VertexBuffer
     {
-        public bool IsContentLost
-        {
-            get
-            {
-                throw new NotImplementedException("IsContentLost");
-            }
-        }
 
-		
+        public bool IsContentLost { get { return _strategy.ToConcrete<ConcreteDynamicVertexBuffer>().IsContentLost; } }
+
+        public event EventHandler<EventArgs> ContentLost;
+
 		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
             : this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
         {
