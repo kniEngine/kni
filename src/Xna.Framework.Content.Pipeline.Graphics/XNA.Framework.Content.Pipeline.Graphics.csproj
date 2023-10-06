@@ -193,7 +193,6 @@
   
   <ItemGroup>
     <Compile Include="ExternalTool.cs" />
-    <Compile Include="Utilities\PathHelper.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
   </ItemGroup>
   

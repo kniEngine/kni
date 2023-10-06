@@ -168,14 +168,8 @@
     <Compile Include="Utilities\PathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
-      <Link>Utilities\CurrentPlatform.cs</Link>
-    </Compile>
     <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
       <Link>Utilities\ReflectionHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MonoGame.Framework\Graphics\GraphicsExtensions.cs">
-      <Link>Utilities\GraphicsExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\MonoGame.Framework\Content\ContentExtensions.cs">
       <Link>Utilities\ContentExtensions.cs</Link>
