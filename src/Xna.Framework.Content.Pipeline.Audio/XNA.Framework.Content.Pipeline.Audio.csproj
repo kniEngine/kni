@@ -48,16 +48,12 @@
 
   <ItemGroup>
     <Compile Include="ExternalTool.cs" />
-    <Compile Include="Utilities\PathHelper.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterBase.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
-      <Link>Utilities\ReflectionHelpers.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
