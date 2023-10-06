@@ -77,10 +77,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="nkast.Wasm.Audio" Version="6.0.3" />
-    <PackageReference Include="nkast.Wasm.Canvas" Version="6.0.3" />
-    <PackageReference Include="nkast.Wasm.Dom" Version="6.0.3" />
-    <PackageReference Include="nkast.Wasm.XHR" Version="6.0.3" />
+    <PackageReference Include="nkast.Wasm.Audio" Version="6.0.4" />
+    <PackageReference Include="nkast.Wasm.Canvas" Version="6.0.4" />
+    <PackageReference Include="nkast.Wasm.Dom" Version="6.0.4" />
+    <PackageReference Include="nkast.Wasm.XHR" Version="6.0.4" />
   </ItemGroup>
 
   <Import Project="Blazor.targets" />
