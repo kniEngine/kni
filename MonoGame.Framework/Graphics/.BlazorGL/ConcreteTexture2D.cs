@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {
             _glTarget = WebGLTextureTarget.TEXTURE_2D;
-            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy,
+            ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                 out _glInternalFormat,
                 out _glFormat,
                 out _glType,
@@ -276,7 +276,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy.CurrentContext.Strategy);
 
             base.Dispose(disposing);
         }

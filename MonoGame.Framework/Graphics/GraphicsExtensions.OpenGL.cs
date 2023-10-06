@@ -4,7 +4,8 @@
 
 using System;
 using System.Diagnostics;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -67,35 +68,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        [Conditional("DEBUG")]
-        public static void CheckFramebufferStatus()
-        {
-            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-            switch (status)
-            {
-                case FramebufferErrorCode.FramebufferComplete:
-                    return;
-                case FramebufferErrorCode.FramebufferIncompleteAttachment:
-                    throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
-                case FramebufferErrorCode.FramebufferIncompleteMissingAttachment:
-                    throw new InvalidOperationException("No images are attached to the framebuffer.");
-                case FramebufferErrorCode.FramebufferUnsupported:
-                    throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
-                case FramebufferErrorCode.FramebufferIncompleteMultisample:
-                    throw new InvalidOperationException("Not all attached images have the same number of samples.");
-
-                default:
-                    throw new InvalidOperationException("Framebuffer Incomplete.");
-            }
-        }
-
     }
         
-    internal class OpenGLException : Exception
-    {
-        public OpenGLException(string message)
-            : base(message)
-        {
-        }
-    }
 }

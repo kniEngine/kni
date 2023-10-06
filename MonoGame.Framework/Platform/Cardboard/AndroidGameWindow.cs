@@ -10,7 +10,7 @@ using Android.OS;
 using Android.Views;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Framework

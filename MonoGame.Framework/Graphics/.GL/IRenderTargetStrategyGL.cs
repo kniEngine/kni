@@ -4,7 +4,7 @@
 
 // Copyright (C)2023 Nick Kastellanos
 
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 namespace Microsoft.Xna.Platform.Graphics
 {

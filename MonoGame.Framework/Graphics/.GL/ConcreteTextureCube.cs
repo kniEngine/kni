@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
-using MonoGame.OpenGL;
-using GLPixelFormat = MonoGame.OpenGL.PixelFormat;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -194,7 +194,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
                 GraphicsExtensions.CheckGLError();
 
-                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
+                    out _glInternalFormat,
+                    out _glFormat,
+                    out _glType);
 
                 for (int i = 0; i < 6; i++)
                 {

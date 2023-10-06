@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -106,7 +106,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(_glTarget, _glTexture);
                 GraphicsExtensions.CheckGLError();
 
-                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy.Context.DeviceStrategy, out _glInternalFormat, out _glFormat, out _glType);
+                ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
+                    out _glInternalFormat,
+                    out _glFormat,
+                    out _glType);
 
                 GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
                 GraphicsExtensions.CheckGLError();

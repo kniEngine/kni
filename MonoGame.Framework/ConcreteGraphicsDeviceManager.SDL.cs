@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
-using ColorFormat = MonoGame.OpenGL.ColorFormat;
+using ColorFormat = Microsoft.Xna.Platform.Graphics.OpenGL.ColorFormat;
 
 namespace Microsoft.Xna.Platform
 {

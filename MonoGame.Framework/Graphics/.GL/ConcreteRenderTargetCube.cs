@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
             {
-                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy.Context.DeviceStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
+                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy.CurrentContext.Strategy);
 
 
             base.Dispose(disposing);

@@ -21,7 +21,7 @@ using ObjCRuntime;
 #endif
 
 
-namespace MonoGame.OpenGL
+namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     internal enum BufferAccess
     {

@@ -8,7 +8,7 @@ using Android.Opengl;
 using Javax.Microedition.Khronos.Egl;
 using MonoGame.Framework.Utilities;
 
-namespace MonoGame.OpenGL
+namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     internal partial class GL
     {

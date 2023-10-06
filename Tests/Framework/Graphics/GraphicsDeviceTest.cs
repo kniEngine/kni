@@ -11,7 +11,7 @@ using MonoGame.Tests.ContentPipeline;
 using NUnit.Framework;
 using Microsoft.Xna.Platform.Graphics;
 #if DESKTOPGL
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 #endif
 
 namespace MonoGame.Tests.Graphics

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.OpenGL;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;
         internal static void ToGLSurfaceFormat(SurfaceFormat format,
-            GraphicsDeviceStrategy deviceStrategy,
+            GraphicsContextStrategy contextStrategy,
             out PixelInternalFormat glInternalFormat,
             out PixelFormat glFormat,
             out PixelType glType)
@@ -55,16 +55,16 @@ namespace Microsoft.Xna.Platform.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = deviceStrategy.Capabilities.SupportsSRgb;
-            bool supportsS3tc = deviceStrategy.Capabilities.SupportsS3tc;
-            bool supportsPvrtc = deviceStrategy.Capabilities.SupportsPvrtc;
-            bool supportsEtc1 = deviceStrategy.Capabilities.SupportsEtc1;
-            bool supportsEtc2 = deviceStrategy.Capabilities.SupportsEtc2;
-            bool supportsAtitc = deviceStrategy.Capabilities.SupportsAtitc;
-            bool supportsFloat = deviceStrategy.Capabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = deviceStrategy.Capabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = deviceStrategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && deviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
+            bool supportsSRgb = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsSRgb;
+            bool supportsS3tc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsEtc2;
+            bool supportsAtitc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsAtitc;
+            bool supportsFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsNormalized;
+            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
 
             switch (format)
             {
@@ -315,8 +315,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
+            GraphicsDeviceStrategy deviceStrategy = contextStrategy.Context.DeviceStrategy;
+
             int color = 0;
             int depth = 0;
             int stencil = 0;
@@ -441,7 +443,7 @@ namespace Microsoft.Xna.Platform.Graphics
             renderTargetGL.GLStencilBuffer = stencil;
         }
 
-        internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsDeviceStrategy deviceStrategy)
+        internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
             int color = 0;
             int depth = 0;
@@ -470,7 +472,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
 
-                deviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
             }
         }
 
