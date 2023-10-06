@@ -992,7 +992,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
 
-                GraphicsExtensions.CheckFramebufferStatus();
+                CheckFramebufferStatus();
 
                 _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
             }
@@ -1050,5 +1050,27 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        [Conditional("DEBUG")]
+        public static void CheckFramebufferStatus()
+        {
+            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            switch (status)
+            {
+                case FramebufferErrorCode.FramebufferComplete:
+                    return;
+                case FramebufferErrorCode.FramebufferIncompleteAttachment:
+                    throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
+                case FramebufferErrorCode.FramebufferIncompleteMissingAttachment:
+                    throw new InvalidOperationException("No images are attached to the framebuffer.");
+                case FramebufferErrorCode.FramebufferUnsupported:
+                    throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
+                case FramebufferErrorCode.FramebufferIncompleteMultisample:
+                    throw new InvalidOperationException("Not all attached images have the same number of samples.");
+
+                default:
+                    throw new InvalidOperationException("Framebuffer Incomplete.");
+            }
+        }
     }
 }

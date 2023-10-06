@@ -48,27 +48,5 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        [Conditional("DEBUG")]
-        public static void CheckFramebufferStatus()
-        {
-            WebGLFramebufferStatus status = GL.CheckFramebufferStatus(WebGLFramebufferType.FRAMEBUFFER);
-            switch (status)
-            {
-                case WebGLFramebufferStatus.FRAMEBUFFER_COMPLETE:
-                    return;
-                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-                    throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
-                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    throw new InvalidOperationException("No images are attached to the framebuffer.");
-                case WebGLFramebufferStatus.FRAMEBUFFER_UNSUPPORTED:
-                    throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
-                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-                    throw new InvalidOperationException("Not all attached images have the same dimensions.");
-
-                default:
-                    throw new InvalidOperationException("Framebuffer Incomplete.");
-            }
-        }
-
     }
 }

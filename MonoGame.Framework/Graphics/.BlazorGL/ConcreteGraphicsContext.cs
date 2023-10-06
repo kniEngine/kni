@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -850,7 +851,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
 
-                GraphicsExtensions.CheckFramebufferStatus();
+                CheckFramebufferStatus();
 
                 _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
             }
@@ -908,5 +909,27 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+
+        [Conditional("DEBUG")]
+        public void CheckFramebufferStatus()
+        {
+            WebGLFramebufferStatus status = GL.CheckFramebufferStatus(WebGLFramebufferType.FRAMEBUFFER);
+            switch (status)
+            {
+                case WebGLFramebufferStatus.FRAMEBUFFER_COMPLETE:
+                    return;
+                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+                    throw new InvalidOperationException("Not all framebuffer attachment points are framebuffer attachment complete.");
+                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+                    throw new InvalidOperationException("No images are attached to the framebuffer.");
+                case WebGLFramebufferStatus.FRAMEBUFFER_UNSUPPORTED:
+                    throw new InvalidOperationException("The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
+                case WebGLFramebufferStatus.FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+                    throw new InvalidOperationException("Not all attached images have the same dimensions.");
+
+                default:
+                    throw new InvalidOperationException("Framebuffer Incomplete.");
+            }
+        }
     }
 }
