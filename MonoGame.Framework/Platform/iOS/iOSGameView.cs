@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework
 		//        Some level of cooperation with the UIView/Layer will
 		//        probably always be necessary, unfortunately.
         private GLGraphicsContext _glContext;
-		private IOpenGLApi _glapi;
+		private GlesApi _glapi;
 
 		private void CreateGLContext()
 		{
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework
 			}
 
 			this.MakeCurrent();
-            _glapi = new Gles20Api();
+            _glapi = new GlesApi();
 		}
 
 		private void DestroyContext()

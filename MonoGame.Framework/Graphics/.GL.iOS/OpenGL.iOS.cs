@@ -4,8 +4,6 @@
 
 using System;
 using MonoGame.Framework.Utilities;
-using ObjCRuntime;
-using System.Security;
 using OpenGLES;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
@@ -74,6 +72,61 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             }
         }
 
+    }
+
+
+    internal class GlesApi
+    {
+        public GlesApi()
+        {
+            GL.LoadEntryPoints();
+        }
+
+        public void BindFramebuffer(FramebufferTarget target, int framebuffer)
+        {
+            GL.BindFramebuffer(target, framebuffer);
+        }
+
+        public void BindRenderbuffer(RenderbufferTarget target, int renderbuffer)
+        {
+            GL.BindRenderbuffer(target, renderbuffer);
+        }
+
+        public void DeleteFramebuffer(int framebuffers)
+        {
+            GL.DeleteFramebuffer(framebuffers);
+        }
+
+        public void DeleteRenderbuffer(int renderbuffers)
+        {
+            GL.DeleteRenderbuffer(renderbuffers);
+        }
+
+        public void FramebufferRenderbuffer(
+            FramebufferTarget target, FramebufferAttachment attachment, RenderbufferTarget renderbuffertarget, int renderbuffer)
+        {
+            GL.FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+        }
+
+        public int GenFramebuffer()
+        {
+            return GL.GenFramebuffer();
+        }
+
+        public int GenRenderbuffer()
+        {
+            return GL.GenRenderbuffer();
+        }
+
+        public void Scissor(int x, int y, int width, int height)
+        {
+            GL.Scissor(x, y, width, height);
+        }
+
+        public void Viewport(int x, int y, int width, int height)
+        {
+            GL.Viewport(x, y, width, height);
+        }
     }
 }
 
