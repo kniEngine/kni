@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
 
+        internal Dictionary<int, ShaderProgram> ProgramCache { get { return _programCache; } }
+
         internal bool _supportsInvalidateFramebuffer;
         internal bool _supportsBlitFramebuffer;
 
@@ -100,67 +102,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
 
-        internal ShaderProgram GetProgram(VertexShader vertexShader, PixelShader pixelShader, int shaderProgramHash)
-        {   
-            ShaderProgram shaderProgram;
-            if(_programCache.TryGetValue(shaderProgramHash, out shaderProgram))
-                return shaderProgram;
-
-            // the key does not exist so we need to link the programs
-            shaderProgram = CreateProgram(vertexShader, pixelShader);
-            _programCache.Add(shaderProgramHash, shaderProgram);
-            return shaderProgram;
-        }
-
-        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
-        {
-            var GL = CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            WebGLProgram program = GL.CreateProgram();
-            GraphicsExtensions.CheckGLError();
-
-            GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
-            GraphicsExtensions.CheckGLError();
-
-            GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
-            GraphicsExtensions.CheckGLError();
-
-            //vertexShader.BindVertexAttributes(program);
-
-            GL.LinkProgram(program);
-            GraphicsExtensions.CheckGLError();
-
-            GL.UseProgram(program);
-            GraphicsExtensions.CheckGLError();
-
-            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
-
-            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
-
-            bool linkStatus;
-            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
-
-            if (linkStatus == true)
-            {
-                return new ShaderProgram(program);
-            }
-            else
-            {
-                string log = GL.GetProgramInfoLog(program);
-                vertexShader.Dispose();
-                pixelShader.Dispose();
-                program.Dispose();
-                throw new InvalidOperationException("Unable to link effect program");
-            }
-        }
 
         private void ClearProgramCache()
         {
-            foreach (ShaderProgram shaderProgram in _programCache.Values)
+            foreach (ShaderProgram shaderProgram in ProgramCache.Values)
             {
                 shaderProgram.Program.Dispose();
             }
-            _programCache.Clear();
+            ProgramCache.Clear();
         }
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
@@ -207,7 +156,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (disposing)
             {
-
             }
 
             base.Dispose(disposing);
