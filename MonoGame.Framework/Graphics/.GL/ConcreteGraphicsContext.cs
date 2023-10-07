@@ -280,8 +280,15 @@ namespace Microsoft.Xna.Platform.Graphics
         private unsafe void ActivateShaderProgram()
         {
             // Lookup the shader program.
-            int programHash = GetCurrentShaderProgramHash2();
-            ShaderProgram shaderProgram = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetProgram(VertexShader, PixelShader, programHash);
+            ShaderProgram shaderProgram;
+            int shaderProgramHash = GetCurrentShaderProgramHash2();
+            if (!this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
+            {
+                // the key does not exist so we need to link the programs
+                shaderProgram = CreateProgram(this.VertexShader, this.PixelShader);
+                this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
+            }
+
             if (shaderProgram.Program == -1)
                 return;
 
@@ -346,6 +353,53 @@ namespace Microsoft.Xna.Platform.Graphics
             
             GL.Uniform4(posFixupLoc, _posFixup);
             GraphicsExtensions.CheckGLError();
+        }
+
+        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
+        {
+            int program = GL.CreateProgram();
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
+            GraphicsExtensions.CheckGLError();
+
+            //vertexShader.BindVertexAttributes(program);
+
+            GL.LinkProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            GL.UseProgram(program);
+            GraphicsExtensions.CheckGLError();
+
+            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
+
+            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
+
+            int linkStatus;
+            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
+            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
+
+            if (linkStatus == (int)Bool.True)
+            {
+                return new ShaderProgram(program);
+            }
+            else
+            {
+                string log = GL.GetProgramInfoLog(program);
+                Console.WriteLine(log);
+                GL.DetachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
+                GL.DetachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
+
+                if (GL.IsProgram(program))
+                {
+                    GL.DeleteProgram(program);
+                    GraphicsExtensions.CheckGLError();
+                }
+                throw new InvalidOperationException("Unable to link effect program");
+            }
         }
 
         internal int GetUniformLocation(ShaderProgram shaderProgram, string name)

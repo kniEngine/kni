@@ -11,11 +11,14 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
+
 namespace Microsoft.Xna.Platform.Graphics
 {
     internal abstract class ConcreteGraphicsDeviceGL : GraphicsDeviceStrategy
     {
         private readonly Dictionary<int, ShaderProgram> _programCache = new Dictionary<int, ShaderProgram>();
+
+        internal Dictionary<int, ShaderProgram> ProgramCache { get { return _programCache; } }
 
         internal bool _supportsInvalidateFramebuffer;
         internal bool _supportsBlitFramebuffer;
@@ -228,68 +231,9 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal ShaderProgram GetProgram(VertexShader vertexShader, PixelShader pixelShader, int shaderProgramHash)
-        {
-            ShaderProgram shaderProgram;
-            if (_programCache.TryGetValue(shaderProgramHash, out shaderProgram))
-                return shaderProgram;
-
-            // the key does not exist so we need to link the programs
-            shaderProgram = CreateProgram(vertexShader, pixelShader);
-            _programCache.Add(shaderProgramHash, shaderProgram);
-            return shaderProgram;
-        }
-
-        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
-        {
-            int program = GL.CreateProgram();
-            GraphicsExtensions.CheckGLError();
-
-            GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
-            GraphicsExtensions.CheckGLError();
-
-            GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
-            GraphicsExtensions.CheckGLError();
-
-            //vertexShader.BindVertexAttributes(program);
-
-            GL.LinkProgram(program);
-            GraphicsExtensions.CheckGLError();
-
-            GL.UseProgram(program);
-            GraphicsExtensions.CheckGLError();
-
-            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
-
-            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(program);
-
-            int linkStatus;
-            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
-            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
-
-            if (linkStatus == (int)Bool.True)
-            {
-                return new ShaderProgram(program);
-            }
-            else
-            { 
-                string log = GL.GetProgramInfoLog(program);
-                Console.WriteLine(log);
-                GL.DetachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
-                GL.DetachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
-                
-                if (GL.IsProgram(program))
-                {
-                    GL.DeleteProgram(program);
-                    GraphicsExtensions.CheckGLError();
-                }
-                throw new InvalidOperationException("Unable to link effect program");
-            }
-        }
-
         private void ClearProgramCache()
         {
-            foreach (ShaderProgram shaderProgram in _programCache.Values)
+            foreach (ShaderProgram shaderProgram in ProgramCache.Values)
             {
                 if (GL.IsProgram(shaderProgram.Program))
                 {
@@ -297,7 +241,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GraphicsExtensions.CheckGLError();
                 }
             }
-            _programCache.Clear();
+            ProgramCache.Clear();
         }
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
