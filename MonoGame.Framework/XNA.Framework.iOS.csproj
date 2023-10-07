@@ -518,7 +518,6 @@
     <Compile Include="Platform\iOS\ConcreteGame.cs" />
     <Compile Include="Platform\iOS\iOSGameViewController.cs" />
     <Compile Include="Platform\iOS\iOSGameView.cs" />
-    <Compile Include="Platform\iOS\iOSGameView_GLAbstraction.cs" />
     <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />
     <Compile Include="Platform\iOS\iOSGameWindow.cs" />
     <Compile Include="Platform\iOS\OrientationConverter.cs" />
