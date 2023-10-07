@@ -6,11 +6,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Android.Views;
 using Android.Runtime;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -113,22 +114,22 @@ namespace Microsoft.Xna.Platform.Graphics
                     return true;
                 case GraphicsProfile.HiDef:
                     int maxTextureSize;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize);                    
+                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
                     if (maxTextureSize >= 4096) return true;
                     return false;
                 case GraphicsProfile.FL10_0:
                     int maxTextureSize2;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize2);                    
+                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
                     if (maxTextureSize2 >= 8192) return true;
                     return false;
                 case GraphicsProfile.FL10_1:
                     int maxVertexBufferSlots;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxVertexAttribs, out maxVertexBufferSlots);
+                    GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
                     if (maxVertexBufferSlots >= 32) return true;
                     return false;
                 case GraphicsProfile.FL11_0:
                     int maxTextureSize3;
-                    MonoGame.OpenGL.GL.GetInteger(MonoGame.OpenGL.GetPName.MaxTextureSize, out maxTextureSize3);                    
+                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
                     if (maxTextureSize3 >= 16384) return true;
                     return false;
                 case GraphicsProfile.FL11_1:

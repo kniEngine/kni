@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Framework
@@ -697,8 +698,8 @@ namespace Microsoft.Xna.Framework
 
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GetErrorAsString());
-            var createdVersion = new MonoGame.OpenGL.GLESVersion();
-            foreach (var v in MonoGame.OpenGL.GLESVersion.GetSupportedGLESVersions())
+            GLESVersion createdVersion = new GLESVersion();
+            foreach (GLESVersion v in GLESVersion.GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
 
@@ -794,8 +795,8 @@ namespace Microsoft.Xna.Framework
                     gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                 }
 
-                if (MonoGame.OpenGL.GL.GetError == null)
-                    MonoGame.OpenGL.GL.LoadEntryPoints();
+                if (GL.GetError == null)
+                    GL.LoadEntryPoints();
             }
             catch (Exception ex)
             {
