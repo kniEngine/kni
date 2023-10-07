@@ -8,9 +8,10 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 using Android.Views;
 using Android.Graphics;
-using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -137,7 +138,7 @@ namespace Microsoft.Xna.Platform.Media
                 GraphicsExtensions.CheckGLError();
 
                 // Read the pixel data from the framebuffer
-                GL.ReadPixels(0, 0, Video.Width, Video.Height, MonoGame.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
+                GL.ReadPixels(0, 0, Video.Width, Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
                 GraphicsExtensions.CheckGLError();
 
                 // Dettach framebuffer

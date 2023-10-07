@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
-            GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
+            GL.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
             GraphicsExtensions.CheckGLError();
 
 #if GLES
@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int anisotropy = 0;
             if (SupportsTextureFilterAnisotropic)
             {
-                GL.GetInteger((GetPName)GetParamName.MaxTextureMaxAnisotropyExt, out anisotropy);
+                GL.GetInteger(GetParamName.MaxTextureMaxAnisotropyExt, out anisotropy);
                 GraphicsExtensions.CheckGLError();
             }
             MaxTextureAnisotropy = anisotropy;
@@ -127,13 +127,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             SupportsDepthClamp = GL.Extensions.Contains("GL_ARB_depth_clamp");
 
-            GL.GetInteger(GetPName.MaxTextureImageUnits, out _maxTextureSlots);
+            GL.GetInteger(GetParamName.MaxTextureImageUnits, out _maxTextureSlots);
             GraphicsExtensions.CheckGLError();
-            GL.GetInteger(GetPName.MaxVertexTextureImageUnits, out _maxVertexTextureSlots);
+            GL.GetInteger(GetParamName.MaxVertexTextureImageUnits, out _maxVertexTextureSlots);
             GraphicsExtensions.CheckGLError();
             // fix for bad GL drivers
             int maxCombinedTextureImageUnits;
-            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
+            GL.GetInteger(GetParamName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
             _maxTextureSlots = Math.Min(_maxTextureSlots, maxCombinedTextureImageUnits);
             _maxVertexTextureSlots = Math.Min(_maxVertexTextureSlots, maxCombinedTextureImageUnits);
             // limit texture slots to Reach profile limit until we implement profile detection.
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _maxVertexTextureSlots = Math.Min(_maxTextureSlots, 0); // disable vertex textures until we implement it in WebGL.
 
             int maxVertexAttribs;
-            GL.GetInteger(GetPName.MaxVertexAttribs, out maxVertexAttribs);
+            GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexAttribs);
             GraphicsExtensions.CheckGLError();
             _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
             _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 #if DESKTOPGL
-            GL.GetInteger(GetPName.MaxDrawBuffers, out _maxDrawBuffers);
+            GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GraphicsExtensions.CheckGLError();
 #endif
         }
