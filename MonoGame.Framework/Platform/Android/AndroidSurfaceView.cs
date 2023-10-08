@@ -699,7 +699,7 @@ namespace Microsoft.Xna.Framework
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GetErrorAsString());
             GLESVersion createdVersion = new GLESVersion();
-            foreach (GLESVersion v in GLESVersion.GetSupportedGLESVersions())
+            foreach (GLESVersion v in GL.GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
 
