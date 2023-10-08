@@ -33,11 +33,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         private OGL_DROID() : base()
         {
-            LoadPlatformEntryPoints();
         }
 
 
-        private void LoadPlatformEntryPoints()
+        protected override IntPtr GetNativeLibrary()
         {
             Android.Util.Log.Verbose("GL", "Loading Entry Points");
 
@@ -71,6 +70,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                 if (libGL != IntPtr.Zero)
                     Library = libGL;
             }
+
+            return Library;
         }
 
         protected override T LoadFunction<T>(string function)

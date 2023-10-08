@@ -510,10 +510,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         protected OGL()
         {
+            GetNativeLibrary();
             LoadEntryPoints();
             LoadExtensions();
         }
 
+        protected abstract IntPtr GetNativeLibrary();
         protected abstract T LoadFunction<T>(string function);
         protected abstract T LoadFunctionOrNull<T>(string function);
         
