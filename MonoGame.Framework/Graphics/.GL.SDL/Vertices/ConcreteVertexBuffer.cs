@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLVertexBuffer != 0);
 
+            var GL = OGL.Current;
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GraphicsExtensions.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;

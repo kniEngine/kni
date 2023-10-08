@@ -42,6 +42,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
+            var GL = OGL.Current;
+
             for (int i = 0; i < _actualSamplers.Length; i++)
             {
                 SamplerState sampler = _actualSamplers[i];

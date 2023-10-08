@@ -65,6 +65,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
+            var GL = OGL.Current;
+
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
@@ -115,6 +117,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
+            var GL = OGL.Current;
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
@@ -163,6 +167,8 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             Threading.EnsureUIThread();
+
+            var GL = OGL.Current;
 
 #if GLES
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
@@ -238,6 +244,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Threading.EnsureUIThread();
             {
+                var GL = OGL.Current;
+
                 CreateGLTexture2D(contextStrategy);
 
                 int w = width;
@@ -289,6 +297,8 @@ namespace Microsoft.Xna.Platform.Graphics
        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
         {
             System.Diagnostics.Debug.Assert(_glTexture < 0);
+
+            var GL = OGL.Current;
 
             _glTexture = GL.GenTexture();
             GraphicsExtensions.CheckGLError();

@@ -61,6 +61,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(_ibo == 0);
 
+            var GL = OGL.Current;
+
             int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
             _ibo = GL.GenBuffer();
@@ -79,6 +81,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Threading.EnsureUIThread();
 
             Debug.Assert(GLIndexBuffer != 0);
+
+            var GL = OGL.Current;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             int sizeInBytes = elementSizeInByte * elementCount;
@@ -129,6 +133,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (GraphicsDevice != null && !GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteBuffer(_ibo);
                     GraphicsExtensions.CheckGLError();
                     _ibo = 0;

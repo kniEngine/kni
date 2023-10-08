@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
+            var GL = OGL.Current;
+
             bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
                                   this.ColorDestinationBlend == Blend.Zero &&
                                   this.AlphaSourceBlend == Blend.One &&

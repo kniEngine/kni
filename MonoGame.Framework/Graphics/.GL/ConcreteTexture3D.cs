@@ -60,6 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Threading.EnsureUIThread();
 
             {
+                var GL = OGL.Current;
+
                 int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
@@ -97,6 +99,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Threading.EnsureUIThread();
             {
+                var GL = OGL.Current;
+
                 _glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 

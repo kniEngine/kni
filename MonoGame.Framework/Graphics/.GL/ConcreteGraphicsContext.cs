@@ -67,6 +67,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal OGL GL { get { return OGL.Current; } }
+
         internal ConcreteGraphicsContextGL(GraphicsContext context)
             : base(context)
         {
@@ -1106,7 +1108,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         [Conditional("DEBUG")]
-        public static void CheckFramebufferStatus()
+        public void CheckFramebufferStatus()
         {
             FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             switch (status)

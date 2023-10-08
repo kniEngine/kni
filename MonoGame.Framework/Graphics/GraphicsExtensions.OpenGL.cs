@@ -42,6 +42,8 @@ namespace Microsoft.Xna.Framework.Graphics
         [DebuggerHidden]
         public static void CheckGLError()
         {
+            var GL = OGL.Current;
+
             ErrorCode error = GL.GetError();
             //Console.WriteLine(error);
             if (error != ErrorCode.NoError)

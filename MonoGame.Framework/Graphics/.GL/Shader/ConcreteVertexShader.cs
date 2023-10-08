@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void GetVertexAttributeLocations(int program)
         {
+            var GL = OGL.Current;
+
             for (int i = 0; i < Attributes.Length; i++)
             {
                 Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);

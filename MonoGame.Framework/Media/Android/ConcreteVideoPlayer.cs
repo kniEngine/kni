@@ -74,6 +74,8 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
+            var GL = OGL.Current;
+
             _player = new Android.Media.MediaPlayer();
 
             _glVideoSurfaceTexture = GL.GenTexture();
@@ -111,6 +113,8 @@ namespace Microsoft.Xna.Platform.Media
             }
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+
+            var GL = OGL.Current;
 
             if (_frameAvailable)
             {
@@ -217,6 +221,8 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
+            var GL = OGL.Current;
+
             if (disposing)
             {
                 if (_player != null)

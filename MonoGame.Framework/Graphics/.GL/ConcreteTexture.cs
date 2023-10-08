@@ -51,6 +51,8 @@ namespace Microsoft.Xna.Platform.Graphics
             out PixelFormat glFormat,
             out PixelType glType)
         {
+            var GL = OGL.Current;
+
             glInternalFormat = PixelInternalFormat.Rgba;
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
@@ -64,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bool supportsFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsFloatTextures;
             bool supportsHalfFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
             bool supportsNormalized = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
+            bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
 
             switch (format)
             {
@@ -319,6 +321,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             GraphicsDeviceStrategy deviceStrategy = contextStrategy.Context.DeviceStrategy;
 
+            var GL = OGL.Current;
+
             int color = 0;
             int depth = 0;
             int stencil = 0;
@@ -445,6 +449,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
+            var GL = OGL.Current;
+
             int color = 0;
             int depth = 0;
             int stencil = 0;
@@ -482,6 +488,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteTexture(_glTexture);
                     GraphicsExtensions.CheckGLError();
                 }
@@ -503,6 +511,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteTexture(_glTexture);
                     GraphicsExtensions.CheckGLError();
                 }

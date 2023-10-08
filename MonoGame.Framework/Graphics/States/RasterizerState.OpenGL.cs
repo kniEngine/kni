@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
+            var GL = OGL.Current;
+
             if (force)
             {
                 // Turn off dithering to make sure data returned by Texture.GetData is accurate

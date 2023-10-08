@@ -45,6 +45,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(_vbo == 0);
 
+            var GL = OGL.Current;
+
             //this._vao = GLExt.Oes.GenVertexArray();
             //GLExt.Oes.BindVertexArray(this._vao);
             this._vbo = GL.GenBuffer();
@@ -64,6 +66,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Threading.EnsureUIThread();
 
             Debug.Assert(GLVertexBuffer != 0);
+
+            var GL = OGL.Current;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GraphicsExtensions.CheckGLError();
@@ -139,6 +143,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (GraphicsDevice != null && !GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteBuffer(_vbo);
                     GraphicsExtensions.CheckGLError();
                     _vbo = 0;

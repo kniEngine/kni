@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
+            var GL = OGL.Current;
+
             switch (Filter)
             {
                 case TextureFilter.Point:

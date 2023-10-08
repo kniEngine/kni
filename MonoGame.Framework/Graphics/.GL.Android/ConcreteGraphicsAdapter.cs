@@ -108,6 +108,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
+            var GL = OGL.Current;
+
             switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:

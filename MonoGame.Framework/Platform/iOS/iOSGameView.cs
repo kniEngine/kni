@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework
 		//        Some level of cooperation with the UIView/Layer will
 		//        probably always be necessary, unfortunately.
         private GLGraphicsContext _glContext;
-		private GlesApi _glapi;
+		private OGL _glapi;
 
 		private void CreateGLContext()
 		{
@@ -194,7 +194,9 @@ namespace Microsoft.Xna.Framework
 			}
 
 			this.MakeCurrent();
-            _glapi = new GlesApi();
+
+            OGL_IOS.Initialize();
+            _glapi = OGL.Current;
 		}
 
 		private void DestroyContext()
@@ -217,6 +219,8 @@ namespace Microsoft.Xna.Framework
 		{
 			this.MakeCurrent();
 			
+            var GL = OGL.Current;
+
 			// HACK:  GraphicsDevice itself should be calling
 			//        glViewport, so we shouldn't need to do it
 			//        here and then force the state into
@@ -334,6 +338,8 @@ namespace Microsoft.Xna.Framework
 		//        in the Draw/Update loop handler.
 		public void Present()
 		{
+            var GL = OGL.Current;
+
             AssertNotDisposed();
             AssertValidContext();
 

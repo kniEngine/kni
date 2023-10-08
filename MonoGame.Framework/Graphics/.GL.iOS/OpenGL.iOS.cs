@@ -8,21 +8,32 @@ using OpenGLES;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
-    internal partial class GL
+    internal sealed class OGL_IOS : OGL
 	{
-        public static IntPtr Library = FuncLoader.LoadLibrary("/System/Library/Frameworks/OpenGLES.framework/OpenGLES");
+        public IntPtr Library = FuncLoader.LoadLibrary("/System/Library/Frameworks/OpenGLES.framework/OpenGLES");
+
+        public static void Initialize()
+        {
+            System.Diagnostics.Debug.Assert(OGL._current == null);
+            OGL._current = new OGL_IOS();
+        }
+
+        private OGL_IOS() : base()
+        {
+            LoadPlatformEntryPoints();
+        }
         
-        static partial void LoadPlatformEntryPoints()
+        private void LoadPlatformEntryPoints()
 		{
 			BoundApi = RenderApi.ES;
         }
 
-        private static T LoadFunction<T>(string function)
+        protected override T LoadFunction<T>(string function)
         {
             return FuncLoader.LoadFunction<T>(Library, function);
         }
 
-        private static T LoadFunctionOrNull<T>(string function)
+        protected override T LoadFunctionOrNull<T>(string function)
         {
             return FuncLoader.LoadFunctionOrNull<T>(Library, function);
         }
@@ -74,59 +85,5 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     }
 
-
-    internal class GlesApi
-    {
-        public GlesApi()
-        {
-            GL.LoadEntryPoints();
-        }
-
-        public void BindFramebuffer(FramebufferTarget target, int framebuffer)
-        {
-            GL.BindFramebuffer(target, framebuffer);
-        }
-
-        public void BindRenderbuffer(RenderbufferTarget target, int renderbuffer)
-        {
-            GL.BindRenderbuffer(target, renderbuffer);
-        }
-
-        public void DeleteFramebuffer(int framebuffers)
-        {
-            GL.DeleteFramebuffer(framebuffers);
-        }
-
-        public void DeleteRenderbuffer(int renderbuffers)
-        {
-            GL.DeleteRenderbuffer(renderbuffers);
-        }
-
-        public void FramebufferRenderbuffer(
-            FramebufferTarget target, FramebufferAttachment attachment, RenderbufferTarget renderbuffertarget, int renderbuffer)
-        {
-            GL.FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-        }
-
-        public int GenFramebuffer()
-        {
-            return GL.GenFramebuffer();
-        }
-
-        public int GenRenderbuffer()
-        {
-            return GL.GenRenderbuffer();
-        }
-
-        public void Scissor(int x, int y, int width, int height)
-        {
-            GL.Scissor(x, y, width, height);
-        }
-
-        public void Viewport(int x, int y, int width, int height)
-        {
-            GL.Viewport(x, y, width, height);
-        }
-    }
 }
 

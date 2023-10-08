@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void ApplySamplerTextureUnits(int program)
         {
+            var GL = OGL.Current;
+
             // Assign the texture unit index to the sampler uniforms.
             foreach (SamplerInfo sampler in Samplers)
             {

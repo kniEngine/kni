@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
+            var GL = OGL.Current;
+
             // NOTE: We assume here the program has
             // already been set on the device.
             ShaderProgram program = contextStrategy.ToConcrete<ConcreteGraphicsContext>().ShaderProgram;

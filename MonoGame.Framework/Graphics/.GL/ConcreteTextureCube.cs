@@ -49,6 +49,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Threading.EnsureUIThread();
 
             {
+                var GL = OGL.Current;
+
                 int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 // Use try..finally to make sure dataHandle is freed in case of an error
@@ -89,6 +91,8 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             Threading.EnsureUIThread();
+
+            var GL = OGL.Current;
 
 #if OPENGL && DESKTOPGL
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
@@ -171,6 +175,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Threading.EnsureUIThread();
             {
+                var GL = OGL.Current;
+
                 _glTexture = GL.GenTexture();
                 GraphicsExtensions.CheckGLError();
 

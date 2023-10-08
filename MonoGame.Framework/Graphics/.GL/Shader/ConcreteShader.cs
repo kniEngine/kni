@@ -38,6 +38,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void CreateShader(ShaderType shaderType)
         {
+            var GL = OGL.Current;
+
             _shaderHandle = GL.CreateShader(shaderType);
             GraphicsExtensions.CheckGLError();
             GL.ShaderSource(_shaderHandle, _shaderBytecode);
@@ -68,6 +70,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override void PlatformGraphicsContextLost()
         {
+            var GL = OGL.Current;
+
             if (_shaderHandle != -1)
             {
                 if (GL.IsShader(_shaderHandle))
@@ -90,6 +94,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_shaderHandle != -1)
             {
+                var GL = OGL.Current;
+
                 if (GL.IsShader(_shaderHandle))
                 {
                     GL.DeleteShader(_shaderHandle);

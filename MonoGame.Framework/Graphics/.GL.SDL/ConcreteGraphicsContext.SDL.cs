@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // GL entry points must be loaded after the GL context creation, otherwise some Windows drivers will return only GL 1.3 compatible functions
             try
             {
-                GL.LoadEntryPoints();
+                OGL_SDL.Initialize();
             }
             catch (EntryPointNotFoundException)
             {
