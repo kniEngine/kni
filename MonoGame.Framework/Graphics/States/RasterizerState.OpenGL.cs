@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
+            var GL = context.GL;
+
             if (force)
             {
                 // Turn off dithering to make sure data returned by Texture.GetData is accurate
@@ -27,31 +29,31 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 case CullMode.None:
                     GL.Disable(EnableCap.CullFace);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 case Graphics.CullMode.CullClockwiseFace:
                     GL.Enable(EnableCap.CullFace);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.CullFace(CullFaceMode.Back);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(FrontFaceDirection.Cw);
                     else
                         GL.FrontFace(FrontFaceDirection.Ccw);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 case Graphics.CullMode.CullCounterClockwiseFace:
                     GL.Enable(EnableCap.CullFace);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.CullFace(CullFaceMode.Back);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(FrontFaceDirection.Ccw);
                     else
                         GL.FrontFace(FrontFaceDirection.Cw);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 default:
@@ -75,7 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				    GL.Enable(EnableCap.ScissorTest);
 			    else
 				    GL.Disable(EnableCap.ScissorTest);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
             }
 
@@ -110,12 +112,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                     GL.Enable(EnableCap.PolygonOffsetFill);
                     GL.PolygonOffset(this.SlopeScaleDepthBias, this.DepthBias * depthMul);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.Disable(EnableCap.PolygonOffsetFill);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 context._lastRasterizerState.DepthBias = this.DepthBias;
                 context._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
@@ -129,7 +131,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Enable(EnableCap.DepthClamp);
                 else
                     GL.Disable(EnableCap.DepthClamp);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
             }
 

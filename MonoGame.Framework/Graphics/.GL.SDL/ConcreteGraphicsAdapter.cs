@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -32,7 +33,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                try { return OpenGL.GL.GetString(OpenGL.StringName.Renderer); }
+                try
+                {
+                    var GL = OGL.Current;
+                    return GL.GetString(OpenGL.StringName.Renderer);
+                }
                 catch { return string.Empty; }
             }
             set { }

@@ -8,14 +8,25 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
-    partial class GL
+    internal sealed class OGL_SDL : OGL
     {
-        static partial void LoadPlatformEntryPoints()
+        public static void Initialize()
+        {
+            System.Diagnostics.Debug.Assert(OGL._current == null);
+            OGL._current = new OGL_SDL();
+        }
+
+        private OGL_SDL() : base()
+        {
+            LoadPlatformEntryPoints();
+        }
+
+        private void LoadPlatformEntryPoints()
         {
             BoundApi = RenderApi.GL;
         }
 
-        private static T LoadFunction<T>(string function)
+        protected override T LoadFunction<T>(string function)
         {
             IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 
@@ -25,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             throw new EntryPointNotFoundException(function);
         }
 
-        private static T LoadFunctionOrNull<T>(string function)
+        protected override T LoadFunctionOrNull<T>(string function)
         {
             IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 

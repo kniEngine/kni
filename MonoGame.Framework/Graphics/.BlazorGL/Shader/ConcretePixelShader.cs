@@ -35,11 +35,11 @@ namespace Microsoft.Xna.Platform.Graphics
             foreach (SamplerInfo sampler in Samplers)
             {
                 WebGLUniformLocation loc = GL.GetUniformLocation(program, sampler.name);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 if (loc != null)
                 {
                     GL.Uniform1i(loc, sampler.textureSlot);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
         }

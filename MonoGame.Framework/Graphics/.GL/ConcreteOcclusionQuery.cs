@@ -43,8 +43,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
             _glQueryId = GL.GenQuery();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void PlatformBegin()
@@ -52,11 +54,13 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_inBeginEndPair)
                 throw new InvalidOperationException("End() must be called before calling Begin() again.");
 
+            var GL = OGL.Current;
+
             _inBeginEndPair = true;
             _isComplete = false;
 
             GL.BeginQuery(QueryTarget.SamplesPassed, _glQueryId);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void PlatformEnd()
@@ -64,18 +68,22 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!_inBeginEndPair)
                 throw new InvalidOperationException("Begin() must be called before calling End().");
 
+            var GL = OGL.Current;
+
             _inBeginEndPair = false;
             _queryPerformed = true;
 
             GL.EndQuery(QueryTarget.SamplesPassed);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         private bool PlatformGetResult()
         {
+            var GL = OGL.Current;
+
             int resultReady = 0;
             GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResultAvailable, out resultReady);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             if (resultReady == 0)
             {
@@ -85,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out _pixelCount);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 _isComplete = true;
             }
 
@@ -103,8 +111,10 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteQuery(_glQueryId);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 _glQueryId = -1;
             }

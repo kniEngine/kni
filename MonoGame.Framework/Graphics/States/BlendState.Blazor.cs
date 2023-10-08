@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Enable(WebGLCapability.BLEND);
                 else
                     GL.Disable(WebGLCapability.BLEND);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastBlendEnable = blendEnabled;
             }
 
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BlendEquationSeparate(
                         ToGLBlendEquationMode(this.ColorBlendFunction),
                         ToGLBlendEquationMode(this.AlphaBlendFunction));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
                         context._lastBlendState[i].ColorBlendFunction = this.ColorBlendFunction;
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         ToGLBlendFunc(this.ColorDestinationBlend),
                         ToGLBlendFunc(this.AlphaSourceBlend),
                         ToGLBlendFunc(this.AlphaDestinationBlend));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
                         context._lastBlendState[i].ColorSourceBlend = this.ColorSourceBlend;
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (this.ColorWriteChannels & ColorWriteChannels.Green) != 0,
                     (this.ColorWriteChannels & ColorWriteChannels.Blue) != 0,
                     (this.ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
             }
         }

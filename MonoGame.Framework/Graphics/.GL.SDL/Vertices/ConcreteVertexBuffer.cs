@@ -34,13 +34,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLVertexBuffer != 0);
 
+            var GL = OGL.Current;
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             // Pointer to the start of data in the vertex buffer
             IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             ptr = (IntPtr)(ptr.ToInt64() + offsetInBytes);
 
@@ -75,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             GL.UnmapBuffer(BufferTarget.ArrayBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
     }
 

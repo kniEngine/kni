@@ -52,6 +52,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
+            var GL = OGL.Current;
+
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
             int tSize = ReflectionHelpers.SizeOf<T>();
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
@@ -90,6 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformSetup()
         {
             _mainContext = new GraphicsContext(this);
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
@@ -135,6 +138,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize()
         {
+            var GL = OGL.Current;
+
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
@@ -163,6 +168,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void Android_ReInitializeContext()
         {
+            var GL = OGL.Current;
+
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
@@ -233,12 +240,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void ClearProgramCache()
         {
+            var GL = OGL.Current;
+
             foreach (ShaderProgram shaderProgram in ProgramCache.Values)
             {
                 if (GL.IsProgram(shaderProgram.Program))
                 {
                     GL.DeleteProgram(shaderProgram.Program);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
             ProgramCache.Clear();
@@ -246,6 +255,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
+            var GL = OGL.Current;
+
             int maxMultiSampleCount = 0;
             GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);
             return maxMultiSampleCount;

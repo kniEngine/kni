@@ -74,23 +74,25 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
+            var GL = OGL.Current;
+
             _player = new Android.Media.MediaPlayer();
 
             _glVideoSurfaceTexture = GL.GenTexture();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             base.Video.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindTexture((TextureTarget)GL_TEXTURE_EXTERNAL_OES, _glVideoSurfaceTexture);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.TexParameter((TextureTarget)GL_TEXTURE_EXTERNAL_OES, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.TexParameter((TextureTarget)GL_TEXTURE_EXTERNAL_OES, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.TexParameter((TextureTarget)GL_TEXTURE_EXTERNAL_OES, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.TexParameter((TextureTarget)GL_TEXTURE_EXTERNAL_OES, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             _surfaceTexture = new SurfaceTexture(_glVideoSurfaceTexture);
             _surface = new Surface(_surfaceTexture);
@@ -112,6 +114,8 @@ namespace Microsoft.Xna.Platform.Media
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
 
+            var GL = OGL.Current;
+
             if (_frameAvailable)
             {
                 _frameAvailable = false;
@@ -128,26 +132,26 @@ namespace Microsoft.Xna.Platform.Media
 
                 // Create a framebuffer
                 int framebuffer = GL.GenFramebuffer();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 // Attach the texture to the framebuffer
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, (TextureTarget)GL_TEXTURE_EXTERNAL_OES, _glVideoSurfaceTexture, 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 // Read the pixel data from the framebuffer
                 GL.ReadPixels(0, 0, Video.Width, Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 // Dettach framebuffer
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 // cleanup
                 GL.DeleteFramebuffer(framebuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 _lastFrame.SetData(_frameData);
             }
@@ -217,6 +221,8 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
+            var GL = OGL.Current;
+
             if (disposing)
             {
                 if (_player != null)

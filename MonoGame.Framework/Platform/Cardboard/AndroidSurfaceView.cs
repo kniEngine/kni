@@ -699,7 +699,7 @@ namespace Microsoft.Xna.Framework
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GetErrorAsString());
             GLESVersion createdVersion = new GLESVersion();
-            foreach (GLESVersion v in GL.GetSupportedGLESVersions())
+            foreach (GLESVersion v in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
 
@@ -795,8 +795,8 @@ namespace Microsoft.Xna.Framework
                     gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                 }
 
-                if (GL.GetError == null)
-                    GL.LoadEntryPoints();
+                if (OGL_DROID.Current == null)
+                    OGL_DROID.Initialize();
             }
             catch (Exception ex)
             {

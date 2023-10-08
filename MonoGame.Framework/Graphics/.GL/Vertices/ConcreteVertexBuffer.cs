@@ -45,18 +45,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(_vbo == 0);
 
+            var GL = OGL.Current;
+
             //this._vao = GLExt.Oes.GenVertexArray();
             //GLExt.Oes.BindVertexArray(this._vao);
             this._vbo = GL.GenBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             GL.BufferData(BufferTarget.ArrayBuffer,
                           new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
                          _usageHint);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
@@ -65,8 +67,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLVertexBuffer != 0);
 
+            var GL = OGL.Current;
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             if (options == SetDataOptions.Discard)
@@ -78,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     (IntPtr)bufferSize,
                     IntPtr.Zero,
                     _usageHint);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
@@ -91,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInBytes);
 
                     GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)(elementSizeInBytes * elementCount), dataPtr);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 finally
                 {
@@ -110,7 +114,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     for (int i = 0; i < elementCount; i++)
                     {
                         GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)dstOffset, (IntPtr)elementSizeInByte, dataPtr);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
 
                         dstOffset += vertexStride;
                         dataPtr = (IntPtr)(dataPtr.ToInt64() + elementSizeInByte);
@@ -139,8 +143,10 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (GraphicsDevice != null && !GraphicsDevice.IsDisposed)
                 {
+                    var GL = OGL.Current;
+
                     GL.DeleteBuffer(_vbo);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     _vbo = 0;
                 }
             }

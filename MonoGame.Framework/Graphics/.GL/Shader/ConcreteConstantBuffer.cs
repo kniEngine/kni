@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
             // NOTE: We assume here the program has
             // already been set on the device.
             ShaderProgram program = contextStrategy.ToConcrete<ConcreteGraphicsContext>().ShaderProgram;
@@ -77,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
                 GL.Uniform4(_location, this.BufferData.Length >> 4, (Vector4*)bytePtr);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             // Clear the dirty flag.

@@ -38,10 +38,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy, int majorVersion, int minorVersion)
         {
+            var GL = OGL.Current;
+
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
             GL.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
 #if GLES
             SupportsNonPowerOfTwo = GL.Extensions.Contains("GL_OES_texture_npot") ||
@@ -79,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsAtitc = GL.Extensions.Contains("GL_ATI_texture_compression_atitc") ||
                             GL.Extensions.Contains("GL_AMD_compressed_ATC_texture");
 
-            if (GL.BoundApi == GL.RenderApi.ES)
+            if (GL.BoundApi == OGL.RenderApi.ES)
             {
                 SupportsEtc2 = majorVersion >= 3;
             }
@@ -87,7 +89,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Framebuffer objects
 #if GLES
-            SupportsFramebufferObjectARB = GL.BoundApi == GL.RenderApi.ES && (majorVersion >= 2 || GL.Extensions.Contains("GL_ARB_framebuffer_object")); // always supported on GLES 2.0+
+            SupportsFramebufferObjectARB = GL.BoundApi == OGL.RenderApi.ES && (majorVersion >= 2 || GL.Extensions.Contains("GL_ARB_framebuffer_object")); // always supported on GLES 2.0+
             SupportsFramebufferObjectEXT = GL.Extensions.Contains("GL_EXT_framebuffer_object");;
             SupportsFramebufferObjectIMG = GL.Extensions.Contains("GL_IMG_multisampled_render_to_texture") |
                                                  GL.Extensions.Contains("GL_APPLE_framebuffer_multisample") |
@@ -104,21 +106,21 @@ namespace Microsoft.Xna.Platform.Graphics
             if (SupportsTextureFilterAnisotropic)
             {
                 GL.GetInteger(GetParamName.MaxTextureMaxAnisotropyExt, out anisotropy);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
             MaxTextureAnisotropy = anisotropy;
 
             // sRGB
 #if GLES
             SupportsSRgb = GL.Extensions.Contains("GL_EXT_sRGB");
-            SupportsFloatTextures = GL.BoundApi == GL.RenderApi.ES && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_float"));
-            SupportsHalfFloatTextures = GL.BoundApi == GL.RenderApi.ES && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_half_float"));
-            SupportsNormalized = GL.BoundApi == GL.RenderApi.ES && (majorVersion >= 3 && GL.Extensions.Contains("GL_EXT_texture_norm16"));
+            SupportsFloatTextures = GL.BoundApi == OGL.RenderApi.ES && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_float"));
+            SupportsHalfFloatTextures = GL.BoundApi == OGL.RenderApi.ES && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_color_buffer_half_float"));
+            SupportsNormalized = GL.BoundApi == OGL.RenderApi.ES && (majorVersion >= 3 && GL.Extensions.Contains("GL_EXT_texture_norm16"));
 #elif DESKTOPGL
             SupportsSRgb = GL.Extensions.Contains("GL_EXT_texture_sRGB") && GL.Extensions.Contains("GL_EXT_framebuffer_sRGB");
-            SupportsFloatTextures = GL.BoundApi == GL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_ARB_texture_float"));
-            SupportsHalfFloatTextures = GL.BoundApi == GL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_ARB_half_float_pixel"));;
-            SupportsNormalized = GL.BoundApi == GL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_texture_norm16"));;
+            SupportsFloatTextures = GL.BoundApi == OGL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_ARB_texture_float"));
+            SupportsHalfFloatTextures = GL.BoundApi == OGL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_ARB_half_float_pixel"));;
+            SupportsNormalized = GL.BoundApi == OGL.RenderApi.GL && (majorVersion >= 3 || GL.Extensions.Contains("GL_EXT_texture_norm16"));;
 #endif
 
             // TODO: Implement OpenGL support for texture arrays
@@ -128,9 +130,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepthClamp = GL.Extensions.Contains("GL_ARB_depth_clamp");
 
             GL.GetInteger(GetParamName.MaxTextureImageUnits, out _maxTextureSlots);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.GetInteger(GetParamName.MaxVertexTextureImageUnits, out _maxVertexTextureSlots);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             // fix for bad GL drivers
             int maxCombinedTextureImageUnits;
             GL.GetInteger(GetParamName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
@@ -142,7 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int maxVertexAttribs;
             GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexAttribs);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
             _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
 
@@ -158,7 +160,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if DESKTOPGL
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 #endif
         }
 

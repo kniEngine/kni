@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
+            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
             for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
@@ -47,19 +49,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_targets[i] != 0 && (tex == null || _targets[i] != tex.GetTextureStrategy<ConcreteTexture>()._glTarget))
                 {
                     GL.ActiveTexture(TextureUnit.Texture0 + i);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.BindTexture(_targets[i], 0);
                     _targets[i] = 0;
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
 
                 if (tex != null)
                 {
                     GL.ActiveTexture(TextureUnit.Texture0 + i);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     _targets[i] = tex.GetTextureStrategy<ConcreteTexture>()._glTarget;
                     GL.BindTexture(tex.GetTextureStrategy<ConcreteTexture>()._glTarget, tex.GetTextureStrategy<ConcreteTexture>()._glTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
                 }

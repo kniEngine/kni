@@ -10,20 +10,34 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
-    internal partial class GL
+    internal sealed class OGL_DROID : OGL
     {
 		// internal for Android is not used on other platforms
 		// it allows us to use either GLES or Full GL (if the GPU supports it)
 		internal delegate bool BindAPIDelegate(RenderApi api);
-		internal static BindAPIDelegate BindAPI;
+		internal BindAPIDelegate BindAPI;
 
-        public static IntPtr Library;
-        public static IntPtr libES1 = FuncLoader.LoadLibrary("libGLESv1_CM.so");
-        public static IntPtr libES2 = FuncLoader.LoadLibrary("libGLESv2.so");
-        public static IntPtr libES3 = FuncLoader.LoadLibrary("libGLESv3.so");
-        public static IntPtr libGL = FuncLoader.LoadLibrary("libGL.so");
+        public IntPtr Library;
+        public IntPtr libES1 = FuncLoader.LoadLibrary("libGLESv1_CM.so");
+        public IntPtr libES2 = FuncLoader.LoadLibrary("libGLESv2.so");
+        public IntPtr libES3 = FuncLoader.LoadLibrary("libGLESv3.so");
+        public IntPtr libGL = FuncLoader.LoadLibrary("libGL.so");
 
-        static partial void LoadPlatformEntryPoints()
+
+        public static void Initialize()
+        {
+            System.Diagnostics.Debug.Assert(OGL._current == null);
+            OGL._current = new OGL_DROID();
+
+        }
+
+        private OGL_DROID() : base()
+        {
+            LoadPlatformEntryPoints();
+        }
+
+
+        private void LoadPlatformEntryPoints()
         {
             Android.Util.Log.Verbose("GL", "Loading Entry Points");
 
@@ -59,25 +73,25 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             }
         }
 
-        private static T LoadFunction<T>(string function)
+        protected override T LoadFunction<T>(string function)
         {
             return FuncLoader.LoadFunction<T>(Library, function);
         }
 
-        private static T LoadFunctionOrNull<T>(string function)
+        protected override T LoadFunctionOrNull<T>(string function)
         {
             return FuncLoader.LoadFunctionOrNull<T>(Library, function);
         }
-        
-        internal static IEnumerable<GLESVersion> GetSupportedGLESVersions()
+
+        internal IEnumerable<GLESVersion> GetSupportedGLESVersions()
         {
-            if (GL.libES3 != IntPtr.Zero)
+            if (this.libES3 != IntPtr.Zero)
             {
                 yield return new GLESVersion { Major = 3, Minor = 2 };
                 yield return new GLESVersion { Major = 3, Minor = 1 };
                 yield return new GLESVersion { Major = 3, Minor = 0 };
             }
-            if (GL.libES2 != IntPtr.Zero)
+            if (this.libES2 != IntPtr.Zero)
             {
                 // We pass -1 becuase when requesting a GLES 2.0 context we
                 // dont provide the Minor version.
@@ -85,6 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             }
             yield return new GLESVersion();
         }
+
     }
 
     struct GLESVersion

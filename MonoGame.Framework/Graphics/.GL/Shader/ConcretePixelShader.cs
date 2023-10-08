@@ -34,15 +34,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void ApplySamplerTextureUnits(int program)
         {
+            var GL = OGL.Current;
+
             // Assign the texture unit index to the sampler uniforms.
             foreach (SamplerInfo sampler in Samplers)
             {
                 int loc = GL.GetUniformLocation(program, sampler.name);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 if (loc != -1)
                 {
                     GL.Uniform1(loc, sampler.textureSlot);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
         }

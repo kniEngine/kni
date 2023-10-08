@@ -9,8 +9,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     static partial class GraphicsExtensions
     {
-        internal static IWebGLRenderingContext GL;
-
         public static WebGLDepthComparisonFunc ToGLComparisonFunction(CompareFunction compare)
         {
             switch (compare)
@@ -38,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         [Conditional("DEBUG")]
-        internal static void CheckGLError()
+        internal static void CheckGLError(this IWebGLRenderingContext GL)
         {
             WebGLErrorCode error = GL.GetError();
             if (error != WebGLErrorCode.NO_ERROR)

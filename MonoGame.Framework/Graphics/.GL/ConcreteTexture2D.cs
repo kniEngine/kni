@@ -65,6 +65,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
+            var GL = OGL.Current;
+
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
 
@@ -79,9 +81,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
@@ -95,13 +97,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.TexImage2D(
                         TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0,_glFormat, _glType, dataPtr);
                 }
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
 #if !ANDROID
                 // Required to make sure that any texture uploads on a thread are completed
                 // before the main thread tries to use the texture.
                 GL.Finish();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 #endif
             }
             finally
@@ -115,6 +117,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
+            var GL = OGL.Current;
+
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             // Use try..finally to make sure dataHandle is freed in case of an error
@@ -126,9 +130,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
 
@@ -144,13 +148,13 @@ namespace Microsoft.Xna.Platform.Graphics
                         TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                         _glFormat, _glType, dataPtr);
                 }
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
 #if !ANDROID
                 // Required to make sure that any texture uploads on a thread are completed
                 // before the main thread tries to use the texture.
                 GL.Finish();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 #endif
             }
             finally
@@ -164,26 +168,28 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
+            var GL = OGL.Current;
+
 #if GLES
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
 
             int framebufferId = 0;
             framebufferId = GL.GenFramebuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.DeleteFramebuffer(framebufferId);
 #else
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
 
             this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSizeInByte, 8));
 
@@ -194,7 +200,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(TextureTarget.Texture2D, level, temp);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 int rowCount = checkedRect.Height / 4;
                 int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
@@ -211,7 +217,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / tSizeInByte;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
                 GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, temp);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int rowCount = checkedRect.Height;
@@ -238,6 +244,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Threading.EnsureUIThread();
             {
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
                 CreateGLTexture2D(contextStrategy);
 
                 int w = width;
@@ -268,12 +276,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             imageSize = wBlocks * hBlocks * blockSize;
                         }
                         GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     else
                     {
                         GL.TexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, _glFormat, _glType, IntPtr.Zero);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
 
                     if ((w == 1 && h == 1) || !mipMap)
@@ -290,8 +298,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(_glTexture < 0);
 
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
             _glTexture = GL.GenTexture();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
             // dimension is not a power of two.
@@ -302,29 +312,29 @@ namespace Microsoft.Xna.Platform.Graphics
             contextStrategy.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.TexParameter(
                 TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
                 (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.TexParameter(
                 TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
                 (int)TextureMagFilter.Linear);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrap);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // Set mipMap levels
 #if !GLES
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 #endif
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
@@ -335,7 +345,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, 1000);
                 }
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
         }
 

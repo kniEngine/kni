@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -49,8 +50,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             base.Present();
 
+            var GL = OGL.Current;
+
             Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
 
