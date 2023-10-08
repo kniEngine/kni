@@ -68,6 +68,23 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             return FuncLoader.LoadFunctionOrNull<T>(Library, function);
         }
+        
+        internal static IEnumerable<GLESVersion> GetSupportedGLESVersions()
+        {
+            if (GL.libES3 != IntPtr.Zero)
+            {
+                yield return new GLESVersion { Major = 3, Minor = 2 };
+                yield return new GLESVersion { Major = 3, Minor = 1 };
+                yield return new GLESVersion { Major = 3, Minor = 0 };
+            }
+            if (GL.libES2 != IntPtr.Zero)
+            {
+                // We pass -1 becuase when requesting a GLES 2.0 context we
+                // dont provide the Minor version.
+                yield return new GLESVersion { Major = 2, Minor = -1 };
+            }
+            yield return new GLESVersion();
+        }
     }
 
     struct GLESVersion
@@ -89,21 +106,5 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             return string.Format("{0}.{1}", Major, Minor == -1 ? 0 : Minor);
         }
 
-        internal static IEnumerable<GLESVersion> GetSupportedGLESVersions()
-        {
-            if (GL.libES3 != IntPtr.Zero)
-            {
-                yield return new GLESVersion { Major = 3, Minor = 2 };
-                yield return new GLESVersion { Major = 3, Minor = 1 };
-                yield return new GLESVersion { Major = 3, Minor = 0 };
-            }
-            if (GL.libES2 != IntPtr.Zero)
-            {
-                // We pass -1 becuase when requesting a GLES 2.0 context we
-                // dont provide the Minor version.
-                yield return new GLESVersion { Major = 2, Minor = -1 };
-            }
-            yield return new GLESVersion();
-        }
     }
 }
