@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApply()
         {
-            var GL = OGL.Current;
+            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             for (int i = 0; i < _actualSamplers.Length; i++)
             {

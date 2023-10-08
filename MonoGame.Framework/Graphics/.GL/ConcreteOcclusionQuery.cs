@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             _glQueryId = GL.GenQuery();
             GL.CheckGLError();

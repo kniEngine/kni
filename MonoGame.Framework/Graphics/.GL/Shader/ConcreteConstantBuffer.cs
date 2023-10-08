@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             // NOTE: We assume here the program has
             // already been set on the device.

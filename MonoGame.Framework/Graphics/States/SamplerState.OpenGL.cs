@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using ExtTextureFilterAnisotropic = Microsoft.Xna.Platform.Graphics.OpenGL.TextureParameterName;
 
@@ -20,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
-            var GL = OGL.Current;
+            var GL = context.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             switch (Filter)
             {

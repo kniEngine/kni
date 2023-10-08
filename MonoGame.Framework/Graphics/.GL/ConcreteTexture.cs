@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Graphics
             out PixelFormat glFormat,
             out PixelType glType)
         {
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             glInternalFormat = PixelInternalFormat.Rgba;
             glFormat = PixelFormat.Rgba;
@@ -321,7 +321,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             GraphicsDeviceStrategy deviceStrategy = contextStrategy.Context.DeviceStrategy;
 
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int color = 0;
             int depth = 0;
@@ -449,7 +449,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int color = 0;
             int depth = 0;

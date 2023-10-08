@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
-            var GL = OGL.Current;
+            var GL = context.GL;
 
             if (force)
             {

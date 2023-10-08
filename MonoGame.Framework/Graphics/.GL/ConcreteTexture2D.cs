@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Threading.EnsureUIThread();
             {
-                var GL = OGL.Current;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
                 CreateGLTexture2D(contextStrategy);
 
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(_glTexture < 0);
 
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _glTexture = GL.GenTexture();
             GL.CheckGLError();

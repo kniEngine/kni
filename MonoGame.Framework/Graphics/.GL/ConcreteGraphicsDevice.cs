@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformSetup()
         {
             _mainContext = new GraphicsContext(this);
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
