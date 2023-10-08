@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.Enable(EnableCap.Blend);
                 else
                     GL.Disable(EnableCap.Blend);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastBlendEnable = blendEnabled;
             }
 
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.BlendEquationSeparate(
                         ToGLBlendEquationMode(this.ColorBlendFunction),
                         ToGLBlendEquationMode(this.AlphaBlendFunction));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
                         context._lastBlendState[i].ColorBlendFunction = this.ColorBlendFunction;
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         ToGLBlendFunc(this.ColorDestinationBlend),
                         ToGLBlendFunc(this.AlphaSourceBlend),
                         ToGLBlendFunc(this.AlphaDestinationBlend));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     for (int i = 0; i < 4; i++)
                     {
                         context._lastBlendState[i].ColorSourceBlend = this.ColorSourceBlend;
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         GL.BlendEquationSeparatei(i,
                             ToGLBlendEquationMode(_targetBlendState[i].ColorBlendFunction),
                             ToGLBlendEquationMode(_targetBlendState[i].AlphaBlendFunction));
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                         context._lastBlendState[i].ColorBlendFunction = _targetBlendState[i].ColorBlendFunction;
                         context._lastBlendState[i].AlphaBlendFunction = _targetBlendState[i].AlphaBlendFunction;
                     }
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             ToGLBlendFunc(_targetBlendState[i].ColorDestinationBlend),
                             ToGLBlendFunc(_targetBlendState[i].AlphaSourceBlend),
                             ToGLBlendFunc(_targetBlendState[i].AlphaDestinationBlend));
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                         context._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
                         context._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
                         context._lastBlendState[i].AlphaSourceBlend = _targetBlendState[i].AlphaSourceBlend;
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     (this.ColorWriteChannels & ColorWriteChannels.Green) != 0,
                     (this.ColorWriteChannels & ColorWriteChannels.Blue) != 0,
                     (this.ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
             }
         }

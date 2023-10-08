@@ -41,14 +41,14 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = OGL.Current;
 
             _shaderHandle = GL.CreateShader(shaderType);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.ShaderSource(_shaderHandle, _shaderBytecode);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.CompileShader(_shaderHandle);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             int compiled = 0;
             GL.GetShader(_shaderHandle, ShaderParameter.CompileStatus, out compiled);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             if (compiled != (int)Bool.True)
             {
                 string log = GL.GetShaderInfoLog(_shaderHandle);
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (GL.IsShader(_shaderHandle))
                     {
                         GL.DeleteShader(_shaderHandle);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
                 _shaderHandle = -1;
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (GL.IsShader(_shaderHandle))
                 {
                     GL.DeleteShader(_shaderHandle);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 _shaderHandle = -1;
             }
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (GL.IsShader(_shaderHandle))
                 {
                     GL.DeleteShader(_shaderHandle);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 _shaderHandle = -1;
             }

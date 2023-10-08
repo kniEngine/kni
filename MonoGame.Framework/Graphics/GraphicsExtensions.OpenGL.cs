@@ -38,38 +38,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        [Conditional("DEBUG")]
-        [DebuggerHidden]
-        public static void CheckGLError()
-        {
-            var GL = OGL.Current;
-
-            ErrorCode error = GL.GetError();
-            //Console.WriteLine(error);
-            if (error != ErrorCode.NoError)
-            {
-                throw new OpenGLException("GL.GetError() returned " + error.ToString());
-            }
-        }
-
-        [Conditional("DEBUG")]
-        public static void LogGLError(string location)
-        {
-            try
-            {
-                GraphicsExtensions.CheckGLError();
-            }
-            catch (OpenGLException ex)
-            {
-#if ANDROID
-                // Todo: Add generic logging interface
-                Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
-#else
-                Debug.WriteLine("OpenGLException at " + location + " - " + ex.Message);
-#endif
-            }
-        }
-
     }
         
 }

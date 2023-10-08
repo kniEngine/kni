@@ -66,14 +66,14 @@ namespace Microsoft.Xna.Platform.Graphics
             int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
             _ibo = GL.GenBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             GL.BufferData(BufferTarget.ElementArrayBuffer,
                           (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int bufferSize = IndexCount * base.ElementSizeInBytes;
 
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
                 if (options == SetDataOptions.Discard)
@@ -105,11 +105,11 @@ namespace Microsoft.Xna.Platform.Graphics
                         (IntPtr)bufferSize,
                         IntPtr.Zero,
                         _usageHint);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
 
                 GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)sizeInBytes, dataPtr);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
             finally
             {
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     var GL = OGL.Current;
 
                     GL.DeleteBuffer(_ibo);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     _ibo = 0;
                 }
             }

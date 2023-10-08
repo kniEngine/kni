@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = OGL.Current;
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._indexBufferDirty = true;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 Buffer.BlockCopy(buffer, 0, data, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
     }
 

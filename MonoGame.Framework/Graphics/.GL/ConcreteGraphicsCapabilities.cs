@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
             GL.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
 #if GLES
             SupportsNonPowerOfTwo = GL.Extensions.Contains("GL_OES_texture_npot") ||
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (SupportsTextureFilterAnisotropic)
             {
                 GL.GetInteger(GetParamName.MaxTextureMaxAnisotropyExt, out anisotropy);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
             MaxTextureAnisotropy = anisotropy;
 
@@ -130,9 +130,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepthClamp = GL.Extensions.Contains("GL_ARB_depth_clamp");
 
             GL.GetInteger(GetParamName.MaxTextureImageUnits, out _maxTextureSlots);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.GetInteger(GetParamName.MaxVertexTextureImageUnits, out _maxVertexTextureSlots);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             // fix for bad GL drivers
             int maxCombinedTextureImageUnits;
             GL.GetInteger(GetParamName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int maxVertexAttribs;
             GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexAttribs);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
             _maxVertexBufferSlots = Math.Min(_maxVertexBufferSlots, maxVertexAttribs);
 
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if DESKTOPGL
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 #endif
         }
 

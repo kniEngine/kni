@@ -41,15 +41,15 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = this.GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             _vbo = GL.CreateBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, _vbo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             GL.BufferData(WebGLBufferType.ARRAY,
                           (this.VertexDeclaration.VertexStride * this.VertexCount),
                           _usageHint);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
 
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             if (options == SetDataOptions.Discard)
@@ -71,14 +71,14 @@ namespace Microsoft.Xna.Platform.Graphics
                     WebGLBufferType.ARRAY,
                     bufferSize,
                     _usageHint);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
             {
                 // there are no gaps so we can copy in one go
                 GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, elementCount);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
             else
             {

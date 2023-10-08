@@ -29,31 +29,31 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 case CullMode.None:
                     GL.Disable(WebGLCapability.CULL_FACE);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 case Graphics.CullMode.CullClockwiseFace:
                     GL.Enable(WebGLCapability.CULL_FACE);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.CullFace(WebGLCullFaceMode.BACK);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CW);
                     else
                         GL.FrontFace(WebGLWinding.CCW);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 case Graphics.CullMode.CullCounterClockwiseFace:
                     GL.Enable(WebGLCapability.CULL_FACE);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.CullFace(WebGLCullFaceMode.BACK);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (offscreen)
                         GL.FrontFace(WebGLWinding.CCW);
                     else
                         GL.FrontFace(WebGLWinding.CW);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
 
                 default:
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				    GL.Enable(WebGLCapability.SCISSOR_TEST);
 			    else
 				    GL.Disable(WebGLCapability.SCISSOR_TEST);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
             }
 
@@ -104,14 +104,14 @@ namespace Microsoft.Xna.Framework.Graphics
                             throw new ArgumentOutOfRangeException();
                     }
                     GL.Enable(WebGLCapability.POLYGON_OFFSET_FILL);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.PolygonOffset(this.SlopeScaleDepthBias, this.DepthBias * depthMul);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.Disable(WebGLCapability.POLYGON_OFFSET_FILL);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 context._lastRasterizerState.DepthBias = this.DepthBias;
                 context._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;

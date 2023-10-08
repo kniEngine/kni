@@ -40,11 +40,11 @@ namespace Microsoft.Xna.Platform.Graphics
             foreach (SamplerInfo sampler in Samplers)
             {
                 int loc = GL.GetUniformLocation(program, sampler.name);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 if (loc != -1)
                 {
                     GL.Uniform1(loc, sampler.textureSlot);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
         }

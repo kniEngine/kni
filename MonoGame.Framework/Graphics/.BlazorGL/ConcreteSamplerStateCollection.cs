@@ -51,13 +51,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     // However, I suspect that rendering from the same texture with different sampling modes
                     // is a relatively rare occurrence...
                     GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     // NOTE: We don't have to bind the texture here because it is already bound in
                     // TextureCollection.Apply(). This, of course, assumes that Apply() is called
                     // before this method is called. If that ever changes this code will misbehave.
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
-                    // GraphicsExtensions.CheckGLError();
+                    // GL.CheckGLError();
 
                     sampler.PlatformApplyState(_contextStrategy.Context, texture.GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
                     texture.GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;

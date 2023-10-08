@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
                 GL.Uniform4(_location, this.BufferData.Length >> 4, (Vector4*)bytePtr);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             // Clear the dirty flag.

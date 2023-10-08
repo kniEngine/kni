@@ -22,13 +22,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!DepthBufferEnable)
                 {
                     GL.Disable(WebGLCapability.DEPTH_TEST);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 else
                 {
                     // enable Depth Buffer
                     GL.Enable(WebGLCapability.DEPTH_TEST);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 context._lastDepthStencilState.DepthBufferEnable = this.DepthBufferEnable;
             }
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 this.DepthBufferFunction != context._lastDepthStencilState.DepthBufferFunction)
             {
                 GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
 
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 this.DepthBufferWriteEnable != context._lastDepthStencilState.DepthBufferWriteEnable)
             {
                 GL.DepthMask(DepthBufferWriteEnable);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastDepthStencilState.DepthBufferWriteEnable = this.DepthBufferWriteEnable;
             }
 
@@ -55,13 +55,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (!StencilEnable)
                 {
                     GL.Disable(WebGLCapability.STENCIL_TEST);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 else
                 {
                     // enable Stencil
                     GL.Enable(WebGLCapability.STENCIL_TEST);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 context._lastDepthStencilState.StencilEnable = this.StencilEnable;
             }
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.StencilMask != context._lastDepthStencilState.StencilMask)
 				{
                     GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     context._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     context._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
                     context._lastDepthStencilState.StencilMask = this.StencilMask;
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.StencilOp(ToGLStencilOp(StencilFail),
                                  ToGLStencilOp(StencilDepthBufferFail),
                                  ToGLStencilOp(StencilPass));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     context._lastDepthStencilState.StencilFail = this.StencilFail;
                     context._lastDepthStencilState.StencilDepthBufferFail = this.StencilDepthBufferFail;
                     context._lastDepthStencilState.StencilPass = this.StencilPass;
@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 this.StencilWriteMask != context._lastDepthStencilState.StencilWriteMask)
             {
                 GL.StencilMask(this.StencilWriteMask);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 context._lastDepthStencilState.StencilWriteMask = this.StencilWriteMask;
             }
         }

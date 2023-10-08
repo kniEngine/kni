@@ -59,7 +59,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // create context.
             _mainContext = new GraphicsContext(this);
-            GraphicsExtensions.GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext; // for GraphicsExtensions.CheckGLError()
             //_glContext = new LogContent(_glContext);
 
             _capabilities = new ConcreteGraphicsCapabilities();

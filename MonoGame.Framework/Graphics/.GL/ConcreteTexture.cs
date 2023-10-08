@@ -330,19 +330,19 @@ namespace Microsoft.Xna.Platform.Graphics
             if (multiSampleCount > 0)
             {
                 color = GL.GenRenderbuffer();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 if (multiSampleCount > 0)
                 {
                     System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
                     GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, RenderbufferStorage.Rgba8, width, height);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
 
@@ -401,18 +401,18 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (depthInternalFormat != 0)
                 {
                     depth = GL.GenRenderbuffer();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
                         GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     else
                     {
                         GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
@@ -420,19 +420,19 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (stencilInternalFormat != 0)
                         {
                             stencil = GL.GenRenderbuffer();
-                            GraphicsExtensions.CheckGLError();
+                            GL.CheckGLError();
                             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
-                            GraphicsExtensions.CheckGLError();
+                            GL.CheckGLError();
                             if (multiSampleCount > 0)
                             {
                                 System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
                                 GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
-                                GraphicsExtensions.CheckGLError();
+                                GL.CheckGLError();
                             }
                             else
                             {
                                 GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
-                                GraphicsExtensions.CheckGLError();
+                                GL.CheckGLError();
                             }
                         }
                     }
@@ -465,17 +465,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (colorIsRenderbuffer)
                 {
                     GL.DeleteRenderbuffer(color);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 if (stencil != 0 && stencil != depth)
                 {
                     GL.DeleteRenderbuffer(stencil);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 if (depth != 0)
                 {
                     GL.DeleteRenderbuffer(depth);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
 
                 contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
@@ -491,7 +491,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     var GL = OGL.Current;
 
                     GL.DeleteTexture(_glTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
             _glTexture = -1;
@@ -514,7 +514,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     var GL = OGL.Current;
 
                     GL.DeleteTexture(_glTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
             _glTexture = -1;

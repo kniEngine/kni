@@ -35,15 +35,15 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             _shaderHandle = GL.CreateShader(shaderType);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             string glslCode = System.Text.Encoding.ASCII.GetString(_shaderBytecode);
             GL.ShaderSource(_shaderHandle, glslCode);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.CompileShader(_shaderHandle);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             bool compiled = false;
             compiled = GL.GetShaderParameter(_shaderHandle, WebGLShaderStatus.COMPILE);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             if (compiled != true)
             {
                 string log = GL.GetShaderInfoLog(_shaderHandle);

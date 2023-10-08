@@ -98,20 +98,20 @@ namespace Microsoft.Xna.Platform.Media
                 System.Diagnostics.Debug.Assert(texture2D._glTexture != null);
                 texture2D.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, texture2D._glTexture);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(texture2D.Format.GetSize(), 8));
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, 0,
                     texture2D._glInternalFormat, texture2D._glFormat, texture2D._glType,
                     _player);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 //GL.Finish();
-                //GraphicsExtensions.CheckGLError();
+                //GL.CheckGLError();
             }
 
             return _lastFrame;

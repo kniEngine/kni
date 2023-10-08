@@ -61,9 +61,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
                     if (_glFormat == GLPixelFormat.CompressedTextureFormats)
@@ -71,13 +71,13 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CompressedTexSubImage2D(
                             target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                             _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     else
                     {
                         GL.TexSubImage2D(
                             target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
                 finally
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int tFullWidth = Math.Max(this.Size >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) / 4 * tFullWidth];
                 GL.GetCompressedTexImage(target, level, temp);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 int rowCount = checkedRect.Height / 4;
                 int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int tFullWidth = Math.Max(this.Size >> level, 1) * Format.GetSize() / tSizeInByte;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) * tFullWidth];
                 GL.GetTexImage(target, level, _glFormat, _glType, temp);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int rowCount = checkedRect.Height;
@@ -178,27 +178,27 @@ namespace Microsoft.Xna.Platform.Graphics
                 var GL = OGL.Current;
 
                 _glTexture = GL.GenTexture();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.TexParameter(
                     TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter,
                     mipMap ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
@@ -244,12 +244,12 @@ namespace Microsoft.Xna.Platform.Graphics
                                 throw new NotSupportedException();
                         }
                         GL.CompressedTexImage2D(target, 0, _glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     else
                     {
                         GL.TexImage2D(target, 0, _glInternalFormat, size, size, 0, _glFormat, _glType, IntPtr.Zero);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
 
@@ -258,10 +258,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == _glTarget);
 #if IOS || TVOS || ANDROID
                     GL.GenerateMipmap(TextureTarget.TextureCubeMap);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 #else
                     GL.GenerateMipmap(_glTarget);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     // This updates the mipmaps after a change in the base texture
                     GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
 #endif

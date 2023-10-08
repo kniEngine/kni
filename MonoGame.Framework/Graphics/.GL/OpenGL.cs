@@ -1779,6 +1779,40 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                 dataPtr.Free();
             }
         }
+
+
+        [Conditional("DEBUG")]
+        [DebuggerHidden]
+        public void CheckGLError()
+        {
+            var GL = OGL.Current;
+
+            ErrorCode error = GL.GetError();
+            //Console.WriteLine(error);
+            if (error != ErrorCode.NoError)
+            {
+                throw new OpenGLException("GL.GetError() returned " + error.ToString());
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public void LogGLError(string location)
+        {
+            try
+            {
+                this.CheckGLError();
+            }
+            catch (OpenGLException ex)
+            {
+#if ANDROID
+                // Todo: Add generic logging interface
+                Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
+#else
+                Debug.WriteLine("OpenGLException at " + location + " - " + ex.Message);
+#endif
+            }
+        }
+
     }
 }
 

@@ -26,9 +26,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new NotImplementedException();
                     }
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_NEAREST : WebGLTexParam.NEAREST));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.NEAREST);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
                 case TextureFilter.Linear:
                     if (GraphicsDevice.Strategy.Capabilities.SupportsTextureFilterAnisotropic)
@@ -36,9 +36,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new NotImplementedException();
                     }
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.LINEAR);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
                 case TextureFilter.Anisotropic:
                     if (GraphicsDevice.Strategy.Capabilities.SupportsTextureFilterAnisotropic)
@@ -46,9 +46,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         throw new NotImplementedException();
                     }
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR));
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.LINEAR);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     break;
                 case TextureFilter.PointMipLinear:
                     throw new NotImplementedException();
@@ -69,9 +69,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Set up texture addressing.
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, ToGLTextureAddressMode(AddressU));
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, ToGLTextureAddressMode(AddressV));
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             if (GraphicsDevice.Strategy.Capabilities.SupportsTextureMaxLevel)
             {
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     throw new NotImplementedException();
                 }
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
         }
 

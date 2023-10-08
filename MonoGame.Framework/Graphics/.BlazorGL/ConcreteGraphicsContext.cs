@@ -90,24 +90,24 @@ namespace Microsoft.Xna.Platform.Graphics
             if ((options & ClearOptions.Target) != 0)
             {
                 GL.ClearColor(color.X, color.Y, color.Z, color.W);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 bb |= WebGLBufferBits.COLOR;
             }
             if ((options & ClearOptions.DepthBuffer) != 0)
             {
                 GL.ClearDepth(depth);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 bb |= WebGLBufferBits.DEPTH;
             }
             if ((options & ClearOptions.Stencil) != 0)
             {
                 GL.ClearStencil(stencil);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 bb |= WebGLBufferBits.STENCIL;
             }
 
             GL.Clear(bb);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // Restore the previous render state.
             ScissorRectangle = prevScissorRect;
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     this.BlendFactor.G / 255.0f,
                     this.BlendFactor.B / 255.0f,
                     this.BlendFactor.A / 255.0f);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 _blendFactorDirty = false;
             }
         }
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!IsRenderTargetBound)
                 scissorRect.Y = this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
         }
 
@@ -178,10 +178,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
             else
                 GL.Viewport(_viewport.X, this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
-            GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
-            //GraphicsExtensions.CheckGLError(); // GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
+            //GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
 
             // In OpenGL we have to re-apply the special "_posFixup"
             // vertex shader uniform if the viewport changes.
@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_indexBufferDirty)
             {
                 GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 _indexBufferDirty = false;
             }
         }
@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_shaderProgram != shaderProgram)
             {
                 GL.UseProgram(shaderProgram.Program);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 _shaderProgram = shaderProgram;
             }
 
@@ -318,27 +318,27 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             
             GL.Uniform4f(posFixupLoc, _posFixup.X, _posFixup.Y, _posFixup.Z, _posFixup.W);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
         {
             WebGLProgram program = GL.CreateProgram();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.AttachShader(program, ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle());
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.AttachShader(program, ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle());
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
 
             GL.LinkProgram(program);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             GL.UseProgram(program);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(program);
 
@@ -368,7 +368,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 return location;
 
             location = GL.GetUniformLocation(shaderProgram.Program, name);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             shaderProgram._uniformLocationCache[name] = location;
             return location;
@@ -383,7 +383,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (_enabledVertexAttributes.Add(x))
                     {
                         GL.EnableVertexAttribArray(x);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
                 else
@@ -391,7 +391,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (_enabledVertexAttributes.Remove(x))
                     {
                         GL.DisableVertexAttribArray(x);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
             }
@@ -437,7 +437,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 bindingsChanged = true;
 
                 GL.BindBuffer(WebGLBufferType.ARRAY, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 for (int e = 0; e < attrInfo.Elements.Count; e++)
                 {
@@ -448,14 +448,14 @@ namespace Microsoft.Xna.Platform.Graphics
                         element.Normalized,
                         vertexStride,
                         ((IntPtr)(offset.ToInt64() + element.Offset)).ToInt32());
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     // only set the divisor if instancing is supported
                     if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
                     {
                         throw new NotImplementedException();
                         //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
-                        //GraphicsExtensions.CheckGLError();
+                        //GL.CheckGLError();
                     }
                     else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
                     {
@@ -506,13 +506,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     element.Normalized,
                     vertexDeclaration.VertexStride,
                     (baseVertex + element.Offset));
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
                 {
                     throw new NotImplementedException();
                     //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
-                    //GraphicsExtensions.CheckGLError();
+                    //GL.CheckGLError();
                 }
             }
 
@@ -554,7 +554,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                           vertexStart,
                           vertexCount);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
@@ -575,7 +575,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             indexElementCount,
                             indexElementType,
                             indexOffsetInBytes);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
         }
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
@@ -603,19 +603,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // create and bind vertexBuffer
             WebGLBuffer vbo = GL.CreateBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BufferData(WebGLBufferType.ARRAY,
                           (vertexDeclaration.VertexStride * vertexData.Length),
                           (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             // mark the default Vertex buffers for rebinding
             _vertexBuffersDirty = true;
 
             //set vertex data
             GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
@@ -626,12 +626,12 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                           vertexOffset,
                           vertexCount);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             //GL.BindBuffer(WebGLBufferType.ARRAY, null);
-            //GraphicsExtensions.CheckGLError();
+            //GL.CheckGLError();
             //GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, null);
-            //GraphicsExtensions.CheckGLError();
+            //GL.CheckGLError();
 
             vbo.Dispose();
         }
@@ -648,35 +648,35 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // create and bind vertexBuffer
             WebGLBuffer vbo = GL.CreateBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BufferData(WebGLBufferType.ARRAY,
                           (vertexDeclaration.VertexStride * vertexData.Length),
                           (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             // mark the default Vertex buffers for rebinding
             _vertexBuffersDirty = true;
 
             //set vertex data
             GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // create and bind index buffer
             WebGLBuffer ibo = GL.CreateBuffer();
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
                           (indexData.Length * sizeof(short)),
                           (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
             // mark the default index buffer for rebinding
             _indexBufferDirty = true;
 
             // set index buffer
             GL.BufferSubData<short>(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
             vertexDeclaration.BindGraphicsDevice(this.Context.DeviceStrategy.Device);
@@ -691,12 +691,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             indexElementCount,
                             WebGLDataType.USHORT,
                             indexOffsetInBytes);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             //GL.BindBuffer(WebGLBufferType.ARRAY, null);
-            //GraphicsExtensions.CheckGLError();
+            //GL.CheckGLError();
             //GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, null);
-            //GraphicsExtensions.CheckGLError();
+            //GL.CheckGLError();
 
             ibo.Dispose();
             vbo.Dispose();
@@ -842,9 +842,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
                     GL.BindTexture(renderTargetGL.GLTarget, renderTargetGL.GLTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.GenerateMipmap(renderTargetGL.GLTarget);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
         }
@@ -852,7 +852,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyDefaultRenderTarget()
         {
             GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
-            GraphicsExtensions.CheckGLError();
+            GL.CheckGLError();
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
@@ -868,16 +868,16 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
             {
                 glFramebuffer = GL.CreateFramebuffer();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
                 IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
 
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
@@ -894,7 +894,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
                         GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, renderTargetGL.GLTexture);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                 }
 
@@ -905,7 +905,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
 #if DESKTOPGL
@@ -943,13 +943,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_glFramebuffers.TryGetValue(bindings, out fbo))
                 {
                     fbo.Dispose();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     _glFramebuffers.Remove(bindings);
                 }
                 if (_glResolveFramebuffers.TryGetValue(bindings, out fbo))
                 {
                     fbo.Dispose();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     _glResolveFramebuffers.Remove(bindings);
                 }

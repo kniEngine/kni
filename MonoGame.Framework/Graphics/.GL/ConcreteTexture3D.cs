@@ -70,12 +70,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.BindTexture(_glTarget, _glTexture);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
 
                     GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 finally
                 {
@@ -102,13 +102,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 var GL = OGL.Current;
 
                 _glTexture = GL.GenTexture();
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
                 GL.BindTexture(_glTarget, _glTexture);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
 
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     out _glType);
 
                 GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             if (mipMap)

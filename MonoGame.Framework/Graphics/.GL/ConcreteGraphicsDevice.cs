@@ -247,7 +247,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (GL.IsProgram(shaderProgram.Program))
                 {
                     GL.DeleteProgram(shaderProgram.Program);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
             }
             ProgramCache.Clear();

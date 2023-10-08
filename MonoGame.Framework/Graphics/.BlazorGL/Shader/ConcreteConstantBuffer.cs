@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
                 GL.Uniform4fv(_location, this.BufferData);
-                GraphicsExtensions.CheckGLError();
+                GL.CheckGLError();
             }
 
             // Clear the dirty flag.

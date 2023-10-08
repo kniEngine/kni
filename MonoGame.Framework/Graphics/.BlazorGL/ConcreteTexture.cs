@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -143,9 +144,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (depthInternalFormat != 0)
                 {
                     depth = GL.CreateRenderbuffer();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
                         throw new NotImplementedException();
@@ -153,7 +154,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     else
                     {
                         GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
-                        GraphicsExtensions.CheckGLError();
+                        GL.CheckGLError();
                     }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
@@ -161,9 +162,9 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (stencilInternalFormat != 0)
                         {
                             stencil = GL.CreateRenderbuffer();
-                            GraphicsExtensions.CheckGLError();
+                            GL.CheckGLError();
                             GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
-                            GraphicsExtensions.CheckGLError();
+                            GL.CheckGLError();
                             if (multiSampleCount > 0)
                             {
                                 /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
@@ -172,7 +173,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             else
                             {
                                 GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);
-                                GraphicsExtensions.CheckGLError();
+                                GL.CheckGLError();
                             }
                         }
                     }
@@ -189,6 +190,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
             WebGLTexture color = null;
             WebGLRenderbuffer depth = null;
             WebGLRenderbuffer stencil = null;
@@ -207,12 +210,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (stencil != null && stencil != depth)
                 {
                     stencil.Dispose();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
                 if (depth != null)
                 {
                     depth.Dispose();
-                    GraphicsExtensions.CheckGLError();
+                    GL.CheckGLError();
                 }
 
                 contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
