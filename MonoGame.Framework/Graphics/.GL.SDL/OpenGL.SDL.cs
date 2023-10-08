@@ -18,12 +18,14 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         private OGL_SDL() : base()
         {
-            LoadPlatformEntryPoints();
         }
 
-        private void LoadPlatformEntryPoints()
+
+        protected override IntPtr GetNativeLibrary()
         {
             BoundApi = RenderApi.GL;
+
+            return IntPtr.Zero;
         }
 
         protected override T LoadFunction<T>(string function)

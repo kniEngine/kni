@@ -20,12 +20,14 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         private OGL_IOS() : base()
         {
-            LoadPlatformEntryPoints();
         }
-        
-        private void LoadPlatformEntryPoints()
+
+
+        protected override IntPtr GetNativeLibrary()
 		{
 			BoundApi = RenderApi.ES;
+
+            return IntPtr.Zero;
         }
 
         protected override T LoadFunction<T>(string function)
