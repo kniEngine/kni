@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
 using SharpDX.Mathematics.Interop;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
@@ -115,7 +114,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     foreach (D3D11.RenderTargetView view in _currentRenderTargets)
                     {
                         if (view != null)
-                            this.D3dContext.ClearRenderTargetView(view, new RawColor4(color.X, color.Y, color.Z, color.W));
+                            this.D3dContext.ClearRenderTargetView(view, color.ToRawColor4());
                     }
                 }
 
@@ -163,7 +162,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_blendStateDirty || _blendFactorDirty)
             {
                 D3D11.BlendState blendState = _actualBlendState.GetDxState(this);
-                RawColor4 blendFactor = ConcreteGraphicsContext.ToDXColor(BlendFactor);
+                RawColor4 blendFactor = BlendFactor.ToRawColor4();
                 this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 
                 _blendStateDirty = false;
@@ -183,30 +182,13 @@ namespace Microsoft.Xna.Platform.Graphics
             _scissorRectangleDirty = false;
         }
 
-        private static SharpDX.Mathematics.Interop.RawColor4 ToDXColor(Color blendFactor)
-        {
-            return new SharpDX.Mathematics.Interop.RawColor4(
-                    blendFactor.R / 255.0f,
-                    blendFactor.G / 255.0f,
-                    blendFactor.B / 255.0f,
-                    blendFactor.A / 255.0f);
-        }
-
         internal void PlatformApplyViewport()
         {
             lock (this.D3dContext)
             {
                 if (this.D3dContext != null)
                 {
-                    RawViewportF viewport = new RawViewportF
-                    {
-                        X = _viewport.X,
-                        Y = _viewport.Y,
-                        Width = _viewport.Width,
-                        Height = _viewport.Height,
-                        MinDepth = _viewport.MinDepth,
-                        MaxDepth = _viewport.MaxDepth
-                    };
+                    RawViewportF viewport = _viewport.ToRawViewportF();
                     this.D3dContext.Rasterizer.SetViewport(viewport);
                 }
             }

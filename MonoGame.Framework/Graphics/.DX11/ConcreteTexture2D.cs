@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Height = levelHeight;
             texture2DDesc.MipLevels = 1;
             texture2DDesc.ArraySize = 1;
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.None;
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
             texture2DDesc.SampleDescription = sampleDesc;
@@ -264,7 +264,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Height = this.Height;
             texture2DDesc.MipLevels = this.LevelCount;
             texture2DDesc.ArraySize = this.ArraySize;
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             texture2DDesc.SampleDescription = sampleDesc;

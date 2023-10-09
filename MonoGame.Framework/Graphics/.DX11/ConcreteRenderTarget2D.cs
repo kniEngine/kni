@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Height = this.Height;
             texture2DDesc.MipLevels = this.LevelCount;
             texture2DDesc.ArraySize = this.ArraySize;
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             texture2DDesc.SampleDescription = sampleDesc;
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             D3D11.Device d3dDevice = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
-            _msSampleDescription = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(GraphicsExtensions.ToDXFormat(this.Format), multiSampleCount);
+            _msSampleDescription = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(this.Format.ToDXFormat(), multiSampleCount);
 
             _renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
             _depthStencilViews = new D3D11.DepthStencilView[1];
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Allocate a 2-D surface as the depth/stencil buffer.
             // Create a DepthStencil view on this surface to use on bind.
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat);
+            texture2DDesc.Format = DepthStencilFormat.ToDXFormat();
             texture2DDesc.ArraySize = 1;
             texture2DDesc.MipLevels = 1;
             texture2DDesc.Width = width;
@@ -196,7 +196,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 // Create the view for binding to the device.
                 D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
-                depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(DepthStencilFormat);
+                depthStencilViewDesc.Format = DepthStencilFormat.ToDXFormat();
                 depthStencilViewDesc.Dimension = (MultiSampleCount > 1)
                                                ? D3D11.DepthStencilViewDimension.Texture2DMultisampled
                                                : D3D11.DepthStencilViewDimension.Texture2D;
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Height = this.Height;
             texture2DDesc.MipLevels = 1; // mip mapping is applied to the resolved texture, not the multisampled texture;
             texture2DDesc.ArraySize = this.ArraySize;
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.RenderTarget; // ~BindFlags.ShaderResource, the multi sampled texture can never be bound directly.
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             texture2DDesc.SampleDescription = _msSampleDescription;
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     0,
                     this.GetTexture(),
                     0,
-                    GraphicsExtensions.ToDXFormat(this.Format));
+                    this.Format.ToDXFormat());
             }
         }
 

@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					BorderColor.B / 255.0f,
 					BorderColor.A / 255.0f);
 #else
-                samplerStateDesc.BorderColor = BorderColor.ToDXColor4();
+                samplerStateDesc.BorderColor = BorderColor.ToRawColor4();
 #endif
 
 				samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);

@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if WINDOWS
                     // The first argument instructs DXGI to block n VSyncs before presenting.
-                    syncInterval = GraphicsExtensions.ToDXSwapInterval(PresentationParameters.PresentationInterval);
+                    syncInterval = PresentationParameters.PresentationInterval.ToDXSwapInterval();
 #endif
 
 #if WINDOWS_UAP
@@ -437,7 +437,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.ModeDescription target = new DXGI.ModeDescription
             {
                 Format = format,
@@ -485,7 +485,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWS
         internal void ResizeTargets()
         {
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.ModeDescription modeDesc = new DXGI.ModeDescription();
             modeDesc.Format = format;
             modeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
@@ -587,7 +587,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
             }
 
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
@@ -636,7 +636,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 swapChainDesc.SampleDescription = multisampleDesc;
                 swapChainDesc.Usage = DXGI.Usage.RenderTargetOutput;
                 swapChainDesc.BufferCount = 2;
-                swapChainDesc.SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval);
+                swapChainDesc.SwapEffect = PresentationParameters.PresentationInterval.ToDXSwapEffect();
                 swapChainDesc.Flags = swapChainFlags;
 
                 // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
@@ -688,7 +688,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(PresentationParameters.BackBufferFormat);
+            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
                 PresentationParameters.MultiSampleCount);
@@ -729,7 +729,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 swapChainDesc.SampleDescription = multisampleDesc;
                 swapChainDesc.Usage = DXGI.Usage.RenderTargetOutput;
                 swapChainDesc.BufferCount = 2;
-                swapChainDesc.SwapEffect = GraphicsExtensions.ToDXSwapEffect(PresentationParameters.PresentationInterval);
+                swapChainDesc.SwapEffect = PresentationParameters.PresentationInterval.ToDXSwapEffect();
                 swapChainDesc.Flags = swapChainFlags;
 
                 // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
@@ -813,7 +813,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Create the depth buffer if we need it.
             if (PresentationParameters.DepthStencilFormat != DepthFormat.None)
             {
-                DXGI.Format depthFormat = GraphicsExtensions.ToDXFormat(PresentationParameters.DepthStencilFormat);
+                DXGI.Format depthFormat = PresentationParameters.DepthStencilFormat.ToDXFormat();
 
                 // Allocate a 2-D surface as the depth/stencil buffer.
                 D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -869,7 +869,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            DXGI.Format format = GraphicsExtensions.ToDXFormat(surfaceFormat);
+            DXGI.Format format = surfaceFormat.ToDXFormat();
 
             // Find the maximum supported level starting with the game's requested multisampling level
             // and halving each time until reaching 0 (meaning no multisample support).
