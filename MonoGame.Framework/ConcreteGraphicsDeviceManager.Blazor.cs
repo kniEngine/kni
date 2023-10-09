@@ -195,9 +195,11 @@ namespace Microsoft.Xna.Platform
         {
             //base.EndDraw();
 
-            var device = Game.GraphicsDevice;
+            GraphicsDevice device = Game.GraphicsDevice;
             if (device != null)
+            {
                 device.Present();
+            }
         }
 
         #endregion IGraphicsDeviceManager strategy
