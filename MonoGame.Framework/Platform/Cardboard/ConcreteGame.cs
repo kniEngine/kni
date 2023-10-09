@@ -10,6 +10,7 @@ using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
 
 
@@ -79,7 +80,8 @@ namespace Microsoft.Xna.Platform
                     break;
             }
             base.BeforeInitialize();
-            _gameWindow.GameView.TouchEnabled = true;
+            _gameWindow._touchEventListener = new TouchEventListener();
+            _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
 
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)

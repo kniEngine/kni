@@ -11,6 +11,7 @@ using Android.Views;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Input.Touch;
 
 
 namespace Microsoft.Xna.Framework
@@ -34,6 +35,8 @@ namespace Microsoft.Xna.Framework
         private Rectangle _clientBounds;
         private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
+
+        internal TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
 
