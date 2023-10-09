@@ -33,6 +33,7 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
+    <Compile Include="Graphics\.GL\Threading.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +43,6 @@
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
-    <Compile Include="Graphics\.GL\Threading.cs" />
   </ItemGroup>
 
   <ItemGroup>
