@@ -68,9 +68,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
     <Compile Include="Audio\AudioFactory.cs" />
@@ -235,13 +232,33 @@
     <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\VertexDeclarationAttributeInfo.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
     <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
     <Compile Include="Graphics\.GL\ConcreteOcclusionQuery.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
+    <Compile Include="Graphics\.GL\Threading.cs" />
+
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
@@ -416,26 +433,6 @@
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
-
-    <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
-    <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
-    <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
-    <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
-    <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
-    <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
-    <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
-    <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
-    <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
-    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
-
-    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
-    <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdaptersProvider.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
-    <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
-    <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
-    <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
 	  
     <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
@@ -446,7 +443,6 @@
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
     <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
-    <Compile Include="Graphics\.GL\Threading.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
