@@ -2,17 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+﻿// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    static partial class GraphicsExtensions
+    static class GLExtensions
     {
-        public static ComparisonFunc ToGLComparisonFunction(CompareFunction compare)
+        public static ComparisonFunc ToGLComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
             {

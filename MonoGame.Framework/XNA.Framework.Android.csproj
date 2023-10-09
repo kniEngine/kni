@@ -247,6 +247,7 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\GLExtensions.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
     <Compile Include="Graphics\.GL\Threading.cs" />
@@ -434,7 +435,6 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
 	  
-    <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
