@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (force ||
                 this.DepthBufferFunction != context._lastDepthStencilState.DepthBufferFunction)
             {
-                GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
+                GL.DepthFunc(DepthBufferFunction.ToGLComparisonFunction());
                 GL.CheckGLError();
                 context._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != context._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
+                    GL.StencilFunc(this.StencilFunction.ToGLComparisonFunction(), ReferenceStencil, StencilMask);
                     GL.CheckGLError();
                     context._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     context._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
