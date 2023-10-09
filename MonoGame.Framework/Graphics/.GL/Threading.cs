@@ -18,12 +18,13 @@ namespace Microsoft.Xna.Framework
             _mainThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
-#if ANDROID
-        internal static void ResetThread(int id)
+        /// <summary>
+        // Set main game thread.
+        /// </summary>
+        internal static void MakeMainThread()
         {
-            _mainThreadId = id;
+            _mainThreadId = Thread.CurrentThread.ManagedThreadId;
         }
-#endif
 
         /// <summary>
         /// Checks if the code is currently running on the UI thread.
