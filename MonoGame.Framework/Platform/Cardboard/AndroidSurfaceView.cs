@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework
             _isCancellationRequested = false;
 
             // prepare gameLoop
-            Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
+            Threading.MakeMainThread();
             _stopWatch = System.Diagnostics.Stopwatch.StartNew();
             _prevTickTime = DateTime.Now;
             var looper = Android.OS.Looper.MainLooper;
@@ -219,8 +219,7 @@ namespace Microsoft.Xna.Framework
 
         void RunStep()
         {
-            // set main game thread global ID
-            Threading.ResetThread(Thread.CurrentThread.ManagedThreadId);
+            Threading.MakeMainThread();
 
             switch (_appState)
             {
