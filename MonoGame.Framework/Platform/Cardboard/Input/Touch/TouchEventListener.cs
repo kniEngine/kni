@@ -2,35 +2,33 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
+using System;
 using Android.Views;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input.Touch;
 
-namespace Microsoft.Xna.Framework.Input.Touch
+namespace Microsoft.Xna.Platform.Input.Touch
 {
-    /// <summary>
-    /// Manages touch events for Android. Maps new presses to new touch Ids as per Xna WP7 incrementing touch Id behaviour. 
-    /// This is required as Android reports touch IDs of 0 to 5, which leads to incorrect handling of touch events.
-    /// Motivation and discussion: http://monogame.codeplex.com/discussions/382252
-    /// </summary>
-    class AndroidTouchEventManager
+    class TouchEventListener : Java.Lang.Object
+        , View.IOnTouchListener
     {
-        readonly AndroidGameWindow _gameWindow;
-
-        public bool Enabled { get; set; }
-
-        public AndroidTouchEventManager(AndroidGameWindow androidGameWindow)
+        public void SetTouchListener(GameWindow window)
         {
-            _gameWindow = androidGameWindow;
+            GameWindow gameWindow = window;
+
+            AndroidGameWindow androidGameWindow = (AndroidGameWindow)gameWindow;
+            androidGameWindow.GameView.SetOnTouchListener(this);
         }
 
-        public void OnTouchEvent(MotionEvent e)
+        bool View.IOnTouchListener.OnTouch(View v, MotionEvent e)
         {
-            if (!Enabled)
-                return;
-
             Vector2 position = Vector2.Zero;
             position.X = e.GetX(e.ActionIndex);
             position.Y = e.GetY(e.ActionIndex);
             int id = e.GetPointerId(e.ActionIndex);
+
             switch (e.ActionMasked)
             {
                 // DOWN                
@@ -38,11 +36,13 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 case MotionEventActions.PointerDown:
                     TouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
                     break;
+
                 // UP                
                 case MotionEventActions.Up:
                 case MotionEventActions.PointerUp:
                     TouchPanel.AddEvent(id, TouchLocationState.Released, position);
                     break;
+
                 // MOVE                
                 case MotionEventActions.Move:
                     for (int i = 0; i < e.PointerCount; i++)
@@ -64,6 +64,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
                     }
                     break;
             }
+
+            return true;
         }
 
     }

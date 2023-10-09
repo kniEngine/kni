@@ -15,7 +15,6 @@ using Android.Views;
 using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
@@ -25,7 +24,6 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidSurfaceView : SurfaceView
         , ISurfaceHolderCallback
-        , View.IOnTouchListener
         , Java.Lang.IRunnable
     {
         // What is the state of the app, for tracking surface recreation inside this class.
@@ -56,7 +54,6 @@ namespace Microsoft.Xna.Framework
         bool? _isCancellationRequested = null;
         private int _frameRequests = 0;
 
-        private readonly AndroidTouchEventManager _touchManager;
         private readonly AndroidGameWindow _gameWindow;
         private readonly Game _game;
 
@@ -66,15 +63,6 @@ namespace Microsoft.Xna.Framework
 
         internal event EventHandler Tick;
 
-        internal bool TouchEnabled
-        {
-            get { return _touchManager.Enabled; }
-            set
-            {
-                _touchManager.Enabled = value;
-                SetOnTouchListener(value ? this : null);
-            }
-        }
 
         internal bool IsResuming { get; private set; }
 
@@ -83,7 +71,6 @@ namespace Microsoft.Xna.Framework
         {
             _gameWindow = gameWindow;
             _game = game;
-            _touchManager = new AndroidTouchEventManager(gameWindow);
             Init();
         }
 
@@ -117,12 +104,6 @@ namespace Microsoft.Xna.Framework
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
         {
             _androidSurfaceAvailable = false;
-        }
-
-        bool View.IOnTouchListener.OnTouch(View v, MotionEvent e)
-        {
-            _touchManager.OnTouchEvent(e);
-            return true;
         }
 
         internal void SwapBuffers()

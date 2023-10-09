@@ -545,7 +545,7 @@
     <Compile Include="Platform\Cardboard\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\Cardboard\Devices\Sensors\Compass.cs" />
     <Compile Include="Platform\Cardboard\Input\Keyboard.cs" />
-    <Compile Include="Platform\Cardboard\Input\Touch\AndroidTouchEventManager.cs" />
+    <Compile Include="Platform\Cardboard\Input\Touch\TouchEventListener.cs" />
     <Compile Include="Platform\Cardboard\AndroidCompatibility.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameActivity.cs" />
     <Compile Include="Platform\Cardboard\ConcreteGame.cs" />
