@@ -922,14 +922,14 @@ namespace Microsoft.Xna.Platform.Graphics
             return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
-        internal void PlatformUnbindRenderTarget(IRenderTarget renderTarget)
+        internal void PlatformUnbindRenderTarget(IRenderTargetStrategyGL renderTargetStrategy)
         {
             var bindingsToDelete = new List<RenderTargetBinding[]>();
             foreach (RenderTargetBinding[] bindings in _glFramebuffers.Keys)
             {
-                foreach (RenderTargetBinding binding in bindings)
+                foreach (RenderTargetBinding binding in renderTargetStrategy)
                 {
-                    if (binding.RenderTarget == renderTarget)
+                    if (binding.RenderTarget.GetTextureStrategy<ITextureStrategy>() == renderTarget)
                     {
                         bindingsToDelete.Add(bindings);
                         break;
