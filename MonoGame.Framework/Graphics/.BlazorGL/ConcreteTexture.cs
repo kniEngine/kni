@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
-                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget((IRenderTarget)renderTargetGL);
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget(renderTargetGL);
             }
         }
 
