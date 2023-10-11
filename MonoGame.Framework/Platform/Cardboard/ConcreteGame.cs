@@ -80,8 +80,6 @@ namespace Microsoft.Xna.Platform
                     break;
             }
 
-            IsActive = true;
-
             _gameWindow._touchEventListener = new TouchEventListener();
             _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
