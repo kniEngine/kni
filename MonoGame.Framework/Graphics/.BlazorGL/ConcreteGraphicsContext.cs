@@ -927,9 +927,9 @@ namespace Microsoft.Xna.Platform.Graphics
             var bindingsToDelete = new List<RenderTargetBinding[]>();
             foreach (RenderTargetBinding[] bindings in _glFramebuffers.Keys)
             {
-                foreach (RenderTargetBinding binding in renderTargetStrategy)
+                foreach (RenderTargetBinding binding in bindings)
                 {
-                    if (binding.RenderTarget.GetTextureStrategy<ITextureStrategy>() == renderTarget)
+                    if (binding.RenderTarget.GetTextureStrategy<ITextureStrategy>() == renderTargetStrategy)
                     {
                         bindingsToDelete.Add(bindings);
                         break;
