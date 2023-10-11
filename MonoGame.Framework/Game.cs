@@ -523,8 +523,8 @@ namespace Microsoft.Xna.Framework
             }
 
             Strategy.BeforeInitialize();
-
             Initialize();
+
             Strategy.InitializeComponents();
         }
 

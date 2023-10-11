@@ -285,16 +285,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
         }
 
-        /// <summary>
-        /// Gives derived classes an opportunity to do work before any
-        /// components are initialized.  Note that the base implementation sets
-        /// IsActive to true, so derived classes should either call the base
-        /// implementation or set IsActive to true by their own means.
-        /// </summary>
-        public virtual void BeforeInitialize()
-        {
-            IsActive = true;
-        }
+        public abstract void BeforeInitialize();
 
         internal void InitializeComponents()
         {

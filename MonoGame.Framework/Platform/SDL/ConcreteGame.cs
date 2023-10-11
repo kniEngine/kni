@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform
         {
             SdlRunLoop();
 
-            base.BeforeInitialize();
+            IsActive = true;
         }
 
         public override bool IsMouseVisible
