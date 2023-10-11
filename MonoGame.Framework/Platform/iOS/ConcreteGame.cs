@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Platform
 
         public override void BeforeInitialize()
         {
-            base.BeforeInitialize();
+            IsActive = true;
 
             _viewController.View.LayoutSubviews();
         }

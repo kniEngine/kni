@@ -79,7 +79,9 @@ namespace Microsoft.Xna.Platform
                     this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.LandscapeRight ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft, false);
                     break;
             }
-            base.BeforeInitialize();
+
+            IsActive = true;
+
             _gameWindow._touchEventListener = new TouchEventListener();
             _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
