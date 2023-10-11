@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             }
             if (this.libES2 != IntPtr.Zero)
             {
-                // We pass -1 becuase when requesting a GLES 2.0 context we
+                // We pass -1 because when requesting a GLES 2.0 context we
                 // dont provide the Minor version.
                 yield return new GLESVersion { Major = 2, Minor = -1 };
             }
