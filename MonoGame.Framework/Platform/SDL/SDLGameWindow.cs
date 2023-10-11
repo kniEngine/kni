@@ -333,7 +333,9 @@ namespace Microsoft.Xna.Framework
                                 _game.Strategy.IsActive = false;
                                 break;
                             case Sdl.Window.EventId.Moved:
-                                Moved();
+                                if (!_supressMoved)
+                                    _wasMoved = true;
+                                _supressMoved = false;
                                 break;
                             case Sdl.Window.EventId.Close:
                                 isExiting = true;
@@ -489,17 +491,6 @@ namespace Microsoft.Xna.Framework
             IsFullScreen = willBeFullScreen;
 
             _supressMoved = true;
-        }
-
-        internal void Moved()
-        {
-            if (_supressMoved)
-            {
-                _supressMoved = false;
-                return;
-            }
-
-            _wasMoved = true;
         }
 
         public void ClientResize(int width, int height)
