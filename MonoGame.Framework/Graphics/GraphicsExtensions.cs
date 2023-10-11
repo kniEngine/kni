@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    static partial class GraphicsExtensions
+    static class GraphicsExtensions
     {
 
         public static bool IsCompressedFormat(this SurfaceFormat format)

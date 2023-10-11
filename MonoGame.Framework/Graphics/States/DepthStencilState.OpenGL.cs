@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (force || 
                 this.DepthBufferFunction != context._lastDepthStencilState.DepthBufferFunction)
             {
-                GL.DepthFunc(GraphicsExtensions.ToGLComparisonFunction(DepthBufferFunction));
+                GL.DepthFunc(DepthBufferFunction.ToGLComparisonFunction());
                 GL.CheckGLError();
                 context._lastDepthStencilState.DepthBufferFunction = this.DepthBufferFunction;
             }
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != context._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFuncSeparate(cullFaceModeFront, GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction),
+                    GL.StencilFuncSeparate(cullFaceModeFront, this.StencilFunction.ToGLComparisonFunction(),
                                            this.ReferenceStencil, this.StencilMask);
                     GL.CheckGLError();
                     context._lastDepthStencilState.StencilFunction = this.StencilFunction;
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
                     this.StencilMask != context._lastDepthStencilState.StencilMask)
 			    {
-                    GL.StencilFuncSeparate(cullFaceModeBack, GraphicsExtensions.ToGLComparisonFunction(this.CounterClockwiseStencilFunction),
+                    GL.StencilFuncSeparate(cullFaceModeBack, this.CounterClockwiseStencilFunction.ToGLComparisonFunction(),
                                            this.ReferenceStencil, this.StencilMask);
                     GL.CheckGLError();
                     context._lastDepthStencilState.CounterClockwiseStencilFunction = this.CounterClockwiseStencilFunction;
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
 					this.StencilMask != context._lastDepthStencilState.StencilMask)
 				{
-                    GL.StencilFunc(GraphicsExtensions.ToGLComparisonFunction(this.StencilFunction), ReferenceStencil, StencilMask);
+                    GL.StencilFunc(this.StencilFunction.ToGLComparisonFunction(), ReferenceStencil, StencilMask);
                     GL.CheckGLError();
                     context._lastDepthStencilState.StencilFunction = this.StencilFunction;
                     context._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;

@@ -2,18 +2,22 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Mathematics.Interop;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    static partial class GraphicsExtensions
+    static partial class SharpDXExtensions
     {
-        public static int ToDXSwapInterval(PresentInterval interval)
+        static public int ToDXSwapInterval(this PresentInterval interval)
         {
             switch (interval)
             {
@@ -27,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public DXGI.SwapEffect ToDXSwapEffect(PresentInterval presentInterval)
+        static public DXGI.SwapEffect ToDXSwapEffect(this PresentInterval presentInterval)
         {
             DXGI.SwapEffect effect;
 
@@ -67,7 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return effect;
         }
 
-        static public DXGI.Format ToDXFormat(DepthFormat format)
+        static public DXGI.Format ToDXFormat(this DepthFormat format)
         {
             switch (format)
             {
@@ -84,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public DXGI.Format ToDXFormat(SurfaceFormat format)
+        static public DXGI.Format ToDXFormat(this SurfaceFormat format)
         {
             switch (format)
             {
@@ -156,26 +160,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        static public RawVector2 ToDXVector2(this Vector2 vec)
-        {
-            return new RawVector2(vec.X, vec.Y);
-        }
-
-        static public RawVector3 ToDXVector3(this Vector3 vec)
-        {
-            return new RawVector3(vec.X, vec.Y, vec.Z);
-        }
-
-        static public RawVector4 ToDXVector4(this Vector4 vec)
-        {
-            return new RawVector4(vec.X, vec.Y, vec.Z, vec.W);
-        }
-
-        static public RawColor4 ToDXColor4(this Color color)
-        {
-            return new RawColor4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
-        }
-
         static public D3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
@@ -201,5 +185,46 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentException("Invalid comparison!");
             }
         }
+
+        static public RawVector2 ToRawVector2(this Vector2 vec)
+        {
+            return new RawVector2(vec.X, vec.Y);
+        }
+
+        static public RawVector3 ToRawVector3(this Vector3 vec)
+        {
+            return new RawVector3(vec.X, vec.Y, vec.Z);
+        }
+
+        static public RawVector4 ToRawVector4(this Vector4 vec)
+        {
+            return new RawVector4(vec.X, vec.Y, vec.Z, vec.W);
+        }
+
+        static public RawColor4 ToRawColor4(this Vector4 color)
+        {
+            return new RawColor4(color.X, color.Y, color.Z, color.W);
+        }
+
+        static public RawColor4 ToRawColor4(this Color color)
+        {
+            return new RawColor4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+        }
+
+        static public RawViewportF ToRawViewportF(this Viewport viewport)
+        {
+            return new RawViewportF
+            {
+                X = viewport.X,
+                Y = viewport.Y,
+                Width = viewport.Width,
+                Height = viewport.Height,
+                MinDepth = viewport.MinDepth,
+                MaxDepth = viewport.MaxDepth
+            };
+        }
+
+        
+
     }
 }

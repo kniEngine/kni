@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case TextureFilterMode.Comparison:
                     GL.TexParameter(target, TextureParameterName.TextureCompareMode, (int)TextureCompareMode.CompareRefToTexture);
                     GL.CheckGLError();
-                    GL.TexParameter(target, TextureParameterName.TextureCompareFunc, (int)GraphicsExtensions.ToGLComparisonFunction(ComparisonFunction));
+                    GL.TexParameter(target, TextureParameterName.TextureCompareFunc, (int)ComparisonFunction.ToGLComparisonFunction());
                     GL.CheckGLError();
                     break;
                 case TextureFilterMode.Default:

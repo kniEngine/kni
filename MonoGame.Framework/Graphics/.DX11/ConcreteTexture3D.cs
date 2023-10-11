@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture3DDesc.Height = this.Height;
             texture3DDesc.Depth = this.Depth;
             texture3DDesc.MipLevels = 1;
-            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.Format = this.Format.ToDXFormat();
             texture3DDesc.BindFlags = D3D11.BindFlags.None;
             texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read;
             texture3DDesc.Usage = D3D11.ResourceUsage.Staging;
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture3DDesc.Height = this.Height;
             texture3DDesc.Depth = this.Depth;
             texture3DDesc.MipLevels = this.LevelCount;
-            texture3DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture3DDesc.Format = this.Format.ToDXFormat();
             texture3DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
             texture3DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             texture3DDesc.Usage = D3D11.ResourceUsage.Default;

@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Height = this.Size;
             texture2DDesc.MipLevels = this.LevelCount;
             texture2DDesc.ArraySize = 6; // A texture cube is a 2D texture array with 6 textures.
-            texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+            texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource;
             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             texture2DDesc.SampleDescription = sampleDesc;
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
                 renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture2DArray;
-                renderTargetViewDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+                renderTargetViewDesc.Format = this.Format.ToDXFormat();
                 renderTargetViewDesc.Texture2DArray.ArraySize = 1;
                 renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
                 renderTargetViewDesc.Texture2DArray.MipSlice = 0;
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             D3D11.Texture2DDescription depthStencilDesc = new D3D11.Texture2DDescription();
-            depthStencilDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+            depthStencilDesc.Format = preferredDepthFormat.ToDXFormat();
             depthStencilDesc.ArraySize = 1;
             depthStencilDesc.MipLevels = 1;
             depthStencilDesc.Width = this.Size;
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 for (int i = 0; i < _renderTargetViews.Length; i++)
                 {
                     D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
-                    depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+                    depthStencilViewDesc.Format = preferredDepthFormat.ToDXFormat();
                     depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2DArray;
                     depthStencilViewDesc.Texture2DArray.ArraySize = 1;
                     depthStencilViewDesc.Texture2DArray.FirstArraySlice = i;
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _depthTarget = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, depthStencilDesc);
 
                     D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
-                    depthStencilViewDesc.Format = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+                    depthStencilViewDesc.Format = preferredDepthFormat.ToDXFormat();
                     depthStencilViewDesc.Dimension = D3D11.DepthStencilViewDimension.Texture2D;
                     _depthStencilViews[i] = new D3D11.DepthStencilView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _depthTarget, depthStencilViewDesc);
                 }

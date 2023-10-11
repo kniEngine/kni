@@ -33,11 +33,11 @@
     <Compile Include="Graphics\.BlazorGL\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.BlazorGL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.BlazorGL\GLExtensions.cs" />
     <Compile Include="Graphics\.BlazorGL\IRenderTargetStrategyGL.cs" />
   </ItemGroup>
 	
   <ItemGroup>
-    <Compile Include="Graphics\GraphicsExtensions.Blazor.cs" />
     <Compile Include="Graphics\States\BlendState.Blazor.cs" />
     <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
     <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />

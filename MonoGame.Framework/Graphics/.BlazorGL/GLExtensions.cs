@@ -2,14 +2,16 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    static partial class GraphicsExtensions
+    static class GLExtensions
     {
-        public static WebGLDepthComparisonFunc ToGLComparisonFunction(CompareFunction compare)
+        public static WebGLDepthComparisonFunc ToGLComparisonFunction(this CompareFunction compare)
         {
             switch (compare)
             {

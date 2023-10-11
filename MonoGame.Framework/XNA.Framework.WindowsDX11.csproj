@@ -261,6 +261,7 @@
 	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
+    <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
 	  
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\ColorWriteChannels.cs" />
@@ -411,7 +412,6 @@
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsExtensions.DX11.cs" />
     <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
     <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />

@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             DXGI.Format dxgiFormat = (preferredSurfaceFormat == SurfaceFormat.Color)
                                    ? DXGI.Format.B8G8R8A8_UNorm
-                                   : GraphicsExtensions.ToDXFormat(preferredSurfaceFormat);
+                                   : preferredSurfaceFormat.ToDXFormat();
 
             DXGI.SampleDescription multisampleDesc = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
 
@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
             CreateSwapChainTexture(d3dDevice, width, height, multisampleDesc, dxgiFormat);
             if (preferredDepthFormat != DepthFormat.None)
             {
-                DXGI.Format dxgiDepthFormat = GraphicsExtensions.ToDXFormat(preferredDepthFormat);
+                DXGI.Format dxgiDepthFormat = preferredDepthFormat.ToDXFormat();
                 CreateSwapChainDepthBuffer(d3dDevice, width, height, multisampleDesc, dxgiDepthFormat);
             }
         }
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
             swapChainDesc.SampleDescription = multisampleDesc;
             swapChainDesc.Usage = DXGI.Usage.RenderTargetOutput;
             swapChainDesc.BufferCount = 2;
-            swapChainDesc.SwapEffect = GraphicsExtensions.ToDXSwapEffect(_presentInterval);
+            swapChainDesc.SwapEffect = _presentInterval.ToDXSwapEffect();
             swapChainDesc.IsWindowed = true;
             
             // First, retrieve the underlying DXGI Device from the D3D Device.
@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 texture2DDesc.Height = this.Height;
                 texture2DDesc.MipLevels = this.LevelCount;
                 texture2DDesc.ArraySize = this.ArraySize;
-                texture2DDesc.Format = GraphicsExtensions.ToDXFormat(this.Format);
+                texture2DDesc.Format = this.Format.ToDXFormat();
                 texture2DDesc.BindFlags = D3D11.BindFlags.ShaderResource;
                 texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
                 texture2DDesc.SampleDescription = sampleDesc;
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 try
                 {
-                    _swapChain.Present(GraphicsExtensions.ToDXSwapInterval(_presentInterval), DXGI.PresentFlags.None);
+                    _swapChain.Present(_presentInterval.ToDXSwapInterval(), DXGI.PresentFlags.None);
                 }
                 catch (DX.SharpDXException)
                 {

@@ -31,13 +31,13 @@
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
     <Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\GLExtensions.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
     <Compile Include="Graphics\.GL\Threading.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Graphics\GraphicsExtensions.OpenGL.cs" />
     <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
     <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
     <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
