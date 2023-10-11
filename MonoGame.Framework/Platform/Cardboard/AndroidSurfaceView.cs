@@ -302,6 +302,9 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
+                if (OGL_DROID.Current == null)
+                    OGL_DROID.Initialize();
+
                 CreateGLContext();
                 _glContextAvailable = true;
                 if (!_glSurfaceAvailable)
@@ -775,8 +778,6 @@ namespace Microsoft.Xna.Framework
                     gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                 }
 
-                if (OGL_DROID.Current == null)
-                    OGL_DROID.Initialize();
             }
             catch (Exception ex)
             {
