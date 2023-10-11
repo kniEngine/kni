@@ -21,8 +21,6 @@ namespace Microsoft.Xna.Platform
 
         public ConcreteGame(Game game) : base(game)
         {
-            IsActive = true;
-
             _window = new BlazorGameWindow(this);
 
             Window = _window;
@@ -40,6 +38,7 @@ namespace Microsoft.Xna.Platform
             Timer = Stopwatch.StartNew();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
+            IsActive = true;
 
             _window.RunLoop();
 
@@ -67,8 +66,6 @@ namespace Microsoft.Xna.Platform
 
         public override void BeforeInitialize()
         {
-            IsActive = true;
-
             var gdm = this.GraphicsDeviceManager;
             if (gdm == null)
             {
