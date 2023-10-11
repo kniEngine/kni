@@ -79,8 +79,6 @@ namespace Microsoft.Xna.Platform
             bool isExiting = _window.SdlRunLoop();
             if (isExiting)
                 _isExiting++;
-
-            IsActive = true;
         }
 
         public override bool IsMouseVisible
