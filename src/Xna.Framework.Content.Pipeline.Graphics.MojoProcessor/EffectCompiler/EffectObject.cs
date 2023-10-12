@@ -7,7 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Graphics;
+using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -655,7 +657,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         static public EffectObject CompileEffect(ShaderResult shaderResult, out string errorsAndWarnings)
         {
-            var effect = new EffectObject();
+            EffectObject effect = new EffectObject();
             errorsAndWarnings = string.Empty;
 
             // These are filled out as we process stuff.
@@ -664,22 +666,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Go thru the techniques and that will find all the 
             // shaders and constant buffers.
-            var shaderInfo = shaderResult.ShaderInfo;
+            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
             effect.Techniques = new EffectTechniqueContent[shaderInfo.Techniques.Count];
-            for (var t = 0; t < shaderInfo.Techniques.Count; t++)
+            for (int t = 0; t < shaderInfo.Techniques.Count; t++)
             {
-                var tinfo = shaderInfo.Techniques[t]; ;
+                TechniqueInfo tinfo = shaderInfo.Techniques[t]; ;
 
-                var technique = new EffectTechniqueContent();
+                EffectTechniqueContent technique = new EffectTechniqueContent();
                 technique.name = tinfo.name;
                 technique.pass_count = (uint)tinfo.Passes.Count;
                 technique.pass_handles = new EffectPassContent[tinfo.Passes.Count];
 
-                for (var p = 0; p < tinfo.Passes.Count; p++)
+                for (int p = 0; p < tinfo.Passes.Count; p++)
                 {
-                    var pinfo = tinfo.Passes[p];
+                    PassInfo pinfo = tinfo.Passes[p];
 
-                    var pass = new EffectPassContent();
+                    EffectPassContent pass = new EffectPassContent();
                     pass.name = pinfo.name ?? string.Empty;
 
                     pass.blendState = pinfo.blendState;
@@ -687,7 +689,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     pass.rasterizerState = pinfo.rasterizerState;
 
                     pass.state_count = 0;
-                    var tempstate = new EffectStateContent[2];
+                    EffectStateContent[] tempstate = new EffectStateContent[2];
 
                     shaderResult.Profile.ValidateShaderModels(pinfo);
 
@@ -704,7 +706,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
 
                     pass.states = new EffectStateContent[pass.state_count];
-                    for (var s = 0; s < pass.state_count; s++)
+                    for (int s = 0; s < pass.state_count; s++)
                         pass.states[s] = tempstate[s];
 
                     technique.pass_handles[p] = pass;
@@ -715,16 +717,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Make the list of parameters by combining all the
             // constant buffers ignoring the buffer offsets.
-            var parameters = new List<EffectParameterContent>();
-            for (var c = 0; c < effect.ConstantBuffers.Count; c++)
+            List<EffectParameterContent> parameters = new List<EffectParameterContent>();
+            for (int c = 0; c < effect.ConstantBuffers.Count; c++)
             {
-                var cb = effect.ConstantBuffers[c];
+                ConstantBufferData cb = effect.ConstantBuffers[c];
 
-                for (var i = 0; i < cb.Parameters.Count; i++)
+                for (int i = 0; i < cb.Parameters.Count; i++)
                 {
-                    var param = cb.Parameters[i];
+                    EffectParameterContent param = cb.Parameters[i];
 
-                    var match = parameters.FindIndex(e => e.name == param.name);
+                    int match = parameters.FindIndex(e => e.name == param.name);
                     if (match == -1)
                     {
                         cb.ParameterIndex.Add(parameters.Count);
@@ -740,19 +742,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Add the texture parameters from the samplers.
-            foreach (var shader in effect.Shaders)
+            foreach (ShaderData shader in effect.Shaders)
             {
-                for (var s = 0; s < shader._samplers.Length; s++)
+                for (int s = 0; s < shader._samplers.Length; s++)
                 {
-                    var sampler = shader._samplers[s];
+                    ShaderData.Sampler sampler = shader._samplers[s];
 
-                    var match = parameters.FindIndex(e => e.name == sampler.parameterName);
+                    int match = parameters.FindIndex(e => e.name == sampler.parameterName);
                     if (match == -1)
                     {
                         // Store the index for runtime lookup.
                         shader._samplers[s].parameter = parameters.Count;
 
-                        var param = new EffectParameterContent();
+                        EffectParameterContent param = new EffectParameterContent();
                         param.class_ = PARAMETER_CLASS.OBJECT;
                         param.name = sampler.parameterName;
                         param.semantic = string.Empty;
@@ -801,7 +803,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
-            var shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
+            ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
             if (shaderData == null)
             {
                 // Compile and create the shader.
@@ -810,7 +812,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 shaderData.ShaderProfile = shaderProfile;
             }
 
-            var state = new EffectStateContent();
+            EffectStateContent state = new EffectStateContent();
             state.index = 0;
             state.type = STATE_TYPE.CONSTANT;
             state.operation = isVertexShader ? (uint)146 : (uint)147;
@@ -862,7 +864,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 }
 
                 // Compile the shader into bytecode.                
-                var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(
+                D3DC.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(
                     shaderResult.FileContent,
                     shaderFunction,
                     shaderProfile,
@@ -879,7 +881,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     throw new ShaderCompilerException();
                 
                 shaderByteCode = result.Bytecode;
-                //var source = shaderByteCode.Disassemble();
+                //string source = shaderByteCode.Disassemble();
             }
             catch (SharpDX.CompilationException ex)
             {
@@ -893,9 +895,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         
         internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)
         {
-            foreach (var state in states)
+            foreach (EffectStateContent state in states)
             {
-                var operation = state_table[state.operation];
+                state_info operation = state_table[state.operation];
                 if (operation.class_ != type)
                     continue;
 

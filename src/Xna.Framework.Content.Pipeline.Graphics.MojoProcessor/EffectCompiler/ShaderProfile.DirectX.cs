@@ -51,10 +51,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, EffectObject effect, ref string errorsAndWarnings)
         {
-            var bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
+            byte[] bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
 
-            var shaderInfo = shaderResult.ShaderInfo;
-            var shaderData = ShaderData.CreateHLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
+            ShaderData shaderData = ShaderData.CreateHLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             effect.Shaders.Add(shaderData);
             return shaderData;
         }

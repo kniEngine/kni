@@ -13,11 +13,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 	{
         public static ShaderData CreateGLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
-            var dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
 
-			// Use MojoShader to convert the HLSL bytecode to GLSL.
+            // Use MojoShader to convert the HLSL bytecode to GLSL.
 
-			var parseDataPtr = MojoShader.NativeMethods.Parse(
+            IntPtr parseDataPtr = MojoShader.NativeMethods.Parse(
 				MojoShader.NativeConstants.PROFILE_GLSL,
 				byteCode,
 				byteCode.Length,
@@ -29,10 +29,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				IntPtr.Zero,
 				IntPtr.Zero);
 
-			var parseData = MarshalHelper.Unmarshal<MojoShader.ParseData>(parseDataPtr);
+            MojoShader.ParseData parseData = MarshalHelper.Unmarshal<MojoShader.ParseData>(parseDataPtr);
 			if (parseData.error_count > 0)
             {
-				var errors = MarshalHelper.UnmarshalArray<MojoShader.Error>(
+                MojoShader.Error[] errors = MarshalHelper.UnmarshalArray<MojoShader.Error>(
 					parseData.errors,
 					parseData.error_count
 				);
@@ -44,11 +44,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			// TODO: Could this be done using DX shader reflection?
 			//
 			{
-				var attributes = MarshalHelper.UnmarshalArray<MojoShader.Attribute>(
+                MojoShader.Attribute[] attributes = MarshalHelper.UnmarshalArray<MojoShader.Attribute>(
 						parseData.attributes, parseData.attribute_count);
 
 				dxshader._attributes = new Attribute[attributes.Length];
-				for (var i = 0; i < attributes.Length; i++)
+				for (int i = 0; i < attributes.Length; i++)
                 {
 					dxshader._attributes [i].name = attributes [i].name;
 					dxshader._attributes [i].index = attributes [i].index;
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				}
 			}
 
-			var symbols = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
+            MojoShader.Symbol[] symbols = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
 					parseData.symbols, parseData.symbol_count);
 
 			//try to put the symbols in the order they are eventually packed into the uniform arrays
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				uint float4_index = 0;
 				uint int4_index = 0;
 
-				for (var i = 0; i < symbols.Length; i++)
+				for (int i = 0; i < symbols.Length; i++)
                 {
 					switch (symbols [i].register_set)
                     {
@@ -106,18 +106,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 				}
 			}
 
-			// Get the samplers.
-			var samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler>(
+            // Get the samplers.
+            MojoShader.Sampler[] samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler>(
 					parseData.samplers, parseData.sampler_count);
 			dxshader._samplers = new Sampler[samplers.Length];
-			for (var i = 0; i < samplers.Length; i++)
+			for (int i = 0; i < samplers.Length; i++)
             {
                 // We need the original sampler name... look for that in the symbols.
-                var samplerName = symbols.First(e => e.register_set == MojoShader.SymbolRegisterSet.SAMPLER &&
+                string samplerName = symbols.First(e => e.register_set == MojoShader.SymbolRegisterSet.SAMPLER &&
                                                      e.register_index == samplers[i].index
                                                ).name;
 
-                var sampler = new Sampler
+                Sampler sampler = new Sampler
                 {
                     //sampler mapping to parameter is unknown atm
                     parameter = -1,
@@ -138,10 +138,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     sampler.state = state.State;
 
-                    if (state.TextureName == null)
+                    if (state.TextureName != null)
                         sampler.parameterName = state.TextureName;
-
-                    sampler.parameterName = state.TextureName ?? samplerName;
                 }
 
                 // Store the sampler.
@@ -149,22 +147,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
 
 			// Gather all the parameters used by this shader.
-			var symbol_types = new [] { 
+			var symbol_types = new []
+            {
 				new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.SymbolRegisterSet.BOOL, },
 				new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
 				new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
 			};
 
-			var cbuffer_index = new List<int>();
-			for (var i = 0; i < symbol_types.Length; i++)
+            List<int> cbuffer_index = new List<int>();
+			for (int i = 0; i < symbol_types.Length; i++)
             {
-				var cbuffer = new ConstantBufferData(symbol_types [i].name,
+                ConstantBufferData cbuffer = new ConstantBufferData(symbol_types [i].name,
 													 symbol_types [i].set,
 													 symbols);
 				if (cbuffer.Size == 0)
 					continue;
 
-				var match = cbuffers.FindIndex(e => e.SameAs(cbuffer));
+				int match = cbuffers.FindIndex(e => e.SameAs(cbuffer));
 				if (match == -1)
                 {
 					cbuffer_index.Add(cbuffers.Count);
@@ -175,7 +174,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
 			dxshader._cbuffers = cbuffer_index.ToArray();
 
-			var glslCode = parseData.output;
+			string glslCode = parseData.output;
 
 			// TODO: This sort of sucks... why does MojoShader not produce
 			// code valid for GLES out of the box?
@@ -185,7 +184,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 			// Add the required precision specifiers for GLES.
 
-            var floatPrecision = dxshader.IsVertexShader ? "precision highp float;\r\n" : "precision mediump float;\r\n";
+            string floatPrecision = dxshader.IsVertexShader ? "precision highp float;\r\n" : "precision mediump float;\r\n";
 
 			glslCode = "#ifdef GL_ES\r\n" +
                  floatPrecision +

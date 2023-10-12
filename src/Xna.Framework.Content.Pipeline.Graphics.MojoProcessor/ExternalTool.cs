@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         public static int Run(string command, string arguments)
         {
             string stdout, stderr;
-            var result = Run(command, arguments, out stdout, out stderr);
+            int result = Run(command, arguments, out stdout, out stderr);
             if (result < 0)
                 throw new Exception(string.Format("{0} returned exit code {1}", command, result));
 
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             // This particular case is likely to be the most common and thus
             // warrants its own specific error message rather than falling
             // back to a general exception from Process.Start()
-            var fullPath = FindCommand(command);
+            string fullPath = FindCommand(command);
             if (string.IsNullOrEmpty(fullPath))
                 throw new Exception(string.Format("Couldn't locate external tool '{0}'.", command));
 
@@ -40,16 +40,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             // lambdas (for the thread functions), so we have to store
             // the data in a temporary variable and then assign these
             // variables to the out parameters.
-            var stdoutTemp = string.Empty;
-            var stderrTemp = string.Empty;
+            string stdoutTemp = string.Empty;
+            string stderrTemp = string.Empty;
 
-            var processInfo = new ProcessStartInfo
+            ProcessStartInfo processInfo = new ProcessStartInfo
             {
+                FileName = fullPath,
                 Arguments = arguments,
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 ErrorDialog = false,
-                FileName = fullPath,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             EnsureExecutable(fullPath);
 
-            using (var process = new Process())
+            using (Process process = new Process())
             {
                 process.StartInfo = processInfo;
 
@@ -67,20 +67,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // We have to run these in threads, because using ReadToEnd
                 // on one stream can deadlock if the other stream's buffer is
                 // full.
-                var stdoutThread = new Thread(new ThreadStart(() =>
+                Thread stdoutThread = new Thread(new ThreadStart(() =>
                 {
-                    var memory = new MemoryStream();
+                    MemoryStream memory = new MemoryStream();
                     process.StandardOutput.BaseStream.CopyTo(memory);
-                    var bytes = new byte[memory.Position];
+                    byte[] bytes = new byte[memory.Position];
                     memory.Seek(0, SeekOrigin.Begin);
                     memory.Read(bytes, 0, bytes.Length);
                     stdoutTemp = System.Text.Encoding.ASCII.GetString(bytes);
                 }));
-                var stderrThread = new Thread(new ThreadStart(() =>
+                Thread stderrThread = new Thread(new ThreadStart(() =>
                 {
-                    var memory = new MemoryStream();
+                    MemoryStream memory = new MemoryStream();
                     process.StandardError.BaseStream.CopyTo(memory);
-                    var bytes = new byte[memory.Position];
+                    byte[] bytes = new byte[memory.Position];
                     memory.Seek(0, SeekOrigin.Begin);
                     memory.Read(bytes, 0, bytes.Length);
                     stderrTemp = System.Text.Encoding.ASCII.GetString(bytes);
@@ -125,30 +125,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return command;
 
             // For Linux check specific subfolder
-            var lincom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "linux", command);
+            string lincom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "linux", command);
             if (CurrentPlatform.OS == OS.Linux && File.Exists(lincom))
                 return lincom;
 
             // For Mac check specific subfolder
-            var maccom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "osx", command);
+            string maccom = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "osx", command);
             if (CurrentPlatform.OS == OS.MacOSX && File.Exists(maccom))
                 return maccom;
 
             // We don't have a full path, so try running through the system path to find it.
-            var paths = AppDomain.CurrentDomain.BaseDirectory +
+            string paths = AppDomain.CurrentDomain.BaseDirectory +
                 Path.PathSeparator +
                 Environment.GetEnvironmentVariable("PATH");
 
-            var justTheName = Path.GetFileName(command);
-            foreach (var path in paths.Split(Path.PathSeparator))
+            string justTheName = Path.GetFileName(command);
+            foreach (string path in paths.Split(Path.PathSeparator))
             {
-                var fullName = Path.Combine(path, justTheName);
+                string fullName = Path.Combine(path, justTheName);
                 if (File.Exists(fullName))
                     return fullName;
 
                 if (CurrentPlatform.OS == OS.Windows)
                 {
-                    var fullExeName = string.Concat(fullName, ".exe");
+                    string fullExeName = string.Concat(fullName, ".exe");
                     if (File.Exists(fullExeName))
                         return fullExeName;
                 }
@@ -170,8 +170,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             try
             {
-                var p = Process.Start("chmod", "u+x \"" + path + "\"");
-                p.WaitForExit();
+                Process process = Process.Start("chmod", "u+x \"" + path + "\"");
+                process.WaitForExit();
             }
             catch
             {
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 File.Delete(filePath);
             }
             catch (Exception)
-            {                    
+            {
             }
         }
     }

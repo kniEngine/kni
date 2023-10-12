@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Create the effect object.
             EffectObject effect = null;
-            var shaderErrorsAndWarnings = string.Empty;
+            string shaderErrorsAndWarnings = String.Empty;
             try
             {
                 effect = EffectObject.CompileEffect(shaderResult, out shaderErrorsAndWarnings);
@@ -102,9 +102,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             CompiledEffectContent result;
             try
             {
-                using (var stream = new MemoryStream())
+                using (MemoryStream stream = new MemoryStream())
                 {
-                    using (var writer = new BinaryWriter(stream))
+                    using (BinaryWriter writer = new BinaryWriter(stream))
                     {
                         Write(effect, writer, profile.ProfileType);
                         result = new CompiledEffectContent(stream.ToArray());
@@ -138,19 +138,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 pp.AddMacro("DEBUG", "1");
             }
 
-            foreach (var macro in profile.GetMacros())
+            foreach (KeyValuePair<string,string> macro in profile.GetMacros())
                 pp.AddMacro(macro.Key, macro.Value);
 
             if (!string.IsNullOrEmpty(Defines))
             {
-                var defines = Defines.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var define in defines)
+                string[] defines = Defines.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string define in defines)
                 {
-                    var name = define;
-                    var value = "1";
+                    string name = define;
+                    string value = "1";
                     if (define.Contains("="))
                     {
-                        var parts = define.Split('=');
+                        string[] parts = define.Split('=');
 
                         if (parts.Length > 0)
                             name = parts[0].Trim();
@@ -172,12 +172,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private ShaderResult ParseTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile profile, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
-            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
-            var tree = new Parser(new Scanner()).Parse(effectCode, fullPath);
+            string fullPath = Path.GetFullPath(input.Identity.SourceFilename);
+            ParseTree tree = new Parser(new Scanner()).Parse(effectCode, fullPath);
             if (tree.Errors.Count > 0)
             {
-                var errors = String.Empty;
-                foreach (var error in tree.Errors)
+                string errors = String.Empty;
+                foreach (ParseError error in tree.Errors)
                 {
 
                     errors += string.Format("{0}({1},{2}) : {3}\r\n", error.File, error.Line, error.Column, error.Message);
@@ -187,19 +187,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             // Evaluate the results of the parse tree.
-            var shaderInfo = tree.Eval() as ShaderInfo;
+            ShaderInfo shaderInfo = tree.Eval() as ShaderInfo;
 
             // Remove the samplers and techniques so that the shader compiler
             // gets a clean file without any FX file syntax in it.
-            var cleanFile = effectCode;
+            string cleanFile = effectCode;
             WhitespaceNodes(TokenType.Technique_Declaration, tree.Nodes, ref cleanFile);
             WhitespaceNodes(TokenType.Sampler_Declaration_States, tree.Nodes, ref cleanFile);
 
 
             // Remove empty techniques.
-            for (var i = 0; i < shaderInfo.Techniques.Count; i++)
+            for (int i = 0; i < shaderInfo.Techniques.Count; i++)
             {
-                var tech = shaderInfo.Techniques[i];
+                TechniqueInfo tech = shaderInfo.Techniques[i];
                 if (tech.Passes.Count <= 0)
                 {
                     shaderInfo.Techniques.RemoveAt(i);
@@ -226,9 +226,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private static void WhitespaceNodes(TokenType type, List<ParseNode> nodes, ref string sourceFile)
         {
-            for (var i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
-                var n = nodes[i];
+                ParseNode n = nodes[i];
                 if (n.Token.Type != type)
                 {
                     WhitespaceNodes(type, n.Nodes, ref sourceFile);
@@ -236,20 +236,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
 
                 // Get the full content of this node.
-                var start = n.Token.StartPos;
-                var end = n.Token.EndPos;
-                var length = end - n.Token.StartPos;
-                var content = sourceFile.Substring(start, length);
+                int start = n.Token.StartPos;
+                int end = n.Token.EndPos;
+                int length = end - n.Token.StartPos;
+                string content = sourceFile.Substring(start, length);
 
                 // Replace the content of this node with whitespace.
-                for (var c = 0; c < length; c++)
+                for (int c = 0; c < length; c++)
                 {
                     if (!char.IsWhiteSpace(content[c]))
                         content = content.Replace(content[c], ' ');
                 }
 
                 // Add the whitespace back to the source file.
-                var newfile = sourceFile.Substring(0, start);
+                string newfile = sourceFile.Substring(0, start);
                 newfile += content;
                 newfile += sourceFile.Substring(end);
                 sourceFile = newfile;
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 // Calculate a hash code from memory stream
                 // and write it to the header.
-                var effectKey = MonoGame.Framework.Utilities.Hash.ComputeHash(memStream);
+                int effectKey = MonoGame.Framework.Utilities.Hash.ComputeHash(memStream);
                 writer.Write((Int32)effectKey);
 
                 //write content from memory stream to final stream.
@@ -296,17 +296,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
         {
             // Split the errors and warnings into individual lines.
-            var errorsAndWarningArray = shaderErrorsAndWarnings.Split(new[] { "\n", "\r", Environment.NewLine },
+            string[] errorsAndWarningArray = shaderErrorsAndWarnings.Split(new[] { "\n", "\r", Environment.NewLine },
                                                                       StringSplitOptions.RemoveEmptyEntries);
 
-            var errorOrWarning = new Regex(@"(?<Filename>.*)\((?<LineAndColumn>[0-9]*(,([0-9]+)(-[0-9]+)?)?)\)\s*:\s*(?<ErrorType>error|warning)\s*(?<ErrorCode>[A-Z0-9]*)\s*:\s*(?<Message>.*)", RegexOptions.Compiled);
+            Regex errorOrWarning = new Regex(@"(?<Filename>.*)\((?<LineAndColumn>[0-9]*(,([0-9]+)(-[0-9]+)?)?)\)\s*:\s*(?<ErrorType>error|warning)\s*(?<ErrorCode>[A-Z0-9]*)\s*:\s*(?<Message>.*)", RegexOptions.Compiled);
             ContentIdentity identity = null;
-            var allErrorsAndWarnings = string.Empty;
+            string allErrorsAndWarnings = string.Empty;
 
             // Process all the lines.
-            for (var i = 0; i < errorsAndWarningArray.Length; i++)
+            for (int i = 0; i < errorsAndWarningArray.Length; i++)
             {
-                var match = errorOrWarning.Match(errorsAndWarningArray[i]);
+                Match match = errorOrWarning.Match(errorsAndWarningArray[i]);
                 if (!match.Success) // || match.Groups.Count != 8)
                 {
                     // Just log anything we don't recognize as a warning.
@@ -315,23 +315,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     continue;
                 }
 
-                var fileName = match.Groups["Filename"].Value;
-                var lineAndColumn = match.Groups["LineAndColumn"].Value;
-                var errorType = match.Groups["ErrorType"].Value;
-                var errorCode = match.Groups["ErrorCode"].Value;
-                var message = match.Groups["Message"].Value;
+                string fileName = match.Groups["Filename"].Value;
+                string lineAndColumn = match.Groups["LineAndColumn"].Value;
+                string errorType = match.Groups["ErrorType"].Value;
+                string errorCode = match.Groups["ErrorCode"].Value;
+                string message = match.Groups["Message"].Value;
 
                 // Try to ensure a good file name for the error message.
                 if (string.IsNullOrEmpty(fileName))
                     fileName = input.Identity.SourceFilename;
                 else if (!File.Exists(fileName))
                 {
-                    var folder = Path.GetDirectoryName(input.Identity.SourceFilename);
+                    string folder = Path.GetDirectoryName(input.Identity.SourceFilename);
                     fileName = Path.Combine(folder, fileName);
                 }
 
                 identity = new ContentIdentity(fileName, input.Identity.SourceTool, lineAndColumn);
-                var errorCodeAndMessage = string.Format("{0}:{1}", errorCode, message);
+                string errorCodeAndMessage = string.Format("{0}:{1}", errorCode, message);
 
                 switch (errorType)
                 {
