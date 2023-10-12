@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using CppNet;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using CppNet;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -25,8 +25,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public string Preprocess(EffectContent input, ContentProcessorContext context)
         {
-            var fullPath = Path.GetFullPath(input.Identity.SourceFilename);
-            var dependencies = new List<string>();            
+            string fullPath = Path.GetFullPath(input.Identity.SourceFilename);
+            List<string> dependencies = new List<string>();
             
             _pp.EmitExtraLineInfo = false;
             _pp.addFeature(Feature.LINEMARKERS);
@@ -39,12 +39,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             _pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
 
-            var result = new StringBuilder();
+            StringBuilder result = new StringBuilder();
 
-            var endOfStream = false;
+            bool endOfStream = false;
             while (!endOfStream)
             {
-                var token = _pp.token();
+                Token token = _pp.token();
                 switch (token.getType())
                 {
                     case CppNet.Token.EOF:
@@ -58,11 +58,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         break;
                     case CppNet.Token.CCOMMENT:
                     {
-                        var tokenText = token.getText();
+                        string tokenText = token.getText();
                         if (tokenText != null)
                         {
                             // Need to preserve line breaks so that line numbers are correct.
-                            foreach (var c in tokenText)
+                            foreach (char c in tokenText)
                                 if (c == '\n')
                                     result.Append(c);
                         }
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
                     default:
                     {
-                        var tokenText = token.getText();
+                            string tokenText = token.getText();
                         if (tokenText != null)
                             result.Append(tokenText);
                         break;
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Add the include dependencies so that if they change
             // it will trigger a rebuild of this effect.
-            foreach (var dep in dependencies)
+            foreach (string dep in dependencies)
                 context.AddDependency(dep);
 
             return result.ToString();

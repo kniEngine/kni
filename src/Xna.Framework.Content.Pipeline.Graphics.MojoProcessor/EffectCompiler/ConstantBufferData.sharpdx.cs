@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -20,21 +21,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             ParameterIndex = new List<int>();
 
-            var parameters = new List<EffectObject.EffectParameterContent>();
+            List<EffectObject.EffectParameterContent> parameters = new List<EffectObject.EffectParameterContent>();
 
             // Gather all the parameters.
-            for (var i = 0; i < cb.Description.VariableCount; i++)
+            for (int i = 0; i < cb.Description.VariableCount; i++)
             {
-                var vdesc = cb.GetVariable(i);
+                D3DC.ShaderReflectionVariable vdesc = cb.GetVariable(i);
 
-                var param = GetParameterFromType(vdesc.GetVariableType());
+                EffectObject.EffectParameterContent param = GetParameterFromType(vdesc.GetVariableType());
 
                 param.name = vdesc.Description.Name;
                 param.semantic = string.Empty;
                 param.bufferOffset = vdesc.Description.StartOffset;
 
-                var size = param.columns * param.rows * 4;
-                var data = new byte[size];
+                uint size = param.columns * param.rows * 4;
+                byte[] data = new byte[size];
 
                 if (vdesc.Description.DefaultValue != IntPtr.Zero)
                     Marshal.Copy(vdesc.Description.DefaultValue, data, 0, (int)size);
@@ -49,13 +50,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Store the parameter offsets.
             ParameterOffset = new List<int>();
-            foreach (var param in Parameters)
+            foreach (EffectObject.EffectParameterContent param in Parameters)
                 ParameterOffset.Add(param.bufferOffset);
         }
 
         private static EffectObject.EffectParameterContent GetParameterFromType(SharpDX.D3DCompiler.ShaderReflectionType type)
         {
-            var param = new EffectObject.EffectParameterContent();
+            EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
             param.rows = (uint)type.Description.RowCount;
             param.columns = (uint)type.Description.ColumnCount;
             param.name = type.Description.Name ?? string.Empty;
@@ -104,9 +105,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             if (param.member_count > 0)
             {
                 param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
-                for (var i = 0; i < param.member_count; i++)
+                for (int i = 0; i < param.member_count; i++)
                 {
-                    var mparam = GetParameterFromType(type.GetMemberType(i));
+                    EffectObject.EffectParameterContent mparam = GetParameterFromType(type.GetMemberType(i));
                     mparam.name = type.GetMemberTypeName(i) ?? string.Empty;
                     param.member_handles[i] = mparam;
                 }
@@ -114,9 +115,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             else
             {
                 param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
-                for (var i = 0; i < param.element_count; i++)
+                for (int i = 0; i < param.element_count; i++)
                 {
-                    var mparam = new EffectObject.EffectParameterContent();
+                    EffectObject.EffectParameterContent mparam = new EffectObject.EffectParameterContent();
 
                     mparam.name = string.Empty;
                     mparam.semantic = string.Empty;

@@ -24,17 +24,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			int minRegister = short.MaxValue;
 			int maxRegister = 0;
 
-			var registerSize = (set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
+			int registerSize = (set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
 
-			foreach (var symbol in symbols)
+			foreach (MojoShader.Symbol symbol in symbols)
             {
 				if (symbol.register_set != set)
 					continue;
 
-				// Create the parameter.
-				var parm = GetParameterFromSymbol(symbol);
+                // Create the parameter.
+                EffectObject.EffectParameterContent parm = GetParameterFromSymbol(symbol);
 
-				var offset = (int)symbol.register_index * registerSize;
+				int offset = (int)symbol.register_index * registerSize;
 				parm.bufferOffset = offset;
 
 				Parameters.Add(parm);
@@ -49,14 +49,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static EffectObject.EffectParameterContent GetParameterFromSymbol(MojoShader.Symbol symbol)
         {
-            var param = new EffectObject.EffectParameterContent();
+            EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
             param.rows = symbol.info.rows;
             param.columns = symbol.info.columns;
             param.name = symbol.name ?? string.Empty;
             param.semantic = string.Empty; // TODO: How do i do this with only MojoShader?
 
-            var registerSize = (symbol.register_set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
-            var offset = (int)symbol.register_index * registerSize;
+            int registerSize = (symbol.register_set == MojoShader.SymbolRegisterSet.BOOL ? 1 : 4) * 4;
+            int offset = (int)symbol.register_index * registerSize;
             param.bufferOffset = offset;
 
             switch (symbol.info.parameter_class)
@@ -110,21 +110,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
 
-                var members = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
+                MojoShader.Symbol[] members = MarshalHelper.UnmarshalArray<MojoShader.Symbol>(
                     symbol.info.members, (int)symbol.info.member_count);
 
-                for (var i = 0; i < param.member_count; i++)
+                for (int i = 0; i < param.member_count; i++)
                 {
-                    var mparam = GetParameterFromSymbol(members[i]);
+                    EffectObject.EffectParameterContent mparam = GetParameterFromSymbol(members[i]);
                     param.member_handles[i] = mparam;
                 }
             }
             else
             {
                 param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
-                for (var i = 0; i < param.element_count; i++)
+                for (int i = 0; i < param.element_count; i++)
                 {
-                    var mparam = new EffectObject.EffectParameterContent();
+                    EffectObject.EffectParameterContent mparam = new EffectObject.EffectParameterContent();
 
                     mparam.name = string.Empty;
                     mparam.semantic = string.Empty;

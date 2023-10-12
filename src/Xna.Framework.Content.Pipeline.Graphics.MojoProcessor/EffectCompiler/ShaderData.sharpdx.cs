@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using SharpDX.Direct3D;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using D3D = SharpDX.Direct3D;
+using D3DC = SharpDX.D3DCompiler;
 
 // Copyright (C)2022 Nick Kastellanos
 
@@ -11,20 +12,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     {
         public static ShaderData CreateHLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
         {
-            var dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
             dxshader._attributes = new Attribute[0];
 
             // Strip the bytecode we're gonna save!
-            var stripFlags = SharpDX.D3DCompiler.StripFlags.CompilerStripReflectionData |
-                             SharpDX.D3DCompiler.StripFlags.CompilerStripTestBlobs;
+            D3DC.StripFlags stripFlags = D3DC.StripFlags.CompilerStripReflectionData |
+                             D3DC.StripFlags.CompilerStripTestBlobs;
 
             if (debugMode != EffectProcessorDebugMode.Debug)
-                stripFlags |= SharpDX.D3DCompiler.StripFlags.CompilerStripDebugInformation;
+                stripFlags |= D3DC.StripFlags.CompilerStripDebugInformation;
 
-            using (var original = new SharpDX.D3DCompiler.ShaderBytecode(byteCode))
+            using (D3DC.ShaderBytecode original = new D3DC.ShaderBytecode(byteCode))
             {
                 // Strip the bytecode for saving to disk.
-                var stripped = original.Strip(stripFlags);
+                D3DC.ShaderBytecode stripped = original.Strip(stripFlags);
                 {
                     // Only SM4 and above works with strip... so this can return null!
                     if (stripped != null)
@@ -46,18 +47,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 }
 
                 // Use reflection to get details of the shader.
-                using (var refelect = new SharpDX.D3DCompiler.ShaderReflection(byteCode))
+                using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(byteCode))
                 {
                     // Get the samplers.
-                    var samplers = new List<Sampler>();
-                    for (var i = 0; i < refelect.Description.BoundResources; i++)
+                    List<Sampler> samplers = new List<Sampler>();
+                    for (int i = 0; i < refelect.Description.BoundResources; i++)
                     {
-                        var rdesc = refelect.GetResourceBindingDescription(i);
-                        if (rdesc.Type == SharpDX.D3DCompiler.ShaderInputType.Texture)
+                        D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
+                        if (rdesc.Type == D3DC.ShaderInputType.Texture)
                         {
-                            var samplerName = rdesc.Name;
+                            string samplerName = rdesc.Name;
 
-                            var sampler = new Sampler
+                            Sampler sampler = new Sampler
                             {
                                 samplerName = string.Empty,
                                 textureSlot = rdesc.BindPoint,
@@ -70,12 +71,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             {
                                 sampler.state = state.State;
 
-                                if (state.TextureName == null)
-                                    sampler.parameterName = samplerName;
+                                if (state.TextureName != null)
+                                { }
                             }
                             else
                             {
-                                foreach (var s in samplerStates.Values)
+                                foreach (SamplerStateInfo s in samplerStates.Values)
                                 {
                                     if (samplerName == s.TextureName)
                                     {
@@ -89,9 +90,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             // Find sampler slot, which can be different from the texture slot.
                             for (int j = 0; j < refelect.Description.BoundResources; j++)
                             {
-                                var samplerrdesc = refelect.GetResourceBindingDescription(j);
+                                D3DC.InputBindingDescription samplerrdesc = refelect.GetResourceBindingDescription(j);
 
-                                if (samplerrdesc.Type == SharpDX.D3DCompiler.ShaderInputType.Sampler && 
+                                if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler && 
                                     samplerrdesc.Name == samplerName)
                                 {
                                     sampler.samplerSlot = samplerrdesc.BindPoint;
@@ -101,24 +102,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                             switch (rdesc.Dimension)
                             {
-                                case ShaderResourceViewDimension.Texture1D:
-                                case ShaderResourceViewDimension.Texture1DArray:
+                                case D3D.ShaderResourceViewDimension.Texture1D:
+                                case D3D.ShaderResourceViewDimension.Texture1DArray:
                                     sampler.type = MojoShader.SamplerType.SAMPLER_1D;
                                     break;
 
-                                case ShaderResourceViewDimension.Texture2D:
-                                case ShaderResourceViewDimension.Texture2DArray:
-                                case ShaderResourceViewDimension.Texture2DMultisampled:
-                                case ShaderResourceViewDimension.Texture2DMultisampledArray:
+                                case D3D.ShaderResourceViewDimension.Texture2D:
+                                case D3D.ShaderResourceViewDimension.Texture2DArray:
+                                case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
+                                case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
                                     sampler.type = MojoShader.SamplerType.SAMPLER_2D;
                                     break;
 
-                                case ShaderResourceViewDimension.Texture3D:
+                                case D3D.ShaderResourceViewDimension.Texture3D:
                                     sampler.type = MojoShader.SamplerType.SAMPLER_VOLUME;
                                     break;
 
-                                case ShaderResourceViewDimension.TextureCube:
-                                case ShaderResourceViewDimension.TextureCubeArray:
+                                case D3D.ShaderResourceViewDimension.TextureCube:
+                                case D3D.ShaderResourceViewDimension.TextureCubeArray:
                                     sampler.type = MojoShader.SamplerType.SAMPLER_CUBE;
                                     break;
                             }
@@ -130,12 +131,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                     // Gather all the constant buffers used by this shader.
                     dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
-                    for (var i = 0; i < refelect.Description.ConstantBuffers; i++)
+                    for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
                     {
-                        var cb = new ConstantBufferData(refelect.GetConstantBuffer(i));
+                        ConstantBufferData cb = new ConstantBufferData(refelect.GetConstantBuffer(i));
 
                         // Look for a duplicate cbuffer in the list.
-                        for (var c = 0; c < cbuffers.Count; c++)
+                        for (int c = 0; c < cbuffers.Count; c++)
                         {
                             if (cb.SameAs(cbuffers[c]))
                             {

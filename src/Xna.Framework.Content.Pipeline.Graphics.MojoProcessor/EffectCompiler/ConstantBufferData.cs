@@ -44,10 +44,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 return false;
             
             // Compare the parameters themselves.
-            for (var i = 0; i < Parameters.Count; i++)
+            for (int i = 0; i < Parameters.Count; i++)
             {
-                var p1 = Parameters[i];
-                var p2 = other.Parameters[i];
+                EffectObject.EffectParameterContent p1 = Parameters[i];
+                EffectObject.EffectParameterContent p2 = other.Parameters[i];
 
                 // Check the importaint bits.
                 if (    p1.name != p2.name ||

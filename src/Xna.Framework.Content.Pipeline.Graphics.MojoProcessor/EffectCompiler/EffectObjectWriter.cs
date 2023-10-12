@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteConstantBuffers(ICollection<ConstantBufferData> constantBuffers)
         {
             Write(constantBuffers.Count);
-            foreach (var cbuffer in constantBuffers)
+            foreach (ConstantBufferData cbuffer in constantBuffers)
                 WriteConstantBuffer(cbuffer);
         }
 
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write((ushort)cbuffer.Size);
 
             Write(cbuffer.ParameterIndex.Count);
-            for (var i = 0; i < cbuffer.ParameterIndex.Count; i++)
+            for (int i = 0; i < cbuffer.ParameterIndex.Count; i++)
             {
                 Write(cbuffer.ParameterIndex[i]);
                 Write((ushort)cbuffer.ParameterOffset[i]);
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteShaders(ICollection<ShaderData> shaders)
         {
             Write(shaders.Count);
-            foreach (var shader in shaders)
+            foreach (ShaderData shader in shaders)
                 WriteShader(shader);
         }
 
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write(shader.ShaderCode);
 
             Write((byte)shader._samplers.Length);
-            foreach (var sampler in shader._samplers)
+            foreach (ShaderData.Sampler sampler in shader._samplers)
             {
                 Write((byte)sampler.type);
                 Write((byte)sampler.textureSlot);
@@ -90,11 +90,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             Write((byte)shader._cbuffers.Length);
-            foreach (var cb in shader._cbuffers)
+            foreach (int cb in shader._cbuffers)
                 Write((byte)cb);
 
             Write((byte)shader._attributes.Length);
-            foreach (var attrib in shader._attributes)
+            foreach (ShaderData.Attribute attrib in shader._attributes)
             {
                 Write(attrib.name);
                 Write((byte)attrib.usage);
@@ -121,14 +121,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteParameters(EffectObject.EffectParameterContent[] parameters, int count)
         {
             Write(count);
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
                 WriteParameter(parameters[i]);
         }
 
         private void WriteParameter(EffectObject.EffectParameterContent param)
         {
-            var class_ = EffectObject.ToXNAParameterClass(param.class_);
-            var type = EffectObject.ToXNAParameterType(param.type);
+            EffectParameterClass class_ = EffectObject.ToXNAParameterClass(param.class_);
+            EffectParameterTypeContent type = EffectObject.ToXNAParameterType(param.type);
             Write((byte)class_);
             Write((byte)type);
 
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteTechniques(EffectObject.EffectTechniqueContent[] techniques)
         {
             Write(techniques.Length);
-            foreach (var technique in techniques)
+            foreach (EffectObject.EffectTechniqueContent technique in techniques)
             {
                 Write(technique.name);
                 WriteAnnotations(technique.annotation_handles);
@@ -172,9 +172,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WritePasses(EffectObject.EffectTechniqueContent technique)
         {
             Write((int)technique.pass_count);
-            for (var p = 0; p < technique.pass_count; p++)
+            for (int p = 0; p < technique.pass_count; p++)
             {
-                var pass = technique.pass_handles[p];
+                EffectObject.EffectPassContent pass = technique.pass_handles[p];
                 WriteEffectPass(pass);
             }
         }
@@ -185,8 +185,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             WriteAnnotations(pass.annotation_handles);
 
             // Write the index for the vertex and pixel shaders.
-            var vertexShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
-            var pixelShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
+            int vertexShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
+            int pixelShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
             Write(vertexShaderIndex);
             Write(pixelShaderIndex);
 
@@ -267,13 +267,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteAnnotations(EffectObject.EffectParameterContent[] annotations)
         {
-            var count = annotations == null ? 0 : annotations.Length;
+            int count = annotations == null ? 0 : annotations.Length;
             Write(count);
 
             // TODO: Annotations are not implemented!
             System.Diagnostics.Debug.Assert(count == 0);
 
-            //for (var i = 0; i < count; i++)
+            //for (int i = 0; i < count; i++)
             //    WriteParameter(writer, annotations[i]);
         }
 
@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         //    {
         //        do
         //        {
-        //            var value7bit = (byte)(value & 0x7f);
+        //            byte value7bit = (byte)(value & 0x7f);
         //            value = (int)((uint)value >> 7);
         //            if (value != 0)
         //                value7bit |= 0x80;

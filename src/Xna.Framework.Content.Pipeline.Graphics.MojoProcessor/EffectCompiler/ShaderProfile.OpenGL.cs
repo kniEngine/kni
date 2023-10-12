@@ -54,10 +54,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             // For now GLSL is only supported via translation
             // using MojoShader which works from HLSL bytecode.
-            var bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
+            byte[] bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
 
-            var shaderInfo = shaderResult.ShaderInfo;
-            var shaderData = ShaderData.CreateGLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
+            ShaderData shaderData = ShaderData.CreateGLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             effect.Shaders.Add(shaderData);
 
             return shaderData;

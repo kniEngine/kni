@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         protected static void ParseShaderModel(string text, Regex regex, out int major, out int minor)
         {
-            var match = regex.Match(text);
+            Match match = regex.Match(text);
             if (!match.Success)
             {
                 major = 0;
@@ -99,9 +99,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 if (value is string)
                 {
-                    var name = value as string;
+                    string name = value as string;
 
-                    foreach (var e in All)
+                    foreach (ShaderProfile e in All)
                     {
                         if (e.Name == name)
                             return e;
