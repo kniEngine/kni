@@ -4,6 +4,7 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using System;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
@@ -28,7 +29,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			public string parameterName;
 			public int parameter;
 			public SamplerState state;
-		}
+
+            public override string ToString()
+            {
+                return String.Format("type: {0}, parameter:{1}, parameterName: {2}, samplerName: {3}, t#: {4}, s#: {5}",                    
+                                     type, parameter, parameterName, samplerName, textureSlot, samplerSlot);
+            }
+        }
 
 		public struct Attribute
 		{
