@@ -18,16 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
     /// properties <see cref="GraphicsResource.Name"/> and <see cref="GraphicsResource.Tag"/> are
     /// ignored in <see cref="GetHashCode"/> and <see cref="Equals(VertexDeclaration)"/>!)
     /// </remarks>
-    public partial class VertexDeclaration : GraphicsResource, IEquatable<VertexDeclaration>
+    public partial class VertexDeclaration : IEquatable<VertexDeclaration>
     {
-        // TODO:
-        // For XNA-compatibility VertexDeclaration is derived from GraphicsResource, which means it
-        // has GraphicsDevice, Name, Tag and implements IDisposable. The GraphicsDevice was late-bound
-        // after the first usage.
-        // This is incompatible with KNI because we allow multiple GraphicsDevice instances.
-        // Currently VertexDeclaration.GraphicsDevice is set when used in the constractor of VertexBuffer
-        // and the OpenGL DrawUserPrimitives methods.
-        // VertexDeclaration should be a lightweight immutable type. No base class, no IDisposable.
 
         #region ----- Data shared between structurally identical vertex declarations -----
 
