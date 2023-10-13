@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                 sampler.state = state.State;
 
                                 if (state.TextureName != null)
-                                { }
+                                    sampler.parameterName = state.TextureName;
                             }
                             else
                             {
