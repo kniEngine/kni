@@ -227,6 +227,7 @@ namespace Microsoft.Xna.Platform
 
         public override void BeforeInitialize()
         {
+            IsActive = true;
         }
 
         public override void TickExiting()
