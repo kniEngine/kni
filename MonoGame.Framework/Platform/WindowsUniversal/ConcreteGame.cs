@@ -225,6 +225,10 @@ namespace Microsoft.Xna.Platform
                 dispatcher.RunIdleAsync(OnRenderFrame);
         }
 
+        public override void BeforeInitialize()
+        {
+        }
+
         public override void TickExiting()
         {
             if (!UAPGameWindow.Instance.IsExiting)
