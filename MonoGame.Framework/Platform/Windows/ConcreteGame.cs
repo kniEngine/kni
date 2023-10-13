@@ -67,8 +67,6 @@ namespace Microsoft.Xna.Platform
 
         public override void BeforeInitialize()
         {
-            IsActive = true;
-
             var gdm = this.GraphicsDeviceManager;
             if (gdm == null)
             {
