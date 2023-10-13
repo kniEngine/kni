@@ -133,6 +133,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     type = samplers[i].type,
                 };
 
+                if (samplerName.Contains('+'))
+                {
+                    int plusIndex = samplerName.IndexOf('+');
+                    samplerName = samplerName.Substring(0, plusIndex);
+                }
+
                 SamplerStateInfo state;
                 if (samplerStates.TryGetValue(samplerName, out state))
                 {
