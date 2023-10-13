@@ -133,9 +133,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     type = samplers[i].type,
                 };
 
+                string textureName = null;
                 if (samplerName.Contains('+'))
                 {
                     int plusIndex = samplerName.IndexOf('+');
+                    textureName = samplerName.Substring(plusIndex+1);
                     samplerName = samplerName.Substring(0, plusIndex);
                 }
 
@@ -144,7 +146,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     sampler.state = state.State;
 
-                    if (state.TextureName != null)
+                    if (textureName != null)
+                        sampler.parameterName = textureName;
+                    else if (state.TextureName != null)
                         sampler.parameterName = state.TextureName;
                 }
 
