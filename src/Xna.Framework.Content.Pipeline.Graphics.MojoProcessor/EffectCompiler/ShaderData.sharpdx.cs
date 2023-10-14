@@ -22,115 +22,113 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             if (debugMode != EffectProcessorDebugMode.Debug)
                 stripFlags |= D3DC.StripFlags.CompilerStripDebugInformation;
 
+            // Strip the bytecode for saving to disk.
+            D3DC.ShaderBytecode stripped = shaderBytecodeDX11.Strip(stripFlags);
             {
-                // Strip the bytecode for saving to disk.
-                D3DC.ShaderBytecode stripped = shaderBytecodeDX11.Strip(stripFlags);
+                // Only SM4 and above works with strip... so this can return null!
+                if (stripped != null)
                 {
-                    // Only SM4 and above works with strip... so this can return null!
-                    if (stripped != null)
-                    {
-                        dxshader.ShaderCode = stripped;
-                    }
-                    else
-                    {
-                        // TODO: There is a way to strip SM3 and below
-                        // but we have to write the method ourselves.
-                        // 
-                        // If we need to support it then consider porting
-                        // this code over...
-                        //
-                        // http://entland.homelinux.com/blog/2009/01/15/stripping-comments-from-shader-bytecodes/
-                        //
-                        dxshader.ShaderCode = (byte[])shaderBytecodeDX11.Data.Clone();
-                    }
+                    dxshader.ShaderCode = stripped;
                 }
-
-                // Use reflection to get details of the shader.
-                using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
+                else
                 {
-                    // Get the samplers.
-                    List<Sampler> samplers = new List<Sampler>();
-                    for (int i = 0; i < refelect.Description.BoundResources; i++)
+                    // TODO: There is a way to strip SM3 and below
+                    // but we have to write the method ourselves.
+                    // 
+                    // If we need to support it then consider porting
+                    // this code over...
+                    //
+                    // http://entland.homelinux.com/blog/2009/01/15/stripping-comments-from-shader-bytecodes/
+                    //
+                    dxshader.ShaderCode = (byte[])shaderBytecodeDX11.Data.Clone();
+                }
+            }
+
+            // Use reflection to get details of the shader.
+            using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
+            {
+                // Get the samplers.
+                List<Sampler> samplers = new List<Sampler>();
+                for (int i = 0; i < refelect.Description.BoundResources; i++)
+                {
+                    D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
+                    if (rdesc.Type == D3DC.ShaderInputType.Texture)
                     {
-                        D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
-                        if (rdesc.Type == D3DC.ShaderInputType.Texture)
+                        string samplerName = rdesc.Name;
+
+                        Sampler sampler = new Sampler
                         {
-                            string samplerName = rdesc.Name;
-
-                            Sampler sampler = new Sampler
-                            {
-                                samplerName = string.Empty,
-                                textureSlot = rdesc.BindPoint,
-                                samplerSlot = rdesc.BindPoint,
-                                parameterName = samplerName
-                            };
+                            samplerName = string.Empty,
+                            textureSlot = rdesc.BindPoint,
+                            samplerSlot = rdesc.BindPoint,
+                            parameterName = samplerName
+                        };
                             
-                            SamplerStateInfo state;
-                            if (samplerStates.TryGetValue(samplerName, out state))
-                            {
-                                sampler.state = state.State;
+                        SamplerStateInfo state;
+                        if (samplerStates.TryGetValue(samplerName, out state))
+                        {
+                            sampler.state = state.State;
 
-                                if (state.TextureName != null)
-                                    sampler.parameterName = state.TextureName;
-                            }
-                            else
-                            {
-                                foreach (SamplerStateInfo s in samplerStates.Values)
-                                {
-                                    if (samplerName == s.TextureName)
-                                    {
-                                        sampler.state = s.State;
-                                        samplerName = s.Name;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            // Find sampler slot, which can be different from the texture slot.
-                            for (int j = 0; j < refelect.Description.BoundResources; j++)
-                            {
-                                D3DC.InputBindingDescription samplerrdesc = refelect.GetResourceBindingDescription(j);
-
-                                if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler && 
-                                    samplerrdesc.Name == samplerName)
-                                {
-                                    sampler.samplerSlot = samplerrdesc.BindPoint;
-                                    break;
-                                }
-                            }
-
-                            switch (rdesc.Dimension)
-                            {
-                                case D3D.ShaderResourceViewDimension.Texture1D:
-                                case D3D.ShaderResourceViewDimension.Texture1DArray:
-                                    sampler.type = MojoShader.SamplerType.SAMPLER_1D;
-                                    break;
-
-                                case D3D.ShaderResourceViewDimension.Texture2D:
-                                case D3D.ShaderResourceViewDimension.Texture2DArray:
-                                case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
-                                case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
-                                    sampler.type = MojoShader.SamplerType.SAMPLER_2D;
-                                    break;
-
-                                case D3D.ShaderResourceViewDimension.Texture3D:
-                                    sampler.type = MojoShader.SamplerType.SAMPLER_VOLUME;
-                                    break;
-
-                                case D3D.ShaderResourceViewDimension.TextureCube:
-                                case D3D.ShaderResourceViewDimension.TextureCubeArray:
-                                    sampler.type = MojoShader.SamplerType.SAMPLER_CUBE;
-                                    break;
-                            }
-
-                            samplers.Add(sampler);
+                            if (state.TextureName != null)
+                                sampler.parameterName = state.TextureName;
                         }
-                    }
-                    dxshader._samplers = samplers.ToArray();
+                        else
+                        {
+                            foreach (SamplerStateInfo s in samplerStates.Values)
+                            {
+                                if (samplerName == s.TextureName)
+                                {
+                                    sampler.state = s.State;
+                                    samplerName = s.Name;
+                                    break;
+                                }
+                            }
+                        }
 
-                    // Gather all the constant buffers used by this shader.
-                    AddConstantBuffers(cbuffers, dxshader, refelect);
+                        // Find sampler slot, which can be different from the texture slot.
+                        for (int j = 0; j < refelect.Description.BoundResources; j++)
+                        {
+                            D3DC.InputBindingDescription samplerrdesc = refelect.GetResourceBindingDescription(j);
+
+                            if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler && 
+                                samplerrdesc.Name == samplerName)
+                            {
+                                sampler.samplerSlot = samplerrdesc.BindPoint;
+                                break;
+                            }
+                        }
+
+                        switch (rdesc.Dimension)
+                        {
+                            case D3D.ShaderResourceViewDimension.Texture1D:
+                            case D3D.ShaderResourceViewDimension.Texture1DArray:
+                                sampler.type = MojoShader.SamplerType.SAMPLER_1D;
+                                break;
+
+                            case D3D.ShaderResourceViewDimension.Texture2D:
+                            case D3D.ShaderResourceViewDimension.Texture2DArray:
+                            case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
+                            case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
+                                sampler.type = MojoShader.SamplerType.SAMPLER_2D;
+                                break;
+
+                            case D3D.ShaderResourceViewDimension.Texture3D:
+                                sampler.type = MojoShader.SamplerType.SAMPLER_VOLUME;
+                                break;
+
+                            case D3D.ShaderResourceViewDimension.TextureCube:
+                            case D3D.ShaderResourceViewDimension.TextureCubeArray:
+                                sampler.type = MojoShader.SamplerType.SAMPLER_CUBE;
+                                break;
+                        }
+
+                        samplers.Add(sampler);
+                    }
                 }
+                dxshader._samplers = samplers.ToArray();
+
+                // Gather all the constant buffers used by this shader.
+                AddConstantBuffers(cbuffers, dxshader, refelect);
             }
 
             return dxshader;
