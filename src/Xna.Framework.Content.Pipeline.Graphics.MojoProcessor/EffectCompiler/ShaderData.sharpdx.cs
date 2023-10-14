@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -56,13 +57,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     {
                         string samplerName = rdesc.Name;
 
-                        SamplerInfo sampler = new SamplerInfo
-                        {
-                            GLsamplerName = string.Empty,
-                            textureSlot = rdesc.BindPoint,
-                            samplerSlot = rdesc.BindPoint,
-                            textureName = samplerName
-                        };
+                        SamplerInfo sampler = new SamplerInfo();
+                        sampler.textureSlot = rdesc.BindPoint;
+                        sampler.samplerSlot = rdesc.BindPoint;
+
+                        // default to String.Empty for DX.
+                        sampler.GLsamplerName = String.Empty;
+
+                        sampler.textureName = samplerName;
                             
                         SamplerStateInfo state;
                         if (samplerStates.TryGetValue(samplerName, out state))

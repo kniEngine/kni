@@ -119,21 +119,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                                      e.register_index == samplers[i].index
                                                ).name;
 
-                SamplerInfo sampler = new SamplerInfo
-                {
-                    //sampler mapping to parameter is unknown atm
-                    textureParameter = -1,
-                                      
-                    // GLSL needs the MojoShader mangled sampler name.
-                    GLsamplerName = samplers[i].name,
+                SamplerInfo sampler = new SamplerInfo();
+                sampler.textureSlot = samplers[i].index;
+                sampler.samplerSlot = samplers[i].index;
 
-                    // By default use the original sampler name for the parameter name.
-                    textureName = samplerName,
+                // GLSL needs the uniform sampler name.
+                sampler.GLsamplerName = samplers[i].name;
 
-                    textureSlot = samplers[i].index,
-                    samplerSlot = samplers[i].index,
-                    type = samplers[i].type,
-                };
+                //sampler mapping to parameter is unknown atm
+                sampler.textureParameter = -1;
+                // By default use the original sampler name for the parameter name.
+                sampler.textureName = samplerName;
+
+                sampler.type = samplers[i].type;
+
 
                 string textureName = null;
                 if (samplerName.Contains('+'))
