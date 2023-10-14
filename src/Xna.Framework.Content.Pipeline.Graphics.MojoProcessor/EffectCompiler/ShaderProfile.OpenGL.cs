@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, EffectObject effect, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
         {
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
 
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = ShaderData.CreateGLSL(shaderBytecodeDX9, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+                ShaderData shaderDataDX9 = ShaderData.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
                 return shaderDataDX9;
             }
         }

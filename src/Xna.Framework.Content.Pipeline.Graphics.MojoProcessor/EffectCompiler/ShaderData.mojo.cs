@@ -12,10 +12,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-        public static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        public static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
 
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
+            ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
 
             // Use MojoShader to convert the HLSL bytecode to GLSL.
 
@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 			// Add the required precision specifiers for GLES.
 
-            string floatPrecision = dxshader.IsVertexShader ? "precision highp float;\r\n" : "precision mediump float;\r\n";
+            string floatPrecision = dxshader.Stage == ShaderStage.Vertex ? "precision highp float;\r\n" : "precision mediump float;\r\n";
 
 			glslCode = "#ifdef GL_ES\r\n" +
                  floatPrecision +
@@ -196,9 +196,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             var symbol_types = new []
             {
-                new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.SymbolRegisterSet.BOOL, },
-                new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
-                new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
+                new { name = (dxshader.Stage == ShaderStage.Vertex) ? "vs_uniforms_bool"  : "ps_uniforms_bool",  set = MojoShader.SymbolRegisterSet.BOOL, },
+                new { name = (dxshader.Stage == ShaderStage.Vertex) ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
+                new { name = (dxshader.Stage == ShaderStage.Vertex) ? "vs_uniforms_vec4"  : "ps_uniforms_vec4",  set = MojoShader.SymbolRegisterSet.FLOAT4, },
             };
 
             List<int> cbuffer_index = new List<int>();

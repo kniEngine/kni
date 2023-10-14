@@ -1,8 +1,8 @@
 ﻿namespace Microsoft.Xna.Platform.Graphics
 {
-    public enum ShaderStage
+    public enum ShaderStage : byte
     {
-        Vertex,
-        Pixel,
+        Pixel  = 0,
+        Vertex = 1,
     }
 }
