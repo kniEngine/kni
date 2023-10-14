@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            ShaderProfile profile = ShaderProfile.FromPlatform(context.TargetPlatform);
+            ShaderProfile profile = EffectProcessor.FromPlatform(context.TargetPlatform);
             if (profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             
@@ -119,6 +119,48 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return result;
         }
 
+        /// <summary>
+        /// Returns the correct profile for the named platform or
+        /// null if no supporting profile is found.
+        /// </summary>
+        public static ShaderProfile FromPlatform(TargetPlatform platform)
+        {
+            switch (platform)
+            {
+                case TargetPlatform.Windows:
+                case TargetPlatform.WindowsStoreApp:
+                    return ShaderProfile.DirectX_11;
+
+                case TargetPlatform.iOS:
+                case TargetPlatform.Android:
+                case TargetPlatform.BlazorGL:
+                case TargetPlatform.DesktopGL:
+                case TargetPlatform.MacOSX:
+                case TargetPlatform.RaspberryPi:
+                    return ShaderProfile.OpenGL_Mojo;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// Returns the profile by type or null if no match is found.
+        /// </summary>
+        public static ShaderProfile FromType(ShaderProfileType profileType)
+        {
+            switch (profileType)
+            {
+                case ShaderProfileType.DirectX_11:
+                    return ShaderProfile.DirectX_11;
+
+                case ShaderProfileType.OpenGL_Mojo:
+                    return ShaderProfile.OpenGL_Mojo;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
 
         // Pre-process the file,
         // resolving all #includes and macros.

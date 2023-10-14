@@ -70,6 +70,7 @@
     <Compile Include="EffectCompiler\ShaderProfile.cs" />
     <Compile Include="EffectCompiler\ShaderProfile.DirectX.cs" />
     <Compile Include="EffectCompiler\ShaderProfile.OpenGL.cs" />
+    <Compile Include="EffectCompiler\ShaderProfileType.cs" />
     <Compile Include="EffectCompiler\ShaderResult.cs" />
   </ItemGroup>
   <ItemGroup>

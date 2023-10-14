@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using D3DC = SharpDX.D3DCompiler;
 
 // Copyright (C)2022 Nick Kastellanos
 
@@ -11,16 +12,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-        public static ShaderData CreateGLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        public static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
+            byte[] bytecodeDX9 = shaderBytecodeDX9.Data.ToArray(); // Return a copy of the shader bytecode.
+
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, bytecodeDX9);
 
             // Use MojoShader to convert the HLSL bytecode to GLSL.
 
             IntPtr parseDataPtr = MojoShader.NativeMethods.Parse(
 				MojoShader.NativeConstants.PROFILE_GLSL,
-				byteCode,
-				byteCode.Length,
+				bytecodeDX9,
+				bytecodeDX9.Length,
 				IntPtr.Zero,
 				0,
 				IntPtr.Zero,
@@ -157,32 +160,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
 
 			// Gather all the parameters used by this shader.
-			var symbol_types = new []
-            {
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.SymbolRegisterSet.BOOL, },
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
-				new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
-			};
-
-            List<int> cbuffer_index = new List<int>();
-			for (int i = 0; i < symbol_types.Length; i++)
-            {
-                ConstantBufferData cbuffer = new ConstantBufferData(symbol_types [i].name,
-													 symbol_types [i].set,
-													 symbols);
-				if (cbuffer.Size == 0)
-					continue;
-
-				int match = cbuffers.FindIndex(e => e.SameAs(cbuffer));
-				if (match == -1)
-                {
-					cbuffer_index.Add(cbuffers.Count);
-					cbuffers.Add(cbuffer);
-				}
-                else
-					cbuffer_index.Add(match);
-			}
-			dxshader._cbuffers = cbuffer_index.ToArray();
+            AddConstantBuffers(cbuffers, dxshader, symbols);
 
 			string glslCode = parseData.output;
 
@@ -214,5 +192,35 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             return dxshader;
 		}
+
+        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, MojoShader.Symbol[] symbols)
+        {
+            var symbol_types = new []
+            {
+                new { name = dxshader.IsVertexShader ? "vs_uniforms_bool" : "ps_uniforms_bool", set = MojoShader.SymbolRegisterSet.BOOL, },
+                new { name = dxshader.IsVertexShader ? "vs_uniforms_ivec4" : "ps_uniforms_ivec4", set = MojoShader.SymbolRegisterSet.INT4, },
+                new { name = dxshader.IsVertexShader ? "vs_uniforms_vec4" : "ps_uniforms_vec4", set = MojoShader.SymbolRegisterSet.FLOAT4, },
+            };
+
+            List<int> cbuffer_index = new List<int>();
+            for (int i = 0; i < symbol_types.Length; i++)
+            {
+                ConstantBufferData cbuffer = new ConstantBufferData(symbol_types[i].name,
+                                                     symbol_types[i].set,
+                                                     symbols);
+                if (cbuffer.Size == 0)
+                    continue;
+
+                int match = cbuffers.FindIndex(e => e.SameAs(cbuffer));
+                if (match == -1)
+                {
+                    cbuffer_index.Add(cbuffers.Count);
+                    cbuffers.Add(cbuffer);
+                }
+                else
+                    cbuffer_index.Add(match);
+            }
+            dxshader._cbuffers = cbuffer_index.ToArray();
+        }
 	}
 }

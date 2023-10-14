@@ -15,34 +15,19 @@ using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public enum ShaderProfileType
-    {
-        OpenGL_Mojo = 0,
-        DirectX_11  = 1,
-    }
-
     [TypeConverter(typeof(StringConverter))]
     public abstract class ShaderProfile
     {
-        private static readonly LoadedTypeCollection<ShaderProfile> _profiles = new LoadedTypeCollection<ShaderProfile>();
-
         protected ShaderProfile(string name, ShaderProfileType profileType)
         {
             Name = name;
             ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile OpenGL_Mojo = FromType(ShaderProfileType.OpenGL_Mojo);
+        public static readonly ShaderProfile DirectX_11 = new DirectX11ShaderProfile();
 
-        public static readonly ShaderProfile DirectX_11 = FromType(ShaderProfileType.DirectX_11);
+        public static readonly ShaderProfile OpenGL_Mojo = new OpenGLShaderProfile();
 
-        /// <summary>
-        /// Returns all the loaded shader profiles.
-        /// </summary>
-        public static IEnumerable<ShaderProfile> All
-        {
-            get { return _profiles; }
-        }
 
         /// <summary>
         /// Returns the name of the shader profile.
@@ -53,25 +38,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// Returns the format identifier used in the MGFX file format.
         /// </summary>
         public ShaderProfileType ProfileType { get; private set; }
-
-        internal abstract bool Supports(TargetPlatform platform);
-        
-        /// <summary>
-        /// Returns the correct profile for the named platform or
-        /// null if no supporting profile is found.
-        /// </summary>
-        public static ShaderProfile FromPlatform(TargetPlatform platform)
-        {
-            return _profiles.FirstOrDefault(p => p.Supports(platform));
-        }
-
-        /// <summary>
-        /// Returns the profile by type or null if no match is found.
-        /// </summary>
-        public static ShaderProfile FromType(ShaderProfileType profileType)
-        {
-            return _profiles.FirstOrDefault(p => p.ProfileType == profileType);
-        }
 
         internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
 
@@ -101,11 +67,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     string name = value as string;
 
-                    foreach (ShaderProfile e in All)
-                    {
-                        if (e.Name == name)
-                            return e;
-                    }
+                    if (ShaderProfile.DirectX_11.Name == name)
+                        return ShaderProfile.DirectX_11;
+
+                    if (ShaderProfile.OpenGL_Mojo.Name == name)
+                        return ShaderProfile.OpenGL_Mojo;
                 }
 
                 return base.ConvertFrom(context, culture, value);

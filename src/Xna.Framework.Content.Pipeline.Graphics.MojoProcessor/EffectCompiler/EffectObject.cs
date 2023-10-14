@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Graphics;
 using D3DC = SharpDX.D3DCompiler;
@@ -808,6 +807,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 // Compile and create the shader.
                 shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, isVertexShader, this, ref errorsAndWarnings);
+                this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfile;
             }
@@ -829,42 +829,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static byte[] CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
-            SharpDX.D3DCompiler.ShaderBytecode shaderByteCode;
             try
             {
-                SharpDX.D3DCompiler.ShaderFlags shaderFlags = 0;
+                D3DC.ShaderFlags shaderFlags = 0;
 
                 // While we never allow preshaders, this flag is invalid for
                 // the DX11 shader compiler which doesn't allow preshaders
                 // in the first place.
-                //shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.NoPreshader;
+                //shaderFlags |= D3DC.ShaderFlags.NoPreshader;
 
-                if (shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11)
-                {
-                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility;
-                }
-
-                // force D3DCompiler to generate legacy bytecode that is compatible with MojoShader.
-                if (shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo)
-                {
-                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
-                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
-                }
+                if (backwardsCompatibility)
+                    shaderFlags |= D3DC.ShaderFlags.EnableBackwardsCompatibility;
 
                 if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
                 {
-                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.SkipOptimization;
-                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.Debug;
+                    shaderFlags |= D3DC.ShaderFlags.SkipOptimization;
+                    shaderFlags |= D3DC.ShaderFlags.Debug;
                 }
                 else
                 {
-                    shaderFlags |= SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel3;
+                    shaderFlags |= D3DC.ShaderFlags.OptimizationLevel3;
                 }
 
                 // Compile the shader into bytecode.                
-                D3DC.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(
+                D3DC.CompilationResult result = D3DC.ShaderBytecode.Compile(
                     shaderResult.FileContent,
                     shaderFunction,
                     shaderProfile,
@@ -879,18 +869,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 if (result.Bytecode == null)
                     throw new ShaderCompilerException();
-                
-                shaderByteCode = result.Bytecode;
+
+                D3DC.ShaderBytecode shaderBytecode = result.Bytecode;
                 //string source = shaderByteCode.Disassemble();
+
+                return shaderBytecode;
             }
             catch (SharpDX.CompilationException ex)
             {
                 errorsAndWarnings += ex.Message;
                 throw new ShaderCompilerException();
             }
-
-            // Return a copy of the shader bytecode.
-            return shaderByteCode.Data.ToArray();
         }
         
         internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)

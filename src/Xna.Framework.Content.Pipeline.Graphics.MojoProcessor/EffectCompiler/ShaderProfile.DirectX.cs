@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -51,24 +52,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, EffectObject effect, ref string errorsAndWarnings)
         {
-            byte[] bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
-
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-            ShaderData shaderData = ShaderData.CreateHLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
-            effect.Shaders.Add(shaderData);
-            return shaderData;
-        }
 
-        internal override bool Supports(TargetPlatform platform)
-        {
-            switch (platform)
-            {
-                case TargetPlatform.Windows:
-                case TargetPlatform.WindowsStoreApp:
-                    return true;
-                default:
-                    return false;
-            }
+            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
+
+            D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction,shaderProfile, true, ref errorsAndWarnings);
+
+            ShaderData shaderDataDX11 = ShaderData.CreateHLSL(shaderBytecodeDX11, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            return shaderDataDX11;
         }
     }
 }
