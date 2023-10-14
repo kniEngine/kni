@@ -61,6 +61,7 @@
     <Compile Include="EffectCompiler\EffectObject.cs" />
     <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
+    <Compile Include="EffectCompiler\SamplerInfo.cs" />
     <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
     <Compile Include="EffectCompiler\ShaderData.cs" />
     <Compile Include="EffectCompiler\ShaderData.mojo.cs" />
