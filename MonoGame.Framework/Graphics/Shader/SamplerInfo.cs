@@ -23,6 +23,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // TODO: This should be moved to EffectPass.
         public int textureParameter;
+
+        public override string ToString()
+        {
+            return String.Format("type: {0}, textureParameter:{1}, GLsamplerName: {2}, t#: {3}, s#: {4}",
+                                 type, textureParameter, GLsamplerName, textureSlot, samplerSlot);
+        }
     }
 }
 

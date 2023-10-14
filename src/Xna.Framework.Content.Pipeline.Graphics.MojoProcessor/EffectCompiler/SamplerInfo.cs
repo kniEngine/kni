@@ -18,8 +18,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public override string ToString()
         {
-            return String.Format("type: {0}, textureParameter:{1}, textureName: {2}, GLsamplerName: {3}, t#: {4}, s#: {5}",
-                                 type, textureParameter, textureName, GLsamplerName, textureSlot, samplerSlot);
+            return String.Format("type: {0}, textureParameter:{1}, GLsamplerName: {2}, t#: {3}, s#: {4}, textureName: {5}",
+                                 type, textureParameter, GLsamplerName, textureSlot, samplerSlot, textureName);
         }
     }
 }
