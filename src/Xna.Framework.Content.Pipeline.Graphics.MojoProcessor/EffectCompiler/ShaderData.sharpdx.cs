@@ -130,33 +130,38 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     dxshader._samplers = samplers.ToArray();
 
                     // Gather all the constant buffers used by this shader.
-                    dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
-                    for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
-                    {
-                        ConstantBufferData cb = new ConstantBufferData(refelect.GetConstantBuffer(i));
-
-                        // Look for a duplicate cbuffer in the list.
-                        for (int c = 0; c < cbuffers.Count; c++)
-                        {
-                            if (cb.SameAs(cbuffers[c]))
-                            {
-                                cb = null;
-                                dxshader._cbuffers[i] = c;
-                                break;
-                            }
-                        }
-
-                        // Add a new cbuffer.
-                        if (cb != null)
-                        {
-                            dxshader._cbuffers[i] = cbuffers.Count;
-                            cbuffers.Add(cb);
-                        }
-                    }
+                    AddConstantBuffers(cbuffers, dxshader, refelect);
                 }
             }
 
             return dxshader;
+        }
+
+        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection refelect)
+        {
+            dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
+            for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
+            {
+                ConstantBufferData cb = new ConstantBufferData(refelect.GetConstantBuffer(i));
+
+                // Look for a duplicate cbuffer in the list.
+                for (int c = 0; c < cbuffers.Count; c++)
+                {
+                    if (cb.SameAs(cbuffers[c]))
+                    {
+                        cb = null;
+                        dxshader._cbuffers[i] = c;
+                        break;
+                    }
+                }
+
+                // Add a new cbuffer.
+                if (cb != null)
+                {
+                    dxshader._cbuffers[i] = cbuffers.Count;
+                    cbuffers.Add(cb);
+                }
+            }
         }
     }
 }
