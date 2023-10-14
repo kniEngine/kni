@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using D3D = SharpDX.Direct3D;
@@ -13,22 +12,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     {
         public static ShaderData CreateHLSL(D3DC.ShaderBytecode shaderBytecodeDX11, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
         {
-            byte[] byteCodeDX11 = shaderBytecodeDX11.Data.ToArray(); // Return a copy of the shader bytecode.
-
             ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
             dxshader._attributes = new Attribute[0];
 
             // Strip the bytecode we're gonna save!
             D3DC.StripFlags stripFlags = D3DC.StripFlags.CompilerStripReflectionData |
-                             D3DC.StripFlags.CompilerStripTestBlobs;
+                                         D3DC.StripFlags.CompilerStripTestBlobs;
 
             if (debugMode != EffectProcessorDebugMode.Debug)
                 stripFlags |= D3DC.StripFlags.CompilerStripDebugInformation;
 
-            using (D3DC.ShaderBytecode original = new D3DC.ShaderBytecode(byteCodeDX11))
             {
                 // Strip the bytecode for saving to disk.
-                D3DC.ShaderBytecode stripped = original.Strip(stripFlags);
+                D3DC.ShaderBytecode stripped = shaderBytecodeDX11.Strip(stripFlags);
                 {
                     // Only SM4 and above works with strip... so this can return null!
                     if (stripped != null)
@@ -45,12 +41,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         //
                         // http://entland.homelinux.com/blog/2009/01/15/stripping-comments-from-shader-bytecodes/
                         //
-                        dxshader.ShaderCode = (byte[])byteCodeDX11.Clone();
+                        dxshader.ShaderCode = (byte[])shaderBytecodeDX11.Data.Clone();
                     }
                 }
 
                 // Use reflection to get details of the shader.
-                using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(byteCodeDX11))
+                using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
                 {
                     // Get the samplers.
                     List<Sampler> samplers = new List<Sampler>();
