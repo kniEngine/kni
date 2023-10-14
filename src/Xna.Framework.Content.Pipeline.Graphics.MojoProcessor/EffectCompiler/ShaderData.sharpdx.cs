@@ -57,22 +57,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     {
                         string samplerName = rdesc.Name;
 
-                        SamplerInfo sampler = new SamplerInfo();
-                        sampler.textureSlot = rdesc.BindPoint;
-                        sampler.samplerSlot = rdesc.BindPoint;
+                        SamplerInfo samplerInfo = new SamplerInfo();
+                        samplerInfo.textureSlot = rdesc.BindPoint;
+                        samplerInfo.samplerSlot = rdesc.BindPoint;
 
                         // default to String.Empty for DX.
-                        sampler.GLsamplerName = String.Empty;
+                        samplerInfo.GLsamplerName = String.Empty;
 
-                        sampler.textureName = samplerName;
+                        samplerInfo.textureName = samplerName;
                             
                         SamplerStateInfo state;
                         if (samplerStates.TryGetValue(samplerName, out state))
                         {
-                            sampler.state = state.State;
+                            samplerInfo.state = state.State;
 
                             if (state.TextureName != null)
-                                sampler.textureName = state.TextureName;
+                                samplerInfo.textureName = state.TextureName;
                         }
                         else
                         {
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             {
                                 if (samplerName == s.TextureName)
                                 {
-                                    sampler.state = s.State;
+                                    samplerInfo.state = s.State;
                                     samplerName = s.Name;
                                     break;
                                 }
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler && 
                                 samplerrdesc.Name == samplerName)
                             {
-                                sampler.samplerSlot = samplerrdesc.BindPoint;
+                                samplerInfo.samplerSlot = samplerrdesc.BindPoint;
                                 break;
                             }
                         }
@@ -104,27 +104,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         {
                             case D3D.ShaderResourceViewDimension.Texture1D:
                             case D3D.ShaderResourceViewDimension.Texture1DArray:
-                                sampler.type = MojoShader.SamplerType.SAMPLER_1D;
+                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
                                 break;
 
                             case D3D.ShaderResourceViewDimension.Texture2D:
                             case D3D.ShaderResourceViewDimension.Texture2DArray:
                             case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
                             case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
-                                sampler.type = MojoShader.SamplerType.SAMPLER_2D;
+                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
                                 break;
 
                             case D3D.ShaderResourceViewDimension.Texture3D:
-                                sampler.type = MojoShader.SamplerType.SAMPLER_VOLUME;
+                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
                                 break;
 
                             case D3D.ShaderResourceViewDimension.TextureCube:
                             case D3D.ShaderResourceViewDimension.TextureCubeArray:
-                                sampler.type = MojoShader.SamplerType.SAMPLER_CUBE;
+                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
                                 break;
                         }
 
-                        samplers.Add(sampler);
+                        samplers.Add(samplerInfo);
                     }
                 }
                 dxshader._samplers = samplers.ToArray();

@@ -119,19 +119,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                                      e.register_index == samplers[i].index
                                                ).name;
 
-                SamplerInfo sampler = new SamplerInfo();
-                sampler.textureSlot = samplers[i].index;
-                sampler.samplerSlot = samplers[i].index;
+                SamplerInfo samplerInfo = new SamplerInfo();
+                samplerInfo.textureSlot = samplers[i].index;
+                samplerInfo.samplerSlot = samplers[i].index;
 
                 // GLSL needs the uniform sampler name.
-                sampler.GLsamplerName = samplers[i].name;
+                samplerInfo.GLsamplerName = samplers[i].name;
 
                 //sampler mapping to parameter is unknown atm
-                sampler.textureParameter = -1;
+                samplerInfo.textureParameter = -1;
                 // By default use the original sampler name for the parameter name.
-                sampler.textureName = samplerName;
+                samplerInfo.textureName = samplerName;
 
-                sampler.type = samplers[i].type;
+                samplerInfo.type = samplers[i].type;
 
 
                 string textureName = null;
@@ -145,16 +145,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 SamplerStateInfo state;
                 if (samplerStates.TryGetValue(samplerName, out state))
                 {
-                    sampler.state = state.State;
+                    samplerInfo.state = state.State;
 
                     if (textureName != null)
-                        sampler.textureName = textureName;
+                        samplerInfo.textureName = textureName;
                     else if (state.TextureName != null)
-                        sampler.textureName = state.TextureName;
+                        samplerInfo.textureName = state.TextureName;
                 }
 
                 // Store the sampler.
-			    dxshader._samplers[i] = sampler;
+			    dxshader._samplers[i] = samplerInfo;
 			}
 
 			// Gather all the parameters used by this shader.
