@@ -745,17 +745,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 for (int s = 0; s < shader._samplers.Length; s++)
                 {
-                    ShaderData.Sampler sampler = shader._samplers[s];
+                    SamplerInfo sampler = shader._samplers[s];
 
-                    int match = parameters.FindIndex(e => e.name == sampler.parameterName);
+                    int match = parameters.FindIndex(e => e.name == sampler.textureName);
                     if (match == -1)
                     {
                         // Store the index for runtime lookup.
-                        shader._samplers[s].parameter = parameters.Count;
+                        shader._samplers[s].textureParameter = parameters.Count;
 
                         EffectParameterContent param = new EffectParameterContent();
                         param.class_ = PARAMETER_CLASS.OBJECT;
-                        param.name = sampler.parameterName;
+                        param.name = sampler.textureName;
                         param.semantic = string.Empty;
 
                         switch (sampler.type)
@@ -784,7 +784,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         // TODO: Make sure the type and size of 
                         // the parameter match up!
 
-                        shader._samplers[s].parameter = match;
+                        shader._samplers[s].textureParameter = match;
                     }
                 }
             }

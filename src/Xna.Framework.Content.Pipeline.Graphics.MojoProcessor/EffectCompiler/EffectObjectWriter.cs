@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write(shader.ShaderCode);
 
             Write((byte)shader._samplers.Length);
-            foreach (ShaderData.Sampler sampler in shader._samplers)
+            foreach (SamplerInfo sampler in shader._samplers)
             {
                 Write((byte)sampler.type);
                 Write((byte)sampler.textureSlot);
@@ -84,9 +84,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 else
                     Write(false);
 
-                Write(sampler.samplerName);
+                Write(sampler.GLsamplerName);
 
-                Write((byte)sampler.parameter);
+                Write((byte)sampler.textureParameter);
             }
 
             Write((byte)shader._cbuffers.Length);

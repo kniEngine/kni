@@ -115,8 +115,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     if (ReadBoolean())
                         samplers[s].state = ReadSamplerState();
 
-                    samplers[s].name = ReadString();
-                    samplers[s].parameter = ReadByte();
+                    samplers[s].GLsamplerName = ReadString();
+                    samplers[s].textureParameter = ReadByte();
                 }
 
                 var cbufferCount = (int)ReadByte();

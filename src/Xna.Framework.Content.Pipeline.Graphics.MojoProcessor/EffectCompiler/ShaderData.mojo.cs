@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Get the samplers.
             MojoShader.Sampler[] samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler>(
 					parseData.samplers, parseData.sampler_count);
-			dxshader._samplers = new Sampler[samplers.Length];
+			dxshader._samplers = new SamplerInfo[samplers.Length];
 			for (int i = 0; i < samplers.Length; i++)
             {
                 // We need the original sampler name... look for that in the symbols.
@@ -119,21 +119,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                                      e.register_index == samplers[i].index
                                                ).name;
 
-                Sampler sampler = new Sampler
-                {
-                    //sampler mapping to parameter is unknown atm
-                    parameter = -1,
-                                      
-                    // GLSL needs the MojoShader mangled sampler name.
-                    samplerName = samplers[i].name,
+                SamplerInfo samplerInfo = new SamplerInfo();
+                samplerInfo.textureSlot = samplers[i].index;
+                samplerInfo.samplerSlot = samplers[i].index;
 
-                    // By default use the original sampler name for the parameter name.
-                    parameterName = samplerName,
+                // GLSL needs the uniform sampler name.
+                samplerInfo.GLsamplerName = samplers[i].name;
 
-                    textureSlot = samplers[i].index,
-                    samplerSlot = samplers[i].index,
-                    type = samplers[i].type,
-                };
+                //sampler mapping to parameter is unknown atm
+                samplerInfo.textureParameter = -1;
+                // By default use the original sampler name for the parameter name.
+                samplerInfo.textureName = samplerName;
+
+                samplerInfo.type = samplers[i].type;
+
 
                 string textureName = null;
                 if (samplerName.Contains('+'))
@@ -146,16 +145,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 SamplerStateInfo state;
                 if (samplerStates.TryGetValue(samplerName, out state))
                 {
-                    sampler.state = state.State;
+                    samplerInfo.state = state.State;
 
                     if (textureName != null)
-                        sampler.parameterName = textureName;
+                        samplerInfo.textureName = textureName;
                     else if (state.TextureName != null)
-                        sampler.parameterName = state.TextureName;
+                        samplerInfo.textureName = state.TextureName;
                 }
 
                 // Store the sampler.
-			    dxshader._samplers[i] = sampler;
+			    dxshader._samplers[i] = samplerInfo;
 			}
 
 			// Gather all the parameters used by this shader.
