@@ -60,17 +60,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             ShaderData shaderDataDX11 = ShaderData.CreateHLSL(bytecodeDX11, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             return shaderDataDX11;
         }
-
-        internal override bool Supports(TargetPlatform platform)
-        {
-            switch (platform)
-            {
-                case TargetPlatform.Windows:
-                case TargetPlatform.WindowsStoreApp:
-                    return true;
-                default:
-                    return false;
-            }
-        }
     }
 }

@@ -65,21 +65,5 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             ShaderData shaderDataDX9 = ShaderData.CreateGLSL(bytecodeDX9, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             return shaderDataDX9;
         }
-            
-        internal override bool Supports(TargetPlatform platform)
-        {
-            switch(platform)
-            {
-                case TargetPlatform.iOS:
-                case TargetPlatform.Android:
-                case TargetPlatform.BlazorGL:
-                case TargetPlatform.DesktopGL:
-                case TargetPlatform.MacOSX:
-                case TargetPlatform.RaspberryPi:
-                    return true;
-                default:
-                    return false;
-            }
-        }
     }
 }
