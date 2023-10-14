@@ -18,11 +18,11 @@ namespace Microsoft.Xna.Platform.Graphics
         public SamplerType type;
         public int textureSlot;
         public int samplerSlot;
-        public string name;
+        public string GLsamplerName; // e.g. "ps_s0", "ps_s1", etc
         public SamplerState state;
 
         // TODO: This should be moved to EffectPass.
-        public int parameter;
+        public int textureParameter;
     }
 }
 

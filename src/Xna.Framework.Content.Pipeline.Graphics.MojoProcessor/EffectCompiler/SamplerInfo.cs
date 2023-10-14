@@ -11,15 +11,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public MojoShader.SamplerType type;
         public int textureSlot;
         public int samplerSlot;
-        public string samplerName;
-        public string parameterName;
-        public int parameter;
+        public string GLsamplerName; // e.g. "ps_s0", "ps_s1", etc
+        public string textureName;
+        public int textureParameter;
         public SamplerState state;
 
         public override string ToString()
         {
-            return String.Format("type: {0}, parameter:{1}, parameterName: {2}, samplerName: {3}, t#: {4}, s#: {5}",
-                                 type, parameter, parameterName, samplerName, textureSlot, samplerSlot);
+            return String.Format("type: {0}, textureParameter:{1}, textureName: {2}, GLsamplerName: {3}, t#: {4}, s#: {5}",
+                                 type, textureParameter, textureName, GLsamplerName, textureSlot, samplerSlot);
         }
     }
 }

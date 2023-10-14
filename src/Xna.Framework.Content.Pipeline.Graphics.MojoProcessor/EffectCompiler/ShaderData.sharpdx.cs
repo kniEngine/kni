@@ -58,10 +58,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                         SamplerInfo sampler = new SamplerInfo
                         {
-                            samplerName = string.Empty,
+                            GLsamplerName = string.Empty,
                             textureSlot = rdesc.BindPoint,
                             samplerSlot = rdesc.BindPoint,
-                            parameterName = samplerName
+                            textureName = samplerName
                         };
                             
                         SamplerStateInfo state;
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             sampler.state = state.State;
 
                             if (state.TextureName != null)
-                                sampler.parameterName = state.TextureName;
+                                sampler.textureName = state.TextureName;
                         }
                         else
                         {

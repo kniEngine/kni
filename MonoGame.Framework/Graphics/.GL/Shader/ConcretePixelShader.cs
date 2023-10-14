@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Assign the texture unit index to the sampler uniforms.
             foreach (SamplerInfo sampler in Samplers)
             {
-                int loc = GL.GetUniformLocation(program, sampler.name);
+                int loc = GL.GetUniformLocation(program, sampler.GLsamplerName);
                 GL.CheckGLError();
                 if (loc != -1)
                 {

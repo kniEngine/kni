@@ -122,13 +122,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 SamplerInfo sampler = new SamplerInfo
                 {
                     //sampler mapping to parameter is unknown atm
-                    parameter = -1,
+                    textureParameter = -1,
                                       
                     // GLSL needs the MojoShader mangled sampler name.
-                    samplerName = samplers[i].name,
+                    GLsamplerName = samplers[i].name,
 
                     // By default use the original sampler name for the parameter name.
-                    parameterName = samplerName,
+                    textureName = samplerName,
 
                     textureSlot = samplers[i].index,
                     samplerSlot = samplers[i].index,
@@ -149,9 +149,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     sampler.state = state.State;
 
                     if (textureName != null)
-                        sampler.parameterName = textureName;
+                        sampler.textureName = textureName;
                     else if (state.TextureName != null)
-                        sampler.parameterName = state.TextureName;
+                        sampler.textureName = state.TextureName;
                 }
 
                 // Store the sampler.

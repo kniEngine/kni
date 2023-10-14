@@ -84,9 +84,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 else
                     Write(false);
 
-                Write(sampler.samplerName);
+                Write(sampler.GLsamplerName);
 
-                Write((byte)sampler.parameter);
+                Write((byte)sampler.textureParameter);
             }
 
             Write((byte)shader._cbuffers.Length);
