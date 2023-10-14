@@ -11,13 +11,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-		public ShaderData(bool isVertexShader, int sharedIndex)
+        private readonly ShaderStage _shaderStage;
+
+		public ShaderStage Stage { get { return _shaderStage; } }
+
+
+        public ShaderData(ShaderStage shaderStage, int sharedIndex)
 		{
-			IsVertexShader = isVertexShader;
+            _shaderStage = shaderStage;
 			SharedIndex = sharedIndex;
 		}
 
-		public bool IsVertexShader { get; private set; }
 
 		public struct Sampler
 		{

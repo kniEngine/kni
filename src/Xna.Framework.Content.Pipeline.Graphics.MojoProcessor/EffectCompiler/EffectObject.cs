@@ -695,13 +695,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.psFunction, pinfo.psModel, false, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.vsFunction, pinfo.vsModel, true, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectStateContent[pass.state_count];
@@ -799,14 +799,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, isVertexShader, this, ref errorsAndWarnings);
+                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, shaderStage, this, ref errorsAndWarnings);
                 this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfile;
@@ -815,13 +815,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             EffectStateContent state = new EffectStateContent();
             state.index = 0;
             state.type = STATE_TYPE.CONSTANT;
-            state.operation = isVertexShader ? (uint)146 : (uint)147;
+            state.operation = (shaderStage== ShaderStage.Vertex)
+                            ? (uint)146
+                            : (uint)147;
 
             state.parameter = new EffectParameterContent();
             state.parameter.name = string.Empty;
             state.parameter.semantic = string.Empty;
             state.parameter.class_ = PARAMETER_CLASS.OBJECT;
-            state.parameter.type = isVertexShader ? PARAMETER_TYPE.VERTEXSHADER : PARAMETER_TYPE.PIXELSHADER;
+            state.parameter.type = (shaderStage == ShaderStage.Vertex)
+                                 ? PARAMETER_TYPE.VERTEXSHADER
+                                 : PARAMETER_TYPE.PIXELSHADER;
             state.parameter.rows = 0;
             state.parameter.columns = 0;
             state.parameter.data = shaderData.SharedIndex;

@@ -10,9 +10,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal partial class ShaderData
     {
-        public static ShaderData CreateHLSL(D3DC.ShaderBytecode shaderBytecodeDX11, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        public static ShaderData CreateHLSL(D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
         {
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
+            ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
             dxshader._attributes = new Attribute[0];
 
             // Strip the bytecode we're gonna save!

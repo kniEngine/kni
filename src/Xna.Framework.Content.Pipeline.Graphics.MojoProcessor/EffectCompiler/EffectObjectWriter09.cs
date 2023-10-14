@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteShader(ShaderData shader)
         {
-            Write(shader.IsVertexShader);
+            Write((byte)shader.Stage);
 
             Write(shader.ShaderCode.Length);
             Write(shader.ShaderCode);

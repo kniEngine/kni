@@ -94,8 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private Shader ReadShader()
             {
-                bool isVertexShader = ReadBoolean();
-                ShaderStage stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
+                ShaderStage shaderStage = (ShaderStage)ReadByte();
 
                 var shaderLength = ReadInt32();
                 var shaderBytecode = ReadBytes(shaderLength);
@@ -130,7 +129,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     attributes[a].location = ReadInt16();
                 }
 
-                switch (stage)
+                switch (shaderStage)
                 {
                     case ShaderStage.Vertex:
                         return new VertexShader(_graphicsDevice,
