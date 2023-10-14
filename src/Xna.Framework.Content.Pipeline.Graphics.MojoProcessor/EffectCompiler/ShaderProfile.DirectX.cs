@@ -51,12 +51,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, EffectObject effect, ref string errorsAndWarnings)
         {
-            byte[] bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
-
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-            ShaderData shaderData = ShaderData.CreateHLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
-            effect.Shaders.Add(shaderData);
-            return shaderData;
+
+            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
+
+            byte[] bytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction,shaderProfile, true, ref errorsAndWarnings);
+
+            ShaderData shaderDataDX11 = ShaderData.CreateHLSL(bytecodeDX11, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            return shaderDataDX11;
         }
 
         internal override bool Supports(TargetPlatform platform)

@@ -52,15 +52,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool isVertexShader, EffectObject effect, ref string errorsAndWarnings)
         {
-            // For now GLSL is only supported via translation
-            // using MojoShader which works from HLSL bytecode.
-            byte[] bytecode = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, ref errorsAndWarnings);
-
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-            ShaderData shaderData = ShaderData.CreateGLSL(bytecode, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
-            effect.Shaders.Add(shaderData);
 
-            return shaderData;
+            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo);
+
+            // For now GLSL is only supported via translation
+            // using MojoShader which works from DX9 HLSL bytecode.
+            shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
+            shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
+            byte[] bytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings);
+
+            ShaderData shaderDataDX9 = ShaderData.CreateGLSL(bytecodeDX9, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            return shaderDataDX9;
         }
             
         internal override bool Supports(TargetPlatform platform)

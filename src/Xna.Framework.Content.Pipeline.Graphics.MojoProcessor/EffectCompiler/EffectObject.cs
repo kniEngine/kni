@@ -808,6 +808,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 // Compile and create the shader.
                 shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, isVertexShader, this, ref errorsAndWarnings);
+                this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfile;
             }
@@ -829,7 +830,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static byte[] CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ref string errorsAndWarnings)
+        public static byte[] CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {
@@ -840,17 +841,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // in the first place.
                 //shaderFlags |= D3DC.ShaderFlags.NoPreshader;
 
-                if (shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11)
-                {
+                if (backwardsCompatibility)
                     shaderFlags |= D3DC.ShaderFlags.EnableBackwardsCompatibility;
-                }
-
-                // force D3DCompiler to generate legacy bytecode that is compatible with MojoShader.
-                if (shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo)
-                {
-                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
-                    shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
-                }
 
                 if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
                 {
