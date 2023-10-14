@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -60,9 +61,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // using MojoShader which works from DX9 HLSL bytecode.
             shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
             shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
-            byte[] bytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings);
+            D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings);
 
-            ShaderData shaderDataDX9 = ShaderData.CreateGLSL(bytecodeDX9, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            ShaderData shaderDataDX9 = ShaderData.CreateGLSL(shaderBytecodeDX9, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             return shaderDataDX9;
         }
     }

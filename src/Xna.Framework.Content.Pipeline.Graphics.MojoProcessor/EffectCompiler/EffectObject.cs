@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Graphics;
 using D3DC = SharpDX.D3DCompiler;
@@ -830,7 +829,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static byte[] CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {
@@ -874,8 +873,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 D3DC.ShaderBytecode shaderBytecode = result.Bytecode;
                 //string source = shaderByteCode.Disassemble();
 
-                // Return a copy of the shader bytecode.
-                return shaderBytecode.Data.ToArray();
+                return shaderBytecode;
             }
             catch (SharpDX.CompilationException ex)
             {

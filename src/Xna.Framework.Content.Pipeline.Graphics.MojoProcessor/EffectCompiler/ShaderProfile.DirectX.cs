@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -55,9 +56,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
 
-            byte[] bytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction,shaderProfile, true, ref errorsAndWarnings);
+            D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction,shaderProfile, true, ref errorsAndWarnings);
 
-            ShaderData shaderDataDX11 = ShaderData.CreateHLSL(bytecodeDX11, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+            ShaderData shaderDataDX11 = ShaderData.CreateHLSL(shaderBytecodeDX11, isVertexShader, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
             return shaderDataDX11;
         }
     }

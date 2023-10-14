@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using D3DC = SharpDX.D3DCompiler;
 
 // Copyright (C)2022 Nick Kastellanos
 
@@ -11,16 +12,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-        public static ShaderData CreateGLSL(byte[] byteCode, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        public static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, byteCode);
+            byte[] bytecodeDX9 = shaderBytecodeDX9.Data.ToArray(); // Return a copy of the shader bytecode.
+
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, bytecodeDX9);
 
             // Use MojoShader to convert the HLSL bytecode to GLSL.
 
             IntPtr parseDataPtr = MojoShader.NativeMethods.Parse(
 				MojoShader.NativeConstants.PROFILE_GLSL,
-				byteCode,
-				byteCode.Length,
+				bytecodeDX9,
+				bytecodeDX9.Length,
 				IntPtr.Zero,
 				0,
 				IntPtr.Zero,
