@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
             {
                 // Get the samplers.
-                List<Sampler> samplers = new List<Sampler>();
+                List<SamplerInfo> samplers = new List<SamplerInfo>();
                 for (int i = 0; i < refelect.Description.BoundResources; i++)
                 {
                     D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     {
                         string samplerName = rdesc.Name;
 
-                        Sampler sampler = new Sampler
+                        SamplerInfo sampler = new SamplerInfo
                         {
                             samplerName = string.Empty,
                             textureSlot = rdesc.BindPoint,

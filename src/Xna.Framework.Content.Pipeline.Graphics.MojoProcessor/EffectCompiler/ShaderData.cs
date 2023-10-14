@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		}
 
 
-		public struct Sampler
+		public struct SamplerInfo
 		{
 			public MojoShader.SamplerType type;
 			public int textureSlot;
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		/// </summary>
 		public int[] _cbuffers;
 
-		public Sampler[] _samplers;
+		public SamplerInfo[] _samplers;
 
 		public Attribute[] _attributes;
 

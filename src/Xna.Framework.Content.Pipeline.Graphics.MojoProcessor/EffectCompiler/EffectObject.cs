@@ -745,7 +745,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 for (int s = 0; s < shader._samplers.Length; s++)
                 {
-                    ShaderData.Sampler sampler = shader._samplers[s];
+                    ShaderData.SamplerInfo sampler = shader._samplers[s];
 
                     int match = parameters.FindIndex(e => e.name == sampler.parameterName);
                     if (match == -1)

@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Get the samplers.
             MojoShader.Sampler[] samplers = MarshalHelper.UnmarshalArray<MojoShader.Sampler>(
 					parseData.samplers, parseData.sampler_count);
-			dxshader._samplers = new Sampler[samplers.Length];
+			dxshader._samplers = new SamplerInfo[samplers.Length];
 			for (int i = 0; i < samplers.Length; i++)
             {
                 // We need the original sampler name... look for that in the symbols.
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                                      e.register_index == samplers[i].index
                                                ).name;
 
-                Sampler sampler = new Sampler
+                SamplerInfo sampler = new SamplerInfo
                 {
                     //sampler mapping to parameter is unknown atm
                     parameter = -1,
