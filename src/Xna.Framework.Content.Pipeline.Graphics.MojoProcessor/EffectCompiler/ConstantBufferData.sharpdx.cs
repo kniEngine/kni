@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal partial class ConstantBufferData
     {
-        public ConstantBufferData(SharpDX.D3DCompiler.ConstantBuffer cb)
+        public ConstantBufferData(D3DC.ConstantBuffer cb)
         {
             Name = string.Empty;
             Size = cb.Description.Size;
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 ParameterOffset.Add(param.bufferOffset);
         }
 
-        private static EffectObject.EffectParameterContent GetParameterFromType(SharpDX.D3DCompiler.ShaderReflectionType type)
+        private static EffectObject.EffectParameterContent GetParameterFromType(D3DC.ShaderReflectionType type)
         {
             EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
             param.rows = (uint)type.Description.RowCount;
@@ -65,15 +65,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             switch (type.Description.Class)
             {
-                case SharpDX.D3DCompiler.ShaderVariableClass.Scalar:
+                case D3DC.ShaderVariableClass.Scalar:
                     param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
                     break;
 
-                case SharpDX.D3DCompiler.ShaderVariableClass.Vector:
+                case D3DC.ShaderVariableClass.Vector:
                     param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
                     break;
 
-                case SharpDX.D3DCompiler.ShaderVariableClass.MatrixColumns:
+                case D3DC.ShaderVariableClass.MatrixColumns:
                     param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
                     break;
 
@@ -83,15 +83,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             switch (type.Description.Type)
             {
-                case SharpDX.D3DCompiler.ShaderVariableType.Bool:
+                case D3DC.ShaderVariableType.Bool:
                     param.type = EffectObject.PARAMETER_TYPE.BOOL;
                     break;
 
-                case SharpDX.D3DCompiler.ShaderVariableType.Float:
+                case D3DC.ShaderVariableType.Float:
                     param.type = EffectObject.PARAMETER_TYPE.FLOAT;
                     break;
 
-                case SharpDX.D3DCompiler.ShaderVariableType.Int:
+                case D3DC.ShaderVariableType.Int:
                     param.type = EffectObject.PARAMETER_TYPE.INT;
                     break;
 
