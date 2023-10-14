@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             byte[] byteCodeDX11 = shaderBytecodeDX11.Data.ToArray(); // Return a copy of the shader bytecode.
 
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, byteCodeDX11);
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
             dxshader._attributes = new Attribute[0];
 
             // Strip the bytecode we're gonna save!
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         //
                         // http://entland.homelinux.com/blog/2009/01/15/stripping-comments-from-shader-bytecodes/
                         //
-                        dxshader.ShaderCode = (byte[])dxshader.Bytecode.Clone();
+                        dxshader.ShaderCode = (byte[])byteCodeDX11.Clone();
                     }
                 }
 

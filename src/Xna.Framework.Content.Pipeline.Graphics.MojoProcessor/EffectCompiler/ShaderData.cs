@@ -11,11 +11,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal partial class ShaderData
 	{
-		public ShaderData(bool isVertexShader, int sharedIndex, byte[] bytecode)
+		public ShaderData(bool isVertexShader, int sharedIndex)
 		{
 			IsVertexShader = isVertexShader;
 			SharedIndex = sharedIndex;
-			Bytecode = (byte[])bytecode.Clone();	    
 		}
 
 		public bool IsVertexShader { get; private set; }
@@ -61,8 +60,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 
 #region Non-Serialized Stuff
-
-		public byte[] Bytecode { get; private set; }
 
 		// The index of the shader in the shared list.
 		public int SharedIndex { get; private set; }

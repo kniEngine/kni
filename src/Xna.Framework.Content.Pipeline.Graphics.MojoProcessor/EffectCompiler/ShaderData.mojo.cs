@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		{
             byte[] bytecodeDX9 = shaderBytecodeDX9.Data.ToArray(); // Return a copy of the shader bytecode.
 
-            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex, bytecodeDX9);
+            ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
 
             // Use MojoShader to convert the HLSL bytecode to GLSL.
 
