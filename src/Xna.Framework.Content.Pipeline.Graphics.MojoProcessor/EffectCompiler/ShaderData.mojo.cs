@@ -14,7 +14,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 	{
         public static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, bool isVertexShader, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
 		{
-            byte[] bytecodeDX9 = shaderBytecodeDX9.Data.ToArray(); // Return a copy of the shader bytecode.
 
             ShaderData dxshader = new ShaderData(isVertexShader, sharedIndex);
 
@@ -22,8 +21,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             IntPtr parseDataPtr = MojoShader.NativeMethods.Parse(
 				MojoShader.NativeConstants.PROFILE_GLSL,
-				bytecodeDX9,
-				bytecodeDX9.Length,
+				shaderBytecodeDX9.Data,
+				shaderBytecodeDX9.Data.Length,
 				IntPtr.Zero,
 				0,
 				IntPtr.Zero,
