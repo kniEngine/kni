@@ -15,12 +15,6 @@ using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public enum ShaderProfileType
-    {
-        OpenGL_Mojo = 0,
-        DirectX_11  = 1,
-    }
-
     [TypeConverter(typeof(StringConverter))]
     public abstract class ShaderProfile
     {
