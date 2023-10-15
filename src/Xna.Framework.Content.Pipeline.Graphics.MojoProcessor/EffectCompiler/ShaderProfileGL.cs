@@ -17,12 +17,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     class ShaderProfileGL : ShaderProfile
     {
+        public override ShaderProfileType ProfileType { get { return ShaderProfileType.OpenGL_Mojo; } }
+        public override string Name { get { return "OpenGL"; } }
+
+
         private static readonly Regex GlslPixelShaderRegex = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
         private static readonly Regex GlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
 
         public ShaderProfileGL()
-            : base("OpenGL", ShaderProfileType.OpenGL_Mojo)
-        {                
+        {
         }
 
         internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
