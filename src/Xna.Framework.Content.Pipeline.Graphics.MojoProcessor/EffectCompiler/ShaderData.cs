@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 		public SamplerInfo[] _samplers;
 
-		public Attribute[] _attributes;
+		public ShaderData.Attribute[] _attributes;
 
 		public byte[] ShaderCode { get; set; }
 
