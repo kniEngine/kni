@@ -56,8 +56,6 @@
     <Compile Include="Processors\EffectProcessor.cs" />
     <Compile Include="Processors\EffectProcessorDebugMode.cs" />
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />
-    <Compile Include="EffectCompiler\ConstantBufferData.mojo.cs" />
-    <Compile Include="EffectCompiler\ConstantBufferData.sharpdx.cs" />
     <Compile Include="EffectCompiler\EffectObject.cs" />
     <Compile Include="EffectCompiler\EffectObjectWriter.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />

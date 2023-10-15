@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    internal partial class ConstantBufferData
+    internal class ConstantBufferData
     {
         public ConstantBufferData()
         {
