@@ -6,7 +6,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using D3D = SharpDX.Direct3D;
@@ -195,26 +197,153 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
             for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
             {
-                ConstantBufferData cb = new ConstantBufferData(refelect.GetConstantBuffer(i));
+                D3DC.ConstantBuffer d3dConstantBuffer = refelect.GetConstantBuffer(i);
+                ConstantBufferData cbuffer = DirectX11ShaderProfile.CreateConstantBufferData(d3dConstantBuffer);
 
                 // Look for a duplicate cbuffer in the list.
                 for (int c = 0; c < cbuffers.Count; c++)
                 {
-                    if (cb.SameAs(cbuffers[c]))
+                    if (cbuffer.SameAs(cbuffers[c]))
                     {
-                        cb = null;
+                        cbuffer = null;
                         dxshader._cbuffers[i] = c;
                         break;
                     }
                 }
 
                 // Add a new cbuffer.
-                if (cb != null)
+                if (cbuffer != null)
                 {
                     dxshader._cbuffers[i] = cbuffers.Count;
-                    cbuffers.Add(cb);
+                    cbuffers.Add(cbuffer);
                 }
             }
-        } 
+        }
+
+
+        private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer cb)
+        {
+            ConstantBufferData cbuffer = new ConstantBufferData();
+
+            cbuffer.Name = string.Empty;
+            cbuffer.Size = cb.Description.Size;
+
+            cbuffer.ParameterIndex = new List<int>();
+
+            List<EffectObject.EffectParameterContent> parameters = new List<EffectObject.EffectParameterContent>();
+
+            // Gather all the parameters.
+            for (int i = 0; i < cb.Description.VariableCount; i++)
+            {
+                D3DC.ShaderReflectionVariable vdesc = cb.GetVariable(i);
+
+                EffectObject.EffectParameterContent param = GetParameterFromType(vdesc.GetVariableType());
+
+                param.name = vdesc.Description.Name;
+                param.semantic = string.Empty;
+                param.bufferOffset = vdesc.Description.StartOffset;
+
+                uint size = param.columns * param.rows * 4;
+                byte[] data = new byte[size];
+
+                if (vdesc.Description.DefaultValue != IntPtr.Zero)
+                    Marshal.Copy(vdesc.Description.DefaultValue, data, 0, (int)size);
+
+                param.data = data;
+
+                parameters.Add(param);
+            }
+
+            // Sort them by the offset for some consistent results.
+            IEnumerable<EffectObject.EffectParameterContent> sortedParameters = parameters.OrderBy(e => e.bufferOffset);
+            cbuffer.Parameters = sortedParameters.ToList();
+
+            // Store the parameter offsets.
+            cbuffer.ParameterOffset = new List<int>();
+            foreach (EffectObject.EffectParameterContent param in cbuffer.Parameters)
+                cbuffer.ParameterOffset.Add(param.bufferOffset);
+
+            return cbuffer;
+        }
+
+        private static EffectObject.EffectParameterContent GetParameterFromType(D3DC.ShaderReflectionType type)
+        {
+            EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
+            param.rows = (uint)type.Description.RowCount;
+            param.columns = (uint)type.Description.ColumnCount;
+            param.name = type.Description.Name ?? string.Empty;
+            param.semantic = string.Empty;
+            param.bufferOffset = type.Description.Offset;
+
+            switch (type.Description.Class)
+            {
+                case D3DC.ShaderVariableClass.Scalar:
+                    param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
+                    break;
+
+                case D3DC.ShaderVariableClass.Vector:
+                    param.class_ = EffectObject.PARAMETER_CLASS.VECTOR;
+                    break;
+
+                case D3DC.ShaderVariableClass.MatrixColumns:
+                    param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
+                    break;
+
+                default:
+                    throw new Exception("Unsupported parameter class!");
+            }
+
+            switch (type.Description.Type)
+            {
+                case D3DC.ShaderVariableType.Bool:
+                    param.type = EffectObject.PARAMETER_TYPE.BOOL;
+                    break;
+
+                case D3DC.ShaderVariableType.Float:
+                    param.type = EffectObject.PARAMETER_TYPE.FLOAT;
+                    break;
+
+                case D3DC.ShaderVariableType.Int:
+                    param.type = EffectObject.PARAMETER_TYPE.INT;
+                    break;
+
+                default:
+                    throw new Exception("Unsupported parameter type!");
+            }
+
+            param.member_count = (uint)type.Description.MemberCount;
+            param.element_count = (uint)type.Description.ElementCount;
+
+            if (param.member_count > 0)
+            {
+                param.member_handles = new EffectObject.EffectParameterContent[param.member_count];
+                for (int i = 0; i < param.member_count; i++)
+                {
+                    EffectObject.EffectParameterContent mparam = GetParameterFromType(type.GetMemberType(i));
+                    mparam.name = type.GetMemberTypeName(i) ?? string.Empty;
+                    param.member_handles[i] = mparam;
+                }
+            }
+            else
+            {
+                param.member_handles = new EffectObject.EffectParameterContent[param.element_count];
+                for (int i = 0; i < param.element_count; i++)
+                {
+                    EffectObject.EffectParameterContent mparam = new EffectObject.EffectParameterContent();
+
+                    mparam.name = string.Empty;
+                    mparam.semantic = string.Empty;
+                    mparam.type = param.type;
+                    mparam.class_ = param.class_;
+                    mparam.rows = param.rows;
+                    mparam.columns = param.columns;
+                    mparam.data = new byte[param.columns * param.rows * 4];
+
+                    param.member_handles[i] = mparam;
+                }
+            }
+
+            return param;
+        }
     }
 }

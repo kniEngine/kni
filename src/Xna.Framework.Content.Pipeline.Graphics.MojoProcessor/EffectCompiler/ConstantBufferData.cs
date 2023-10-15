@@ -10,15 +10,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal partial class ConstantBufferData
     {
-        public string Name { get; private set; }
+        public ConstantBufferData()
+        {
+        }
 
-        public int Size { get; private set; }
+        public string Name { get; internal set; }
 
-        public List<int> ParameterIndex { get; private set; }
+        public int Size { get; internal set; }
 
-        public List<int> ParameterOffset { get; private set; }
+        public List<int> ParameterIndex { get; internal set; }
 
-        public List<EffectObject.EffectParameterContent> Parameters { get; private set; }
+        public List<int> ParameterOffset { get; internal set; }
+
+        public List<EffectObject.EffectParameterContent> Parameters { get; internal set; }
 
         public ConstantBufferData(string name)
         {
