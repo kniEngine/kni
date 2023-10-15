@@ -30,7 +30,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 technique BasicColorDrawing
 {
-	pass P0
+	pass pass0
 	{
 		VertexShader = compile vs_4_0_level_9_1 MainVS();
 		PixelShader = compile ps_4_0_level_9_1 MainPS();
