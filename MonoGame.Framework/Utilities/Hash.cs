@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace MonoGame.Framework.Utilities
@@ -15,15 +17,21 @@ namespace MonoGame.Framework.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal static int ComputeHash(params byte[] data)
+        internal unsafe static int ComputeHash(params byte[] data)
         {
             unchecked
             {
                 const int p = 16777619;
-                var hash = (int)2166136261;
+                int hash = (int)2166136261;
 
-                for (var i = 0; i < data.Length; i++)
-                    hash = (hash ^ data[i]) * p;
+                int count = data.Length;
+                fixed (byte* pData = data)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        hash = (hash ^ pData[i]) * p;
+                    }
+                }
 
                 hash += hash << 13;
                 hash ^= hash >> 7;
@@ -41,24 +49,27 @@ namespace MonoGame.Framework.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal static int ComputeHash(Stream stream)
+        internal unsafe static int ComputeHash(Stream stream)
         {
             System.Diagnostics.Debug.Assert(stream.CanSeek);
 
             unchecked
             {
                 const int p = 16777619;
-                var hash = (int)2166136261;
+                int hash = (int)2166136261;
 
-                var prevPosition = stream.Position;
+                long prevPosition = stream.Position;
                 stream.Position = 0;
 
-                var data = new byte[1024];
-                int length;
-                while((length = stream.Read(data, 0, data.Length)) != 0)
+                int count;
+                byte[] data = new byte[1024];
+                fixed (byte* pData = data)
                 {
-                    for (var i = 0; i < length; i++)
-                        hash = (hash ^ data[i]) * p;
+                    while ((count = stream.Read(data, 0, data.Length)) != 0)
+                    {
+                        for (int i = 0; i < count; i++)
+                            hash = (hash ^ pData[i]) * p;
+                    }
                 }
 
                 // Restore stream position.

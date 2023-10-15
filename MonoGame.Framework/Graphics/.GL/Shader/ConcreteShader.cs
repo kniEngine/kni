@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
 
+            // TODO: precompute shader's hashKey in the processor.
             _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
          }
 
