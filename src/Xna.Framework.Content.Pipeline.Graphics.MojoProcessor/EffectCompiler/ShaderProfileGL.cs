@@ -15,12 +15,12 @@ using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class OpenGLShaderProfile : ShaderProfile
+    class ShaderProfileGL : ShaderProfile
     {
         private static readonly Regex GlslPixelShaderRegex = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
         private static readonly Regex GlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
 
-        public OpenGLShaderProfile()
+        public ShaderProfileGL()
             : base("OpenGL", ShaderProfileType.OpenGL_Mojo)
         {                
         }
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = OpenGLShaderProfile.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
                 return shaderDataDX9;
             }
         }
@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             List<int> cbuffer_index = new List<int>();
             for (int i = 0; i < symbol_types.Length; i++)
             {
-                ConstantBufferData cbuffer = OpenGLShaderProfile.CreateConstantBufferData(symbol_types[i].name,
+                ConstantBufferData cbuffer = ShaderProfileGL.CreateConstantBufferData(symbol_types[i].name,
                                                                                           symbol_types[i].set,
                                                                                           symbols);
 

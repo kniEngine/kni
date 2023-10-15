@@ -24,9 +24,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile DirectX_11 = new DirectX11ShaderProfile();
+        public static readonly ShaderProfile DirectX_11 = new ShaderProfileDX11();
 
-        public static readonly ShaderProfile OpenGL_Mojo = new OpenGLShaderProfile();
+        public static readonly ShaderProfile OpenGL_Mojo = new ShaderProfileGL();
 
 
         /// <summary>

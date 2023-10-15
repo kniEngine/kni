@@ -16,12 +16,12 @@ using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class DirectX11ShaderProfile : ShaderProfile
+    class ShaderProfileDX11 : ShaderProfile
     {
         private static readonly Regex HlslPixelShaderRegex = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(9_1|9_3))?$", RegexOptions.Compiled);
         private static readonly Regex HlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(9_1|9_3))?$", RegexOptions.Compiled);
 
-        public DirectX11ShaderProfile()
+        public ShaderProfileDX11()
             : base("DirectX_11", ShaderProfileType.DirectX_11)
         {
         }
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             using (D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = DirectX11ShaderProfile.CreateHLSL(shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
                 return shaderDataDX11;
             }
         }
@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
             {
                 D3DC.ConstantBuffer d3dConstantBuffer = refelect.GetConstantBuffer(i);
-                ConstantBufferData cbuffer = DirectX11ShaderProfile.CreateConstantBufferData(d3dConstantBuffer);
+                ConstantBufferData cbuffer = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
 
                 // Look for a duplicate cbuffer in the list.
                 for (int c = 0; c < cbuffers.Count; c++)
