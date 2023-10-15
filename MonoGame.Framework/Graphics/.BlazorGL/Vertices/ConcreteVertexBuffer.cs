@@ -31,14 +31,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _usageHint = WebGLBufferUsageHint.STATIC_DRAW;
 
-            PlatformConstructVertexBuffer();
+            PlatformConstructVertexBuffer(contextStrategy);
         }
 
-        internal void PlatformConstructVertexBuffer()
+        internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
             Debug.Assert(_vbo == null);
 
-            var GL = this.GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             _vbo = GL.CreateBuffer();
             GL.CheckGLError();

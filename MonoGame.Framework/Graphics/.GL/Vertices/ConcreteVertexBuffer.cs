@@ -36,16 +36,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _usageHint = BufferUsageHint.StaticDraw;
 
-            PlatformConstructVertexBuffer();
+            PlatformConstructVertexBuffer(contextStrategy);
         }
 
-        internal void PlatformConstructVertexBuffer()
+        internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
             Threading.EnsureUIThread();
 
             Debug.Assert(_vbo == 0);
 
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             //this._vao = GLExt.Oes.GenVertexArray();
             //GLExt.Oes.BindVertexArray(this._vao);

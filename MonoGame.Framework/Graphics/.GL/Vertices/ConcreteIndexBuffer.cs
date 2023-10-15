@@ -52,16 +52,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 default: throw new InvalidOperationException();
             }
 
-            PlatformConstructIndexBuffer();
+            PlatformConstructIndexBuffer(contextStrategy);
         }
 
-        internal void PlatformConstructIndexBuffer()
+        internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
             Threading.EnsureUIThread();
 
             Debug.Assert(_ibo == 0);
 
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 

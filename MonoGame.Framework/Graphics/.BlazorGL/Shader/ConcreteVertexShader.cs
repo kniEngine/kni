@@ -17,19 +17,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal WebGLShader GetVertexShaderHandle()
+        internal WebGLShader GetVertexShaderHandle(GraphicsContextStrategy contextStrategy)
         {
             // If the shader has already been created then return it.
             if (ShaderHandle != null)
                 return ShaderHandle;
 
-            base.CreateShader(WebGLShaderType.VERTEX);
+            base.CreateShader(contextStrategy, WebGLShaderType.VERTEX);
             return ShaderHandle;
         }
 
-        internal void GetVertexAttributeLocations(WebGLProgram program)
+        internal void GetVertexAttributeLocations(GraphicsContextStrategy contextStrategy, WebGLProgram program)
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             for (int i = 0; i < Attributes.Length; i++)
             {

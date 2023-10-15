@@ -23,12 +23,12 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteDynamicVertexBuffer(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
             : base(contextStrategy, vertexDeclaration, vertexCount, usage, isDynamic:true)
         {
-            PlatformConstructDynamicVertexBuffer();
+            PlatformConstructDynamicVertexBuffer(contextStrategy);
         }
 
-        private void PlatformConstructDynamicVertexBuffer()
+        private void PlatformConstructDynamicVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            base.PlatformConstructVertexBuffer();
+            base.PlatformConstructVertexBuffer(contextStrategy);
         }
 
 
