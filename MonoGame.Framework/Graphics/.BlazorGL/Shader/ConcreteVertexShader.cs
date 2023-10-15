@@ -15,16 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-        }
-
-        internal WebGLShader GetVertexShaderHandle(GraphicsContextStrategy contextStrategy)
-        {
-            // If the shader has already been created then return it.
-            if (ShaderHandle != null)
-                return ShaderHandle;
-
-            base.CreateShader(contextStrategy, WebGLShaderType.VERTEX);
-            return ShaderHandle;
+            base.CreateShader(contextStrategy, WebGLShaderType.VERTEX, shaderBytecode);
         }
 
         internal void GetVertexAttributeLocations(GraphicsContextStrategy contextStrategy, WebGLProgram program)

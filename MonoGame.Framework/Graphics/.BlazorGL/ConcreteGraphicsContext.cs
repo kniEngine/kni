@@ -326,11 +326,11 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLProgram program = GL.CreateProgram();
             GL.CheckGLError();
 
-            WebGLShader vertexShaderHandle = ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle(this);
+            WebGLShader vertexShaderHandle = ((ConcreteVertexShader)vertexShader.Strategy).ShaderHandle;
             GL.AttachShader(program, vertexShaderHandle);
             GL.CheckGLError();
 
-            WebGLShader pixelShaderHandle = ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle(this);
+            WebGLShader pixelShaderHandle = ((ConcretePixelShader)pixelShader.Strategy).ShaderHandle;
             GL.AttachShader(program, pixelShaderHandle);
             GL.CheckGLError();
 

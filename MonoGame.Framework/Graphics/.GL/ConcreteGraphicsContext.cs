@@ -362,11 +362,11 @@ namespace Microsoft.Xna.Platform.Graphics
             int program = GL.CreateProgram();
             GL.CheckGLError();
 
-            int vertexShaderHandle = ((ConcreteVertexShader)vertexShader.Strategy).GetVertexShaderHandle(this);
+            int vertexShaderHandle = ((ConcreteVertexShader)vertexShader.Strategy).ShaderHandle;
             GL.AttachShader(program, vertexShaderHandle);
             GL.CheckGLError();
 
-            int pixelShaderHandle = ((ConcretePixelShader)pixelShader.Strategy).GetPixelShaderHandle(this);
+            int pixelShaderHandle = ((ConcretePixelShader)pixelShader.Strategy).ShaderHandle;
             GL.AttachShader(program, pixelShaderHandle);
             GL.CheckGLError();
 

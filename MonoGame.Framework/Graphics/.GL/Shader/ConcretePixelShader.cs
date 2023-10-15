@@ -20,16 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-        }
-
-        internal int GetPixelShaderHandle(GraphicsContextStrategy contextStrategy)
-        {
-            // If the shader has already been created then return it.
-            if (base.ShaderHandle != -1)
-                return base.ShaderHandle;
-
-            base.CreateShader(contextStrategy, ShaderType.FragmentShader);
-            return base.ShaderHandle;
+            base.CreateShader(contextStrategy, ShaderType.FragmentShader, shaderBytecode);
         }
 
         internal void ApplySamplerTextureUnits(GraphicsContextStrategy contextStrategy, int program)
