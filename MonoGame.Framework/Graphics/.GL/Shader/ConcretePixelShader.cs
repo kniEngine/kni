@@ -22,19 +22,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal int GetPixelShaderHandle()
+        internal int GetPixelShaderHandle(GraphicsContextStrategy contextStrategy)
         {
             // If the shader has already been created then return it.
             if (base.ShaderHandle != -1)
                 return base.ShaderHandle;
 
-            base.CreateShader(ShaderType.FragmentShader);
+            base.CreateShader(contextStrategy, ShaderType.FragmentShader);
             return base.ShaderHandle;
         }
 
-        internal void ApplySamplerTextureUnits(int program)
+        internal void ApplySamplerTextureUnits(GraphicsContextStrategy contextStrategy, int program)
         {
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             // Assign the texture unit index to the sampler uniforms.
             foreach (SamplerInfo sampler in Samplers)

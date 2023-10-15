@@ -22,19 +22,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal int GetVertexShaderHandle()
+        internal int GetVertexShaderHandle(GraphicsContextStrategy contextStrategy)
         {
             // If the shader has already been created then return it.
             if (base.ShaderHandle != -1)
                 return base.ShaderHandle;
 
-            base.CreateShader(ShaderType.VertexShader);
+            base.CreateShader(contextStrategy, ShaderType.VertexShader);
             return base.ShaderHandle;
         }
 
-        internal void GetVertexAttributeLocations(int program)
+        internal void GetVertexAttributeLocations(GraphicsContextStrategy contextStrategy, int program)
         {
-            var GL = OGL.Current;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             for (int i = 0; i < Attributes.Length; i++)
             {

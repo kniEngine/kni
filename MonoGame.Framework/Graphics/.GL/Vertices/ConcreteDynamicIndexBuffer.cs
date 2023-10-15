@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteDynamicIndexBuffer(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy, indexElementSize, indexCount, usage, isDynamic:true)
         {
-            PlatformConstructDynamicIndexBuffer();
+            PlatformConstructDynamicIndexBuffer(contextStrategy);
         }
         
         private void PlatformConstructDynamicIndexBuffer(GraphicsContextStrategy contextStrategy)

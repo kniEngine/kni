@@ -17,19 +17,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal WebGLShader GetPixelShaderHandle()
+        internal WebGLShader GetPixelShaderHandle(GraphicsContextStrategy contextStrategy)
         {
             // If the shader has already been created then return it.
             if (ShaderHandle != null)
                 return ShaderHandle;
 
-            base.CreateShader(WebGLShaderType.FRAGMENT);
+            base.CreateShader(contextStrategy, WebGLShaderType.FRAGMENT);
             return ShaderHandle;
         }
 
-        internal void ApplySamplerTextureUnits(WebGLProgram program)
+        internal void ApplySamplerTextureUnits(GraphicsContextStrategy contextStrategy, WebGLProgram program)
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // Assign the texture unit index to the sampler uniforms.
             foreach (SamplerInfo sampler in Samplers)

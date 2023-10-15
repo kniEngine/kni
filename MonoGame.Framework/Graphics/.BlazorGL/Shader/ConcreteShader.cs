@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private WebGLShader _shaderHandle = null;
 
         internal byte[] ShaderBytecode { get { return _shaderBytecode; } }
-        protected WebGLShader ShaderHandle { get { return _shaderHandle; } }
+        internal WebGLShader ShaderHandle { get { return _shaderHandle; } }
 
         internal ConcreteShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
@@ -30,9 +30,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
         }
 
-        internal void CreateShader(WebGLShaderType shaderType)
+        internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType)
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             _shaderHandle = GL.CreateShader(shaderType);
             GL.CheckGLError();
