@@ -15,16 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-        }
-
-        internal WebGLShader GetPixelShaderHandle(GraphicsContextStrategy contextStrategy)
-        {
-            // If the shader has already been created then return it.
-            if (ShaderHandle != null)
-                return ShaderHandle;
-
-            base.CreateShader(contextStrategy, WebGLShaderType.FRAGMENT);
-            return ShaderHandle;
+            base.CreateShader(contextStrategy, WebGLShaderType.FRAGMENT, shaderBytecode);
         }
 
         internal void ApplySamplerTextureUnits(GraphicsContextStrategy contextStrategy, WebGLProgram program)

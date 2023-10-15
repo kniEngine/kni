@@ -16,13 +16,9 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class ConcreteShader : ShaderStrategy
     {
-        // We keep this around for recompiling on context lost and debugging.
-        private byte[] _shaderBytecode;
-
         // The shader handle.
         private int _shaderHandle = -1;
 
-        internal byte[] ShaderBytecode { get { return _shaderBytecode; } }
         internal int ShaderHandle { get { return _shaderHandle; } }
 
 
@@ -32,17 +28,16 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("This effect was built for a different platform.");
 
-            _shaderBytecode = shaderBytecode;
-            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
+            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
          }
 
-        internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType)
+        internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _shaderHandle = GL.CreateShader(shaderType);
             GL.CheckGLError();
-            GL.ShaderSource(_shaderHandle, _shaderBytecode);
+            GL.ShaderSource(_shaderHandle, shaderBytecode);
             GL.CheckGLError();
             GL.CompileShader(_shaderHandle);
             GL.CheckGLError();
@@ -101,8 +96,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.DeleteShader(_shaderHandle);
                     GL.CheckGLError();
                 }
-                _shaderHandle = -1;
             }
+
+            _shaderHandle = -1;
 
             base.Dispose(disposing);
         }
