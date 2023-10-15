@@ -64,8 +64,6 @@
     <Compile Include="EffectCompiler\SamplerInfo.cs" />
     <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
     <Compile Include="EffectCompiler\ShaderData.cs" />
-    <Compile Include="EffectCompiler\ShaderData.mojo.cs" />
-    <Compile Include="EffectCompiler\ShaderData.sharpdx.cs" />
     <Compile Include="EffectCompiler\MojoShader.cs" />
     <Compile Include="EffectCompiler\Preprocessor.cs" />
     <Compile Include="EffectCompiler\ShaderProfile.cs" />

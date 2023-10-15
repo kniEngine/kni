@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	internal partial class ShaderData
+	internal class ShaderData
 	{
         private readonly ShaderStage _shaderStage;
 
