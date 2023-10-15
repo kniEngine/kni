@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	internal partial class ShaderData
+	internal class ShaderData
 	{
         private readonly ShaderStage _shaderStage;
 
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 		public SamplerInfo[] _samplers;
 
-		public Attribute[] _attributes;
+		public ShaderData.Attribute[] _attributes;
 
 		public byte[] ShaderCode { get; set; }
 

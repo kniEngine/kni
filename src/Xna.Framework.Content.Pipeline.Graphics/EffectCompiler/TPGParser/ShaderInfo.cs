@@ -9,8 +9,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 {
     public class ShaderInfo
 	{
-		public List<TechniqueInfo> Techniques = new List<TechniqueInfo>();
+		public readonly List<TechniqueInfo> Techniques = new List<TechniqueInfo>();
 
-        public Dictionary<string, SamplerStateInfo> SamplerStates = new Dictionary<string, SamplerStateInfo>();
+        public readonly Dictionary<string, SamplerStateInfo> SamplerStates = new Dictionary<string, SamplerStateInfo>();
 	}
 }

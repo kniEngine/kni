@@ -18,26 +18,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     [TypeConverter(typeof(StringConverter))]
     public abstract class ShaderProfile
     {
-        protected ShaderProfile(string name, ShaderProfileType profileType)
+        protected ShaderProfile()
         {
-            Name = name;
-            ProfileType = profileType;
         }
 
-        public static readonly ShaderProfile DirectX_11 = new DirectX11ShaderProfile();
+        public static readonly ShaderProfile DirectX_11 = new ShaderProfileDX11();
 
-        public static readonly ShaderProfile OpenGL_Mojo = new OpenGLShaderProfile();
+        public static readonly ShaderProfile OpenGL_Mojo = new ShaderProfileGL();
 
 
         /// <summary>
         /// Returns the name of the shader profile.
         /// </summary>
-        public string Name { get; private set; }
+        public abstract string Name { get; }
 
         /// <summary>
         /// Returns the format identifier used in the MGFX file format.
         /// </summary>
-        public ShaderProfileType ProfileType { get; private set; }
+        public abstract ShaderProfileType ProfileType { get; }
 
         internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
 
