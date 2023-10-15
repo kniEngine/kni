@@ -26,9 +26,9 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformConstructDynamicIndexBuffer();
         }
         
-        private void PlatformConstructDynamicIndexBuffer()
+        private void PlatformConstructDynamicIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            base.PlatformConstructIndexBuffer();
+            base.PlatformConstructIndexBuffer(contextStrategy);
         }
 
 

@@ -26,9 +26,9 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformConstructDynamicVertexBuffer();
         }
 
-        private void PlatformConstructDynamicVertexBuffer()
+        private void PlatformConstructDynamicVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            base.PlatformConstructVertexBuffer();
+            base.PlatformConstructVertexBuffer(contextStrategy);
         }
 
 
