@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System.Diagnostics;
 using System.IO;
 
 namespace MonoGame.Framework.Utilities
@@ -20,10 +21,12 @@ namespace MonoGame.Framework.Utilities
             unchecked
             {
                 const int p = 16777619;
-                var hash = (int)2166136261;
+                int hash = (int)2166136261;
 
-                for (var i = 0; i < data.Length; i++)
+                for (int i = 0; i < data.Length; i++)
+                {
                     hash = (hash ^ data[i]) * p;
+                }
 
                 hash += hash << 13;
                 hash ^= hash >> 7;
@@ -48,16 +51,16 @@ namespace MonoGame.Framework.Utilities
             unchecked
             {
                 const int p = 16777619;
-                var hash = (int)2166136261;
+                int hash = (int)2166136261;
 
-                var prevPosition = stream.Position;
+                long prevPosition = stream.Position;
                 stream.Position = 0;
 
-                var data = new byte[1024];
+                byte[] data = new byte[1024];
                 int length;
                 while((length = stream.Read(data, 0, data.Length)) != 0)
                 {
-                    for (var i = 0; i < length; i++)
+                    for (int i = 0; i < length; i++)
                         hash = (hash ^ data[i]) * p;
                 }
 
