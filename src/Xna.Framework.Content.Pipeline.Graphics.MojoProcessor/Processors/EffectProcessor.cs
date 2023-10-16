@@ -218,12 +218,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new InvalidContentException("The effect must contain at least one technique and pass!",
                     input.Identity);
 
-            // Setup the shader info.
-            ShaderResult shaderResult = new ShaderResult(
-                shaderInfo
-                );
-
-            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, fullFilePath, cleanFile, shaderResult);
+            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile);
             return result;
         }
 
@@ -259,7 +254,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string fileContent, ShaderResult shaderResult)
+        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent)
         {
 
             // Create the effect object.
@@ -267,7 +262,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
+                effect = EffectObject.CompileEffect(shaderProfile, shaderInfo, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {

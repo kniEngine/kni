@@ -655,7 +655,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static public EffectObject CompileEffect(ShaderResult shaderResult, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
+        static public EffectObject CompileEffect(ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
         {
             EffectObject effect = new EffectObject();
             errorsAndWarnings = string.Empty;
@@ -666,7 +666,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Go thru the techniques and that will find all the 
             // shaders and constant buffers.
-            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
             effect.Techniques = new EffectTechniqueContent[shaderInfo.Techniques.Count];
             for (int t = 0; t < shaderInfo.Techniques.Count; t++)
             {
@@ -696,13 +695,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectStateContent[pass.state_count];
@@ -800,14 +799,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private EffectStateContent CreateShader(ShaderResult shaderResult, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderProfile.CreateShader(shaderResult, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
+                shaderData = shaderProfile.CreateShader(shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
                 this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
@@ -834,7 +833,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {

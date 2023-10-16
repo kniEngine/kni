@@ -57,15 +57,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(ShaderResult shaderResult, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
         {
-            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-
             // For now GLSL is only supported via translation
             // using MojoShader which works from DX9 HLSL bytecode.
             shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
             shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
-            using (D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderResult, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, debugMode);
                 return shaderDataDX9;
