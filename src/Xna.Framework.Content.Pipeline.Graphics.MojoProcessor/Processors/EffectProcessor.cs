@@ -237,7 +237,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new InvalidContentException("The effect must contain at least one technique and pass!",
                     input.Identity);
 
-            EffectObject effectObject = ProcessPasses(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile);
+
+            // Create the effect object.
+            EffectObject effectObject = null;
+            string shaderErrorsAndWarnings = String.Empty;
+            try
+            {
+                effectObject = EffectObject.CompileEffect(shaderProfile, shaderInfo, fullFilePath, cleanFile, this.DebugMode, out shaderErrorsAndWarnings);
+            }
+            catch (ShaderCompilerException)
+            {
+                // This will log any warnings and errors and throw.
+                ProcessErrorsAndWarnings(true, shaderErrorsAndWarnings, input, context);
+            }
+
+            // Process any warning messages that the shader compiler might have produced.
+            ProcessErrorsAndWarnings(false, shaderErrorsAndWarnings, input, context);
+
             return effectObject;
         }
 
@@ -272,28 +288,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 sourceFile = newfile;
             }
         }
-
-        private EffectObject ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent)
-        {
-            // Create the effect object.
-            EffectObject effectObject = null;
-            string shaderErrorsAndWarnings = String.Empty;
-            try
-            {
-                effectObject = EffectObject.CompileEffect(shaderProfile, shaderInfo, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
-            }
-            catch (ShaderCompilerException)
-            {
-                // This will log any warnings and errors and throw.
-                ProcessErrorsAndWarnings(true, shaderErrorsAndWarnings, input, context);
-            }
-
-            // Process any warning messages that the shader compiler might have produced.
-            ProcessErrorsAndWarnings(false, shaderErrorsAndWarnings, input, context);
-
-            return effectObject;
-        }
-
 
         private const string MGFXHeader = "MGFX";
         private const int Version = 10;
