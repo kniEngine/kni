@@ -59,16 +59,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            ShaderProfile profile = EffectProcessor.FromPlatform(context.TargetPlatform);
-            if (profile == null)
+            ShaderProfile shaderProfile = EffectProcessor.FromPlatform(context.TargetPlatform);
+            if (shaderProfile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             
             try
             {
                 // Preprocess the FX file expanding includes and macros.
-                string effectCode = Preprocess(input, context, profile);
+                string effectCode = Preprocess(input, context, shaderProfile);
 
-                CompiledEffectContent result = ProcessTechniques(input, context, profile, effectCode);
+                CompiledEffectContent result = ProcessTechniques(input, context, shaderProfile, effectCode);
                 return result;
             }
             catch (InvalidContentException)
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         // Pre-process the file,
         // resolving all #includes and macros.
-        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile profile)
+        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile)
         {
             Preprocessor pp = new Preprocessor();
 
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 pp.AddMacro("DEBUG", "1");
             }
 
-            foreach (KeyValuePair<string,string> macro in profile.GetMacros())
+            foreach (KeyValuePair<string,string> macro in shaderProfile.GetMacros())
                 pp.AddMacro(macro.Key, macro.Value);
 
             if (!string.IsNullOrEmpty(Defines))
@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
 
-        private CompiledEffectContent ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile profile, string effectCode)
+        private CompiledEffectContent ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
             string fullPath = Path.GetFullPath(input.Identity.SourceFilename);
@@ -222,11 +222,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 shaderInfo,
                 fullPath,
                 cleanFile,
-                profile,
+                shaderProfile,
                 DebugMode
                 );
 
-            CompiledEffectContent result = ProcessPasses(input, context, profile, shaderResult);
+            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, shaderResult);
             return result;
         }
 
@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile profile, ShaderResult shaderResult)
+        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderResult shaderResult)
         {
 
             // Create the effect object.
@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     using (BinaryWriter writer = new BinaryWriter(stream))
                     {
-                        Write(effect, writer, profile.ProfileType);
+                        Write(effect, writer, shaderProfile.ProfileType);
                         result = new CompiledEffectContent(stream.ToArray());
                     }
                 }
