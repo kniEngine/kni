@@ -15,12 +15,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     public class ShaderResult
     {
         public ShaderInfo ShaderInfo { get; private set; }
-        public string FileContent { get; private set; }
 
-        public ShaderResult(ShaderInfo ShaderInfo, string FileContent)
+        public ShaderResult(ShaderInfo ShaderInfo)
         {
             this.ShaderInfo = ShaderInfo;
-            this.FileContent = FileContent;
         }
 
     }

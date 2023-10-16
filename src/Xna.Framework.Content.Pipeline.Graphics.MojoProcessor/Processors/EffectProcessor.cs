@@ -220,11 +220,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Setup the shader info.
             ShaderResult shaderResult = new ShaderResult(
-                shaderInfo,
-                cleanFile
+                shaderInfo
                 );
 
-            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, fullFilePath, shaderResult);
+            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, fullFilePath, cleanFile, shaderResult);
             return result;
         }
 
@@ -260,7 +259,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, ShaderResult shaderResult)
+        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string fileContent, ShaderResult shaderResult)
         {
 
             // Create the effect object.
@@ -268,7 +267,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, fullFilePath, this.DebugMode, out shaderErrorsAndWarnings);
+                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
