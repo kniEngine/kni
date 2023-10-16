@@ -63,6 +63,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (shaderProfile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             
+            EffectObject effectObject;
             try
             {
                 string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
@@ -70,8 +71,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // Preprocess the FX file expanding includes and macros.
                 string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
 
-                CompiledEffectContent result = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
-                return result;
+                effectObject = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
             }
             catch (InvalidContentException)
             {
@@ -81,6 +81,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             {
                 // TODO: Extract good line numbers from mgfx parser!
                 throw new InvalidContentException(ex.Message, input.Identity, ex);
+            }
+
+            // Write out the effect to a runtime format.
+            try
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                    {
+                        Write(effectObject, writer, shaderProfile.ProfileType);
+                        byte[] effectBytecode = stream.ToArray();
+                        CompiledEffectContent result = new CompiledEffectContent(effectBytecode);
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidContentException("Failed to serialize the effect!", input.Identity, ex);
             }
         }
 
@@ -176,7 +195,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
 
-        private CompiledEffectContent ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string effectCode)
+        private EffectObject ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
             ParseTree tree = new Parser(new Scanner()).Parse(effectCode, fullFilePath);
@@ -218,8 +237,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new InvalidContentException("The effect must contain at least one technique and pass!",
                     input.Identity);
 
-            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile);
-            return result;
+            EffectObject effectObject = ProcessPasses(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile);
+            return effectObject;
         }
 
         private static void WhitespaceNodes(TokenType type, List<ParseNode> nodes, ref string sourceFile)
@@ -254,15 +273,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent)
+        private EffectObject ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent)
         {
-
             // Create the effect object.
-            EffectObject effect = null;
+            EffectObject effectObject = null;
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderProfile, shaderInfo, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
+                effectObject = EffectObject.CompileEffect(shaderProfile, shaderInfo, fullFilePath, fileContent, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
@@ -273,25 +291,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Process any warning messages that the shader compiler might have produced.
             ProcessErrorsAndWarnings(false, shaderErrorsAndWarnings, input, context);
 
-            // Write out the effect to a runtime format.
-            CompiledEffectContent result;
-            try
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        Write(effect, writer, shaderProfile.ProfileType);
-                        result = new CompiledEffectContent(stream.ToArray());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidContentException("Failed to serialize the effect!", input.Identity, ex);
-            }
-
-            return result;
+            return effectObject;
         }
 
 
