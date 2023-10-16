@@ -63,15 +63,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (profile == null)
                 throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
             
-
-            ShaderResult shaderResult;
             try
             {
                 // Preprocess the FX file expanding includes and macros.
                 string effectCode = Preprocess(input, context, profile);
 
                 // return techniques.
-                shaderResult = ProcessTechniques(input, context, profile, effectCode);
+                ShaderResult shaderResult = ProcessTechniques(input, context, profile, effectCode);
+
+                CompiledEffectContent result = ProcessPasses(input, context, profile, shaderResult);
+                return result;
             }
             catch (InvalidContentException)
             {
@@ -82,9 +83,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 // TODO: Extract good line numbers from mgfx parser!
                 throw new InvalidContentException(ex.Message, input.Identity, ex);
             }
-
-            CompiledEffectContent result = ProcessPasses(input, context, profile, shaderResult);
-            return result;
         }
 
         /// <summary>
