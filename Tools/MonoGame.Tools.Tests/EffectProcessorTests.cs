@@ -52,13 +52,15 @@ namespace MonoGame.Tests.ContentPipeline
             effect.Name = Path.GetFileNameWithoutExtension(filename);
             effect.EffectCode = File.ReadAllText(filename);
 
+            string fullFilePath = Path.GetFullPath(effect.Identity.SourceFilename);
+
 
             var processorContext = new TestProcessorContext(TargetPlatform.Windows, Path.ChangeExtension(filename, ".xnb"));
 
             // Preprocess.
             Preprocessor pp = new Preprocessor();
             pp.AddMacro("TEST2", "1");
-            var mgPreprocessed = pp.Preprocess(effect, processorContext);
+            var mgPreprocessed = pp.Preprocess(effect, processorContext, fullFilePath);
 
             Assert.That(processorContext._dependencies, Has.Count.EqualTo(1));
             Assert.That(Path.GetFileName(processorContext._dependencies[0]), Is.EqualTo("PreprocessorInclude.fxh"));

@@ -65,10 +65,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             
             try
             {
-                // Preprocess the FX file expanding includes and macros.
-                string effectCode = Preprocess(input, context, shaderProfile);
+                string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
 
-                CompiledEffectContent result = ProcessTechniques(input, context, shaderProfile, effectCode);
+                // Preprocess the FX file expanding includes and macros.
+                string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
+
+                CompiledEffectContent result = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
                 return result;
             }
             catch (InvalidContentException)
@@ -127,7 +129,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         // Pre-process the file,
         // resolving all #includes and macros.
-        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile)
+        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath)
         {
             Preprocessor pp = new Preprocessor();
 
@@ -168,17 +170,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            string effectCode = pp.Preprocess(input, context);
+            string effectCode = pp.Preprocess(input, context, fullFilePath);
 
             return effectCode;
         }
 
 
-        private CompiledEffectContent ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string effectCode)
+        private CompiledEffectContent ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
-            string fullPath = Path.GetFullPath(input.Identity.SourceFilename);
-            ParseTree tree = new Parser(new Scanner()).Parse(effectCode, fullPath);
+            ParseTree tree = new Parser(new Scanner()).Parse(effectCode, fullFilePath);
             if (tree.Errors.Count > 0)
             {
                 string errors = String.Empty;
@@ -220,11 +221,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Setup the shader info.
             ShaderResult shaderResult = new ShaderResult(
                 shaderInfo,
-                fullPath,
                 cleanFile
                 );
 
-            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, shaderResult);
+            CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, fullFilePath, shaderResult);
             return result;
         }
 
@@ -260,7 +260,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderResult shaderResult)
+        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, ShaderResult shaderResult)
         {
 
             // Create the effect object.
@@ -268,7 +268,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, this.DebugMode, out shaderErrorsAndWarnings);
+                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, fullFilePath, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
