@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using Microsoft.Xna.Framework.Graphics;
 using D3DC = SharpDX.D3DCompiler;
 
@@ -654,7 +655,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static public EffectObject CompileEffect(ShaderResult shaderResult, ShaderProfile shaderProfile, out string errorsAndWarnings)
+        static public EffectObject CompileEffect(ShaderResult shaderResult, ShaderProfile shaderProfile, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
         {
             EffectObject effect = new EffectObject();
             errorsAndWarnings = string.Empty;
@@ -695,13 +696,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectStateContent[pass.state_count];
@@ -799,14 +800,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private EffectStateContent CreateShader(ShaderResult shaderResult, ShaderProfile shaderProfile, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderResult shaderResult, ShaderProfile shaderProfile, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderProfile.CreateShader(shaderResult, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
+                shaderData = shaderProfile.CreateShader(shaderResult, debugMode, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
                 this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
@@ -833,7 +834,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {
@@ -847,7 +848,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (backwardsCompatibility)
                     shaderFlags |= D3DC.ShaderFlags.EnableBackwardsCompatibility;
 
-                if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
+                if (debugMode == Processors.EffectProcessorDebugMode.Debug)
                 {
                     shaderFlags |= D3DC.ShaderFlags.SkipOptimization;
                     shaderFlags |= D3DC.ShaderFlags.Debug;

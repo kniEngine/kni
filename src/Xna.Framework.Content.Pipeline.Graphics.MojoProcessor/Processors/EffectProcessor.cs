@@ -221,8 +221,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             ShaderResult shaderResult = new ShaderResult(
                 shaderInfo,
                 fullPath,
-                cleanFile,
-                DebugMode
+                cleanFile
                 );
 
             CompiledEffectContent result = ProcessPasses(input, context, shaderProfile, shaderResult);
@@ -269,7 +268,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, out shaderErrorsAndWarnings);
+                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -41,7 +42,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal abstract void ValidateShaderModels(PassInfo pass);
 
-        internal abstract ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings);
+        internal abstract ShaderData CreateShader(ShaderResult shaderResult, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings);
 
         protected static void ParseShaderModel(string text, Regex regex, out int major, out int minor)
         {

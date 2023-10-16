@@ -17,14 +17,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public ShaderInfo ShaderInfo { get; private set; }
         public string FilePath { get; private set; }
         public string FileContent { get; private set; }
-        public EffectProcessorDebugMode Debug { get; private set; }
 
-        public ShaderResult(ShaderInfo ShaderInfo, string FilePath, string FileContent, EffectProcessorDebugMode Debug)
+        public ShaderResult(ShaderInfo ShaderInfo, string FilePath, string FileContent)
         {
             this.ShaderInfo = ShaderInfo;
             this.FilePath = FilePath;
             this.FileContent = FileContent;
-            this.Debug = Debug;
         }
 
     }
