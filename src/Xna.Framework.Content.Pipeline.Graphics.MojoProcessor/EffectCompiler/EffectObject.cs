@@ -6,10 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
-using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using Microsoft.Xna.Framework.Graphics;
-using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
@@ -655,59 +652,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        public static D3DC.ShaderBytecode CompileHLSL(ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
-        {
-            try
-            {
-                D3DC.ShaderFlags shaderFlags = 0;
-
-                // While we never allow preshaders, this flag is invalid for
-                // the DX11 shader compiler which doesn't allow preshaders
-                // in the first place.
-                //shaderFlags |= D3DC.ShaderFlags.NoPreshader;
-
-                if (backwardsCompatibility)
-                    shaderFlags |= D3DC.ShaderFlags.EnableBackwardsCompatibility;
-
-                if (debugMode == Processors.EffectProcessorDebugMode.Debug)
-                {
-                    shaderFlags |= D3DC.ShaderFlags.SkipOptimization;
-                    shaderFlags |= D3DC.ShaderFlags.Debug;
-                }
-                else
-                {
-                    shaderFlags |= D3DC.ShaderFlags.OptimizationLevel3;
-                }
-
-                // Compile the shader into bytecode.                
-                D3DC.CompilationResult result = D3DC.ShaderBytecode.Compile(
-                    fileContent,
-                    shaderFunction,
-                    shaderProfileName,
-                    shaderFlags,
-                    0,
-                    null,
-                    null,
-                    fullFilePath);
-
-                // Store all the errors and warnings to log out later.
-                errorsAndWarnings += result.Message;
-
-                if (result.Bytecode == null)
-                    throw new ShaderCompilerException();
-
-                D3DC.ShaderBytecode shaderBytecode = result.Bytecode;
-                //string source = shaderByteCode.Disassemble();
-
-                return shaderBytecode;
-            }
-            catch (SharpDX.CompilationException ex)
-            {
-                errorsAndWarnings += ex.Message;
-                throw new ShaderCompilerException();
-            }
-        }
-        
         internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)
         {
             foreach (EffectStateContent state in states)
