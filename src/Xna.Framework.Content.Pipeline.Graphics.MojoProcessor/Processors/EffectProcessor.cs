@@ -83,40 +83,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new InvalidContentException(ex.Message, input.Identity, ex);
             }
 
-            // Create the effect object.
-            EffectObject effect = null;
-            string shaderErrorsAndWarnings = String.Empty;
-            try
-            {
-                effect = EffectObject.CompileEffect(shaderResult, out shaderErrorsAndWarnings);
-            }
-            catch (ShaderCompilerException)
-            {
-                // This will log any warnings and errors and throw.
-                ProcessErrorsAndWarnings(true, shaderErrorsAndWarnings, input, context);
-            }
-
-            // Process any warning messages that the shader compiler might have produced.
-            ProcessErrorsAndWarnings(false, shaderErrorsAndWarnings, input, context);
-
-            // Write out the effect to a runtime format.
-            CompiledEffectContent result;
-            try
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        Write(effect, writer, profile.ProfileType);
-                        result = new CompiledEffectContent(stream.ToArray());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidContentException("Failed to serialize the effect!", input.Identity, ex);
-            }
-
+            CompiledEffectContent result = ProcessPasses(input, context, profile, shaderResult);
             return result;
         }
 
@@ -297,6 +264,46 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 newfile += sourceFile.Substring(end);
                 sourceFile = newfile;
             }
+        }
+
+        private CompiledEffectContent ProcessPasses(EffectContent input, ContentProcessorContext context, ShaderProfile profile, ShaderResult shaderResult)
+        {
+
+            // Create the effect object.
+            EffectObject effect = null;
+            string shaderErrorsAndWarnings = String.Empty;
+            try
+            {
+                effect = EffectObject.CompileEffect(shaderResult, out shaderErrorsAndWarnings);
+            }
+            catch (ShaderCompilerException)
+            {
+                // This will log any warnings and errors and throw.
+                ProcessErrorsAndWarnings(true, shaderErrorsAndWarnings, input, context);
+            }
+
+            // Process any warning messages that the shader compiler might have produced.
+            ProcessErrorsAndWarnings(false, shaderErrorsAndWarnings, input, context);
+
+            // Write out the effect to a runtime format.
+            CompiledEffectContent result;
+            try
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                    {
+                        Write(effect, writer, profile.ProfileType);
+                        result = new CompiledEffectContent(stream.ToArray());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidContentException("Failed to serialize the effect!", input.Identity, ex);
+            }
+
+            return result;
         }
 
 
