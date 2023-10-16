@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // using MojoShader which works from DX9 HLSL bytecode.
             shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
             shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
-            using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, debugMode);
                 return shaderDataDX9;
