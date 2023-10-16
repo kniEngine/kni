@@ -89,8 +89,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
-        // VertexDeclaration and State objects need to be late-bound to the GraphicsDevice.
-        // They might get used on multiple GraphicsDevice objects during their lifetime, 
+        // State objects need to be late-bound to the GraphicsDevice.
+        // They might get used on multiple GraphicsDevice objects during their lifetime,
         // but only one GraphicsDevice should retain ownership.
         internal void BindGraphicsDevice(GraphicsDevice device)
         {
