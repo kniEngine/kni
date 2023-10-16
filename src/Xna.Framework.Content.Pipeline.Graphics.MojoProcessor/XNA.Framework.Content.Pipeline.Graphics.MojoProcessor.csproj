@@ -68,7 +68,6 @@
     <Compile Include="EffectCompiler\ShaderProfileDX11.cs" />
     <Compile Include="EffectCompiler\ShaderProfileGL.cs" />
     <Compile Include="EffectCompiler\ShaderProfileType.cs" />
-    <Compile Include="EffectCompiler\ShaderResult.cs" />
     <Compile Include="EffectCompiler\ShaderStage.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -57,20 +57,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
-            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-
-            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
-
-            using (D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, true, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX11;
             }
         }
 
-        private static ShaderData CreateHLSL(D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateHLSL(ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
         {
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
             dxshader._attributes = new ShaderData.Attribute[0];
@@ -126,7 +122,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         samplerInfo.textureName = samplerName;
 
                         SamplerStateInfo state;
-                        if (samplerStates.TryGetValue(samplerName, out state))
+                        if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
                         {
                             samplerInfo.state = state.State;
 
@@ -135,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         }
                         else
                         {
-                            foreach (SamplerStateInfo s in samplerStates.Values)
+                            foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
                             {
                                 if (samplerName == s.TextureName)
                                 {

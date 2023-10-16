@@ -23,21 +23,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             _pp.addMacro(name, value);
         }
 
-        public string Preprocess(EffectContent input, ContentProcessorContext context)
+        public string Preprocess(EffectContent input, ContentProcessorContext context, string fullFilePath)
         {
-            string fullPath = Path.GetFullPath(input.Identity.SourceFilename);
             List<string> dependencies = new List<string>();
             
             _pp.EmitExtraLineInfo = false;
             _pp.addFeature(Feature.LINEMARKERS);
             _pp.setListener(new MGErrorListener(context.Logger));
             _pp.setFileSystem(new MGFileSystem(dependencies));
-            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullPath) });
+            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullFilePath) });
             
             string effectCode = input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            _pp.addInput(new MGStringLexerSource(effectCode, true, fullPath));
+            _pp.addInput(new MGStringLexerSource(effectCode, true, fullFilePath));
 
             StringBuilder result = new StringBuilder();
 

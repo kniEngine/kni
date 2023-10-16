@@ -6,15 +6,13 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Graphics;
-using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
 	internal class EffectObject
 	{
-        private EffectObject()
+        public EffectObject()
         {
         }
 
@@ -654,238 +652,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static public EffectObject CompileEffect(ShaderResult shaderResult, out string errorsAndWarnings)
-        {
-            EffectObject effect = new EffectObject();
-            errorsAndWarnings = string.Empty;
-
-            // These are filled out as we process stuff.
-            effect.ConstantBuffers = new List<ConstantBufferData>();
-            effect.Shaders = new List<ShaderData>();
-
-            // Go thru the techniques and that will find all the 
-            // shaders and constant buffers.
-            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-            effect.Techniques = new EffectTechniqueContent[shaderInfo.Techniques.Count];
-            for (int t = 0; t < shaderInfo.Techniques.Count; t++)
-            {
-                TechniqueInfo tinfo = shaderInfo.Techniques[t]; ;
-
-                EffectTechniqueContent technique = new EffectTechniqueContent();
-                technique.name = tinfo.name;
-                technique.pass_count = (uint)tinfo.Passes.Count;
-                technique.pass_handles = new EffectPassContent[tinfo.Passes.Count];
-
-                for (int p = 0; p < tinfo.Passes.Count; p++)
-                {
-                    PassInfo pinfo = tinfo.Passes[p];
-
-                    EffectPassContent pass = new EffectPassContent();
-                    pass.name = pinfo.name ?? string.Empty;
-
-                    pass.blendState = pinfo.blendState;
-                    pass.depthStencilState = pinfo.depthStencilState;
-                    pass.rasterizerState = pinfo.rasterizerState;
-
-                    pass.state_count = 0;
-                    EffectStateContent[] tempstate = new EffectStateContent[2];
-
-                    shaderResult.Profile.ValidateShaderModels(pinfo);
-
-                    if (!string.IsNullOrEmpty(pinfo.psFunction))
-                    {
-                        pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
-                    }
-
-                    if (!string.IsNullOrEmpty(pinfo.vsFunction))
-                    {
-                        pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
-                    }
-
-                    pass.states = new EffectStateContent[pass.state_count];
-                    for (int s = 0; s < pass.state_count; s++)
-                        pass.states[s] = tempstate[s];
-
-                    technique.pass_handles[p] = pass;
-                }
-
-                effect.Techniques[t] = technique;
-            }
-
-            // Make the list of parameters by combining all the
-            // constant buffers ignoring the buffer offsets.
-            List<EffectParameterContent> parameters = new List<EffectParameterContent>();
-            for (int c = 0; c < effect.ConstantBuffers.Count; c++)
-            {
-                ConstantBufferData cb = effect.ConstantBuffers[c];
-
-                for (int i = 0; i < cb.Parameters.Count; i++)
-                {
-                    EffectParameterContent param = cb.Parameters[i];
-
-                    int match = parameters.FindIndex(e => e.name == param.name);
-                    if (match == -1)
-                    {
-                        cb.ParameterIndex.Add(parameters.Count);
-                        parameters.Add(param);
-                    }
-                    else
-                    {
-                        // TODO: Make sure the type and size of 
-                        // the parameter match up!
-                        cb.ParameterIndex.Add(match);
-                    }
-                }
-            }
-
-            // Add the texture parameters from the samplers.
-            foreach (ShaderData shader in effect.Shaders)
-            {
-                for (int s = 0; s < shader._samplers.Length; s++)
-                {
-                    SamplerInfo sampler = shader._samplers[s];
-
-                    int match = parameters.FindIndex(e => e.name == sampler.textureName);
-                    if (match == -1)
-                    {
-                        // Store the index for runtime lookup.
-                        shader._samplers[s].textureParameter = parameters.Count;
-
-                        EffectParameterContent param = new EffectParameterContent();
-                        param.class_ = PARAMETER_CLASS.OBJECT;
-                        param.name = sampler.textureName;
-                        param.semantic = string.Empty;
-
-                        switch (sampler.type)
-                        {
-                            case MojoShader.SamplerType.SAMPLER_1D:
-                                param.type = PARAMETER_TYPE.TEXTURE1D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_2D:
-                                param.type = PARAMETER_TYPE.TEXTURE2D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_VOLUME:
-                                param.type = PARAMETER_TYPE.TEXTURE3D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_CUBE:
-                                param.type = PARAMETER_TYPE.TEXTURECUBE;
-                                break;
-                        }
-
-                        parameters.Add(param);
-                    }
-                    else
-                    {
-                        // TODO: Make sure the type and size of 
-                        // the parameter match up!
-
-                        shader._samplers[s].textureParameter = match;
-                    }
-                }
-            }
-
-            // TODO: Annotations are part of the .FX format and
-            // not a part of shaders... we need to implement them
-            // in our mgfx parser if we want them back.
-
-            effect.Parameters = parameters.ToArray();
-
-            return effect;
-        }
-
-
-        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, ref string errorsAndWarnings)
-        {
-            // Check if this shader has already been created.
-            ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
-            if (shaderData == null)
-            {
-                // Compile and create the shader.
-                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, shaderStage, this, ref errorsAndWarnings);
-                this.Shaders.Add(shaderData);
-                shaderData.ShaderFunctionName = shaderFunction;
-                shaderData.ShaderProfile = shaderProfile;
-            }
-
-            EffectStateContent state = new EffectStateContent();
-            state.index = 0;
-            state.type = STATE_TYPE.CONSTANT;
-            state.operation = (shaderStage== ShaderStage.Vertex)
-                            ? (uint)146
-                            : (uint)147;
-
-            state.parameter = new EffectParameterContent();
-            state.parameter.name = string.Empty;
-            state.parameter.semantic = string.Empty;
-            state.parameter.class_ = PARAMETER_CLASS.OBJECT;
-            state.parameter.type = (shaderStage == ShaderStage.Vertex)
-                                 ? PARAMETER_TYPE.VERTEXSHADER
-                                 : PARAMETER_TYPE.PIXELSHADER;
-            state.parameter.rows = 0;
-            state.parameter.columns = 0;
-            state.parameter.data = shaderData.SharedIndex;
-
-            return state;
-        }
-       
-        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
-        {
-            try
-            {
-                D3DC.ShaderFlags shaderFlags = 0;
-
-                // While we never allow preshaders, this flag is invalid for
-                // the DX11 shader compiler which doesn't allow preshaders
-                // in the first place.
-                //shaderFlags |= D3DC.ShaderFlags.NoPreshader;
-
-                if (backwardsCompatibility)
-                    shaderFlags |= D3DC.ShaderFlags.EnableBackwardsCompatibility;
-
-                if (shaderResult.Debug == Processors.EffectProcessorDebugMode.Debug)
-                {
-                    shaderFlags |= D3DC.ShaderFlags.SkipOptimization;
-                    shaderFlags |= D3DC.ShaderFlags.Debug;
-                }
-                else
-                {
-                    shaderFlags |= D3DC.ShaderFlags.OptimizationLevel3;
-                }
-
-                // Compile the shader into bytecode.                
-                D3DC.CompilationResult result = D3DC.ShaderBytecode.Compile(
-                    shaderResult.FileContent,
-                    shaderFunction,
-                    shaderProfile,
-                    shaderFlags,
-                    0,
-                    null,
-                    null,
-                    shaderResult.FilePath);
-
-                // Store all the errors and warnings to log out later.
-                errorsAndWarnings += result.Message;
-
-                if (result.Bytecode == null)
-                    throw new ShaderCompilerException();
-
-                D3DC.ShaderBytecode shaderBytecode = result.Bytecode;
-                //string source = shaderByteCode.Disassemble();
-
-                return shaderBytecode;
-            }
-            catch (SharpDX.CompilationException ex)
-            {
-                errorsAndWarnings += ex.Message;
-                throw new ShaderCompilerException();
-            }
-        }
-        
         internal static int GetShaderIndex(STATE_CLASS type, EffectStateContent[] states)
         {
             foreach (EffectStateContent state in states)
@@ -905,13 +671,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public EffectParameterContent[] Objects { get; private set; }
 
-        public EffectParameterContent[] Parameters { get; private set; }
+        public EffectParameterContent[] Parameters { get; internal set; }
 
-        public EffectTechniqueContent[] Techniques { get; private set; }
+        public EffectTechniqueContent[] Techniques { get; internal set; }
 
-        public List<ShaderData> Shaders { get; private set; }
+        public List<ShaderData> Shaders { get; internal set; }
 
-        public List<ConstantBufferData> ConstantBuffers { get; private set; }
+        public List<ConstantBufferData> ConstantBuffers { get; internal set; }
 	}
 }
 

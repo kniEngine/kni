@@ -57,24 +57,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
-            ShaderInfo shaderInfo = shaderResult.ShaderInfo;
-
-            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo);
-
             // For now GLSL is only supported via translation
             // using MojoShader which works from DX9 HLSL bytecode.
-            shaderProfile = shaderProfile.Replace("s_4_0_level_9_1", "s_2_0");
-            shaderProfile = shaderProfile.Replace("s_4_0_level_9_3", "s_3_0");
-            using (D3DC.ShaderBytecode shaderBytecodeDX9 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, false, ref errorsAndWarnings))
+            shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
+            shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
+            using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
+                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX9;
             }
         }
 
-        private static ShaderData CreateGLSL(D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, Dictionary<string, SamplerStateInfo> samplerStates, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateGLSL(ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
         {
 
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
@@ -205,7 +201,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 }
 
                 SamplerStateInfo state;
-                if (samplerStates.TryGetValue(samplerName, out state))
+                if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
                 {
                     samplerInfo.state = state.State;
 
