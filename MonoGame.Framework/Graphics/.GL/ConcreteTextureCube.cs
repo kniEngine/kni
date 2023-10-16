@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Threading.EnsureUIThread();
 
             {
-                var GL = OGL.Current;
+                var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
                 int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if OPENGL && DESKTOPGL
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);

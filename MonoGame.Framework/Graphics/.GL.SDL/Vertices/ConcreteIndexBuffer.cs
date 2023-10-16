@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLIndexBuffer != 0);
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
             GL.CheckGLError();

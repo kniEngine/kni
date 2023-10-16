@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLVertexBuffer != 0);
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GL.CheckGLError();

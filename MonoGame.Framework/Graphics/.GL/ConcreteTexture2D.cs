@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureUIThread();
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if GLES
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
