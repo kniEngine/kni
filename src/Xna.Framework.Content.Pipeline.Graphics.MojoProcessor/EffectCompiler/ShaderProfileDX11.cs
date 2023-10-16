@@ -57,13 +57,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, EffectObject effect, ref string errorsAndWarnings)
         {
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
 
             System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
 
-            using (D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfile, true, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);
                 return shaderDataDX11;

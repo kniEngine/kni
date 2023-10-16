@@ -799,17 +799,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfile, ShaderStage shaderStage, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
-            ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfile);
+            ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfile, shaderStage, this, ref errorsAndWarnings);
+                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
                 this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
-                shaderData.ShaderProfile = shaderProfile;
+                shaderData.ShaderProfile = shaderProfileName;
             }
 
             EffectStateContent state = new EffectStateContent();
@@ -833,7 +833,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return state;
         }
        
-        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfile, bool backwardsCompatibility, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {
@@ -861,7 +861,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 D3DC.CompilationResult result = D3DC.ShaderBytecode.Compile(
                     shaderResult.FileContent,
                     shaderFunction,
-                    shaderProfile,
+                    shaderProfileName,
                     shaderFlags,
                     0,
                     null,
