@@ -654,7 +654,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        static public EffectObject CompileEffect(ShaderResult shaderResult, out string errorsAndWarnings)
+        static public EffectObject CompileEffect(ShaderResult shaderResult, ShaderProfile shaderProfile, out string errorsAndWarnings)
         {
             EffectObject effect = new EffectObject();
             errorsAndWarnings = string.Empty;
@@ -690,18 +690,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     pass.state_count = 0;
                     EffectStateContent[] tempstate = new EffectStateContent[2];
 
-                    shaderResult.Profile.ValidateShaderModels(pinfo);
+                    shaderProfile.ValidateShaderModels(pinfo);
 
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, shaderProfile, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectStateContent[pass.state_count];
@@ -799,14 +799,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private EffectStateContent CreateShader(ShaderResult shaderResult, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        private EffectStateContent CreateShader(ShaderResult shaderResult, ShaderProfile shaderProfile, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             ShaderData shaderData = Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderResult.Profile.CreateShader(shaderResult, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
+                shaderData = shaderProfile.CreateShader(shaderResult, shaderFunction, shaderProfileName, shaderStage, this, ref errorsAndWarnings);
                 this.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;

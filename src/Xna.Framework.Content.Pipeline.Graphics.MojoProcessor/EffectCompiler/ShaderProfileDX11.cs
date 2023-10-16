@@ -61,8 +61,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
 
-            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.DirectX_11);
-
             using (D3DC.ShaderBytecode shaderBytecodeDX11 = EffectObject.CompileHLSL(shaderResult, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, shaderInfo.SamplerStates, shaderResult.Debug);

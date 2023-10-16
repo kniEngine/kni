@@ -61,8 +61,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             ShaderInfo shaderInfo = shaderResult.ShaderInfo;
 
-            System.Diagnostics.Debug.Assert(shaderResult.Profile.ProfileType == ShaderProfileType.OpenGL_Mojo);
-
             // For now GLSL is only supported via translation
             // using MojoShader which works from DX9 HLSL bytecode.
             shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");

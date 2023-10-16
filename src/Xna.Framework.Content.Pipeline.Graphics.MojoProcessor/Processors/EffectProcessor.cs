@@ -222,7 +222,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 shaderInfo,
                 fullPath,
                 cleanFile,
-                shaderProfile,
                 DebugMode
                 );
 
@@ -270,7 +269,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effect = EffectObject.CompileEffect(shaderResult, out shaderErrorsAndWarnings);
+                effect = EffectObject.CompileEffect(shaderResult, shaderProfile, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
