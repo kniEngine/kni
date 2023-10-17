@@ -8,7 +8,12 @@ namespace Microsoft.Xna.Platform.Audio
     public sealed class ConcreteDynamicSoundEffectInstance : ConcreteSoundEffectInstance
         , IDynamicSoundEffectInstanceStrategy
     {
-        public event EventHandler<EventArgs> OnBufferNeeded;
+        private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
+        DynamicSoundEffectInstance IDynamicSoundEffectInstanceStrategy.DynamicSoundEffectInstance
+        {
+            get { return _dynamicSoundEffectInstanceRef.Target as DynamicSoundEffectInstance; }
+            set { _dynamicSoundEffectInstanceRef.Target = value; }
+        }
 
         internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels, float pan)
             : base(audioServiceStrategy, null, pan)

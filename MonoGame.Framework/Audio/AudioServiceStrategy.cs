@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Platform.Audio
 
     public interface IDynamicSoundEffectInstanceStrategy
     {
-        event EventHandler<EventArgs> OnBufferNeeded;
+        DynamicSoundEffectInstance DynamicSoundEffectInstance { get; set; }
 
         void DynamicPlatformSubmitBuffer(byte[] buffer, int offset, int count, SoundState state);
         void DynamicPlatformUpdateBuffers();

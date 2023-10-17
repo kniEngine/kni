@@ -24,7 +24,13 @@ namespace Microsoft.Xna.Platform.Audio
         private List<QueuedBuffer> _queuedBuffers = new List<QueuedBuffer>();
         private int _uid;
 
-        public event EventHandler<EventArgs> OnBufferNeeded;
+        private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
+        DynamicSoundEffectInstance IDynamicSoundEffectInstanceStrategy.DynamicSoundEffectInstance
+        {
+            get { return _dynamicSoundEffectInstanceRef.Target as DynamicSoundEffectInstance; }
+            set { _dynamicSoundEffectInstanceRef.Target = value; }
+        }
+
 
         internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels, float pan)
             : base(audioServiceStrategy, null, pan)
@@ -127,9 +133,11 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // Raise the event
-                var handler = OnBufferNeeded;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
+                if (_dynamicSoundEffectInstanceRef.Target != null)
+                {
+                    DynamicSoundEffectInstance instance = (DynamicSoundEffectInstance)_dynamicSoundEffectInstanceRef.Target;
+                    instance._dstrategy_OnBufferNeeded();
+                }
             }
         }
 
