@@ -141,10 +141,23 @@ namespace Content.Pipeline.Editor
 
         public bool AddContent(string sourceFile, bool skipDuplicates)
         {
+            string link = null;
+            if (sourceFile.Contains(";"))
+            {
+                var split = sourceFile.Split(';');
+                sourceFile = split[0];
+
+                if (split.Length > 0)
+                    link = split[1];
+            }
+
             // Make sure the source file is relative to the project.
             var projectDir = ProjectDirectory + Path.DirectorySeparatorChar;
 
             sourceFile = PathHelper.GetRelativePath(projectDir, sourceFile);
+
+            if (sourceFile.Contains(".."))
+                throw new InvalidOperationException("Content file is not rooted in content path \""+ projectDir+"\"");
 
             // Do we have a duplicate?
             var previous = _project.ContentItems.FindIndex(e => string.Equals(e.OriginalPath, sourceFile, StringComparison.InvariantCultureIgnoreCase));
@@ -185,10 +198,23 @@ namespace Content.Pipeline.Editor
             Description = "Copy the content source file verbatim to the output directory.")]
         public void OnCopy(string sourceFile)
         {
+            string link = null;
+            if (sourceFile.Contains(";"))
+            {
+                var split = sourceFile.Split(';');
+                sourceFile = split[0];
+
+                if (split.Length > 0)
+                    link = split[1];
+            }
+
             // Make sure the source file is relative to the project.
             var projectDir = ProjectDirectory + Path.DirectorySeparatorChar;
 
             sourceFile = PathHelper.GetRelativePath(projectDir, sourceFile);
+
+            if (sourceFile.Contains(".."))
+                throw new InvalidOperationException("Content file is not rooted in content path \"" + projectDir + "\"");
 
             // Remove duplicates... keep this new one.
             var previous = _project.ContentItems.FirstOrDefault(e => e.OriginalPath.Equals(sourceFile));
