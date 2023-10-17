@@ -239,20 +239,18 @@ namespace Microsoft.Xna.Framework.Media
         private MediaPlayer()
         {
             _strategy = MediaFactory.Current.CreateMediaPlayerStrategy();
-
-            _strategy.PlatformActiveSongChanged += Strategy_PlatformActiveSongChanged;
-            _strategy.PlatformMediaStateChanged += Strategy_PlatformMediaStateChanged;
-        }
-        
-
-        private void Strategy_PlatformActiveSongChanged(object sender, EventArgs e)
-        {
-            OnActiveSongChanged(e);
+            _strategy.MediaPlayer = this;
         }
 
-        private void Strategy_PlatformMediaStateChanged(object sender, EventArgs e)
+
+        internal void Strategy_PlatformActiveSongChanged()
         {
-            OnMediaStateChanged(e);
+            OnActiveSongChanged(EventArgs.Empty);
+        }
+
+        internal void Strategy_PlatformMediaStateChanged()
+        {
+            OnMediaStateChanged(EventArgs.Empty);
         }
 
         void IMediaPlayer.Play(Song song)
@@ -273,10 +271,10 @@ namespace Microsoft.Xna.Framework.Media
 
             Strategy.PlatformPlaySong(song);
             Strategy._state = MediaState.Playing;
-            Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+            Strategy.OnPlatformMediaStateChanged();
 
             if (previousSong != song)
-                Strategy.OnPlatformActiveSongChanged(EventArgs.Empty);
+                Strategy.OnPlatformActiveSongChanged();
         }
 
         void IMediaPlayer.Play(SongCollection collection)
@@ -302,7 +300,7 @@ namespace Microsoft.Xna.Framework.Media
 
             Strategy.PlatformPlaySong(activeSong);
             Strategy._state = MediaState.Playing;
-            Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+            Strategy.OnPlatformMediaStateChanged();
         }
 
         void IMediaPlayer.Pause()
@@ -315,7 +313,7 @@ namespace Microsoft.Xna.Framework.Media
                     {
                         Strategy.PlatformPause();
                         Strategy._state =  MediaState.Paused;
-                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                        Strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
@@ -330,7 +328,7 @@ namespace Microsoft.Xna.Framework.Media
                     {
                         Strategy.PlatformResume();
                         Strategy._state = MediaState.Playing;
-                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                        Strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
@@ -346,7 +344,7 @@ namespace Microsoft.Xna.Framework.Media
                     {
                         Strategy.PlatformStop();
                         Strategy._state = MediaState.Stopped;
-                        Strategy.OnPlatformMediaStateChanged(EventArgs.Empty);
+                        Strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
