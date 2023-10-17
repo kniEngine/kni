@@ -193,9 +193,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     link = split[1];
             }
 
+            string projectDir = Directory.GetCurrentDirectory();
+
+            if (sourceFile.Contains(".."))
+                throw new InvalidOperationException("Content file is not rooted in content path \"" + projectDir + "\"");
+
             // Make sure the source file is absolute.
             if (!Path.IsPathRooted(sourceFile))
-                sourceFile = Path.Combine(Directory.GetCurrentDirectory(), sourceFile);
+                sourceFile = Path.Combine(projectDir, sourceFile);
 
             // link should remain relative, absolute path will get set later when the build occurs
 

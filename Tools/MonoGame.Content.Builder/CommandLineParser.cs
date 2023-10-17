@@ -378,6 +378,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 return true;
             }
+            catch (TargetInvocationException tiex)
+            {
+                ShowError("Invalid value '{0}' for option '{1}'", value, GetAttribute<CommandLineParameterAttribute>(member).Name);
+                ShowError(tiex.InnerException.Message);
+                return false;
+            }
             catch
             {
                 ShowError("Invalid value '{0}' for option '{1}'", value, GetAttribute<CommandLineParameterAttribute>(member).Name);
