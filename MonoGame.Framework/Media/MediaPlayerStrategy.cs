@@ -24,10 +24,13 @@ namespace Microsoft.Xna.Platform.Media
         // Need to hold onto this to keep track of how many songs
         // have played when in shuffle mode
         internal int _numSongsInQueuePlayed = 0;
-        
 
-        internal event EventHandler<EventArgs> PlatformActiveSongChanged;
-        internal event EventHandler<EventArgs> PlatformMediaStateChanged;
+        private readonly WeakReference _mediaPlayerRef = new WeakReference(null);
+        internal MediaPlayer MediaPlayer
+        {
+            get { return _mediaPlayerRef.Target as MediaPlayer; }
+            set { _mediaPlayerRef.Target = value; }
+        }
         
         ~MediaPlayerStrategy()
         {
@@ -82,18 +85,22 @@ namespace Microsoft.Xna.Platform.Media
         internal abstract void PlatformStop();
 
 
-        internal void OnPlatformActiveSongChanged(EventArgs args)
+        internal void OnPlatformActiveSongChanged()
         {
-            var handler = PlatformActiveSongChanged;
-            if (handler != null)
-                handler(null, args);
+            if (_mediaPlayerRef.Target != null)
+            {
+                MediaPlayer mediaPlayer = (MediaPlayer)_mediaPlayerRef.Target;
+                mediaPlayer.Strategy_PlatformActiveSongChanged();
+            }
         }
 
-        internal void OnPlatformMediaStateChanged(EventArgs args)
+        internal void OnPlatformMediaStateChanged()
         {
-            var handler = PlatformMediaStateChanged;
-            if (handler != null)
-                handler(null, args);
+            if (_mediaPlayerRef.Target != null)
+            {
+                MediaPlayer mediaPlayer = (MediaPlayer)_mediaPlayerRef.Target;
+                mediaPlayer.Strategy_PlatformMediaStateChanged();
+            }
         }
 
         internal virtual void PlatformClearQueue()
@@ -138,10 +145,10 @@ namespace Microsoft.Xna.Platform.Media
 
                 PlatformPlaySong(nextSong);
                 _state = MediaState.Playing;
-                OnPlatformMediaStateChanged(EventArgs.Empty);
+                OnPlatformMediaStateChanged();
             }
 
-            OnPlatformActiveSongChanged(EventArgs.Empty);
+            OnPlatformActiveSongChanged();
         }
 
         internal void OnSongFinishedPlaying()
@@ -164,12 +171,12 @@ namespace Microsoft.Xna.Platform.Media
                             {
                                 PlatformStop();
                                 _state = MediaState.Stopped;
-                                OnPlatformMediaStateChanged(EventArgs.Empty);
+                                OnPlatformMediaStateChanged();
                             }
                             break;
                     }
 
-                    OnPlatformActiveSongChanged(EventArgs.Empty);
+                    OnPlatformActiveSongChanged();
                     return;
                 }
             }
@@ -184,7 +191,7 @@ namespace Microsoft.Xna.Platform.Media
                         {
                             PlatformStop();
                             _state = MediaState.Stopped;
-                            OnPlatformMediaStateChanged(EventArgs.Empty);
+                            OnPlatformMediaStateChanged();
                         }
                         break;
                 }
