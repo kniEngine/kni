@@ -11,7 +11,6 @@ namespace Microsoft.Xna.Platform.Graphics
     public interface IGraphicsResourceStrategy : IDisposable
     {
         GraphicsDevice GraphicsDevice { get; }
-
-        event EventHandler<EventArgs> Disposing;
+        GraphicsResource GraphicsResource { get; set; }
     }
 }
