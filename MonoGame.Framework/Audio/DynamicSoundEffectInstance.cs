@@ -96,11 +96,10 @@ namespace Microsoft.Xna.Framework.Audio
 
             _dynamicStrategy = _audioService._strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
             _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
-
-            _dynamicStrategy.OnBufferNeeded += _dstrategy_OnBufferNeeded;
+            _dynamicStrategy.DynamicSoundEffectInstance = this;
         }
 
-        private void _dstrategy_OnBufferNeeded(object sender, EventArgs e)
+        internal void _dstrategy_OnBufferNeeded()
         {
             lock (AudioService.SyncHandle)
             {
@@ -388,7 +387,7 @@ namespace Microsoft.Xna.Framework.Audio
             if(disposing)
             {
                 if (_dynamicStrategy !=null)
-                    _dynamicStrategy.OnBufferNeeded -= _dstrategy_OnBufferNeeded;
+                    _dynamicStrategy.DynamicSoundEffectInstance = null;
                 base.Dispose(disposing);
                 _dynamicStrategy = null;
                 DynamicPlayingInstancesNode = null;
@@ -396,7 +395,7 @@ namespace Microsoft.Xna.Framework.Audio
             else
             {
                 if (_dynamicStrategy != null)
-                    _dynamicStrategy.OnBufferNeeded -= _dstrategy_OnBufferNeeded;
+                    _dynamicStrategy.DynamicSoundEffectInstance = null;
                 base.Dispose(disposing);
                 _dynamicStrategy = null;
                 DynamicPlayingInstancesNode = null;

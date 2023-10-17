@@ -19,7 +19,12 @@ namespace Microsoft.Xna.Platform.Audio
         private ALFormat _format;
         private Queue<int> _queuedBuffers = new Queue<int>();
 
-        public event EventHandler<EventArgs> OnBufferNeeded;
+        private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
+        DynamicSoundEffectInstance IDynamicSoundEffectInstanceStrategy.DynamicSoundEffectInstance
+        {
+            get { return _dynamicSoundEffectInstanceRef.Target as DynamicSoundEffectInstance; }
+            set { _dynamicSoundEffectInstanceRef.Target = value; }
+        }
 
         internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels, float pan)
             : base(audioServiceStrategy, null, pan)
@@ -135,11 +140,11 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             // Raise the event for each removed buffer
-            var handler = OnBufferNeeded;
-            if (handler != null)
+            if (_dynamicSoundEffectInstanceRef.Target != null)
             {
-               for (int i = 0; i < processedBuffers; i++)
-                   handler(this, EventArgs.Empty);
+                DynamicSoundEffectInstance instance = (DynamicSoundEffectInstance)_dynamicSoundEffectInstanceRef.Target;
+                for (int i = 0; i < processedBuffers; i++)
+                    instance._dstrategy_OnBufferNeeded();
             }
         }
 
