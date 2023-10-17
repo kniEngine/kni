@@ -189,6 +189,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         ~GraphicsDeviceStrategy()
         {
+            _isDisposed = true;
+            OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
@@ -196,13 +198,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (!_isDisposed)
             {
+                _isDisposed = true;
+                OnDisposing(EventArgs.Empty);
                 Dispose(true);
                 GC.SuppressFinalize(this);
-                _isDisposed = true;
             }
         }
 
-        internal void OnDisposing(EventArgs e)
+        private void OnDisposing(EventArgs e)
         {
             var handler = Disposing;
             if (handler != null)
@@ -211,8 +214,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            System.Diagnostics.Debug.Assert(!IsDisposed);
-
             if (disposing)
             {
                 // Clear the effect cache.

@@ -138,7 +138,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         ~GraphicsDevice()
         {
-            Strategy.OnDisposing(EventArgs.Empty);
             Dispose(false);
         }
 
@@ -303,12 +302,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Dispose()
         {
-            if (!_strategy.IsDisposed)
-            {
-                Strategy.OnDisposing(EventArgs.Empty);
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void OnDisposing(EventArgs e)
@@ -320,17 +315,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected virtual void Dispose(bool disposing)
         {
-            System.Diagnostics.Debug.Assert(!IsDisposed);
-
             if (disposing)
             {
-                _strategy.DeviceResetting -= (sender, e) => { OnDeviceResetting(e); };
-                _strategy.DeviceReset -= (sender, e) => { OnDeviceReset(e); };
-                _strategy.PresentationChanged -= (sender, e) => { OnPresentationChanged(e); };
-                _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
-
                 _strategy.Dispose();
             }
+
+            _strategy.DeviceResetting -= (sender, e) => { OnDeviceResetting(e); };
+            _strategy.DeviceReset -= (sender, e) => { OnDeviceReset(e); };
+            _strategy.PresentationChanged -= (sender, e) => { OnPresentationChanged(e); };
+            _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
         }
 
 
