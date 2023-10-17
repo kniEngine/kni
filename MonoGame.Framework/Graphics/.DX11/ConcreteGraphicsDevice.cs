@@ -1005,8 +1005,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void Dispose(bool disposing)
         {
-            System.Diagnostics.Debug.Assert(!IsDisposed);
-
             if (disposing)
             {
                 // make sure to release full screen or this might cause issues on exit
