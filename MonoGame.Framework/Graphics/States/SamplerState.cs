@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    BindGraphicsDevice(device);
+                    BindGraphicsDevice(device.Strategy);
                 }
                 else
                     throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
