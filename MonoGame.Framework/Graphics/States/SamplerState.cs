@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly SamplerState PointClamp;
         public static readonly SamplerState PointWrap;
 
-        private readonly bool _defaultStateObject;
+        private readonly bool _isDefaultStateObject;
 
         private TextureAddressMode _addressU;
         private TextureAddressMode _addressV;
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ThrowIfBound()
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot modify a default sampler state object.");
             if (GraphicsDevice != null)
                 throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _addressU = addressMode;
             _addressV = addressMode;
             _addressW = addressMode;
-            _defaultStateObject = true;
+            _isDefaultStateObject = true;
         }
 
         private SamplerState(SamplerState cloneSource)

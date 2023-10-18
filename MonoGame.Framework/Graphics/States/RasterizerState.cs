@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class RasterizerState : GraphicsResource
 	{
-        private readonly bool _defaultStateObject;
+        private readonly bool _isDefaultStateObject;
 
         private CullMode _cullMode;
         private float _depthBias;
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This rasterizer state is already bound to a different graphics device.");
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ThrowIfBound()
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
             if (GraphicsDevice != null)
                 throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
 	        Name = name;
 	        _cullMode = cullMode;
-	        _defaultStateObject = true;
+	        _isDefaultStateObject = true;
 	    }
 
 	    private RasterizerState(RasterizerState cloneSource)

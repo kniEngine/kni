@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
         private readonly TargetBlendState[] _targetBlendState;
 
-        private readonly bool _defaultStateObject;
+        private readonly bool _isDefaultStateObject;
 
 	    private Color _blendFactor;
 
@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ThrowIfBound()
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot modify a default blend state object.");
             if (GraphicsDevice != null)
                 throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Framework.Graphics
             AlphaSourceBlend = sourceBlend;
             ColorDestinationBlend = destinationBlend;
             AlphaDestinationBlend = destinationBlend;
-            _defaultStateObject = true;
+            _isDefaultStateObject = true;
         }
 
         private BlendState(BlendState cloneSource)
