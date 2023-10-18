@@ -34,12 +34,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public GraphicsResourceStrategy(GraphicsContextStrategy contextStrategy)
         {
-            SetGraphicsDevice(contextStrategy.Context.DeviceStrategy);
+            BindGraphicsDevice(contextStrategy.Context.DeviceStrategy);
         }
 
         public GraphicsResourceStrategy(GraphicsResourceStrategy source)
         {
-            SetGraphicsDevice(source._deviceStrategy);
+            BindGraphicsDevice(source._deviceStrategy);
         }
 
         internal void BindGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
@@ -57,26 +57,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
                 _deviceStrategy = null;
-            }
-        }
-
-        internal void SetGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
-        {
-            if (_deviceStrategy == deviceStrategy)
-                return;
-
-            if (_deviceStrategy != null)
-            {
-                _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
-                _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
-            }
-
-            _deviceStrategy = deviceStrategy;
-
-            if (_deviceStrategy != null)
-            {
-                _deviceStrategy.ContextLost += GraphicsDeviceStrategy_ContextLost;
-                _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
             }
         }
 
