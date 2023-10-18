@@ -27,9 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
         { 
             get 
             {
-                if (_strategy == null)
-                    return null;
-                return _strategy.GraphicsDevice;
+                if (_strategy != null)
+                    return _strategy.GraphicsDevice;
+
+                return null;
             } 
         }
 
