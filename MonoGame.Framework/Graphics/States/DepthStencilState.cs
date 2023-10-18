@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState : GraphicsResource
     {
-        private readonly bool _defaultStateObject;
+        private readonly bool _isDefaultStateObject;
 
         private bool _depthBufferEnable;
         private bool _depthBufferWriteEnable;
@@ -32,7 +32,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _depthBufferEnable; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _depthBufferEnable = value;
             }
         }
@@ -42,7 +46,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _depthBufferWriteEnable; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _depthBufferWriteEnable = value;
             }
         }
@@ -52,7 +60,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _counterClockwiseStencilDepthBufferFail; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _counterClockwiseStencilDepthBufferFail = value;
             }
         }
@@ -62,7 +74,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _counterClockwiseStencilFail; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _counterClockwiseStencilFail = value;
             }
         }
@@ -72,7 +88,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _counterClockwiseStencilFunction; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _counterClockwiseStencilFunction = value;
             }
         }
@@ -82,7 +102,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _counterClockwiseStencilPass; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _counterClockwiseStencilPass = value;
             }
         }
@@ -92,7 +116,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _depthBufferFunction; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _depthBufferFunction = value;
             }
         }
@@ -102,7 +130,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _referenceStencil; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _referenceStencil = value;
             }
         }
@@ -112,7 +144,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilDepthBufferFail; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilDepthBufferFail = value;
             }
         }
@@ -122,7 +158,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilEnable; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilEnable = value;
             }
         }
@@ -132,7 +172,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilFail; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilFail = value;
             }
         }
@@ -142,7 +186,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilFunction; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilFunction = value;
             }
         }
@@ -152,7 +200,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilMask; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilMask = value;
             }
         }
@@ -162,7 +214,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilPass; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilPass = value;
             }
         }
@@ -172,7 +228,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _stencilWriteMask; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _stencilWriteMask = value;
             }
         }
@@ -182,27 +242,23 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _twoSidedStencilMode; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
+
                 _twoSidedStencilMode = value;
             }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_defaultStateObject)
+            if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
             if (GraphicsDevice != null && GraphicsDevice != device)
                 throw new InvalidOperationException("This depth stencil state is already bound to a different graphics device.");
 
             BindGraphicsDevice(device);
-        }
-
-        internal void ThrowIfBound()
-        {
-            if (_defaultStateObject)
-                throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
-            if (GraphicsDevice != null)
-                throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
         }
 
         public DepthStencilState()
@@ -232,7 +288,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	        Name = name;
             _depthBufferEnable = depthBufferEnable;
             _depthBufferWriteEnable = depthBufferWriteEnable;
-	        _defaultStateObject = true;
+	        _isDefaultStateObject = true;
 	    }
 
         private DepthStencilState(DepthStencilState cloneSource)
