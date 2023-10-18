@@ -17,9 +17,10 @@ namespace Microsoft.Xna.Platform.Graphics
         { 
             get 
             {
-                if (_deviceStrategy == null)
-                    return null;
-                return _deviceStrategy.Device;
+                if (_deviceStrategy != null)
+                    return _deviceStrategy.Device;
+
+                return null;
             }
         }
 
