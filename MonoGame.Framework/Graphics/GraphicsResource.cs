@@ -91,15 +91,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         // State objects need to be late-bound to the GraphicsDevice.
-        // They might get used on multiple GraphicsDevice objects during their lifetime,
-        // but only one GraphicsDevice should retain ownership.
+        // Oonly one GraphicsDevice should retain ownership.
         internal void BindGraphicsDevice(GraphicsDevice device)
         {
-            if (_strategy.GraphicsDevice != device)
-            {
-                Debug.Assert(device != null);
-                ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
-            }
+            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
         }
 
         private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
