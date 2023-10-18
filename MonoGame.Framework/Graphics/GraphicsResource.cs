@@ -150,9 +150,8 @@ namespace Microsoft.Xna.Framework.Graphics
             // Remove from the global list of graphics resources
             if (_strategy.GraphicsDevice != null)
             {
-                ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(null);
+                ((GraphicsResourceStrategy)_strategy).UnbindGraphicsDevice();
             }
-
         }
 
 

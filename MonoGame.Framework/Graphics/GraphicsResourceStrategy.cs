@@ -42,6 +42,16 @@ namespace Microsoft.Xna.Platform.Graphics
             SetGraphicsDevice(source._deviceStrategy);
         }
 
+        internal void UnbindGraphicsDevice()
+        {
+            if (_deviceStrategy != null)
+            {
+                _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
+                _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
+                _deviceStrategy = null;
+            }
+        }
+
         internal void SetGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
         {
             if (_deviceStrategy == deviceStrategy)
@@ -119,7 +129,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                SetGraphicsDevice(null);
+                UnbindGraphicsDevice();
                 _deviceStrategy = null;
             }
 
