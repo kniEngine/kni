@@ -43,7 +43,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _addressU; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _addressU = value;
             }
         }
@@ -53,7 +57,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _addressV; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _addressV = value;
             }
         }
@@ -63,7 +71,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _addressW; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _addressW = value;
             }
         }
@@ -73,7 +85,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _borderColor; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _borderColor = value;
             }
         }
@@ -83,7 +99,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _filter; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _filter = value;
             }
         }
@@ -93,7 +113,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _maxAnisotropy; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _maxAnisotropy = value;
             }
         }
@@ -103,7 +127,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _maxMipLevel; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _maxMipLevel = value;
             }
         }
@@ -113,7 +141,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _mipMapLevelOfDetailBias; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _mipMapLevelOfDetailBias = value;
             }
         }
@@ -126,7 +158,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _comparisonFunction; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _comparisonFunction = value;
             }
         }
@@ -136,7 +172,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _filterMode; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
+
                 _filterMode = value;
             }
         }
@@ -149,14 +189,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
 
             BindGraphicsDevice(device);
-        }
-
-        internal void ThrowIfBound()
-        {
-            if (_isDefaultStateObject)
-                throw new InvalidOperationException("You cannot modify a default sampler state object.");
-            if (GraphicsDevice != null)
-                throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
         }
 
         public SamplerState()

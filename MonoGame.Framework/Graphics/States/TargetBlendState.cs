@@ -51,7 +51,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _alphaBlendFunction; }
 	        set
 	        {
-	            _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _alphaBlendFunction = value;
 	        }
 	    }
@@ -61,7 +65,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _alphaDestinationBlend; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _alphaDestinationBlend = value;
 	        }
 	    }
@@ -71,7 +79,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _alphaSourceBlend; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _alphaSourceBlend = value;
 	        }
 	    }
@@ -81,7 +93,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _colorBlendFunction; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _colorBlendFunction = value;
 	        }
 	    }
@@ -91,7 +107,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _colorDestinationBlend; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _colorDestinationBlend = value;
 	        }
 	    }
@@ -101,7 +121,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _colorSourceBlend; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _colorSourceBlend = value;
 	        }
 	    }
@@ -111,7 +135,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _colorWriteChannels; }
 	        set
 	        {
-                _parent.ThrowIfBound();
+                if (_parent._isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (_parent.GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
 	            _colorWriteChannels = value;
 	        }
 	    }

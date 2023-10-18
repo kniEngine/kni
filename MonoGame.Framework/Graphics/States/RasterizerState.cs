@@ -23,7 +23,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _cullMode; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _cullMode = value;
             }
 	    }
@@ -33,7 +37,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _depthBias; }
 	        set
 	        {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _depthBias = value;
 	        }
 	    }
@@ -43,7 +51,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _fillMode; }
 	        set
 	        {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _fillMode = value;
 	        }
 	    }
@@ -53,7 +65,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _multiSampleAntiAlias; }
 	        set
 	        {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _multiSampleAntiAlias = value;
 	        }
 	    }
@@ -63,7 +79,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _scissorTestEnable; }
 	        set
 	        {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _scissorTestEnable = value;
 	        }
 	    }
@@ -73,7 +93,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	        get { return _slopeScaleDepthBias; }
 	        set
 	        {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _slopeScaleDepthBias = value;
 	        }
 	    }
@@ -83,7 +107,11 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _depthClipEnable; }
             set
             {
-                ThrowIfBound();
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
+
                 _depthClipEnable = value;
             }
         }
@@ -96,14 +124,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("This rasterizer state is already bound to a different graphics device.");
 
             BindGraphicsDevice(device);
-        }
-
-        internal void ThrowIfBound()
-        {
-            if (_isDefaultStateObject)
-                throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
-            if (GraphicsDevice != null)
-                throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
         }
 
 	    public static readonly RasterizerState CullClockwise;
