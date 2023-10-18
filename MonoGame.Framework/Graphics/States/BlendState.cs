@@ -22,10 +22,17 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_isDefaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
-            if (GraphicsDevice != null && GraphicsDevice != device)
-                throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
 
-            BindGraphicsDevice(device);
+            if (this.GraphicsDevice != device)
+            {
+                if (this.GraphicsDevice == null)
+                {
+                    System.Diagnostics.Debug.Assert(device != null);
+                    BindGraphicsDevice(device.Strategy);
+                }
+                else
+                    throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
+            }
         }
 
         /// <summary>
