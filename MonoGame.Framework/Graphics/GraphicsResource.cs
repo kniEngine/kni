@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             IGraphicsResourceStrategy strategy = new GraphicsResourceStrategy();
             SetResourceStrategy(strategy);
-
-            SetGraphicsDevice(device);
+            Debug.Assert(device != null);
+            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
         }
 
         protected void SetResourceStrategy(IGraphicsResourceStrategy strategy)
@@ -96,15 +96,9 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_strategy.GraphicsDevice != device)
             {
-                SetGraphicsDevice(device);
+                Debug.Assert(device != null);
+                ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
             }
-        }
-
-        internal void SetGraphicsDevice(GraphicsDevice device)
-        {
-            Debug.Assert(device != null);
-
-            ((GraphicsResourceStrategy)_strategy).SetGraphicsDevice(device.Strategy);
         }
 
         private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
