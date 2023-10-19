@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Media;
+using FrameworkMedia = Microsoft.Xna.Framework.Media;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -26,9 +27,9 @@ namespace Microsoft.Xna.Platform.Media
         internal int _numSongsInQueuePlayed = 0;
 
         private readonly WeakReference _mediaPlayerRef = new WeakReference(null);
-        internal MediaPlayer MediaPlayer
+        internal FrameworkMedia.MediaPlayer MediaPlayer
         {
-            get { return _mediaPlayerRef.Target as MediaPlayer; }
+            get { return _mediaPlayerRef.Target as FrameworkMedia.MediaPlayer; }
             set { _mediaPlayerRef.Target = value; }
         }
         
@@ -89,7 +90,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_mediaPlayerRef.Target != null)
             {
-                MediaPlayer mediaPlayer = (MediaPlayer)_mediaPlayerRef.Target;
+                FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
                 mediaPlayer.Strategy_PlatformActiveSongChanged();
             }
         }
@@ -98,7 +99,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_mediaPlayerRef.Target != null)
             {
-                MediaPlayer mediaPlayer = (MediaPlayer)_mediaPlayerRef.Target;
+                FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
                 mediaPlayer.Strategy_PlatformMediaStateChanged();
             }
         }
