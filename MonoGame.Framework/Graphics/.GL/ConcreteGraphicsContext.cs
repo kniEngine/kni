@@ -469,49 +469,49 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
-                IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
+                IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
-                if (!_attribsDirty &&
-                    slot < _activeBufferBindingInfosCount &&
-                    _bufferBindingInfos[slot].VertexOffset == offset &&
-                    ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo) &&
-                    _bufferBindingInfos[slot].InstanceFrequency == vertexBufferBinding.InstanceFrequency &&
-                    _bufferBindingInfos[slot].Vbo == vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
-                    continue;
-
-                bindingsChanged = true;
-
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
-                GL.CheckGLError();
-
-                for (int e = 0; e < attrInfo.Elements.Count; e++)
+                if (_attribsDirty
+                ||  slot >= _activeBufferBindingInfosCount
+                ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
+                ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo)
+                ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
                 {
-                    VertexDeclarationAttributeInfoElement element = attrInfo.Elements[e];
-                    GL.VertexAttribPointer(element.AttributeLocation,
-                        element.NumberOfElements,
-                        element.VertexAttribPointerType,
-                        element.Normalized,
-                        vertexStride,
-                        (IntPtr)(offset.ToInt64() + element.Offset));
+                    bindingsChanged = true;
+
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
                     GL.CheckGLError();
 
-                    // only set the divisor if instancing is supported
-                    if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
+                    for (int e = 0; e < attrInfo.Elements.Count; e++)
                     {
-                        GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
+                        VertexDeclarationAttributeInfoElement element = attrInfo.Elements[e];
+                        GL.VertexAttribPointer(element.AttributeLocation,
+                            element.NumberOfElements,
+                            element.VertexAttribPointerType,
+                            element.Normalized,
+                            vertexStride,
+                            (IntPtr)(vertexOffset.ToInt64() + element.Offset));
                         GL.CheckGLError();
-                    }
-                    else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
-                    {
-                        if (vertexBufferBinding.InstanceFrequency > 0)
-                            throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
-                    }
-                }
 
-                _bufferBindingInfos[slot].VertexOffset = offset;
-                _bufferBindingInfos[slot].AttributeInfo = attrInfo;
-                _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
+                        // only set the divisor if instancing is supported
+                        if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
+                        {
+                            GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
+                            GL.CheckGLError();
+                        }
+                        else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
+                        {
+                            if (vertexBufferBinding.InstanceFrequency > 0)
+                                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
+                        }
+                    }
+
+                    _bufferBindingInfos[slot].VertexOffset = vertexOffset;
+                    _bufferBindingInfos[slot].AttributeInfo = attrInfo;
+                    _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
+                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
+                }
             }
 
             _attribsDirty = false;
