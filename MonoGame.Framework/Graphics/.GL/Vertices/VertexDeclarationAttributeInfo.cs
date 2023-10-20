@@ -26,6 +26,12 @@ namespace Microsoft.Xna.Platform.Graphics
             InstanceFrequency = instanceFrequency;
             Vbo = vbo;
         }
+
+        public override string ToString()
+        {
+            return String.Format("{{Vbo: {0}, VertexOffset: {1}, InstanceFrequency: {2}}}",
+                Vbo, VertexOffset, InstanceFrequency);
+        }
     }
 
     internal class RenderTargetBindingArrayComparer : IEqualityComparer<RenderTargetBinding[]>
