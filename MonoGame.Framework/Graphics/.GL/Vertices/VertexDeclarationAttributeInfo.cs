@@ -14,17 +14,25 @@ namespace Microsoft.Xna.Platform.Graphics
     // Holds information for caching
     internal class BufferBindingInfo
     {
+        private WeakReference _vertexBufferStrategyRef = new WeakReference(null);
+
         public VertexDeclarationAttributeInfo AttributeInfo;
         public IntPtr VertexOffset;
         public int InstanceFrequency;
-        public int GLVertexBuffer;
 
-        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, int glVertexBuffer)
+        public VertexBufferStrategy GLVertexBuffer
+        {
+            get { return (VertexBufferStrategy)_vertexBufferStrategyRef.Target; }
+            set { _vertexBufferStrategyRef.Target = value; }
+        }
+
+
+        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, VertexBufferStrategy vertexBufferStrategy)
         {
             AttributeInfo = attributeInfo;
             VertexOffset = vertexOffset;
             InstanceFrequency = instanceFrequency;
-            GLVertexBuffer = glVertexBuffer;
+            GLVertexBuffer = vertexBufferStrategy;
         }
 
         public override string ToString()
