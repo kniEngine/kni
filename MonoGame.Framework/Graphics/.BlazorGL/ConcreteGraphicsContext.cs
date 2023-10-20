@@ -429,7 +429,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (_attribsDirty
-                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo)
                 ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
@@ -465,10 +465,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
 
-                    _bufferBindingInfos[slot].VertexOffset = vertexOffset;
+                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy;
                     _bufferBindingInfos[slot].AttributeInfo = attrInfo;
+                    _bufferBindingInfos[slot].VertexOffset = vertexOffset;
                     _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
                 }
             }
 
