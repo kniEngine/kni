@@ -17,20 +17,20 @@ namespace Microsoft.Xna.Platform.Graphics
         public VertexDeclarationAttributeInfo AttributeInfo;
         public IntPtr VertexOffset;
         public int InstanceFrequency;
-        public int Vbo;
+        public int GLVertexBuffer;
 
-        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, int vbo)
+        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, int glVertexBuffer)
         {
             AttributeInfo = attributeInfo;
             VertexOffset = vertexOffset;
             InstanceFrequency = instanceFrequency;
-            Vbo = vbo;
+            GLVertexBuffer = glVertexBuffer;
         }
 
         public override string ToString()
         {
-            return String.Format("{{Vbo: {0}, VertexOffset: {1}, InstanceFrequency: {2}}}",
-                Vbo, VertexOffset, InstanceFrequency);
+            return String.Format("{{glVertexBuffer: {0}, VertexOffset: {1}, InstanceFrequency: {2}}}",
+                GLVertexBuffer, VertexOffset, InstanceFrequency);
         }
     }
 

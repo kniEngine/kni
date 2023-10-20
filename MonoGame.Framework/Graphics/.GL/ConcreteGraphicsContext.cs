@@ -469,14 +469,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
                 int vertexStride = vertexDeclaration.VertexStride;
-                IntPtr offset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
+                IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (_attribsDirty
                 ||  slot >= _activeBufferBindingInfosCount
-                ||  _bufferBindingInfos[slot].VertexOffset != offset
+                ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo)
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
-                ||  _bufferBindingInfos[slot].Vbo != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
                 {
                     bindingsChanged = true;
 
@@ -491,7 +491,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             element.VertexAttribPointerType,
                             element.Normalized,
                             vertexStride,
-                            (IntPtr)(offset.ToInt64() + element.Offset));
+                            (IntPtr)(vertexOffset.ToInt64() + element.Offset));
                         GL.CheckGLError();
 
                         // only set the divisor if instancing is supported
@@ -507,10 +507,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
 
-                    _bufferBindingInfos[slot].VertexOffset = offset;
+                    _bufferBindingInfos[slot].VertexOffset = vertexOffset;
                     _bufferBindingInfos[slot].AttributeInfo = attrInfo;
                     _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
-                    _bufferBindingInfos[slot].Vbo = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
+                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer;
                 }
             }
 
