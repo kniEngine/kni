@@ -107,9 +107,9 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Debug.Assert(vertexBufferBindings[i].VertexBuffer != null);
 
-                if (InstanceFrequencies[i] != vertexBufferBindings[i].InstanceFrequency
-                ||  _vertexBuffers[i] != vertexBufferBindings[i].VertexBuffer
-                ||  _vertexOffsets[i] != vertexBufferBindings[i].VertexOffset)
+                if (_vertexBuffers[i] != vertexBufferBindings[i].VertexBuffer
+                ||  _vertexOffsets[i] != vertexBufferBindings[i].VertexOffset
+                ||  InstanceFrequencies[i] != vertexBufferBindings[i].InstanceFrequency)
                 {
                     VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
                     InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
