@@ -429,11 +429,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (_attribsDirty
-                ||  slot >= _activeBufferBindingInfosCount
-                ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, attrInfo)
+                ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
-                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer)
+                ||  slot >= _activeBufferBindingInfosCount)
                 {
                     bindingsChanged = true;
 
