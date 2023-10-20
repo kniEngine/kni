@@ -107,18 +107,16 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Debug.Assert(vertexBufferBindings[i].VertexBuffer != null);
 
-                if (InstanceFrequencies[i] == vertexBufferBindings[i].InstanceFrequency
-                    && _vertexBuffers[i] == vertexBufferBindings[i].VertexBuffer
-                    && _vertexOffsets[i] == vertexBufferBindings[i].VertexOffset)
+                if (InstanceFrequencies[i] != vertexBufferBindings[i].InstanceFrequency
+                ||  _vertexBuffers[i] != vertexBufferBindings[i].VertexBuffer
+                ||  _vertexOffsets[i] != vertexBufferBindings[i].VertexOffset)
                 {
-                    continue;
+                    VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
+                    InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
+                    _vertexBuffers[i] = vertexBufferBindings[i].VertexBuffer;
+                    _vertexOffsets[i] = vertexBufferBindings[i].VertexOffset;
+                    isDirty = true;
                 }
-
-                VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
-                InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
-                _vertexBuffers[i] = vertexBufferBindings[i].VertexBuffer;
-                _vertexOffsets[i] = vertexBufferBindings[i].VertexOffset;
-                isDirty = true;
             }
 
             if (Count > vertexBufferBindings.Length)
