@@ -12,6 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     public class GraphicsResourceStrategy : IGraphicsResourceStrategy
     {
         private GraphicsDeviceStrategy _deviceStrategy;
+        private WeakDeviceStrategyEvents _deviceStrategyEvents;
         private readonly WeakReference _graphicsResourceRef = new WeakReference(null);
 
         public GraphicsDevice GraphicsDevice
@@ -49,18 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _deviceStrategy = deviceStrategy;
 
-            _deviceStrategy.ContextLost += GraphicsDeviceStrategy_ContextLost;
-            _deviceStrategy.Disposing += GraphicsDeviceStrategy_Disposing;
-        }
-
-        internal void UnbindGraphicsDevice()
-        {
-            if (_deviceStrategy != null)
-            {
-                _deviceStrategy.ContextLost -= GraphicsDeviceStrategy_ContextLost;
-                _deviceStrategy.Disposing -= GraphicsDeviceStrategy_Disposing;
-                _deviceStrategy = null;
-            }
+            _deviceStrategyEvents = new WeakDeviceStrategyEvents(this, _deviceStrategy);
         }
 
         private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
@@ -126,13 +116,55 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                UnbindGraphicsDevice();
-                _deviceStrategy = null;
             }
 
+            if (_deviceStrategyEvents != null)
+            {
+                _deviceStrategyEvents.Dispose();
+                _deviceStrategyEvents = null;
+            }
+
+            _deviceStrategy = null;
         }
 
         #endregion IDisposable Members
+
+
+        private sealed class  WeakDeviceStrategyEvents : IDisposable
+        {
+            readonly WeakReference _resourceStrategyRef;
+            GraphicsDeviceStrategy _deviceStrategy;
+
+            internal WeakDeviceStrategyEvents(GraphicsResourceStrategy resourceStrategy, GraphicsDeviceStrategy deviceStrategy)
+            {
+                _resourceStrategyRef = new WeakReference(resourceStrategy);
+                _deviceStrategy = deviceStrategy;
+
+                _deviceStrategy.ContextLost += this.GraphicsDeviceStrategy_ContextLost;
+                _deviceStrategy.Disposing += this.GraphicsDeviceStrategy_Disposing;
+            }
+
+            private void GraphicsDeviceStrategy_ContextLost(object sender, EventArgs e)
+            {
+                if (_resourceStrategyRef.IsAlive)
+                    ((GraphicsResourceStrategy)_resourceStrategyRef.Target).GraphicsDeviceStrategy_ContextLost(sender, e);
+            }
+
+            private void GraphicsDeviceStrategy_Disposing(object sender, EventArgs e)
+            {
+                if (_resourceStrategyRef.IsAlive)
+                    ((GraphicsResourceStrategy)_resourceStrategyRef.Target).GraphicsDeviceStrategy_Disposing(sender, e);
+            }
+
+            public void Dispose()
+            {
+                _deviceStrategy.ContextLost -= this.GraphicsDeviceStrategy_ContextLost;
+                _deviceStrategy.Disposing -= this.GraphicsDeviceStrategy_Disposing;
+
+                _resourceStrategyRef.Target = null;
+                _deviceStrategy = null;
+            }
+        }
 
     }
 }
