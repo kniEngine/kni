@@ -12,6 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     public class GraphicsResourceStrategy : IGraphicsResourceStrategy
     {
         private GraphicsDeviceStrategy _deviceStrategy;
+        private readonly WeakReference _graphicsResourceRef = new WeakReference(null);
 
         public GraphicsDevice GraphicsDevice
         { 
@@ -24,10 +25,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public event EventHandler<EventArgs> Disposing;
-
-        public event EventHandler<EventArgs> ContextLost;
-        public event EventHandler<EventArgs> DeviceDisposing;
+        GraphicsResource IGraphicsResourceStrategy.GraphicsResource
+        {
+            get { return _graphicsResourceRef.Target as GraphicsResource;}
+            set { _graphicsResourceRef.Target = value; }
+        }
 
         internal GraphicsResourceStrategy()
         {
@@ -74,16 +76,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void OnContextLost(EventArgs e)
         {
-            var handler = ContextLost;
-            if (handler != null)
-                handler(this, e);
+            if (_graphicsResourceRef.Target != null)
+            {
+                GraphicsResource graphicsResource = (GraphicsResource)_graphicsResourceRef.Target;
+                graphicsResource.GraphicsResourceStrategy_ContextLost();
+            }
         }
 
         private void OnDeviceDisposing(EventArgs e)
         {
-            var handler = DeviceDisposing;
-            if (handler != null)
-                handler(this, e);
+            if (_graphicsResourceRef.Target != null)
+            {
+                GraphicsResource graphicsResource = (GraphicsResource)_graphicsResourceRef.Target;
+                graphicsResource.GraphicsResourceStrategy_DeviceDisposing();
+            }
         }
 
         internal virtual void PlatformGraphicsContextLost()
@@ -109,9 +115,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void OnDisposing(EventArgs e)
         {
-            var handler = Disposing;
-            if (handler != null)
-                handler(this, e);
+            if (_graphicsResourceRef.Target != null)
+            {
+                GraphicsResource graphicsResource = (GraphicsResource)_graphicsResourceRef.Target;
+                graphicsResource.OnDisposing();
+            }
         }
 
         protected virtual void Dispose(bool disposing)

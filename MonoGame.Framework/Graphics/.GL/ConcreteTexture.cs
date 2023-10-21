@@ -509,13 +509,10 @@ namespace Microsoft.Xna.Platform.Graphics
             
             if (_glTexture > 0)
             {
-                if (!GraphicsDevice.IsDisposed)
-                {
-                    var GL = OGL.Current;
+                var GL = OGL.Current;
 
-                    GL.DeleteTexture(_glTexture);
-                    GL.CheckGLError();
-                }
+                GL.DeleteTexture(_glTexture);
+                GL.CheckGLError();
             }
             _glTexture = -1;
 

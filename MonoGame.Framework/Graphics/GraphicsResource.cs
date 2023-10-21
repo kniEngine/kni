@@ -66,10 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(_strategy == null);
 
             _strategy = strategy;
-            _strategy.Disposing += (sender, e) => { OnDisposing(e); };
-
-            ((GraphicsResourceStrategy)_strategy).ContextLost += GraphicsResourceStrategy_ContextLost;
-            ((GraphicsResourceStrategy)_strategy).DeviceDisposing += GraphicsResourceStrategy_DeviceDisposing;
+            _strategy.GraphicsResource = this;
         }
 
         ~GraphicsResource()
@@ -97,12 +94,12 @@ namespace Microsoft.Xna.Framework.Graphics
             ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(deviceStrategy);
         }
 
-        private void GraphicsResourceStrategy_ContextLost(object sender, EventArgs e)
+        internal void GraphicsResourceStrategy_ContextLost()
         {
             GraphicsContextLost();
         }
 
-        private void GraphicsResourceStrategy_DeviceDisposing(object sender, EventArgs e)
+        internal void GraphicsResourceStrategy_DeviceDisposing()
         {
             this.Dispose();
         }
@@ -118,11 +115,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void OnDisposing(EventArgs e)
+        internal void OnDisposing()
         {
             var handler = Disposing;
             if (handler != null)
-                handler(this, e);
+                handler(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -137,10 +134,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (disposing)
             {
                 _strategy.Dispose();
-                _strategy.Disposing -= (sender, e) => { OnDisposing(e); };
-
-                ((GraphicsResourceStrategy)_strategy).ContextLost -= GraphicsResourceStrategy_ContextLost;
-                ((GraphicsResourceStrategy)_strategy).DeviceDisposing -= GraphicsResourceStrategy_DeviceDisposing;
+                _strategy.GraphicsResource = null;
             }
 
             // Remove from the global list of graphics resources
