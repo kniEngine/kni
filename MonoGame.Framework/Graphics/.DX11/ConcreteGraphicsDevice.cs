@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             try
             {
-                lock (_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (_mainContext.Strategy.SyncHandle)
                 {
                     int syncInterval = 0;
                     DXGI.PresentFlags presentFlags = DXGI.PresentFlags.None;
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                 {
-                    lock (_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                    lock (_mainContext.Strategy.SyncHandle)
                     {
                         // Copy the data from the GPU to the staging texture.
                         // if MSAA is enabled we need to first copy to a resource without MSAA

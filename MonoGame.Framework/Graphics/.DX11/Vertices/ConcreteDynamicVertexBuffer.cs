@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
                 mode = D3D11.MapMode.WriteNoOverwrite;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
