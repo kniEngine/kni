@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = true;
             _isComplete = false;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = false;
             _queryPerformed = true;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool PlatformGetResult()
         {
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 

@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     Right = checkedRect.Right
                 };
 
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 

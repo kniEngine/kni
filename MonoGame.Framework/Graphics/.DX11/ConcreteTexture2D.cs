@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // TODO: We need to deal with threaded contexts here!
                 int arraySlice = 0;
                 int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -177,7 +177,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             D3D11.Texture2D stagingTexture = new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
             {
                 D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 

@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion(left, top, front, right, bottom, back);
 
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc))
             {
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 

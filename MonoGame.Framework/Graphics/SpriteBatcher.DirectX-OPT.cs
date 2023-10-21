@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _device.SetVertexBuffer(_vertexBuffer);
                 _device.Indices = _indexBuffer;
 
-                lock (_device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext)
+                lock (_device.Strategy.CurrentContext.Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 

@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 options &= ~ClearOptions.Stencil;
             }
 
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 // Clear the diffuse render buffer.
                 if ((options & ClearOptions.Target) == ClearOptions.Target)
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyViewport()
         {
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 if (this.D3dContext != null)
                 {
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
         {
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 //PlatformApplyIndexBuffer();
@@ -318,7 +318,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 PlatformApplyIndexBuffer();
@@ -334,7 +334,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex,
             int primitiveCount, int baseInstance, int instanceCount)
         {
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 PlatformApplyIndexBuffer();
@@ -433,7 +433,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //       Bind directly to d3dContext and set dirty flags.
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, vertexCount, vertexDeclaration);
 
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 //PlatformApplyIndexBuffer();
@@ -454,7 +454,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(_userIndexBuffer16, indexData, indexOffset, indexCount);
 
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
@@ -475,7 +475,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
             int startIndex = SetUserIndexBuffer(_userIndexBuffer32, indexData, indexOffset, indexCount);
 
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 PlatformApplyState();
                 PlatformApplyIndexBuffer(); // SetUserIndexBuffer() overwrites the indexbuffer
@@ -619,7 +619,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Generate mipmaps.
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
-                    lock (this.D3dContext)
+                    lock (this.SyncHandle)
                     {
                         this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
                     }
@@ -634,7 +634,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _currentRenderTargets[0] = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._renderTargetView;
             _currentDepthStencilView = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._depthStencilView;
 
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
             }
@@ -648,7 +648,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Make sure none of the new targets are bound
             // to the device as a texture resource.
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 this.VertexTextures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
                 this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
@@ -666,7 +666,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
             {
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
             }
@@ -680,7 +680,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyViewport();
                         
-            lock (this.D3dContext)
+            lock (this.SyncHandle)
                     this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
 
             _pixelTextures.Dirty();
