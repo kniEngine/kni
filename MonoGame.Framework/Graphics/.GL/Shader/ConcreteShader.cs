@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override void PlatformGraphicsContextLost()
         {
-            var GL = OGL.Current;
+            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             if (_shaderHandle != -1)
             {
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_shaderHandle != -1)
             {
-                var GL = OGL.Current;
+                var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                 if (GL.IsShader(_shaderHandle))
                 {

@@ -1787,9 +1787,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [DebuggerHidden]
         public void CheckGLError()
         {
-            var GL = OGL.Current;
-
-            ErrorCode error = GL.GetError();
+            ErrorCode error = this.GetError();
             //Console.WriteLine(error);
             if (error != ErrorCode.NoError)
             {

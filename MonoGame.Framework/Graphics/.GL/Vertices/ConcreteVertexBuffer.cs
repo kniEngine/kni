@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (GraphicsDevice != null && !GraphicsDevice.IsDisposed)
                 {
-                    var GL = OGL.Current;
+                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                     GL.DeleteBuffer(_vbo);
                     GL.CheckGLError();

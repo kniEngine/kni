@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             base.Present();
 
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
             GL.CheckGLError();

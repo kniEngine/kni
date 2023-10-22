@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
             int tSize = ReflectionHelpers.SizeOf<T>();
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize()
         {
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void Android_ReInitializeContext()
         {
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
@@ -240,7 +240,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void ClearProgramCache()
         {
-            var GL = OGL.Current;
+            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             foreach (ShaderProgram shaderProgram in ProgramCache.Values)
             {
@@ -255,7 +255,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            var GL = OGL.Current;
+            var GL = this.MainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int maxMultiSampleCount = 0;
             GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);
