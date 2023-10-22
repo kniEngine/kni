@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal OcclusionQueryStrategy(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
+            _contextStrategy = contextStrategy;
         }
 
         public abstract void PlatformBegin();

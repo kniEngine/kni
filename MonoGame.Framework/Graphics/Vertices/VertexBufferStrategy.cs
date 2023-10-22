@@ -36,6 +36,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal VertexBufferStrategy(GraphicsContextStrategy contextStrategy, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
             : base(contextStrategy)
         {
+            this._contextStrategy = contextStrategy;
+
             this._vertexDeclaration = vertexDeclaration;
             this._vertexCount = vertexCount;
             this._bufferUsage = usage;

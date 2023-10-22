@@ -25,6 +25,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy)
         {
+            _contextStrategy = contextStrategy;
+
             this._samplers = samplers;
             this._CBuffers = cBuffers;
             this._attributes = attributes;

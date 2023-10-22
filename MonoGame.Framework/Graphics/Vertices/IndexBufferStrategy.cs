@@ -43,7 +43,9 @@ namespace Microsoft.Xna.Platform.Graphics
         internal IndexBufferStrategy(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy)
         {
-			this._indexElementSize = indexElementSize;	
+            _contextStrategy = contextStrategy;
+
+            this._indexElementSize = indexElementSize;	
             this._indexCount = indexCount;
             this._bufferUsage = usage;
 
