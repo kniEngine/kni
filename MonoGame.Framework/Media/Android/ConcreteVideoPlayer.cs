@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 using Android.Views;
@@ -21,9 +22,11 @@ namespace Microsoft.Xna.Platform.Media
         private const int GL_TEXTURE_EXTERNAL_OES = (0x00008D65);
         
         private Android.Media.MediaPlayer _player;
-        private int _glVideoSurfaceTexture;
+
         private SurfaceTexture _surfaceTexture;
         private Surface _surface;
+        private GraphicsDeviceStrategy _graphicsDeviceStrategy;
+        private int _glVideoSurfaceTexture;
 
         private bool _frameAvailable;
         private byte[] _frameData;
@@ -72,15 +75,42 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        public override Video Video
+        {
+            get { return base.Video; }
+            protected set
+            {
+                base.Video = value;
+                if (value != null)
+                    CreateGLVideoSurfaceTexture(value.GraphicsDevice.Strategy);
+            }
+        }
+
+
         internal ConcreteVideoPlayerStrategy()
         {
-            var GL = OGL.Current;
-
             _player = new Android.Media.MediaPlayer();
+
+        }
+        
+        private void CreateGLVideoSurfaceTexture(GraphicsDeviceStrategy graphicsDeviceStrategy)
+        {
+            if (_graphicsDeviceStrategy != null)
+            {
+                if (_graphicsDeviceStrategy != graphicsDeviceStrategy)
+                    throw new InvalidOperationException();
+
+                return;
+            }
+
+            _graphicsDeviceStrategy = graphicsDeviceStrategy;
+
+            var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
 
             _glVideoSurfaceTexture = GL.GenTexture();
             GL.CheckGLError();
-            base.Video.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            _graphicsDeviceStrategy.MainContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.CheckGLError();
             GL.BindTexture((TextureTarget)GL_TEXTURE_EXTERNAL_OES, _glVideoSurfaceTexture);
@@ -105,23 +135,23 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_lastFrame != null)
             {
-                if (_lastFrame.Width != base.Video.Width || _lastFrame.Height != base.Video.Height)
+                if (_lastFrame.Width != this.Video.Width || _lastFrame.Height != this.Video.Height)
                 {
                     _lastFrame.Dispose();
                     _lastFrame = null;
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+                _lastFrame = new Texture2D(this.Video.GraphicsDevice, this.Video.Width, this.Video.Height, false, SurfaceFormat.Color);
 
-            var GL = OGL.Current;
+            var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             if (_frameAvailable)
             {
                 _frameAvailable = false;
 
                 // Calculate the buffer size for RGBA format
-                int frameBufferSize = base.Video.Width * base.Video.Height * 4;
+                int frameBufferSize = this.Video.Width * this.Video.Height * 4;
 
                 // Allocate memory for the frame data if needed
                 if (_frameData == null || _frameData.Length != frameBufferSize)
@@ -142,7 +172,7 @@ namespace Microsoft.Xna.Platform.Media
                 GL.CheckGLError();
 
                 // Read the pixel data from the framebuffer
-                GL.ReadPixels(0, 0, Video.Width, Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
+                GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
                 GL.CheckGLError();
 
                 // Dettach framebuffer
@@ -153,7 +183,7 @@ namespace Microsoft.Xna.Platform.Media
                 GL.DeleteFramebuffer(framebuffer);
                 GL.CheckGLError();
 
-                _lastFrame.SetData(_frameData);
+                _lastFrame.SetData(_frameData, 0, frameBufferSize);
             }
 
             return _lastFrame;
@@ -173,9 +203,9 @@ namespace Microsoft.Xna.Platform.Media
                 _player.Reset();
             }
 
-            base.Video = video;
+            this.Video = video;
             
-            var afd = Android.App.Application.Context.Assets.OpenFd(base.Video.FileName);
+            var afd = Android.App.Application.Context.Assets.OpenFd(this.Video.FileName);
             if (afd == null)
                 return;
 
@@ -221,16 +251,22 @@ namespace Microsoft.Xna.Platform.Media
 
         protected override void Dispose(bool disposing)
         {
-            var GL = OGL.Current;
 
             if (disposing)
             {
+                if (_lastFrame != null)
+                    _lastFrame.Dispose();
+                _lastFrame = null;
+
                 if (_player != null)
                     _player.Dispose();
                 _player = null;
 
                 if (_surfaceTexture != null)
+                {
+                    _surfaceTexture.FrameAvailable -= _surfaceTexture_FrameAvailable;
                     _surfaceTexture.Dispose();
+                }
                 _surfaceTexture = null;
 
                 if (_surface != null)
@@ -238,7 +274,17 @@ namespace Microsoft.Xna.Platform.Media
                 _surface = null;
             }
 
-            GL.DeleteTexture(_glVideoSurfaceTexture);
+            if (_graphicsDeviceStrategy != null)
+            {
+                var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                if (_glVideoSurfaceTexture != 0)
+                {
+                    GL.DeleteTexture(_glVideoSurfaceTexture);
+                    _glVideoSurfaceTexture = 0;
+                }
+            }
+            _graphicsDeviceStrategy = null;
 
             base.Dispose(disposing);
         }
