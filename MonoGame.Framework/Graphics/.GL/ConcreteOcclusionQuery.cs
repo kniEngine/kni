@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_inBeginEndPair)
                 throw new InvalidOperationException("End() must be called before calling Begin() again.");
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _inBeginEndPair = true;
             _isComplete = false;
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!_inBeginEndPair)
                 throw new InvalidOperationException("Begin() must be called before calling End().");
 
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _inBeginEndPair = false;
             _queryPerformed = true;
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool PlatformGetResult()
         {
-            var GL = OGL.Current;
+            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int resultReady = 0;
             GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResultAvailable, out resultReady);
@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    var GL = OGL.Current;
+                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                     GL.DeleteQuery(_glQueryId);
                     GL.CheckGLError();

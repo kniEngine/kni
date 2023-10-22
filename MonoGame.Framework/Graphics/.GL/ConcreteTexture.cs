@@ -488,7 +488,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    var GL = OGL.Current;
+                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                     GL.DeleteTexture(_glTexture);
                     GL.CheckGLError();
@@ -509,7 +509,7 @@ namespace Microsoft.Xna.Platform.Graphics
             
             if (_glTexture > 0)
             {
-                var GL = OGL.Current;
+                var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                 GL.DeleteTexture(_glTexture);
                 GL.CheckGLError();
