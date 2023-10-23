@@ -309,7 +309,15 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum ErrorCode
     {
-        NoError = 0,
+        NO_ERROR          = 0x0000,
+        INVALID_ENUM      = 0x0500,
+        INVALID_VALUE     = 0x0501,
+        INVALID_OPERATION = 0x0502,
+        STACK_OVERFLOW    = 0x0503,
+        STACK_UNDERFLOW   = 0x0504,
+        OUT_OF_MEMORY     = 0x0505,
+        INVALID_FRAMEBUFFER_OPERATION = 0x0506,
+        CONTEXT_LOST      = 0x0507, //(with OpenGL 4.5 or ARB_KHR_robustness)
     }
 
     internal enum TextureUnit
@@ -1538,7 +1546,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             string extstring = this.GetString(StringName.Extensions);
             ErrorCode error = this.GetError();
-            if (error != ErrorCode.NoError || string.IsNullOrEmpty(extstring))
+            if (error != ErrorCode.NO_ERROR || string.IsNullOrEmpty(extstring))
                 return;
             Extensions.AddRange(extstring.Split(' '));
             LogExtensions();
@@ -1788,11 +1796,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         public void CheckGLError()
         {
             ErrorCode error = this.GetError();
-            //Console.WriteLine(error);
-            if (error != ErrorCode.NoError)
-            {
-                throw new OpenGLException("GL.GetError() returned " + error.ToString());
-            }
+            if (error == ErrorCode.NO_ERROR)
+                return;
+
+            string errorMsg = String.Format("GL_ERROR: {0} (0x{1:X4})", error, (int)error);
+            //Console.WriteLine(errorMsg);
+            throw new OpenGLException("GL.GetError() returned " + errorMsg);
         }
 
         [Conditional("DEBUG")]
