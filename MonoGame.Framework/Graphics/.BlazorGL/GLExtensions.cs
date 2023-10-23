@@ -41,11 +41,12 @@ namespace Microsoft.Xna.Platform.Graphics
         internal static void CheckGLError(this IWebGLRenderingContext GL)
         {
             WebGLErrorCode error = GL.GetError();
-            if (error != WebGLErrorCode.NO_ERROR)
-            {
-                Console.WriteLine(error);
-                throw new InvalidOperationException("GL.GetError() returned " + error.ToString());
-            }
+            if (error == WebGLErrorCode.NO_ERROR)
+                return;
+
+            string errorMsg = String.Format("GL_ERROR: {0} ({1:4X})", error, (int)error);
+            Console.WriteLine(errorMsg);
+            throw new InvalidOperationException("GL.GetError() returned " + errorMsg);
         }
 
     }
