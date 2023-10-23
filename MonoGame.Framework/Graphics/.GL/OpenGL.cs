@@ -1539,6 +1539,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             Android.Util.Log.Verbose("GL","Supported Extensions");
             foreach (string ext in Extensions)
                 Android.Util.Log.Verbose("GL", "   " + ext);
+#else
+            System.Diagnostics.Debug.WriteLine("Supported GL Extensions");
+            foreach (string ext in Extensions)
+                System.Diagnostics.Debug.WriteLine("   " + ext);
 #endif
         }
 
