@@ -682,19 +682,19 @@ namespace Microsoft.Xna.Framework
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GetErrorAsString());
 
-            foreach (GLESVersion v in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
+            foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
-                Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
+                Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
 
-                _eglContext = _egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, v.GetAttributes());
+                _eglContext = _egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
                     _eglContext = EGL10.EglNoContext;
-                    Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", v, GetErrorAsString()));
+                    Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GetErrorAsString()));
                     continue;
                 }
-                _glesVersion = v;
+                _glesVersion = ver;
                 break;
             }
             if (_eglContext == null || _eglContext == EGL10.EglNoContext)
