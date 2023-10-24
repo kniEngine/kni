@@ -20,6 +20,9 @@ namespace Microsoft.Xna.Platform.Graphics
         private IntPtr _glContext;
 
         private int _glContextCurrentThreadId = -1;
+        private IntPtr _glSharedContext;
+        private IntPtr _glSharedContextWindowHandle;
+
         internal DrawBuffersEnum[] _drawBuffers;
 
         internal IntPtr GlContext { get { return _glContext; } }
@@ -41,6 +44,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     "Try updating your graphics drivers.");
             }
 
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
+            _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
+            _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
+
             MakeCurrent(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(context.DeviceStrategy.PresentationParameters.PresentationInterval);
             SDL.OpenGL.SetSwapInterval(swapInterval);
@@ -57,11 +64,15 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
-            throw new InvalidOperationException("Operation not called on UI thread.");
+            Sdl.Current.OpenGL.MakeCurrent(this._glSharedContextWindowHandle, this._glSharedContext);
         }
 
         public override void UnbindDisposeContext()
         {
+            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+                return;
+
+            Sdl.Current.OpenGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
