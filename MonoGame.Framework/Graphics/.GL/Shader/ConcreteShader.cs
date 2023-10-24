@@ -90,12 +90,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_shaderHandle != -1)
             {
-                var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-                if (GL.IsShader(_shaderHandle))
+                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                try
                 {
-                    GL.DeleteShader(_shaderHandle);
-                    GL.CheckGLError();
+                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                    if (GL.IsShader(_shaderHandle))
+                    {
+                        GL.DeleteShader(_shaderHandle);
+                        GL.CheckGLError();
+                    }
+                }
+                finally
+                {
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
                 }
             }
 

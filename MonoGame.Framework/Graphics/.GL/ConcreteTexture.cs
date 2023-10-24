@@ -449,8 +449,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
             int color = 0;
             int depth = 0;
             int stencil = 0;
@@ -462,23 +460,33 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (color != 0)
             {
-                if (colorIsRenderbuffer)
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                try
                 {
-                    GL.DeleteRenderbuffer(color);
-                    GL.CheckGLError();
-                }
-                if (stencil != 0 && stencil != depth)
-                {
-                    GL.DeleteRenderbuffer(stencil);
-                    GL.CheckGLError();
-                }
-                if (depth != 0)
-                {
-                    GL.DeleteRenderbuffer(depth);
-                    GL.CheckGLError();
-                }
+                    var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget(renderTargetGL);
+                    if (colorIsRenderbuffer)
+                    {
+                        GL.DeleteRenderbuffer(color);
+                        GL.CheckGLError();
+                    }
+                    if (stencil != 0 && stencil != depth)
+                    {
+                        GL.DeleteRenderbuffer(stencil);
+                        GL.CheckGLError();
+                    }
+                    if (depth != 0)
+                    {
+                        GL.DeleteRenderbuffer(depth);
+                        GL.CheckGLError();
+                    }
+
+                    contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget(renderTargetGL);
+                }
+                finally
+                {
+                    contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                }
             }
         }
 
@@ -509,10 +517,18 @@ namespace Microsoft.Xna.Platform.Graphics
             
             if (_glTexture > 0)
             {
-                var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                try
+                {
+                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                GL.DeleteTexture(_glTexture);
-                GL.CheckGLError();
+                    GL.DeleteTexture(_glTexture);
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                }
             }
             _glTexture = -1;
 
