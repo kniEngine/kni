@@ -50,6 +50,14 @@ namespace Microsoft.Xna.Platform.Graphics
             SDL.OpenGL.MakeCurrent(winHandle, _glContext);
         }
 
+        public override void BindDisposeContext()
+        {
+        }
+
+        public override void UnbindDisposeContext()
+        {
+        }
+
         /// <summary>
         /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
         /// </summary>

@@ -16,6 +16,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void BindDisposeContext()
+        {
+        }
+
+        public override void UnbindDisposeContext()
+        {
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
