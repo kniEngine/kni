@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private IntPtr _glContext;
 
+        private int _glContextCurrentThreadId = -1;
         internal DrawBuffersEnum[] _drawBuffers;
 
         internal IntPtr GlContext { get { return _glContext; } }
@@ -48,6 +49,19 @@ namespace Microsoft.Xna.Platform.Graphics
         public void MakeCurrent(IntPtr winHandle)
         {
             SDL.OpenGL.MakeCurrent(winHandle, _glContext);
+            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+        }
+
+        public override void BindDisposeContext()
+        {
+            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+                return;
+
+            throw new InvalidOperationException("Operation not called on UI thread.");
+        }
+
+        public override void UnbindDisposeContext()
+        {
         }
 
         /// <summary>

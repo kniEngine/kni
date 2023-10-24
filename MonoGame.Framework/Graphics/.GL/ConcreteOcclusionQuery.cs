@@ -111,10 +111,18 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!GraphicsDevice.IsDisposed)
                 {
-                    var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                    try
+                    {
+                        var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                    GL.DeleteQuery(_glQueryId);
-                    GL.CheckGLError();
+                        GL.DeleteQuery(_glQueryId);
+                        GL.CheckGLError();
+                    }
+                    finally
+                    {
+                        _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                    }
                 }
                 _glQueryId = -1;
             }

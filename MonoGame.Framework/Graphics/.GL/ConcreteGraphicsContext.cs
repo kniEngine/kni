@@ -75,6 +75,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public abstract void BindDisposeContext();
+        public abstract void UnbindDisposeContext();
+
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             // TODO: We need to figure out how to detect if we have a
