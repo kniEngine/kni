@@ -681,7 +681,7 @@ namespace Microsoft.Xna.Framework
 
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GetErrorAsString());
-            GLESVersion createdVersion = new GLESVersion();
+
             foreach (GLESVersion v in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", v);
@@ -694,7 +694,7 @@ namespace Microsoft.Xna.Framework
                     Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", v, GetErrorAsString()));
                     continue;
                 }
-                createdVersion = v;
+                _glesVersion = v;
                 break;
             }
             if (_eglContext == null || _eglContext == EGL10.EglNoContext)
@@ -702,7 +702,7 @@ namespace Microsoft.Xna.Framework
                 _eglContext = null;
                 throw new Exception("Could not create EGL context" + GetErrorAsString());
             }
-            Log.Verbose("AndroidGameView", "Created GLES {0} Context", createdVersion);
+            Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
             _eglConfig = results[0];
         }
 
@@ -883,6 +883,7 @@ namespace Microsoft.Xna.Framework
         #region Properties
 
         private IEGL10 _egl;
+        private GLESVersion _glesVersion;
         private EGLDisplay _eglDisplay;
         private EGLConfig  _eglConfig;
         private EGLSurface _eglSurface;
