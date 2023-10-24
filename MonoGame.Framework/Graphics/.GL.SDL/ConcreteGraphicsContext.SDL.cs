@@ -112,9 +112,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
+            if (_glSharedContext != IntPtr.Zero)
+                SDL.OpenGL.DeleteContext(_glSharedContext);
+            _glSharedContext = IntPtr.Zero;
+
+            if (_glSharedContextWindowHandle != IntPtr.Zero)
+                SDL.WINDOW.Destroy(_glSharedContextWindowHandle);
+            _glSharedContextWindowHandle = IntPtr.Zero;
+
             if (_glContext != IntPtr.Zero)
                 SDL.OpenGL.DeleteContext(_glContext);
             _glContext = IntPtr.Zero;
+
 
             base.Dispose(disposing);
         }
