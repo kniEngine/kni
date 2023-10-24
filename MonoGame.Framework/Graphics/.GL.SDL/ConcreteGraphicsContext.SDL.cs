@@ -52,6 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void BindDisposeContext()
         {
+            Microsoft.Xna.Framework.Threading.EnsureUIThread();
         }
 
         public override void UnbindDisposeContext()
