@@ -18,8 +18,13 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
+        private static ConcreteGame _concreteGameInstance = null;
+        internal static ConcreteGame GameConcreteInstance { get { return ConcreteGame._concreteGameInstance; } }
+
         public ConcreteGame(Game game) : base(game)
         {
+            ConcreteGame._concreteGameInstance = this;
+
             System.Diagnostics.Debug.Assert(AndroidGameWindow.Activity != null, "Must set Game.Activity before creating the Game instance");
             AndroidGameWindow.Activity.Game = Game;
             AndroidGameActivity.Paused += Activity_Paused;

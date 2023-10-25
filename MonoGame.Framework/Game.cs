@@ -27,8 +27,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public Game()
         {
-            _instance = this;
-
             LaunchParameters = new LaunchParameters();
 
             Strategy = new ConcreteGame(this);
@@ -87,7 +85,6 @@ namespace Microsoft.Xna.Framework
 #endif
 
                 _isDisposed = true;
-                _instance = null;
             }
         }
 
@@ -105,9 +102,6 @@ namespace Microsoft.Xna.Framework
         #endregion IDisposable Implementation
 
         #region Properties
-
-        private static Game _instance = null;
-        internal static Game Instance { get { return Game._instance; } }
 
         /// <summary>
         /// The start up parameters for this <see cref="Game"/>.

@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework
             get { return _orientation; }
         }
 
-        private ConcreteGame Strategy { get { return Game.Instance.Strategy as ConcreteGame; } }
+        private GameStrategy GameStrategy { get { return ConcreteGame.ConcreteGameInstance; } }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework
 
         void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
         {
-            Strategy.IsVisible = args.Visible;
+            GameStrategy.IsVisible = args.Visible;
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
@@ -162,9 +162,9 @@ namespace Microsoft.Xna.Framework
                 _isFocusChanged = false;
 
                 if (_newActivationState == CoreWindowActivationState.Deactivated)
-                    Strategy.IsActive = false;
+                    GameStrategy.IsActive = false;
                 else
-                    Strategy.IsActive = true;
+                    GameStrategy.IsActive = true;
             }
         }
 

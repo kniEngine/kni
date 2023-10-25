@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Platform;
 using Android.App;
 using Android.Content;
 using Android.Hardware;
@@ -41,7 +42,7 @@ namespace Microsoft.Xna.Framework
 
             var disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
-            AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Instance.Window;
+            AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
             if ((gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0 ||
                 disporientation == gameWindow.CurrentOrientation ||
                 disporientation == DisplayOrientation.Unknown)
@@ -69,7 +70,7 @@ namespace Microsoft.Xna.Framework
                 // orientation must be stable for 0.5 seconds before changing.
                 if (elapsed.TotalSeconds > 0.5)
                 {
-                    AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Instance.Window;
+                    AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
                     gameWindow.SetOrientation(targetOrientation, true);
                     targetOrientation = DisplayOrientation.Unknown;
                     elapsed = TimeSpan.Zero;

@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Media
         internal ConcreteVideoPlayerStrategy()
         {
             Sdl.Window.SDL_SysWMinfo sys = new Sdl.Window.SDL_SysWMinfo();
-            Sdl.Window.GetWindowWMInfo(Game.Instance.Window.Handle, ref sys);
+            Sdl.Window.GetWindowWMInfo(ConcreteGame.ConcreteGameInstance.Window.Handle, ref sys);
             nsWindow = new NSSDLWindow(sys.window);
         }
 
