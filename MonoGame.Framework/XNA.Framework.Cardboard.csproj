@@ -548,6 +548,7 @@
     <Compile Include="Platform\Cardboard\AndroidGameWindow.cs" />
     <Compile Include="Platform\Cardboard\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Cardboard\IResumeManager.cs" />
+    <Compile Include="Platform\Cardboard\ISurfaceView.cs" />
     <Compile Include="Platform\Cardboard\OrientationListener.cs" />
     <Compile Include="Platform\Cardboard\ResumeManager.cs" />
     <Compile Include="Platform\Cardboard\ScreenReceiver.cs" />

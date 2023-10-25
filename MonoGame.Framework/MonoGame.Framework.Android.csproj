@@ -65,6 +65,7 @@
     <Compile Include="Platform\Android\Input\Keyboard.cs" />
     <Compile Include="Platform\Android\Input\Touch\TouchEventListener.cs" />
     <Compile Include="Platform\Android\IResumeManager.cs" />
+    <Compile Include="Platform\Android\ISurfaceView.cs" />
     <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Android\ResumeManager.cs" />

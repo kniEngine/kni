@@ -15,6 +15,7 @@ using Android.Views;
 using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
@@ -23,6 +24,7 @@ namespace Microsoft.Xna.Framework
 {
     [CLSCompliant(false)]
     public class AndroidSurfaceView : SurfaceView
+        , ISurfaceView
         , ISurfaceHolderCallback
         , Java.Lang.IRunnable
     {
@@ -884,11 +886,21 @@ namespace Microsoft.Xna.Framework
 
         private IEGL10 _egl;
         private GLESVersion _glesVersion;
+        private EGLConfig _eglConfig;
         private EGLDisplay _eglDisplay;
-        private EGLConfig  _eglConfig;
-        private EGLSurface _eglSurface;
         private EGLContext _eglContext;
+        private EGLSurface _eglSurface;
 
+        #endregion
+
+        #region ISurfaceView
+        
+        IEGL10 ISurfaceView.Egl { get { return _egl; } }
+        GLESVersion ISurfaceView.GLesVersion { get { return _glesVersion; } }
+        EGLConfig ISurfaceView.EglConfig { get { return _eglConfig; } }
+        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
+        EGLContext ISurfaceView.EglContext { get { return _eglContext; } }
+        
         #endregion
 
     }
