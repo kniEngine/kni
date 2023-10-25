@@ -67,12 +67,20 @@ non-infringement.
 #endregion License
 
 using System;
+using System.Collections.Generic;
 using UIKit;
 
 namespace Microsoft.Xna.Framework
  {
 	class iOSGameWindow : GameWindow
     {
+        private static Dictionary<IntPtr, iOSGameWindow> _instances = new Dictionary<IntPtr, iOSGameWindow>();
+
+        internal static iOSGameWindow FromHandle(IntPtr windowHandle)
+        {
+            return _instances[windowHandle];
+        }
+
 		private readonly iOSGameViewController _viewController;
 
 		public iOSGameWindow(iOSGameViewController viewController)
@@ -81,6 +89,8 @@ namespace Microsoft.Xna.Framework
 				throw new ArgumentNullException("viewController");
 			_viewController = viewController;
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
+
+            _instances.Add(this.Handle, this);
 		}
 
         void HandleInterfaceOrientationChanged(object sender, EventArgs e)
