@@ -44,6 +44,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     "Try updating your graphics drivers.");
             }
 
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, 0);
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
             _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
             _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
