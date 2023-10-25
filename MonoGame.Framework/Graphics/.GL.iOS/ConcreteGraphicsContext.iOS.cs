@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             iOSGameWindow gameWindow = iOSGameWindow.FromHandle(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             // TODO: Remove Game.Instance. iOSGameViewController/iOSGameView should be part of iOSGameWindow.
-            ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
+            ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
             iOSGameViewController viewController = concreteGame.ViewController;
             iOSGameView view = viewController.View;
             GLGraphicsContext glContext = viewController.View._glContext;

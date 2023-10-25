@@ -1,6 +1,7 @@
 using System;
 using Android.Content;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform;
 using Android.App;
 
 
@@ -60,7 +61,7 @@ namespace Microsoft.Xna.Framework
         {
             ScreenReceiver.ScreenLocked = false;
             MediaPlayer.IsMuted = false;
-            ((AndroidGameWindow)Game.Instance.Window).GameView.Resume();
+            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.Resume();
         }
     }
 }

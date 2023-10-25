@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
+            ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
             if (concreteGame == null)
                 throw new InvalidOperationException("No iOS GameStrategy instance was available");
 
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            ConcreteGame concreteGame = (ConcreteGame)Game.Instance.Strategy;
+            ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
             if (concreteGame == null)
                 throw new InvalidOperationException("No iOS GameStrategy instance was available");
 

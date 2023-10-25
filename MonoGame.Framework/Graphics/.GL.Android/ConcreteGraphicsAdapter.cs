@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                View view = ((AndroidGameWindow)Game.Instance.Window).GameView;
+                View view = ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView;
                 return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
             }
         }

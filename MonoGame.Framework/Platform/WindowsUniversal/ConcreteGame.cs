@@ -33,11 +33,16 @@ namespace Microsoft.Xna.Platform
         [CLSCompliant(false)]
         public static ApplicationExecutionState PreviousExecutionState { get; internal set; }
 
+        private static ConcreteGame _concreteGameInstance = null;
+        internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
+
         public ConcreteGame(Game game) : base(game)
         {
+            ConcreteGame._concreteGameInstance = this;
+
             // Setup the game window.
             Window = UAPGameWindow.Instance;
-			UAPGameWindow.Instance.Game = game;
+            ((UAPGameWindow)Window).Game = game;
 
             // Register the CoreWindow with the services registry
             Services.AddService(typeof(CoreWindow), UAPGameWindow.Instance.CoreWindow);
@@ -282,8 +287,8 @@ namespace Microsoft.Xna.Platform
                 gdm.Dispose();
 
 			UAPGameWindow.Instance.Dispose();
-			
-			base.Dispose(disposing);
+
+            base.Dispose(disposing);
         }
     }
 }

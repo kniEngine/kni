@@ -96,8 +96,13 @@ namespace Microsoft.Xna.Platform
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
+        private static ConcreteGame _concreteGameInstance = null;
+        internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
+
         public ConcreteGame(Game game) : base(game)
         {
+            ConcreteGame._concreteGameInstance = this;
+
             game.Services.AddService(typeof(ConcreteGame), this);
 
             //This also runs the TitleContainer static constructor, ensuring it is done on the main thread
