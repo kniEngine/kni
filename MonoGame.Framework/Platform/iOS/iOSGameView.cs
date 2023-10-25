@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework
 		//        GLGraphicsContext into an iOS-specific GraphicsDevice.
 		//        Some level of cooperation with the UIView/Layer will
 		//        probably always be necessary, unfortunately.
-        private GLGraphicsContext _glContext;
+        internal GLGraphicsContext _glContext;
 		private OGL _glapi;
 
 		private void CreateGLContext()
