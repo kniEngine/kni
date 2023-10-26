@@ -272,11 +272,18 @@ namespace MonoGame.Framework
         {
             if (_switchingFullScreen || Form.IsResizing)
             {   
-                // TNC: repaint the window when resizing
-                // gameloop is paused during windows resize
+                // Repaint the window while resizing.
+                // gameloop is paused during windows resize.
                 try 
                 {
-                    _concreteGame.GraphicsDevice.Present();
+                    if (!_concreteGame.GraphicsDevice.Strategy._mainContext.IsRenderTargetBound)
+                    {   
+                        _concreteGame.GraphicsDevice.Strategy.Present();
+                    }
+                    else
+                    {
+                        // We cannot present with a RT set on the device.
+                    }
                 }
                 catch (Exception ex)
                 {
