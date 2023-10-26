@@ -882,7 +882,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 for (int i = 0; i < _currentRenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
-                    IRenderTarget renderTarget = (IRenderTarget)renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     WebGLFramebufferAttachmentPoint attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
 
