@@ -385,6 +385,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Strategy.Reset(presentationParameters);
 
+            // Update the back buffer.
+            Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
+
+            Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
+
             Strategy.OnDeviceReset(EventArgs.Empty);
         }
 
