@@ -505,8 +505,13 @@ namespace Microsoft.Xna.Framework
 
             device.PresentationParameters.BackBufferWidth = width;
             device.PresentationParameters.BackBufferHeight = height;
-            device.Viewport = new Viewport(0, 0, width, height);
 
+            if (!device.Strategy._mainContext.IsRenderTargetBound)
+            {
+                device.Viewport = new Viewport(0, 0, width, height);
+                device.ScissorRectangle = new Rectangle(0, 0, width, height);
+            }
+            
             SDL.WINDOW.GetSize(Handle, out _width, out _height);
 
             OnClientSizeChanged();
