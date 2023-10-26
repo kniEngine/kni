@@ -178,10 +178,14 @@ namespace Microsoft.Xna.Platform
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
 
             // Set the viewport from client bounds
-            base.GraphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
+            if (!base.GraphicsDevice.Strategy._mainContext.IsRenderTargetBound)
+            {
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, newClientBounds.Width, newClientBounds.Height);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, newClientBounds.Width, newClientBounds.Height);
+            }
 
             ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(newClientBounds);
-            Android.Util.Log.Debug("MonoGame", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
+            Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
 
             // Touch panel needs latest buffer size for scaling
             TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
