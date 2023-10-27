@@ -106,10 +106,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            WebGLTexture color = null;
-            WebGLRenderbuffer depth = null;
-            WebGLRenderbuffer stencil = null;
-
             if (multiSampleCount > 0)
             {
                 throw new NotImplementedException();
@@ -143,9 +139,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (depthInternalFormat != 0)
                 {
-                    depth = GL.CreateRenderbuffer();
+                    renderTargetGL.GLDepthBuffer = GL.CreateRenderbuffer();
                     GL.CheckGLError();
-                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, depth);
+                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
                     GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
@@ -158,12 +154,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
-                        stencil = depth;
+                        renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
                         if (stencilInternalFormat != 0)
                         {
-                            stencil = GL.CreateRenderbuffer();
+                            renderTargetGL.GLStencilBuffer = GL.CreateRenderbuffer();
                             GL.CheckGLError();
-                            GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, stencil);
+                            GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
                             GL.CheckGLError();
                             if (multiSampleCount > 0)
                             {
@@ -180,41 +176,27 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            if (color != null)
-                renderTargetGL.GLColorBuffer = color;
-            else
-                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
-            renderTargetGL.GLDepthBuffer = depth;
-            renderTargetGL.GLStencilBuffer = stencil;
+            return;
         }
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            WebGLTexture color = null;
-            WebGLRenderbuffer depth = null;
-            WebGLRenderbuffer stencil = null;
-
-            color = renderTargetGL.GLColorBuffer;
-            depth = renderTargetGL.GLDepthBuffer;
-            stencil = renderTargetGL.GLStencilBuffer;
-            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
-
-            if (color != null)
+            if (renderTargetGL.GLColorBuffer != null)
             {
-                if (colorIsRenderbuffer)
+                if (renderTargetGL.GLColorBuffer != null)
                 {
                     throw new NotImplementedException();
                 }
-                if (stencil != null && stencil != depth)
+                if (renderTargetGL.GLStencilBuffer != null && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
                 {
-                    stencil.Dispose();
+                    renderTargetGL.GLStencilBuffer.Dispose();
                     GL.CheckGLError();
                 }
-                if (depth != null)
+                if (renderTargetGL.GLDepthBuffer != null)
                 {
-                    depth.Dispose();
+                    renderTargetGL.GLDepthBuffer.Dispose();
                     GL.CheckGLError();
                 }
 

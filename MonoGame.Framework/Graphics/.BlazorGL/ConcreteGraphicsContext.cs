@@ -885,7 +885,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     WebGLFramebufferAttachmentPoint attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
 
-                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    if (renderTargetGL.GLColorBuffer != null)
                     {
                         throw new NotImplementedException();
                     }
