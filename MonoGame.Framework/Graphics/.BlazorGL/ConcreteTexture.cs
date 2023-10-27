@@ -106,9 +106,33 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
+            // Hardcodes format values not defined in nkast.Wasm.Canvas v6.0.4
+            const WebGLRenderbufferInternalFormat RGBA4            = (WebGLRenderbufferInternalFormat)0x8056;
+            const WebGLRenderbufferInternalFormat RGB5_A1          = (WebGLRenderbufferInternalFormat)0x8057;
+            const WebGLRenderbufferInternalFormat RGB565           = (WebGLRenderbufferInternalFormat)0x8D62;
+            const WebGLRenderbufferInternalFormat SRGB8_ALPHA8_EXT = (WebGLRenderbufferInternalFormat)0x8C43;
+
             if (multiSampleCount > 0)
             {
-                throw new NotImplementedException();
+                WebGLRenderbufferInternalFormat colorInternalFormat = RGBA4;
+                bool EXT_sRGB = GL.GetExtension("EXT_sRGB");
+                if (EXT_sRGB)
+                    colorInternalFormat = SRGB8_ALPHA8_EXT;
+
+                renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
+                GL.CheckGLError();
+                GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
+                GL.CheckGLError();
+                if (multiSampleCount > 0)
+                {
+                    /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, colorInternalFormat, width, height);
+                    GL.CheckGLError();
+                }
             }
 
             if (preferredDepthFormat != DepthFormat.None)
@@ -145,6 +169,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
+                        /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
                         throw new NotImplementedException();
                     }
                     else
@@ -186,7 +211,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (renderTargetGL.GLColorBuffer != null)
                 {
-                    throw new NotImplementedException();
+                    renderTargetGL.GLColorBuffer.Dispose();
+                    GL.CheckGLError();
                 }
                 if (renderTargetGL.GLStencilBuffer != null && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
                 {

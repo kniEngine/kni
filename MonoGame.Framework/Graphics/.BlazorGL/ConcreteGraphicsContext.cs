@@ -887,7 +887,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (renderTargetGL.GLColorBuffer != null)
                     {
-                        throw new NotImplementedException();
+                        GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, attachement, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
+                        GL.CheckGLError();
                     }
                     else
                     {

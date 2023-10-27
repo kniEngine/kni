@@ -325,6 +325,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (multiSampleCount > 0)
             {
+                RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
+
                 renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                 GL.CheckGLError();
                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
@@ -332,12 +334,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (multiSampleCount > 0)
                 {
                     System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, RenderbufferStorage.Rgba8, width, height);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
                     GL.CheckGLError();
                 }
                 else
                 {
-                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Rgba8, width, height);
+                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
                     GL.CheckGLError();
                 }
             }
