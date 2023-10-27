@@ -439,10 +439,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            if (color != 0)
-                renderTargetGL.GLColorBuffer = color;
-            else
-                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
+            renderTargetGL.GLColorBuffer = color;
             renderTargetGL.GLDepthBuffer = depth;
             renderTargetGL.GLStencilBuffer = stencil;
         }
@@ -456,7 +453,6 @@ namespace Microsoft.Xna.Platform.Graphics
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
-            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
 
             if (color != 0)
             {
@@ -465,7 +461,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                    if (colorIsRenderbuffer)
+                    if (renderTargetGL.GLColorBuffer != 0)
                     {
                         GL.DeleteRenderbuffer(color);
                         GL.CheckGLError();

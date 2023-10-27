@@ -1036,7 +1036,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
 
-                    if (renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture)
+                    if (renderTargetGL.GLColorBuffer != 0)
                     {
                         GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
                         GL.CheckGLError();

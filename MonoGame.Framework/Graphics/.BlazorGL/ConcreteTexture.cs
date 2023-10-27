@@ -180,10 +180,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            if (color != null)
-                renderTargetGL.GLColorBuffer = color;
-            else
-                renderTargetGL.GLColorBuffer = renderTargetGL.GLTexture;
+            renderTargetGL.GLColorBuffer = color;
             renderTargetGL.GLDepthBuffer = depth;
             renderTargetGL.GLStencilBuffer = stencil;
         }
@@ -199,11 +196,10 @@ namespace Microsoft.Xna.Platform.Graphics
             color = renderTargetGL.GLColorBuffer;
             depth = renderTargetGL.GLDepthBuffer;
             stencil = renderTargetGL.GLStencilBuffer;
-            bool colorIsRenderbuffer = renderTargetGL.GLColorBuffer != renderTargetGL.GLTexture;
 
             if (color != null)
             {
-                if (colorIsRenderbuffer)
+                if (renderTargetGL.GLColorBuffer != null)
                 {
                     throw new NotImplementedException();
                 }
