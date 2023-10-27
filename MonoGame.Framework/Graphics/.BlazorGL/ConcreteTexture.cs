@@ -183,7 +183,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            if (renderTargetGL.GLColorBuffer != null)
             {
                 if (renderTargetGL.GLColorBuffer != null)
                 {
