@@ -18,27 +18,27 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         Never,
         /// <summary>
-        /// Passes the test when the new pixel value is less than current pixel value.
+        /// Passes the test when the new value is less than current value.
         /// </summary>
         Less,
         /// <summary>
-        /// Passes the test when the new pixel value is less than or equal to current pixel value.
+        /// Passes the test when the new value is less than or equal to current value.
         /// </summary>
         LessEqual,
         /// <summary>
-        /// Passes the test when the new pixel value is equal to current pixel value.
+        /// Passes the test when the new value is equal to current value.
         /// </summary>
         Equal,
         /// <summary>
-        /// Passes the test when the new pixel value is greater than or equal to current pixel value.
+        /// Passes the test when the new value is greater than or equal to current value.
         /// </summary>
         GreaterEqual,
         /// <summary>
-        /// Passes the test when the new pixel value is greater than current pixel value.
+        /// Passes the test when the new value is greater than current value.
         /// </summary>
         Greater,
         /// <summary>
-        /// Passes the test when the new pixel value does not equal to current pixel value.
+        /// Passes the test when the new value does not equal to current value.
         /// </summary>
         NotEqual
     }
