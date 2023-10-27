@@ -72,14 +72,14 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion IRenderTargetStrategy
 
 
-        WebGLTexture _glColorBuffer;
+        WebGLRenderbuffer _glColorBuffer;
         WebGLRenderbuffer _glDepthBuffer;
         WebGLRenderbuffer _glStencilBuffer;
 
         #region IRenderTargetStrategyGL
         WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return _glTexture; } }
         WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return _glTarget; } }
-        WebGLTexture IRenderTargetStrategyGL.GLColorBuffer
+        WebGLRenderbuffer IRenderTargetStrategyGL.GLColorBuffer
         {
             get { return _glColorBuffer; }
             set { _glColorBuffer = value; }

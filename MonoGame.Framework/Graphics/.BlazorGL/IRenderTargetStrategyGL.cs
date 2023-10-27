@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         WebGLTexture GLTexture { get; }
         WebGLTextureTarget GLTarget { get; }
-        WebGLTexture GLColorBuffer { get; set; }
+        WebGLRenderbuffer GLColorBuffer { get; set; }
         WebGLRenderbuffer GLDepthBuffer { get; set; }
         WebGLRenderbuffer GLStencilBuffer { get; set; }
 
