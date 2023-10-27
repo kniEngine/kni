@@ -440,35 +440,32 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
-            if (renderTargetGL.GLColorBuffer != 0)
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+            try
             {
-                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
-                try
-                {
-                    var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                    if (renderTargetGL.GLColorBuffer != 0)
-                    {
-                        GL.DeleteRenderbuffer(renderTargetGL.GLColorBuffer);
-                        GL.CheckGLError();
-                    }
-                    if (renderTargetGL.GLStencilBuffer != 0 && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
-                    {
-                        GL.DeleteRenderbuffer(renderTargetGL.GLStencilBuffer);
-                        GL.CheckGLError();
-                    }
-                    if (renderTargetGL.GLDepthBuffer != 0)
-                    {
-                        GL.DeleteRenderbuffer(renderTargetGL.GLDepthBuffer);
-                        GL.CheckGLError();
-                    }
-
-                    contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget(renderTargetGL);
-                }
-                finally
+                if (renderTargetGL.GLColorBuffer != 0)
                 {
-                    contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                    GL.DeleteRenderbuffer(renderTargetGL.GLColorBuffer);
+                    GL.CheckGLError();
                 }
+                if (renderTargetGL.GLStencilBuffer != 0 && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
+                {
+                    GL.DeleteRenderbuffer(renderTargetGL.GLStencilBuffer);
+                    GL.CheckGLError();
+                }
+                if (renderTargetGL.GLDepthBuffer != 0)
+                {
+                    GL.DeleteRenderbuffer(renderTargetGL.GLDepthBuffer);
+                    GL.CheckGLError();
+                }
+
+                contextStrategy.ToConcrete<ConcreteGraphicsContext>().PlatformUnbindRenderTarget(renderTargetGL);
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
             }
         }
 
