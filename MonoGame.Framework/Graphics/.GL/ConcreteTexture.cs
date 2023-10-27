@@ -323,15 +323,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int color = 0;
-            int depth = 0;
-            int stencil = 0;
-
             if (multiSampleCount > 0)
             {
-                color = GL.GenRenderbuffer();
+                renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                 GL.CheckGLError();
-                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, color);
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
                 GL.CheckGLError();
                 if (multiSampleCount > 0)
                 {
@@ -400,9 +396,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (depthInternalFormat != 0)
                 {
-                    depth = GL.GenRenderbuffer();
+                    renderTargetGL.GLDepthBuffer = GL.GenRenderbuffer();
                     GL.CheckGLError();
-                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depth);
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
                     GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
@@ -416,12 +412,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
-                        stencil = depth;
+                        renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
                         if (stencilInternalFormat != 0)
                         {
-                            stencil = GL.GenRenderbuffer();
+                            renderTargetGL.GLStencilBuffer = GL.GenRenderbuffer();
                             GL.CheckGLError();
-                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, stencil);
+                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
                             GL.CheckGLError();
                             if (multiSampleCount > 0)
                             {
@@ -439,22 +435,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            renderTargetGL.GLColorBuffer = color;
-            renderTargetGL.GLDepthBuffer = depth;
-            renderTargetGL.GLStencilBuffer = stencil;
+            return;
         }
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
-            int color = 0;
-            int depth = 0;
-            int stencil = 0;
-
-            color = renderTargetGL.GLColorBuffer;
-            depth = renderTargetGL.GLDepthBuffer;
-            stencil = renderTargetGL.GLStencilBuffer;
-
-            if (color != 0)
+            if (renderTargetGL.GLColorBuffer != 0)
             {
                 contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
                 try
@@ -463,17 +449,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (renderTargetGL.GLColorBuffer != 0)
                     {
-                        GL.DeleteRenderbuffer(color);
+                        GL.DeleteRenderbuffer(renderTargetGL.GLColorBuffer);
                         GL.CheckGLError();
                     }
-                    if (stencil != 0 && stencil != depth)
+                    if (renderTargetGL.GLStencilBuffer != 0 && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
                     {
-                        GL.DeleteRenderbuffer(stencil);
+                        GL.DeleteRenderbuffer(renderTargetGL.GLStencilBuffer);
                         GL.CheckGLError();
                     }
-                    if (depth != 0)
+                    if (renderTargetGL.GLDepthBuffer != 0)
                     {
-                        GL.DeleteRenderbuffer(depth);
+                        GL.DeleteRenderbuffer(renderTargetGL.GLDepthBuffer);
                         GL.CheckGLError();
                     }
 
