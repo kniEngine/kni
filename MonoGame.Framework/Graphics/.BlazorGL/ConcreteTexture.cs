@@ -111,6 +111,7 @@ namespace Microsoft.Xna.Platform.Graphics
             const WebGLRenderbufferInternalFormat RGB5_A1          = (WebGLRenderbufferInternalFormat)0x8057;
             const WebGLRenderbufferInternalFormat RGB565           = (WebGLRenderbufferInternalFormat)0x8D62;
             const WebGLRenderbufferInternalFormat SRGB8_ALPHA8_EXT = (WebGLRenderbufferInternalFormat)0x8C43;
+            const WebGLRenderbufferInternalFormat DEPTH_STENCIL    = (WebGLRenderbufferInternalFormat)0x84F9;
 
             if (multiSampleCount > 0)
             {
@@ -153,8 +154,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         break;
 
                     case DepthFormat.Depth24Stencil8:
-                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
-                        stencilInternalFormat = WebGLRenderbufferInternalFormat.STENCIL_INDEX8;
+                        depthInternalFormat = DEPTH_STENCIL;
                         break;
 
                     default:
@@ -177,26 +177,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
                         GL.CheckGLError();
                     }
+
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
                     {
                         renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
-                        if (stencilInternalFormat != 0)
-                        {
-                            renderTargetGL.GLStencilBuffer = GL.CreateRenderbuffer();
-                            GL.CheckGLError();
-                            GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLStencilBuffer);
-                            GL.CheckGLError();
-                            if (multiSampleCount > 0)
-                            {
-                                /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
-                                throw new NotImplementedException();
-                            }
-                            else
-                            {
-                                GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, stencilInternalFormat, width, height);
-                                GL.CheckGLError();
-                            }
-                        }
                     }
                 }
             }
