@@ -5,8 +5,6 @@ sampler2D SpriteTextureSampler : register(s0) = sampler_state
     Texture = <SpriteTexture>;
 };
 
-DECLARE_TEXTURE(SpriteTexture, 0);
-
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
