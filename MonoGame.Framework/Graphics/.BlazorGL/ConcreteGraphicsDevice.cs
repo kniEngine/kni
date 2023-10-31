@@ -126,7 +126,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GameWindow gameWindow = BlazorGameWindow.FromHandle(handle);
             Canvas canvas = ((BlazorGameWindow)gameWindow)._canvas;
 
-            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>();
+            ContextAttributes contextAttributes = new ContextAttributes();
+
+            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>(contextAttributes);
 
             return new ConcreteGraphicsContext(context, glContext);
         }
