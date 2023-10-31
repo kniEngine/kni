@@ -129,6 +129,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ContextAttributes contextAttributes = new ContextAttributes();
             contextAttributes.PowerPreference = ContextAttributes.PowerPreferenceType.HighPerformance;
 
+            contextAttributes.Antialias = (PresentationParameters.MultiSampleCount > 0);
+
             switch (PresentationParameters.DepthStencilFormat)
             {
                 case DepthFormat.None:
