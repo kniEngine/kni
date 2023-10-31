@@ -174,8 +174,8 @@ namespace Microsoft.Xna.Framework
                     _keys.Remove(xnakey);
             };
 
-            //Form.Activated += OnActivated;
-            // Form.Deactivate += OnDeactivate;
+            _window.OnFocus += OnActivated;
+            _window.OnBlur += OnDeactivate;
             // Form.Resize += OnResize;
             //  Form.ResizeBegin += OnResizeBegin;
             //  Form.ResizeEnd += OnResizeEnd;
@@ -194,15 +194,15 @@ namespace Microsoft.Xna.Framework
             Dispose(false);
         }
 
-        private void OnActivated(object sender, EventArgs eventArgs)
+        private void OnActivated(object sender)
         {
             _concreteGame.IsActive = true;
             //Keyboard.SetActive(true);
         }
 
-        private void OnDeactivate(object sender, EventArgs eventArgs)
+        private void OnDeactivate(object sender)
         {
-        
+            _concreteGame.IsActive = false;
         }
 
 

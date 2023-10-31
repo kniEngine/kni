@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform
             Timer = Stopwatch.StartNew();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
-            IsActive = true;
+            IsActive = _window.wasmWindow.Document.HasFocus();
 
             _window.RunLoop();
 
