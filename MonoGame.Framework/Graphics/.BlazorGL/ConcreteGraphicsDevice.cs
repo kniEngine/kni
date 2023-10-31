@@ -150,6 +150,20 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
             }
 
+            switch (PresentationParameters.RenderTargetUsage)
+            {
+                case RenderTargetUsage.PreserveContents:
+                    contextAttributes.PreserveDrawingBuffer = true;
+                    break;
+
+                case RenderTargetUsage.DiscardContents:
+                    contextAttributes.PreserveDrawingBuffer = false;
+                    break;
+
+                case RenderTargetUsage.PlatformContents:
+                    break;
+            }
+
             IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>(contextAttributes);
 
             return new ConcreteGraphicsContext(context, glContext);
