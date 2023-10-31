@@ -107,18 +107,13 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // Hardcodes format values not defined in nkast.Wasm.Canvas v6.0.4
-            const WebGLRenderbufferInternalFormat RGBA4            = (WebGLRenderbufferInternalFormat)0x8056;
-            const WebGLRenderbufferInternalFormat RGB5_A1          = (WebGLRenderbufferInternalFormat)0x8057;
-            const WebGLRenderbufferInternalFormat RGB565           = (WebGLRenderbufferInternalFormat)0x8D62;
-            const WebGLRenderbufferInternalFormat SRGB8_ALPHA8_EXT = (WebGLRenderbufferInternalFormat)0x8C43;
-            const WebGLRenderbufferInternalFormat DEPTH_STENCIL    = (WebGLRenderbufferInternalFormat)0x84F9;
 
             if (multiSampleCount > 0)
             {
-                WebGLRenderbufferInternalFormat colorInternalFormat = RGBA4;
+                WebGLRenderbufferInternalFormat colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
                 bool EXT_sRGB = GL.GetExtension("EXT_sRGB");
                 if (EXT_sRGB)
-                    colorInternalFormat = SRGB8_ALPHA8_EXT;
+                    colorInternalFormat = WebGLRenderbufferInternalFormat.SRGB8_ALPHA8_EXT;
 
                 renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
                 GL.CheckGLError();
@@ -154,7 +149,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         break;
 
                     case DepthFormat.Depth24Stencil8:
-                        depthInternalFormat = DEPTH_STENCIL;
+                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_STENCIL;
                         break;
 
                     default:
