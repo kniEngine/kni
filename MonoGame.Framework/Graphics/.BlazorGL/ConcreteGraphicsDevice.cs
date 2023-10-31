@@ -128,6 +128,25 @@ namespace Microsoft.Xna.Platform.Graphics
 
             ContextAttributes contextAttributes = new ContextAttributes();
 
+            switch (PresentationParameters.DepthStencilFormat)
+            {
+                case DepthFormat.None:
+                    contextAttributes.Depth = false;
+                    contextAttributes.Stencil = false;
+                    break;
+
+                case DepthFormat.Depth16:
+                case DepthFormat.Depth24:
+                    contextAttributes.Depth = true;
+                    contextAttributes.Stencil = false;
+                    break;
+
+                case DepthFormat.Depth24Stencil8:
+                    contextAttributes.Depth = true;
+                    contextAttributes.Stencil = true;
+                    break;
+            }
+
             IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>(contextAttributes);
 
             return new ConcreteGraphicsContext(context, glContext);
