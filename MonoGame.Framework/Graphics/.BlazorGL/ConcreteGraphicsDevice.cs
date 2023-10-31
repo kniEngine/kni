@@ -127,6 +127,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Canvas canvas = ((BlazorGameWindow)gameWindow)._canvas;
 
             ContextAttributes contextAttributes = new ContextAttributes();
+            contextAttributes.PowerPreference = ContextAttributes.PowerPreferenceType.HighPerformance;
 
             switch (PresentationParameters.DepthStencilFormat)
             {
