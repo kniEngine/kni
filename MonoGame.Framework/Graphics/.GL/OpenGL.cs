@@ -248,14 +248,15 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum ComparisonFunc
     {
-        Always = 0x0207,
-        Equal = 0x0202,
-        Greater = 0x0204,
-        Gequal = 0x0206,
-        Less = 0x0201,
-        Lequal = 0x0203,
-        Never = 0x0200,
-        Notequal = 0x0205,
+        Never    = 0x0200,
+        Less     = 0x0201,
+        Equal    = 0x0202,
+        Greater  = 0x0204,
+
+        Lequal   = 0x0203, // Less | Equal
+        Notequal = 0x0205, // Less | Greater
+        Gequal   = 0x0206, // Equal | Greater
+        Always   = 0x0207, // Less | Equal | Greater
     }
 
     internal enum GetPName : int
