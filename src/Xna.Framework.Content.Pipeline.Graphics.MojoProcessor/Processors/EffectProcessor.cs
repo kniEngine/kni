@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     SamplerInfo samplerInfo = shader._samplers[s];
 
-                    int match = parameters.FindIndex(e => e.name == samplerInfo.textureName);
+                    int match = parameters.FindIndex((paramContent) => paramContent.name == samplerInfo.textureName);
                     if (match == -1)
                     {
                         // Store the index for runtime lookup.
