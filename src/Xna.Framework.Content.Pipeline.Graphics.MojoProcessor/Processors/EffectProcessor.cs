@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             effect.Techniques = new EffectObject.EffectTechniqueContent[shaderInfo.Techniques.Count];
             for (int t = 0; t < shaderInfo.Techniques.Count; t++)
             {
-                TechniqueInfo tinfo = shaderInfo.Techniques[t]; ;
+                TechniqueInfo tinfo = shaderInfo.Techniques[t];
 
                 EffectObject.EffectTechniqueContent technique = new EffectObject.EffectTechniqueContent();
                 technique.name = tinfo.name;
