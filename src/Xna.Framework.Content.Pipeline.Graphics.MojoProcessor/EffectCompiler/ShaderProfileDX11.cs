@@ -171,29 +171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         }
                     }
 
-                    switch (txDesc.Dimension)
-                    {
-                        case D3D.ShaderResourceViewDimension.Texture1D:
-                        case D3D.ShaderResourceViewDimension.Texture1DArray:
-                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
-                            break;
-
-                        case D3D.ShaderResourceViewDimension.Texture2D:
-                        case D3D.ShaderResourceViewDimension.Texture2DArray:
-                        case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
-                        case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
-                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
-                            break;
-
-                        case D3D.ShaderResourceViewDimension.Texture3D:
-                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
-                            break;
-
-                        case D3D.ShaderResourceViewDimension.TextureCube:
-                        case D3D.ShaderResourceViewDimension.TextureCubeArray:
-                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
-                            break;
-                    }
+                    samplerInfo.type = DXToSamplerType(txDesc.Dimension);
 
                     samplers.Add(samplerInfo);
                 }
@@ -204,6 +182,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             return dxshader;
+        }
+
+        private static MojoShader.SamplerType DXToSamplerType(D3D.ShaderResourceViewDimension dimension)
+        {
+            switch (dimension)
+            {
+                case D3D.ShaderResourceViewDimension.Texture1D:
+                case D3D.ShaderResourceViewDimension.Texture1DArray:
+                    return MojoShader.SamplerType.SAMPLER_1D;
+
+                case D3D.ShaderResourceViewDimension.Texture2D:
+                case D3D.ShaderResourceViewDimension.Texture2DArray:
+                case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
+                case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
+                    return MojoShader.SamplerType.SAMPLER_2D;
+
+                case D3D.ShaderResourceViewDimension.Texture3D:
+                    return MojoShader.SamplerType.SAMPLER_VOLUME;
+
+                case D3D.ShaderResourceViewDimension.TextureCube:
+                case D3D.ShaderResourceViewDimension.TextureCubeArray:
+                    return MojoShader.SamplerType.SAMPLER_CUBE;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         [Conditional("DEBUG")]

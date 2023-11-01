@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -68,6 +69,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             Write(shader.ShaderCode.Length);
             Write(shader.ShaderCode);
+
+            Debug.WriteLine("Write Samplers ("+ shader._samplers.Length + ")");
+            foreach (SamplerInfo sampler in shader._samplers)
+            {
+                Debug.WriteLine(" ");
+                Debug.WriteLine(" GLsamplerName: " + sampler.GLsamplerName);
+                Debug.WriteLine(" textureName: //" + sampler.textureName);
+                Debug.WriteLine(" type: " + sampler.type);
+                Debug.WriteLine(" textureSlot: #" + sampler.textureSlot);
+                Debug.WriteLine(" samplerSlot: #" + sampler.samplerSlot);
+                bool hasState = sampler.state != null;
+                Debug.WriteLine(" hasState: " + hasState);
+                if (hasState)
+                {
+                    Debug.WriteLine("  Filter: " + sampler.state.Filter);
+                    Debug.WriteLine("  AddressU: " + sampler.state.AddressU);
+                    Debug.WriteLine("  AddressV: " + sampler.state.AddressV);
+                }
+            }
+            Debug.WriteLine("");
 
             Write((byte)shader._samplers.Length);
             foreach (SamplerInfo sampler in shader._samplers)
