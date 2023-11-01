@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using D3DC = SharpDX.D3DCompiler;
 
@@ -43,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal abstract void ValidateShaderModels(PassInfo pass);
 
-        internal abstract ShaderData CreateShader(EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings);
+        internal abstract ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings);
 
         protected static void ParseShaderModel(string text, Regex regex, out int major, out int minor)
         {
@@ -60,7 +61,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        public static D3DC.ShaderBytecode CompileHLSL(string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
+        public static D3DC.ShaderBytecode CompileHLSL(EffectContent input, ContentProcessorContext context, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {

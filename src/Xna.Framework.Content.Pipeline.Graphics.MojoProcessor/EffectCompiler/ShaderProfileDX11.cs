@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using D3D = SharpDX.Direct3D;
 using D3DC = SharpDX.D3DCompiler;
@@ -59,16 +60,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
-            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX11;
             }
         }
 
-        private static ShaderData CreateHLSL(ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
         {
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
             dxshader._attributes = new ShaderData.Attribute[0];
@@ -128,7 +129,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
                 foreach(D3DC.InputBindingDescription txDesc in texturesMap)
                 {
-                    string samplerName = txDesc.Name;
+                    string textureName = txDesc.Name;
 
                     SamplerInfo samplerInfo = new SamplerInfo();
                     samplerInfo.textureSlot = txDesc.BindPoint;
@@ -137,10 +138,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     // default to String.Empty for DX.
                     samplerInfo.GLsamplerName = String.Empty;
 
-                    samplerInfo.textureName = samplerName;
+                    samplerInfo.textureName = textureName;
 
                     SamplerStateInfo state;
-                    if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
+                    if (shaderInfo.SamplerStates.TryGetValue(textureName, out state))
                     {
                         samplerInfo.state = state.State;
 
@@ -151,10 +152,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     {
                         foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
                         {
-                            if (samplerName == s.TextureName)
+                            if (textureName == s.TextureName)
                             {
                                 samplerInfo.state = s.State;
-                                samplerName = s.Name;
+                                textureName = s.Name;
                                 break;
                             }
                         }
@@ -163,7 +164,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     // Find sampler slot, which can be different from the texture slot.
                     foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
                     {
-                        if (samplerDesc.Name == samplerName)
+                        if (samplerDesc.Name == textureName)
                         {
                             samplerInfo.samplerSlot = samplerDesc.BindPoint;
                             break;
