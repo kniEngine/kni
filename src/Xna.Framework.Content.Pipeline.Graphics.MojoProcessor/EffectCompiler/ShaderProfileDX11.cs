@@ -107,6 +107,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 LogShaderReflection(shaderReflection);
 
+                List<D3DC.InputBindingDescription> samplersMap = new List<D3DC.InputBindingDescription>();
+
+                for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
+                {
+                    D3DC.InputBindingDescription ibDesc = shaderReflection.GetResourceBindingDescription(i);
+                    switch (ibDesc.Type)
+                    {
+                        case D3DC.ShaderInputType.Sampler:
+                            samplersMap.Add(ibDesc);
+                            break;
+                    }
+                }
+
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
                 for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
@@ -147,12 +160,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         }
 
                         // Find sampler slot, which can be different from the texture slot.
-                        for (int j = 0; j < shaderReflection.Description.BoundResources; j++)
+                        foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
                         {
-                            D3DC.InputBindingDescription samplerDesc = shaderReflection.GetResourceBindingDescription(j);
-
-                            if (samplerDesc.Type == D3DC.ShaderInputType.Sampler &&
-                                samplerDesc.Name == samplerName)
+                            if (samplerDesc.Name == samplerName)
                             {
                                 samplerInfo.samplerSlot = samplerDesc.BindPoint;
                                 break;
