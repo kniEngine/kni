@@ -391,25 +391,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         param.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
                         param.name = sampler.textureName;
                         param.semantic = string.Empty;
-
-                        switch (sampler.type)
-                        {
-                            case MojoShader.SamplerType.SAMPLER_1D:
-                                param.type = EffectObject.PARAMETER_TYPE.TEXTURE1D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_2D:
-                                param.type = EffectObject.PARAMETER_TYPE.TEXTURE2D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_VOLUME:
-                                param.type = EffectObject.PARAMETER_TYPE.TEXTURE3D;
-                                break;
-
-                            case MojoShader.SamplerType.SAMPLER_CUBE:
-                                param.type = EffectObject.PARAMETER_TYPE.TEXTURECUBE;
-                                break;
-                        }
+                        param.type = SamplerTypeToParameterType(sampler.type);
 
                         parameters.Add(param);
                     }
@@ -430,6 +412,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             effect.Parameters = parameters.ToArray();
 
             return effect;
+        }
+
+        private static EffectObject.PARAMETER_TYPE SamplerTypeToParameterType(MojoShader.SamplerType samplerType)
+        {
+            switch (samplerType)
+            {
+                case MojoShader.SamplerType.SAMPLER_1D:
+                    return EffectObject.PARAMETER_TYPE.TEXTURE1D;
+
+                case MojoShader.SamplerType.SAMPLER_2D:
+                    return EffectObject.PARAMETER_TYPE.TEXTURE2D;
+
+                case MojoShader.SamplerType.SAMPLER_VOLUME:
+                    return EffectObject.PARAMETER_TYPE.TEXTURE3D;
+
+                case MojoShader.SamplerType.SAMPLER_CUBE:
+                    return EffectObject.PARAMETER_TYPE.TEXTURECUBE;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
