@@ -196,8 +196,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dxshader._cbuffers = new int[shaderReflection.Description.ConstantBuffers];
             for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
             {
-                D3DC.ConstantBuffer d3dConstantBuffer = shaderReflection.GetConstantBuffer(i);
-                ConstantBufferData cbufferData = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
+                D3DC.ConstantBuffer d3dcbuffer = shaderReflection.GetConstantBuffer(i);
+                ConstantBufferData cbufferData = ShaderProfileDX11.CreateConstantBufferData(d3dcbuffer);
 
                 // Look for a duplicate cbuffer in the list.
                 for (int c = 0; c < cbuffers.Count; c++)
@@ -220,21 +220,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer cb)
+        private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer d3dcbuffer)
         {
             ConstantBufferData cbufferData = new ConstantBufferData();
 
             cbufferData.Name = string.Empty;
-            cbufferData.Size = cb.Description.Size;
+            cbufferData.Size = d3dcbuffer.Description.Size;
 
             cbufferData.ParameterIndex = new List<int>();
 
             List<EffectObject.EffectParameterContent> parameters = new List<EffectObject.EffectParameterContent>();
 
             // Gather all the parameters.
-            for (int i = 0; i < cb.Description.VariableCount; i++)
+            for (int i = 0; i < d3dcbuffer.Description.VariableCount; i++)
             {
-                D3DC.ShaderReflectionVariable vdesc = cb.GetVariable(i);
+                D3DC.ShaderReflectionVariable vdesc = d3dcbuffer.GetVariable(i);
 
                 EffectObject.EffectParameterContent param = GetParameterFromType(vdesc.GetVariableType());
 
