@@ -197,24 +197,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
             {
                 D3DC.ConstantBuffer d3dConstantBuffer = shaderReflection.GetConstantBuffer(i);
-                ConstantBufferData cbuffer = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
+                ConstantBufferData cbufferData = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
 
                 // Look for a duplicate cbuffer in the list.
                 for (int c = 0; c < cbuffers.Count; c++)
                 {
-                    if (cbuffer.SameAs(cbuffers[c]))
+                    if (cbufferData.SameAs(cbuffers[c]))
                     {
-                        cbuffer = null;
+                        cbufferData = null;
                         dxshader._cbuffers[i] = c;
                         break;
                     }
                 }
 
                 // Add a new cbuffer.
-                if (cbuffer != null)
+                if (cbufferData != null)
                 {
                     dxshader._cbuffers[i] = cbuffers.Count;
-                    cbuffers.Add(cbuffer);
+                    cbuffers.Add(cbufferData);
                 }
             }
         }
@@ -222,12 +222,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer cb)
         {
-            ConstantBufferData cbuffer = new ConstantBufferData();
+            ConstantBufferData cbufferData = new ConstantBufferData();
 
-            cbuffer.Name = string.Empty;
-            cbuffer.Size = cb.Description.Size;
+            cbufferData.Name = string.Empty;
+            cbufferData.Size = cb.Description.Size;
 
-            cbuffer.ParameterIndex = new List<int>();
+            cbufferData.ParameterIndex = new List<int>();
 
             List<EffectObject.EffectParameterContent> parameters = new List<EffectObject.EffectParameterContent>();
 
@@ -255,14 +255,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Sort them by the offset for some consistent results.
             IEnumerable<EffectObject.EffectParameterContent> sortedParameters = parameters.OrderBy(e => e.bufferOffset);
-            cbuffer.Parameters = sortedParameters.ToList();
+            cbufferData.Parameters = sortedParameters.ToList();
 
             // Store the parameter offsets.
-            cbuffer.ParameterOffset = new List<int>();
-            foreach (EffectObject.EffectParameterContent param in cbuffer.Parameters)
-                cbuffer.ParameterOffset.Add(param.bufferOffset);
+            cbufferData.ParameterOffset = new List<int>();
+            foreach (EffectObject.EffectParameterContent param in cbufferData.Parameters)
+                cbufferData.ParameterOffset.Add(param.bufferOffset);
 
-            return cbuffer;
+            return cbufferData;
         }
 
         private static EffectObject.EffectParameterContent GetParameterFromType(D3DC.ShaderReflectionType type)
