@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int height = bottom - top;
             int depth = back - front;
 
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             {
                 var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glTarget = TextureTarget.Texture3D;
 
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 

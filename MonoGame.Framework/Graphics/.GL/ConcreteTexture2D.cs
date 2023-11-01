@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 out _glFormat,
                 out _glType);
 
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 

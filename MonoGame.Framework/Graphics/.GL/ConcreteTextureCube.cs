@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
 
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             {
                 var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glTarget = TextureTarget.TextureCubeMap;
 
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
