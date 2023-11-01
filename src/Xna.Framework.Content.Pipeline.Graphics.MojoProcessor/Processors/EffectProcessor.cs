@@ -243,7 +243,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effectObject = EffectProcessor.CompileEffect(shaderProfile, shaderInfo, fullFilePath, cleanFile, this.DebugMode, out shaderErrorsAndWarnings);
+                effectObject = EffectProcessor.CompileEffect(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private static EffectObject CompileEffect(ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
+        private static EffectObject CompileEffect(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
         {
             errorsAndWarnings = string.Empty;
 
@@ -329,13 +329,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectObject.EffectStateContent[pass.state_count];
@@ -432,14 +432,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return effect;
         }
 
-        internal static EffectObject.EffectStateContent CreateShader(EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
             ShaderData shaderData = effect.Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
             if (shaderData == null)
             {
                 // Compile and create the shader.
-                shaderData = shaderProfile.CreateShader(effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
+                shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
                 effect.Shaders.Add(shaderData);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;

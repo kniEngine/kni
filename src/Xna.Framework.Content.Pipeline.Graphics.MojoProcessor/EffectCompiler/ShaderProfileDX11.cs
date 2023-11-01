@@ -6,10 +6,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using D3D = SharpDX.Direct3D;
 using D3DC = SharpDX.D3DCompiler;
@@ -57,16 +60,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
-            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX11;
             }
         }
 
-        private static ShaderData CreateHLSL(ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
         {
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
             dxshader._attributes = new ShaderData.Attribute[0];
@@ -101,140 +104,249 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Use reflection to get details of the shader.
-            using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
+            using (D3DC.ShaderReflection shaderReflection = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
             {
+                LogShaderReflection(shaderReflection);
+
+                List<D3DC.InputBindingDescription> samplersMap = new List<D3DC.InputBindingDescription>();
+                List<D3DC.InputBindingDescription> texturesMap = new List<D3DC.InputBindingDescription>();
+
+                for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
+                {
+                    D3DC.InputBindingDescription ibDesc = shaderReflection.GetResourceBindingDescription(i);
+                    switch (ibDesc.Type)
+                    {
+                        case D3DC.ShaderInputType.Sampler:
+                            samplersMap.Add(ibDesc);
+                            break;
+                        case D3DC.ShaderInputType.Texture:
+                            texturesMap.Add(ibDesc);
+                            break;
+                    }
+                }
+
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
-                for (int i = 0; i < refelect.Description.BoundResources; i++)
+                foreach(D3DC.InputBindingDescription txDesc in texturesMap)
                 {
-                    D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
-                    if (rdesc.Type == D3DC.ShaderInputType.Texture)
+                    string textureName = txDesc.Name;
+
+                    SamplerInfo samplerInfo = new SamplerInfo();
+                    samplerInfo.textureSlot = txDesc.BindPoint;
+                    samplerInfo.samplerSlot = txDesc.BindPoint;
+
+                    // default to String.Empty for DX.
+                    samplerInfo.GLsamplerName = String.Empty;
+
+                    samplerInfo.textureName = textureName;
+
+                    SamplerStateInfo state;
+                    if (shaderInfo.SamplerStates.TryGetValue(textureName, out state))
                     {
-                        string samplerName = rdesc.Name;
+                        samplerInfo.state = state.State;
 
-                        SamplerInfo samplerInfo = new SamplerInfo();
-                        samplerInfo.textureSlot = rdesc.BindPoint;
-                        samplerInfo.samplerSlot = rdesc.BindPoint;
-
-                        // default to String.Empty for DX.
-                        samplerInfo.GLsamplerName = String.Empty;
-
-                        samplerInfo.textureName = samplerName;
-
-                        SamplerStateInfo state;
-                        if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
-                        {
-                            samplerInfo.state = state.State;
-
-                            if (state.TextureName != null)
-                                samplerInfo.textureName = state.TextureName;
-                        }
-                        else
-                        {
-                            foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
-                            {
-                                if (samplerName == s.TextureName)
-                                {
-                                    samplerInfo.state = s.State;
-                                    samplerName = s.Name;
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Find sampler slot, which can be different from the texture slot.
-                        for (int j = 0; j < refelect.Description.BoundResources; j++)
-                        {
-                            D3DC.InputBindingDescription samplerrdesc = refelect.GetResourceBindingDescription(j);
-
-                            if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler &&
-                                samplerrdesc.Name == samplerName)
-                            {
-                                samplerInfo.samplerSlot = samplerrdesc.BindPoint;
-                                break;
-                            }
-                        }
-
-                        switch (rdesc.Dimension)
-                        {
-                            case D3D.ShaderResourceViewDimension.Texture1D:
-                            case D3D.ShaderResourceViewDimension.Texture1DArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.Texture2D:
-                            case D3D.ShaderResourceViewDimension.Texture2DArray:
-                            case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
-                            case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.Texture3D:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.TextureCube:
-                            case D3D.ShaderResourceViewDimension.TextureCubeArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
-                                break;
-                        }
-
-                        samplers.Add(samplerInfo);
+                        if (state.TextureName != null)
+                            samplerInfo.textureName = state.TextureName;
                     }
+                    else
+                    {
+                        foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
+                        {
+                            if (textureName == s.TextureName)
+                            {
+                                samplerInfo.state = s.State;
+                                textureName = s.Name;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Find sampler slot, which can be different from the texture slot.
+                    foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
+                    {
+                        if (samplerDesc.Name == textureName)
+                        {
+                            samplerInfo.samplerSlot = samplerDesc.BindPoint;
+                            break;
+                        }
+                    }
+
+                    switch (txDesc.Dimension)
+                    {
+                        case D3D.ShaderResourceViewDimension.Texture1D:
+                        case D3D.ShaderResourceViewDimension.Texture1DArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.Texture2D:
+                        case D3D.ShaderResourceViewDimension.Texture2DArray:
+                        case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
+                        case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.Texture3D:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.TextureCube:
+                        case D3D.ShaderResourceViewDimension.TextureCubeArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
+                            break;
+                    }
+
+                    samplers.Add(samplerInfo);
                 }
                 dxshader._samplers = samplers.ToArray();
 
                 // Gather all the constant buffers used by this shader.
-                AddConstantBuffers(cbuffers, dxshader, refelect);
+                AddConstantBuffers(cbuffers, dxshader, shaderReflection);
             }
 
             return dxshader;
         }
 
-        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection refelect)
+        [Conditional("DEBUG")]
+        private static void LogShaderReflection(D3DC.ShaderReflection shaderReflection)
         {
-            dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
-            for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("LogShaderReflection ");
+
+            for (int r = 0; r < shaderReflection.Description.BoundResources; r++)
             {
-                D3DC.ConstantBuffer d3dConstantBuffer = refelect.GetConstantBuffer(i);
-                ConstantBufferData cbuffer = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
+                D3DC.InputBindingDescription ibDesc = shaderReflection.GetResourceBindingDescription(r);
+
+                sb.AppendLine("");
+                sb.AppendLine("ResourceBindingDescription: #" + r);
+                sb.AppendLine("Name: '" + ibDesc.Name+"'");
+                sb.AppendLine("Type: " + ibDesc.Type);
+                sb.AppendLine("BindPoint: " + ibDesc.BindPoint);
+                sb.AppendLine("BindCount: " + ibDesc.BindCount);
+                sb.AppendLine("Flags: " + ibDesc.Flags);
+                sb.AppendLine("ReturnType: " + ibDesc.ReturnType);
+                sb.AppendLine("Dimension: " + ibDesc.Dimension);
+            }
+
+            for (int i = 0; i < shaderReflection.Description.InputParameters; i++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetInputParameterDescription(i);
+
+                sb.AppendLine("");
+                sb.AppendLine("InputParameterDescription: #" + i);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+
+            for (int o = 0; o < shaderReflection.Description.OutputParameters; o++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetOutputParameterDescription(o);
+
+                sb.AppendLine("");
+                sb.AppendLine("OutputParameterDescription: #" + o);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+            
+            for (int c = 0; c < shaderReflection.Description.ConstantBuffers; c++)
+            {
+                D3DC.ConstantBuffer cbuffer = shaderReflection.GetConstantBuffer(c);
+
+                sb.AppendLine("");
+                sb.AppendLine("ConstantBuffer: #" + c);
+                sb.AppendLine("Tag: " + cbuffer.Tag);
+                sb.AppendLine("Name: '" + cbuffer.Description.Name + "'");
+                sb.AppendLine("Size: " + cbuffer.Description.Size);
+                sb.AppendLine("Flags: " + cbuffer.Description.Flags);
+                for (int v = 0; v < cbuffer.Description.VariableCount; v++)
+                {
+                    D3DC.ShaderReflectionVariable variable = cbuffer.GetVariable(v);
+                    D3DC.ShaderReflectionType type = variable.GetVariableType();
+
+                    sb.AppendLine("");
+                    sb.AppendLine("  Variable: #" + v);
+                    sb.AppendLine("  Name: '" + variable.Description.Name + "'");
+                    sb.AppendLine("  Flags: " + variable.Description.Flags);
+                    sb.AppendLine("  TypeClass: " + type.Description.Class);
+                    sb.AppendLine("  StartOffset: " + variable.Description.StartOffset);
+                    sb.AppendLine("  Size: " + variable.Description.Size);
+                    sb.AppendLine("  StartSampler: " + variable.Description.StartSampler);
+                    sb.AppendLine("  SamplerSize: " + variable.Description.SamplerSize);
+                    sb.AppendLine("  StartTexture: " + variable.Description.StartTexture);
+                    sb.AppendLine("  TextureSize: " + variable.Description.TextureSize);
+                }
+            }
+
+            for (int p = 0; p < shaderReflection.Description.PatchConstantParameters; p++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetPatchConstantParameterDescription(p);
+
+                sb.AppendLine("");
+                sb.AppendLine("PatchConstantParameterDescription: #" + p);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+
+            sb.AppendLine("");
+
+            string msg = sb.ToString();
+            Debug.WriteLine(msg);
+
+            return;
+        }
+
+        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection shaderReflection)
+        {
+            dxshader._cbuffers = new int[shaderReflection.Description.ConstantBuffers];
+            for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
+            {
+                D3DC.ConstantBuffer d3dcbuffer = shaderReflection.GetConstantBuffer(i);
+                ConstantBufferData cbufferData = ShaderProfileDX11.CreateConstantBufferData(d3dcbuffer);
 
                 // Look for a duplicate cbuffer in the list.
                 for (int c = 0; c < cbuffers.Count; c++)
                 {
-                    if (cbuffer.SameAs(cbuffers[c]))
+                    if (cbufferData.SameAs(cbuffers[c]))
                     {
-                        cbuffer = null;
+                        cbufferData = null;
                         dxshader._cbuffers[i] = c;
                         break;
                     }
                 }
 
                 // Add a new cbuffer.
-                if (cbuffer != null)
+                if (cbufferData != null)
                 {
                     dxshader._cbuffers[i] = cbuffers.Count;
-                    cbuffers.Add(cbuffer);
+                    cbuffers.Add(cbufferData);
                 }
             }
         }
 
 
-        private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer cb)
+        private static ConstantBufferData CreateConstantBufferData(D3DC.ConstantBuffer d3dcbuffer)
         {
-            ConstantBufferData cbuffer = new ConstantBufferData();
+            ConstantBufferData cbufferData = new ConstantBufferData();
 
-            cbuffer.Name = string.Empty;
-            cbuffer.Size = cb.Description.Size;
+            cbufferData.Name = string.Empty;
+            cbufferData.Size = d3dcbuffer.Description.Size;
 
-            cbuffer.ParameterIndex = new List<int>();
+            cbufferData.ParameterIndex = new List<int>();
 
             List<EffectObject.EffectParameterContent> parameters = new List<EffectObject.EffectParameterContent>();
 
             // Gather all the parameters.
-            for (int i = 0; i < cb.Description.VariableCount; i++)
+            for (int i = 0; i < d3dcbuffer.Description.VariableCount; i++)
             {
-                D3DC.ShaderReflectionVariable vdesc = cb.GetVariable(i);
+                D3DC.ShaderReflectionVariable vdesc = d3dcbuffer.GetVariable(i);
 
                 EffectObject.EffectParameterContent param = GetParameterFromType(vdesc.GetVariableType());
 
@@ -255,14 +367,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Sort them by the offset for some consistent results.
             IEnumerable<EffectObject.EffectParameterContent> sortedParameters = parameters.OrderBy(e => e.bufferOffset);
-            cbuffer.Parameters = sortedParameters.ToList();
+            cbufferData.Parameters = sortedParameters.ToList();
 
             // Store the parameter offsets.
-            cbuffer.ParameterOffset = new List<int>();
-            foreach (EffectObject.EffectParameterContent param in cbuffer.Parameters)
-                cbuffer.ParameterOffset.Add(param.bufferOffset);
+            cbufferData.ParameterOffset = new List<int>();
+            foreach (EffectObject.EffectParameterContent param in cbufferData.Parameters)
+                cbufferData.ParameterOffset.Add(param.bufferOffset);
 
-            return cbuffer;
+            return cbufferData;
         }
 
         private static EffectObject.EffectParameterContent GetParameterFromType(D3DC.ShaderReflectionType type)
