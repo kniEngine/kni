@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             Debug.Assert(GLVertexBuffer != 0);
 

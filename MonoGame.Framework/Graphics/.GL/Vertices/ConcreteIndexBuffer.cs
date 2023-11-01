@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             Debug.Assert(_ibo == 0);
 
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             Debug.Assert(GLIndexBuffer != 0);
 

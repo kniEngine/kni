@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyState()
         {
-            Threading.EnsureUIThread();
+            Threading.EnsureMainThread();
 
             {
                 PlatformApplyBlend();
