@@ -379,9 +379,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             {
                 for (int s = 0; s < shader._samplers.Length; s++)
                 {
-                    SamplerInfo sampler = shader._samplers[s];
+                    SamplerInfo samplerInfo = shader._samplers[s];
 
-                    int match = parameters.FindIndex(e => e.name == sampler.textureName);
+                    int match = parameters.FindIndex(e => e.name == samplerInfo.textureName);
                     if (match == -1)
                     {
                         // Store the index for runtime lookup.
@@ -389,9 +389,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                         EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
                         param.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
-                        param.name = sampler.textureName;
+                        param.name = samplerInfo.textureName;
                         param.semantic = string.Empty;
-                        param.type = SamplerTypeToParameterType(sampler.type);
+                        param.type = SamplerTypeToParameterType(samplerInfo.type);
 
                         parameters.Add(param);
                     }
