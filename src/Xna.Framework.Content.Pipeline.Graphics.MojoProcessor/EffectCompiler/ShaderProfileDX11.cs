@@ -149,12 +149,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         // Find sampler slot, which can be different from the texture slot.
                         for (int j = 0; j < shaderReflection.Description.BoundResources; j++)
                         {
-                            D3DC.InputBindingDescription samplerrdesc = shaderReflection.GetResourceBindingDescription(j);
+                            D3DC.InputBindingDescription samplerDesc = shaderReflection.GetResourceBindingDescription(j);
 
-                            if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler &&
-                                samplerrdesc.Name == samplerName)
+                            if (samplerDesc.Type == D3DC.ShaderInputType.Sampler &&
+                                samplerDesc.Name == samplerName)
                             {
-                                samplerInfo.samplerSlot = samplerrdesc.BindPoint;
+                                samplerInfo.samplerSlot = samplerDesc.BindPoint;
                                 break;
                             }
                         }
