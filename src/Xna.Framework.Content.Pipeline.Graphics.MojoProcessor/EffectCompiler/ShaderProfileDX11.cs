@@ -101,13 +101,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Use reflection to get details of the shader.
-            using (D3DC.ShaderReflection refelect = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
+            using (D3DC.ShaderReflection shaderReflection = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
             {
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
-                for (int i = 0; i < refelect.Description.BoundResources; i++)
+                for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
                 {
-                    D3DC.InputBindingDescription rdesc = refelect.GetResourceBindingDescription(i);
+                    D3DC.InputBindingDescription rdesc = shaderReflection.GetResourceBindingDescription(i);
                     if (rdesc.Type == D3DC.ShaderInputType.Texture)
                     {
                         string samplerName = rdesc.Name;
@@ -143,9 +143,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         }
 
                         // Find sampler slot, which can be different from the texture slot.
-                        for (int j = 0; j < refelect.Description.BoundResources; j++)
+                        for (int j = 0; j < shaderReflection.Description.BoundResources; j++)
                         {
-                            D3DC.InputBindingDescription samplerrdesc = refelect.GetResourceBindingDescription(j);
+                            D3DC.InputBindingDescription samplerrdesc = shaderReflection.GetResourceBindingDescription(j);
 
                             if (samplerrdesc.Type == D3DC.ShaderInputType.Sampler &&
                                 samplerrdesc.Name == samplerName)
@@ -185,18 +185,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 dxshader._samplers = samplers.ToArray();
 
                 // Gather all the constant buffers used by this shader.
-                AddConstantBuffers(cbuffers, dxshader, refelect);
+                AddConstantBuffers(cbuffers, dxshader, shaderReflection);
             }
 
             return dxshader;
         }
 
-        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection refelect)
+        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection shaderReflection)
         {
-            dxshader._cbuffers = new int[refelect.Description.ConstantBuffers];
-            for (int i = 0; i < refelect.Description.ConstantBuffers; i++)
+            dxshader._cbuffers = new int[shaderReflection.Description.ConstantBuffers];
+            for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
             {
-                D3DC.ConstantBuffer d3dConstantBuffer = refelect.GetConstantBuffer(i);
+                D3DC.ConstantBuffer d3dConstantBuffer = shaderReflection.GetConstantBuffer(i);
                 ConstantBufferData cbuffer = ShaderProfileDX11.CreateConstantBufferData(d3dConstantBuffer);
 
                 // Look for a duplicate cbuffer in the list.
