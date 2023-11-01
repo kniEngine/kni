@@ -6,7 +6,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
@@ -103,6 +105,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Use reflection to get details of the shader.
             using (D3DC.ShaderReflection shaderReflection = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
             {
+                LogShaderReflection(shaderReflection);
+
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
                 for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
@@ -189,6 +193,103 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             return dxshader;
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogShaderReflection(D3DC.ShaderReflection shaderReflection)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("LogShaderReflection ");
+
+            for (int r = 0; r < shaderReflection.Description.BoundResources; r++)
+            {
+                D3DC.InputBindingDescription ibDesc = shaderReflection.GetResourceBindingDescription(r);
+
+                sb.AppendLine("");
+                sb.AppendLine("ResourceBindingDescription: #" + r);
+                sb.AppendLine("Name: '" + ibDesc.Name+"'");
+                sb.AppendLine("Type: " + ibDesc.Type);
+                sb.AppendLine("BindPoint: " + ibDesc.BindPoint);
+                sb.AppendLine("BindCount: " + ibDesc.BindCount);
+                sb.AppendLine("Flags: " + ibDesc.Flags);
+                sb.AppendLine("ReturnType: " + ibDesc.ReturnType);
+                sb.AppendLine("Dimension: " + ibDesc.Dimension);
+            }
+
+            for (int i = 0; i < shaderReflection.Description.InputParameters; i++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetInputParameterDescription(i);
+
+                sb.AppendLine("");
+                sb.AppendLine("InputParameterDescription: #" + i);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+
+            for (int o = 0; o < shaderReflection.Description.OutputParameters; o++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetOutputParameterDescription(o);
+
+                sb.AppendLine("");
+                sb.AppendLine("OutputParameterDescription: #" + o);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+            
+            for (int c = 0; c < shaderReflection.Description.ConstantBuffers; c++)
+            {
+                D3DC.ConstantBuffer cbuffer = shaderReflection.GetConstantBuffer(c);
+
+                sb.AppendLine("");
+                sb.AppendLine("ConstantBuffer: #" + c);
+                sb.AppendLine("Tag: " + cbuffer.Tag);
+                sb.AppendLine("Name: '" + cbuffer.Description.Name + "'");
+                sb.AppendLine("Size: " + cbuffer.Description.Size);
+                sb.AppendLine("Flags: " + cbuffer.Description.Flags);
+                for (int v = 0; v < cbuffer.Description.VariableCount; v++)
+                {
+                    D3DC.ShaderReflectionVariable variable = cbuffer.GetVariable(v);
+                    D3DC.ShaderReflectionType type = variable.GetVariableType();
+
+                    sb.AppendLine("");
+                    sb.AppendLine("  Variable: #" + v);
+                    sb.AppendLine("  Name: '" + variable.Description.Name + "'");
+                    sb.AppendLine("  Flags: " + variable.Description.Flags);
+                    sb.AppendLine("  TypeClass: " + type.Description.Class);
+                    sb.AppendLine("  StartOffset: " + variable.Description.StartOffset);
+                    sb.AppendLine("  Size: " + variable.Description.Size);
+                    sb.AppendLine("  StartSampler: " + variable.Description.StartSampler);
+                    sb.AppendLine("  SamplerSize: " + variable.Description.SamplerSize);
+                    sb.AppendLine("  StartTexture: " + variable.Description.StartTexture);
+                    sb.AppendLine("  TextureSize: " + variable.Description.TextureSize);
+                }
+            }
+
+            for (int p = 0; p < shaderReflection.Description.PatchConstantParameters; p++)
+            {
+                D3DC.ShaderParameterDescription paramDesc = shaderReflection.GetPatchConstantParameterDescription(p);
+
+                sb.AppendLine("");
+                sb.AppendLine("PatchConstantParameterDescription: #" + p);
+                sb.AppendLine("SemanticName: '" + paramDesc.SemanticName + "'");
+                sb.AppendLine("SemanticIndex: " + paramDesc.SemanticIndex);
+                sb.AppendLine("Register: " + paramDesc.Register);
+                sb.AppendLine("SystemValueType: " + paramDesc.SystemValueType);
+                sb.AppendLine("UsageMask: " + paramDesc.UsageMask);
+            }
+
+            sb.AppendLine("");
+
+            string msg = sb.ToString();
+            Debug.WriteLine(msg);
+
+            return;
         }
 
         private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, D3DC.ShaderReflection shaderReflection)
