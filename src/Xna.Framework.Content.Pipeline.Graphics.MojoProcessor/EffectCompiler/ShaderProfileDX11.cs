@@ -108,6 +108,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 LogShaderReflection(shaderReflection);
 
                 List<D3DC.InputBindingDescription> samplersMap = new List<D3DC.InputBindingDescription>();
+                List<D3DC.InputBindingDescription> texturesMap = new List<D3DC.InputBindingDescription>();
 
                 for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
                 {
@@ -117,84 +118,83 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         case D3DC.ShaderInputType.Sampler:
                             samplersMap.Add(ibDesc);
                             break;
+                        case D3DC.ShaderInputType.Texture:
+                            texturesMap.Add(ibDesc);
+                            break;
                     }
                 }
 
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
-                for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
+                foreach(D3DC.InputBindingDescription txDesc in texturesMap)
                 {
-                    D3DC.InputBindingDescription rdesc = shaderReflection.GetResourceBindingDescription(i);
-                    if (rdesc.Type == D3DC.ShaderInputType.Texture)
+                    string samplerName = txDesc.Name;
+
+                    SamplerInfo samplerInfo = new SamplerInfo();
+                    samplerInfo.textureSlot = txDesc.BindPoint;
+                    samplerInfo.samplerSlot = txDesc.BindPoint;
+
+                    // default to String.Empty for DX.
+                    samplerInfo.GLsamplerName = String.Empty;
+
+                    samplerInfo.textureName = samplerName;
+
+                    SamplerStateInfo state;
+                    if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
                     {
-                        string samplerName = rdesc.Name;
+                        samplerInfo.state = state.State;
 
-                        SamplerInfo samplerInfo = new SamplerInfo();
-                        samplerInfo.textureSlot = rdesc.BindPoint;
-                        samplerInfo.samplerSlot = rdesc.BindPoint;
-
-                        // default to String.Empty for DX.
-                        samplerInfo.GLsamplerName = String.Empty;
-
-                        samplerInfo.textureName = samplerName;
-
-                        SamplerStateInfo state;
-                        if (shaderInfo.SamplerStates.TryGetValue(samplerName, out state))
-                        {
-                            samplerInfo.state = state.State;
-
-                            if (state.TextureName != null)
-                                samplerInfo.textureName = state.TextureName;
-                        }
-                        else
-                        {
-                            foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
-                            {
-                                if (samplerName == s.TextureName)
-                                {
-                                    samplerInfo.state = s.State;
-                                    samplerName = s.Name;
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Find sampler slot, which can be different from the texture slot.
-                        foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
-                        {
-                            if (samplerDesc.Name == samplerName)
-                            {
-                                samplerInfo.samplerSlot = samplerDesc.BindPoint;
-                                break;
-                            }
-                        }
-
-                        switch (rdesc.Dimension)
-                        {
-                            case D3D.ShaderResourceViewDimension.Texture1D:
-                            case D3D.ShaderResourceViewDimension.Texture1DArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.Texture2D:
-                            case D3D.ShaderResourceViewDimension.Texture2DArray:
-                            case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
-                            case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.Texture3D:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
-                                break;
-
-                            case D3D.ShaderResourceViewDimension.TextureCube:
-                            case D3D.ShaderResourceViewDimension.TextureCubeArray:
-                                samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
-                                break;
-                        }
-
-                        samplers.Add(samplerInfo);
+                        if (state.TextureName != null)
+                            samplerInfo.textureName = state.TextureName;
                     }
+                    else
+                    {
+                        foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
+                        {
+                            if (samplerName == s.TextureName)
+                            {
+                                samplerInfo.state = s.State;
+                                samplerName = s.Name;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Find sampler slot, which can be different from the texture slot.
+                    foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
+                    {
+                        if (samplerDesc.Name == samplerName)
+                        {
+                            samplerInfo.samplerSlot = samplerDesc.BindPoint;
+                            break;
+                        }
+                    }
+
+                    switch (txDesc.Dimension)
+                    {
+                        case D3D.ShaderResourceViewDimension.Texture1D:
+                        case D3D.ShaderResourceViewDimension.Texture1DArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_1D;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.Texture2D:
+                        case D3D.ShaderResourceViewDimension.Texture2DArray:
+                        case D3D.ShaderResourceViewDimension.Texture2DMultisampled:
+                        case D3D.ShaderResourceViewDimension.Texture2DMultisampledArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_2D;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.Texture3D:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_VOLUME;
+                            break;
+
+                        case D3D.ShaderResourceViewDimension.TextureCube:
+                        case D3D.ShaderResourceViewDimension.TextureCubeArray:
+                            samplerInfo.type = MojoShader.SamplerType.SAMPLER_CUBE;
+                            break;
+                    }
+
+                    samplers.Add(samplerInfo);
                 }
                 dxshader._samplers = samplers.ToArray();
 
