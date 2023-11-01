@@ -127,55 +127,90 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
-                foreach(D3DC.InputBindingDescription txDesc in texturesMap)
+                foreach (D3DC.InputBindingDescription samplerDesc in samplersMap)
                 {
-                    string textureName = txDesc.Name;
-
                     SamplerInfo samplerInfo = new SamplerInfo();
-                    samplerInfo.textureSlot = txDesc.BindPoint;
-                    samplerInfo.samplerSlot = txDesc.BindPoint;
-
-                    // default to String.Empty for DX.
                     samplerInfo.GLsamplerName = String.Empty;
+                    samplerInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
+                    samplerInfo.samplerSlot = -1;
+                    samplerInfo.state = null;
+                    samplerInfo.textureSlot = -1;
+                    samplerInfo.textureName = null;
+                    samplerInfo.textureParameter = -1;
 
-                    samplerInfo.textureName = textureName;
-
-                    SamplerStateInfo state;
-                    if (shaderInfo.SamplerStates.TryGetValue(textureName, out state))
-                    {
-                        samplerInfo.state = state.State;
-
-                        if (state.TextureName != null)
-                            samplerInfo.textureName = state.TextureName;
-                    }
-                    else
-                    {
-                        foreach (SamplerStateInfo s in shaderInfo.SamplerStates.Values)
-                        {
-                            if (textureName == s.TextureName)
-                            {
-                                samplerInfo.state = s.State;
-                                textureName = s.Name;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Find sampler slot, which can be different from the texture slot.
-                    foreach(D3DC.InputBindingDescription samplerDesc in samplersMap)
-                    {
-                        if (samplerDesc.Name == textureName)
-                        {
-                            samplerInfo.samplerSlot = samplerDesc.BindPoint;
-                            break;
-                        }
-                    }
-
-                    samplerInfo.type = DXToSamplerType(txDesc.Dimension);
+                    SamplerStateInfo samplerStateInfo = shaderInfo.SamplerStates[samplerDesc.Name];
+                    samplerInfo.state = samplerStateInfo.State;
+                    samplerInfo.GLsamplerName = samplerDesc.Name;
+                    samplerInfo.samplerSlot = samplerDesc.BindPoint;
+                    samplerInfo.textureName = samplerStateInfo.TextureName;
 
                     samplers.Add(samplerInfo);
                 }
-                dxshader._samplers = samplers.ToArray();
+
+                // Get the textures.
+                List<SamplerInfo> textures = new List<SamplerInfo>();
+                foreach (D3DC.InputBindingDescription txDesc in texturesMap)
+                {
+                    SamplerInfo textureInfo = new SamplerInfo();
+                    textureInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
+                    textureInfo.GLsamplerName = String.Empty;
+                    textureInfo.samplerSlot = -1;
+                    textureInfo.state = null;
+                    textureInfo.textureSlot = -1;
+                    textureInfo.textureName = null;
+                    textureInfo.textureParameter = -1;
+
+                    textureInfo.textureSlot = txDesc.BindPoint;
+                    textureInfo.textureName = txDesc.Name;
+                    textureInfo.type = DXToSamplerType(txDesc.Dimension);
+
+                    textures.Add(textureInfo);
+                }
+
+                // merge paired samples & textures
+                // & resolve textureName from sample.
+                for(int t = 0; t< textures.Count; t++)
+                {
+                    var textureInfo = textures[t];
+                    for (int s = samplers.Count - 1; s >= 0; s--)
+                    {
+                        if (textureInfo.textureName == samplers[s].GLsamplerName)
+                        {
+                            if (samplers[s].textureName != null)
+                                textureInfo.textureName = samplers[s].textureName;
+                            if (samplers[s].state != null)
+                            {
+                                textureInfo.samplerSlot = samplers[s].samplerSlot;
+                                textureInfo.state = samplers[s].state;
+                            }
+                            textures[t] = textureInfo;
+                            samplers.RemoveAt(s);
+                            break;
+                        }
+                    }
+                }
+
+                // merge remaining samples into textures 
+                for (int t = 0; t < textures.Count; t++)
+                {
+                    var textureInfo = textures[t];
+                    if (textureInfo.samplerSlot == -1 && samplers.Count > 0)
+                    {
+                        int s = samplers.Count - 1;
+                        if (samplers[s].state != null)
+                        {
+                            textureInfo.samplerSlot = samplers[s].samplerSlot;
+                            textureInfo.state = samplers[s].state;
+                        }
+                        textures[t] = textureInfo;
+                        samplers.RemoveAt(s);
+                    }
+                }
+
+                if (samplers.Count > 0)
+                    throw new InvalidOperationException("samplers not merged.");
+
+                dxshader._samplers = textures.ToArray();
 
                 // Gather all the constant buffers used by this shader.
                 AddConstantBuffers(cbuffers, dxshader, shaderReflection);
