@@ -102,6 +102,10 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install the assemblies for all the platforms we can 
   ; target from a Windows desktop system.
 
+  ; Copy nuget packages
+  SetOutPath '$INSTDIR\Packages\'
+  File '..\..\NuGetPackages\Output\*.nupkg'
+
   ; Install framework Assemblies
   SetOutPath '$INSTDIR\Assemblies\Framework\net40'
   File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
