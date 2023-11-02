@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project name="MonoGame Build Script" default="build" basedir=".">
+<project name="KNI Build Script" default="build" basedir=".">
 
-  <description>The MonoGame automated build script.</description>
+  <description>The KNI automated build script.</description>
 
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
   <property name="msbuild15" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe" />
