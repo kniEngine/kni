@@ -104,7 +104,7 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
 
   ; Copy nuget packages
   SetOutPath '$INSTDIR\Packages\'
-  File '..\..\NuGetPackages\Output\*.nupkg'
+  File '..\..\Artifacts\Packages\*.nupkg'
 
   ; Install framework Assemblies
   SetOutPath '$INSTDIR\Assemblies\Framework\net40'
