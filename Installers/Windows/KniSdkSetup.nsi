@@ -120,10 +120,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   SetOutPath '$INSTDIR\Assemblies\Android'
   File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.dll'
   File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.xml'
-  SetOutPath '$INSTDIR\Assemblies\Android\net6.0-android'
-  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.aar'
-  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.dll'
-  File '..\..\Artifacts\MonoGame.Framework\Android\Release\net6.0-android\*.xml'
   
   ; Install DesktopGL Assemblies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL'
@@ -132,15 +128,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib'
   File '..\..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib'
   File '..\..\ThirdParty\Dependencies\MonoGame.Framework.dll.config'
-    
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL\netstandard2.0'
-  File '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\*.*'  
-  ; Install x86 DesktopGL Dependencies
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL\netstandard2.0\x86'
-  File '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\x86\*.*'
-  ; Install x64 DesktopGL Dependencies
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL\netstandard2.0\x64'
-  File '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\netstandard2.0\x64\*.*'
   
   ; Install x86 DesktopGL Dependencies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL\x86'
@@ -159,10 +146,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   SetOutPath '$INSTDIR\Assemblies\Windows'
   File '..\..\MonoGame.Framework\bin\Windows\AnyCPU\Release\*.dll'
   File '..\..\MonoGame.Framework\bin\Windows\AnyCPU\Release\*.xml'
-
-  SetOutPath '$INSTDIR\Assemblies\Windows\net6.0-windows'
-  File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\*.*'
-  File '..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\*.*'
   
   ; Install Oculus Ovr DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
@@ -170,10 +153,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.xml'
   File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.dll'
   File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.Native.dll'  
-  SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net6.0-windows'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net6.0-windows\Xna.Framework.Oculus.OvrDX11.dll'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net6.0-windows\Xna.Framework.Oculus.OvrDX11.xml'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net6.0-windows\Xna.Framework.Oculus.OvrDX11.deps.json'
 
   ; Install Windows 10 UAP Assemblies
   SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'
@@ -188,9 +167,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ;SetOutPath '$INSTDIR\Assemblies\iOS'
   ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.dll'
   ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.xml'
-  SetOutPath '$INSTDIR\Assemblies\iOS\net6.0-ios'
-  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\net6.0-ios\*.dll'
-  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\net6.0-ios\*.xml'
   SkipiOSAssemblies:
 
   WriteRegStr HKLM 'SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\${APPNAME} for Windows' '' '$INSTDIR\Assemblies\Windows'
