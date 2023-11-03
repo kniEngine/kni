@@ -136,8 +136,8 @@
   </target>
   
   <target name="build_cardboard" description="Build Cardboard">
-      <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Build /p:Configuration=Release" />
+      <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
+        <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.sln /t:Build /p:Configuration=Release" />
       </if>
   </target>
 
