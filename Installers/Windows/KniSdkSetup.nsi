@@ -132,7 +132,7 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install DesktopGL Assemblies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL'
   File /nonfatal '..\..\MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\*.dll'
-  File /nonfatal ' ..\..\MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\*.xml'
+  File /nonfatal '..\..\MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\*.xml'
   File '..\..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib'
   File '..\..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib'
   File '..\..\ThirdParty\Dependencies\MonoGame.Framework.dll.config'
