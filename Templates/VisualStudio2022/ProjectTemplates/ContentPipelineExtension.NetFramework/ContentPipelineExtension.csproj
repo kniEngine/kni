@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -33,34 +32,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Xna.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Ref\net40\MonoGame.Framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline.Audio">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Audio.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline.Graphics">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Graphics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline.Graphics.MojoProcessor">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline.Media">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Media.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+      <PackageReference Include="nkast.Xna.Framework.Ref" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+      <PackageReference Include="nkast.Xna.Framework.Content.Pipeline" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+      <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Audio" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+      <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Graphics" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+      <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Media" Version="3.9.9001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentImporter1.cs" />
