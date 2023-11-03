@@ -96,10 +96,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
 
   ; Associate .mgcb files open in the Pipeline tool.
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '10.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '11.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '12.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '14.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
   !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
   !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '${MSBuildInstallDir}\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '${MSBuildInstallDir}\Tools\PipelineEditor.exe "%1"'
 
@@ -375,9 +371,7 @@ Section "Uninstall"
   DeleteRegKey HKLM 'SOFTWARE\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android'
   DeleteRegKey HKLM 'SOFTWARE\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS'
 
-  DeleteRegKey HKCU 'Software\Microsoft\VisualStudio\10.0\Default Editors\mgcb'
-  DeleteRegKey HKCU 'Software\Microsoft\VisualStudio\11.0\Default Editors\mgcb'
-  DeleteRegKey HKCU 'Software\Microsoft\VisualStudio\12.0\Default Editors\mgcb'
+  ;DeleteRegKey HKCU 'Software\Microsoft\VisualStudio\12.0\Default Editors\mgcb'
 
   DeleteRegKey HKCR '.mgcb'
   DeleteRegKey HKCR 'MonoGame.ContentBuilderFile'
