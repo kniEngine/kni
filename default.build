@@ -122,8 +122,8 @@
 
       <!--
       <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild17}" commandline="MonoGame.Framework.Android.9K.sln /t:Clean /p:Configuration=Release" />
-        <exec program="${msbuild17}" commandline="MonoGame.Framework.Android.9K.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
       </if>
       -->
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
