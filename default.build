@@ -30,8 +30,8 @@
     
     <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild15}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
     
