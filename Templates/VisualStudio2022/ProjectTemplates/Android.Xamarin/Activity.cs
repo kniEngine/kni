@@ -10,7 +10,7 @@ namespace $safeprojectname$
         , Icon = "@drawable/icon"
         , Theme = "@style/Theme.Splash"
         , AlwaysRetainTaskState = true
-        , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
+        , LaunchMode = LaunchMode.SingleInstance
         , ScreenOrientation = ScreenOrientation.FullSensor
         , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.UiMode | ConfigChanges.SmallestScreenSize)]
     public class $projectname$Activity : Microsoft.Xna.Framework.AndroidGameActivity
