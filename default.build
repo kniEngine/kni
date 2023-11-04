@@ -6,11 +6,14 @@
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
   <property name="msbuild15" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe" />
   <property name="msbuild17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
+
+  <property name="nugetPath" value="C:\Program Files (x86)\NuGet3\nuget.exe" />
+  <property name="nugetPackageVersion" value="3.9.9001.0" />
   
   <!-- Helper default target. -->
   <target   name="build" 
             description="Build, run tests, generate docs, and create installers." 
-            depends="_clean,build_code,run_tests,build_docs,build_installer" />
+            depends="_clean,build_code,build_nuget,run_tests,build_docs,build_installer" />
 
   <!-- Clean the build output directories. -->
   <target name="_clean">
@@ -51,6 +54,33 @@
     <call target="build_ios" />
   </target>
  
+
+  <target name="build_nuget" description="Build nuget packages.">
+      
+    <!-- <exec program="BuildNuget.bat" commandline="" /> -->
+
+    <exec program="dotnet" commandline="pack src\Xna.Framework\Xna.Framework.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release" />
+
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Audio.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Graphics.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Media.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.DesktopGL.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Android.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.iOS.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+
+    <exec program="dotnet" commandline="pack XNA.Framework.Blazor.sln --output NuGetPackages\Output\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release" />
+
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Cardboard.nuspec        -OutputDirectory NuGetPackages\Output\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+
+  </target>
 
 
   <!-- Build targets for the various platforms. -->
