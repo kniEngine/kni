@@ -102,10 +102,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install the assemblies for all the platforms we can 
   ; target from a Windows desktop system.
 
-  ; Copy nuget packages
-  SetOutPath '$INSTDIR\Packages\'
-  File '..\..\Artifacts\Packages\*.nupkg'
-
   ; Install framework Assemblies
   SetOutPath '$INSTDIR\Assemblies\Framework\net40'
   File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
@@ -211,6 +207,16 @@ Section "VS012 Redistributables (x64)" VS2012Redist
   
 SectionEnd
 
+
+Section "Nuget Packages" NugetPackages
+
+  ; Copy nuget packages
+  SetOutPath '$INSTDIR\Packages\'
+  File /r '..\..\Artifacts\Packages\*.nupkg'
+
+SectionEnd
+
+
 Section "VS2017 Templates" VS2017
 
   IfFileExists `$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
@@ -276,6 +282,7 @@ SectionEnd
 
 LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBuild extensions for MonoGame"
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
+LangString NugetPackagesDesc ${LANG_ENGLISH} "Install the nuget packages"
 LangString VS2017Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2017"
 LangString VS2019Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2019"
 LangString VS2022Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2022"
@@ -284,6 +291,7 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${CoreComponents} $(CoreComponentsDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(NugetPackagesDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
