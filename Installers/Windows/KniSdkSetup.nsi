@@ -207,19 +207,6 @@ Section "VS012 Redistributables (x64)" VS2012Redist
   
 SectionEnd
 
-Section "VS2017 Templates" VS2017
-
-  IfFileExists `$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\*.*` InstallTemplates CannotInstallTemplates
-  InstallTemplates:
-    SetOutPath "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\KNI"
-    File /r '..\..\Templates\VisualStudio2017\ProjectTemplates\*.zip'
-    GOTO EndTemplates
-  CannotInstallTemplates:
-    DetailPrint "Visual Studio 2017 not found"
-  EndTemplates:
-
-SectionEnd
-
 Section "VS2019 Templates" VS2019
 
   IfFileExists `$DOCUMENTS\Visual Studio 2019\*.*` InstallTemplates CannotInstallTemplates
@@ -272,7 +259,6 @@ SectionEnd
 
 LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBuild extensions for MonoGame"
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
-LangString VS2017Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2017"
 LangString VS2019Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2019"
 LangString VS2022Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2022"
 LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your start menu"
@@ -281,7 +267,6 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
   !insertmacro MUI_DESCRIPTION_TEXT ${CoreComponents} $(CoreComponentsDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${NugetPackages} $(NugetPackagesDesc)
-  !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
@@ -306,13 +291,6 @@ Function checkVS2012Redist
  ; TODO: check if VS2012 Redisttributables are installed 
 FunctionEnd
 
-Function checkVS2017
-IfFileExists `$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\*.*` end disable
-  disable:
-	 SectionSetFlags ${VS2017} $0
-  end:
-FunctionEnd
-
 Function checkVS2019
 IfFileExists `$DOCUMENTS\Visual Studio 2019\*.*` end disable
   disable:
@@ -330,7 +308,6 @@ FunctionEnd
 Function .onInit 
   IntOp $0 $0 | ${SF_RO}
   call checkVS2012Redist
-  Call checkVS2017
   Call checkVS2019
   Call checkVS2022
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
@@ -377,7 +354,6 @@ Section "Uninstall"
   RMDir /r "$DOCUMENTS\Visual Studio 2010\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2013\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\KNI"
-  RMDir /r "$DOCUMENTS\Visual Studio 2017\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
