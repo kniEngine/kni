@@ -55,29 +55,21 @@
     <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.9.9001" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$ext_safeprojectname$Activity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="$ext_safeprojectname$Activity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
-    <None Include="Resources\AboutResources.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Assets\AboutAssets.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
     <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Layout\" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Splash.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
     <AndroidResource Include="Resources\Values\Styles.xml" />
+    <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">   
