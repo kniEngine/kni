@@ -291,7 +291,7 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${CoreComponents} $(CoreComponentsDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
-  !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(NugetPackagesDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${NugetPackages} $(NugetPackagesDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2017} $(VS2017Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2019} $(VS2019Desc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
