@@ -29,16 +29,12 @@ namespace Microsoft.Xna.Framework.Graphics
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
         }
 
-        private readonly bool _isDefaultStateObject;
-
 
         public TextureAddressMode AddressU
         {
             get { return _strategy.AddressU; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -51,8 +47,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.AddressV; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -65,8 +59,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.AddressW; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -79,8 +71,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.BorderColor; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -93,8 +83,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.Filter; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -107,8 +95,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.MaxAnisotropy; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -121,8 +107,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.MaxMipLevel; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -135,8 +119,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.MipMapLevelOfDetailBias; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -152,8 +134,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ComparisonFunction; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -166,8 +146,6 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.FilterMode; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
@@ -177,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_isDefaultStateObject)
+            if (_strategy is ReadonlySamplerStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
             if (this.GraphicsDevice != device)
@@ -202,12 +180,7 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             Name = name;
-            _strategy = new SamplerStateStrategy();
-            _strategy.Filter = filter;
-            _strategy.AddressU = addressMode;
-            _strategy.AddressV = addressMode;
-            _strategy.AddressW = addressMode;
-            _isDefaultStateObject = true;
+            _strategy = new ReadonlySamplerStateStrategy(filter, addressMode);
         }
 
         private SamplerState(SamplerState cloneSource)

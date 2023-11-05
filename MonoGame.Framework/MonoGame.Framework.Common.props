@@ -151,6 +151,7 @@
     <Compile Include="Graphics\States\IRasterizerStateStrategy.cs" />
     <Compile Include="Graphics\States\SamplerState.cs" />
     <Compile Include="Graphics\States\SamplerStateStrategy.cs" />
+    <Compile Include="Graphics\States\ReadonlySamplerStateStrategy.cs" />
     <Compile Include="Graphics\States\ISamplerStateStrategy.cs" />
     <Compile Include="Graphics\States\StencilOperation.cs" />
     <Compile Include="Graphics\States\TargetBlendState.cs" />
