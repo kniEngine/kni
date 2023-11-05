@@ -26,16 +26,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 samplerStateDesc.AddressW = ToDXTextureAddressMode(AddressW);
 
 #if WINDOWS_UAP
-				samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
-					BorderColor.R / 255.0f,
-					BorderColor.G / 255.0f,
-					BorderColor.B / 255.0f,
-					BorderColor.A / 255.0f);
+                samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
+                    BorderColor.R / 255.0f,
+                    BorderColor.G / 255.0f,
+                    BorderColor.B / 255.0f,
+                    BorderColor.A / 255.0f);
 #else
                 samplerStateDesc.BorderColor = BorderColor.ToRawColor4();
 #endif
 
-				samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
+                samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
                 samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, context.DeviceStrategy.Capabilities.MaxTextureAnisotropy);
                 samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
                 samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
