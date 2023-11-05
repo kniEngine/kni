@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState : GraphicsResource
     {
+        internal IBlendStateStrategy _strategy;
 
         public static readonly BlendState Additive;
         public static readonly BlendState AlphaBlend;
@@ -232,7 +235,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
             if (_isDefaultStateObject)
@@ -253,6 +255,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public BlendState()
             : base()
         {
+            _strategy = new BlendStateStrategy();
             _blendFactor = Color.White;
             _multiSampleMask = Int32.MaxValue;
 
@@ -279,6 +282,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = cloneSource.Name;
 
+            _strategy = new BlendStateStrategy();
             _blendFactor = cloneSource._blendFactor;
             _multiSampleMask = cloneSource._multiSampleMask;
 

@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState : GraphicsResource
     {
+        internal IDepthStencilStateStrategy _strategy;
 
         public static readonly DepthStencilState Default;
         public static readonly DepthStencilState DepthRead;
@@ -283,6 +286,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public DepthStencilState()
             : base()
         {
+            _strategy = new DepthStencilStateStrategy();
+
             DepthBufferEnable = true;
             DepthBufferWriteEnable = true;
             DepthBufferFunction = CompareFunction.LessEqual;
@@ -313,6 +318,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private DepthStencilState(DepthStencilState cloneSource)
         {
             Name = cloneSource.Name;
+
+            _strategy = new DepthStencilStateStrategy();
+
             _depthBufferEnable = cloneSource._depthBufferEnable;
             _depthBufferWriteEnable = cloneSource._depthBufferWriteEnable;
             _counterClockwiseStencilDepthBufferFail = cloneSource._counterClockwiseStencilDepthBufferFail;

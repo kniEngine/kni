@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class SamplerState : GraphicsResource
     {
+        internal ISamplerStateStrategy _strategy;
 
         public static readonly SamplerState AnisotropicClamp;
         public static readonly SamplerState AnisotropicWrap;
@@ -202,6 +205,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public SamplerState()
             : base()
         {
+            _strategy = new SamplerStateStrategy();
+
             Filter = TextureFilter.Linear;
             AddressU = TextureAddressMode.Wrap;
             AddressV = TextureAddressMode.Wrap;
@@ -228,6 +233,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private SamplerState(SamplerState cloneSource)
         {
             Name = cloneSource.Name;
+
+            _strategy = new SamplerStateStrategy();
+
             _filter = cloneSource._filter;
             _addressU = cloneSource._addressU;
             _addressV = cloneSource._addressV;

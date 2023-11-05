@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class RasterizerState : GraphicsResource
     {
+        internal IRasterizerStateStrategy _strategy;
 
         public static readonly RasterizerState CullClockwise;
         public static readonly RasterizerState CullCounterClockwise;
@@ -148,6 +151,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public RasterizerState()
             : base()
         {
+            _strategy = new RasterizerStateStrategy();
+
             CullMode = CullMode.CullCounterClockwiseFace;
             FillMode = FillMode.Solid;
             DepthBias = 0;
@@ -168,6 +173,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private RasterizerState(RasterizerState cloneSource)
         {
             Name = cloneSource.Name;
+
+            _strategy = new RasterizerStateStrategy();
+
             _cullMode = cloneSource._cullMode;
             _fillMode = cloneSource._fillMode;
             _depthBias = cloneSource._depthBias;
