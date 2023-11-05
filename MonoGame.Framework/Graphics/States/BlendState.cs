@@ -24,13 +24,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal readonly bool _isDefaultStateObject;
 
-        private readonly TargetBlendState[] _targetBlendState;
-
         private Color _blendFactor;
-
         private int _multiSampleMask;
 
         private bool _independentBlendEnable;
+        private readonly TargetBlendState[] _targetBlendState;
 
         /// <summary>
         /// Returns the target specific blend state.
