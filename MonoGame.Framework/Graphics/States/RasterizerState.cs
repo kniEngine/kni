@@ -8,6 +8,18 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class RasterizerState : GraphicsResource
 	{
+
+	    public static readonly RasterizerState CullClockwise;
+        public static readonly RasterizerState CullCounterClockwise;
+        public static readonly RasterizerState CullNone;
+
+		static RasterizerState()
+		{
+		    CullClockwise = new RasterizerState("RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
+		    CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
+		    CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
+		}
+
         private readonly bool _isDefaultStateObject;
 
         private CullMode _cullMode;
@@ -133,10 +145,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-	    public static readonly RasterizerState CullClockwise;
-        public static readonly RasterizerState CullCounterClockwise;
-        public static readonly RasterizerState CullNone;
-
         public RasterizerState()
             : base()
 		{
@@ -168,13 +176,6 @@ namespace Microsoft.Xna.Framework.Graphics
 	        _slopeScaleDepthBias = cloneSource._slopeScaleDepthBias;
 	        _depthClipEnable = cloneSource._depthClipEnable;
 	    }
-
-		static RasterizerState()
-		{
-		    CullClockwise = new RasterizerState("RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
-		    CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
-		    CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
-		}
 
 	    internal RasterizerState Clone()
 	    {

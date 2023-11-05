@@ -8,9 +8,23 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public partial class BlendState : GraphicsResource
 	{
-        private readonly TargetBlendState[] _targetBlendState;
+
+        public static readonly BlendState Additive;
+        public static readonly BlendState AlphaBlend;
+        public static readonly BlendState NonPremultiplied;
+        public static readonly BlendState Opaque;
+
+        static BlendState()
+        {
+            Additive = new BlendState("BlendState.Additive", Blend.SourceAlpha, Blend.One);
+            AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
+            NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
+            Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
+		}
 
         internal readonly bool _isDefaultStateObject;
+
+        private readonly TargetBlendState[] _targetBlendState;
 
 	    private Color _blendFactor;
 
@@ -237,12 +251,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
-        public static readonly BlendState Additive;
-        public static readonly BlendState AlphaBlend;
-        public static readonly BlendState NonPremultiplied;
-        public static readonly BlendState Opaque;
-
         public BlendState()
             : base()
         {
@@ -282,14 +290,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _multiSampleMask = cloneSource._multiSampleMask;
             _independentBlendEnable = cloneSource._independentBlendEnable;
         }
-
-        static BlendState()
-        {
-            Additive = new BlendState("BlendState.Additive", Blend.SourceAlpha, Blend.One);
-            AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
-            NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
-            Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
-		}
 
 	    internal BlendState Clone()
 	    {

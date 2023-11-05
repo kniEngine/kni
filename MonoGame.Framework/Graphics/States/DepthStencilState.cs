@@ -8,6 +8,18 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState : GraphicsResource
     {
+
+        public static readonly DepthStencilState Default;
+        public static readonly DepthStencilState DepthRead;
+        public static readonly DepthStencilState None;
+
+		static DepthStencilState()
+		{
+		    Default = new DepthStencilState("DepthStencilState.Default", true, true);
+			DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
+		    None = new DepthStencilState("DepthStencilState.None", false, false);
+		}
+
         private readonly bool _isDefaultStateObject;
 
         private bool _depthBufferEnable;
@@ -318,17 +330,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _stencilWriteMask = cloneSource._stencilWriteMask;
             _twoSidedStencilMode = cloneSource._twoSidedStencilMode;
 	    }
-
-        public static readonly DepthStencilState Default;
-        public static readonly DepthStencilState DepthRead;
-        public static readonly DepthStencilState None;
-
-		static DepthStencilState()
-		{
-		    Default = new DepthStencilState("DepthStencilState.Default", true, true);
-			DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
-		    None = new DepthStencilState("DepthStencilState.None", false, false);
-		}
 
         internal DepthStencilState Clone()
         {

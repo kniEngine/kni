@@ -8,6 +8,14 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class SamplerState : GraphicsResource
     {
+
+        public static readonly SamplerState AnisotropicClamp;
+        public static readonly SamplerState AnisotropicWrap;
+        public static readonly SamplerState LinearClamp;
+        public static readonly SamplerState LinearWrap;
+        public static readonly SamplerState PointClamp;
+        public static readonly SamplerState PointWrap;
+
         static SamplerState()
         {
             AnisotropicClamp = new SamplerState("SamplerState.AnisotropicClamp", TextureFilter.Anisotropic, TextureAddressMode.Clamp);
@@ -17,13 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
             PointClamp = new SamplerState("SamplerState.PointClamp", TextureFilter.Point, TextureAddressMode.Clamp);
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
         }
-
-        public static readonly SamplerState AnisotropicClamp;
-        public static readonly SamplerState AnisotropicWrap;
-        public static readonly SamplerState LinearClamp;
-        public static readonly SamplerState LinearWrap;
-        public static readonly SamplerState PointClamp;
-        public static readonly SamplerState PointWrap;
 
         private readonly bool _isDefaultStateObject;
 
