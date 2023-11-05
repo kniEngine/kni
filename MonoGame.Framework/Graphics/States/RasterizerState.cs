@@ -144,14 +144,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new RasterizerStateStrategy();
-
-            CullMode = CullMode.CullCounterClockwiseFace;
-            FillMode = FillMode.Solid;
-            DepthBias = 0;
-            MultiSampleAntiAlias = true;
-            ScissorTestEnable = false;
-            SlopeScaleDepthBias = 0;
-            DepthClipEnable = true;
         }
 
         private RasterizerState(string name, CullMode cullMode)

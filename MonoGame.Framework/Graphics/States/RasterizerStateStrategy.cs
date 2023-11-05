@@ -58,6 +58,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public RasterizerStateStrategy()
         {
+            _cullMode = CullMode.CullCounterClockwiseFace;
+            _fillMode = FillMode.Solid;
+            _depthBias = 0;
+            _multiSampleAntiAlias = true;
+            _scissorTestEnable = false;
+            _slopeScaleDepthBias = 0;
+            _depthClipEnable = true;
         }
     }
 }
