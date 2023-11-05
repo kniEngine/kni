@@ -387,6 +387,7 @@
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
     <Compile Include="Graphics\States\BlendStateStrategy.cs" />
+    <Compile Include="Graphics\States\ReadonlyBlendStateStrategy.cs" />
     <Compile Include="Graphics\States\IBlendStateStrategy.cs" />
     <Compile Include="Graphics\States\CompareFunction.cs" />
     <Compile Include="Graphics\States\CullMode.cs" />
