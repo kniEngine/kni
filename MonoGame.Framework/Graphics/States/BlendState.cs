@@ -253,15 +253,15 @@ namespace Microsoft.Xna.Framework.Graphics
         public BlendState()
             : base()
         {
+            _blendFactor = Color.White;
+            _multiSampleMask = Int32.MaxValue;
+
+            _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this);
             _targetBlendState[1] = new TargetBlendState(this);
             _targetBlendState[2] = new TargetBlendState(this);
             _targetBlendState[3] = new TargetBlendState(this);
-
-            _blendFactor = Color.White;
-            _multiSampleMask = Int32.MaxValue;
-            _independentBlendEnable = false;
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
@@ -279,15 +279,15 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = cloneSource.Name;
 
+            _blendFactor = cloneSource._blendFactor;
+            _multiSampleMask = cloneSource._multiSampleMask;
+
+            _independentBlendEnable = cloneSource._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = cloneSource[0].Clone(this);
             _targetBlendState[1] = cloneSource[1].Clone(this);
             _targetBlendState[2] = cloneSource[2].Clone(this);
             _targetBlendState[3] = cloneSource[3].Clone(this);
-
-            _blendFactor = cloneSource._blendFactor;
-            _multiSampleMask = cloneSource._multiSampleMask;
-            _independentBlendEnable = cloneSource._independentBlendEnable;
         }
 
         internal BlendState Clone()
