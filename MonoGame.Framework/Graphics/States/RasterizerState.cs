@@ -25,17 +25,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private readonly bool _isDefaultStateObject;
 
-        private CullMode _cullMode;
-        private float _depthBias;
-        private FillMode _fillMode;
-        private bool _multiSampleAntiAlias;
-        private bool _scissorTestEnable;
-        private float _slopeScaleDepthBias;
-        private bool _depthClipEnable;
-
         public CullMode CullMode
         {
-            get { return _cullMode; }
+            get { return _strategy.CullMode; }
             set
             {
                 if (_isDefaultStateObject)
@@ -43,13 +35,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _cullMode = value;
+                _strategy.CullMode = value;
             }
         }
 
         public float DepthBias
         {
-            get { return _depthBias; }
+            get { return _strategy.DepthBias; }
             set
             {
                 if (_isDefaultStateObject)
@@ -57,13 +49,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _depthBias = value;
+                _strategy.DepthBias = value;
             }
         }
 
         public FillMode FillMode
         {
-            get { return _fillMode; }
+            get { return _strategy.FillMode; }
             set
             {
                 if (_isDefaultStateObject)
@@ -71,13 +63,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _fillMode = value;
+                _strategy.FillMode = value;
             }
         }
 
         public bool MultiSampleAntiAlias
         {
-            get { return _multiSampleAntiAlias; }
+            get { return _strategy.MultiSampleAntiAlias; }
             set
             {
                 if (_isDefaultStateObject)
@@ -85,13 +77,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _multiSampleAntiAlias = value;
+                _strategy.MultiSampleAntiAlias = value;
             }
         }
 
         public bool ScissorTestEnable
         {
-            get { return _scissorTestEnable; }
+            get { return _strategy.ScissorTestEnable; }
             set
             {
                 if (_isDefaultStateObject)
@@ -99,13 +91,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _scissorTestEnable = value;
+                _strategy.ScissorTestEnable = value;
             }
         }
 
         public float SlopeScaleDepthBias
         {
-            get { return _slopeScaleDepthBias; }
+            get { return _strategy.SlopeScaleDepthBias; }
             set
             {
                 if (_isDefaultStateObject)
@@ -113,13 +105,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _slopeScaleDepthBias = value;
+                _strategy.SlopeScaleDepthBias = value;
             }
         }
 
         public bool DepthClipEnable
         {
-            get { return _depthClipEnable; }
+            get { return _strategy.DepthClipEnable; }
             set
             {
                 if (_isDefaultStateObject)
@@ -127,7 +119,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
 
-                _depthClipEnable = value;
+                _strategy.DepthClipEnable = value;
             }
         }
 
@@ -166,7 +158,7 @@ namespace Microsoft.Xna.Framework.Graphics
             : this()
         {
             Name = name;
-            _cullMode = cullMode;
+            _strategy.CullMode = cullMode;
             _isDefaultStateObject = true;
         }
 
@@ -176,13 +168,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy = new RasterizerStateStrategy();
 
-            _cullMode = cloneSource._cullMode;
-            _fillMode = cloneSource._fillMode;
-            _depthBias = cloneSource._depthBias;
-            _multiSampleAntiAlias = cloneSource._multiSampleAntiAlias;
-            _scissorTestEnable = cloneSource._scissorTestEnable;
-            _slopeScaleDepthBias = cloneSource._slopeScaleDepthBias;
-            _depthClipEnable = cloneSource._depthClipEnable;
+            _strategy.CullMode = cloneSource._strategy.CullMode;
+            _strategy.FillMode = cloneSource._strategy.FillMode;
+            _strategy.DepthBias = cloneSource._strategy.DepthBias;
+            _strategy.MultiSampleAntiAlias = cloneSource._strategy.MultiSampleAntiAlias;
+            _strategy.ScissorTestEnable = cloneSource._strategy.ScissorTestEnable;
+            _strategy.SlopeScaleDepthBias = cloneSource._strategy.SlopeScaleDepthBias;
+            _strategy.DepthClipEnable = cloneSource._strategy.DepthClipEnable;
         }
 
         internal RasterizerState Clone()
