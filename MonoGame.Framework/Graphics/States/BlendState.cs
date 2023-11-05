@@ -24,28 +24,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal readonly bool _isDefaultStateObject;
 
-        private readonly TargetBlendState[] _targetBlendState;
-
         private Color _blendFactor;
-
         private int _multiSampleMask;
 
         private bool _independentBlendEnable;
+        private readonly TargetBlendState[] _targetBlendState;
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
+        /// <summary>
+        /// Enables use of the per-target blend states.
+        /// </summary>
+        public bool IndependentBlendEnable
         {
-            if (_isDefaultStateObject)
-                throw new InvalidOperationException("You cannot bind a default state object.");
-
-            if (this.GraphicsDevice != device)
+            get { return _independentBlendEnable; }
+            set
             {
-                if (this.GraphicsDevice == null)
-                {
-                    System.Diagnostics.Debug.Assert(device != null);
-                    BindGraphicsDevice(device.Strategy);
-                }
-                else
-                    throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
+                _independentBlendEnable = value;
             }
         }
 
@@ -234,35 +232,36 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /// <summary>
-        /// Enables use of the per-target blend states.
-        /// </summary>
-        public bool IndependentBlendEnable
-        {
-            get { return _independentBlendEnable; }
-            set
-            {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _independentBlendEnable = value;
+        internal void BindToGraphicsDevice(GraphicsDevice device)
+        {
+            if (_isDefaultStateObject)
+                throw new InvalidOperationException("You cannot bind a default state object.");
+
+            if (this.GraphicsDevice != device)
+            {
+                if (this.GraphicsDevice == null)
+                {
+                    System.Diagnostics.Debug.Assert(device != null);
+                    BindGraphicsDevice(device.Strategy);
+                }
+                else
+                    throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
             }
         }
 
         public BlendState()
             : base()
         {
+            _blendFactor = Color.White;
+            _multiSampleMask = Int32.MaxValue;
+
+            _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this);
             _targetBlendState[1] = new TargetBlendState(this);
             _targetBlendState[2] = new TargetBlendState(this);
             _targetBlendState[3] = new TargetBlendState(this);
-
-            _blendFactor = Color.White;
-            _multiSampleMask = Int32.MaxValue;
-            _independentBlendEnable = false;
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
@@ -280,15 +279,15 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = cloneSource.Name;
 
+            _blendFactor = cloneSource._blendFactor;
+            _multiSampleMask = cloneSource._multiSampleMask;
+
+            _independentBlendEnable = cloneSource._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = cloneSource[0].Clone(this);
             _targetBlendState[1] = cloneSource[1].Clone(this);
             _targetBlendState[2] = cloneSource[2].Clone(this);
             _targetBlendState[3] = cloneSource[3].Clone(this);
-
-            _blendFactor = cloneSource._blendFactor;
-            _multiSampleMask = cloneSource._multiSampleMask;
-            _independentBlendEnable = cloneSource._independentBlendEnable;
         }
 
         internal BlendState Clone()
