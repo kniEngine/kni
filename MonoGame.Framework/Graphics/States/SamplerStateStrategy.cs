@@ -78,6 +78,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public SamplerStateStrategy()
         {
+            _filter = TextureFilter.Linear;
+            _addressU = TextureAddressMode.Wrap;
+            _addressV = TextureAddressMode.Wrap;
+            _addressW = TextureAddressMode.Wrap;
+            _borderColor = Color.White;
+            _maxAnisotropy = 4;
+            _maxMipLevel = 0;
+            _mipMapLevelOfDetailBias = 0.0f;
+            _comparisonFunction = CompareFunction.Never;
+            _filterMode = TextureFilterMode.Default;
         }
     }
 }

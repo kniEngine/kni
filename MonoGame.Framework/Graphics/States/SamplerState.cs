@@ -196,17 +196,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new SamplerStateStrategy();
-
-            Filter = TextureFilter.Linear;
-            AddressU = TextureAddressMode.Wrap;
-            AddressV = TextureAddressMode.Wrap;
-            AddressW = TextureAddressMode.Wrap;
-            BorderColor = Color.White;
-            MaxAnisotropy = 4;
-            MaxMipLevel = 0;
-            MipMapLevelOfDetailBias = 0.0f;
-            ComparisonFunction = CompareFunction.Never;
-            FilterMode = TextureFilterMode.Default;
         }
 
         private SamplerState(string name, TextureFilter filter, TextureAddressMode addressMode)
