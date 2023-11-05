@@ -32,23 +32,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private bool _independentBlendEnable;
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
-        {
-            if (_isDefaultStateObject)
-                throw new InvalidOperationException("You cannot bind a default state object.");
-
-            if (this.GraphicsDevice != device)
-            {
-                if (this.GraphicsDevice == null)
-                {
-                    System.Diagnostics.Debug.Assert(device != null);
-                    BindGraphicsDevice(device.Strategy);
-                }
-                else
-                    throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
-            }
-        }
-
         /// <summary>
         /// Returns the target specific blend state.
         /// </summary>
@@ -248,6 +231,23 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _independentBlendEnable = value;
+            }
+        }
+
+        internal void BindToGraphicsDevice(GraphicsDevice device)
+        {
+            if (_isDefaultStateObject)
+                throw new InvalidOperationException("You cannot bind a default state object.");
+
+            if (this.GraphicsDevice != device)
+            {
+                if (this.GraphicsDevice == null)
+                {
+                    System.Diagnostics.Debug.Assert(device != null);
+                    BindGraphicsDevice(device.Strategy);
+                }
+                else
+                    throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
             }
         }
 
