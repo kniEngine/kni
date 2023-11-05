@@ -27,9 +27,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal readonly bool _isDefaultStateObject;
 
-        private Color _blendFactor;
-        private int _multiSampleMask;
-
         private bool _independentBlendEnable;
         private readonly TargetBlendState[] _targetBlendState;
 
@@ -209,7 +206,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public Color BlendFactor
         {
-            get { return _blendFactor; }
+            get { return _strategy.BlendFactor; }
             set
             {
                 if (_isDefaultStateObject)
@@ -217,13 +214,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _blendFactor = value;
+                _strategy.BlendFactor = value;
             }
         }
 
         public int MultiSampleMask
         {
-            get { return _multiSampleMask; }
+            get { return _strategy.MultiSampleMask; }
             set
             {
                 if (_isDefaultStateObject)
@@ -231,7 +228,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _multiSampleMask = value;
+                _strategy.MultiSampleMask = value;
             }
         }
 
@@ -256,8 +253,8 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new BlendStateStrategy();
-            _blendFactor = Color.White;
-            _multiSampleMask = Int32.MaxValue;
+            _strategy.BlendFactor = Color.White;
+            _strategy.MultiSampleMask = Int32.MaxValue;
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
@@ -283,8 +280,8 @@ namespace Microsoft.Xna.Framework.Graphics
             Name = cloneSource.Name;
 
             _strategy = new BlendStateStrategy();
-            _blendFactor = cloneSource._blendFactor;
-            _multiSampleMask = cloneSource._multiSampleMask;
+            _strategy.BlendFactor = cloneSource._strategy.BlendFactor;
+            _strategy.MultiSampleMask = cloneSource._strategy.MultiSampleMask;
 
             _independentBlendEnable = cloneSource._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
