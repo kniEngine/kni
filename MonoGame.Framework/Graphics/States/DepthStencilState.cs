@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState : GraphicsResource
     {
+        internal IDepthStencilStateStrategy _strategy;
 
         public static readonly DepthStencilState Default;
         public static readonly DepthStencilState DepthRead;
@@ -20,252 +23,201 @@ namespace Microsoft.Xna.Framework.Graphics
             None = new DepthStencilState("DepthStencilState.None", false, false);
         }
 
-        private readonly bool _isDefaultStateObject;
-
-        private bool _depthBufferEnable;
-        private bool _depthBufferWriteEnable;
-        private StencilOperation _counterClockwiseStencilDepthBufferFail;
-        private StencilOperation _counterClockwiseStencilFail;
-        private CompareFunction _counterClockwiseStencilFunction;
-        private StencilOperation _counterClockwiseStencilPass;
-        private CompareFunction _depthBufferFunction;
-        private int _referenceStencil;
-        private StencilOperation _stencilDepthBufferFail;
-        private bool _stencilEnable;
-        private StencilOperation _stencilFail;
-        private CompareFunction _stencilFunction;
-        private int _stencilMask;
-        private StencilOperation _stencilPass;
-        private int _stencilWriteMask;
-        private bool _twoSidedStencilMode;
-
         public bool DepthBufferEnable
         {
-            get { return _depthBufferEnable; }
+            get { return _strategy.DepthBufferEnable; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _depthBufferEnable = value;
+                _strategy.DepthBufferEnable = value;
             }
         }
 
         public bool DepthBufferWriteEnable
         {
-            get { return _depthBufferWriteEnable; }
+            get { return _strategy.DepthBufferWriteEnable; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _depthBufferWriteEnable = value;
+                _strategy.DepthBufferWriteEnable = value;
             }
         }
 
         public StencilOperation CounterClockwiseStencilDepthBufferFail
         {
-            get { return _counterClockwiseStencilDepthBufferFail; }
+            get { return _strategy.CounterClockwiseStencilDepthBufferFail; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _counterClockwiseStencilDepthBufferFail = value;
+                _strategy.CounterClockwiseStencilDepthBufferFail = value;
             }
         }
 
         public StencilOperation CounterClockwiseStencilFail
         {
-            get { return _counterClockwiseStencilFail; }
+            get { return _strategy.CounterClockwiseStencilFail; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _counterClockwiseStencilFail = value;
+                _strategy.CounterClockwiseStencilFail = value;
             }
         }
 
         public CompareFunction CounterClockwiseStencilFunction
         {
-            get { return _counterClockwiseStencilFunction; }
+            get { return _strategy.CounterClockwiseStencilFunction; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _counterClockwiseStencilFunction = value;
+                _strategy.CounterClockwiseStencilFunction = value;
             }
         }
 
         public StencilOperation CounterClockwiseStencilPass
         {
-            get { return _counterClockwiseStencilPass; }
+            get { return _strategy.CounterClockwiseStencilPass; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _counterClockwiseStencilPass = value;
+                _strategy.CounterClockwiseStencilPass = value;
             }
         }
 
         public CompareFunction DepthBufferFunction
         {
-            get { return _depthBufferFunction; }
+            get { return _strategy.DepthBufferFunction; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _depthBufferFunction = value;
+                _strategy.DepthBufferFunction = value;
             }
         }
 
         public int ReferenceStencil
         {
-            get { return _referenceStencil; }
+            get { return _strategy.ReferenceStencil; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _referenceStencil = value;
+                _strategy.ReferenceStencil = value;
             }
         }
 
         public StencilOperation StencilDepthBufferFail
         {
-            get { return _stencilDepthBufferFail; }
+            get { return _strategy.StencilDepthBufferFail; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilDepthBufferFail = value;
+                _strategy.StencilDepthBufferFail = value;
             }
         }
 
         public bool StencilEnable
         {
-            get { return _stencilEnable; }
+            get { return _strategy.StencilEnable; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilEnable = value;
+                _strategy.StencilEnable = value;
             }
         }
 
         public StencilOperation StencilFail
         {
-            get { return _stencilFail; }
+            get { return _strategy.StencilFail; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilFail = value;
+                _strategy.StencilFail = value;
             }
         }
 
         public CompareFunction StencilFunction
         {
-            get { return _stencilFunction; }
+            get { return _strategy.StencilFunction; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilFunction = value;
+                _strategy.StencilFunction = value;
             }
         }
 
         public int StencilMask
         {
-            get { return _stencilMask; }
+            get { return _strategy.StencilMask; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilMask = value;
+                _strategy.StencilMask = value;
             }
         }
 
         public StencilOperation StencilPass
         {
-            get { return _stencilPass; }
+            get { return _strategy.StencilPass; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilPass = value;
+                _strategy.StencilPass = value;
             }
         }
 
         public int StencilWriteMask
         {
-            get { return _stencilWriteMask; }
+            get { return _strategy.StencilWriteMask; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _stencilWriteMask = value;
+                _strategy.StencilWriteMask = value;
             }
         }
 
         public bool TwoSidedStencilMode
         {
-            get { return _twoSidedStencilMode; }
+            get { return _strategy.TwoSidedStencilMode; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default depth stencil state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
 
-                _twoSidedStencilMode = value;
+                _strategy.TwoSidedStencilMode = value;
             }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_isDefaultStateObject)
+            if (_strategy is ReadonlyDepthStencilStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
             if (this.GraphicsDevice != device)
@@ -283,52 +235,38 @@ namespace Microsoft.Xna.Framework.Graphics
         public DepthStencilState()
             : base()
         {
-            DepthBufferEnable = true;
-            DepthBufferWriteEnable = true;
-            DepthBufferFunction = CompareFunction.LessEqual;
-            StencilEnable = false;
-            StencilFunction = CompareFunction.Always;
-            StencilPass = StencilOperation.Keep;
-            StencilFail = StencilOperation.Keep;
-            StencilDepthBufferFail = StencilOperation.Keep;
-            TwoSidedStencilMode = false;
-            CounterClockwiseStencilFunction = CompareFunction.Always;
-            CounterClockwiseStencilFail = StencilOperation.Keep;
-            CounterClockwiseStencilPass = StencilOperation.Keep;
-            CounterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
-            StencilMask = Int32.MaxValue;
-            StencilWriteMask = Int32.MaxValue;
-            ReferenceStencil = 0;
+            _strategy = new DepthStencilStateStrategy();
         }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
-            : this()
+            : base()
         {
             Name = name;
-            _depthBufferEnable = depthBufferEnable;
-            _depthBufferWriteEnable = depthBufferWriteEnable;
-            _isDefaultStateObject = true;
+            _strategy = new ReadonlyDepthStencilStateStrategy(depthBufferEnable, depthBufferWriteEnable);
         }
 
         private DepthStencilState(DepthStencilState cloneSource)
         {
             Name = cloneSource.Name;
-            _depthBufferEnable = cloneSource._depthBufferEnable;
-            _depthBufferWriteEnable = cloneSource._depthBufferWriteEnable;
-            _counterClockwiseStencilDepthBufferFail = cloneSource._counterClockwiseStencilDepthBufferFail;
-            _counterClockwiseStencilFail = cloneSource._counterClockwiseStencilFail;
-            _counterClockwiseStencilFunction = cloneSource._counterClockwiseStencilFunction;
-            _counterClockwiseStencilPass = cloneSource._counterClockwiseStencilPass;
-            _depthBufferFunction = cloneSource._depthBufferFunction;
-            _referenceStencil = cloneSource._referenceStencil;
-            _stencilDepthBufferFail = cloneSource._stencilDepthBufferFail;
-            _stencilEnable = cloneSource._stencilEnable;
-            _stencilFail = cloneSource._stencilFail;
-            _stencilFunction = cloneSource._stencilFunction;
-            _stencilMask = cloneSource._stencilMask;
-            _stencilPass = cloneSource._stencilPass;
-            _stencilWriteMask = cloneSource._stencilWriteMask;
-            _twoSidedStencilMode = cloneSource._twoSidedStencilMode;
+
+            _strategy = new DepthStencilStateStrategy();
+
+            _strategy.DepthBufferEnable = cloneSource._strategy.DepthBufferEnable;
+            _strategy.DepthBufferWriteEnable = cloneSource._strategy.DepthBufferWriteEnable;
+            _strategy.CounterClockwiseStencilDepthBufferFail = cloneSource._strategy.CounterClockwiseStencilDepthBufferFail;
+            _strategy.CounterClockwiseStencilFail = cloneSource._strategy.CounterClockwiseStencilFail;
+            _strategy.CounterClockwiseStencilFunction = cloneSource._strategy.CounterClockwiseStencilFunction;
+            _strategy.CounterClockwiseStencilPass = cloneSource._strategy.CounterClockwiseStencilPass;
+            _strategy.DepthBufferFunction = cloneSource._strategy.DepthBufferFunction;
+            _strategy.ReferenceStencil = cloneSource._strategy.ReferenceStencil;
+            _strategy.StencilDepthBufferFail = cloneSource._strategy.StencilDepthBufferFail;
+            _strategy.StencilEnable = cloneSource._strategy.StencilEnable;
+            _strategy.StencilFail = cloneSource._strategy.StencilFail;
+            _strategy.StencilFunction = cloneSource._strategy.StencilFunction;
+            _strategy.StencilMask = cloneSource._strategy.StencilMask;
+            _strategy.StencilPass = cloneSource._strategy.StencilPass;
+            _strategy.StencilWriteMask = cloneSource._strategy.StencilWriteMask;
+            _strategy.TwoSidedStencilMode = cloneSource._strategy.TwoSidedStencilMode;
         }
 
         internal DepthStencilState Clone()

@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class SamplerState : GraphicsResource
     {
+        internal ISamplerStateStrategy _strategy;
 
         public static readonly SamplerState AnisotropicClamp;
         public static readonly SamplerState AnisotropicWrap;
@@ -26,128 +29,100 @@ namespace Microsoft.Xna.Framework.Graphics
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
         }
 
-        private readonly bool _isDefaultStateObject;
-
-        private TextureAddressMode _addressU;
-        private TextureAddressMode _addressV;
-        private TextureAddressMode _addressW;
-        private Color _borderColor;
-        private TextureFilter _filter;
-        private int _maxAnisotropy;
-        private int _maxMipLevel;
-        private float _mipMapLevelOfDetailBias;
-        private TextureFilterMode _filterMode;
-        private CompareFunction _comparisonFunction;
 
         public TextureAddressMode AddressU
         {
-            get { return _addressU; }
+            get { return _strategy.AddressU; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _addressU = value;
+                _strategy.AddressU = value;
             }
         }
 
         public TextureAddressMode AddressV
         {
-            get { return _addressV; }
+            get { return _strategy.AddressV; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _addressV = value;
+                _strategy.AddressV = value;
             }
         }
 
         public TextureAddressMode AddressW
         {
-            get { return _addressW; }
+            get { return _strategy.AddressW; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _addressW = value;
+                _strategy.AddressW = value;
             }
         }
 
         public Color BorderColor
         {
-            get { return _borderColor; }
+            get { return _strategy.BorderColor; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _borderColor = value;
+                _strategy.BorderColor = value;
             }
         }
 
         public TextureFilter Filter
         {
-            get { return _filter; }
+            get { return _strategy.Filter; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _filter = value;
+                _strategy.Filter = value;
             }
         }
 
         public int MaxAnisotropy
         {
-            get { return _maxAnisotropy; }
+            get { return _strategy.MaxAnisotropy; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _maxAnisotropy = value;
+                _strategy.MaxAnisotropy = value;
             }
         }
 
         public int MaxMipLevel
         {
-            get { return _maxMipLevel; }
+            get { return _strategy.MaxMipLevel; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _maxMipLevel = value;
+                _strategy.MaxMipLevel = value;
             }
         }
 
         public float MipMapLevelOfDetailBias
         {
-            get { return _mipMapLevelOfDetailBias; }
+            get { return _strategy.MipMapLevelOfDetailBias; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _mipMapLevelOfDetailBias = value;
+                _strategy.MipMapLevelOfDetailBias = value;
             }
         }
 
@@ -156,35 +131,31 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public CompareFunction ComparisonFunction
         {
-            get { return _comparisonFunction; }
+            get { return _strategy.ComparisonFunction; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _comparisonFunction = value;
+                _strategy.ComparisonFunction = value;
             }
         }
 
         public TextureFilterMode FilterMode
         {
-            get { return _filterMode; }
+            get { return _strategy.FilterMode; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default sampler state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
 
-                _filterMode = value;
+                _strategy.FilterMode = value;
             }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_isDefaultStateObject)
+            if (_strategy is ReadonlySamplerStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
             if (this.GraphicsDevice != device)
@@ -202,42 +173,32 @@ namespace Microsoft.Xna.Framework.Graphics
         public SamplerState()
             : base()
         {
-            Filter = TextureFilter.Linear;
-            AddressU = TextureAddressMode.Wrap;
-            AddressV = TextureAddressMode.Wrap;
-            AddressW = TextureAddressMode.Wrap;
-            BorderColor = Color.White;
-            MaxAnisotropy = 4;
-            MaxMipLevel = 0;
-            MipMapLevelOfDetailBias = 0.0f;
-            ComparisonFunction = CompareFunction.Never;
-            FilterMode = TextureFilterMode.Default;
+            _strategy = new SamplerStateStrategy();
         }
 
         private SamplerState(string name, TextureFilter filter, TextureAddressMode addressMode)
-            : this()
+            : base()
         {
             Name = name;
-            _filter = filter;
-            _addressU = addressMode;
-            _addressV = addressMode;
-            _addressW = addressMode;
-            _isDefaultStateObject = true;
+            _strategy = new ReadonlySamplerStateStrategy(filter, addressMode);
         }
 
         private SamplerState(SamplerState cloneSource)
         {
             Name = cloneSource.Name;
-            _filter = cloneSource._filter;
-            _addressU = cloneSource._addressU;
-            _addressV = cloneSource._addressV;
-            _addressW = cloneSource._addressW;
-            _borderColor = cloneSource._borderColor;
-            _maxAnisotropy = cloneSource._maxAnisotropy;
-            _maxMipLevel = cloneSource._maxMipLevel;
-            _mipMapLevelOfDetailBias = cloneSource._mipMapLevelOfDetailBias;
-            _comparisonFunction = cloneSource._comparisonFunction;
-            _filterMode = cloneSource._filterMode;
+
+            _strategy = new SamplerStateStrategy();
+
+            _strategy.Filter = cloneSource._strategy.Filter;
+            _strategy.AddressU = cloneSource._strategy.AddressU;
+            _strategy.AddressV = cloneSource._strategy.AddressV;
+            _strategy.AddressW = cloneSource._strategy.AddressW;
+            _strategy.BorderColor = cloneSource._strategy.BorderColor;
+            _strategy.MaxAnisotropy = cloneSource._strategy.MaxAnisotropy;
+            _strategy.MaxMipLevel = cloneSource._strategy.MaxMipLevel;
+            _strategy.MipMapLevelOfDetailBias = cloneSource._strategy.MipMapLevelOfDetailBias;
+            _strategy.ComparisonFunction = cloneSource._strategy.ComparisonFunction;
+            _strategy.FilterMode = cloneSource._strategy.FilterMode;
         }
 
         internal SamplerState Clone()

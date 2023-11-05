@@ -2,12 +2,15 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class BlendState : GraphicsResource
     {
+        internal IBlendStateStrategy _strategy;
 
         public static readonly BlendState Additive;
         public static readonly BlendState AlphaBlend;
@@ -22,11 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
         }
 
-        internal readonly bool _isDefaultStateObject;
-
-        private Color _blendFactor;
-        private int _multiSampleMask;
-
         private bool _independentBlendEnable;
         private readonly TargetBlendState[] _targetBlendState;
 
@@ -38,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _independentBlendEnable; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -62,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].AlphaBlendFunction; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -76,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].AlphaDestinationBlend; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -90,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].AlphaSourceBlend; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -104,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorBlendFunction; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -118,7 +116,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorDestinationBlend; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -132,7 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorSourceBlend; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -146,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[0].ColorWriteChannels; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -160,7 +158,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[1].ColorWriteChannels; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -174,7 +172,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[2].ColorWriteChannels; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -188,7 +186,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _targetBlendState[3].ColorWriteChannels; }
             set
             {
-                if (_isDefaultStateObject)
+                if (_strategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
@@ -206,36 +204,31 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public Color BlendFactor
         {
-            get { return _blendFactor; }
+            get { return _strategy.BlendFactor; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _blendFactor = value;
+                _strategy.BlendFactor = value;
             }
         }
 
         public int MultiSampleMask
         {
-            get { return _multiSampleMask; }
+            get { return _strategy.MultiSampleMask; }
             set
             {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _multiSampleMask = value;
+                _strategy.MultiSampleMask = value;
             }
         }
 
-
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
-            if (_isDefaultStateObject)
+            if (_strategy is ReadonlyBlendStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
             if (this.GraphicsDevice != device)
@@ -253,8 +246,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public BlendState()
             : base()
         {
-            _blendFactor = Color.White;
-            _multiSampleMask = Int32.MaxValue;
+            _strategy = new BlendStateStrategy();
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
@@ -265,22 +257,30 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : this()
+            : base()
         {
             Name = name;
+            _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend);
             ColorSourceBlend = sourceBlend;
             AlphaSourceBlend = sourceBlend;
             ColorDestinationBlend = destinationBlend;
             AlphaDestinationBlend = destinationBlend;
-            _isDefaultStateObject = true;
+
+            _independentBlendEnable = false;
+            _targetBlendState = new TargetBlendState[4];
+            _targetBlendState[0] = new TargetBlendState(this);
+            _targetBlendState[1] = new TargetBlendState(this);
+            _targetBlendState[2] = new TargetBlendState(this);
+            _targetBlendState[3] = new TargetBlendState(this);
         }
 
         private BlendState(BlendState cloneSource)
         {
             Name = cloneSource.Name;
 
-            _blendFactor = cloneSource._blendFactor;
-            _multiSampleMask = cloneSource._multiSampleMask;
+            _strategy = new BlendStateStrategy();
+            _strategy.BlendFactor = cloneSource._strategy.BlendFactor;
+            _strategy.MultiSampleMask = cloneSource._strategy.MultiSampleMask;
 
             _independentBlendEnable = cloneSource._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
