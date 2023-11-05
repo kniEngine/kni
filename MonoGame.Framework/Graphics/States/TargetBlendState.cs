@@ -9,21 +9,21 @@ using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class TargetBlendState
-	{
-	    private readonly BlendState _parent;
-	    private BlendFunction _alphaBlendFunction;
-	    private Blend _alphaDestinationBlend;
-	    private Blend _alphaSourceBlend;
-	    private BlendFunction _colorBlendFunction;
-	    private Blend _colorDestinationBlend;
-	    private Blend _colorSourceBlend;
-	    private ColorWriteChannels _colorWriteChannels;
+    public class TargetBlendState
+    {
+        private readonly BlendState _parent;
+        private BlendFunction _alphaBlendFunction;
+        private Blend _alphaDestinationBlend;
+        private Blend _alphaSourceBlend;
+        private BlendFunction _colorBlendFunction;
+        private Blend _colorDestinationBlend;
+        private Blend _colorSourceBlend;
+        private ColorWriteChannels _colorWriteChannels;
 
-	    internal TargetBlendState(BlendState parent)
+        internal TargetBlendState(BlendState parent)
         {
-	        _parent = parent;
-	        AlphaBlendFunction = BlendFunction.Add;
+            _parent = parent;
+            AlphaBlendFunction = BlendFunction.Add;
             AlphaDestinationBlend = Blend.Zero;
             AlphaSourceBlend = Blend.One;
             ColorBlendFunction = BlendFunction.Add;
@@ -32,117 +32,117 @@ namespace Microsoft.Xna.Framework.Graphics
             ColorWriteChannels = ColorWriteChannels.All;
         }
 
-	    internal TargetBlendState Clone(BlendState parent)
-	    {
-	        return new TargetBlendState(parent)
-	        {
-	            AlphaBlendFunction = AlphaBlendFunction,
+        internal TargetBlendState Clone(BlendState parent)
+        {
+            return new TargetBlendState(parent)
+            {
+                AlphaBlendFunction = AlphaBlendFunction,
                 AlphaDestinationBlend = AlphaDestinationBlend,
                 AlphaSourceBlend = AlphaSourceBlend,
                 ColorBlendFunction = ColorBlendFunction,
                 ColorDestinationBlend = ColorDestinationBlend,
                 ColorSourceBlend = ColorSourceBlend,
                 ColorWriteChannels = ColorWriteChannels
-	        };
-	    }
+            };
+        }
 
-	    public BlendFunction AlphaBlendFunction
-	    {
-	        get { return _alphaBlendFunction; }
-	        set
-	        {
+        public BlendFunction AlphaBlendFunction
+        {
+            get { return _alphaBlendFunction; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _alphaBlendFunction = value;
-	        }
-	    }
+                _alphaBlendFunction = value;
+            }
+        }
 
-	    public Blend AlphaDestinationBlend
-	    {
-	        get { return _alphaDestinationBlend; }
-	        set
-	        {
+        public Blend AlphaDestinationBlend
+        {
+            get { return _alphaDestinationBlend; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _alphaDestinationBlend = value;
-	        }
-	    }
+                _alphaDestinationBlend = value;
+            }
+        }
 
-	    public Blend AlphaSourceBlend
-	    {
-	        get { return _alphaSourceBlend; }
-	        set
-	        {
+        public Blend AlphaSourceBlend
+        {
+            get { return _alphaSourceBlend; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _alphaSourceBlend = value;
-	        }
-	    }
+                _alphaSourceBlend = value;
+            }
+        }
 
-	    public BlendFunction ColorBlendFunction
-	    {
-	        get { return _colorBlendFunction; }
-	        set
-	        {
+        public BlendFunction ColorBlendFunction
+        {
+            get { return _colorBlendFunction; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _colorBlendFunction = value;
-	        }
-	    }
+                _colorBlendFunction = value;
+            }
+        }
 
-	    public Blend ColorDestinationBlend
-	    {
-	        get { return _colorDestinationBlend; }
-	        set
-	        {
+        public Blend ColorDestinationBlend
+        {
+            get { return _colorDestinationBlend; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _colorDestinationBlend = value;
-	        }
-	    }
+                _colorDestinationBlend = value;
+            }
+        }
 
-	    public Blend ColorSourceBlend
-	    {
-	        get { return _colorSourceBlend; }
-	        set
-	        {
+        public Blend ColorSourceBlend
+        {
+            get { return _colorSourceBlend; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _colorSourceBlend = value;
-	        }
-	    }
+                _colorSourceBlend = value;
+            }
+        }
 
-	    public ColorWriteChannels ColorWriteChannels
-	    {
-	        get { return _colorWriteChannels; }
-	        set
-	        {
+        public ColorWriteChannels ColorWriteChannels
+        {
+            get { return _colorWriteChannels; }
+            set
+            {
                 if (_parent._isDefaultStateObject)
                     throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-	            _colorWriteChannels = value;
-	        }
-	    }
+                _colorWriteChannels = value;
+            }
+        }
 
 #if DIRECTX
 
@@ -246,6 +246,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 #endif
 
-	}
+    }
 }
 

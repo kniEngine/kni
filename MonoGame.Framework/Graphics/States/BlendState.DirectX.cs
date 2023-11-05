@@ -36,8 +36,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 _state = new D3D11.BlendState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, blendStateDesc);
             }
 
-			// Apply the state!
-			return _state;
+            // Apply the state!
+            return _state;
         }
 
         partial void PlatformDispose(bool disposing)

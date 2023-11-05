@@ -8,6 +8,18 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class DepthStencilState : GraphicsResource
     {
+
+        public static readonly DepthStencilState Default;
+        public static readonly DepthStencilState DepthRead;
+        public static readonly DepthStencilState None;
+
+        static DepthStencilState()
+        {
+            Default = new DepthStencilState("DepthStencilState.Default", true, true);
+            DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
+            None = new DepthStencilState("DepthStencilState.None", false, false);
+        }
+
         private readonly bool _isDefaultStateObject;
 
         private bool _depthBufferEnable;
@@ -270,37 +282,37 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public DepthStencilState()
             : base()
-		{
+        {
             DepthBufferEnable = true;
             DepthBufferWriteEnable = true;
-			DepthBufferFunction = CompareFunction.LessEqual;
-			StencilEnable = false;
-			StencilFunction = CompareFunction.Always;
-			StencilPass = StencilOperation.Keep;
-			StencilFail = StencilOperation.Keep;
-			StencilDepthBufferFail = StencilOperation.Keep;
-			TwoSidedStencilMode = false;
-			CounterClockwiseStencilFunction = CompareFunction.Always;
-			CounterClockwiseStencilFail = StencilOperation.Keep;
-			CounterClockwiseStencilPass = StencilOperation.Keep;
-			CounterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
-			StencilMask = Int32.MaxValue;
-			StencilWriteMask = Int32.MaxValue;
-			ReferenceStencil = 0;
-		}
+            DepthBufferFunction = CompareFunction.LessEqual;
+            StencilEnable = false;
+            StencilFunction = CompareFunction.Always;
+            StencilPass = StencilOperation.Keep;
+            StencilFail = StencilOperation.Keep;
+            StencilDepthBufferFail = StencilOperation.Keep;
+            TwoSidedStencilMode = false;
+            CounterClockwiseStencilFunction = CompareFunction.Always;
+            CounterClockwiseStencilFail = StencilOperation.Keep;
+            CounterClockwiseStencilPass = StencilOperation.Keep;
+            CounterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
+            StencilMask = Int32.MaxValue;
+            StencilWriteMask = Int32.MaxValue;
+            ReferenceStencil = 0;
+        }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
             : this()
-	    {
-	        Name = name;
+        {
+            Name = name;
             _depthBufferEnable = depthBufferEnable;
             _depthBufferWriteEnable = depthBufferWriteEnable;
-	        _isDefaultStateObject = true;
-	    }
+            _isDefaultStateObject = true;
+        }
 
         private DepthStencilState(DepthStencilState cloneSource)
-	    {
-	        Name = cloneSource.Name;
+        {
+            Name = cloneSource.Name;
             _depthBufferEnable = cloneSource._depthBufferEnable;
             _depthBufferWriteEnable = cloneSource._depthBufferWriteEnable;
             _counterClockwiseStencilDepthBufferFail = cloneSource._counterClockwiseStencilDepthBufferFail;
@@ -317,18 +329,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _stencilPass = cloneSource._stencilPass;
             _stencilWriteMask = cloneSource._stencilWriteMask;
             _twoSidedStencilMode = cloneSource._twoSidedStencilMode;
-	    }
-
-        public static readonly DepthStencilState Default;
-        public static readonly DepthStencilState DepthRead;
-        public static readonly DepthStencilState None;
-
-		static DepthStencilState()
-		{
-		    Default = new DepthStencilState("DepthStencilState.Default", true, true);
-			DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
-		    None = new DepthStencilState("DepthStencilState.None", false, false);
-		}
+        }
 
         internal DepthStencilState Clone()
         {

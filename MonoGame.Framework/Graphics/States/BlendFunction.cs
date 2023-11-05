@@ -7,16 +7,16 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Defines a function for color blending.
     /// </summary>
-	public enum BlendFunction
-	{
+    public enum BlendFunction
+    {
         /// <summary>
         /// The function will adds destination to the source. (srcColor * srcBlend) + (destColor * destBlend)
         /// </summary>
-		Add,
+        Add,
         /// <summary>
         /// The function will subtracts destination from source. (srcColor * srcBlend) − (destColor * destBlend)
         /// </summary>
-		Subtract,
+        Subtract,
         /// <summary>
         /// The function will subtracts source from destination. (destColor * destBlend) - (srcColor * srcBlend) 
         /// </summary>
@@ -28,6 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// The function will extracts maximum of the source and destination. max((srcColor * srcBlend),(destColor * destBlend))
         /// </summary>
-		Max
-	}
+        Max
+    }
 }
