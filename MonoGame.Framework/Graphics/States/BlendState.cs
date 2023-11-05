@@ -31,6 +31,23 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly TargetBlendState[] _targetBlendState;
 
         /// <summary>
+        /// Enables use of the per-target blend states.
+        /// </summary>
+        public bool IndependentBlendEnable
+        {
+            get { return _independentBlendEnable; }
+            set
+            {
+                if (_isDefaultStateObject)
+                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                if (GraphicsDevice != null)
+                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+
+                _independentBlendEnable = value;
+            }
+        }
+
+        /// <summary>
         /// Returns the target specific blend state.
         /// </summary>
         /// <param name="index">The 0 to 3 target blend state index.</param>
@@ -215,22 +232,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        /// <summary>
-        /// Enables use of the per-target blend states.
-        /// </summary>
-        public bool IndependentBlendEnable
-        {
-            get { return _independentBlendEnable; }
-            set
-            {
-                if (_isDefaultStateObject)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _independentBlendEnable = value;
-            }
-        }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
         {
