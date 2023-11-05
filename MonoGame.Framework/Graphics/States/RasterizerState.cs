@@ -147,9 +147,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private RasterizerState(string name, CullMode cullMode)
-            : this()
+            : base()
         {
             Name = name;
+            _strategy = new RasterizerStateStrategy();
             _strategy.CullMode = cullMode;
             _isDefaultStateObject = true;
         }

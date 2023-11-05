@@ -199,9 +199,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private SamplerState(string name, TextureFilter filter, TextureAddressMode addressMode)
-            : this()
+            : base()
         {
             Name = name;
+            _strategy = new SamplerStateStrategy();
             _strategy.Filter = filter;
             _strategy.AddressU = addressMode;
             _strategy.AddressV = addressMode;

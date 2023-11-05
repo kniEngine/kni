@@ -263,14 +263,22 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : this()
+            : base()
         {
             Name = name;
+            _strategy = new BlendStateStrategy();
             ColorSourceBlend = sourceBlend;
             AlphaSourceBlend = sourceBlend;
             ColorDestinationBlend = destinationBlend;
             AlphaDestinationBlend = destinationBlend;
             _isDefaultStateObject = true;
+
+            _independentBlendEnable = false;
+            _targetBlendState = new TargetBlendState[4];
+            _targetBlendState[0] = new TargetBlendState(this);
+            _targetBlendState[1] = new TargetBlendState(this);
+            _targetBlendState[2] = new TargetBlendState(this);
+            _targetBlendState[3] = new TargetBlendState(this);
         }
 
         private BlendState(BlendState cloneSource)

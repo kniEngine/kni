@@ -273,9 +273,10 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
-            : this()
+            : base()
         {
             Name = name;
+            _strategy = new DepthStencilStateStrategy();
             _strategy.DepthBufferEnable = depthBufferEnable;
             _strategy.DepthBufferWriteEnable = depthBufferWriteEnable;
             _isDefaultStateObject = true;
