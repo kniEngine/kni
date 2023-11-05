@@ -83,6 +83,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BlendStateStrategy()
         {
+            _blendFactor = Color.White;
+            _multiSampleMask = Int32.MaxValue;
+
+            //_alphaBlendFunction = BlendFunction.Add;
+            //_alphaDestinationBlend = Blend.Zero;
+            //_alphaSourceBlend = Blend.One;
+            //_colorBlendFunction = BlendFunction.Add;
+            //_colorDestinationBlend = Blend.Zero;
+            //_colorSourceBlend = Blend.One;
+            //_colorWriteChannels = ColorWriteChannels.All;
         }
     }
 }

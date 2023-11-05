@@ -253,8 +253,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new BlendStateStrategy();
-            _strategy.BlendFactor = Color.White;
-            _strategy.MultiSampleMask = Int32.MaxValue;
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
