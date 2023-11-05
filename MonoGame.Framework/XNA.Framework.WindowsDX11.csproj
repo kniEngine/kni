@@ -403,6 +403,7 @@
     <Compile Include="Graphics\States\FillMode.cs" />
     <Compile Include="Graphics\States\RasterizerState.cs" />
     <Compile Include="Graphics\States\RasterizerStateStrategy.cs" />
+    <Compile Include="Graphics\States\ReadonlyRasterizerStateStrategy.cs" />
     <Compile Include="Graphics\States\IRasterizerStateStrategy.cs" />
     <Compile Include="Graphics\States\SamplerState.cs" />
     <Compile Include="Graphics\States\SamplerStateStrategy.cs" />
