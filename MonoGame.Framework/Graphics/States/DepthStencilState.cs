@@ -270,23 +270,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new DepthStencilStateStrategy();
-
-            DepthBufferEnable = true;
-            DepthBufferWriteEnable = true;
-            DepthBufferFunction = CompareFunction.LessEqual;
-            StencilEnable = false;
-            StencilFunction = CompareFunction.Always;
-            StencilPass = StencilOperation.Keep;
-            StencilFail = StencilOperation.Keep;
-            StencilDepthBufferFail = StencilOperation.Keep;
-            TwoSidedStencilMode = false;
-            CounterClockwiseStencilFunction = CompareFunction.Always;
-            CounterClockwiseStencilFail = StencilOperation.Keep;
-            CounterClockwiseStencilPass = StencilOperation.Keep;
-            CounterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
-            StencilMask = Int32.MaxValue;
-            StencilWriteMask = Int32.MaxValue;
-            ReferenceStencil = 0;
         }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)

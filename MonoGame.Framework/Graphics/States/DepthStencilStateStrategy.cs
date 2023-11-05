@@ -122,6 +122,22 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public DepthStencilStateStrategy()
         {
+            _depthBufferEnable = true;
+            _depthBufferWriteEnable = true;
+            _depthBufferFunction = CompareFunction.LessEqual;
+            _stencilEnable = false;
+            _stencilFunction = CompareFunction.Always;
+            _stencilPass = StencilOperation.Keep;
+            _stencilFail = StencilOperation.Keep;
+            _stencilDepthBufferFail = StencilOperation.Keep;
+            _twoSidedStencilMode = false;
+            _counterClockwiseStencilFunction = CompareFunction.Always;
+            _counterClockwiseStencilFail = StencilOperation.Keep;
+            _counterClockwiseStencilPass = StencilOperation.Keep;
+            _counterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
+            _stencilMask = Int32.MaxValue;
+            _stencilWriteMask = Int32.MaxValue;
+            _referenceStencil = 0;
         }
     }
 }
