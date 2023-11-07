@@ -544,11 +544,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             outputFilepath = PathHelper.Normalize(outputFilepath);
         }
 
-        private PipelineBuildEvent LoadBuildEvent(string destFile, out string eventFilepath)
+        private string GetBuildEventFilepath(string destFile)
         {
-            var contentPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
-            eventFilepath = Path.Combine(IntermediateDirectory, contentPath);
-            return PipelineBuildEvent.LoadXml(eventFilepath);
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            return intermediateXmlEventPath;
+        }
+
+        private PipelineBuildEvent LoadBuildEvent(string destFile)
+        {
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            return PipelineBuildEvent.LoadXml(intermediateXmlEventPath);
         }
 
         public void RegisterContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
@@ -589,8 +596,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Load the previous content event if it exists.
-            string eventFilepath;
-            var cachedEvent = LoadBuildEvent(contentEvent.DestFile, out eventFilepath);
+            string eventFilepath = GetBuildEventFilepath(contentEvent.DestFile);
+            var cachedEvent = LoadBuildEvent(contentEvent.DestFile);
 
             BuildContent(logger, contentEvent, cachedEvent, eventFilepath);
 
@@ -627,8 +634,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // While this asset doesn't need to be rebuilt the dependent assets might.
                     foreach (var asset in cachedEvent.BuildAsset)
                     {
-                        string assetEventFilepath;
-                        var assetCachedEvent = LoadBuildEvent(asset, out assetEventFilepath);
+                        string assetEventFilepath = GetBuildEventFilepath(asset);
+                        var assetCachedEvent = LoadBuildEvent(asset);
 
                         // If we cannot find the cached event for the dependancy
                         // then we have to trigger a rebuild of the parent content.
@@ -786,16 +793,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             // First try to load the event file.
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-            string eventFilepath;
-            var cachedEvent = LoadBuildEvent(outputFilepath, out eventFilepath);
+            string eventFilepath = GetBuildEventFilepath(outputFilepath);
+            var cachedEvent = LoadBuildEvent(outputFilepath);
 
             if (cachedEvent != null)
             {
                 // Recursively clean additional (nested) assets.
                 foreach (var asset in cachedEvent.BuildAsset)
                 {
-                    string assetEventFilepath;
-                    var assetCachedEvent = LoadBuildEvent(asset, out assetEventFilepath);
+                    string assetEventFilepath = GetBuildEventFilepath(asset);
+                    var assetCachedEvent = LoadBuildEvent(asset);
 
                     if (assetCachedEvent == null)
                     {
@@ -925,8 +932,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             for (int index = 0; ; index++)
             {
                 string destFile = assetName + '_' + index;
-                string eventFile;
-                var existingBuildEvent = LoadBuildEvent(destFile, out eventFile);
+                var existingBuildEvent = LoadBuildEvent(destFile);
                 if (existingBuildEvent == null)
                     return destFile;
 
