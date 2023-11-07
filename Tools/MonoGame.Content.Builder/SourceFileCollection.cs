@@ -49,9 +49,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
             catch (Exception)
             {
+                return null;
             }
-
-            return new SourceFileCollection();
         }
 
         public void SaveXml(string filePath)
@@ -59,6 +58,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
                 serializer.Serialize(textWriter, this);            
+        }
+
+        internal void AddFile(string sourceFile, string outputFile)
+        {
+            this.SourceFiles.Add(sourceFile);
+            this.DestFiles.Add(outputFile);
         }
 
         public void Merge(SourceFileCollection other)

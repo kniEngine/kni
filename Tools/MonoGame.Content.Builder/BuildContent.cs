@@ -430,9 +430,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                           item.Processor,
                                           item.ProcessorParams);
 
-                    newContent.SourceFiles.Add(item.SourceFile);
-                    newContent.DestFiles.Add(item.OutputFile);
-
+                    newContent.AddFile(item.SourceFile, item.OutputFile);
                     SuccessCount++;
                 }
                 catch (InvalidContentException ex)
@@ -545,8 +543,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         if (task.IsCompleted)
                         {
                             var buildState = task.AsyncState as BuildAsyncState;
-                            newContent.SourceFiles.Add(buildState.SourceFile);
-                            newContent.DestFiles.Add(buildState.OutputFile);
+
+                            newContent.AddFile(buildState.SourceFile, buildState.OutputFile);
                             SuccessCount++;
                         }
                     }
