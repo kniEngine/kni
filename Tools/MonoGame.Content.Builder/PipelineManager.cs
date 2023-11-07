@@ -598,13 +598,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Load the previous content event if it exists.
             var cachedEvent = LoadBuildEvent(contentEvent.DestFile);
 
-            string eventFilepath = GetBuildEventFilepath(contentEvent.DestFile);
-            BuildContent(logger, contentEvent, cachedEvent, eventFilepath);
+            BuildContent(logger, contentEvent, cachedEvent, contentEvent.DestFile);
 
             return contentEvent;
         }
 
-        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent, PipelineBuildEvent cachedEvent, string eventFilepath)
+        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent, PipelineBuildEvent cachedEvent, string destFilePath)
         {
             if (!File.Exists(pipelineEvent.SourceFile))
             {
@@ -654,8 +653,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         };
 
                         // Give the asset a chance to rebuild.                    
-                        string assetEventFilepath = GetBuildEventFilepath(asset);
-                        BuildContent(logger, depEvent, assetCachedEvent, assetEventFilepath);
+                        BuildContent(logger, depEvent, assetCachedEvent, asset);
                     }
                 }
 
@@ -673,6 +671,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     pipelineEvent.ProcessorTime = GetProcessorAssemblyTimestamp(pipelineEvent.Processor);
 
                     // Store the new event into the intermediate folder.
+                    string eventFilepath = GetBuildEventFilepath(destFilePath);
                     pipelineEvent.SaveXml(eventFilepath);
                 }
             }
