@@ -333,21 +333,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Load the previously serialized list of built content.
-            SourceFileCollection previousContent = LoadFileCollection(intermediatePath);
-            if (previousContent == null)
-                previousContent = new SourceFileCollection();
+            SourceFileCollection previousFileCollection = LoadFileCollection(intermediatePath);
+            if (previousFileCollection == null)
+                previousFileCollection = new SourceFileCollection();
 
             // If the target changed in any way then we need to force
             // a full rebuild even under incremental builds.
-            bool targetChanged = previousContent.Config != Config ||
-                                previousContent.Platform != Platform ||
-                                previousContent.Profile != Profile;
+            bool targetChanged = previousFileCollection.Config != Config ||
+                                 previousFileCollection.Platform != Platform ||
+                                 previousFileCollection.Profile != Profile;
 
             // First clean previously built content.
-            CleanItems(previousContent, targetChanged);
+            CleanItems(previousFileCollection, targetChanged);
             // TODO: Should we be cleaning copy items?  I think maybe we should.
 
-            var newContent = new SourceFileCollection
+            SourceFileCollection newFileCollection = new SourceFileCollection
             {
                 Profile = _manager.Profile = Profile,
                 Platform = _manager.Platform = Platform,
@@ -361,36 +361,36 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             RegisterItems(_content);
 
             if (SingleThread)
-                BuildItemsSingleThread(_content, newContent);
+                BuildItemsSingleThread(_content, newFileCollection);
             else
-                BuildItemsMultiThread(_content, newContent);
+                BuildItemsMultiThread(_content, newFileCollection);
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
             if (Incremental && !targetChanged)
-                newContent.Merge(previousContent);
+                newFileCollection.Merge(previousFileCollection);
 
             // Delete the old file and write the new content 
             // list if we have any to serialize.
             DeleteFileCollection(intermediatePath);
-            if (newContent.SourceFiles.Count > 0)
-                SaveFileCollection(intermediatePath, newContent);
+            if (newFileCollection.SourceFiles.Count > 0)
+                SaveFileCollection(intermediatePath, newFileCollection);
 
             // Process copy items (files that bypass the content pipeline)
             CopyItems(_copyItems, projectDirectory, outputPath);
         }
 
-        private void CleanItems(SourceFileCollection previousContent, bool targetChanged)
+        private void CleanItems(SourceFileCollection fileCollection, bool targetChanged)
         {
-            for (int i = 0; i < previousContent.SourceFiles.Count; i++)
+            for (int i = 0; i < fileCollection.SourceFiles.Count; i++)
             {
-                var sourceFile = previousContent.SourceFiles[i];
+                string sourceFile = fileCollection.SourceFiles[i];
 
                 // This may be an old file (prior to MG 3.7) which doesn't have destination files:
                 string destFile = null;
-                if (i < previousContent.DestFiles.Count)
+                if (i < fileCollection.DestFiles.Count)
                 {
-                    destFile = previousContent.DestFiles[i];
+                    destFile = fileCollection.DestFiles[i];
                 }
 
                 var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
@@ -416,7 +416,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection newContent)
+        private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
             foreach (var item in contentItems)
             {
@@ -429,7 +429,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                           item.Processor,
                                           item.ProcessorParams);
 
-                    newContent.AddFile(item.SourceFile, item.OutputFile);
+                    fileCollection.AddFile(item.SourceFile, item.OutputFile);
                     SuccessCount++;
                 }
                 catch (InvalidContentException ex)
@@ -447,7 +447,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void BuildItemsMultiThread(List<ContentItem> contentItems, SourceFileCollection newContent)
+        private void BuildItemsMultiThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
             var buildTaskQueue = new Queue<Task<PipelineBuildEvent>>();
             var activeBuildTasks = new List<Task<PipelineBuildEvent>>();
@@ -543,7 +543,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         {
                             var buildState = task.AsyncState as BuildAsyncState;
 
-                            newContent.AddFile(buildState.SourceFile, buildState.OutputFile);
+                            fileCollection.AddFile(buildState.SourceFile, buildState.OutputFile);
                             SuccessCount++;
                         }
                     }
