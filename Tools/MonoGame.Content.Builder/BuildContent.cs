@@ -333,8 +333,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Load the previously serialized list of built content.
-            var contentFile = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            var previousContent = SourceFileCollection.LoadXml(contentFile);
+            SourceFileCollection previousContent = LoadFileCollection(intermediatePath);
             if (previousContent == null)
                 previousContent = new SourceFileCollection();
 
@@ -373,9 +372,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Delete the old file and write the new content 
             // list if we have any to serialize.
-            FileHelper.DeleteIfExists(contentFile);
+            DeleteFileCollection(intermediatePath);
             if (newContent.SourceFiles.Count > 0)
-                newContent.SaveXml(contentFile);
+                SaveFileCollection(intermediatePath, newContent);
 
             // Process copy items (files that bypass the content pipeline)
             CopyItems(_copyItems, projectDirectory, outputPath);
@@ -660,6 +659,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (ex.InnerException != null)
                 Console.Error.WriteLine(ex.InnerException.ToString());
             ErrorCount++;
+        }
+        
+        private static void DeleteFileCollection(string intermediatePath)
+        {
+            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            FileHelper.DeleteIfExists(intermediateXmlFileCollectionPath);
+        }
+
+        private static void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
+        {
+            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            fileCollection.SaveXml(intermediateXmlFileCollectionPath);
+        }
+
+        private static SourceFileCollection LoadFileCollection(string intermediatePath)
+        {
+            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            var fileCollection = SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
+            return fileCollection;
         }
 
     }
