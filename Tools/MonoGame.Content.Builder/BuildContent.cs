@@ -335,6 +335,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Load the previously serialized list of built content.
             var contentFile = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
             var previousContent = SourceFileCollection.LoadXml(contentFile);
+            if (previousContent == null)
+                previousContent = new SourceFileCollection();
 
             // If the target changed in any way then we need to force
             // a full rebuild even under incremental builds.
