@@ -596,9 +596,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Load the previous content event if it exists.
-            string eventFilepath = GetBuildEventFilepath(contentEvent.DestFile);
             var cachedEvent = LoadBuildEvent(contentEvent.DestFile);
 
+            string eventFilepath = GetBuildEventFilepath(contentEvent.DestFile);
             BuildContent(logger, contentEvent, cachedEvent, eventFilepath);
 
             return contentEvent;
@@ -634,7 +634,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // While this asset doesn't need to be rebuilt the dependent assets might.
                     foreach (var asset in cachedEvent.BuildAsset)
                     {
-                        string assetEventFilepath = GetBuildEventFilepath(asset);
                         var assetCachedEvent = LoadBuildEvent(asset);
 
                         // If we cannot find the cached event for the dependancy
@@ -655,6 +654,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         };
 
                         // Give the asset a chance to rebuild.                    
+                        string assetEventFilepath = GetBuildEventFilepath(asset);
                         BuildContent(logger, depEvent, assetCachedEvent, assetEventFilepath);
                     }
                 }
