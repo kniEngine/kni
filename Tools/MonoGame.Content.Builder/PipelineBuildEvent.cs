@@ -120,12 +120,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public static PipelineBuildEvent LoadXml(string filePath)
         {
-            var deserializer = new XmlSerializer(typeof (PipelineBuildEvent));
+            XmlSerializer deserializer = new XmlSerializer(typeof(PipelineBuildEvent));
             PipelineBuildEvent pipelineEvent;
             try
             {
                 using (var textReader = new XmlTextReader(filePath))
-                    pipelineEvent = (PipelineBuildEvent) deserializer.Deserialize(textReader);
+                    pipelineEvent = (PipelineBuildEvent)deserializer.Deserialize(textReader);
             }
             catch (Exception)
             {
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Repopulate the parameters from the serialized state.
-            foreach (var pair in pipelineEvent.ParametersXml)
+            foreach (Pair pair in pipelineEvent.ParametersXml)
                 pipelineEvent.Parameters.Add(pair.Key, pair.Value);
             pipelineEvent.ParametersXml.Clear();
 
@@ -147,11 +147,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Convert the parameters into something we can serialize.
             ParametersXml.Clear();
-            foreach (var pair in Parameters)
+            foreach (KeyValuePair<string, object> pair in Parameters)
                 ParametersXml.Add(new Pair { Key = pair.Key, Value = ConvertToString(pair.Value) });
 
             // Serialize our state.
-            var serializer = new XmlSerializer(typeof (PipelineBuildEvent));
+            XmlSerializer serializer = new XmlSerializer(typeof(PipelineBuildEvent));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
                 serializer.Serialize(textWriter, this);
         }
@@ -166,12 +166,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Verify that the last write time of the source file matches
             // what we recorded when it was built.  If it is different
             // that means someone modified it and we need to rebuild.
-            var sourceWriteTime = File.GetLastWriteTime(SourceFile);
+            DateTime sourceWriteTime = File.GetLastWriteTime(SourceFile);
             if (cachedEvent.SourceTime != sourceWriteTime)
                 return true;
 
             // Do the same test for the dest file.
-            var destWriteTime = File.GetLastWriteTime(DestFile);
+            DateTime destWriteTime = File.GetLastWriteTime(DestFile);
             if (cachedEvent.DestTime != destWriteTime)
                 return true;
 
@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return true;
 
             // Are any of the dependancy files newer than the dest file?
-            foreach (var depFile in cachedEvent.Dependencies)
+            foreach (string depFile in cachedEvent.Dependencies)
             {
                 if (File.GetLastWriteTime(depFile) >= destWriteTime)
                     return true;
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return true;
 
             // Did the parameters change?
-            var defaultValues = manager.GetProcessorDefaultValues(Processor);
+            OpaqueDataDictionary defaultValues = manager.GetProcessorDefaultValues(Processor);
             if (!AreParametersEqual(cachedEvent.Parameters, Parameters, defaultValues))
                 return true;
 
@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // the default values.
             if (parameters0.Count < parameters1.Count)
             {
-                var dummy = parameters0;
+                OpaqueDataDictionary dummy = parameters0;
                 parameters0 = parameters1;
                 parameters1 = dummy;
             }
@@ -297,7 +297,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (value == null)
                 return null;
 
-            var typeConverter = TypeDescriptor.GetConverter(value.GetType());
+            TypeConverter typeConverter = TypeDescriptor.GetConverter(value.GetType());
             return typeConverter.ConvertToInvariantString(value);
         }
     }

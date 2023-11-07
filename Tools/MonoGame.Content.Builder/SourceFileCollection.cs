@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         static public SourceFileCollection LoadXml(string filePath)
         {
-            var deserializer = new XmlSerializer(typeof(SourceFileCollection));
+            XmlSerializer deserializer = new XmlSerializer(typeof(SourceFileCollection));
             try
             {
                 using (var textReader = new StreamReader(filePath))
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public void SaveXml(string filePath)
         {
-            var serializer = new XmlSerializer(typeof(SourceFileCollection));
+            XmlSerializer serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
                 serializer.Serialize(textWriter, this);            
         }
@@ -68,16 +68,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public void Merge(SourceFileCollection other)
         {
-            foreach (var sourceFile in other.SourceFiles)
+            foreach (string sourceFile in other.SourceFiles)
             {
-                var inContent = SourceFiles.Any(e => string.Equals(e, sourceFile, StringComparison.InvariantCultureIgnoreCase));
+                bool inContent = SourceFiles.Any(e => string.Equals(e, sourceFile, StringComparison.InvariantCultureIgnoreCase));
                 if (!inContent)
                     SourceFiles.Add(sourceFile);
             }
 
-            foreach (var destFile in other.DestFiles)
+            foreach (string destFile in other.DestFiles)
             {
-                var inContent = DestFiles.Any(e => string.Equals(e, destFile, StringComparison.InvariantCultureIgnoreCase));
+                bool inContent = DestFiles.Any(e => string.Equals(e, destFile, StringComparison.InvariantCultureIgnoreCase));
                 if (!inContent)
                     DestFiles.Add(destFile);
             }
