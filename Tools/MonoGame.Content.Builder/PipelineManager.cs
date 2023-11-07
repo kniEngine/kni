@@ -544,11 +544,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             outputFilepath = PathHelper.Normalize(outputFilepath);
         }
 
-        private string GetBuildEventFilepath(string destFile)
+        private void DeleteBuildEvent(string destFile)
         {
             string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
             string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
-            return intermediateXmlEventPath;
+            FileHelper.DeleteIfExists(intermediateXmlEventPath);
+        }
+
+        private void SaveBuildEvent(string destFile, PipelineBuildEvent pipelineEvent)
+        {
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            pipelineEvent.SaveXml(intermediateXmlEventPath);
         }
 
         private PipelineBuildEvent LoadBuildEvent(string destFile)
@@ -671,8 +678,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     pipelineEvent.ProcessorTime = GetProcessorAssemblyTimestamp(pipelineEvent.Processor);
 
                     // Store the new event into the intermediate folder.
-                    string eventFilepath = GetBuildEventFilepath(destFilePath);
-                    pipelineEvent.SaveXml(eventFilepath);
+                    SaveBuildEvent(destFilePath, pipelineEvent);
                 }
             }
             finally
@@ -792,7 +798,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             // First try to load the event file.
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-            string eventFilepath = GetBuildEventFilepath(outputFilepath);
             var cachedEvent = LoadBuildEvent(outputFilepath);
 
             if (cachedEvent != null)
@@ -800,7 +805,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 // Recursively clean additional (nested) assets.
                 foreach (var asset in cachedEvent.BuildAsset)
                 {
-                    string assetEventFilepath = GetBuildEventFilepath(asset);
                     var assetCachedEvent = LoadBuildEvent(asset);
 
                     if (assetCachedEvent == null)
@@ -811,7 +815,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         FileHelper.DeleteIfExists(asset);
 
                         // Remove event file (.mgcontent file) from intermediate folder.
-                        FileHelper.DeleteIfExists(assetEventFilepath);
+                        DeleteBuildEvent(asset);
                         continue;
                     }
 
@@ -832,7 +836,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             FileHelper.DeleteIfExists(outputFilepath);
 
             // Remove event file (.mgcontent file) from intermediate folder.
-            FileHelper.DeleteIfExists(eventFilepath);
+            DeleteBuildEvent(outputFilepath);
 
             lock (_pipelineBuildEvents)
             {
