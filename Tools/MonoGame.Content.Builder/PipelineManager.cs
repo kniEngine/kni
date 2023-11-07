@@ -544,11 +544,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             outputFilepath = PathHelper.Normalize(outputFilepath);
         }
 
-        private PipelineBuildEvent LoadBuildEvent(string destFile, out string eventFilepath)
+        private void DeleteBuildEvent(string destFile)
         {
-            var contentPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            eventFilepath = Path.Combine(IntermediateDirectory, contentPath);
-            return PipelineBuildEvent.Load(eventFilepath);
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            FileHelper.DeleteIfExists(intermediateXmlEventPath);
+        }
+
+        private void SaveBuildEvent(string destFile, PipelineBuildEvent pipelineEvent)
+        {
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            pipelineEvent.SaveXml(intermediateXmlEventPath);
+        }
+
+        private PipelineBuildEvent LoadBuildEvent(string destFile)
+        {
+            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
+            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            return PipelineBuildEvent.LoadXml(intermediateXmlEventPath);
         }
 
         public void RegisterContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
@@ -589,50 +603,48 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Load the previous content event if it exists.
-            string eventFilepath;
-            var cachedEvent = LoadBuildEvent(contentEvent.DestFile, out eventFilepath);
+            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(contentEvent.DestFile);
 
-            BuildContent(logger, contentEvent, cachedEvent, eventFilepath);
+            BuildContent(logger, contentEvent, cachedBuildEvent, contentEvent.DestFile);
 
             return contentEvent;
         }
 
-        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent, PipelineBuildEvent cachedEvent, string eventFilepath)
+        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
         {
-            if (!File.Exists(pipelineEvent.SourceFile))
+            if (!File.Exists(buildEvent.SourceFile))
             {
-                logger.LogMessage("{0}", pipelineEvent.SourceFile);
-                throw new PipelineException("The source file '{0}' does not exist!", pipelineEvent.SourceFile);
+                logger.LogMessage("{0}", buildEvent.SourceFile);
+                throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
             }
 
-            logger.PushFile(pipelineEvent.SourceFile);
+            logger.PushFile(buildEvent.SourceFile);
 
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
-            TrackPipelineBuildEvent(pipelineEvent);
+            TrackPipelineBuildEvent(buildEvent);
 
-            var building = RegisterBuildEvent(pipelineEvent);
-            var rebuild = pipelineEvent.NeedsRebuild(this, cachedEvent);
+            var building = RegisterBuildEvent(buildEvent);
+            var rebuild = buildEvent.NeedsRebuild(this, cachedBuildEvent);
             rebuild = rebuild && !building;
 
             if (rebuild)
-                logger.LogMessage("{0}", pipelineEvent.SourceFile);
+                logger.LogMessage("{0}", buildEvent.SourceFile);
             else
-                logger.LogMessage("Skipping {0}", pipelineEvent.SourceFile);
+                logger.LogMessage("Skipping {0}", buildEvent.SourceFile);
 
             logger.Indent();
             try
             {
-                if (!rebuild && cachedEvent != null)
+                if (!rebuild && cachedBuildEvent != null)
                 {
                     // While this asset doesn't need to be rebuilt the dependent assets might.
-                    foreach (var asset in cachedEvent.BuildAsset)
+                    foreach (var asset in cachedBuildEvent.BuildAsset)
                     {
-                        string assetEventFilepath;
-                        var assetCachedEvent = LoadBuildEvent(asset, out assetEventFilepath);
+                        PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
                         // If we cannot find the cached event for the dependancy
                         // then we have to trigger a rebuild of the parent content.
-                        if (assetCachedEvent == null)
+                        if (assetCachedBuildEvent == null)
                         {
                             rebuild = true;
                             break;
@@ -640,15 +652,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                         var depEvent = new PipelineBuildEvent
                         {
-                            SourceFile = assetCachedEvent.SourceFile,
-                            DestFile = assetCachedEvent.DestFile,
-                            Importer = assetCachedEvent.Importer,
-                            Processor = assetCachedEvent.Processor,
-                            Parameters = assetCachedEvent.Parameters,
+                            SourceFile = assetCachedBuildEvent.SourceFile,
+                            DestFile = assetCachedBuildEvent.DestFile,
+                            Importer = assetCachedBuildEvent.Importer,
+                            Processor = assetCachedBuildEvent.Processor,
+                            Parameters = assetCachedBuildEvent.Parameters,
                         };
 
                         // Give the asset a chance to rebuild.                    
-                        BuildContent(logger, depEvent, assetCachedEvent, assetEventFilepath);
+                        BuildContent(logger, depEvent, assetCachedBuildEvent, asset);
                     }
                 }
 
@@ -656,17 +668,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    var processedObject = ProcessContent(logger, pipelineEvent);
+                    var processedObject = ProcessContent(logger, buildEvent);
 
                     // Write the content to disk.
-                    WriteXnb(processedObject, pipelineEvent);
+                    WriteXnb(processedObject, buildEvent);
 
                     // Store the timestamp of the DLLs containing the importer and processor.
-                    pipelineEvent.ImporterTime = GetImporterAssemblyTimestamp(pipelineEvent.Importer);
-                    pipelineEvent.ProcessorTime = GetProcessorAssemblyTimestamp(pipelineEvent.Processor);
+                    buildEvent.ImporterTime = GetImporterAssemblyTimestamp(buildEvent.Importer);
+                    buildEvent.ProcessorTime = GetProcessorAssemblyTimestamp(buildEvent.Processor);
 
                     // Store the new event into the intermediate folder.
-                    pipelineEvent.Save(eventFilepath);
+                    SaveBuildEvent(destFilePath, buildEvent);
                 }
             }
             finally
@@ -786,18 +798,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             // First try to load the event file.
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-            string eventFilepath;
-            var cachedEvent = LoadBuildEvent(outputFilepath, out eventFilepath);
+            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(outputFilepath);
 
-            if (cachedEvent != null)
+            if (cachedBuildEvent != null)
             {
                 // Recursively clean additional (nested) assets.
-                foreach (var asset in cachedEvent.BuildAsset)
+                foreach (var asset in cachedBuildEvent.BuildAsset)
                 {
-                    string assetEventFilepath;
-                    var assetCachedEvent = LoadBuildEvent(asset, out assetEventFilepath);
+                    PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
-                    if (assetCachedEvent == null)
+                    if (assetCachedBuildEvent == null)
                     {
                         Logger.LogMessage("Cleaning {0}", asset);
 
@@ -805,7 +815,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         FileHelper.DeleteIfExists(asset);
 
                         // Remove event file (.mgcontent file) from intermediate folder.
-                        FileHelper.DeleteIfExists(assetEventFilepath);
+                        DeleteBuildEvent(asset);
                         continue;
                     }
 
@@ -813,7 +823,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 }
 
                 // Remove related output files (non-XNB files) that were copied to the output folder.
-                foreach (var asset in cachedEvent.BuildOutput)
+                foreach (var asset in cachedBuildEvent.BuildOutput)
                 {
                     Logger.LogMessage("Cleaning {0}", asset);
                     FileHelper.DeleteIfExists(asset);
@@ -826,7 +836,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             FileHelper.DeleteIfExists(outputFilepath);
 
             // Remove event file (.mgcontent file) from intermediate folder.
-            FileHelper.DeleteIfExists(eventFilepath);
+            DeleteBuildEvent(outputFilepath);
 
             lock (_pipelineBuildEvents)
             {
@@ -925,8 +935,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             for (int index = 0; ; index++)
             {
                 string destFile = assetName + '_' + index;
-                string eventFile;
-                var existingBuildEvent = LoadBuildEvent(destFile, out eventFile);
+                PipelineBuildEvent existingBuildEvent = LoadBuildEvent(destFile);
                 if (existingBuildEvent == null)
                     return destFile;
 
