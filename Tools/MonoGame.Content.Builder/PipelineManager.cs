@@ -555,6 +555,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
             string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            intermediateXmlEventPath = Path.GetFullPath(intermediateXmlEventPath);
             pipelineEvent.SaveXml(intermediateXmlEventPath);
         }
 
@@ -562,6 +563,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
             string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
+            intermediateXmlEventPath = Path.GetFullPath(intermediateXmlEventPath);
             return PipelineBuildEvent.LoadXml(intermediateXmlEventPath);
         }
 

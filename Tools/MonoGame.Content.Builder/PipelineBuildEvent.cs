@@ -120,12 +120,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public static PipelineBuildEvent LoadXml(string filePath)
         {
-            var fullFilePath = Path.GetFullPath(filePath);
             var deserializer = new XmlSerializer(typeof (PipelineBuildEvent));
             PipelineBuildEvent pipelineEvent;
             try
             {
-                using (var textReader = new XmlTextReader(fullFilePath))
+                using (var textReader = new XmlTextReader(filePath))
                     pipelineEvent = (PipelineBuildEvent) deserializer.Deserialize(textReader);
             }
             catch (Exception)
@@ -143,9 +142,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public void SaveXml(string filePath)
         {
-            var fullFilePath = Path.GetFullPath(filePath);
             // Make sure the directory exists.
-            Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath) + Path.DirectorySeparatorChar);
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar);
 
             // Convert the parameters into something we can serialize.
             ParametersXml.Clear();
@@ -154,7 +152,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Serialize our state.
             var serializer = new XmlSerializer(typeof (PipelineBuildEvent));
-            using (var textWriter = new StreamWriter(fullFilePath, false, new UTF8Encoding(false)))
+            using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
                 serializer.Serialize(textWriter, this);
         }
 
