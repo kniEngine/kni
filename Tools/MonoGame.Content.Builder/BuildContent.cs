@@ -418,7 +418,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
-            foreach (var item in contentItems)
+            foreach (ContentItem item in contentItems)
             {
                 try
                 {
@@ -470,11 +470,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     };
                     buildState.Logger.Immediate = firstTask;
 
-                    var task = Task.Factory.StartNew<PipelineBuildEvent>((stateobj) =>
+                    Task<PipelineBuildEvent> task = Task.Factory.StartNew<PipelineBuildEvent>((stateobj) =>
                     {
-                        var state = stateobj as BuildAsyncState;
+                        BuildAsyncState state = stateobj as BuildAsyncState;
                         //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
-                        var result = _manager.BuildContent(state.Logger,
+                        PipelineBuildEvent result = _manager.BuildContent(state.Logger,
                                               state.SourceFile,
                                               state.OutputFile,
                                               state.Importer,
@@ -663,20 +663,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         
         private static void DeleteFileCollection(string intermediatePath)
         {
-            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
             FileHelper.DeleteIfExists(intermediateXmlFileCollectionPath);
         }
 
         private static void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
         {
-            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
             fileCollection.SaveXml(intermediateXmlFileCollectionPath);
         }
 
         private static SourceFileCollection LoadFileCollection(string intermediatePath)
         {
-            var intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            var fileCollection = SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
+            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            SourceFileCollection fileCollection = SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
             return fileCollection;
         }
 
