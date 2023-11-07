@@ -546,9 +546,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private PipelineBuildEvent LoadBuildEvent(string destFile, out string eventFilepath)
         {
-            var contentPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            var contentPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
             eventFilepath = Path.Combine(IntermediateDirectory, contentPath);
-            return PipelineBuildEvent.Load(eventFilepath);
+            return PipelineBuildEvent.LoadXml(eventFilepath);
         }
 
         public void RegisterContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
@@ -666,7 +666,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     pipelineEvent.ProcessorTime = GetProcessorAssemblyTimestamp(pipelineEvent.Processor);
 
                     // Store the new event into the intermediate folder.
-                    pipelineEvent.Save(eventFilepath);
+                    pipelineEvent.SaveXml(eventFilepath);
                 }
             }
             finally

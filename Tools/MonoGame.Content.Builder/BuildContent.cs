@@ -333,8 +333,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Load the previously serialized list of built content.
-            var contentFile = Path.Combine(intermediatePath, PipelineBuildEvent.Extension);
-            var previousContent = SourceFileCollection.Read(contentFile);
+            var contentFile = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
+            var previousContent = SourceFileCollection.LoadXml(contentFile);
 
             // If the target changed in any way then we need to force
             // a full rebuild even under incremental builds.
@@ -373,7 +373,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // list if we have any to serialize.
             FileHelper.DeleteIfExists(contentFile);
             if (newContent.SourceFiles.Count > 0)
-                newContent.Write(contentFile);
+                newContent.SaveXml(contentFile);
 
             // Process copy items (files that bypass the content pipeline)
             CopyItems(_copyItems, projectDirectory, outputPath);

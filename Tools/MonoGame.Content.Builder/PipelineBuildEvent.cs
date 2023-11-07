@@ -17,8 +17,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     public class PipelineBuildEvent
     {
+        public static readonly string XmlExtension = ".mgcontent";
+
         private static readonly OpaqueDataDictionary EmptyParameters = new OpaqueDataDictionary();
-        public static readonly string Extension = ".mgcontent";
 
         public PipelineBuildEvent()
         {
@@ -117,7 +118,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </remarks>
         public List<string> BuildOutput { get; set; }
 
-        public static PipelineBuildEvent Load(string filePath)
+        public static PipelineBuildEvent LoadXml(string filePath)
         {
             var fullFilePath = Path.GetFullPath(filePath);
             var deserializer = new XmlSerializer(typeof (PipelineBuildEvent));
@@ -140,7 +141,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return pipelineEvent;
         }
 
-        public void Save(string filePath)
+        public void SaveXml(string filePath)
         {
             var fullFilePath = Path.GetFullPath(filePath);
             // Make sure the directory exists.

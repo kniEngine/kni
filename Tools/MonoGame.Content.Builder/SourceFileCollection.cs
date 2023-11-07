@@ -17,6 +17,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     [XmlRoot(ElementName = "SourceFileCollection")]
     public sealed class SourceFileCollection
     {
+        public static readonly string XmlExtension = ".mgcontent";
+
         public GraphicsProfile Profile { get; set; }
 
         public TargetPlatform Platform { get; set; }
@@ -37,7 +39,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Config = string.Empty;
         }
 
-        static public SourceFileCollection Read(string filePath)
+        static public SourceFileCollection LoadXml(string filePath)
         {
             var deserializer = new XmlSerializer(typeof(SourceFileCollection));
             try
@@ -52,7 +54,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return new SourceFileCollection();
         }
 
-        public void Write(string filePath)
+        public void SaveXml(string filePath)
         {
             var serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
