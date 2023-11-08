@@ -11,16 +11,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineProcessorContext : ContentProcessorContext
     {
-        ConsoleLogger _logger;
         private readonly PipelineManager _manager;
+        ConsoleLogger _logger;
+        private readonly PipelineBuildEvent _buildEvent;
 
-        private readonly PipelineBuildEvent _pipelineEvent;
-
-        public PipelineProcessorContext(ConsoleLogger logger, PipelineManager manager, PipelineBuildEvent pipelineEvent)
+        public PipelineProcessorContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
         {
-            _logger = logger;
             _manager = manager;
-            _pipelineEvent = pipelineEvent;
+            _logger = logger;
+            _buildEvent = buildEvent;
         }
 
         public override TargetPlatform TargetPlatform { get { return _manager.Platform; } }
@@ -30,22 +29,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public override string IntermediateDirectory { get { return _manager.IntermediateDirectory; } }
         public override string OutputDirectory { get { return _manager.OutputDirectory; } }
-        public override string OutputFilename { get { return _pipelineEvent.DestFile; } }
+        public override string OutputFilename { get { return _buildEvent.DestFile; } }
 
-        public override OpaqueDataDictionary Parameters { get { return _pipelineEvent.Parameters; } }
+        public override OpaqueDataDictionary Parameters { get { return _buildEvent.Parameters; } }
 
         public override ContentBuildLogger Logger { get { return _logger; } }
 
         public override void AddDependency(string filename)
         {
-            if (!_pipelineEvent.Dependencies.Contains(filename))
-                _pipelineEvent.Dependencies.Add(filename);
+            if (!_buildEvent.Dependencies.Contains(filename))
+                _buildEvent.Dependencies.Add(filename);
         }
 
         public override void AddOutputFile(string filename)
         {
-            if (!_pipelineEvent.BuildOutput.Contains(filename))
-                _pipelineEvent.BuildOutput.Add(filename);
+            if (!_buildEvent.BuildOutput.Contains(filename))
+                _buildEvent.BuildOutput.Add(filename);
         }
 
         public override TOutput Convert<TInput, TOutput>(   TInput input, 
@@ -53,19 +52,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                             OpaqueDataDictionary processorParameters)
         {
             var processor = _manager.CreateProcessor(processorName, processorParameters);
-            var processContext = new PipelineProcessorContext(this._logger, _manager, new PipelineBuildEvent { Parameters = processorParameters } );
+            var processContext = new PipelineProcessorContext(_manager, this._logger, new PipelineBuildEvent { Parameters = processorParameters } );
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.
-            foreach (string dependency in processContext._pipelineEvent.Dependencies)
+            foreach (string dependency in processContext._buildEvent.Dependencies)
             {
-                if (!_pipelineEvent.Dependencies.Contains(dependency))
-                    _pipelineEvent.Dependencies.Add(dependency);
+                if (!_buildEvent.Dependencies.Contains(dependency))
+                    _buildEvent.Dependencies.Add(dependency);
             }
-            foreach (string buildAsset in processContext._pipelineEvent.BuildAsset)
+            foreach (string buildAsset in processContext._buildEvent.BuildAsset)
             {
-                if (!_pipelineEvent.BuildAsset.Contains(buildAsset))
-                    _pipelineEvent.BuildAsset.Add(buildAsset);
+                if (!_buildEvent.BuildAsset.Contains(buildAsset))
+                    _buildEvent.BuildAsset.Add(buildAsset);
             }
 
             return (TOutput)processedObject;
@@ -86,7 +85,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            var buildEvent = new PipelineBuildEvent 
+            PipelineBuildEvent buildEvent = new PipelineBuildEvent 
             { 
                 SourceFile = sourceFilepath,
                 Importer = importerName,
@@ -97,8 +96,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var processedObject = _manager.ProcessContent(this._logger, buildEvent);
 
             // Record that we processed this dependent asset.
-            if (!_pipelineEvent.Dependencies.Contains(sourceFilepath))
-                _pipelineEvent.Dependencies.Add(sourceFilepath);
+            if (!_buildEvent.Dependencies.Contains(sourceFilepath))
+                _buildEvent.Dependencies.Add(sourceFilepath);
 
             return (TOutput)processedObject;
         }
@@ -116,8 +115,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             PipelineBuildEvent buildEvent = _manager.BuildContent(this._logger, sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
 
             // Record that we built this dependent asset.
-            if (!_pipelineEvent.BuildAsset.Contains(buildEvent.DestFile))
-                _pipelineEvent.BuildAsset.Add(buildEvent.DestFile);
+            if (!_buildEvent.BuildAsset.Contains(buildEvent.DestFile))
+                _buildEvent.BuildAsset.Add(buildEvent.DestFile);
 
             return new ExternalReference<TOutput>(buildEvent.DestFile);
         }

@@ -9,15 +9,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     internal class PipelineImporterContext : ContentImporterContext
     {
-        ConsoleLogger _logger;
         private readonly PipelineManager _manager;
-        private readonly PipelineBuildEvent _pipelineEvent;
+        ConsoleLogger _logger;
+        private readonly PipelineBuildEvent _buildEvent;
 
-        public PipelineImporterContext(ConsoleLogger logger, PipelineManager manager, PipelineBuildEvent pipelineEvent)
+        public PipelineImporterContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
         {
-            _logger = logger;
             _manager = manager;
-            _pipelineEvent = pipelineEvent;
+            _logger = logger;
+            _buildEvent = buildEvent;
         }
 
         public override string IntermediateDirectory { get { return _manager.IntermediateDirectory; } }
@@ -26,8 +26,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public override void AddDependency(string filename)
         {            
-            if (!_pipelineEvent.Dependencies.Contains(filename))
-                _pipelineEvent.Dependencies.Add(filename);
+            if (!_buildEvent.Dependencies.Contains(filename))
+                _buildEvent.Dependencies.Add(filename);
         }
     }
 }
