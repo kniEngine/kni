@@ -373,7 +373,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Delete the old file and write the new content 
             // list if we have any to serialize.
             DeleteFileCollection(intermediatePath);
-            if (newFileCollection.SourceFiles.Count > 0)
+            if (newFileCollection.SourceFilesCount > 0)
                 SaveFileCollection(intermediatePath, newFileCollection);
 
             // Process copy items (files that bypass the content pipeline)
@@ -382,16 +382,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void CleanItems(SourceFileCollection fileCollection, bool targetChanged)
         {
-            for (int i = 0; i < fileCollection.SourceFiles.Count; i++)
+            for (int i = 0; i < fileCollection.SourceFilesCount; i++)
             {
                 string sourceFile = fileCollection.SourceFiles[i];
 
                 // This may be an old file (prior to MG 3.7) which doesn't have destination files:
                 string destFile = null;
                 if (i < fileCollection.DestFiles.Count)
-                {
                     destFile = fileCollection.DestFiles[i];
-                }
 
                 var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
                 var cleanOldContent = !inContent && !Incremental;

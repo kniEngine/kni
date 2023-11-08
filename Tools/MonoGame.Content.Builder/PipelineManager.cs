@@ -625,8 +625,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
             TrackPipelineBuildEvent(buildEvent);
 
-            var building = RegisterBuildEvent(buildEvent);
-            var rebuild = buildEvent.NeedsRebuild(this, cachedBuildEvent);
+            bool building = RegisterBuildEvent(buildEvent);
+            bool rebuild = buildEvent.NeedsRebuild(this, cachedBuildEvent);
             rebuild = rebuild && !building;
 
             if (rebuild)
@@ -640,7 +640,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (!rebuild && cachedBuildEvent != null)
                 {
                     // While this asset doesn't need to be rebuilt the dependent assets might.
-                    foreach (var asset in cachedBuildEvent.BuildAsset)
+                    foreach (string asset in cachedBuildEvent.BuildAsset)
                     {
                         PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
@@ -670,7 +670,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    var processedObject = ProcessContent(logger, buildEvent);
+                    object processedObject = ProcessContent(logger, buildEvent);
 
                     // Write the content to disk.
                     WriteXnb(processedObject, buildEvent);
@@ -713,7 +713,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
             // Make sure we can find the importer and processor.
-            var importer = CreateImporter(buildEvent.Importer);
+            IContentImporter importer = CreateImporter(buildEvent.Importer);
             if (importer == null)
                 throw new PipelineException("Failed to create importer '{0}'", buildEvent.Importer);
 
@@ -750,7 +750,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (string.IsNullOrEmpty(buildEvent.Processor))
                 return importedObject;
 
-            var processor = CreateProcessor(buildEvent.Processor, buildEvent.Parameters);
+            IContentProcessor processor = CreateProcessor(buildEvent.Processor, buildEvent.Parameters);
             if (processor == null)
                 throw new PipelineException("Failed to create processor '{0}'", buildEvent.Processor);
 
