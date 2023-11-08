@@ -335,11 +335,11 @@ namespace Microsoft.Xna.Framework.Content
             byte b = xnbReader.ReadByte();
             byte platform = xnbReader.ReadByte();
 
-            if (x != 'X' || n != 'N' || b != 'B' ||
-                !(targetPlatformIdentifiers.Contains((char)platform)))
-            {
-                throw new ContentLoadException("Asset does not appear to be a valid XNB file. Did you process your content for Windows?");
-            }
+            if (x != 'X' || n != 'N' || b != 'B')
+                throw new ContentLoadException("Asset does not appear to be a valid XNB file.");
+
+            if (!targetPlatformIdentifiers.Contains((char)platform))
+                throw new ContentLoadException("Asset does not appear to target a known platform.");
 
             byte version = xnbReader.ReadByte();
             byte flags = xnbReader.ReadByte();
