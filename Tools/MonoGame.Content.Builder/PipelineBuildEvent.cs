@@ -121,11 +121,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public static PipelineBuildEvent LoadXml(string filePath)
         {
             XmlSerializer deserializer = new XmlSerializer(typeof(PipelineBuildEvent));
-            PipelineBuildEvent pipelineEvent;
+            PipelineBuildEvent buildEvent;
             try
             {
                 using (var textReader = new XmlTextReader(filePath))
-                    pipelineEvent = (PipelineBuildEvent)deserializer.Deserialize(textReader);
+                    buildEvent = (PipelineBuildEvent)deserializer.Deserialize(textReader);
             }
             catch (Exception)
             {
@@ -133,11 +133,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Repopulate the parameters from the serialized state.
-            foreach (Pair pair in pipelineEvent.ParametersXml)
-                pipelineEvent.Parameters.Add(pair.Key, pair.Value);
-            pipelineEvent.ParametersXml.Clear();
+            foreach (Pair pair in buildEvent.ParametersXml)
+                buildEvent.Parameters.Add(pair.Key, pair.Value);
+            buildEvent.ParametersXml.Clear();
 
-            return pipelineEvent;
+            return buildEvent;
         }
 
         public void SaveXml(string filePath)

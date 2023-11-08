@@ -551,12 +551,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             FileHelper.DeleteIfExists(intermediateXmlEventPath);
         }
 
-        private void SaveBuildEvent(string destFile, PipelineBuildEvent pipelineEvent)
+        private void SaveBuildEvent(string destFile, PipelineBuildEvent buildEvent)
         {
             string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
             string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
             intermediateXmlEventPath = Path.GetFullPath(intermediateXmlEventPath);
-            pipelineEvent.SaveXml(intermediateXmlEventPath);
+            buildEvent.SaveXml(intermediateXmlEventPath);
         }
 
         private PipelineBuildEvent LoadBuildEvent(string destFile)
@@ -574,7 +574,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            var contentEvent = new PipelineBuildEvent
+            PipelineBuildEvent buildEvent = new PipelineBuildEvent
             {
                 SourceFile = sourceFilepath,
                 DestFile = outputFilepath,
@@ -584,7 +584,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Register pipeline build event. (Required to correctly resolve external dependencies.)
-            TrackPipelineBuildEvent(contentEvent);
+            TrackPipelineBuildEvent(buildEvent);
         }
 
         public PipelineBuildEvent BuildContent(ConsoleLogger logger, string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
@@ -595,7 +595,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
             // Record what we're building and how.
-            var contentEvent = new PipelineBuildEvent
+            PipelineBuildEvent buildEvent = new PipelineBuildEvent
             {
                 SourceFile = sourceFilepath,
                 DestFile = outputFilepath,
@@ -605,11 +605,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Load the previous content event if it exists.
-            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(contentEvent.DestFile);
+            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(buildEvent.DestFile);
 
-            BuildContent(logger, contentEvent, cachedBuildEvent, contentEvent.DestFile);
+            BuildContent(logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
-            return contentEvent;
+            return buildEvent;
         }
 
         private void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
@@ -652,7 +652,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             break;
                         }
 
-                        var depEvent = new PipelineBuildEvent
+                        PipelineBuildEvent depBuildEvent = new PipelineBuildEvent
                         {
                             SourceFile = assetCachedBuildEvent.SourceFile,
                             DestFile = assetCachedBuildEvent.DestFile,
@@ -662,7 +662,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         };
 
                         // Give the asset a chance to rebuild.                    
-                        BuildContent(logger, depEvent, assetCachedBuildEvent, asset);
+                        BuildContent(logger, depBuildEvent, assetCachedBuildEvent, asset);
                     }
                 }
 
@@ -690,32 +690,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private bool RegisterBuildEvent(PipelineBuildEvent pipelineEvent)
+        private bool RegisterBuildEvent(PipelineBuildEvent buildEvent)
         {
             lock (_processingBuildEvents)
             {
-                if (!_processingBuildEvents.Contains(pipelineEvent.DestFile))
+                if (!_processingBuildEvents.Contains(buildEvent.DestFile))
                 {
-                    _processingBuildEvents.Add(pipelineEvent.DestFile);
+                    _processingBuildEvents.Add(buildEvent.DestFile);
                     return false;
                 }
             }
             return true;
         }
 
-        public object ProcessContent(ConsoleLogger logger, PipelineBuildEvent pipelineEvent)
+        public object ProcessContent(ConsoleLogger logger, PipelineBuildEvent buildEvent)
         {
-            if (!File.Exists(pipelineEvent.SourceFile))
-                throw new PipelineException("The source file '{0}' does not exist!", pipelineEvent.SourceFile);
+            if (!File.Exists(buildEvent.SourceFile))
+                throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
 
             // Store the last write time of the source file
             // so we can detect if it has been changed.
-            pipelineEvent.SourceTime = File.GetLastWriteTime(pipelineEvent.SourceFile);
+            buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
             // Make sure we can find the importer and processor.
-            var importer = CreateImporter(pipelineEvent.Importer);
+            var importer = CreateImporter(buildEvent.Importer);
             if (importer == null)
-                throw new PipelineException("Failed to create importer '{0}'", pipelineEvent.Importer);
+                throw new PipelineException("Failed to create importer '{0}'", buildEvent.Importer);
 
             // Try importing the content.
             object importedObject;
@@ -723,8 +723,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    var importContext = new PipelineImporterContext(logger, this, pipelineEvent);
-                    importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
+                    var importContext = new PipelineImporterContext(this, logger, buildEvent);
+                    importedObject = importer.Import(buildEvent.SourceFile, importContext);
                 }
                 catch (PipelineException)
                 {
@@ -736,23 +736,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 }
                 catch (Exception inner)
                 {
-                    throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", pipelineEvent.Importer), inner);
+                    throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
                 }
             }
             else
             {
-                var importContext = new PipelineImporterContext(logger, this, pipelineEvent);
-                importedObject = importer.Import(pipelineEvent.SourceFile, importContext);
+                var importContext = new PipelineImporterContext(this, logger, buildEvent);
+                importedObject = importer.Import(buildEvent.SourceFile, importContext);
             }
 
             // The pipelineEvent.Processor can be null or empty. In this case the
             // asset should be imported but not processed.
-            if (string.IsNullOrEmpty(pipelineEvent.Processor))
+            if (string.IsNullOrEmpty(buildEvent.Processor))
                 return importedObject;
 
-            var processor = CreateProcessor(pipelineEvent.Processor, pipelineEvent.Parameters);
+            var processor = CreateProcessor(buildEvent.Processor, buildEvent.Parameters);
             if (processor == null)
-                throw new PipelineException("Failed to create processor '{0}'", pipelineEvent.Processor);
+                throw new PipelineException("Failed to create processor '{0}'", buildEvent.Processor);
 
             // Make sure the input type is valid.
             if (!processor.InputType.IsAssignableFrom(importedObject.GetType()))
@@ -760,7 +760,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 throw new PipelineException(
                     string.Format("The type '{0}' cannot be processed by {1} as a {2}!",
                     importedObject.GetType().FullName,
-                    pipelineEvent.Processor,
+                    buildEvent.Processor,
                     processor.InputType.FullName));
             }
 
@@ -771,7 +771,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    var processContext = new PipelineProcessorContext(logger, this, pipelineEvent);
+                    var processContext = new PipelineProcessorContext(this, logger, buildEvent);
                     processedObject = processor.Process(importedObject, processContext);
                 }
                 catch (PipelineException)
@@ -784,12 +784,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 }
                 catch (Exception inner)
                 {
-                    throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", pipelineEvent.Processor), inner);
+                    throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
                 }
             }
             else
             {
-                var processContext = new PipelineProcessorContext(logger, this, pipelineEvent);
+                var processContext = new PipelineProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
             }
 
@@ -846,10 +846,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void WriteXnb(object content, PipelineBuildEvent pipelineEvent)
+        private void WriteXnb(object content, PipelineBuildEvent buildEvent)
         {
             // Make sure the output directory exists.
-            var outputFileDir = Path.GetDirectoryName(pipelineEvent.DestFile);
+            var outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
 
             Directory.CreateDirectory(outputFileDir);
 
@@ -857,33 +857,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _compiler = new ContentCompiler();
 
             // Write the XNB.
-            using (var stream = new FileStream(pipelineEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, CompressContent, OutputDirectory, outputFileDir);
 
             // Store the last write time of the output XNB here
             // so we can verify it hasn't been tampered with.
-            pipelineEvent.DestTime = File.GetLastWriteTime(pipelineEvent.DestFile);
+            buildEvent.DestTime = File.GetLastWriteTime(buildEvent.DestFile);
         }
 
         /// <summary>
         /// Stores the pipeline build event (in memory) if no matching event is found.
         /// </summary>
-        /// <param name="pipelineEvent">The pipeline build event.</param>
-        private void TrackPipelineBuildEvent(PipelineBuildEvent pipelineEvent)
+        /// <param name="buildEvent">The pipeline build event.</param>
+        private void TrackPipelineBuildEvent(PipelineBuildEvent buildEvent)
         {
             List<PipelineBuildEvent> pipelineBuildEvents;
 
             lock (_pipelineBuildEvents)
             {
-                bool eventsFound = _pipelineBuildEvents.TryGetValue(pipelineEvent.SourceFile, out pipelineBuildEvents);
+                bool eventsFound = _pipelineBuildEvents.TryGetValue(buildEvent.SourceFile, out pipelineBuildEvents);
                 if (!eventsFound)
                 {
                     pipelineBuildEvents = new List<PipelineBuildEvent>();
-                    _pipelineBuildEvents.Add(pipelineEvent.SourceFile, pipelineBuildEvents);
+                    _pipelineBuildEvents.Add(buildEvent.SourceFile, pipelineBuildEvents);
                 }
 
-                if (FindMatchingEvent(pipelineBuildEvents, pipelineEvent.DestFile, pipelineEvent.Importer, pipelineEvent.Processor, pipelineEvent.Parameters) == null)
-                    pipelineBuildEvents.Add(pipelineEvent);
+                if (FindMatchingEvent(pipelineBuildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters) == null)
+                    pipelineBuildEvents.Add(buildEvent);
             }
         }
 
