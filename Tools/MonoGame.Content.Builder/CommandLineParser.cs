@@ -229,12 +229,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return;
             }
 
-            if (arg.StartsWith("/@") || arg.StartsWith("--@") || arg.StartsWith("-@"))
+            if (arg.StartsWith("/@:") || arg.StartsWith("--@:") || arg.StartsWith("-@:"))
             {
                 var file = arg;
-                if (file.StartsWith("/@") || file.StartsWith("-@"))
+                if (file.StartsWith("/@:") || file.StartsWith("-@:"))
                     file = arg.Substring(3);
-                if (file.StartsWith("--@"))
+                if (file.StartsWith("--@:"))
                     file = arg.Substring(4);
 
                 file = Path.GetFullPath(file);
