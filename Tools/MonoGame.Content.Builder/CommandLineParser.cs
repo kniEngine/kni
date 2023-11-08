@@ -229,7 +229,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return;
             }
 
-            if (arg.StartsWith("/@") || arg.StartsWith("--@") || arg.StartsWith("-@") || (arg.EndsWith(".mgcb")))
+            if (arg.StartsWith("/@") || arg.StartsWith("--@") || arg.StartsWith("-@"))
             {
                 var file = arg;
                 if (file.StartsWith("/@") || file.StartsWith("-@"))
