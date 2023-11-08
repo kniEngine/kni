@@ -23,13 +23,22 @@ namespace Microsoft.Xna.Framework.Graphics
         internal TargetBlendState(BlendState parent)
         {
             _parent = parent;
-            AlphaBlendFunction = BlendFunction.Add;
-            AlphaDestinationBlend = Blend.Zero;
-            AlphaSourceBlend = Blend.One;
-            ColorBlendFunction = BlendFunction.Add;
-            ColorDestinationBlend = Blend.Zero;
-            ColorSourceBlend = Blend.One;
-            ColorWriteChannels = ColorWriteChannels.All;
+            _alphaBlendFunction = BlendFunction.Add;
+            _alphaDestinationBlend = Blend.Zero;
+            _alphaSourceBlend = Blend.One;
+            _colorBlendFunction = BlendFunction.Add;
+            _colorDestinationBlend = Blend.Zero;
+            _colorSourceBlend = Blend.One;
+            _colorWriteChannels = ColorWriteChannels.All;
+        }
+
+        public TargetBlendState(BlendState parent, Blend sourceBlend, Blend destinationBlend) 
+            : this(parent)
+        {
+            _colorSourceBlend = sourceBlend;
+            _alphaSourceBlend = sourceBlend;
+            _colorDestinationBlend = destinationBlend;
+            _alphaDestinationBlend = destinationBlend;
         }
 
         internal TargetBlendState Clone(BlendState parent)

@@ -261,17 +261,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = name;
             _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend);
-            ColorSourceBlend = sourceBlend;
-            AlphaSourceBlend = sourceBlend;
-            ColorDestinationBlend = destinationBlend;
-            AlphaDestinationBlend = destinationBlend;
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = new TargetBlendState(this);
-            _targetBlendState[1] = new TargetBlendState(this);
-            _targetBlendState[2] = new TargetBlendState(this);
-            _targetBlendState[3] = new TargetBlendState(this);
+            _targetBlendState[0] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            _targetBlendState[1] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            _targetBlendState[2] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            _targetBlendState[3] = new TargetBlendState(this, sourceBlend, destinationBlend);
         }
 
         private BlendState(BlendState cloneSource)
