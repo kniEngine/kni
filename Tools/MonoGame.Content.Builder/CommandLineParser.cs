@@ -275,10 +275,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private bool ParseFlags(string arg)
         {
-            // Filename detected, redo with a build command
-            if (File.Exists(arg))
-                return ParseFlags("/build=" + arg);
-
             // Only one flag
             if (arg.Length >= 3 &&
                 (arg[0] == '-' || arg[0] == '/') &&
