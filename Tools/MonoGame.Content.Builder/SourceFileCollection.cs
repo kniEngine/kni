@@ -43,7 +43,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             try
             {
                 using (var textReader = new StreamReader(filePath))
-                    return (SourceFileCollection)deserializer.Deserialize(textReader);
+                {
+                    SourceFileCollection result = (SourceFileCollection)deserializer.Deserialize(textReader);
+
+                    if (result.DestFiles.Count != result.SourceFiles.Count)
+                        return null; // file is invalid
+
+                    return result;
+                }
             }
             catch (Exception)
             {
@@ -68,18 +75,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public void Merge(SourceFileCollection previousFileCollection)
         {
-            foreach (string prevSourceFile in previousFileCollection.SourceFiles)
+            for (int i = 0; i < previousFileCollection.SourceFiles.Count; i++)
             {
+                string prevSourceFile = previousFileCollection.SourceFiles[i];
+                string prevDestFile = previousFileCollection.DestFiles[i];
+
                 bool contains = this.SourceFiles.Exists((sourceFile) => string.Equals(sourceFile, prevSourceFile, StringComparison.InvariantCultureIgnoreCase));
                 if (!contains)
+                {
                     this.SourceFiles.Add(prevSourceFile);
-            }
-
-            foreach (string prevDestFile in previousFileCollection.DestFiles)
-            {
-                bool contains = this.DestFiles.Exists((destFile) => string.Equals(destFile, prevDestFile, StringComparison.InvariantCultureIgnoreCase));
-                if (!contains)
                     this.DestFiles.Add(prevDestFile);
+                }
             }
         }
     }
