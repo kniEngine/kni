@@ -229,12 +229,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return;
             }
 
-            if (arg.StartsWith("/@") || arg.StartsWith("--@") || arg.StartsWith("-@") || (arg.EndsWith(".mgcb")))
+            if (arg.StartsWith("/@:") || arg.StartsWith("--@:") || arg.StartsWith("-@:"))
             {
                 var file = arg;
-                if (file.StartsWith("/@") || file.StartsWith("-@"))
+                if (file.StartsWith("/@:") || file.StartsWith("-@:"))
                     file = arg.Substring(3);
-                if (file.StartsWith("--@"))
+                if (file.StartsWith("--@:"))
                     file = arg.Substring(4);
 
                 file = Path.GetFullPath(file);
@@ -275,10 +275,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private bool ParseFlags(string arg)
         {
-            // Filename detected, redo with a build command
-            if (File.Exists(arg))
-                return ParseFlags("/build=" + arg);
-
             // Only one flag
             if (arg.Length >= 3 &&
                 (arg[0] == '-' || arg[0] == '/') &&
