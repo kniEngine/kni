@@ -36,11 +36,6 @@ namespace Content.Pipeline.Editor
         /// </summary>
         bool ProjectBuilding { get; }
 
-        /// <summary>
-        /// Passes /launchdebugger option when launching MGCB.
-        /// </summary>
-        bool LaunchDebugger { get; set; }
-
         bool SingleThread { get; set; }
 
         /// <summary>

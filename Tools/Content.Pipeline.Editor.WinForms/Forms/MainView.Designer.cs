@@ -69,7 +69,6 @@ namespace Content.Pipeline.Editor
             this._cleanMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this._filterOutputMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._debuggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._singlethreadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cancelBuildSeparator = new System.Windows.Forms.ToolStripSeparator();
             this._cancelBuildMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -355,7 +354,6 @@ namespace Content.Pipeline.Editor
             this._cleanMenuItem,
             this.toolStripSeparator5,
             this._filterOutputMenuItem,
-            this._debuggerMenuItem,
             this._singlethreadMenuItem,
             this._cancelBuildSeparator,
             this._cancelBuildMenuItem});
@@ -399,13 +397,6 @@ namespace Content.Pipeline.Editor
             this._filterOutputMenuItem.Size = new System.Drawing.Size(201, 24);
             this._filterOutputMenuItem.Text = "Filter Output";
             this._filterOutputMenuItem.CheckedChanged += new System.EventHandler(this.FilterOutputMenuItem_CheckedChanged);
-            // 
-            // _debuggerMenuItem
-            // 
-            this._debuggerMenuItem.CheckOnClick = true;
-            this._debuggerMenuItem.Name = "_debuggerMenuItem";
-            this._debuggerMenuItem.Size = new System.Drawing.Size(201, 24);
-            this._debuggerMenuItem.Text = "Debug Mode";
             // 
             // _singlethreadMenuItem
             // 
@@ -921,7 +912,6 @@ namespace Content.Pipeline.Editor
         private System.Windows.Forms.ToolStripMenuItem _treeRebuildMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem _filterOutputMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem _debuggerMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _singlethreadMenuItem;
         private System.Windows.Forms.ToolStripSeparator _treeSeparator1;
         private System.Windows.Forms.ToolStripMenuItem _treeOpenFileMenuItem;

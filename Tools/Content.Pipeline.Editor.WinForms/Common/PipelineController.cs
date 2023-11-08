@@ -45,8 +45,6 @@ namespace Content.Pipeline.Editor
 
         public Selection Selection { get; private set; }
 
-        public bool LaunchDebugger { get; set; }
-
         public bool SingleThread { get; set; }
 
         public string ProjectLocation
@@ -333,8 +331,6 @@ namespace Content.Pipeline.Editor
         {
             var commands = string.Format("/@:\"{0}\" {1}", _project.OriginalPath, rebuild ? "/rebuild" : string.Empty);
 
-            if (LaunchDebugger)
-                commands += " /launchdebugger";
             if (SingleThread)
                 commands += " /singleThread";
 
@@ -363,8 +359,6 @@ namespace Content.Pipeline.Editor
             // Run the build the command.
             var commands = string.Format("/@:\"{0}\" /rebuild /incremental", tempPath);
 
-            if (LaunchDebugger)
-                commands += " /launchdebugger";
             if (SingleThread)
                 commands += " /singleThread";
 
@@ -409,8 +403,6 @@ namespace Content.Pipeline.Editor
 
             var commands = string.Format("/clean /intermediateDir:\"{0}\" /outputDir:\"{1}\"", _project.IntermediateDir, _project.OutputDir);
 
-            if (LaunchDebugger)
-                commands += " /launchdebugger";
             if (SingleThread)
                 commands += " /singleThread";
 

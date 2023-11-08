@@ -644,7 +644,6 @@ namespace Content.Pipeline.Editor
 
                 PipelineSettings.Default.Maximized = (this.WindowState == FormWindowState.Maximized);
                 PipelineSettings.Default.FilterOutput = _filterOutputMenuItem.Checked;
-                PipelineSettings.Default.DebugMode = _debuggerMenuItem.Checked;
                 PipelineSettings.Default.Save();
             }
         }        
@@ -722,28 +721,24 @@ namespace Content.Pipeline.Editor
 
         private void BuildMenuItemClick(object sender, EventArgs e)
         {
-            _controller.LaunchDebugger = _debuggerMenuItem.Checked;
             _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Build(false);
         }
 
         private void RebuildMenuItemClick(object sender, EventArgs e)
         {
-            _controller.LaunchDebugger = _debuggerMenuItem.Checked;
             _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Build(true);
         }
 
         private void RebuildItemsMenuItemClick(object sender, EventArgs e)
         {
-            _controller.LaunchDebugger = _debuggerMenuItem.Checked;
             _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.RebuildItems(_treeView.GetSelectedContentItems());
         }
 
         private void CleanMenuItemClick(object sender, EventArgs e)
         {
-            _controller.LaunchDebugger = _debuggerMenuItem.Checked;
             _controller.SingleThread = _singlethreadMenuItem.Checked;
             _controller.Clean();
         }
@@ -1015,7 +1010,6 @@ namespace Content.Pipeline.Editor
                 _splitEditorOutput.SplitterDistance = PipelineSettings.Default.VSeparator;
                 _splitTreeProps.SplitterDistance = PipelineSettings.Default.HSeparator;
 
-                _debuggerMenuItem.Checked = PipelineSettings.Default.DebugMode;
                 _filterOutputMenuItem.Checked = _toolFilterOutput.Checked = PipelineSettings.Default.FilterOutput;
 
                 if (PipelineSettings.Default.Maximized)

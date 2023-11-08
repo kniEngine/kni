@@ -16,12 +16,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     class BuildContent
     {
         [CommandLineParameter(
-            Name = "launchdebugger",
-            Flag = "d",
-            Description = "Wait for debugger to attach before building content.")]
-        public bool LaunchDebugger = false;
-
-        [CommandLineParameter(
             Name = "singleThread",
             Flag = "s",
             Description = "Use single Thread.")]
@@ -316,11 +310,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath);
             _manager.CompressContent = CompressContent;
-
-            // If the intent is to debug build, break at the original location
-            // of any exception, eg, within the actual importer/processor.
-            if (LaunchDebugger)
-                _manager.RethrowExceptions = false;
 
             // Feed all the assembly references to the pipeline manager
             // so it can resolve importers, processors, writers, and types.

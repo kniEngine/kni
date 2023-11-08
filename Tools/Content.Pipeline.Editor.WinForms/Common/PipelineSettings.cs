@@ -23,7 +23,7 @@ namespace Content.Pipeline.Editor
         public string StartupProject;
         public Microsoft.Xna.Framework.Point Size;
         public int HSeparator, VSeparator;
-        public bool Maximized, FilterOutput, DebugMode;
+        public bool Maximized, FilterOutput;
 
         static PipelineSettings()
         {
