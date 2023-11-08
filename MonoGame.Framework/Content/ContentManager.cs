@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content
 
         internal static readonly ContentBufferPool ScratchBufferPool = new ContentBufferPool();
 
-        private static readonly List<char> targetPlatformIdentifiers = new List<char>()
+        private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
         {
             // XNA content identifiers
             'w', // Windows (XNA & DirectX)
@@ -338,8 +338,8 @@ namespace Microsoft.Xna.Framework.Content
             if (x != 'X' || n != 'N' || b != 'B')
                 throw new ContentLoadException("Asset does not appear to be a valid XNB file.");
 
-            if (!targetPlatformIdentifiers.Contains((char)platform))
-                throw new ContentLoadException("Asset does not appear to target a known platform.");
+            if (!_targetPlatformIdentifiers.Contains((char)platform))
+                throw new ContentLoadException("Asset does not appear to target a known platform. Platform Identifier: '" + (char)platform+"'.");
 
             byte version = xnbReader.ReadByte();
             byte flags = xnbReader.ReadByte();
