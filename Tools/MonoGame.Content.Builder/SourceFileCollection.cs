@@ -5,12 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
@@ -57,8 +55,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
-                serializer.Serialize(textWriter, this);            
+                serializer.Serialize(textWriter, this);
         }
+
+        public int SourceFilesCount { get { return this.SourceFiles.Count; } }
 
         internal void AddFile(string sourceFile, string outputFile)
         {
@@ -66,20 +66,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             this.DestFiles.Add(outputFile);
         }
 
-        public void Merge(SourceFileCollection other)
+        public void Merge(SourceFileCollection previousFileCollection)
         {
-            foreach (string sourceFile in other.SourceFiles)
+            foreach (string prevSourceFile in previousFileCollection.SourceFiles)
             {
-                bool inContent = SourceFiles.Any(e => string.Equals(e, sourceFile, StringComparison.InvariantCultureIgnoreCase));
-                if (!inContent)
-                    SourceFiles.Add(sourceFile);
+                bool contains = this.SourceFiles.Exists((sourceFile) => string.Equals(sourceFile, prevSourceFile, StringComparison.InvariantCultureIgnoreCase));
+                if (!contains)
+                    this.SourceFiles.Add(prevSourceFile);
             }
 
-            foreach (string destFile in other.DestFiles)
+            foreach (string prevDestFile in previousFileCollection.DestFiles)
             {
-                bool inContent = DestFiles.Any(e => string.Equals(e, destFile, StringComparison.InvariantCultureIgnoreCase));
-                if (!inContent)
-                    DestFiles.Add(destFile);
+                bool contains = this.DestFiles.Exists((destFile) => string.Equals(destFile, prevDestFile, StringComparison.InvariantCultureIgnoreCase));
+                if (!contains)
+                    this.DestFiles.Add(prevDestFile);
             }
         }
     }

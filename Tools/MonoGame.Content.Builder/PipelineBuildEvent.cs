@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Importer = string.Empty;
             Processor = string.Empty;
             Parameters = new OpaqueDataDictionary();
-            ParametersXml = new List<Pair>();
+            XmlParameters = new List<XmlParameter>();
             Dependencies = new List<string>();
             BuildAsset = new List<string>();
             BuildOutput = new List<string>();
@@ -71,14 +71,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         [XmlIgnore]
         public OpaqueDataDictionary Parameters { get; set; }
 
-        public class Pair
+        public class XmlParameter
         {
             public string Key { get; set; }
             public string Value { get; set; }
+
+            public XmlParameter()
+            {
+            }
+
+            public XmlParameter(string key, string value)
+            {
+                this.Key = key;
+                this.Value = value;
+            }
         }
 
         [XmlElement("Parameters")]
-        public List<Pair> ParametersXml { get; set; }
+        public List<XmlParameter> XmlParameters { get; set; }
 
         /// <summary>
         /// Gets or sets the dependencies.
@@ -133,9 +143,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Repopulate the parameters from the serialized state.
-            foreach (Pair pair in buildEvent.ParametersXml)
-                buildEvent.Parameters.Add(pair.Key, pair.Value);
-            buildEvent.ParametersXml.Clear();
+            foreach (XmlParameter xmlParam in buildEvent.XmlParameters)
+                buildEvent.Parameters.Add(xmlParam.Key, xmlParam.Value);
+            buildEvent.XmlParameters.Clear();
 
             return buildEvent;
         }
@@ -146,9 +156,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Directory.CreateDirectory(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar);
 
             // Convert the parameters into something we can serialize.
-            ParametersXml.Clear();
-            foreach (KeyValuePair<string, object> pair in Parameters)
-                ParametersXml.Add(new Pair { Key = pair.Key, Value = ConvertToString(pair.Value) });
+            XmlParameters.Clear();
+            foreach (KeyValuePair<string, object> param in Parameters)
+            {
+                string key = param.Key;
+                string valueStr = ConvertToString(param.Value);
+                XmlParameters.Add(new XmlParameter(key, valueStr));
+            }
 
             // Serialize our state.
             XmlSerializer serializer = new XmlSerializer(typeof(PipelineBuildEvent));
@@ -193,20 +207,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 cachedEvent.DestFile != DestFile)
                 return true;
 
-            // Did the importer assembly change?
-            if (manager.GetImporterAssemblyTimestamp(cachedEvent.Importer) > cachedEvent.ImporterTime)
-                return true;
-
             // Did the importer change?
             if (cachedEvent.Importer != Importer)
                 return true;
 
-            // Did the processor assembly change?
-            if (manager.GetProcessorAssemblyTimestamp(cachedEvent.Processor) > cachedEvent.ProcessorTime)
-                return true;
-
             // Did the processor change?
             if (cachedEvent.Processor != Processor)
+                return true;
+
+            // Did the importer assembly change?
+            DateTime importerAssemblyTimestamp = manager.GetImporterAssemblyTimestamp(cachedEvent.Importer);
+            if (importerAssemblyTimestamp > cachedEvent.ImporterTime)
+                return true;
+
+            // Did the processor assembly change?
+            DateTime processorAssemblyTimestamp = manager.GetProcessorAssemblyTimestamp(cachedEvent.Processor);
+            if (processorAssemblyTimestamp > cachedEvent.ProcessorTime)
                 return true;
 
             // Did the parameters change?
@@ -245,7 +261,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Compare parameters0 with parameters1 or defaultValues.
-            foreach (var pair in parameters0)
+            foreach (KeyValuePair<string, object> pair in parameters0)
             {
                 object value0 = pair.Value;
                 object value1;
@@ -259,7 +275,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Compare parameters which are only in parameters1 with defaultValues.
-            foreach (var pair in parameters1)
+            foreach (KeyValuePair<string, object> pair in parameters1)
             {
                 if (parameters0.ContainsKey(pair.Key))
                     continue;
