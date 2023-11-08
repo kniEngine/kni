@@ -385,11 +385,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             for (int i = 0; i < fileCollection.SourceFilesCount; i++)
             {
                 string sourceFile = fileCollection.SourceFiles[i];
-
-                // This may be an old file (prior to MG 3.7) which doesn't have destination files:
-                string destFile = null;
-                if (i < fileCollection.DestFiles.Count)
-                    destFile = fileCollection.DestFiles[i];
+                string destFile = fileCollection.DestFiles[i];
 
                 var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
                 var cleanOldContent = !inContent && !Incremental;
