@@ -87,18 +87,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </summary>
         public bool CompressContent { get; set; }
 
-        /// <summary>        
-        /// If true exceptions thrown from within an importer or processor are caught and then 
-        /// thrown from the context. Default value is true.
-        /// </summary>
-        public bool RethrowExceptions { get; set; }
-
         public PipelineManager(string projectDir, string outputDir, string intermediateDir)
         {
             _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
             _processingBuildEvents = new SortedSet<string>();
-            RethrowExceptions = true;
 
             Assemblies = new List<string>();
             Logger = new ConsoleLogger();
@@ -719,30 +712,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Try importing the content.
             object importedObject;
-            if (RethrowExceptions)
-            {
-                try
-                {
-                    var importContext = new PipelineImporterContext(this, logger, buildEvent);
-                    importedObject = importer.Import(buildEvent.SourceFile, importContext);
-                }
-                catch (PipelineException)
-                {
-                    throw;
-                }
-                catch (InvalidContentException)
-                {
-                    throw;
-                }
-                catch (Exception inner)
-                {
-                    throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
-                }
-            }
-            else
+
+            try
             {
                 var importContext = new PipelineImporterContext(this, logger, buildEvent);
                 importedObject = importer.Import(buildEvent.SourceFile, importContext);
+            }
+            catch (PipelineException) { throw; }
+            catch (InvalidContentException) { throw; }
+            catch (Exception inner)
+            {
+                throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
             }
 
             // The pipelineEvent.Processor can be null or empty. In this case the
@@ -767,30 +747,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Process the imported object.
 
             object processedObject;
-            if (RethrowExceptions)
-            {
-                try
-                {
-                    var processContext = new PipelineProcessorContext(this, logger, buildEvent);
-                    processedObject = processor.Process(importedObject, processContext);
-                }
-                catch (PipelineException)
-                {
-                    throw;
-                }
-                catch (InvalidContentException)
-                {
-                    throw;
-                }
-                catch (Exception inner)
-                {
-                    throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
-                }
-            }
-            else
+            try
             {
                 var processContext = new PipelineProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
+            }
+            catch (PipelineException) { throw; }
+            catch (InvalidContentException) { throw; }
+            catch (Exception inner)
+            {
+                throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
             }
 
             return processedObject;

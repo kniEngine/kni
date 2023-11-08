@@ -34,20 +34,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (!parser.Parse(args))
                 return -1;
             
-            // Launch debugger if requested.
-            if (content.LaunchDebugger)
-            {
-                try
-                {
-                    System.Diagnostics.Debugger.Launch();
-                }
-                catch (NotImplementedException)
-                {
-                    // not implemented under Mono
-                    Console.Error.WriteLine("The debugger is not implemented under Mono and thus is not supported on your platform.");
-                }
-            }
-
             // Print a startup message.
             var buildStarted = DateTime.Now;
             if (!content.Quiet)
