@@ -539,25 +539,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void DeleteBuildEvent(string destFile)
         {
-            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
-            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
-            FileHelper.DeleteIfExists(intermediateXmlEventPath);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            FileHelper.DeleteIfExists(intermediateEventPath);
         }
 
         private void SaveBuildEvent(string destFile, PipelineBuildEvent buildEvent)
         {
-            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
-            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
-            intermediateXmlEventPath = Path.GetFullPath(intermediateXmlEventPath);
-            buildEvent.SaveXml(intermediateXmlEventPath);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            intermediateEventPath = Path.GetFullPath(intermediateEventPath);
+            buildEvent.SaveBinary(intermediateEventPath);
         }
 
         private PipelineBuildEvent LoadBuildEvent(string destFile)
         {
-            string relativeXmlEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.XmlExtension);
-            string intermediateXmlEventPath = Path.Combine(IntermediateDirectory, relativeXmlEventPath);
-            intermediateXmlEventPath = Path.GetFullPath(intermediateXmlEventPath);
-            return PipelineBuildEvent.LoadXml(intermediateXmlEventPath);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            intermediateEventPath = Path.GetFullPath(intermediateEventPath);
+            return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }
 
         public void RegisterContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
