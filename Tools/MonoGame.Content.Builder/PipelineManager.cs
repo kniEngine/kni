@@ -60,6 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public string ProjectDirectory { get; private set; }
         public string OutputDirectory { get; private set; }
         public string IntermediateDirectory { get; private set; }
+        public bool Quiet { get; private set; }
 
         private ContentCompiler _compiler;
 
@@ -87,7 +88,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </summary>
         public bool CompressContent { get; set; }
 
-        public PipelineManager(string projectDir, string outputDir, string intermediateDir)
+        public PipelineManager(string projectDir, string outputDir, string intermediateDir, bool quiet)
         {
             _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
@@ -99,6 +100,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             ProjectDirectory = PathHelper.NormalizeDirectory(projectDir);
             OutputDirectory = PathHelper.NormalizeDirectory(outputDir);
             IntermediateDirectory = PathHelper.NormalizeDirectory(intermediateDir);
+            Quiet = quiet;
 
             RegisterCustomConverters();
         }
@@ -624,7 +626,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             if (rebuild)
                 logger.LogMessage("{0}", buildEvent.SourceFile);
-            else
+            if (!rebuild && !this.Quiet)
                 logger.LogMessage("Skipping {0}", buildEvent.SourceFile);
 
             logger.Indent();

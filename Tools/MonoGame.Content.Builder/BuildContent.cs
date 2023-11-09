@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (!Path.IsPathRooted(intermediatePath))
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
 
-            _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath);
+            _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath, this.Quiet);
             _manager.CompressContent = CompressContent;
 
             // Feed all the assembly references to the pipeline manager
@@ -560,10 +560,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         var dstTime = File.GetLastWriteTimeUtc(dest);
                         if (srcTime <= dstTime)
                         {
-                            if (string.IsNullOrEmpty(item.Link))
-                                Console.WriteLine("Skipping {0}", item.SourceFile);
-                            else
-                                Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
+                            if (!this.Quiet)
+                            {
+                                if (string.IsNullOrEmpty(item.Link))
+                                    Console.WriteLine("Skipping {0}", item.SourceFile);
+                                else
+                                    Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
+                            }
 
                             return;
                         }
