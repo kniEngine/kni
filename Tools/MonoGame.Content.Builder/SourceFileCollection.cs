@@ -39,11 +39,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         static public SourceFileCollection LoadXml(string filePath)
         {
-            XmlSerializer deserializer = new XmlSerializer(typeof(SourceFileCollection));
             try
             {
                 using (var textReader = new StreamReader(filePath))
                 {
+                    XmlSerializer deserializer = new XmlSerializer(typeof(SourceFileCollection));
                     SourceFileCollection result = (SourceFileCollection)deserializer.Deserialize(textReader);
 
                     if (result.DestFiles.Count != result.SourceFiles.Count)
@@ -60,9 +60,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public void SaveXml(string filePath)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SourceFileCollection));
                 serializer.Serialize(textWriter, this);
+            }
         }
 
         public int SourceFilesCount { get { return this.SourceFiles.Count; } }
