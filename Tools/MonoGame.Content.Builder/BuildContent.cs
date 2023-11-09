@@ -659,8 +659,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private static SourceFileCollection LoadFileCollection(string intermediatePath)
         {
             string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            SourceFileCollection fileCollection = SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
-            return fileCollection;
+            return SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
         }
 
     }
