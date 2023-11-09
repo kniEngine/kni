@@ -646,20 +646,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         
         private static void DeleteFileCollection(string intermediatePath)
         {
-            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            FileHelper.DeleteIfExists(intermediateXmlFileCollectionPath);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            FileHelper.DeleteIfExists(intermediateFileCollectionPath);
         }
 
         private static void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
         {
-            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            fileCollection.SaveXml(intermediateXmlFileCollectionPath);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            fileCollection.SaveBinary(intermediateFileCollectionPath);
         }
 
         private static SourceFileCollection LoadFileCollection(string intermediatePath)
         {
-            string intermediateXmlFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.XmlExtension);
-            return SourceFileCollection.LoadXml(intermediateXmlFileCollectionPath);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            return SourceFileCollection.LoadBinary(intermediateFileCollectionPath);
         }
 
     }

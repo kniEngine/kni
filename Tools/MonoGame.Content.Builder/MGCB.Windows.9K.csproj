@@ -42,8 +42,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Convertors\StringToColorConverter.cs" />
@@ -61,7 +59,6 @@
     <Compile Include="PipelineProcessorContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
-    <Compile Include="XmlColor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
