@@ -242,6 +242,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (!File.Exists(file))
                     throw new Exception(string.Format("File '{0}' does not exist.", file));
 
+                string responseFilename = Path.GetFileName(file);
+                if (!inResponseFile)
+                    output.Add("/@:" + responseFilename);
+
                 var prevDir = Directory.GetCurrentDirectory();
                 var dir = Path.GetDirectoryName(file);
 

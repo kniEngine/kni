@@ -36,6 +36,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             CommandLineParser.Instance.ShowError(null);
         }
 
+        private string _responseFilename = string.Empty;
+
         [CommandLineParameter(
             Name = "@",
             Flag = "@",
@@ -43,10 +45,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Description = "Read a text response file with additional command line options and switches.")]
         // This property only exists for documentation.
         // The actual handling of '/@' is done in the preprocess step.
-        public List<string> ResponseFiles
+        public void SetResponseFile(string responseFilename)
         {
-            get { throw new InvalidOperationException(); }
-            set { throw new InvalidOperationException(); }
+            _responseFilename = responseFilename;
         }
 
         [CommandLineParameter(
@@ -308,7 +309,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (!Path.IsPathRooted(intermediatePath))
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
 
-            _manager = new PipelineManager(projectDirectory, outputPath, intermediatePath, this.Quiet);
+            _manager = new PipelineManager(projectDirectory, _responseFilename, outputPath, intermediatePath, this.Quiet);
             _manager.CompressContent = CompressContent;
 
             // Feed all the assembly references to the pipeline manager
