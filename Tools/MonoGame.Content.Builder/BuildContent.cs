@@ -648,21 +648,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             ErrorCount++;
         }
         
-        private static void DeleteFileCollection(string intermediatePath)
+        private void DeleteFileCollection(string intermediatePath)
         {
-            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(_responseFilename, SourceFileCollection.Extension));
             FileHelper.DeleteIfExists(intermediateFileCollectionPath);
         }
 
-        private static void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
+        private void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
         {
-            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(_responseFilename, SourceFileCollection.Extension));
             fileCollection.SaveBinary(intermediateFileCollectionPath);
         }
 
-        private static SourceFileCollection LoadFileCollection(string intermediatePath)
+        private SourceFileCollection LoadFileCollection(string intermediatePath)
         {
-            string intermediateFileCollectionPath = Path.Combine(intermediatePath, SourceFileCollection.Extension);
+            string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(_responseFilename, SourceFileCollection.Extension));
             return SourceFileCollection.LoadBinary(intermediateFileCollectionPath);
         }
 

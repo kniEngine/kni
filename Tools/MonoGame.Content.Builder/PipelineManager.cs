@@ -544,14 +544,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void DeleteBuildEvent(string destFile)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             FileHelper.DeleteIfExists(intermediateEventPath);
         }
 
         private void SaveBuildEvent(string destFile, PipelineBuildEvent buildEvent)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             buildEvent.SaveBinary(intermediateEventPath);
         }
@@ -559,7 +559,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private PipelineBuildEvent LoadBuildEvent(string destFile)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }
