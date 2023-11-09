@@ -57,7 +57,6 @@
         <Link>%(MonoGameContentReference.Link)</Link>
         <FullDir>%(MonoGameContentReference.RootDir)%(MonoGameContentReference.Directory)</FullDir>
         <ContentFolder>%(MonoGameContentReference.ContentFolder)</ContentFolder>
-        <OutputFolder>%(MonoGameContentReference.Filename)</OutputFolder>
       </ContentReference>
 
       <!--
@@ -74,9 +73,9 @@
       <!-- Assemble final metadata. -->
       <ContentReference>
         <ContentDir>%(ContentFolder)/</ContentDir>
-        <ContentOutputDir Condition="'$(MonoGamePlatform)' != 'BlazorGL'">%(FullDir)bin/$(MonoGamePlatform)/%(OutputFolder)</ContentOutputDir>
+        <ContentOutputDir Condition="'$(MonoGamePlatform)' != 'BlazorGL'">%(FullDir)bin/$(MonoGamePlatform)/</ContentOutputDir>
         <ContentOutputDir Condition="'$(MonoGamePlatform)' == 'BlazorGL'">$(MSBuildProjectDirectory)/wwwroot/%(ContentFolder)/</ContentOutputDir>
-        <ContentIntermediateOutputDir>%(FullDir)obj/$(MonoGamePlatform)/$(TargetFramework)/%(OutputFolder)</ContentIntermediateOutputDir>
+        <ContentIntermediateOutputDir>%(FullDir)obj/$(MonoGamePlatform)/</ContentIntermediateOutputDir>
       </ContentReference>
 
     </ItemGroup>
