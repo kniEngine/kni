@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             foreach (var arg in args)
                 ParsePreprocessArg(arg, output, ifstack, false);
 
-            return output.ToArray();
+            return output;
         }
 
         private void ParsePreprocessArg(string arg, List<string> output, Stack<IfCondition> ifstack, bool inResponseFile)
