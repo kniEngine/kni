@@ -189,8 +189,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             string projectDir = Directory.GetCurrentDirectory();
 
-            if (sourceFile.Contains(".."))
-                throw new InvalidOperationException("Content file is not rooted in content path \"" + projectDir + "\"");
+            //if (sourceFile.Contains(".."))
+            //    throw new InvalidOperationException("Content file is not rooted in content path \"" + projectDir + "\"");
 
             // Make sure the source file is absolute.
             if (!Path.IsPathRooted(sourceFile))
