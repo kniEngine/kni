@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
     public class PipelineBuildEvent
     {
+        public const string Extension = ".kniContent";
         public static readonly string XmlExtension = ".mgcontent";
 
         private static readonly OpaqueDataDictionary EmptyParameters = new OpaqueDataDictionary();
@@ -173,6 +174,36 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
+        public void SaveBinary(string filePath)
+        {
+            // Make sure the directory exists.
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar);
+
+            using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var writer = new PipelineBuildEventBinaryWriter(stream))
+            {
+                writer.Write(this);
+            }
+        }
+
+        public static PipelineBuildEvent LoadBinary(string filePath)
+        {
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                using (var writer = new PipelineBuildEventBinaryReader(stream))
+                {
+                    PipelineBuildEvent result = new PipelineBuildEvent();
+                    writer.Read(result);
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         internal bool NeedsRebuild(PipelineManager manager, PipelineBuildEvent cachedEvent)
         {
             // If we have no previously cached build event then we cannot
@@ -318,6 +349,181 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             TypeConverter typeConverter = TypeDescriptor.GetConverter(value.GetType());
             return typeConverter.ConvertToInvariantString(value);
+        }
+
+
+        internal class PipelineBuildEventBinaryWriter : BinaryWriter
+        {
+            private const string Header = "KNIC"; // content db
+            private const short MajorVersion = 3;
+            private const short MinorVersion = 9;
+            private const short DataType = 2; // PipelineBuildEvent data
+
+
+            public PipelineBuildEventBinaryWriter(Stream output) : base(output)
+            {
+            }
+
+            internal void Write(PipelineBuildEvent value)
+            {
+                Write(Header.ToCharArray());
+                Write((Int16)MajorVersion);
+                Write((Int16)MinorVersion);
+                Write((Int32)DataType);
+                Write((Int32)0); // reserved
+
+
+                WriteStringOrNull(value.SourceFile);
+                WriteDateTime(value.SourceTime);
+
+                WriteStringOrNull(value.DestFile);
+                WriteDateTime(value.DestTime);
+
+                WriteStringOrNull(value.Importer);
+                WriteDateTime(value.ImporterTime);
+
+                WriteStringOrNull(value.Processor);
+                WriteDateTime(value.ProcessorTime);
+
+                WritePackedInt(value.Parameters.Count);
+                foreach (var param in value.Parameters)
+                {
+                    WriteStringOrNull(param.Key);
+                    WriteStringOrNull(ConvertToString(param.Value));
+                }
+
+                WritePackedInt(value.Dependencies.Count);
+                for (int i = 0; i < value.Dependencies.Count; i++)
+                    WriteStringOrNull(value.Dependencies[i]);
+
+                WritePackedInt(value.BuildAsset.Count);
+                for (int i = 0; i < value.BuildAsset.Count; i++)
+                    WriteStringOrNull(value.BuildAsset[i]);
+
+                WritePackedInt(value.BuildOutput.Count);
+                for (int i = 0; i < value.BuildOutput.Count; i++)
+                    WriteStringOrNull(value.BuildOutput[i]);
+
+                return;
+            }
+
+            protected void WritePackedInt(int value)
+            {
+                // write zigzag encoded int
+                int zzint = ((value << 1) ^ (value >> 31));
+                Write7BitEncodedInt(zzint);
+            }
+
+            private void WriteStringOrNull(string value)
+            {
+                if (value != null)
+                {
+                    Write(true);
+                    Write(value);
+                }
+                else
+                    Write(false);
+            }
+
+            private void WriteDateTime(DateTime value)
+            {
+                Write((Int64)value.ToBinary());
+            }
+        }
+
+
+        internal class PipelineBuildEventBinaryReader : BinaryReader
+        {
+            private const string Header = "KNIC"; // content db
+            private const short MajorVersion = 3;
+            private const short MinorVersion = 9;
+            private const int DataType = 2; // PipelineBuildEvent data
+
+
+            public PipelineBuildEventBinaryReader(Stream output) : base(output)
+            {
+            }
+
+            internal void Read(PipelineBuildEvent value)
+            {
+                if (ReadByte() != Header[0]
+                ||  ReadByte() != Header[1]
+                ||  ReadByte() != Header[2]
+                ||  ReadByte() != Header[3])
+                    throw new Exception("Invalid file.");
+
+                if (ReadInt16() != MajorVersion
+                || ReadInt16() != MinorVersion)
+                    throw new Exception("Invalid file version.");
+
+                int dataType = ReadInt32();
+                if (dataType != DataType)
+                    throw new Exception("Invalid data type.");
+
+                int reserved0 = ReadInt32();
+
+                value.SourceFile = ReadStringOrNull();
+                value.SourceTime = ReadDateTime();
+
+                value.DestFile = ReadStringOrNull();
+                value.DestTime = ReadDateTime();
+
+                value.Importer = ReadStringOrNull();
+                value.ImporterTime = ReadDateTime();
+
+                value.Processor = ReadStringOrNull();
+                value.ProcessorTime = ReadDateTime();
+
+                int parametersCount = ReadPackedInt();
+                value.Parameters = new OpaqueDataDictionary();
+                for (int i = 0; i < parametersCount; i++)
+                {
+                    value.Parameters.Add(
+                        ReadStringOrNull(),
+                        ReadStringOrNull());
+                }
+
+                int dependenciesCount = ReadPackedInt();
+                value.Dependencies = new List<string>(dependenciesCount);
+                for (int i = 0; i < dependenciesCount; i++)
+                    value.Dependencies.Add(ReadStringOrNull());
+
+                int buildAssetCount = ReadPackedInt();
+                value.BuildAsset = new List<string>(buildAssetCount);
+                for (int i = 0; i < buildAssetCount; i++)
+                    value.BuildAsset.Add(ReadStringOrNull());
+
+                int buildOutputCount = ReadPackedInt();
+                value.BuildOutput = new List<string>(buildOutputCount);
+                for (int i = 0; i < buildOutputCount; i++)
+                    value.BuildOutput.Add(ReadStringOrNull());
+
+                return;
+            }
+
+
+            private int ReadPackedInt()
+            {
+                unchecked
+                {
+                    // read zigzag encoded int
+                    int zzint = Read7BitEncodedInt();
+                    return ((int)((uint)zzint >> 1) ^ (-(zzint & 1)));
+                }
+            }
+
+            private string ReadStringOrNull()
+            {
+                if (ReadBoolean())
+                    return ReadString();
+                else
+                    return null;
+            }
+
+            private DateTime ReadDateTime()
+            {
+                return DateTime.FromBinary(ReadInt64());
+            }
         }
     }
 }
