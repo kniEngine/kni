@@ -58,6 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private readonly SortedSet<string> _processingBuildEvents;
 
         public string ProjectDirectory { get; private set; }
+        public string ResponseFilename { get; private set; }
         public string OutputDirectory { get; private set; }
         public string IntermediateDirectory { get; private set; }
         public bool Quiet { get; private set; }
@@ -88,7 +89,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </summary>
         public bool CompressContent { get; set; }
 
-        public PipelineManager(string projectDir, string outputDir, string intermediateDir, bool quiet)
+        public PipelineManager(string projectDir, string responseFilename, string outputDir, string intermediateDir, bool quiet)
         {
             _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
@@ -98,6 +99,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Logger = new ConsoleLogger();
 
             ProjectDirectory = PathHelper.NormalizeDirectory(projectDir);
+            ResponseFilename = responseFilename;
             OutputDirectory = PathHelper.NormalizeDirectory(outputDir);
             IntermediateDirectory = PathHelper.NormalizeDirectory(intermediateDir);
             Quiet = quiet;
@@ -542,14 +544,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void DeleteBuildEvent(string destFile)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             FileHelper.DeleteIfExists(intermediateEventPath);
         }
 
         private void SaveBuildEvent(string destFile, PipelineBuildEvent buildEvent)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             buildEvent.SaveBinary(intermediateEventPath);
         }
@@ -557,7 +559,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private PipelineBuildEvent LoadBuildEvent(string destFile)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }

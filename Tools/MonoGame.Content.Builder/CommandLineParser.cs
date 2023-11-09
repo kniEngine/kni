@@ -231,8 +231,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             if (arg.StartsWith("/@:") || arg.StartsWith("--@:") || arg.StartsWith("-@:"))
             {
-                var file = arg;
-                if (file.StartsWith("/@:") || file.StartsWith("-@:"))
+                string file = null;
+                if (arg.StartsWith("/@:") || arg.StartsWith("-@:"))
                     file = arg.Substring(3);
                 if (file.StartsWith("--@:"))
                     file = arg.Substring(4);
@@ -241,6 +241,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 if (!File.Exists(file))
                     throw new Exception(string.Format("File '{0}' does not exist.", file));
+
+                string responseFilename = Path.GetFileName(file);
+                if (!inResponseFile)
+                    output.Add("/@:" + responseFilename);
 
                 var prevDir = Directory.GetCurrentDirectory();
                 var dir = Path.GetDirectoryName(file);
