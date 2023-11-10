@@ -11,7 +11,7 @@
     <RootNamespace>$ext_safeprojectname$</RootNamespace>
     <AssemblyName>$ext_safeprojectname$</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MonoGamePlatform>DesktopGL</MonoGamePlatform>
+    <KniPlatform>DesktopGL</KniPlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -56,12 +56,12 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
       <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
-    </MonoGameContentReference>
+    </KniContentReference>
     <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
 </Project>

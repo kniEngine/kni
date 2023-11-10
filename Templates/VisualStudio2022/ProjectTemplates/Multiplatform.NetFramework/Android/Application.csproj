@@ -19,7 +19,7 @@
     <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
-    <MonoGamePlatform>Android</MonoGamePlatform>
+    <KniPlatform>Android</KniPlatform>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
   </PropertyGroup>
@@ -72,11 +72,11 @@
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">   
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">   
       <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
-    </MonoGameContentReference>
+    </KniContentReference>
   </ItemGroup>
   <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
 </Project>

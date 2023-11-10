@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-	<MonoGamePlatform>BlazorGL</MonoGamePlatform>
+	<KniPlatform>BlazorGL</KniPlatform>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MonoGameContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder17.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
 </Project>

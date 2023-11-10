@@ -1,6 +1,7 @@
 <Project>
 
   <PropertyGroup>
+	<KniPlatform>Windows</KniPlatform>
     <MonoGamePlatform>Windows</MonoGamePlatform>
   </PropertyGroup>
 
