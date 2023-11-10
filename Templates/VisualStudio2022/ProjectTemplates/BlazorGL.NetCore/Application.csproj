@@ -37,5 +37,5 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder17.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
 </Project>
