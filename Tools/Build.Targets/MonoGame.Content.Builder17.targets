@@ -42,7 +42,7 @@
           - FullDir: C:/Game/Game.Shared/
           - ContentDir: Game.Shared/
           - ContentOutputDir: C:/Game/Game.Shared/bin/DesktopGL/
-          - ContentIntermediateOutputDir: C:/Game/Game.Shared/obj/DesktopGL/SharedContent/
+          - ContentIntermediateOutputDir: C:/Game/Game.Shared/obj/DesktopGL/
   -->
   <Target Name="CollectContentReferences">
 
