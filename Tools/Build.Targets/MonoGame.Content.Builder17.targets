@@ -1,8 +1,5 @@
 <Project>
 
- <Warning Text="Replace MonoGame.Content.Builder17.targets with Kni.Content.Builder.targets, MonoGameContentReference with KniContentReference, MonoGamePlatform with KniPlatform, and MonoGameMGCBAdditionalArguments with KniContentBuilderArguments." />
-
-
   <!-- Add MonoGameContentReference to item type selection in Visual Studio -->
   <ItemGroup>
     <AvailableItemName Include="MonoGameContentReference" />
@@ -48,6 +45,8 @@
           - ContentIntermediateOutputDir: C:/Game/Game.Shared/obj/DesktopGL/
   -->
   <Target Name="CollectContentReferences">
+
+    <Warning Text="Replace MonoGame.Content.Builder17.targets with Kni.Content.Builder.targets, MonoGameContentReference with KniContentReference, MonoGamePlatform with KniPlatform, and MonoGameMGCBAdditionalArguments with KniContentBuilderArguments." />
 
     <ItemGroup >
       <MonoGameContentReference Include="**/*.mgcb" />
