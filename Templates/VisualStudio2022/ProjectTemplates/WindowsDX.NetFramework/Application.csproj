@@ -57,7 +57,7 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
     <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

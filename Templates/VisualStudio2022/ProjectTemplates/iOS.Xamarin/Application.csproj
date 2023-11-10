@@ -117,7 +117,7 @@
   <ItemGroup>
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <MonoGameContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Default.png" />

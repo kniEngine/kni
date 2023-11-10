@@ -1,8 +1,8 @@
 <Project>
 
-  <!-- Add MonoGameContentReference to item type selection in Visual Studio -->
+  <!-- Add KniContentReference to item type selection in Visual Studio -->
   <ItemGroup>
-    <AvailableItemName Include="MonoGameContentReference" />
+    <AvailableItemName Include="KniContentReference" />
   </ItemGroup>
 
   <!-- This disables the IDE feature that skips executing msbuild in some build situations. -->
@@ -23,7 +23,7 @@
     CollectContentReferences
     ========================
 
-    Converts MonoGameContentReference items to ContentReference items, deriving the necessary metadata.
+    Converts KniContentReference items to ContentReference items, deriving the necessary metadata.
 
     Outputs:
       - ContentReference: references to .mgcb files that can be built with MGCB
@@ -36,7 +36,7 @@
       - Given the following file setup:
         - C:\Game\Game.Shared\SharedContent.mgcb
         - C:\Game\Game.DesktopGL\Game.DesktopGL.csproj
-          - MonoGameContentReference: ..\Game.Shared\SharedContent.mgcb
+          - KniContentReference: ..\Game.Shared\SharedContent.mgcb
       - Output:
         - ContentReference
           - FullDir: C:/Game/Game.Shared/
@@ -47,16 +47,16 @@
   <Target Name="CollectContentReferences">
 
     <ItemGroup >
-      <MonoGameContentReference Include="**/*.mgcb" />
+      <KniContentReference Include="**/*.mgcb" />
     </ItemGroup>
 
     <ItemGroup>
 
       <!-- Start with existing metadata. -->
-      <ContentReference Include="@(MonoGameContentReference)">
-        <Link>%(MonoGameContentReference.Link)</Link>
-        <FullDir>%(MonoGameContentReference.RootDir)%(MonoGameContentReference.Directory)</FullDir>
-        <ContentFolder>%(MonoGameContentReference.ContentFolder)</ContentFolder>
+      <ContentReference Include="@(KniContentReference)">
+        <Link>%(KniContentReference.Link)</Link>
+        <FullDir>%(KniContentReference.RootDir)%(KniContentReference.Directory)</FullDir>
+        <ContentFolder>%(KniContentReference.ContentFolder)</ContentFolder>
       </ContentReference>
 
       <!--
@@ -110,11 +110,11 @@
       Condition="'$(MonoGamePlatform)' == ''" />
 
     <Warning
-      Text="No Content References Found. Please make sure your .mgcb file has a build action of MonoGameContentReference"
+      Text="No Content References Found. Please make sure your .mgcb file has a build action of KniContentReference"
       Condition="'%(ContentReference.FullPath)' == ''" />
 
     <Warning
-      Text="Content Reference output directory contains '..' which may cause content to be placed outside of the output directory. Please set ContentFolder on your MonoGameContentReference '%(ContentReference.Filename)' to enforce the correct content output location."
+      Text="Content Reference output directory contains '..' which may cause content to be placed outside of the output directory. Please set ContentFolder on your KniContentReference '%(ContentReference.Filename)' to enforce the correct content output location."
       Condition="$([System.String]::Copy('%(ContentReference.ContentDir)').Contains('..'))" />
 
     <MakeDir Directories="%(ContentReference.ContentOutputDir)"/>
@@ -171,7 +171,7 @@
   <Target
     Name="IncludeContent"
     DependsOnTargets="RunContentBuilder"
-    Condition="'@(MonoGameContentReference)' != ''"
+    Condition="'@(KniContentReference)' != ''"
     Outputs="%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension)"
     BeforeTargets="BeforeBuild">
 

@@ -172,15 +172,15 @@ The MGCB Editor has 3 actions related to building content: Build, Rebuild and Cl
 
 Once you have built your content, you have a few different ways to add it to your game project. They all have the same goal, to get the built XNB's in your project output folder so a [`ContentManager`](xref:Microsoft.Xna.Framework.Content.ContentManager) can easily find and load them.
 
-### MonoGameContentReference
+### KniContentReference
 
-The simplest method is to set up your game project from one of the templates that come with the SDK. When you create a new project, it will include a Content.mgcb file with its Build Action set to **MonoGameContentReference** and a reference to `MonoGame.Content.Builder.Task` which processes *MonoGameContentReference* items.
+The simplest method is to set up your game project from one of the templates that come with the SDK. When you create a new project, it will include a Content.mgcb file with its Build Action set to **KniContentReference** and a reference to `MonoGame.Content.Builder.Task` which processes *KniContentReference* items.
 
 ![MonoGame Content Reference](~/images/content/MGCB-ContentReference.png)
 
 > This build action is defined in the .targets file [here](https://github.com/MonoGame/MonoGame/blob/develop/Tools/MonoGame.Content.Builder.Task/MonoGame.Content.Builder.Task.targets).
 
-The **MonoGameContentReference** is set up so that when the project is built, the MGCB will automatically build any new/modified content and copy the resulting XNB's to the project output directory, so they can be used in the project. This way you do not even have to manually build the content with the MGCB Editor.
+The **KniContentReference** is set up so that when the project is built, the MGCB will automatically build any new/modified content and copy the resulting XNB's to the project output directory, so they can be used in the project. This way you do not even have to manually build the content with the MGCB Editor.
 
 Just add your content to the .mgcb with the MGCB Editor and the rest will happen when you build your project. The content files do not need to be added to your project.
 

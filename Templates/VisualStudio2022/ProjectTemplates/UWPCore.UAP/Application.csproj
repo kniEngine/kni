@@ -122,7 +122,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
