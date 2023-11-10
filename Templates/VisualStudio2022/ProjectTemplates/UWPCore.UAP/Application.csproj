@@ -20,7 +20,7 @@
     $if$($includeKeyFile$==true)
     <PackageCertificateKeyFile>$projectname$_TemporaryKey.pfx</PackageCertificateKeyFile>
     $endif$
-    <MonoGamePlatform>WindowsStoreApp</MonoGamePlatform>
+    <KniPlatform>WindowsStoreApp</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>

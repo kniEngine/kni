@@ -1,6 +1,7 @@
 <Project>
 
   <PropertyGroup>
+	<KniPlatform>DesktopGL</KniPlatform>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
   </PropertyGroup>
 

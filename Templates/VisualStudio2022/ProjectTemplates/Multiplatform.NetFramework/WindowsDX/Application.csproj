@@ -11,7 +11,7 @@
     <RootNamespace>$ext_safeprojectname$</RootNamespace>
     <AssemblyName>$ext_safeprojectname$</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MonoGamePlatform>Windows</MonoGamePlatform>
+    <KniPlatform>Windows</KniPlatform>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

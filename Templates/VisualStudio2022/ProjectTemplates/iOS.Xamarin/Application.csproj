@@ -9,7 +9,7 @@
     <RootNamespace>$safeprojectname$</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>$safeprojectname$</AssemblyName>
-    <MonoGamePlatform>iOS</MonoGamePlatform>
+    <KniPlatform>iOS</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

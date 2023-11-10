@@ -73,9 +73,9 @@
       <!-- Assemble final metadata. -->
       <ContentReference>
         <ContentDir>%(ContentFolder)/</ContentDir>
-        <ContentOutputDir Condition="'$(MonoGamePlatform)' != 'BlazorGL'">%(FullDir)bin/$(MonoGamePlatform)/</ContentOutputDir>
-        <ContentOutputDir Condition="'$(MonoGamePlatform)' == 'BlazorGL'">$(MSBuildProjectDirectory)/wwwroot/%(ContentFolder)/</ContentOutputDir>
-        <ContentIntermediateOutputDir>%(FullDir)obj/$(MonoGamePlatform)/</ContentIntermediateOutputDir>
+        <ContentOutputDir Condition="'$(KniPlatform)' != 'BlazorGL'">%(FullDir)bin/$(KniPlatform)/</ContentOutputDir>
+        <ContentOutputDir Condition="'$(KniPlatform)' == 'BlazorGL'">$(MSBuildProjectDirectory)/wwwroot/%(ContentFolder)/</ContentOutputDir>
+        <ContentIntermediateOutputDir>%(FullDir)obj/$(KniPlatform)/</ContentIntermediateOutputDir>
       </ContentReference>
 
     </ItemGroup>
@@ -96,18 +96,18 @@
   <Target Name="PrepareContentBuilder" DependsOnTargets="CollectContentReferences">
 
     <PropertyGroup>
-      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'MacOSX'">$(MonoMacResourcePrefix)</PlatformResourcePrefix>
-      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'iOS'">$(IPhoneResourcePrefix)</PlatformResourcePrefix>
-      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'Android'">$(MonoAndroidAssetsPrefix)</PlatformResourcePrefix>
-      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'BlazorGL'"></PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(KniPlatform)' == 'MacOSX'">$(MonoMacResourcePrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(KniPlatform)' == 'iOS'">$(IPhoneResourcePrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(KniPlatform)' == 'Android'">$(MonoAndroidAssetsPrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(KniPlatform)' == 'BlazorGL'"></PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(PlatformResourcePrefix)' != '' And !HasTrailingSlash('$(PlatformResourcePrefix)')">$(PlatformResourcePrefix)\</PlatformResourcePrefix>
       <PlatformResourcePrefix Condition="'$(PlatformResourcePrefix)' == ''"></PlatformResourcePrefix>
       <KniContentBuilderArguments Condition="'$(KniContentBuilderArguments)' == ''">/quiet</KniContentBuilderArguments>
     </PropertyGroup>
 
     <Error
-      Text="The MonoGamePlatform property was not defined in the project!"
-      Condition="'$(MonoGamePlatform)' == ''" />
+      Text="The KniPlatform property was not defined in the project!"
+      Condition="'$(KniPlatform)' == ''" />
 
     <Warning
       Text="No Content References Found. Please make sure your .mgcb file has a build action of KniContentReference"
@@ -143,7 +143,7 @@
     <!-- Execute MGCB from the project directory so we use the correct manifest. -->
     <Exec
       Condition="'%(ContentReference.FullPath)' != ''"
-      Command="$(KniContentBuilderCmd) $(KniContentBuilderArguments) /@:&quot;%(ContentReference.FullPath)&quot; /platform:$(MonoGamePlatform) /outputDir:&quot;%(ContentReference.ContentOutputDir)&quot; /intermediateDir:&quot;%(ContentReference.ContentIntermediateOutputDir)&quot; /workingDir:&quot;%(ContentReference.FullDir)&quot;"
+      Command="$(KniContentBuilderCmd) $(KniContentBuilderArguments) /@:&quot;%(ContentReference.FullPath)&quot; /platform:$(KniPlatform) /outputDir:&quot;%(ContentReference.ContentOutputDir)&quot; /intermediateDir:&quot;%(ContentReference.ContentIntermediateOutputDir)&quot; /workingDir:&quot;%(ContentReference.FullDir)&quot;"
       WorkingDirectory="$(MSBuildProjectDirectory)" />
 
     <ItemGroup>
@@ -180,9 +180,9 @@
       Include="%(ExtraContent.FullPath)"
       AdditionalMetadata="Link=$(PlatformResourcePrefix)%(ExtraContent.ContentDir)%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension);CopyToOutputDirectory=PreserveNewest"
       Condition="'%(ExtraContent.Filename)' != ''">
-      <Output TaskParameter="Include" ItemName="Content" Condition="'$(MonoGamePlatform)' != 'Android' And '$(MonoGamePlatform)' != 'iOS' And '$(MonoGamePlatform)' != 'MacOSX'" />
-      <Output TaskParameter="Include" ItemName="BundleResource" Condition="'$(MonoGamePlatform)' == 'MacOSX' Or '$(MonoGamePlatform)' == 'iOS'" />
-      <Output TaskParameter="Include" ItemName="AndroidAsset" Condition="'$(MonoGamePlatform)' == 'Android'" />
+      <Output TaskParameter="Include" ItemName="Content" Condition="'$(KniPlatform)' != 'Android' And '$(KniPlatform)' != 'iOS' And '$(KniPlatform)' != 'MacOSX'" />
+      <Output TaskParameter="Include" ItemName="BundleResource" Condition="'$(KniPlatform)' == 'MacOSX' Or '$(KniPlatform)' == 'iOS'" />
+      <Output TaskParameter="Include" ItemName="AndroidAsset" Condition="'$(KniPlatform)' == 'Android'" />
     </CreateItem>
 
   </Target>

@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-	<MonoGamePlatform>BlazorGL</MonoGamePlatform>
+	<KniPlatform>BlazorGL</KniPlatform>
   </PropertyGroup>
   
   <PropertyGroup>

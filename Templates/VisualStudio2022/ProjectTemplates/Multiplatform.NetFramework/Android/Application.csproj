@@ -19,7 +19,7 @@
     <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
-    <MonoGamePlatform>Android</MonoGamePlatform>
+    <KniPlatform>Android</KniPlatform>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
   </PropertyGroup>
