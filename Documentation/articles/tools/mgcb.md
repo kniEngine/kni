@@ -243,9 +243,9 @@ by `msbuild` to run your own targets.
 </Target>
 ```
 
-If you want to customize the arguments sent to the `MGCB.exe` as part of the build process you can use the `<MonoGameMGCBAdditionalArguments>` property to define those.
+If you want to customize the arguments sent to the `MGCB.exe` as part of the build process you can use the `<KniContentBuilderArguments>` property to define those.
 For example to pass in the current project configuration you could include the following code in a PropertyGroup in your .csproj file.
 
 ```
-<MonoGameMGCBAdditionalArguments>-config:$(Configuration)</MonoGameMGCBAdditionalArguments>
+<KniContentBuilderArguments>-config:$(Configuration)</KniContentBuilderArguments>
 ```

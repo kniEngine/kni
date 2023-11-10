@@ -1,6 +1,6 @@
 <Project>
 
- <Warning Text="Replace MonoGame.Content.Builder17.targets with Kni.Content.Builder.targets, and MonoGameContentReference with KniContentReference." />
+ <Warning Text="Replace MonoGame.Content.Builder17.targets with Kni.Content.Builder.targets, MonoGameContentReference with KniContentReference, and MonoGameMGCBAdditionalArguments with KniContentBuilderArguments." />
 
 
   <!-- Add MonoGameContentReference to item type selection in Visual Studio -->
