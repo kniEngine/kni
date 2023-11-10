@@ -401,7 +401,10 @@ namespace Content.Pipeline.Editor
             View.OutputClear();
             View.OutputPopulateAssets(_project, _project.ContentItems);
 
-            var commands = string.Format("/clean /intermediateDir:\"{0}\" /outputDir:\"{1}\"", _project.IntermediateDir, _project.OutputDir);
+            string commands = string.Format("/@:\"{0}\" ", _project.OriginalPath);
+            commands += " /clean";
+
+            //commands += string.Format(" /intermediateDir:\"{0}\" /outputDir:\"{1}\"", _project.IntermediateDir, _project.OutputDir);
 
             if (SingleThread)
                 commands += " /singleThread";

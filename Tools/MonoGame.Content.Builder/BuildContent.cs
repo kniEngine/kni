@@ -337,6 +337,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             CleanItems(previousFileCollection, targetChanged);
             // TODO: Should we be cleaning copy items?  I think maybe we should.
 
+            if (Clean)
+                return;
+
             SourceFileCollection newFileCollection = new SourceFileCollection
             {
                 Profile = _manager.Profile = Profile,
@@ -372,6 +375,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void CleanItems(SourceFileCollection fileCollection, bool targetChanged)
         {
+            bool cleanOrRebuild = Clean || Rebuild;
+
             for (int i = 0; i < fileCollection.SourceFilesCount; i++)
             {
                 string sourceFile = fileCollection.SourceFiles[i];
@@ -379,7 +384,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
                 var cleanOldContent = !inContent && !Incremental;
-                var cleanRebuiltContent = inContent && (Rebuild || Clean);
+                var cleanRebuiltContent = inContent && cleanOrRebuild;
                 if (cleanRebuiltContent || cleanOldContent || targetChanged)
                     _manager.CleanContent(sourceFile, destFile);
             }
