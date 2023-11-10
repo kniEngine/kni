@@ -34,15 +34,15 @@
 
     Example:
       - Given the following file setup:
-        - C:\Game\Game.Shared\Content.mgcb
+        - C:\Game\Game.Shared\SharedContent.mgcb
         - C:\Game\Game.DesktopGL\Game.DesktopGL.csproj
-          - MonoGameContentReference: ..\Game.Shared\Content.mgcb
+          - MonoGameContentReference: ..\Game.Shared\SharedContent.mgcb
       - Output:
         - ContentReference
           - FullDir: C:/Game/Game.Shared/
           - ContentDir: Game.Shared/
-          - ContentOutputDir: C:/Game/Game.Shared/bin/DesktopGL/Content
-          - ContentIntermediateOutputDir: C:/Game/Game.Shared/obj/DesktopGL/Content
+          - ContentOutputDir: C:/Game/Game.Shared/bin/DesktopGL/
+          - ContentIntermediateOutputDir: C:/Game/Game.Shared/obj/DesktopGL/SharedContent/
   -->
   <Target Name="CollectContentReferences">
 
