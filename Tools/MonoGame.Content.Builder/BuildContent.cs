@@ -376,11 +376,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             bool cleanOrRebuild = Clean || Rebuild;
 
+            HashSet<String> contentSourceFiles = new HashSet<string>();
+            for (int i = 0; i < _content.Count; i++)
+                contentSourceFiles.Add(_content[i].SourceFile.ToLowerInvariant());
+
             for (int i = 0; i < previousFileCollection.SourceFilesCount; i++)
             {
                 string prevSourceFile = previousFileCollection.SourceFiles[i];
 
-                bool inContent = _content.Exists((contentItem) => string.Equals(contentItem.SourceFile, prevSourceFile, StringComparison.InvariantCultureIgnoreCase));
+                bool inContent = contentSourceFiles.Contains(prevSourceFile.ToLowerInvariant());
                 bool cleanOldContent = !inContent && !Incremental;
                 bool cleanRebuiltContent = inContent && cleanOrRebuild;
                 if (cleanRebuiltContent || cleanOldContent || targetChanged)
