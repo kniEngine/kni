@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
@@ -373,20 +372,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             CopyItems(_copyItems, projectDirectory, outputPath);
         }
 
-        private void CleanItems(SourceFileCollection fileCollection, bool targetChanged)
+        private void CleanItems(SourceFileCollection previousFileCollection, bool targetChanged)
         {
             bool cleanOrRebuild = Clean || Rebuild;
 
-            for (int i = 0; i < fileCollection.SourceFilesCount; i++)
+            for (int i = 0; i < previousFileCollection.SourceFilesCount; i++)
             {
-                string sourceFile = fileCollection.SourceFiles[i];
-                string destFile = fileCollection.DestFiles[i];
+                string prevSourceFile = previousFileCollection.SourceFiles[i];
 
-                var inContent = _content.Any(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
-                var cleanOldContent = !inContent && !Incremental;
-                var cleanRebuiltContent = inContent && cleanOrRebuild;
+                bool inContent = _content.Exists((contentItem) => string.Equals(contentItem.SourceFile, prevSourceFile, StringComparison.InvariantCultureIgnoreCase));
+                bool cleanOldContent = !inContent && !Incremental;
+                bool cleanRebuiltContent = inContent && cleanOrRebuild;
                 if (cleanRebuiltContent || cleanOldContent || targetChanged)
-                    _manager.CleanContent(sourceFile, destFile);
+                    _manager.CleanContent(prevSourceFile, previousFileCollection.DestFiles[i]);
             }
         }
 
