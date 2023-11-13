@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
-    internal class PipelineProcessorContext : ContentProcessorContext
+    internal class ProcessorContext : ContentProcessorContext
     {
         private readonly PipelineManager _manager;
         ConsoleLogger _logger;
-        private readonly PipelineBuildEvent _buildEvent;
+        private readonly BuildEvent _buildEvent;
 
-        public PipelineProcessorContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public ProcessorContext(PipelineManager manager, ConsoleLogger logger, BuildEvent buildEvent)
         {
             _manager = manager;
             _logger = logger;
@@ -51,8 +51,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                             string processorName,
                                                             OpaqueDataDictionary processorParameters)
         {
-            var processor = _manager.CreateProcessor(processorName, processorParameters);
-            var processContext = new PipelineProcessorContext(_manager, this._logger, new PipelineBuildEvent { Parameters = processorParameters } );
+            IContentProcessor processor = _manager.CreateProcessor(processorName, processorParameters);
+            ProcessorContext processContext = new ProcessorContext(_manager, this._logger, new BuildEvent { Parameters = processorParameters } );
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            PipelineBuildEvent buildEvent = new PipelineBuildEvent 
+            BuildEvent buildEvent = new BuildEvent
             { 
                 SourceFile = sourceFilepath,
                 Importer = importerName,
@@ -109,10 +109,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                                                 string assetName)
         {
             if (string.IsNullOrEmpty(assetName))
-                assetName = _manager.GetAssetName(this._logger, sourceAsset.Filename, importerName, processorName, processorParameters);
+                assetName = _manager.GetAssetName(sourceAsset.Filename, importerName, processorName, processorParameters, this._logger);
 
             // Build the content.
-            PipelineBuildEvent buildEvent = _manager.BuildContent(this._logger, sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            BuildEvent buildEvent = _manager.CreateBuildEvent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+            _manager.BuildContent(this._logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
             // Record that we built this dependent asset.
             if (!_buildEvent.BuildAsset.Contains(buildEvent.DestFile))

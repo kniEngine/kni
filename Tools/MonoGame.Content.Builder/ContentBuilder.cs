@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
-    class BuildContent
+    class ContentBuilder
     {
         [CommandLineParameter(
             Name = "singleThread",
@@ -201,26 +201,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             sourceFile = PathHelper.Normalize(sourceFile);
 
             // Remove duplicates... keep this new one.
-            var previous = _content.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
+            int previous = _contentItems.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
             if (previous != -1)
-                _content.RemoveAt(previous);
+                _contentItems.RemoveAt(previous);
 
             // Create the item for processing later.
-            var item = new ContentItem
+            ContentItem contentItem = new ContentItem
             {
-                SourceFile = sourceFile, 
+                SourceFile = sourceFile,
                 OutputFile = link,
                 Importer = Importer, 
                 Processor = _processor,
                 ProcessorParams = new OpaqueDataDictionary()
             };
-            _content.Add(item);
+            _contentItems.Add(contentItem);
 
             // Copy the current processor parameters blind as we
             // will validate and remove invalid parameters during
             // the build process later.
             foreach (var pair in _processorParams)
-                item.ProcessorParams.Add(pair.Key, pair.Value);
+                contentItem.ProcessorParams.Add(pair.Key, pair.Value);
         }
 
         [CommandLineParameter(
@@ -260,9 +260,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public class ContentItem
         {
             public string SourceFile;
+            public string OutputFile; // This refers to the "Link" which can override the default output location
 
-            // This refers to the "Link" which can override the default output location
-            public string OutputFile;
             public string Importer;
             public string Processor;
             public OpaqueDataDictionary ProcessorParams;
@@ -275,14 +274,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         }
 
         private PipelineManager _manager;
-        private readonly List<ContentItem> _content = new List<ContentItem>();
+        private readonly List<ContentItem> _contentItems = new List<ContentItem>();
         private readonly List<CopyItem> _copyItems = new List<CopyItem>();
         public int SuccessCount { get; private set; }
         public int ErrorCount { get; private set; }
 
         public bool HasWork
         {
-            get { return _content.Count > 0 || _copyItems.Count > 0 || Clean; }    
+            get { return _contentItems.Count > 0 || _copyItems.Count > 0 || Clean; }    
         }
 
         string ReplaceSymbols(string parameter)
@@ -350,12 +349,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Before building the content, register all files to be built.
             // (Necessary to correctly resolve external references.)
-            RegisterItems(_content);
+            foreach (ContentItem contentItem in _contentItems)
+            {
+                try
+                {
+                    BuildEvent buildEvent = _manager.CreateBuildEvent(contentItem.SourceFile, contentItem.OutputFile, contentItem.Importer, contentItem.Processor, contentItem.ProcessorParams);
+                    _manager.TrackBuildEvent(buildEvent);
+                }
+                catch { /* Ignore exception */ }
+            }
 
             if (SingleThread)
-                BuildItemsSingleThread(_content, newFileCollection);
+                BuildItemsSingleThread(_contentItems, newFileCollection);
             else
-                BuildItemsMultiThread(_content, newFileCollection);
+                BuildItemsMultiThread(_contentItems, newFileCollection);
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
@@ -376,9 +383,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             bool cleanOrRebuild = Clean || Rebuild;
 
-            HashSet<String> contentSourceFiles = new HashSet<string>();
-            for (int i = 0; i < _content.Count; i++)
-                contentSourceFiles.Add(_content[i].SourceFile.ToLowerInvariant());
+            HashSet<String> contentSourceFiles = new HashSet<string>(_contentItems.Count);
+            for (int i = 0; i < _contentItems.Count; i++)
+                contentSourceFiles.Add(_contentItems[i].SourceFile.ToLowerInvariant());
 
             for (int i = 0; i < previousFileCollection.SourceFilesCount; i++)
             {
@@ -392,63 +399,54 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void RegisterItems(List<ContentItem> contentItems)
-        {
-            foreach (var item in contentItems)
-            {
-                try
-                {
-                    _manager.RegisterContent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
-                }
-                catch
-                {
-                    // Ignore exception
-                }
-            }
-        }
-
         private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
-            foreach (ContentItem item in contentItems)
+            foreach (ContentItem contentItem in contentItems)
             {
                 try
                 {
-                    _manager.BuildContent(_manager.Logger,
-                                          item.SourceFile,
-                                          item.OutputFile,
-                                          item.Importer,
-                                          item.Processor,
-                                          item.ProcessorParams);
+                    BuildEvent buildEvent = _manager.CreateBuildEvent(
+                                          contentItem.SourceFile,
+                                          contentItem.OutputFile,
+                                          contentItem.Importer,
+                                          contentItem.Processor,
+                                          contentItem.ProcessorParams
+                                          );
+                    // Load the previous content event if it exists.
+                    BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                    _manager.BuildContent(_manager.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
-                    fileCollection.AddFile(item.SourceFile, item.OutputFile);
+                    fileCollection.AddFile(contentItem.SourceFile, contentItem.OutputFile);
                     SuccessCount++;
                 }
                 catch (InvalidContentException ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
                 catch (PipelineException ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
                 catch (Exception ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
             }
         }
 
         private void BuildItemsMultiThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
-            var buildTaskQueue = new Queue<Task<PipelineBuildEvent>>();
-            var activeBuildTasks = new List<Task<PipelineBuildEvent>>();
+            var buildTaskQueue = new Queue<Task<BuildEvent>>();
+            var activeBuildTasks = new List<Task<BuildEvent>>();
             bool firstTask = true;
+
+            int maxConcurrentTasks = Environment.ProcessorCount;
 
             int ci = 0;
             while (ci < contentItems.Count || activeBuildTasks.Count > 0 || buildTaskQueue.Count > 0)
             {
                 // Create build tasks.
-                while (activeBuildTasks.Count < Environment.ProcessorCount && ci < contentItems.Count)
+                while (activeBuildTasks.Count < maxConcurrentTasks && ci < contentItems.Count)
                 {
                     BuildAsyncState buildState = new BuildAsyncState()
                     {
@@ -461,18 +459,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     };
                     buildState.Logger.Immediate = firstTask;
 
-                    Task<PipelineBuildEvent> task = Task.Factory.StartNew<PipelineBuildEvent>((stateobj) =>
+                    Task<BuildEvent> task = Task.Factory.StartNew<BuildEvent>((stateobj) =>
                     {
                         BuildAsyncState state = stateobj as BuildAsyncState;
                         //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
-                        PipelineBuildEvent result = _manager.BuildContent(state.Logger,
+                        BuildEvent buildEvent = _manager.CreateBuildEvent(
                                               state.SourceFile,
                                               state.OutputFile,
                                               state.Importer,
                                               state.Processor,
-                                              state.ProcessorParams);
+                                              state.ProcessorParams
+                                              );
+                        // Load the previous content event if it exists.
+                        BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                        _manager.BuildContent(state.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
                         //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
-                        return result;
+                        return buildEvent;
                     }, buildState, TaskCreationOptions.PreferFairness);
                     buildTaskQueue.Enqueue(task);
                     activeBuildTasks.Add(task);
