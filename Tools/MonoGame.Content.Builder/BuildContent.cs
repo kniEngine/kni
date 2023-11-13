@@ -404,12 +404,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    _manager.BuildContent(_manager.Logger,
-                                          item.SourceFile,
+                    _manager.BuildContent(item.SourceFile,
                                           item.OutputFile,
                                           item.Importer,
                                           item.Processor,
-                                          item.ProcessorParams);
+                                          item.ProcessorParams,
+                                          _manager.Logger);
 
                     fileCollection.AddFile(item.SourceFile, item.OutputFile);
                     SuccessCount++;
@@ -458,12 +458,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     {
                         BuildAsyncState state = stateobj as BuildAsyncState;
                         //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
-                        PipelineBuildEvent result = _manager.BuildContent(state.Logger,
+                        PipelineBuildEvent result = _manager.BuildContent(
                                               state.SourceFile,
                                               state.OutputFile,
                                               state.Importer,
                                               state.Processor,
-                                              state.ProcessorParams);
+                                              state.ProcessorParams,
+                                              state.Logger);
                         //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
                         return result;
                     }, buildState, TaskCreationOptions.PreferFairness);

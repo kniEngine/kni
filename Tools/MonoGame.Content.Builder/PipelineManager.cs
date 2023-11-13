@@ -564,7 +564,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }
 
-        public void RegisterContent(string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
+        public void RegisterContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
@@ -584,7 +584,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             TrackBuildEvent(buildEvent);
         }
 
-        public PipelineBuildEvent BuildContent(ConsoleLogger logger, string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
+        public PipelineBuildEvent BuildContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters, ConsoleLogger logger)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
@@ -864,7 +864,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// <param name="processorName">The name of the content processor. Can be <see langword="null"/>.</param>
         /// <param name="processorParameters">The processor parameters. Can be <see langword="null"/>.</param>
         /// <returns>The asset name.</returns>
-        public string GetAssetName(ContentBuildLogger logger, string sourceFileName, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        public string GetAssetName(string sourceFileName, string importerName, string processorName, OpaqueDataDictionary processorParameters, ContentBuildLogger logger)
         {
             Debug.Assert(Path.IsPathRooted(sourceFileName), "Absolute path expected.");
 
@@ -882,11 +882,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // --> Compare pipeline build events.
                     ResolveImporterAndProcessor(sourceFileName, ref importerName, ref processorName);
 
-                    var matchingEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
-                    if (matchingEvent != null)
+                    PipelineBuildEvent matchedBuildEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
+                    if (matchedBuildEvent != null)
                     {
                         // Matching pipeline build event found.
-                        string existingName = matchingEvent.DestFile;
+                        string existingName = matchedBuildEvent.DestFile;
                         existingName = PathHelper.GetRelativePath(OutputDirectory, existingName);
                         existingName = existingName.Substring(0, existingName.Length - 4);   // Remove ".xnb".
                         return existingName;
@@ -943,13 +943,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </returns>
         private PipelineBuildEvent FindMatchingEvent(List<PipelineBuildEvent> pipelineBuildEvents, string destFile, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
-            foreach (var existingBuildEvent in pipelineBuildEvents)
+            foreach (PipelineBuildEvent existingBuildEvent in pipelineBuildEvents)
             {
                 if ((destFile == null || existingBuildEvent.DestFile.Equals(destFile))
-                    && existingBuildEvent.Importer == importerName
-                    && existingBuildEvent.Processor == processorName)
+                &&  existingBuildEvent.Importer == importerName
+                &&  existingBuildEvent.Processor == processorName)
                 {
-                    var defaultValues = GetProcessorDefaultValues(processorName);
+                    OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
                     if (PipelineBuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
                     {
                         return existingBuildEvent;
