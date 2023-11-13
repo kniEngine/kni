@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
-    class BuildContent
+    class ContentBuilder
     {
         [CommandLineParameter(
             Name = "singleThread",

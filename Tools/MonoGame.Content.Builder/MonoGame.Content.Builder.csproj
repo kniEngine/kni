@@ -20,11 +20,11 @@
   <ItemGroup>
     <Compile Include="Convertors\StringToColorConverter.cs" />
     <Compile Include="BuildAsyncState.cs" />
-    <Compile Include="BuildContent.cs" />
     <Compile Include="BuildEvent.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleAsyncLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="ContentBuilder.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="ImporterContext.cs" />
     <Compile Include="PathHelper.cs" />

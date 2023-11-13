@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return -1;
             }
 
-            var content = new BuildContent();
+            ContentBuilder content = new ContentBuilder();
 
             // Parse the command line.
             var parser = new CommandLineParser(content)
