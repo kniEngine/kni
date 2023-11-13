@@ -399,21 +399,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Convert and set the parameters on the processor.
             foreach (var param in processorParameters)
             {
-                PropertyInfo propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
-                if (propInfo == null || propInfo.GetSetMethod(false) == null)
+                PropertyInfo property = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+                if (property == null || property.GetSetMethod(false) == null)
                     continue;
 
                 // If the property value is already of the correct type then set it.
-                if (propInfo.PropertyType.IsInstanceOfType(param.Value))
-                    propInfo.SetValue(processor, param.Value, null);
+                if (property.PropertyType.IsInstanceOfType(param.Value))
+                    property.SetValue(processor, param.Value, null);
                 else
                 {
                     // Find a type converter for this property.
-                    TypeConverter typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
+                    TypeConverter typeConverter = TypeDescriptor.GetConverter(property.PropertyType);
                     if (typeConverter.CanConvertFrom(param.Value.GetType()))
                     {
                         object propValue = typeConverter.ConvertFrom(null, CultureInfo.InvariantCulture, param.Value);
-                        propInfo.SetValue(processor, propValue, null);
+                        property.SetValue(processor, propValue, null);
                     }
                 }
             }
@@ -493,15 +493,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             foreach (var param in processorParameters)
             {
-                PropertyInfo propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
-                if (propInfo == null || propInfo.GetSetMethod(false) == null)
+                PropertyInfo property = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+                if (property == null || property.GetSetMethod(false) == null)
                     continue;
 
                 // Make sure we can assign the value.
-                if (!propInfo.PropertyType.IsInstanceOfType(param.Value))
+                if (!property.PropertyType.IsInstanceOfType(param.Value))
                 {
                     // Make sure we can convert the value.
-                    TypeConverter typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
+                    TypeConverter typeConverter = TypeDescriptor.GetConverter(property.PropertyType);
                     if (!typeConverter.CanConvertFrom(param.Value.GetType()))
                         continue;
                 }
