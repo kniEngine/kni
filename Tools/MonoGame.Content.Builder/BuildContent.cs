@@ -405,12 +405,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    _manager.BuildContent(item.SourceFile,
+                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(
+                                          item.SourceFile,
                                           item.OutputFile,
                                           item.Importer,
                                           item.Processor,
-                                          item.ProcessorParams,
-                                          _manager.Logger);
+                                          item.ProcessorParams
+                                          );
+                    _manager.BuildContent(buildEvent, _manager.Logger);
 
                     fileCollection.AddFile(item.SourceFile, item.OutputFile);
                     SuccessCount++;
@@ -459,15 +461,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     {
                         BuildAsyncState state = stateobj as BuildAsyncState;
                         //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
-                        PipelineBuildEvent result = _manager.BuildContent(
+                        PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(
                                               state.SourceFile,
                                               state.OutputFile,
                                               state.Importer,
                                               state.Processor,
-                                              state.ProcessorParams,
-                                              state.Logger);
+                                              state.ProcessorParams
+                                              );
+                        _manager.BuildContent(buildEvent, state.Logger);
                         //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
-                        return result;
+                        return buildEvent;
                     }, buildState, TaskCreationOptions.PreferFairness);
                     buildTaskQueue.Enqueue(task);
                     activeBuildTasks.Add(task);

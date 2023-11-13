@@ -112,7 +112,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 assetName = _manager.GetAssetName(sourceAsset.Filename, importerName, processorName, processorParameters, this._logger);
 
             // Build the content.
-            PipelineBuildEvent buildEvent = _manager.BuildContent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters, this._logger);
+            PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            _manager.BuildContent(buildEvent, this._logger);
 
             // Record that we built this dependent asset.
             if (!_buildEvent.BuildAsset.Contains(buildEvent.DestFile))

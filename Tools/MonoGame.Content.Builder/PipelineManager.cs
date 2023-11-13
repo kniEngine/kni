@@ -582,17 +582,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return buildEvent;
         }
 
-        public PipelineBuildEvent BuildContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters, ConsoleLogger logger)
+        public void BuildContent(PipelineBuildEvent buildEvent, ConsoleLogger logger)
         {
-            // Record what we're building and how.
-            PipelineBuildEvent buildEvent = CreateBuildEvent(sourceFilepath, outputFilepath, importerName, processorName, processorParameters);
-
             // Load the previous content event if it exists.
             PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(buildEvent.DestFile);
-
             BuildContent(logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
-
-            return buildEvent;
         }
 
         private void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
