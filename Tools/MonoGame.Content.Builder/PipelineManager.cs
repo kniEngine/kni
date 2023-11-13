@@ -567,8 +567,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-
             ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
+            OpaqueDataDictionary ProcessorParams = ValidateProcessorParameters(processorName, processorParameters);
 
             BuildEvent buildEvent = new BuildEvent
             {
@@ -576,7 +576,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 DestFile = outputFilepath,
                 Importer = importerName,
                 Processor = processorName,
-                Parameters = ValidateProcessorParameters(processorName, processorParameters),
+                Parameters = ProcessorParams,
             };
             return buildEvent;
         }
