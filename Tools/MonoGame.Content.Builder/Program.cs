@@ -48,6 +48,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Console.WriteLine("\nBuild {0} succeeded, {1} failed.\n", content.SuccessCount, content.ErrorCount);
                 Console.WriteLine("Time elapsed {0:hh\\:mm\\:ss\\.ff}.", DateTime.Now - buildStarted);
             }
+            else
+            {
+                Console.WriteLine("KNI content pipeline builder: {0} succeeded, {1} failed, took {2:hh\\:mm\\:ss\\.ff}.", content.SuccessCount, content.ErrorCount, DateTime.Now - buildStarted);
+            }
 
             // Return the error count.
             return content.ErrorCount;
