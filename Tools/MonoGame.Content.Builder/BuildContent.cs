@@ -349,7 +349,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Before building the content, register all files to be built.
             // (Necessary to correctly resolve external references.)
-            RegisterItems(_contentItems);
+            foreach (ContentItem item in _contentItems)
+            {
+                try
+                {
+                    _manager.RegisterContent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
+                }
+                catch { /* Ignore exception */ }
+            }
 
             if (SingleThread)
                 BuildItemsSingleThread(_contentItems, newFileCollection);
@@ -388,21 +395,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 bool cleanRebuiltContent = inContent && cleanOrRebuild;
                 if (cleanRebuiltContent || cleanOldContent || targetChanged)
                     _manager.CleanContent(prevSourceFile, previousFileCollection.DestFiles[i]);
-            }
-        }
-
-        private void RegisterItems(List<ContentItem> contentItems)
-        {
-            foreach (var item in contentItems)
-            {
-                try
-                {
-                    _manager.RegisterContent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
-                }
-                catch
-                {
-                    // Ignore exception
-                }
             }
         }
 
