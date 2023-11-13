@@ -7,13 +7,13 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
-    internal class PipelineImporterContext : ContentImporterContext
+    internal class ImporterContext : ContentImporterContext
     {
         private readonly PipelineManager _manager;
         ConsoleLogger _logger;
         private readonly PipelineBuildEvent _buildEvent;
 
-        public PipelineImporterContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public ImporterContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
         {
             _manager = manager;
             _logger = logger;

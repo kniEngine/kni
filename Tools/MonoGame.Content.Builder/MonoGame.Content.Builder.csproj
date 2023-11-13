@@ -25,11 +25,11 @@
     <Compile Include="ConsoleAsyncLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="FileHelper.cs" />
+    <Compile Include="ImporterContext.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="PipelineBuildEvent.cs" />
-    <Compile Include="PipelineImporterContext.cs" />
     <Compile Include="PipelineManager.cs" />
-    <Compile Include="PipelineProcessorContext.cs" />
+    <Compile Include="ProcessorContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
   </ItemGroup>

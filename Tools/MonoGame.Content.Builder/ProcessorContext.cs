@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 {
-    internal class PipelineProcessorContext : ContentProcessorContext
+    internal class ProcessorContext : ContentProcessorContext
     {
         private readonly PipelineManager _manager;
         ConsoleLogger _logger;
         private readonly PipelineBuildEvent _buildEvent;
 
-        public PipelineProcessorContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public ProcessorContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
         {
             _manager = manager;
             _logger = logger;
@@ -51,8 +51,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                             string processorName,
                                                             OpaqueDataDictionary processorParameters)
         {
-            var processor = _manager.CreateProcessor(processorName, processorParameters);
-            var processContext = new PipelineProcessorContext(_manager, this._logger, new PipelineBuildEvent { Parameters = processorParameters } );
+            IContentProcessor processor = _manager.CreateProcessor(processorName, processorParameters);
+            ProcessorContext processContext = new ProcessorContext(_manager, this._logger, new PipelineBuildEvent { Parameters = processorParameters } );
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.

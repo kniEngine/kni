@@ -691,7 +691,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             try
             {
-                var importContext = new PipelineImporterContext(this, logger, buildEvent);
+                ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
                 importedObject = importer.Import(buildEvent.SourceFile, importContext);
             }
             catch (PipelineException) { throw; }
@@ -725,7 +725,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             object processedObject;
             try
             {
-                var processContext = new PipelineProcessorContext(this, logger, buildEvent);
+                ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
             }
             catch (PipelineException) { throw; }
