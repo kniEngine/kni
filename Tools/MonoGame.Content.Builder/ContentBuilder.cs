@@ -383,7 +383,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             bool cleanOrRebuild = Clean || Rebuild;
 
-            HashSet<String> contentSourceFiles = new HashSet<string>();
+            HashSet<String> contentSourceFiles = new HashSet<string>(_contentItems.Count);
             for (int i = 0; i < _contentItems.Count; i++)
                 contentSourceFiles.Add(_contentItems[i].SourceFile.ToLowerInvariant());
 

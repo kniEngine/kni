@@ -818,7 +818,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 List<BuildEvent> buildEvents;
                 if (!_buildEventsMap.TryGetValue(buildEvent.SourceFile, out buildEvents))
                 {
-                    buildEvents = new List<BuildEvent>();
+                    buildEvents = new List<BuildEvent>(1);
                     _buildEventsMap.Add(buildEvent.SourceFile, buildEvents);
                 }
 
