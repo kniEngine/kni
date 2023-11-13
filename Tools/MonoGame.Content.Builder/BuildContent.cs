@@ -443,11 +443,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             var activeBuildTasks = new List<Task<PipelineBuildEvent>>();
             bool firstTask = true;
 
+            int maxConcurrentTasks = Environment.ProcessorCount;
+
             int ci = 0;
             while (ci < contentItems.Count || activeBuildTasks.Count > 0 || buildTaskQueue.Count > 0)
             {
                 // Create build tasks.
-                while (activeBuildTasks.Count < Environment.ProcessorCount && ci < contentItems.Count)
+                while (activeBuildTasks.Count < maxConcurrentTasks && ci < contentItems.Count)
                 {
                     BuildAsyncState buildState = new BuildAsyncState()
                     {
