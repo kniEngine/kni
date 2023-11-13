@@ -201,9 +201,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             sourceFile = PathHelper.Normalize(sourceFile);
 
             // Remove duplicates... keep this new one.
-            var previous = _content.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
+            var previous = _contentItems.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
             if (previous != -1)
-                _content.RemoveAt(previous);
+                _contentItems.RemoveAt(previous);
 
             // Create the item for processing later.
             var item = new ContentItem
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Processor = _processor,
                 ProcessorParams = new OpaqueDataDictionary()
             };
-            _content.Add(item);
+            _contentItems.Add(item);
 
             // Copy the current processor parameters blind as we
             // will validate and remove invalid parameters during
@@ -275,14 +275,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         }
 
         private PipelineManager _manager;
-        private readonly List<ContentItem> _content = new List<ContentItem>();
+        private readonly List<ContentItem> _contentItems = new List<ContentItem>();
         private readonly List<CopyItem> _copyItems = new List<CopyItem>();
         public int SuccessCount { get; private set; }
         public int ErrorCount { get; private set; }
 
         public bool HasWork
         {
-            get { return _content.Count > 0 || _copyItems.Count > 0 || Clean; }    
+            get { return _contentItems.Count > 0 || _copyItems.Count > 0 || Clean; }    
         }
 
         string ReplaceSymbols(string parameter)
@@ -350,12 +350,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Before building the content, register all files to be built.
             // (Necessary to correctly resolve external references.)
-            RegisterItems(_content);
+            RegisterItems(_contentItems);
 
             if (SingleThread)
-                BuildItemsSingleThread(_content, newFileCollection);
+                BuildItemsSingleThread(_contentItems, newFileCollection);
             else
-                BuildItemsMultiThread(_content, newFileCollection);
+                BuildItemsMultiThread(_contentItems, newFileCollection);
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
@@ -377,8 +377,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool cleanOrRebuild = Clean || Rebuild;
 
             HashSet<String> contentSourceFiles = new HashSet<string>();
-            for (int i = 0; i < _content.Count; i++)
-                contentSourceFiles.Add(_content[i].SourceFile.ToLowerInvariant());
+            for (int i = 0; i < _contentItems.Count; i++)
+                contentSourceFiles.Add(_contentItems[i].SourceFile.ToLowerInvariant());
 
             for (int i = 0; i < previousFileCollection.SourceFilesCount; i++)
             {
