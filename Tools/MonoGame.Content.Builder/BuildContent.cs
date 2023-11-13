@@ -412,7 +412,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                           item.Processor,
                                           item.ProcessorParams
                                           );
-                    _manager.BuildContent(buildEvent, _manager.Logger);
+                    // Load the previous content event if it exists.
+                    PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                    _manager.BuildContent(_manager.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
                     fileCollection.AddFile(item.SourceFile, item.OutputFile);
                     SuccessCount++;
@@ -468,7 +470,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                               state.Processor,
                                               state.ProcessorParams
                                               );
-                        _manager.BuildContent(buildEvent, state.Logger);
+                        // Load the previous content event if it exists.
+                        PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                        _manager.BuildContent(state.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
                         //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
                         return buildEvent;
                     }, buildState, TaskCreationOptions.PreferFairness);

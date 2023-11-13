@@ -556,7 +556,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             buildEvent.SaveBinary(intermediateEventPath);
         }
 
-        private PipelineBuildEvent LoadBuildEvent(string destFile)
+        internal PipelineBuildEvent LoadBuildEvent(string destFile)
         {
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
@@ -582,14 +582,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return buildEvent;
         }
 
-        public void BuildContent(PipelineBuildEvent buildEvent, ConsoleLogger logger)
-        {
-            // Load the previous content event if it exists.
-            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(buildEvent.DestFile);
-            BuildContent(logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
-        }
-
-        private void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
+        internal void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
         {
             if (!File.Exists(buildEvent.SourceFile))
             {
