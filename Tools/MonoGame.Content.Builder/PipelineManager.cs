@@ -481,11 +481,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return DateTime.MaxValue;
         }
 
-        public OpaqueDataDictionary ValidateProcessorParameters(string name, OpaqueDataDictionary processorParameters)
+        public OpaqueDataDictionary ValidateProcessorParameters(string processorName, OpaqueDataDictionary processorParameters)
         {
             OpaqueDataDictionary result = new OpaqueDataDictionary();
 
-            Type processorType = GetProcessorType(name);
+            Type processorType = GetProcessorType(processorName);
             if (processorType == null || processorParameters == null)
             {
                 return result;
