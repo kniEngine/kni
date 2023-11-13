@@ -201,14 +201,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             sourceFile = PathHelper.Normalize(sourceFile);
 
             // Remove duplicates... keep this new one.
-            var previous = _contentItems.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
+            int previous = _contentItems.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
             if (previous != -1)
                 _contentItems.RemoveAt(previous);
 
             // Create the item for processing later.
-            var item = new ContentItem
+            ContentItem item = new ContentItem
             {
-                SourceFile = sourceFile, 
+                SourceFile = sourceFile,
                 OutputFile = link,
                 Importer = Importer, 
                 Processor = _processor,

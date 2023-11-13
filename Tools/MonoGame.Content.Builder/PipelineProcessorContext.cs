@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            PipelineBuildEvent buildEvent = new PipelineBuildEvent 
+            PipelineBuildEvent buildEvent = new PipelineBuildEvent
             { 
                 SourceFile = sourceFilepath,
                 Importer = importerName,

@@ -10,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Graphics;
@@ -390,17 +389,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public IContentProcessor CreateProcessor(string name, OpaqueDataDictionary processorParameters)
         {
-            var processorType = GetProcessorType(name);
+            Type processorType = GetProcessorType(name);
             if (processorType == null)
                 return null;
 
             // Create the processor.
-            var processor = (IContentProcessor)Activator.CreateInstance(processorType);
+            IContentProcessor processor = (IContentProcessor)Activator.CreateInstance(processorType);
 
             // Convert and set the parameters on the processor.
             foreach (var param in processorParameters)
             {
-                var propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
                 if (propInfo == null || propInfo.GetSetMethod(false) == null)
                     continue;
 
@@ -410,10 +409,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 else
                 {
                     // Find a type converter for this property.
-                    var typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
+                    TypeConverter typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
                     if (typeConverter.CanConvertFrom(param.Value.GetType()))
                     {
-                        var propValue = typeConverter.ConvertFrom(null, CultureInfo.InvariantCulture, param.Value);
+                        object propValue = typeConverter.ConvertFrom(null, CultureInfo.InvariantCulture, param.Value);
                         propInfo.SetValue(processor, propValue, null);
                     }
                 }
@@ -484,9 +483,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public OpaqueDataDictionary ValidateProcessorParameters(string name, OpaqueDataDictionary processorParameters)
         {
-            var result = new OpaqueDataDictionary();
+            OpaqueDataDictionary result = new OpaqueDataDictionary();
 
-            var processorType = GetProcessorType(name);
+            Type processorType = GetProcessorType(name);
             if (processorType == null || processorParameters == null)
             {
                 return result;
@@ -494,7 +493,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             foreach (var param in processorParameters)
             {
-                var propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo propInfo = processorType.GetProperty(param.Key, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
                 if (propInfo == null || propInfo.GetSetMethod(false) == null)
                     continue;
 
@@ -502,7 +501,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (!propInfo.PropertyType.IsInstanceOfType(param.Value))
                 {
                     // Make sure we can convert the value.
-                    var typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
+                    TypeConverter typeConverter = TypeDescriptor.GetConverter(propInfo.PropertyType);
                     if (!typeConverter.CanConvertFrom(param.Value.GetType()))
                         continue;
                 }
@@ -518,8 +517,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // If the output path is null... build it from the source file path.
             if (string.IsNullOrEmpty(outputFilepath))
             {
-                var filename = Path.GetFileNameWithoutExtension(sourceFilepath) + ".xnb";
-                var directory = PathHelper.GetRelativePath(ProjectDirectory,
+                string filename = Path.GetFileNameWithoutExtension(sourceFilepath) + ".xnb";
+                string directory = PathHelper.GetRelativePath(ProjectDirectory,
                                                            Path.GetDirectoryName(sourceFilepath) +
                                                            Path.DirectorySeparatorChar);
                 outputFilepath = Path.Combine(OutputDirectory, directory, filename);
@@ -527,7 +526,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             else
             {
                 // If the extension is not XNB or the source file extension then add XNB.
-                var sourceExt = Path.GetExtension(sourceFilepath);
+                string sourceExt = Path.GetExtension(sourceFilepath);
                 if (outputFilepath.EndsWith(sourceExt, StringComparison.InvariantCultureIgnoreCase))
                     outputFilepath = outputFilepath.Substring(0, outputFilepath.Length - sourceExt.Length);
                 if (!outputFilepath.EndsWith(".xnb", StringComparison.InvariantCultureIgnoreCase))
@@ -748,7 +747,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (cachedBuildEvent != null)
             {
                 // Recursively clean additional (nested) assets.
-                foreach (var asset in cachedBuildEvent.BuildAsset)
+                foreach (string asset in cachedBuildEvent.BuildAsset)
                 {
                     PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
@@ -792,7 +791,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void WriteXnb(object content, PipelineBuildEvent buildEvent)
         {
             // Make sure the output directory exists.
-            var outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
+            string outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
 
             Directory.CreateDirectory(outputFileDir);
 
@@ -800,7 +799,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _compiler = new ContentCompiler();
 
             // Write the XNB.
-            using (var stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, CompressContent, OutputDirectory, outputFileDir);
 
             // Store the last write time of the output XNB here
@@ -883,20 +882,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (existingBuildEvent == null)
                     return destFile;
 
-                var existingBuildEventDestFile = existingBuildEvent.DestFile;
+                string existingBuildEventDestFile = existingBuildEvent.DestFile;
                 existingBuildEventDestFile = PathHelper.GetRelativePath(ProjectDirectory, existingBuildEventDestFile);
                 existingBuildEventDestFile = Path.Combine(Path.GetDirectoryName(existingBuildEventDestFile), Path.GetFileNameWithoutExtension(existingBuildEventDestFile));
                 existingBuildEventDestFile = PathHelper.Normalize(existingBuildEventDestFile);
-                
-                var fullDestFile = Path.Combine(OutputDirectory, destFile);
-                var relativeDestFile = PathHelper.GetRelativePath(ProjectDirectory, fullDestFile);
+
+                string fullDestFile = Path.Combine(OutputDirectory, destFile);
+                string relativeDestFile = PathHelper.GetRelativePath(ProjectDirectory, fullDestFile);
                 relativeDestFile = PathHelper.Normalize(relativeDestFile);
 
                 if (existingBuildEventDestFile.Equals(relativeDestFile) &&
                     existingBuildEvent.Importer  == importerName &&
                     existingBuildEvent.Processor == processorName)
                 {
-                    var defaultValues = GetProcessorDefaultValues(processorName);
+                    OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
                     if (PipelineBuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
                         return destFile;
                 }
