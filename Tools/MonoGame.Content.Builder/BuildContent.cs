@@ -353,7 +353,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(contentItem.SourceFile, contentItem.OutputFile, contentItem.Importer, contentItem.Processor, contentItem.ProcessorParams);
+                    BuildEvent buildEvent = _manager.CreateBuildEvent(contentItem.SourceFile, contentItem.OutputFile, contentItem.Importer, contentItem.Processor, contentItem.ProcessorParams);
                     _manager.TrackBuildEvent(buildEvent);
                 }
                 catch { /* Ignore exception */ }
@@ -405,7 +405,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(
+                    BuildEvent buildEvent = _manager.CreateBuildEvent(
                                           contentItem.SourceFile,
                                           contentItem.OutputFile,
                                           contentItem.Importer,
@@ -413,7 +413,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                           contentItem.ProcessorParams
                                           );
                     // Load the previous content event if it exists.
-                    PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                    BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
                     _manager.BuildContent(_manager.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
                     fileCollection.AddFile(contentItem.SourceFile, contentItem.OutputFile);
@@ -436,8 +436,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void BuildItemsMultiThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
-            var buildTaskQueue = new Queue<Task<PipelineBuildEvent>>();
-            var activeBuildTasks = new List<Task<PipelineBuildEvent>>();
+            var buildTaskQueue = new Queue<Task<BuildEvent>>();
+            var activeBuildTasks = new List<Task<BuildEvent>>();
             bool firstTask = true;
 
             int maxConcurrentTasks = Environment.ProcessorCount;
@@ -459,11 +459,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     };
                     buildState.Logger.Immediate = firstTask;
 
-                    Task<PipelineBuildEvent> task = Task.Factory.StartNew<PipelineBuildEvent>((stateobj) =>
+                    Task<BuildEvent> task = Task.Factory.StartNew<BuildEvent>((stateobj) =>
                     {
                         BuildAsyncState state = stateobj as BuildAsyncState;
                         //Console.WriteLine("Task Started - " + Path.GetFileName(state.SourceFile));
-                        PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(
+                        BuildEvent buildEvent = _manager.CreateBuildEvent(
                                               state.SourceFile,
                                               state.OutputFile,
                                               state.Importer,
@@ -471,7 +471,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                               state.ProcessorParams
                                               );
                         // Load the previous content event if it exists.
-                        PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+                        BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
                         _manager.BuildContent(state.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
                         //Console.WriteLine("Task Ended - " + Path.GetFileName(state.SourceFile));
                         return buildEvent;

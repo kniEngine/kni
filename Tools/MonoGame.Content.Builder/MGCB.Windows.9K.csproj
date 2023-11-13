@@ -48,13 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BuildAsyncState.cs" />
     <Compile Include="BuildContent.cs" />
+    <Compile Include="BuildEvent.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleAsyncLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="ImporterContext.cs" />
     <Compile Include="PathHelper.cs" />
-    <Compile Include="PipelineBuildEvent.cs" />
     <Compile Include="PipelineManager.cs" />
     <Compile Include="ProcessorContext.cs" />
     <Compile Include="Program.cs" />

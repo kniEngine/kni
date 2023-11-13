@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         //   Value = list of build events
         // (Note: When using external references, an asset may be built multiple times
         // with different parameters.)
-        private readonly Dictionary<string, List<PipelineBuildEvent>> _pipelineBuildEvents;
+        private readonly Dictionary<string, List<BuildEvent>> _pipelineBuildEvents;
 
         // Store default values for content processor parameters. (Necessary to compare processor
         // parameters. See PipelineBuildEvent.AreParametersEqual.)
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public PipelineManager(string projectDir, string responseFilename, string outputDir, string intermediateDir, bool quiet)
         {
-            _pipelineBuildEvents = new Dictionary<string, List<PipelineBuildEvent>>();
+            _pipelineBuildEvents = new Dictionary<string, List<BuildEvent>>();
             _processorDefaultValues = new Dictionary<string, OpaqueDataDictionary>();
             _processingBuildEvents = new SortedSet<string>();
 
@@ -542,35 +542,35 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void DeleteBuildEvent(string destFile)
         {
-            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             FileHelper.DeleteIfExists(intermediateEventPath);
         }
 
-        private void SaveBuildEvent(string destFile, PipelineBuildEvent buildEvent)
+        private void SaveBuildEvent(string destFile, BuildEvent buildEvent)
         {
-            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             buildEvent.SaveBinary(intermediateEventPath);
         }
 
-        internal PipelineBuildEvent LoadBuildEvent(string destFile)
+        internal BuildEvent LoadBuildEvent(string destFile)
         {
-            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), PipelineBuildEvent.Extension);
+            string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
-            return PipelineBuildEvent.LoadBinary(intermediateEventPath);
+            return BuildEvent.LoadBinary(intermediateEventPath);
         }
 
-        internal PipelineBuildEvent CreateBuildEvent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        internal BuildEvent CreateBuildEvent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
 
             ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            PipelineBuildEvent buildEvent = new PipelineBuildEvent
+            BuildEvent buildEvent = new BuildEvent
             {
                 SourceFile = sourceFilepath,
                 DestFile = outputFilepath,
@@ -581,7 +581,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return buildEvent;
         }
 
-        internal void BuildContent(ConsoleLogger logger, PipelineBuildEvent buildEvent, PipelineBuildEvent cachedBuildEvent, string destFilePath)
+        internal void BuildContent(ConsoleLogger logger, BuildEvent buildEvent, BuildEvent cachedBuildEvent, string destFilePath)
         {
             if (!File.Exists(buildEvent.SourceFile))
             {
@@ -611,7 +611,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // While this asset doesn't need to be rebuilt the dependent assets might.
                     foreach (string asset in cachedBuildEvent.BuildAsset)
                     {
-                        PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
+                        BuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
                         // If we cannot find the cached event for the dependancy
                         // then we have to trigger a rebuild of the parent content.
@@ -621,7 +621,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             break;
                         }
 
-                        PipelineBuildEvent depBuildEvent = new PipelineBuildEvent
+                        BuildEvent depBuildEvent = new BuildEvent
                         {
                             SourceFile = assetCachedBuildEvent.SourceFile,
                             DestFile = assetCachedBuildEvent.DestFile,
@@ -659,7 +659,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private bool RegisterBuildEvent(PipelineBuildEvent buildEvent)
+        private bool RegisterBuildEvent(BuildEvent buildEvent)
         {
             lock (_processingBuildEvents)
             {
@@ -672,7 +672,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ProcessContent(ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -742,14 +742,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             // First try to load the event file.
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-            PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(outputFilepath);
+            BuildEvent cachedBuildEvent = LoadBuildEvent(outputFilepath);
 
             if (cachedBuildEvent != null)
             {
                 // Recursively clean additional (nested) assets.
                 foreach (string asset in cachedBuildEvent.BuildAsset)
                 {
-                    PipelineBuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
+                    BuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
 
                     if (assetCachedBuildEvent == null)
                     {
@@ -788,7 +788,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void WriteXnb(object content, PipelineBuildEvent buildEvent)
+        private void WriteXnb(object content, BuildEvent buildEvent)
         {
             // Make sure the output directory exists.
             string outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
@@ -811,18 +811,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// Stores the pipeline build event (in memory) if no matching event is found.
         /// </summary>
         /// <param name="buildEvent">The pipeline build event.</param>
-        internal void TrackBuildEvent(PipelineBuildEvent buildEvent)
+        internal void TrackBuildEvent(BuildEvent buildEvent)
         {
             lock (_pipelineBuildEvents)
             {
-                List<PipelineBuildEvent> buildEvents;
+                List<BuildEvent> buildEvents;
                 if (!_pipelineBuildEvents.TryGetValue(buildEvent.SourceFile, out buildEvents))
                 {
-                    buildEvents = new List<PipelineBuildEvent>();
+                    buildEvents = new List<BuildEvent>();
                     _pipelineBuildEvents.Add(buildEvent.SourceFile, buildEvents);
                 }
 
-                PipelineBuildEvent matchedBuildEvent = FindMatchingEvent(buildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters);
+                BuildEvent matchedBuildEvent = FindMatchingEvent(buildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters);
                 if (matchedBuildEvent == null)
                     buildEvents.Add(buildEvent);
             }
@@ -844,7 +844,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             sourceFileName = PathHelper.Normalize(sourceFileName);
             string relativeSourceFileName = PathHelper.GetRelativePath(ProjectDirectory, sourceFileName);
 
-            List<PipelineBuildEvent> pipelineBuildEvents;
+            List<BuildEvent> pipelineBuildEvents;
 
             lock (_pipelineBuildEvents)
             {
@@ -854,7 +854,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // --> Compare pipeline build events.
                     ResolveImporterAndProcessor(sourceFileName, ref importerName, ref processorName);
 
-                    PipelineBuildEvent matchedBuildEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
+                    BuildEvent matchedBuildEvent = FindMatchingEvent(pipelineBuildEvents, null, importerName, processorName, processorParameters);
                     if (matchedBuildEvent != null)
                     {
                         // Matching pipeline build event found.
@@ -878,7 +878,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             for (int index = 0; ; index++)
             {
                 string destFile = assetName + '_' + index;
-                PipelineBuildEvent existingBuildEvent = LoadBuildEvent(destFile);
+                BuildEvent existingBuildEvent = LoadBuildEvent(destFile);
                 if (existingBuildEvent == null)
                     return destFile;
 
@@ -896,7 +896,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     existingBuildEvent.Processor == processorName)
                 {
                     OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
-                    if (PipelineBuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
+                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
                         return destFile;
                 }
             }
@@ -913,16 +913,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// <returns>
         /// The matching pipeline build event, or <see langword="null"/>.
         /// </returns>
-        private PipelineBuildEvent FindMatchingEvent(List<PipelineBuildEvent> pipelineBuildEvents, string destFile, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        private BuildEvent FindMatchingEvent(List<BuildEvent> pipelineBuildEvents, string destFile, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
-            foreach (PipelineBuildEvent existingBuildEvent in pipelineBuildEvents)
+            foreach (BuildEvent existingBuildEvent in pipelineBuildEvents)
             {
                 if ((destFile == null || existingBuildEvent.DestFile.Equals(destFile))
                 &&  existingBuildEvent.Importer == importerName
                 &&  existingBuildEvent.Processor == processorName)
                 {
                     OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
-                    if (PipelineBuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
+                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
                     {
                         return existingBuildEvent;
                     }

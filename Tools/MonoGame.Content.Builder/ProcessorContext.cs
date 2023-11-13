@@ -13,9 +13,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     {
         private readonly PipelineManager _manager;
         ConsoleLogger _logger;
-        private readonly PipelineBuildEvent _buildEvent;
+        private readonly BuildEvent _buildEvent;
 
-        public ProcessorContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public ProcessorContext(PipelineManager manager, ConsoleLogger logger, BuildEvent buildEvent)
         {
             _manager = manager;
             _logger = logger;
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                                             OpaqueDataDictionary processorParameters)
         {
             IContentProcessor processor = _manager.CreateProcessor(processorName, processorParameters);
-            ProcessorContext processContext = new ProcessorContext(_manager, this._logger, new PipelineBuildEvent { Parameters = processorParameters } );
+            ProcessorContext processContext = new ProcessorContext(_manager, this._logger, new BuildEvent { Parameters = processorParameters } );
             var processedObject = processor.Process(input, processContext);
            
             // Add its dependencies and built assets to ours.
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
-            PipelineBuildEvent buildEvent = new PipelineBuildEvent
+            BuildEvent buildEvent = new BuildEvent
             { 
                 SourceFile = sourceFilepath,
                 Importer = importerName,
@@ -112,8 +112,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 assetName = _manager.GetAssetName(sourceAsset.Filename, importerName, processorName, processorParameters, this._logger);
 
             // Build the content.
-            PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
-            PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
+            BuildEvent buildEvent = _manager.CreateBuildEvent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
             _manager.BuildContent(this._logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
             // Record that we built this dependent asset.

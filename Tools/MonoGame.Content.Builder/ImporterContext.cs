@@ -11,9 +11,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     {
         private readonly PipelineManager _manager;
         ConsoleLogger _logger;
-        private readonly PipelineBuildEvent _buildEvent;
+        private readonly BuildEvent _buildEvent;
 
-        public ImporterContext(PipelineManager manager, ConsoleLogger logger, PipelineBuildEvent buildEvent)
+        public ImporterContext(PipelineManager manager, ConsoleLogger logger, BuildEvent buildEvent)
         {
             _manager = manager;
             _logger = logger;
