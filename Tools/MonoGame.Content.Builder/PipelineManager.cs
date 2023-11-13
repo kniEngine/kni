@@ -738,7 +738,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return processedObject;
         }
 
-        public void CleanContent(string sourceFilepath, string outputFilepath = null)
+        public void CleanContent(string sourceFilepath, string outputFilepath)
         {
             // First try to load the event file.
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
