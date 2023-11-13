@@ -203,7 +203,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Remove duplicates... keep this new one.
             int previous = _contentItems.FindIndex(e => string.Equals(e.SourceFile, sourceFile, StringComparison.InvariantCultureIgnoreCase));
             if (previous != -1)
+            {
+                _contentItemsMap.Remove(_contentItems[previous].SourceFile.ToLowerInvariant());
                 _contentItems.RemoveAt(previous);
+            }
 
             // Create the item for processing later.
             ContentItem contentItem = new ContentItem
@@ -215,6 +218,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 ProcessorParams = new OpaqueDataDictionary()
             };
             _contentItems.Add(contentItem);
+            _contentItemsMap.Add(contentItem.SourceFile.ToLowerInvariant(), contentItem);
 
             // Copy the current processor parameters blind as we
             // will validate and remove invalid parameters during
@@ -275,6 +279,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private PipelineManager _manager;
         private readonly List<ContentItem> _contentItems = new List<ContentItem>();
+        private readonly Dictionary<string, ContentItem> _contentItemsMap = new Dictionary<string, ContentItem>();
         private readonly List<CopyItem> _copyItems = new List<CopyItem>();
         public int SuccessCount { get; private set; }
         public int ErrorCount { get; private set; }
@@ -383,15 +388,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             bool cleanOrRebuild = Clean || Rebuild;
 
-            HashSet<String> contentSourceFiles = new HashSet<string>(_contentItems.Count);
-            for (int i = 0; i < _contentItems.Count; i++)
-                contentSourceFiles.Add(_contentItems[i].SourceFile.ToLowerInvariant());
-
             for (int i = 0; i < previousFileCollection.SourceFilesCount; i++)
             {
                 string prevSourceFile = previousFileCollection.SourceFiles[i];
 
-                bool inContent = contentSourceFiles.Contains(prevSourceFile.ToLowerInvariant());
+                bool inContent = _contentItemsMap.ContainsKey(prevSourceFile.ToLowerInvariant());
                 bool cleanOldContent = !inContent && !Incremental;
                 bool cleanRebuiltContent = inContent && cleanOrRebuild;
                 if (cleanRebuiltContent || cleanOldContent || targetChanged)
