@@ -260,9 +260,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public class ContentItem
         {
             public string SourceFile;
+            public string OutputFile; // This refers to the "Link" which can override the default output location
 
-            // This refers to the "Link" which can override the default output location
-            public string OutputFile;
             public string Importer;
             public string Processor;
             public OpaqueDataDictionary ProcessorParams;
