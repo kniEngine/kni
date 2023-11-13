@@ -564,7 +564,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }
 
-        public void RegisterContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        private PipelineBuildEvent CreateBuildEvent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
@@ -579,27 +579,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Processor = processorName,
                 Parameters = ValidateProcessorParameters(processorName, processorParameters),
             };
+            return buildEvent;
+        }
 
+        public void RegisterContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        {
+            PipelineBuildEvent buildEvent = CreateBuildEvent(sourceFilepath, outputFilepath, importerName, processorName, processorParameters);
+         
             // Register pipeline build event. (Required to correctly resolve external dependencies.)
             TrackBuildEvent(buildEvent);
         }
 
         public PipelineBuildEvent BuildContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters, ConsoleLogger logger)
         {
-            sourceFilepath = PathHelper.Normalize(sourceFilepath);
-            ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
-            
-            ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
-
             // Record what we're building and how.
-            PipelineBuildEvent buildEvent = new PipelineBuildEvent
-            {
-                SourceFile = sourceFilepath,
-                DestFile = outputFilepath,
-                Importer = importerName,
-                Processor = processorName,
-                Parameters = ValidateProcessorParameters(processorName, processorParameters),
-            };
+            PipelineBuildEvent buildEvent = CreateBuildEvent(sourceFilepath, outputFilepath, importerName, processorName, processorParameters);
 
             // Load the previous content event if it exists.
             PipelineBuildEvent cachedBuildEvent = LoadBuildEvent(buildEvent.DestFile);
