@@ -353,7 +353,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 try
                 {
-                    _manager.RegisterContent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
+                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
+                    _manager.TrackBuildEvent(buildEvent);
                 }
                 catch { /* Ignore exception */ }
             }

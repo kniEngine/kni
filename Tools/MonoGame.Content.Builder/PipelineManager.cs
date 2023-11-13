@@ -564,7 +564,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return PipelineBuildEvent.LoadBinary(intermediateEventPath);
         }
 
-        private PipelineBuildEvent CreateBuildEvent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
+        internal PipelineBuildEvent CreateBuildEvent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
         {
             sourceFilepath = PathHelper.Normalize(sourceFilepath);
             ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
@@ -580,14 +580,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Parameters = ValidateProcessorParameters(processorName, processorParameters),
             };
             return buildEvent;
-        }
-
-        public void RegisterContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters)
-        {
-            PipelineBuildEvent buildEvent = CreateBuildEvent(sourceFilepath, outputFilepath, importerName, processorName, processorParameters);
-         
-            // Register pipeline build event. (Required to correctly resolve external dependencies.)
-            TrackBuildEvent(buildEvent);
         }
 
         public PipelineBuildEvent BuildContent(string sourceFilepath, string outputFilepath, string importerName, string processorName, OpaqueDataDictionary processorParameters, ConsoleLogger logger)
@@ -833,7 +825,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// Stores the pipeline build event (in memory) if no matching event is found.
         /// </summary>
         /// <param name="buildEvent">The pipeline build event.</param>
-        private void TrackBuildEvent(PipelineBuildEvent buildEvent)
+        internal void TrackBuildEvent(PipelineBuildEvent buildEvent)
         {
             lock (_pipelineBuildEvents)
             {
