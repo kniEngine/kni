@@ -206,7 +206,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _contentItems.RemoveAt(previous);
 
             // Create the item for processing later.
-            ContentItem item = new ContentItem
+            ContentItem contentItem = new ContentItem
             {
                 SourceFile = sourceFile,
                 OutputFile = link,
@@ -214,13 +214,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Processor = _processor,
                 ProcessorParams = new OpaqueDataDictionary()
             };
-            _contentItems.Add(item);
+            _contentItems.Add(contentItem);
 
             // Copy the current processor parameters blind as we
             // will validate and remove invalid parameters during
             // the build process later.
             foreach (var pair in _processorParams)
-                item.ProcessorParams.Add(pair.Key, pair.Value);
+                contentItem.ProcessorParams.Add(pair.Key, pair.Value);
         }
 
         [CommandLineParameter(
@@ -349,11 +349,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Before building the content, register all files to be built.
             // (Necessary to correctly resolve external references.)
-            foreach (ContentItem item in _contentItems)
+            foreach (ContentItem contentItem in _contentItems)
             {
                 try
                 {
-                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(item.SourceFile, item.OutputFile, item.Importer, item.Processor, item.ProcessorParams);
+                    PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(contentItem.SourceFile, contentItem.OutputFile, contentItem.Importer, contentItem.Processor, contentItem.ProcessorParams);
                     _manager.TrackBuildEvent(buildEvent);
                 }
                 catch { /* Ignore exception */ }
@@ -401,35 +401,35 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void BuildItemsSingleThread(List<ContentItem> contentItems, SourceFileCollection fileCollection)
         {
-            foreach (ContentItem item in contentItems)
+            foreach (ContentItem contentItem in contentItems)
             {
                 try
                 {
                     PipelineBuildEvent buildEvent = _manager.CreateBuildEvent(
-                                          item.SourceFile,
-                                          item.OutputFile,
-                                          item.Importer,
-                                          item.Processor,
-                                          item.ProcessorParams
+                                          contentItem.SourceFile,
+                                          contentItem.OutputFile,
+                                          contentItem.Importer,
+                                          contentItem.Processor,
+                                          contentItem.ProcessorParams
                                           );
                     // Load the previous content event if it exists.
                     PipelineBuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
                     _manager.BuildContent(_manager.Logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
-                    fileCollection.AddFile(item.SourceFile, item.OutputFile);
+                    fileCollection.AddFile(contentItem.SourceFile, contentItem.OutputFile);
                     SuccessCount++;
                 }
                 catch (InvalidContentException ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
                 catch (PipelineException ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
                 catch (Exception ex)
                 {
-                    WriteError(ex, item.SourceFile);
+                    WriteError(ex, contentItem.SourceFile);
                 }
             }
         }
