@@ -581,7 +581,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             // Register pipeline build event. (Required to correctly resolve external dependencies.)
-            TrackPipelineBuildEvent(buildEvent);
+            TrackBuildEvent(buildEvent);
         }
 
         public PipelineBuildEvent BuildContent(ConsoleLogger logger, string sourceFilepath, string outputFilepath = null, string importerName = null, string processorName = null, OpaqueDataDictionary processorParameters = null)
@@ -620,7 +620,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             logger.PushFile(buildEvent.SourceFile);
 
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
-            TrackPipelineBuildEvent(buildEvent);
+            TrackBuildEvent(buildEvent);
 
             bool building = RegisterBuildEvent(buildEvent);
             bool rebuild = buildEvent.NeedsRebuild(this, cachedBuildEvent);
@@ -839,21 +839,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// Stores the pipeline build event (in memory) if no matching event is found.
         /// </summary>
         /// <param name="buildEvent">The pipeline build event.</param>
-        private void TrackPipelineBuildEvent(PipelineBuildEvent buildEvent)
+        private void TrackBuildEvent(PipelineBuildEvent buildEvent)
         {
-            List<PipelineBuildEvent> pipelineBuildEvents;
-
             lock (_pipelineBuildEvents)
             {
-                bool eventsFound = _pipelineBuildEvents.TryGetValue(buildEvent.SourceFile, out pipelineBuildEvents);
-                if (!eventsFound)
+                List<PipelineBuildEvent> buildEvents;
+                if (!_pipelineBuildEvents.TryGetValue(buildEvent.SourceFile, out buildEvents))
                 {
-                    pipelineBuildEvents = new List<PipelineBuildEvent>();
-                    _pipelineBuildEvents.Add(buildEvent.SourceFile, pipelineBuildEvents);
+                    buildEvents = new List<PipelineBuildEvent>();
+                    _pipelineBuildEvents.Add(buildEvent.SourceFile, buildEvents);
                 }
 
-                if (FindMatchingEvent(pipelineBuildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters) == null)
-                    pipelineBuildEvents.Add(buildEvent);
+                PipelineBuildEvent matchedBuildEvent = FindMatchingEvent(buildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters);
+                if (matchedBuildEvent == null)
+                    buildEvents.Add(buildEvent);
             }
         }
 
