@@ -343,7 +343,7 @@ namespace Content.Pipeline.Editor
             this._deleteMenuItem.Name = "_deleteMenuItem";
             this._deleteMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this._deleteMenuItem.Size = new System.Drawing.Size(165, 24);
-            this._deleteMenuItem.Text = "&Exclude";
+            this._deleteMenuItem.Text = "&Remove";
             this._deleteMenuItem.Click += new System.EventHandler(this.OnDeleteItemClick);
             // 
             // _buildMenu
@@ -549,7 +549,7 @@ namespace Content.Pipeline.Editor
             this._treeDeleteMenuItem.Name = "_treeDeleteMenuItem";
             this._treeDeleteMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this._treeDeleteMenuItem.Size = new System.Drawing.Size(202, 24);
-            this._treeDeleteMenuItem.Text = "&Delete";
+            this._treeDeleteMenuItem.Text = "&Remove";
             this._treeDeleteMenuItem.Click += new System.EventHandler(this.OnDeleteItemClick);
             // 
             // _toolNew
