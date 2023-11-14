@@ -70,74 +70,83 @@ namespace Content.Pipeline.Editor.Windows.Controls
 
             this.SuspendLayout();
             this.BeginUpdate();
-
-            _outputParser.Parse(line);
-
-            line = line.TrimEnd(new[] { ' ', '\n', '\r', '\t' });
-
-            switch (_outputParser.State)
+            try
             {
-                case OutputState.BuildBegin:
-                    {
-                        var tn = AddItem(BuildIcons.BeginEnd, line);
-                        PopulateAssets();
-                        break;
-                    }
+                _outputParser.Parse(line);
 
-                case OutputState.Cleaning:
-                    {
-                        var tn = AddItem(_outputParser.Filename, BuildIcons.Clean, "Cleaned " + GetRelativeOutputPath(_outputParser.Filename));
-                        tn.ToolTipText = line;
-                        AddSubItem(tn, line);
-                        break;
-                    }
-                case OutputState.Skipping:
-                    {
-                        var tn = AddItem(_outputParser.Filename, BuildIcons.Skip, "Skipped " + GetRelativePath(_outputParser.Filename));
-                        tn.ToolTipText = line;
-                        AddSubItem(tn, line);
-                        break;
-                    }
-                case OutputState.BuildAsset:
-                    {
-                        var tn = AddItem(_outputParser.Filename, BuildIcons.Processing, "Building " + GetRelativePath(_outputParser.Filename));
-                        tn.ToolTipText = line;
-                        AddSubItem(tn, line);
-                        break;
-                    }
+                line = line.TrimEnd(new[] { ' ', '\n', '\r', '\t' });
 
-                case OutputState.BuildError:
-                    {
-                        _lastTreeNode.ImageIndex = BuildIcons.Fail;
-                        _lastTreeNode.SelectedImageIndex = BuildIcons.Fail;
-                        _lastTreeNode.ToolTipText += Environment.NewLine + Environment.NewLine + _outputParser.ErrorMessage;
-                        AddSubItem(_lastTreeNode, _outputParser.ErrorMessage).ForeColor = System.Drawing.Color.DarkRed;
-                        break;
-                    }
-                case OutputState.BuildErrorContinue:
-                    {
-                        _lastTreeNode.ToolTipText += Environment.NewLine + _outputParser.ErrorMessage;
-                        AddSubItem(_lastTreeNode, _outputParser.ErrorMessage).ForeColor = System.Drawing.Color.DarkRed;
-                        break;
-                    }
+                switch (_outputParser.State)
+                {
+                    case OutputState.BuildBegin:
+                        {
+                            var tn = AddItem(BuildIcons.BeginEnd, line);
+                            PopulateAssets();
+                            break;
+                        }
 
-                case OutputState.BuildEnd:
-                    {
-                        var tn = AddItem(BuildIcons.BeginEnd, line);
-                        break;
-                    }
-                case OutputState.BuildTime:
-                    {
-                        _lastTreeNode.Text = _lastTreeNode.Text.TrimEnd(new[] {'.', ' '}) + ", " + line;
-                        SendMessage(this.Handle, WM_VSCROLL, SB_BOTTOM, 0); //scroll down to the end
-                        break;
-                    }
+                    case OutputState.Cleaning:
+                        {
+                            var tn = AddItem(_outputParser.Filename, BuildIcons.Clean, "Cleaned " + GetRelativeOutputPath(_outputParser.Filename));
+                            tn.ToolTipText = line;
+                            AddSubItem(tn, line);
+                            break;
+                        }
+                    case OutputState.Skipping:
+                        {
+                            var tn = AddItem(_outputParser.Filename, BuildIcons.Skip, "Skipped " + GetRelativePath(_outputParser.Filename));
+                            tn.ToolTipText = line;
+                            AddSubItem(tn, line);
+                            break;
+                        }
+                    case OutputState.BuildAsset:
+                        {
+                            var tn = AddItem(_outputParser.Filename, BuildIcons.Processing, "Building " + GetRelativePath(_outputParser.Filename));
+                            tn.ToolTipText = line;
+                            AddSubItem(tn, line);
+                            break;
+                        }
+
+                    case OutputState.BuildError:
+                        {
+                            _lastTreeNode.ImageIndex = BuildIcons.Fail;
+                            _lastTreeNode.SelectedImageIndex = BuildIcons.Fail;
+                            _lastTreeNode.ToolTipText += Environment.NewLine + Environment.NewLine + _outputParser.ErrorMessage;
+                            AddSubItem(_lastTreeNode, _outputParser.ErrorMessage).ForeColor = System.Drawing.Color.DarkRed;
+                            break;
+                        }
+                    case OutputState.BuildErrorContinue:
+                        {
+                            _lastTreeNode.ToolTipText += Environment.NewLine + _outputParser.ErrorMessage;
+                            AddSubItem(_lastTreeNode, _outputParser.ErrorMessage).ForeColor = System.Drawing.Color.DarkRed;
+                            break;
+                        }
+
+                    case OutputState.BuildEnd:
+                        {
+                            var tn = AddItem(BuildIcons.BeginEnd, line);
+                            break;
+                        }
+                    case OutputState.BuildTime:
+                        {
+                            _lastTreeNode.Text = _lastTreeNode.Text.TrimEnd(new[] { '.', ' ' }) + ", " + line;
+                            SendMessage(this.Handle, WM_VSCROLL, SB_BOTTOM, 0); //scroll down to the end
+                            break;
+                        }
+                }
+
+                _prevFilename = _outputParser.Filename;
             }
-
-            _prevFilename = _outputParser.Filename;
-
-            this.EndUpdate();
-            this.ResumeLayout();
+            catch (Exception ex)
+            {
+                string msg = String.Format("output: \"{0}\"\n\nError message: {1}", line, ex.Message);
+                MessageBox.Show(msg, "Failed to parse output", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+            }
+            finally
+            {
+                this.EndUpdate();
+                this.ResumeLayout();
+            }
         }
 
         private TreeNode AddItem(int iconIdx, string text, TreeNode node = null)
