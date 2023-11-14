@@ -584,6 +584,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                     }
                                     Console.WriteLine(skipSourceFileOutput);
                                 }
+                                SuccessCount++;
                                 return;
                             }
                         }
@@ -617,6 +618,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         }
                         Console.WriteLine(buildSourceFileOutput);
                         WriteError(ex, item.SourceFile);
+                        ErrorCount++;
                         return;
                     }
                 }
