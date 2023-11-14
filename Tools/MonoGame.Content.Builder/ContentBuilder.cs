@@ -555,51 +555,50 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // retaining the file extension.
                     // Note that replacing a sub-path like this requires consistent
                     // directory separator characters.
-                    var relativeName = item.Link;
+                    string relativeName = item.Link;
                     if (string.IsNullOrWhiteSpace(relativeName))
                         relativeName = item.SourceFile.Replace(projectDirectory, string.Empty)
                                             .TrimStart(Path.DirectorySeparatorChar)
                                             .TrimStart(Path.AltDirectorySeparatorChar);
-                    var dest = Path.Combine(outputPath, relativeName);
+                    string dest = Path.Combine(outputPath, relativeName);
 
                     // Only copy if the source file is newer than the destination.
                     // We may want to provide an option for overriding this, but for
                     // nearly all cases this is the desired behavior.
                     if (File.Exists(dest) && !Rebuild)
                     {
-                        var srcTime = File.GetLastWriteTimeUtc(item.SourceFile);
-                        var dstTime = File.GetLastWriteTimeUtc(dest);
+                        DateTime srcTime = File.GetLastWriteTimeUtc(item.SourceFile);
+                        DateTime dstTime = File.GetLastWriteTimeUtc(dest);
                         if (srcTime <= dstTime)
                         {
                             if (!this.Quiet)
                             {
                                 string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
                                 if (!string.IsNullOrEmpty(item.Link))
-                                {                                    
+                                {
                                     //skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
                                 }
                                 Console.WriteLine(skipSourceFileOutput);
                             }
-
                             return;
                         }
                     }
 
-                    var startTime = DateTime.UtcNow;
+                    DateTime startTime = DateTime.UtcNow;
 
                     // Create the destination directory if it doesn't already exist.
-                    var destPath = Path.GetDirectoryName(dest);
+                    string destPath = Path.GetDirectoryName(dest);
                     if (!Directory.Exists(destPath))
                         Directory.CreateDirectory(destPath);
 
                     File.Copy(item.SourceFile, dest, true);
 
                     // Destination file should not be read-only even if original was.
-                    var fileAttr = File.GetAttributes(dest);
+                    FileAttributes fileAttr = File.GetAttributes(dest);
                     fileAttr = fileAttr & (~FileAttributes.ReadOnly);
                     File.SetAttributes(dest, fileAttr);
 
-                    var buildTime = DateTime.UtcNow - startTime;
+                    TimeSpan buildTime = DateTime.UtcNow - startTime;
 
                     string buildSourceFileOutput = String.Format("{0}", item.SourceFile);
                     if (!string.IsNullOrEmpty(item.Link))
@@ -607,7 +606,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         //buildSourceFileOutput = String.Format("{0} => {1}", item.SourceFile, item.Link);
                     }
                     Console.WriteLine(buildSourceFileOutput);
-
                     SuccessCount++;
                 }
                 catch (Exception ex)
