@@ -547,6 +547,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void CopyItems(List<CopyItem> copyItems, string projectDirectory, string outputPath)
         {
+            object syncHandle = new object();
+
             Parallel.ForEach(copyItems, (item) =>
             {
                 try
@@ -571,16 +573,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         DateTime dstTime = File.GetLastWriteTimeUtc(dest);
                         if (srcTime <= dstTime)
                         {
-                            if (!this.Quiet)
+                            lock (syncHandle)
                             {
-                                string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
-                                if (!string.IsNullOrEmpty(item.Link))
+                                if (!this.Quiet)
                                 {
-                                    //skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
+                                    string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
+                                    if (!string.IsNullOrEmpty(item.Link))
+                                    {
+                                        //skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
+                                    }
+                                    Console.WriteLine(skipSourceFileOutput);
                                 }
-                                Console.WriteLine(skipSourceFileOutput);
+                                return;
                             }
-                            return;
                         }
                     }
 
@@ -600,6 +605,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                     TimeSpan buildTime = DateTime.UtcNow - startTime;
 
+                }
+                catch (Exception ex)
+                {
+                    lock (syncHandle)
+                    {
+                        string buildSourceFileOutput = String.Format("{0}", item.SourceFile);
+                        if (!string.IsNullOrEmpty(item.Link))
+                        {
+                            //buildSourceFileOutput = String.Format("{0} => {1}", item.SourceFile, item.Link);
+                        }
+                        Console.WriteLine(buildSourceFileOutput);
+                        WriteError(ex, item.SourceFile);
+                        return;
+                    }
+                }
+
+                lock (syncHandle)
+                {
                     string buildSourceFileOutput = String.Format("{0}", item.SourceFile);
                     if (!string.IsNullOrEmpty(item.Link))
                     {
@@ -607,10 +630,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     }
                     Console.WriteLine(buildSourceFileOutput);
                     SuccessCount++;
-                }
-                catch (Exception ex)
-                {
-                    WriteError(ex, item.SourceFile);
+                    return;
                 }
             });
         }
