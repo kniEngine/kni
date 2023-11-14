@@ -573,10 +573,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         {
                             if (!this.Quiet)
                             {
-                                if (string.IsNullOrEmpty(item.Link))
-                                    Console.WriteLine("Skipping {0}", item.SourceFile);
-                                else
-                                    Console.WriteLine("Skipping {0} => {1}", item.SourceFile, item.Link);
+                                string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
+                                if (!string.IsNullOrEmpty(item.Link))
+                                {                                    
+                                    skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
+                                }
+                                Console.WriteLine(skipSourceFileOutput);
                             }
 
                             return;
@@ -599,10 +601,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                     var buildTime = DateTime.UtcNow - startTime;
 
-                    if (string.IsNullOrEmpty(item.Link))
-                        Console.WriteLine("{0}", item.SourceFile);
-                    else
-                        Console.WriteLine("{0} => {1}", item.SourceFile, item.Link);
+                    string buildSourceFileOutput = String.Format("{0}", item.SourceFile);
+                    if (!string.IsNullOrEmpty(item.Link))
+                    {
+                        buildSourceFileOutput = String.Format("{0} => {1}", item.SourceFile, item.Link);
+                    }
+                    Console.WriteLine(buildSourceFileOutput);
 
                     SuccessCount++;
                 }
