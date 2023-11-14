@@ -576,7 +576,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                 string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
                                 if (!string.IsNullOrEmpty(item.Link))
                                 {                                    
-                                    skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
+                                    //skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
                                 }
                                 Console.WriteLine(skipSourceFileOutput);
                             }
@@ -604,7 +604,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     string buildSourceFileOutput = String.Format("{0}", item.SourceFile);
                     if (!string.IsNullOrEmpty(item.Link))
                     {
-                        buildSourceFileOutput = String.Format("{0} => {1}", item.SourceFile, item.Link);
+                        //buildSourceFileOutput = String.Format("{0} => {1}", item.SourceFile, item.Link);
                     }
                     Console.WriteLine(buildSourceFileOutput);
 
