@@ -103,7 +103,37 @@ namespace Microsoft.Xna.Platform.Graphics
             const int rowSize = elementSize * 4;
 
             EffectParameterCollection elements = param.Elements;
-            if (elements.Count > 0)
+            if (elements.Count <= 0)
+            {
+                if (param.Data != null)
+                {
+                    switch (param.ParameterType)
+                    {
+                        case EffectParameterType.Single:
+                        case EffectParameterType.Int32:
+                        case EffectParameterType.Bool:
+                            // HLSL assumes matrices are column-major, whereas in-memory we use row-major.
+                            // TODO: HLSL can be told to use row-major. We should handle that too.
+                            if (param.ParameterClass == EffectParameterClass.Matrix)
+                            {
+                                SetData(offset, param.ColumnCount, param.RowCount, param.Data);
+                                return (param.ColumnCount * rowSize);
+                            }
+                            else
+                            {
+                                SetData(offset, param.RowCount, param.ColumnCount, param.Data);
+                                return (param.RowCount * rowSize);
+                            }
+                        default:
+                            throw new NotSupportedException("Not supported!");
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else // (elements.Count > 0)
             {
                 int elementByteCount = 0;
                 for (int i = 0; i < elements.Count; i++)
@@ -112,33 +142,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     elementByteCount += subElementByteCount;
                 }
                 return elementByteCount;
-            }
-            else if (param.Data != null)
-            {
-                switch (param.ParameterType)
-                {
-                    case EffectParameterType.Single:
-                    case EffectParameterType.Int32:
-                    case EffectParameterType.Bool:
-                        // HLSL assumes matrices are column-major, whereas in-memory we use row-major.
-                        // TODO: HLSL can be told to use row-major. We should handle that too.
-                        if (param.ParameterClass == EffectParameterClass.Matrix)
-                        {
-                            SetData(offset, param.ColumnCount, param.RowCount, param.Data);
-                            return (param.ColumnCount * rowSize);
-                        }
-                        else
-                        {
-                            SetData(offset, param.RowCount, param.ColumnCount, param.Data);
-                            return (param.RowCount * rowSize);
-                        }
-                    default:
-                        throw new NotSupportedException("Not supported!");
-                }
-            }
-            else
-            {
-                return 0;
             }
         }
 
