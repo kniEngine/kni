@@ -54,16 +54,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (string.IsNullOrEmpty(version))
                     throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
 
-                // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
-                // optionally followed by multiple vendor specific characters
                 // for GLES, the GL_VERSION string is formatted as:
                 //     OpenGL<space>ES<space><version number><space><vendor-specific information>
-#if GLES
                 if (version.StartsWith("OpenGL ES "))
                     version =  version.Split(' ')[2];
                 else // if it fails, we assume to be on a 1.1 context
                     version = "1.1";
-#endif
+
                 _glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
                 _glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
             }
@@ -76,14 +73,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
-
-
-#if DESKTOPGL
-            // Initialize draw buffer attachment array
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
-            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
-#endif
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
