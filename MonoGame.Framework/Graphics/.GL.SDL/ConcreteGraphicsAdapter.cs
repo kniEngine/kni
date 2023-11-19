@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -132,6 +133,13 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _glMajorVersion = 0;
         private int _glMinorVersion = 0;
 
+        int _capMaxTextureSize;
+        int _capMaxMultiSampleCount;
+        int _capMaxTextureSlots;
+        int _capMaxVertexTextureSlots;
+        int _capMaxVertexAttribs;
+        int _capMaxDrawBuffers;
+
         internal OGL GL { get { return _gl; } }
         internal int glMajorVersion { get { return _glMajorVersion; } }
         internal int glMinorVersion { get { return _glMinorVersion; } }
@@ -186,6 +194,26 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 _description = _gl.GetString(StringName.Renderer);
 
+                // get adapter caps.
+                _gl.GetInteger(GetParamName.MaxTextureSize, out _capMaxTextureSize);
+                _gl.CheckGLError();
+                _gl.GetInteger(GetParamName.MaxSamples, out _capMaxMultiSampleCount);
+                _gl.CheckGLError();
+                _gl.GetInteger(GetParamName.MaxTextureImageUnits, out _capMaxTextureSlots);
+                _gl.CheckGLError();
+                _gl.GetInteger(GetParamName.MaxVertexTextureImageUnits, out _capMaxVertexTextureSlots);
+                _gl.CheckGLError();
+                _gl.GetInteger(GetParamName.MaxVertexAttribs, out _capMaxVertexAttribs);
+                _gl.CheckGLError();
+                _gl.GetInteger(GetParamName.MaxDrawBuffers, out _capMaxDrawBuffers);
+                _gl.CheckGLError();
+
+                int maxCombinedTextureImageUnits;
+                _gl.GetInteger(GetParamName.MaxCombinedTextureImageUnits, out maxCombinedTextureImageUnits);
+                _gl.CheckGLError();
+                _capMaxTextureSlots = Math.Min(_capMaxTextureSlots, maxCombinedTextureImageUnits);
+                _capMaxVertexTextureSlots = Math.Min(_capMaxVertexTextureSlots, maxCombinedTextureImageUnits);
+
             }
             finally
             {
@@ -206,12 +234,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
+                    if (_capMaxTextureSize >= 4096) return true;
                     return false;
                 case GraphicsProfile.FL10_0:
+                    if (_capMaxTextureSize >= 8192) return true;
                     return false;
                 case GraphicsProfile.FL10_1:
-                    return false;
                 case GraphicsProfile.FL11_0:
+                    if (_capMaxTextureSize >= 16384) return true;
                     return false;
                 case GraphicsProfile.FL11_1:
                     return false;
