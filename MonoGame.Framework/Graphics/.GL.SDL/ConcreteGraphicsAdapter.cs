@@ -30,15 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         override internal string Platform_Description
         {
-            get
-            {
-                try
-                {
-                    var GL = OGL.Current;
-                    return GL.GetString(OpenGL.StringName.Renderer);
-                }
-                catch { return string.Empty; }
-            }
+            get { return _description; }
             set { }
         }
 
@@ -134,8 +126,73 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        private OGL _gl;
+        private string _glVersion;
+        private int _glMajorVersion = 0;
+        private int _glMinorVersion = 0;
+
+        internal OGL GL { get { return _gl; } }
+        internal int glMajorVersion { get { return _glMajorVersion; } }
+        internal int glMinorVersion { get { return _glMinorVersion; } }
+
+
         public ConcreteGraphicsAdapter()
         {
+            IntPtr glSharedContextWindowHandle = IntPtr.Zero;
+            IntPtr glSharedContext = IntPtr.Zero;
+            try
+            {
+                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
+                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 0);
+
+                glSharedContextWindowHandle = SDL.WINDOW.Create("KnisDefaultAdapterWindow", 0, 0, 0, 0,
+                    Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
+                glSharedContext = SDL.OpenGL.CreateGLContext(glSharedContextWindowHandle);
+
+                try
+                {
+                    // OGL.Initialize() must be called while we have a gl context,
+                    // because of OGL.LoadEntryPoints() & and OGL.LoadExtensions().
+                    OGL_SDL.Initialize();
+                    _gl = OGL.Current;
+                }
+                catch (EntryPointNotFoundException)
+                {
+                    throw new PlatformNotSupportedException(
+                        "MonoGame requires OpenGL 3.0 compatible drivers, or either ARB_framebuffer_object or EXT_framebuffer_object extensions. " +
+                        "Try updating your graphics drivers.");
+                }
+
+                // try getting the context version
+                // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string.
+                try
+                {
+                    _glVersion = _gl.GetString(StringName.Version);
+                    if (string.IsNullOrEmpty(_glVersion))
+                        throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
+
+                    // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
+                    // optionally followed by multiple vendor specific characters
+                    _glMajorVersion = Convert.ToInt32(_glVersion.Substring(0, 1));
+                    _glMinorVersion = Convert.ToInt32(_glVersion.Substring(2, 1));
+                }
+                catch (FormatException)
+                {
+                    // if it fails, we assume to be on a 1.1 context
+                    _glMajorVersion = 1;
+                    _glMinorVersion = 1;
+                }
+
+                _description = _gl.GetString(StringName.Renderer);
+
+            }
+            finally
+            {
+                if (glSharedContext != IntPtr.Zero)
+                    SDL.OpenGL.DeleteContext(glSharedContext);
+                if (glSharedContextWindowHandle != IntPtr.Zero)
+                    SDL.WINDOW.Destroy(glSharedContextWindowHandle);
+            }
         }
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)

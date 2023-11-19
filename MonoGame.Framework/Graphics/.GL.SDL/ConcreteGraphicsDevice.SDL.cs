@@ -71,27 +71,12 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformSetup()
         {
             _mainContext = new GraphicsContext(this);
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            // try getting the context version
-            // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
-            try
-            {
-                string version = GL.GetString(StringName.Version);
-                if (string.IsNullOrEmpty(version))
-                    throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
+            var GL = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().GL;
 
-                // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
-                // optionally followed by multiple vendor specific characters
-                _glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
-                _glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
-            }
-            catch (FormatException)
-            {
-                // if it fails, we assume to be on a 1.1 context
-                _glMajorVersion = 1;
-                _glMinorVersion = 1;
-            }
+            // get the GL version.
+            _glMajorVersion = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
+            _glMinorVersion = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
 
             _capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);

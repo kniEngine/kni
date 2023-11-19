@@ -32,18 +32,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glContext = SDL.OpenGL.CreateGLContext(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
 
-            // GL entry points must be loaded after the GL context creation, otherwise some Windows drivers will return only GL 1.3 compatible functions
-            try
-            {
-                OGL_SDL.Initialize();
-            }
-            catch (EntryPointNotFoundException)
-            {
-                throw new PlatformNotSupportedException(
-                    "MonoGame requires OpenGL 3.0 compatible drivers, or either ARB_framebuffer_object or EXT_framebuffer_object extensions. " +
-                    "Try updating your graphics drivers.");
-            }
-
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, 0);
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
             _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
