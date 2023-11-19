@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
