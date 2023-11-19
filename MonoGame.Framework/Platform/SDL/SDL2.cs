@@ -690,7 +690,7 @@ internal class Sdl
             ContextMinorVersion,
             ContextEgl,
             ContextFlags,
-            ContextProfileMAsl,
+            ContextProfileMask,
             ShareWithCurrentContext,
             FramebufferSRGBCapable,
             ContextReleaseBehaviour,
