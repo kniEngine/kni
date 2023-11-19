@@ -38,6 +38,10 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio >= (16.0f / 10.0f); }
         }
 
+        public ConcreteGraphicsAdapter()
+        {
+        }
+
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (GraphicsAdapter.UseReferenceDevice)
