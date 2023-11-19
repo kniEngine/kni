@@ -27,6 +27,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             adapterList.Add(adapter);
 
+            // The first adapter is considered the default.
+            adapterList[0].Strategy.Platform_IsDefaultAdapter = true;
+
             _adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
             return;
         }
