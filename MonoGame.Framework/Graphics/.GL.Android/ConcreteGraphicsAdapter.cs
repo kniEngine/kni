@@ -61,7 +61,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         override internal bool Platform_IsDefaultAdapter
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Platform_IsDefaultAdapter; }
+            set { base.Platform_IsDefaultAdapter = value; }
         }
 
         override internal DisplayModeCollection Platform_SupportedDisplayModes
