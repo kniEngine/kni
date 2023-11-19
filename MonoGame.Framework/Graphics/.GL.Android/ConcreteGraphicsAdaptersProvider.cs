@@ -21,9 +21,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public ConcreteGraphicsAdaptersProvider()
         {
-            var adapterList = new List<GraphicsAdapter>(1);
-            var strategy = new ConcreteGraphicsAdapter();
-            var adapter = new GraphicsAdapter(strategy);
+            List<GraphicsAdapter> adapterList = new List<GraphicsAdapter>(1);
+            ConcreteGraphicsAdapter strategy = new ConcreteGraphicsAdapter();
+            GraphicsAdapter adapter = new GraphicsAdapter(strategy);
 
             adapterList.Add(adapter);
 

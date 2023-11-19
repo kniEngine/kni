@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
@@ -132,6 +131,11 @@ namespace Microsoft.Xna.Platform.Graphics
             // Common widescreen modes: 16:9, 16:10, 2:1
             // XNA does not appear to account for rotated displays on the desktop
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
+        }
+
+
+        public ConcreteGraphicsAdapter()
+        {
         }
 
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)

@@ -66,6 +66,10 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public ConcreteGraphicsAdapter()
+        {
+        }
+
         internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             throw new PlatformNotSupportedException();
