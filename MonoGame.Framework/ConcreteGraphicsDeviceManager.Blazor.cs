@@ -149,8 +149,6 @@ namespace Microsoft.Xna.Platform
             {
                 this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
 
-                PresentationParameters presentationParameters = this.PreparePresentationParameters();
-
                 this._initialized = true;
             }
 
