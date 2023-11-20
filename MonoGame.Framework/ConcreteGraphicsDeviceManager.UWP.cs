@@ -100,24 +100,10 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
-            PresentationParameters presentationParameters = this.PreparePresentationParameters();
-
-            gdi.PresentationParameters = presentationParameters;
-            var args = new PreparingDeviceSettingsEventArgs(gdi);
-            this.OnPreparingDeviceSettings(args);
-
-            if (gdi.PresentationParameters == null || gdi.Adapter == null)
-                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
-
-            return gdi;
-        }
-
-        private PresentationParameters PreparePresentationParameters()
-        {
-            var presentationParameters = new PresentationParameters();
+            PresentationParameters presentationParameters = new PresentationParameters();
             presentationParameters.BackBufferFormat = this.PreferredBackBufferFormat;
-            presentationParameters.BackBufferWidth  = this.PreferredBackBufferWidth;
-            presentationParameters.BackBufferHeight   = this.PreferredBackBufferHeight;
+            presentationParameters.BackBufferWidth = this.PreferredBackBufferWidth;
+            presentationParameters.BackBufferHeight = this.PreferredBackBufferHeight;
             presentationParameters.DepthStencilFormat = this.PreferredDepthStencilFormat;
             presentationParameters.IsFullScreen = this.IsFullScreen;
             presentationParameters.HardwareModeSwitch = this.HardwareModeSwitch;
@@ -155,7 +141,14 @@ namespace Microsoft.Xna.Platform
                 presentationParameters.SwapChainPanel = null;
             }
 
-            return presentationParameters;
+            gdi.PresentationParameters = presentationParameters;
+            var args = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(args);
+
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
+
+            return gdi;
         }
 
         public override void CreateDevice()
