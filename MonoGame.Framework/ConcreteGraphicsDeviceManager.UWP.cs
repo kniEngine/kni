@@ -100,24 +100,10 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
-            PresentationParameters presentationParameters = this.PreparePresentationParameters();
-
-            gdi.PresentationParameters = presentationParameters;
-            var args = new PreparingDeviceSettingsEventArgs(gdi);
-            this.OnPreparingDeviceSettings(args);
-
-            if (gdi.PresentationParameters == null || gdi.Adapter == null)
-                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
-
-            return gdi;
-        }
-
-        private PresentationParameters PreparePresentationParameters()
-        {
-            var presentationParameters = new PresentationParameters();
+            PresentationParameters presentationParameters = new PresentationParameters();
             presentationParameters.BackBufferFormat = this.PreferredBackBufferFormat;
-            presentationParameters.BackBufferWidth  = this.PreferredBackBufferWidth;
-            presentationParameters.BackBufferHeight   = this.PreferredBackBufferHeight;
+            presentationParameters.BackBufferWidth = this.PreferredBackBufferWidth;
+            presentationParameters.BackBufferHeight = this.PreferredBackBufferHeight;
             presentationParameters.DepthStencilFormat = this.PreferredDepthStencilFormat;
             presentationParameters.IsFullScreen = this.IsFullScreen;
             presentationParameters.HardwareModeSwitch = this.HardwareModeSwitch;
@@ -142,14 +128,6 @@ namespace Microsoft.Xna.Platform
             }
             presentationParameters.MultiSampleCount = maxMultiSampleCount;
 
-
-            this.PlatformPreparePresentationParameters(presentationParameters);
-
-            return presentationParameters;
-        }
-
-        private void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
-        {
             // The graphics device can use a XAML panel or a window
             // to created the default swapchain target.
             if (this.SwapChainPanel != null)
@@ -162,6 +140,15 @@ namespace Microsoft.Xna.Platform
                 presentationParameters.DeviceWindowHandle = base.Game.Window.Handle;
                 presentationParameters.SwapChainPanel = null;
             }
+
+            gdi.PresentationParameters = presentationParameters;
+            var args = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(args);
+
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
+
+            return gdi;
         }
 
         public override void CreateDevice()
@@ -174,8 +161,6 @@ namespace Microsoft.Xna.Platform
             if (!this._initialized)
             {
                 this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
-
-                PresentationParameters presentationParameters = this.PreparePresentationParameters();
 
                 this._initialized = true;
             }

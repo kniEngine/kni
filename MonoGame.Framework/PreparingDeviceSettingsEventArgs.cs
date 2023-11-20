@@ -11,19 +11,21 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     public class PreparingDeviceSettingsEventArgs : EventArgs
     {
+        GraphicsDeviceInformation _graphicsDeviceInformation;
+
+        /// <summary>
+        /// The default settings that will be used in device creation.
+        /// </summary>
+        public GraphicsDeviceInformation GraphicsDeviceInformation { get { return _graphicsDeviceInformation; } }
+
         /// <summary>
         /// Create a new instance of the event.
         /// </summary>
         /// <param name="graphicsDeviceInformation">The default settings to be used in device creation.</param>
         public PreparingDeviceSettingsEventArgs(GraphicsDeviceInformation graphicsDeviceInformation)
         {
-            GraphicsDeviceInformation = graphicsDeviceInformation;
+            this._graphicsDeviceInformation = graphicsDeviceInformation;
         }
-
-        /// <summary>
-        /// The default settings that will be used in device creation.
-        /// </summary>
-        public GraphicsDeviceInformation GraphicsDeviceInformation { get; private set; }
     }
 }
 
