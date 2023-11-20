@@ -142,14 +142,6 @@ namespace Microsoft.Xna.Platform
             }
             presentationParameters.MultiSampleCount = maxMultiSampleCount;
 
-
-            this.PlatformPreparePresentationParameters(presentationParameters);
-
-            return presentationParameters;
-        }
-
-        private void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
-        {
             // The graphics device can use a XAML panel or a window
             // to created the default swapchain target.
             if (this.SwapChainPanel != null)
@@ -162,6 +154,8 @@ namespace Microsoft.Xna.Platform
                 presentationParameters.DeviceWindowHandle = base.Game.Window.Handle;
                 presentationParameters.SwapChainPanel = null;
             }
+
+            return presentationParameters;
         }
 
         public override void CreateDevice()
