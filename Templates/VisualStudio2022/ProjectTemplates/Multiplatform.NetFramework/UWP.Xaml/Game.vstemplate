@@ -3,7 +3,7 @@
   <TemplateData>
     <Name>KNI Windows 10 Universal (XAML) Project</Name>
     <Description>A KNI game project for Windows 10 UWP using XAML controls.</Description>
-    <TemplateID>Kni.CS.WinRT.UAPGame</TemplateID>
+    <TemplateID>Kni.CS.WinRT.UAPXamlGame</TemplateID>
     <TemplateGroupID>WinRT-Native-UAP</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <SortOrder>43160</SortOrder>
@@ -15,7 +15,7 @@
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <TargetPlatformName>Windows</TargetPlatformName>
     <RequiredPlatformVersion>6.1.0</RequiredPlatformVersion>
-	<Hidden>true</Hidden>		
+	<Hidden>true</Hidden>
 	<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
