@@ -35,8 +35,8 @@
 				<ProjectTemplateLink ProjectName="$projectname$.Android"   CopyParameters="true">Android\Game.vstemplate</ProjectTemplateLink>
 				<ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">WindowsDX\Game.vstemplate</ProjectTemplateLink>	
 				<ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">DesktopGL\Game.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWP.Xaml"  CopyParameters="true">UWP.Xaml\Game.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWP.Core"  CopyParameters="true">UWP.Core\Game.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.UWPCore"  CopyParameters="true">UWPCore\Game.vstemplate</ProjectTemplateLink>
+				<ProjectTemplateLink ProjectName="$projectname$.UWPXaml"  CopyParameters="true">UWPXaml\Game.vstemplate</ProjectTemplateLink>
 			</SolutionFolder>
  		</ProjectCollection>
 	</TemplateContent>

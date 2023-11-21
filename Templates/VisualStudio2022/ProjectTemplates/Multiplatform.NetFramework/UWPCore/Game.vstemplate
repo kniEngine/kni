@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Windows 10 Universal (XAML) Project</Name>
-    <Description>A KNI game project for Windows 10 UWP using XAML controls.</Description>
-    <TemplateID>MonoGame.CS.WinRT.UAPGame</TemplateID>
+    <Name>KNI Windows 10 Universal (Core) Project</Name>
+    <Description>A KNI game project for Windows 10 UWP using the Core Application framework.</Description>
+    <TemplateID>Kni.CS.WinRT.UAPCoreGame</TemplateID>
     <TemplateGroupID>WinRT-Native-UAP</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <SortOrder>43160</SortOrder>
@@ -15,17 +15,13 @@
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <TargetPlatformName>Windows</TargetPlatformName>
     <RequiredPlatformVersion>6.1.0</RequiredPlatformVersion>
-	<Hidden>true</Hidden>		
+	<Hidden>true</Hidden>
 	<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent PreferedSolutionConfiguration="Debug|x86">
     <Project File="Application.csproj" ReplaceParameters="true">
-      
-      <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml">App.xaml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="!blend" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="blend" TargetFileName="GamePage.xaml">GamePage.xaml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="GamePage.xaml.cs">GamePage.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package-managed.appxmanifest</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ext_safeprojectname$_TemporaryKey.pfx" BlendDoNotCreate="true">Application_TemporaryKey.pfx</ProjectItem>
       
