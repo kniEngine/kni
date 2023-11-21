@@ -113,7 +113,6 @@
   <ItemGroup>
     <Compile Include="$projectname$Game.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />

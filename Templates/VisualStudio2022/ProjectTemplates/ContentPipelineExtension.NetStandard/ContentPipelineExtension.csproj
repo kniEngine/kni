@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="ContentImporter1.cs" />
     <Compile Include="ContentProcessor1.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

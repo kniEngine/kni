@@ -25,9 +25,6 @@
     <Project TargetFileName="ContentPipelineExtension.csproj" File="ContentPipelineExtension.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="ContentImporter1.cs">ContentImporter.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="ContentProcessor1.cs">ContentProcessor.cs</ProjectItem>
-      <Folder Name="Properties" TargetFolderName="Properties">
-        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      </Folder>
     </Project>
   </TemplateContent>
 </VSTemplate>
