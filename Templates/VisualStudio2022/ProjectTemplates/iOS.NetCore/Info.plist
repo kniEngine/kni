@@ -11,13 +11,26 @@
   <key>CFBundleIdentifier</key>
   <string>project.Company.$safeprojectname$</string>
   <key>MinimumOSVersion</key>
-  <string>7.0</string>
+  <string>11.0</string>
   <key>UISupportedInterfaceOrientations</key>
   <array>
     <string>UIInterfaceOrientationPortrait</string>
     <string>UIInterfaceOrientationPortraitUpsideDown</string>
     <string>UIInterfaceOrientationLandscapeLeft</string>
     <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+  <key>CFBundleName</key>
+  <string>$safeprojectname$</string>
+  <key>UIRequiresFullScreen</key>
+  <true/>
+  <key>UIStatusBarHidden</key>
+  <true/>
+  <key>UILaunchStoryboardName</key>
+  <string>LaunchScreen</string>
+  <key>UIDeviceFamily</key>
+  <array>
+      <integer>1</integer>
+      <integer>2</integer>
   </array>
 </dict>
 </plist>
