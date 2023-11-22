@@ -50,6 +50,7 @@
             <ProjectItem ReplaceParameters="false" TargetFileName="decode.min.js">decode.min.js</ProjectItem>
         </Folder>
         <ProjectItem ReplaceParameters="false" TargetFileName="favicon.ico">favicon.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="kni.png">kni.png</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="index.html">index.html</ProjectItem>
       </Folder>
     </Project>
