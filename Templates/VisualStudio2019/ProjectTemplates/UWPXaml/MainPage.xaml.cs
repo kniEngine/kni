@@ -20,11 +20,11 @@ namespace $safeprojectname$
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class GamePage : Page
+    public sealed partial class MainPage : Page
     {
         readonly $projectname$Game _game;
 
-        public GamePage()
+        public MainPage()
         {
             this.InitializeComponent();
 
