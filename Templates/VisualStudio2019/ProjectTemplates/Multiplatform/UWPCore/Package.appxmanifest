@@ -33,8 +33,8 @@
       EntryPoint="$ext_safeprojectname$.App">
       <uap:VisualElements
         DisplayName="$ext_safeprojectname$"
-        Square150x150Logo="Assets\Logo.png"
-        Square44x44Logo="Assets\SmallLogo.png"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
         Description="$ext_safeprojectname$"
         BackgroundColor="#464646">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
