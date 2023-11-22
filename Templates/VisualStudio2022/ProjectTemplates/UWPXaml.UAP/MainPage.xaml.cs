@@ -29,7 +29,7 @@ namespace $safeprojectname$
             this.InitializeComponent();
 
             // Create the game.
-            var launchArguments = string.Empty;
+            string launchArguments = String.Empty;
             _game = MonoGame.Framework.XamlGame<$projectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
