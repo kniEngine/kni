@@ -14,9 +14,9 @@
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">$targetplatformversion$</TargetPlatformVersion>
     <TargetPlatformMinVersion>$targetplatformminversion$</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
-    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     $if$($includeKeyFile$==true)
     <PackageCertificateKeyFile>$ext_safeprojectname$_TemporaryKey.pfx</PackageCertificateKeyFile>
     $endif$
@@ -106,7 +106,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -117,6 +116,7 @@
     $endif$
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />

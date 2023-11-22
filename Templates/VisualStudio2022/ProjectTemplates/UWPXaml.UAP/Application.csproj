@@ -14,9 +14,9 @@
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">$targetplatformversion$</TargetPlatformVersion>
     <TargetPlatformMinVersion>$targetplatformminversion$</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
-    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     $if$($includeKeyFile$==true)
     <PackageCertificateKeyFile>$projectname$_TemporaryKey.pfx</PackageCertificateKeyFile>
     $endif$
@@ -105,8 +105,8 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$projectname$Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="$projectname$Game.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
