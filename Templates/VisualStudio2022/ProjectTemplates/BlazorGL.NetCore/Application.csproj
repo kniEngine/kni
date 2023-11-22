@@ -5,7 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+    <AssemblyName>$safeprojectname$</AssemblyName>
 	<KniPlatform>BlazorGL</KniPlatform>
   </PropertyGroup>
   
@@ -18,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);TRACE;BLAZORGL</DefineConstants>
+    <DefineConstants>$(DefineConstants);BLAZORGL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
