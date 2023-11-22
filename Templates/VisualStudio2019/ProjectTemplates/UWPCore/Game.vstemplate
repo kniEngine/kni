@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Windows 10 Universal (Core) Project</Name>
+    <Name>KNI Windows 10 Universal (Core) Project (.uap10)</Name>
     <Description>A KNI game project for Windows 10 UWP using the Core Application framework.</Description>
     <Icon>TemplateIcon.png</Icon>
     <TemplateID>Kni.CS.WinRT.UAPCoreGame</TemplateID>
