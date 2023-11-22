@@ -32,10 +32,10 @@
       
       <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml">App.xaml</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="!blend" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="blend" TargetFileName="GamePage.xaml">GamePage.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="blend" TargetFileName="MainPage.xaml">MainPage.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml.cs">MainPage.xaml.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="GamePage.xaml.cs">GamePage.xaml.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package-managed.appxmanifest</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package.appxmanifest</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$_TemporaryKey.pfx" BlendDoNotCreate="true">Application_TemporaryKey.pfx</ProjectItem>
       
       <Folder Name="Content" TargetFolderName="Content">

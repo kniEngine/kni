@@ -22,7 +22,7 @@
   <TemplateContent PreferedSolutionConfiguration="Debug|x86">
     <Project File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package-managed.appxmanifest</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package.appxmanifest</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ext_safeprojectname$_TemporaryKey.pfx" BlendDoNotCreate="true">Application_TemporaryKey.pfx</ProjectItem>
       
       <Folder Name="Assets" TargetFolderName="Assets">
