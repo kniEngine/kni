@@ -11,14 +11,14 @@ namespace $ext_safeprojectname$
     /// </summary>
     public sealed partial class GamePage : Page
     {
-		readonly $ext_safeprojectname$Game _game;
+        readonly $ext_safeprojectname$Game _game;
 
-		public GamePage()
+        public GamePage()
         {
             this.InitializeComponent();
 
-			// Create the game.
-			var launchArguments = string.Empty;
+            // Create the game.
+            var launchArguments = string.Empty;
             _game = MonoGame.Framework.XamlGame<$ext_safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }

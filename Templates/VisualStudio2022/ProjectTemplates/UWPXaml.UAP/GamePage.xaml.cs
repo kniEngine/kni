@@ -22,14 +22,14 @@ namespace $safeprojectname$
     /// </summary>
     public sealed partial class GamePage : Page
     {
-		readonly $projectname$Game _game;
+        readonly $projectname$Game _game;
 
-		public GamePage()
+        public GamePage()
         {
             this.InitializeComponent();
 
-			// Create the game.
-			var launchArguments = string.Empty;
+            // Create the game.
+            var launchArguments = string.Empty;
             _game = MonoGame.Framework.XamlGame<$projectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
