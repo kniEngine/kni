@@ -39,6 +39,8 @@ namespace Microsoft.Xna.Framework.Windows
     {
         private readonly WinFormsGameWindow _window;
 
+        public const int WM_ERASEBKGND = 0x0014;
+
         public const int WM_KEYDOWN    = 0x0100;
         public const int WM_KEYUP      = 0x0101;
         public const int WM_CHAR       = 0x0102;
@@ -115,7 +117,7 @@ namespace Microsoft.Xna.Framework.Windows
             // TNC: handle those messages internally to avoid garbage from EventArgs
             switch (m.Msg)
             {
-                case 0x0014: // WM_ERASEBKGND
+                case WM_ERASEBKGND:
                     return; // skip repaint of the control under the swapchain (PaintEventArgs)
                 case WM_MOUSEWHEEL:
                     var delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
