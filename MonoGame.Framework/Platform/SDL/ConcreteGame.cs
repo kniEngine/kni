@@ -77,8 +77,7 @@ namespace Microsoft.Xna.Platform
         public override void BeforeInitialize()
         {
             bool isExiting = _window.SdlRunLoop();
-            if (isExiting)
-                _isExiting = true;
+            _isExiting |= isExiting;
         }
 
         public override bool IsMouseVisible
@@ -109,8 +108,7 @@ namespace Microsoft.Xna.Platform
             while (true)
             {
                 bool isExiting  = _window.SdlRunLoop();
-                if (isExiting)
-                    _isExiting = true;
+                _isExiting |= isExiting;
 
                 Game.Tick();
 
