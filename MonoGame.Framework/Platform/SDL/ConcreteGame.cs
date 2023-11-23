@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform
         }
 
 
-        private int _isExiting;
+        private bool _isExiting;
         private SdlGameWindow _window;
 
         public ConcreteGame(Game game) : base(game)
@@ -77,8 +77,7 @@ namespace Microsoft.Xna.Platform
         public override void BeforeInitialize()
         {
             bool isExiting = _window.SdlRunLoop();
-            if (isExiting)
-                _isExiting++;
+            _isExiting |= isExiting;
         }
 
         public override bool IsMouseVisible
@@ -109,19 +108,23 @@ namespace Microsoft.Xna.Platform
             while (true)
             {
                 bool isExiting  = _window.SdlRunLoop();
-                if (isExiting)
-                    _isExiting++;
+                _isExiting |= isExiting;
 
-                Game.Tick();
-
-                if (_isExiting > 0)
+                if (!_isExiting)
+                {
+                    Game.Tick();
+                }
+                else
+                {
+                    Game.Tick();
                     break;
+                }
             }
         }
 
         public override void TickExiting()
         {
-            Interlocked.Increment(ref _isExiting);
+            _isExiting = true;
         }
 
         public override bool BeforeUpdate()
