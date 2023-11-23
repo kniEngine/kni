@@ -111,14 +111,9 @@ namespace Microsoft.Xna.Platform
                 _isExiting |= isExiting;
 
                 if (!_isExiting)
-                {
                     Game.Tick();
-                }
                 else
-                {
-                    Game.Tick();
                     break;
-                }
             }
         }
 
