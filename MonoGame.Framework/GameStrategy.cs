@@ -539,10 +539,9 @@ namespace Microsoft.Xna.Platform
             }
 
             if (!_suppressDraw)
-            {
-                _suppressDraw = false;
                 Game.DoDraw(Time);
-            }
+            else
+                _suppressDraw = false;
         }
 
         #endregion Methods
