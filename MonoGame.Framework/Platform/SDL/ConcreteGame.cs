@@ -110,10 +110,15 @@ namespace Microsoft.Xna.Platform
                 bool isExiting  = _window.SdlRunLoop();
                 _isExiting |= isExiting;
 
-                Game.Tick();
-
-                if (_isExiting)
+                if (!_isExiting)
+                {
+                    Game.Tick();
+                }
+                else
+                {
+                    Game.Tick();
                     break;
+                }
             }
         }
 
