@@ -365,7 +365,7 @@ namespace MonoGame.Framework
             var msg = new NativeMessage();
             do
             {
-                if (msg.msg == WM_QUIT)
+                if (msg.msg == WinFormsGameForm.WM_QUIT)
                     break;
 
                 Thread.Sleep(100);
@@ -389,13 +389,11 @@ namespace MonoGame.Framework
             }
         }
 
-        private const uint WM_QUIT = 0x12;
-
         [StructLayout(LayoutKind.Sequential)]
         public struct NativeMessage
         {
             public IntPtr handle;
-            public uint msg;
+            public int msg;
             public IntPtr wParam;
             public IntPtr lParam;
             public uint time;

@@ -39,6 +39,7 @@ namespace Microsoft.Xna.Framework.Windows
     {
         private readonly WinFormsGameWindow _window;
 
+        public const int WM_QUIT       = 0x0012;
         public const int WM_ERASEBKGND = 0x0014;
 
         public const int WM_KEYDOWN    = 0x0100;
