@@ -39,20 +39,29 @@ namespace Microsoft.Xna.Framework.Windows
     {
         private readonly WinFormsGameWindow _window;
 
-        public const int WM_POINTERUP = 0x0247;
-        public const int WM_POINTERDOWN = 0x0246;
-        public const int WM_POINTERUPDATE = 0x0245;
-        public const int WM_KEYDOWN = 0x0100;
-        public const int WM_KEYUP = 0x0101;
+        public const int WM_QUIT       = 0x0012;
+        public const int WM_ERASEBKGND = 0x0014;
+
+        public const int WM_KEYDOWN    = 0x0100;
+        public const int WM_KEYUP      = 0x0101;
+        public const int WM_CHAR       = 0x0102;
         public const int WM_SYSKEYDOWN = 0x0104;
-        public const int WM_SYSKEYUP = 0x0105;
-        public const int WM_TABLET_QUERYSYSTEMGESTURESTA = (0x02C0 + 12);
+        public const int WM_SYSKEYUP   = 0x0105;
+        public const int WM_UNICHAR    = 0x0109;
+        public const int WM_SYSCOMMAND = 0x0112;
+
+        public const int WM_MOUSEMOVE   = 0x0200;
+        public const int WM_MOUSEWHEEL  = 0x020A;
+        public const int WM_MOUSEHWHEEL = 0x020E;
 
         public const int WM_ENTERSIZEMOVE = 0x0231;
-        public const int WM_EXITSIZEMOVE = 0x0232;
+        public const int WM_EXITSIZEMOVE  = 0x0232;
         public const int WM_DROPFILES = 0x0233;
+        public const int WM_POINTERUPDATE = 0x0245;
+        public const int WM_POINTERDOWN   = 0x0246;
+        public const int WM_POINTERUP     = 0x0247;
+        public const int WM_TABLET_QUERYSYSTEMGESTURESTA = (0x02C0 + 12);
 
-        public const int WM_SYSCOMMAND = 0x0112;
 
         public bool AllowAltF4 = true;
 
@@ -87,10 +96,10 @@ namespace Microsoft.Xna.Framework.Windows
             
             switch (m.Msg)
             {
-                case 0x0100: // WM_KEYDOWN
-                case 0x0101: // WM_KEYUP
-                case 0x0102: // WM_CHAR
-                case 0x0109: // WM_UNICHAR
+                case WM_KEYDOWN:
+                case WM_KEYUP:
+                case WM_CHAR:
+                case WM_UNICHAR:
                     var c = m.WParam.ToInt32();
                     if (c == 0x5B && c == 0x5C) return false; // let Left/Right Windows Key through
                     if (_window.Platform_IsTextInputAttached())  return false; // let keys through if user subscribed to TextInput
@@ -109,17 +118,17 @@ namespace Microsoft.Xna.Framework.Windows
             // TNC: handle those messages internally to avoid garbage from EventArgs
             switch (m.Msg)
             {
-                case 0x0014: // WM_ERASEBKGND
+                case WM_ERASEBKGND:
                     return; // skip repaint of the control under the swapchain (PaintEventArgs)
-                case 0x020A: // WM_MOUSEWHEEL
+                case WM_MOUSEWHEEL:
                     var delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
                     _window.MouseState.ScrollWheelValue += delta;
                     return;
-                case 0x020E: // WM_MOUSEHWHEEL
+                case WM_MOUSEHWHEEL:
                     var deltaH = (short)(((ulong)m.WParam >> 16) & 0xffff);
                     _window.MouseState.HorizontalScrollWheelValue += deltaH;
                     return;
-                case 0x0200: // WM_MOUSEMOVE
+                case WM_MOUSEMOVE:
                     return;
             }
 
