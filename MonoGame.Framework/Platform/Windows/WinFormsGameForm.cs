@@ -39,20 +39,21 @@ namespace Microsoft.Xna.Framework.Windows
     {
         private readonly WinFormsGameWindow _window;
 
-        public const int WM_POINTERUP = 0x0247;
-        public const int WM_POINTERDOWN = 0x0246;
-        public const int WM_POINTERUPDATE = 0x0245;
-        public const int WM_KEYDOWN = 0x0100;
-        public const int WM_KEYUP = 0x0101;
+        public const int WM_KEYDOWN    = 0x0100;
+        public const int WM_KEYUP      = 0x0101;
         public const int WM_SYSKEYDOWN = 0x0104;
-        public const int WM_SYSKEYUP = 0x0105;
-        public const int WM_TABLET_QUERYSYSTEMGESTURESTA = (0x02C0 + 12);
+        public const int WM_SYSKEYUP   = 0x0105;
+        public const int WM_SYSCOMMAND = 0x0112;
+
 
         public const int WM_ENTERSIZEMOVE = 0x0231;
-        public const int WM_EXITSIZEMOVE = 0x0232;
+        public const int WM_EXITSIZEMOVE  = 0x0232;
         public const int WM_DROPFILES = 0x0233;
+        public const int WM_POINTERUPDATE = 0x0245;
+        public const int WM_POINTERDOWN   = 0x0246;
+        public const int WM_POINTERUP     = 0x0247;
+        public const int WM_TABLET_QUERYSYSTEMGESTURESTA = (0x02C0 + 12);
 
-        public const int WM_SYSCOMMAND = 0x0112;
 
         public bool AllowAltF4 = true;
 
