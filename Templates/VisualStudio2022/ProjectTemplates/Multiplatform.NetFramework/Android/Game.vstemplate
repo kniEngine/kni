@@ -12,8 +12,8 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-	<Hidden>true</Hidden>		
-	<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <Hidden>true</Hidden>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
@@ -29,6 +29,7 @@
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
       </Folder>
+
       <Folder Name="Resources" TargetFolderName="Resources">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutResources.txt">AboutResources.txt</ProjectItem>
         <Folder Name="Drawable" TargetFolderName="Drawable">
