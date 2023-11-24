@@ -5,8 +5,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <RootNamespace>$safeprojectname$</RootNamespace>
-    <AssemblyName>$safeprojectname$</AssemblyName>
+    <ProjectGuid>{$guid7$}</ProjectGuid>
+    <RootNamespace>$ext_safeprojectname$</RootNamespace>
+    <AssemblyName>$ext_safeprojectname$</AssemblyName>
     <DefineConstants>$(DefineConstants);BLAZORGL</DefineConstants>
 	<KniPlatform>BlazorGL</KniPlatform>
   </PropertyGroup>
@@ -24,7 +25,6 @@
   <ItemGroup>
     <Compile Include="Pages\Index.razor.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="$safeprojectname$Game.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">   
+      <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
+    </KniContentReference>
   </ItemGroup>
+  <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
 </Project>

@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <TargetFramework>net6.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <ProjectGuid>$guid4$</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>$ext_safeprojectname$</RootNamespace>
+    <AssemblyName>$ext_safeprojectname$</AssemblyName>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>$(DefineConstants);DESKTOPGL</DefineConstants>
+    <KniPlatform>DesktopGL</KniPlatform>
+  </PropertyGroup>
+	
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+  </PropertyGroup>
+	
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+  </PropertyGroup>
+	
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL.9000" Version="3.9.9001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.ico" />
+    <EmbeddedResource Include="Icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
+      <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
+    </KniContentReference>
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+</Project>

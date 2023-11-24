@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+    <ProjectGuid>$guid1$</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+    <AssemblyName>$safeprojectname$</AssemblyName>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>$(DefineConstants);ANDROID</DefineConstants>
+    <KniPlatform>Android</KniPlatform>
+    <ApplicationId>com.companyname.$ext_safeprojectname$</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001" />
+    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.9.9001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$projectname$Activity.cs" />
+    <Compile Include="$projectname$Game.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AndroidManifest.xml" />
+    <None Include="Assets\AboutAssets.txt" />
+    <None Include="Resources\AboutResources.txt" />
+    <AndroidResource Include="Resources\Drawable\Icon.png" />
+    <AndroidResource Include="Resources\Drawable\Splash.png" />
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+    <AndroidResource Include="Resources\Values\Styles.xml" />
+    <Folder Include="Resources\Layout\" />
+  </ItemGroup>
+  <ItemGroup>
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+</Project>

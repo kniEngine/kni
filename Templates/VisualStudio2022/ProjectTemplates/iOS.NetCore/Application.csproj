@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <TargetFramework>net6.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
+    <ProjectGuid>$guid1$</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+    <AssemblyName>$safeprojectname$</AssemblyName>
+    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <KniPlatform>iOS</KniPlatform>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001" />
+    <PackageReference Include="MonoGame.Framework.iOS.9000" Version="3.9.9001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$projectname$Game.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Default.png" />
+    <BundleResource Include="GameThumbnail.png" />
+    <None Include="Entitlements.plist" />
+    <None Include="Info.plist" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+</Project>

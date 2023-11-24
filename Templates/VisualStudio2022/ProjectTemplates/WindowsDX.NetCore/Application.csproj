@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RollForward>Major</RollForward>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ProjectGuid>$guid1$</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+    <AssemblyName>$safeprojectname$</AssemblyName>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
+    <KniPlatform>Windows</KniPlatform>
+  </PropertyGroup>
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+	
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$projectname$Game.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX.9000" Version="3.9.9001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+</Project>

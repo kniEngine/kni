@@ -3,34 +3,27 @@
     <Name>KNI Web browser Platform Project (.net6)</Name>
     <Description>A KNI game project for Blazor webassembly using WebGL.</Description>
     <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>KNI</ProjectSubType>
-    <LanguageTag>csharp</LanguageTag>
-    <PlatformTag>web</PlatformTag>
-    <ProjectTypeTag>games</ProjectTypeTag>
-    <ProjectTypeTag>KNI</ProjectTypeTag>
-    <ProjectTypeTag>web</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <ProjectSubType>
+    </ProjectSubType>
     <SortOrder>43300</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>TemplateIcon.png</Icon>
+    <Hidden>true</Hidden>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="$safeprojectname$Application.csproj" File="Application.csproj" ReplaceParameters="true">
+    <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="_Imports.razor">_Imports.razor</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.razor">App.razor</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>      
       <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor">MainLayout.razor</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor.css">MainLayout.razor.css</ProjectItem>      
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor.css">MainLayout.razor.css</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <Folder Name="Content" TargetFolderName="Content">
-        <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
-      </Folder>
       <Folder Name="Pages" TargetFolderName="Pages">
         <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor">Index.razor</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor.cs">Index.razor.cs</ProjectItem>
