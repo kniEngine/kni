@@ -14,9 +14,9 @@
   <TemplateContent>
     <Project ReplaceParameters="true" File="SharedProject.shproj">
 
-	  <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.projitems">SharedProject.projitems</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.projitems">SharedProject.projitems</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$ext_safeprojectname$Game.cs">Game.cs</ProjectItem>
-                  
+
       <Folder Name="..\Content" TargetFolderName="..\$ext_safeprojectname$Content">
         <ProjectItem ReplaceParameters="true" TargetFileName="$ext_safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
       </Folder>
