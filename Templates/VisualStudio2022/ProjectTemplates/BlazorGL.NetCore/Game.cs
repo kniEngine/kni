@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace $safeprojectname$
 {
@@ -17,6 +21,7 @@ namespace $safeprojectname$
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -61,13 +66,18 @@ namespace $safeprojectname$
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            MouseState mouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
+            GamePadState gamePadState = default;
+            try { gamePadState = GamePad.GetState(PlayerIndex.One); }
+            catch (NotImplementedException) { /* ignore gamePadState */ }
 
             if (keyboardState.IsKeyDown(Keys.Escape) ||
-                keyboardState.IsKeyDown(Keys.Back))
+                keyboardState.IsKeyDown(Keys.Back) ||
+                gamePadState.Buttons.Back == ButtonState.Pressed)
             {
                 try { Exit(); }
-                catch (PlatformNotSupportedException ex) { }
+                catch (PlatformNotSupportedException) { /* ignore */ }
             }
 
             // TODO: Add your update logic here
