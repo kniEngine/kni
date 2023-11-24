@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -34,6 +36,7 @@ namespace $ext_safeprojectname$
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
         }
 
         /// <summary>
@@ -44,8 +47,8 @@ namespace $ext_safeprojectname$
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
-            // TODO: use this.Content to load your game content here
+
+            // TODO: Use this.Content to load your game content here
         }
 
         /// <summary>
@@ -64,6 +67,7 @@ namespace $ext_safeprojectname$
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            MouseState mouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
@@ -72,9 +76,9 @@ namespace $ext_safeprojectname$
                 gamePadState.Buttons.Back == ButtonState.Pressed)
             {
                 try { Exit(); }
-                catch (PlatformNotSupportedException ex) { }
+                catch (PlatformNotSupportedException) { /* ignore */ }
             }
-            
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);

@@ -12,8 +12,8 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-	<Hidden>true</Hidden>		
-	<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <Hidden>true</Hidden>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>

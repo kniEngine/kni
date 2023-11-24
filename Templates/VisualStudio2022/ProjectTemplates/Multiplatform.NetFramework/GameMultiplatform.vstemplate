@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
-	<TemplateData>
-		<Name>KNI Multiplatform Project (.NET Framework,Xamarin)</Name>
+  <TemplateData>
+    <Name>KNI Multiplatform Project (.NET Framework,Xamarin)</Name>
     <Description>A KNI project for multiple platforms with shared content.</Description>
-	<TemplateID>Kni.CS.MultiplatformGame</TemplateID>
+    <TemplateID>Kni.CS.MultiplatformGame</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
@@ -18,26 +18,28 @@
     <ProjectTypeTag>mobile</ProjectTypeTag>
     <ProjectTypeTag>uwp</ProjectTypeTag>
     <SortOrder>43100</SortOrder>
-		<CreateNewFolder>true</CreateNewFolder>
-		<DefaultName>Game</DefaultName>
-		<Icon>TemplateIcon.png</Icon>
-		<ProvideDefaultName>true</ProvideDefaultName>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Game</DefaultName>
+    <Icon>TemplateIcon.png</Icon>
+    <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
-		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
-		<PromptForSaveOnCreation>false</PromptForSaveOnCreation>
-		<CreateInPlace>true</CreateInPlace>
-	</TemplateData>
- 	<TemplateContent>
- 		<ProjectCollection>
-			<SolutionFolder Name="$projectname$">
-				<ProjectTemplateLink ProjectName="$projectname$.Shared"    CopyParameters="true">Shared\Shared.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.Android"   CopyParameters="true">Android\Game.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">WindowsDX\Game.vstemplate</ProjectTemplateLink>	
-				<ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">DesktopGL\Game.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWPCore"  CopyParameters="true">UWPCore\Game.vstemplate</ProjectTemplateLink>
-				<ProjectTemplateLink ProjectName="$projectname$.UWPXaml"  CopyParameters="true">UWPXaml\Game.vstemplate</ProjectTemplateLink>
-			</SolutionFolder>
- 		</ProjectCollection>
-	</TemplateContent>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectCollection>
+
+      <SolutionFolder Name="$projectname$">
+        <ProjectTemplateLink ProjectName="$projectname$.Shared"    CopyParameters="true">Shared\Shared.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.Android"   CopyParameters="true">Android\Game.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">WindowsDX\Game.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">DesktopGL\Game.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.UWPCore"   CopyParameters="true">UWPCore\Game.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.UWPXaml"   CopyParameters="true">UWPXaml\Game.vstemplate</ProjectTemplateLink>
+      </SolutionFolder>
+
+    </ProjectCollection>
+  </TemplateContent>
 </VSTemplate>
