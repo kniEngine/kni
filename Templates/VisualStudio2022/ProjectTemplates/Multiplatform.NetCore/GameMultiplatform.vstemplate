@@ -28,6 +28,7 @@
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
+    <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
     <ProjectCollection>
 
       <SolutionFolder Name="$projectname$">

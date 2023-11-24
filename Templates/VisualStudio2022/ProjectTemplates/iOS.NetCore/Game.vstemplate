@@ -20,6 +20,7 @@
   </TemplateData>
   <TemplateContent>
     <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Application.csproj">
+      <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Default.png">Default.png</ProjectItem>
