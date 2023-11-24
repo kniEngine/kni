@@ -1,0 +1,51 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>KNI Web browser Platform Project (.net6)</Name>
+    <Description>A KNI game project for Blazor webassembly using WebGL.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>43300</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Game</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Hidden>true</Hidden>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="_Imports.razor">_Imports.razor</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.razor">App.razor</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor">MainLayout.razor</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor.css">MainLayout.razor.css</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+      <Folder Name="Pages" TargetFolderName="Pages">
+        <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor">Index.razor</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor.cs">Index.razor.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="launchSettings.json">launchSettings.json</ProjectItem>
+      </Folder>
+      <Folder Name="wwwroot" TargetFolderName="wwwroot">
+        <Folder Name="css" TargetFolderName="css">
+            <ProjectItem ReplaceParameters="false" TargetFileName="app.css">app.css</ProjectItem>
+            <Folder Name="bootstrap" TargetFolderName="bootstrap">
+            <ProjectItem ReplaceParameters="false" TargetFileName="bootstrap.min.css">bootstrap.min.css</ProjectItem>
+            <ProjectItem ReplaceParameters="false" TargetFileName="bootstrap.min.css.map">bootstrap.min.css.map</ProjectItem>
+            </Folder>
+        </Folder>
+        <Folder Name="js" TargetFolderName="js">
+            <ProjectItem ReplaceParameters="false" TargetFileName="decode.min.js">decode.min.js</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="false" TargetFileName="favicon.ico">favicon.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="kni.png">kni.png</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="index.html">index.html</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

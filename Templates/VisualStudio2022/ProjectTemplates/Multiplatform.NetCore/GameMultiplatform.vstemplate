@@ -16,6 +16,7 @@
     <ProjectTypeTag>KNI</ProjectTypeTag>
     <ProjectTypeTag>desktop</ProjectTypeTag>
     <ProjectTypeTag>mobile</ProjectTypeTag>
+    <ProjectTypeTag>web</ProjectTypeTag>
     <SortOrder>43101</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
@@ -36,6 +37,7 @@
         <ProjectTemplateLink ProjectName="$projectname$.Android"   CopyParameters="true">Android\Game.vstemplate</ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$projectname$.WindowsDX" CopyParameters="true">WindowsDX\Game.vstemplate</ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$projectname$.DesktopGL" CopyParameters="true">DesktopGL\Game.vstemplate</ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$projectname$.BlazorGL"  CopyParameters="true">BlazorGL\Game.vstemplate</ProjectTemplateLink>
       </SolutionFolder>
 
     </ProjectCollection>
