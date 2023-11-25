@@ -1,5 +1,105 @@
 ﻿# Changelog
 
+## 3.10.9001 Release - November 30, 2023
+
+### Fixed
+ - Fixed spelling of 'Occurred' in Exceptions, Errors and comments #536.
+ - Fixed spelling errors #545.
+ - Fixed not-supported compression format error message #537.
+ - Fixed GraphicsResource.Disposing event. Throw Disposing before the object is disposed or or collected (XNA Compatibility) #583.
+ - Fixed GraphicsDevice.Disposing event #587. Throw Disposing before the object is disposed or collected.
+ - [OculusVR] Dispose of OvrDevice on device disposing #589.
+ - [OpenAL] Fixed Microphone.BufferDuration redundancy #599.
+ - [OpenGL] Fixed GenRenderbuffer() & DeleteFramebuffer() #647.
+ - [DX11] Fixed MultiSample in shared textures #666.
+ - Fixed spelling in MeshHelper documentation #679.
+ - [OpenGL/WebGL] Fixed Texture bindings #694.
+ - [OpenGL/WebGL] Fixed GL Texture MultiSampleCount #720.
+ - Fixed spelling in comments #744.
+ - Fixed GLSL Texture parameter #752.
+ - Fixed HLSL Texture parameter #754, #755, #830.
+ - Fixed Game.IsActive on startup #759.
+ - Fixed collection of DynamicSoundEffectInstance objects #776. 
+ - Fixed collection of MediaPlayer objects #777, #784.
+ - [OpenGL] Fixed appling of VertexBuffersAttribs #787.
+ - [OpenGL] Fixed disposal of GraphicsResource objects from the GC Finalizer thread. #797, #798, #799, #800, #802, #803, #805.
+ - [DX11] Fixed resizing while a renderTarget is attached to the backbuffer #808.
+ - [OpenGL] Fixed updating of GraphicsDevice.ScissorRectangle after a ClientResize event #810.
+ - Fixed content Builder db corruption #864.
+ - Fixed content Builder IntermediateOutputDir when building from VS target. #875, #876, #877, #878 .
+ - Fixed content Builder /Clean option. #882.
+ - Fixed content Editor crash from invalid builder's output #890.
+ - Fixed content Builder non-standard output. #892.
+ - Fixed content Builder race condition in CopyItems #894.
+ - Fixed content Builder Success/Error counters in CopyItems #895.
+ - Fixed Game.SuppressDraw #915.
+ - [SDL] Bugfix: Tick() was called after Game.Exit() #917.
+  
+### Performance
+ - [OpenGL/WebGL] Optimized SamplerState.PlatformApplyState(...) #580.
+ - [OpenGL] Optimized Effect loading GL #672.
+ - [DX11] Optimized DrawUserIndexedPrimitives #678.
+ - [OpenGL/WebGL] Optimized Apply of TextureCollection #705.
+ - Optimized DrawIndexedPrimitives #706.
+ - [OpenGL] Optimized DrawIndexedPrimitives & DrawInstancedPrimitives #709.
+ - Optimized SpriteBatch flush #710.
+ - [DX11] Optimized SetConstantBuffers #711.
+ - Optimized Effect processor #763.
+ - [OpenGL/WebGL] Optimized ComputeHash #768.
+ - Optimized GraphicsResource.GraphicsDevice code-flow #783, #780.
+ - Optimized PlatformApplyVertexBuffersAttribs code-flow #786.
+ - Optimized content Builder db #871, #872.
+ - Optimized content Builder CleanItems #884.
+ - Optimized content Builder project file loading #887. 
+ - Optimized SetParameter code-flow #896.
+ - Optimized Po2 check #906.
+ 
+### Changed
+ - [Android] implemented GameWindow.Handle and PresentationParameters.DeviceWindowHandle #534.
+ - GraphicsDevice.Handle and Texture.Handle marked obsolete. Use GraphicsDevice.GetD3D11Device() and Texture.GetD3D11Resource() extensions. #593.
+ - Renamed  parameter 'cubeMapFace' of TextureCube.SetData() (XNA Compatibility) #613.
+ - Unresolvable Character error from a SpriteFont now reports the unresolved chracter. #648.
+ - Renamed parameter 'usage' of IndexBuffer & VertexBuffer (XNA Compatibility) #686.
+ - Renamed constants in project templates, LINUX->DESKTOPGL, WINDOWS->WINDOWSDX #712.
+ - VertexDeclaration is no longer inherited from GraphicsResource (breaks XNA API) #760, #773.
+ - Macros removed from the SpriteEffect.fx template #769, #817.
+ - The content Editor enforce rooted content #774.
+ - Updated CompareFunction Members documentation #815.
+ - Cleaned up UAP project templates #831.
+ - VS2022 project templates updated to use nuget packages. #839.
+ - Invalid XNB file error from ContentManager now reports the invalid platform flag #865, #866.
+ - Content builder with /quiet option no longer output 'Skipping...' files in VS build output. #873.
+ - VS2022 project templates updated to use new build target Kni.Content.Builder.targets #879, #880, #928.
+ - Content builder with /guiet option now output a single-line report message. #886.
+ - Content builder reports milliseconds in 3 digits. #886.
+ - [BlazorGL] implemented Texture2D.GetData() #716.
+ - [BlazorGL] implemented SongReader & MediaPlayer #723.
+ - [BlazorGL] implemented VideoPlayer #724.
+ - [BlazorGL] implemented Depth24Stencil8 for render targets #816.
+ - [BlazorGL] implemented Depth24Stencil8 for GraphicsDeviceManager.PreferredDepthStencilFormat #821.
+ - [BlazorGL] implemented GraphicsDeviceManager.PreferrMultiSampling #824.
+ - [BlazorGL] implemented PresentationParameters.RenderTargetUsage #825.
+ - [BlazorGL] implemented Game.IsActive #826.
+ - [OpenGL/WebGL] GraphicsAdapter.IsDefaultAdapter #826.
+ - [DesktopGL] GraphicsAdapter.IsProfileSupported #903.
+ - [ANDROID/iOS] Mobile/Xamarin projects & templates upgraded to .net8 #925, #926, #927.
+ - [BlazorGL] Brotli decompression is disabled by default #931.
+
+### Added
+ - GraphicsDevice.Flush() added to all platforms #590.
+ - DynamicBuffer.ContentLost event (XNA API compatibility) #725.
+ - [BlazorGL] loading screen #911.
+ - [BlazorGL] added enableBrotliDecompression boolean in index.html #930.
+ 
+### Removed
+ - Textur2D.Reload() method #571.
+ - [Android/iOS] Native Texture2D.FromStream() methods #572.
+ - .net6 Libraries removed from the SDK #835.
+ - VS2017 project templates #850.
+ - Implicit response & content filenames as arguments in the content builder, Use /@:responseFile and /build:contentFile #867.
+ - /LauncgDebugger option from the content builder #868.
+ - .net6 Templates #920.
+
 ## 3.9.9001 Release - august 09, 2023
 
 ### Fixed
