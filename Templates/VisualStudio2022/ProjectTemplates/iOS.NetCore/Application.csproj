@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <TargetFramework>net6.0-ios</TargetFramework>
+    <TargetFramework>net8.0-ios</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Exe</OutputType>

@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <TargetFramework>net6.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+    <TargetFramework>net8.0-android</TargetFramework>
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
