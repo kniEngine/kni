@@ -39,7 +39,11 @@ namespace MonoGame.Framework.Utilities
         {
             IntPtr ret = IntPtr.Zero;
 
+#if NET40 || NET45 || NET40_OR_GREATER
             string appDirectory = typeof(FuncLoader).Assembly.Location;
+#else // NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+            string appDirectory = AppContext.BaseDirectory;
+#endif
             appDirectory = Path.GetDirectoryName(appDirectory);
             appDirectory = appDirectory ?? "./";
 
