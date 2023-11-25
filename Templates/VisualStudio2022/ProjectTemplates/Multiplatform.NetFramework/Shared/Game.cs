@@ -26,6 +26,7 @@ namespace $ext_safeprojectname$
 #if (ANDROID || iOS)
             _graphics.IsFullScreen = true;
 #endif
+
         }
 
         /// <summary>
