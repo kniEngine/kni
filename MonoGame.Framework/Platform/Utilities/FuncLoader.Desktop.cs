@@ -38,7 +38,10 @@ namespace MonoGame.Framework.Utilities
         public static IntPtr LoadLibraryExt(string libname)
         {
             IntPtr ret = IntPtr.Zero;
-            string appDirectory = Path.GetDirectoryName(typeof(FuncLoader).Assembly.Location) ?? "./";
+
+            string appDirectory = typeof(FuncLoader).Assembly.Location;
+            appDirectory = Path.GetDirectoryName(appDirectory);
+            appDirectory = appDirectory ?? "./";
 
             // Try .NET Framework / mono locations
             if (CurrentPlatform.OS == OS.MacOSX)
