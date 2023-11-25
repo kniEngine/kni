@@ -37,33 +37,36 @@ namespace MonoGame.Framework.Utilities
 
         public static IntPtr LoadLibraryExt(string libname)
         {
-            var ret = IntPtr.Zero;
-            var assemblyLocation = Path.GetDirectoryName(typeof(FuncLoader).Assembly.Location) ?? "./";
+            IntPtr ret = IntPtr.Zero;
+
+            string appDirectory = typeof(FuncLoader).Assembly.Location;
+            appDirectory = Path.GetDirectoryName(appDirectory);
+            appDirectory = appDirectory ?? "./";
 
             // Try .NET Framework / mono locations
             if (CurrentPlatform.OS == OS.MacOSX)
             {
-                ret = LoadLibrary(Path.Combine(assemblyLocation, libname));
+                ret = LoadLibrary(Path.Combine(appDirectory, libname));
 
                 // Look in Frameworks for .app bundles
                 if (ret == IntPtr.Zero)
-                    ret = LoadLibrary(Path.Combine(assemblyLocation, "..", "Frameworks", libname));
+                    ret = LoadLibrary(Path.Combine(appDirectory, "..", "Frameworks", libname));
             }
             else
             {
                 if (Environment.Is64BitProcess)
-                    ret = LoadLibrary(Path.Combine(assemblyLocation, "x64", libname));
+                    ret = LoadLibrary(Path.Combine(appDirectory, "x64", libname));
                 else
-                    ret = LoadLibrary(Path.Combine(assemblyLocation, "x86", libname));
+                    ret = LoadLibrary(Path.Combine(appDirectory, "x86", libname));
             }
 
             // Try .NET Core development locations
             if (ret == IntPtr.Zero)
-                ret = LoadLibrary(Path.Combine(assemblyLocation, "runtimes", CurrentPlatform.Rid, "native", libname));
+                ret = LoadLibrary(Path.Combine(appDirectory, "runtimes", CurrentPlatform.Rid, "native", libname));
 
             // Try current folder (.NET Core will copy it there after publish)
             if (ret == IntPtr.Zero)
-                ret = LoadLibrary(Path.Combine(assemblyLocation, libname));
+                ret = LoadLibrary(Path.Combine(appDirectory, libname));
 
             // Try alternate way of checking current folder
             // assemblyLocation is null if we are inside macOS app bundle
