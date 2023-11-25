@@ -23,6 +23,9 @@ namespace $ext_safeprojectname$
             Content.RootDirectory = "Content";
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+#if (ANDROID || iOS)
+            _graphics.IsFullScreen = true;
+#endif
         }
 
         /// <summary>

@@ -9,7 +9,7 @@
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants);iOS</DefineConstants>
     <KniPlatform>iOS</KniPlatform>
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
