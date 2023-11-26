@@ -46,7 +46,7 @@
   -->
   <Target Name="CollectContentReferences">
 
-    <Warning Text="Replace MonoGame.Content.Builder17.targets with Kni.Content.Builder.targets, MonoGameContentReference with KniContentReference, MonoGamePlatform with KniPlatform, and MonoGameMGCBAdditionalArguments with KniContentBuilderArguments." />
+    <Warning Text="'MonoGame.Content.Builder17.targets' is deprecated. In your .csproj file, replace 'MonoGame.Content.Builder17.targets' with 'Kni.Content.Builder.targets', 'MonoGameContentReference' with 'KniContentReference', 'MonoGamePlatform' with 'KniPlatform', and 'MonoGameMGCBAdditionalArguments' with 'KniContentBuilderArguments'." />
 
     <ItemGroup >
       <MonoGameContentReference Include="**/*.mgcb" />
