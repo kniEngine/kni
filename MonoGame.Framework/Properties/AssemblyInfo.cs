@@ -38,5 +38,5 @@ using System.Resources;
 
 // Version information for the assembly which is automatically
 // set by our automated build process.
-[assembly: AssemblyVersion("3.9.9001.0")]
-[assembly: AssemblyFileVersion("3.9.9001.0")]
+[assembly: AssemblyVersion("3.10.9001.0")]
+[assembly: AssemblyFileVersion("3.10.9001.0")]
