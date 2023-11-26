@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nkast.Xna.Framework" Version="3.9.9001" />
-    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.9.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
+    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.10.9001" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$ext_safeprojectname$Activity.cs" />
