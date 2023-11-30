@@ -30,12 +30,12 @@
     <script src="_framework/blazor.webassembly.js" autostart="false"></script>
     <script type="module">
         import { BrotliDecode } from './js/decode.min.js';
-        var enableBrotliDecompression = true;
+        // Set this to enable Brotli (.br) decompression on static webServers 
+        // that don't support content compression and http://.
+        var enableBrotliDecompression = false;
         Blazor.start({
             loadBootResource: function (type, name, defaultUri, integrity)
             {
-                // This function enables Brotli (br) decompression for http: connections
-                // and for webservers that don't support content compression.
                 if (enableBrotliDecompression === true && type !== 'dotnetjs' && location.hostname !== 'localhost')
                 {
                     return (async function()
