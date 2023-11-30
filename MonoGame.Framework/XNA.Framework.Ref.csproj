@@ -5,8 +5,8 @@
     <BaseOutputPath>..\Artifacts\MonoGame.Framework\Ref</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
-    <Version>3.9.9001.0</Version>
-    <AssemblyVersion>3.9.9001.0</AssemblyVersion>
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
 
   </PropertyGroup>
 

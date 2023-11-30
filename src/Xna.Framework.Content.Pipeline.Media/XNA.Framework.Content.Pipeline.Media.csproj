@@ -3,8 +3,8 @@
   <PropertyGroup>
     <BaseOutputPath>..\..\Artifacts\Xna.Framework.Content.Pipeline.Media\</BaseOutputPath>
     
-    <Version>3.9.9001.0</Version>
-    <AssemblyVersion>3.9.9001.0</AssemblyVersion>
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
 
   </PropertyGroup>
 
