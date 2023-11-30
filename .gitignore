@@ -89,5 +89,3 @@ IDE/MonoDevelop/MonoDevelop.MonoGame/templates/Common/MonoGame.Framework.dll.con
 # CAKE
 .cake/**
 
-# docfx
-_*
