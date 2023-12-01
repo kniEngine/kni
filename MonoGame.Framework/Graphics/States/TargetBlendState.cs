@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _colorWriteChannels = ColorWriteChannels.All;
         }
 
-        public TargetBlendState(BlendState parent, Blend sourceBlend, Blend destinationBlend) 
+        internal TargetBlendState(BlendState parent, Blend sourceBlend, Blend destinationBlend) 
             : this(parent)
         {
             _colorSourceBlend = sourceBlend;
