@@ -40,16 +40,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal TargetBlendState Clone(BlendState parent)
         {
-            return new TargetBlendState(parent)
-            {
-                AlphaBlendFunction = AlphaBlendFunction,
-                AlphaDestinationBlend = AlphaDestinationBlend,
-                AlphaSourceBlend = AlphaSourceBlend,
-                ColorBlendFunction = ColorBlendFunction,
-                ColorDestinationBlend = ColorDestinationBlend,
-                ColorSourceBlend = ColorSourceBlend,
-                ColorWriteChannels = ColorWriteChannels
-            };
+            TargetBlendState clone = new TargetBlendState(parent);
+            clone.AlphaBlendFunction = this.AlphaBlendFunction;
+            clone.AlphaDestinationBlend = this.AlphaDestinationBlend;
+            clone.AlphaSourceBlend = this.AlphaSourceBlend;
+            clone.ColorBlendFunction = this.ColorBlendFunction;
+            clone.ColorDestinationBlend = this.ColorDestinationBlend;
+            clone.ColorSourceBlend = this.ColorSourceBlend;
+            clone.ColorWriteChannels = this.ColorWriteChannels;
+
+            return clone;
         }
 
         public BlendFunction AlphaBlendFunction
