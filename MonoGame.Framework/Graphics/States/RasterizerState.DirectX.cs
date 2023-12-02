@@ -20,7 +20,15 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_state == null)
             {
-                _state = CreateDXState(this.GraphicsDevice.Strategy, context);
+                // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
+                // TODO: Need fixing. We create the rasterizerStateDesc based on
+                // the DepthFormat of the current rendertarget. When the user set
+                // a new rendertarget the DepthBias will be wrong.
+                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                              ? context._currentRenderTargetBindings[0].DepthFormat
+                                              : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
+
+                _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
             }
 
             // NOTE: We make the assumption here that the caller has
@@ -30,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
             context.D3dContext.Rasterizer.State = _state;
         }
 
-        internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, ConcreteGraphicsContext context)
+        internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, DepthFormat activeDepthFormat)
         {
             // Build the description.
             D3D11.RasterizerStateDescription rasterizerStateDesc = new D3D11.RasterizerStateDescription();
@@ -54,10 +62,6 @@ namespace Microsoft.Xna.Framework.Graphics
             rasterizerStateDesc.IsScissorEnabled = ScissorTestEnable;
             rasterizerStateDesc.IsMultisampleEnabled = MultiSampleAntiAlias;
 
-            // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-            DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                          ? context._currentRenderTargetBindings[0].DepthFormat
-                                          : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
             int depthMul;
             switch (activeDepthFormat)
             {
