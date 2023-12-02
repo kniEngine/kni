@@ -15,45 +15,48 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.SamplerState _state;
 
 
-        internal D3D11.SamplerState GetState(GraphicsContext context)
+        internal D3D11.SamplerState GetDxState()
         {
             if (_state == null)
             {
-                // Build the description.
-                D3D11.SamplerStateDescription samplerStateDesc = new D3D11.SamplerStateDescription();
-                samplerStateDesc.AddressU = ToDXTextureAddressMode(AddressU);
-                samplerStateDesc.AddressV = ToDXTextureAddressMode(AddressV);
-                samplerStateDesc.AddressW = ToDXTextureAddressMode(AddressW);
-
-#if WINDOWS_UAP
-                samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
-                    BorderColor.R / 255.0f,
-                    BorderColor.G / 255.0f,
-                    BorderColor.B / 255.0f,
-                    BorderColor.A / 255.0f);
-#else
-                samplerStateDesc.BorderColor = BorderColor.ToRawColor4();
-#endif
-
-                samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
-                samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, context.DeviceStrategy.Capabilities.MaxTextureAnisotropy);
-                samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
-                samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
-
-                // TODO: How do i do this?
-                samplerStateDesc.MinimumLod = 0.0f;
-
-                // To support feature level 9.1 these must 
-                // be set to these exact values.
-                samplerStateDesc.MaximumLod = float.MaxValue;
-
-                // Create the state.
-                _state = new D3D11.SamplerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, samplerStateDesc);
+                _state = CreateDXState(this.GraphicsDevice.Strategy);
             }
 
-            Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
-
             return _state;
+        }
+
+        internal D3D11.SamplerState CreateDXState(GraphicsDeviceStrategy deviceStrategy)
+        {
+            // Build the description.
+            D3D11.SamplerStateDescription samplerStateDesc = new D3D11.SamplerStateDescription();
+            samplerStateDesc.AddressU = ToDXTextureAddressMode(AddressU);
+            samplerStateDesc.AddressV = ToDXTextureAddressMode(AddressV);
+            samplerStateDesc.AddressW = ToDXTextureAddressMode(AddressW);
+
+#if WINDOWS_UAP
+            samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
+                BorderColor.R / 255.0f,
+                BorderColor.G / 255.0f,
+                BorderColor.B / 255.0f,
+                BorderColor.A / 255.0f);
+#else
+            samplerStateDesc.BorderColor = BorderColor.ToRawColor4();
+#endif
+
+            samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
+            samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, deviceStrategy.Capabilities.MaxTextureAnisotropy);
+            samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
+            samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
+
+            // TODO: How do i do this?
+            samplerStateDesc.MinimumLod = 0.0f;
+
+            // To support feature level 9.1 these must 
+            // be set to these exact values.
+            samplerStateDesc.MaximumLod = float.MaxValue;
+
+            // Create the state.
+            return new D3D11.SamplerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, samplerStateDesc);
         }
 
         private static D3D11.Filter ToDXTextureFilter(TextureFilter filter, TextureFilterMode mode)
