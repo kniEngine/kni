@@ -20,24 +20,29 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_state == null)
             {
-                // Build the description.
-                D3D11.BlendStateDescription blendStateDesc = new D3D11.BlendStateDescription();
-                BlendState.GetDXBlendDescription(_targetBlendState[0], ref blendStateDesc.RenderTarget[0]);
-                BlendState.GetDXBlendDescription(_targetBlendState[1], ref blendStateDesc.RenderTarget[1]);
-                BlendState.GetDXBlendDescription(_targetBlendState[2], ref blendStateDesc.RenderTarget[2]);
-                BlendState.GetDXBlendDescription(_targetBlendState[3], ref blendStateDesc.RenderTarget[3]);
-                blendStateDesc.IndependentBlendEnable = _independentBlendEnable;
-
-                // This is a new DX11 feature we should consider 
-                // exposing as part of the extended MonoGame API.
-                blendStateDesc.AlphaToCoverageEnable = false;
-
-                // Create the state.
-                _state = new D3D11.BlendState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, blendStateDesc);
+                _state = CreateDXState(this.GraphicsDevice.Strategy);
             }
 
             // Apply the state!
             return _state;
+        }
+
+        internal D3D11.BlendState CreateDXState(GraphicsDeviceStrategy deviceStrategy)
+        {
+            // Build the description.
+            D3D11.BlendStateDescription blendStateDesc = new D3D11.BlendStateDescription();
+            BlendState.GetDXBlendDescription(_targetBlendState[0], ref blendStateDesc.RenderTarget[0]);
+            BlendState.GetDXBlendDescription(_targetBlendState[1], ref blendStateDesc.RenderTarget[1]);
+            BlendState.GetDXBlendDescription(_targetBlendState[2], ref blendStateDesc.RenderTarget[2]);
+            BlendState.GetDXBlendDescription(_targetBlendState[3], ref blendStateDesc.RenderTarget[3]);
+            blendStateDesc.IndependentBlendEnable = _independentBlendEnable;
+
+            // This is a new DX11 feature we should consider 
+            // exposing as part of the extended MonoGame API.
+            blendStateDesc.AlphaToCoverageEnable = false;
+
+            // Create the state.
+            return new D3D11.BlendState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, blendStateDesc);
         }
 
         static private void GetDXBlendDescription(TargetBlendState blendStateTarget, ref D3D11.RenderTargetBlendDescription desc)

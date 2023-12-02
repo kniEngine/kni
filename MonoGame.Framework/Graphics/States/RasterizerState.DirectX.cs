@@ -20,73 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_state == null)
             {
-                // Build the description.
-                D3D11.RasterizerStateDescription rasterizerStateDesc = new D3D11.RasterizerStateDescription();
-
-                switch (CullMode)
-                {
-                    case Graphics.CullMode.None:
-                        rasterizerStateDesc.CullMode = D3D11.CullMode.None;
-                        break;
-
-                    case Graphics.CullMode.CullClockwiseFace:
-                        rasterizerStateDesc.CullMode = D3D11.CullMode.Front;
-                        break;
-
-                    case Graphics.CullMode.CullCounterClockwiseFace:
-                        rasterizerStateDesc.CullMode = D3D11.CullMode.Back;
-                        break;
-
-                    default:
-                        throw new InvalidOperationException("CullMode");
-                }
-
-                rasterizerStateDesc.IsScissorEnabled = ScissorTestEnable;
-                rasterizerStateDesc.IsMultisampleEnabled = MultiSampleAntiAlias;
-
-                // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                              ? context._currentRenderTargetBindings[0].DepthFormat
-                                              : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
-                int depthMul;
-                switch (activeDepthFormat)
-                {
-                    case DepthFormat.None:
-                        depthMul = 0;
-                        break;
-                    case DepthFormat.Depth16:
-                        depthMul = 1 << 16 - 1;
-                        break;
-                    case DepthFormat.Depth24:
-                    case DepthFormat.Depth24Stencil8:
-                        depthMul = 1 << 24 - 1;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                rasterizerStateDesc.DepthBias = (int) (DepthBias * depthMul);
-                rasterizerStateDesc.SlopeScaledDepthBias = SlopeScaleDepthBias;
-
-                if (FillMode == Graphics.FillMode.WireFrame)
-                    rasterizerStateDesc.FillMode = D3D11.FillMode.Wireframe;
-                else
-                    rasterizerStateDesc.FillMode = D3D11.FillMode.Solid;
-
-                rasterizerStateDesc.IsDepthClipEnabled = DepthClipEnable;
-
-                // These are new DX11 features we should consider exposing
-                // as part of the extended MonoGame API.
-                rasterizerStateDesc.IsFrontCounterClockwise = false;
-                rasterizerStateDesc.IsAntialiasedLineEnabled = false;
-
-                // To support feature level 9.1 these must 
-                // be set to these exact values.
-                rasterizerStateDesc.DepthBiasClamp = 0.0f;
-
-                // Create the state.
-                _state = new D3D11.RasterizerState(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
+                _state = CreateDXState(this.GraphicsDevice.Strategy, context);
             }
 
             // NOTE: We make the assumption here that the caller has
@@ -94,6 +28,75 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Apply the state.
             context.D3dContext.Rasterizer.State = _state;
+        }
+
+        internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, ConcreteGraphicsContext context)
+        {
+            // Build the description.
+            D3D11.RasterizerStateDescription rasterizerStateDesc = new D3D11.RasterizerStateDescription();
+
+            switch (CullMode)
+            {
+                case CullMode.None:
+                    rasterizerStateDesc.CullMode = D3D11.CullMode.None;
+                    break;
+                case CullMode.CullClockwiseFace:
+                    rasterizerStateDesc.CullMode = D3D11.CullMode.Front;
+                    break;
+                case CullMode.CullCounterClockwiseFace:
+                    rasterizerStateDesc.CullMode = D3D11.CullMode.Back;
+                    break;
+
+                default:
+                    throw new InvalidOperationException("CullMode");
+            }
+
+            rasterizerStateDesc.IsScissorEnabled = ScissorTestEnable;
+            rasterizerStateDesc.IsMultisampleEnabled = MultiSampleAntiAlias;
+
+            // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
+            DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                          ? context._currentRenderTargetBindings[0].DepthFormat
+                                          : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
+            int depthMul;
+            switch (activeDepthFormat)
+            {
+                case DepthFormat.None:
+                    depthMul = 0;
+                    break;
+                case DepthFormat.Depth16:
+                    depthMul = (1 << 16) - 1;
+                    break;
+                case DepthFormat.Depth24:
+                case DepthFormat.Depth24Stencil8:
+                    depthMul = (1 << 24) - 1;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            rasterizerStateDesc.DepthBias = (int)(DepthBias * depthMul);
+            rasterizerStateDesc.SlopeScaledDepthBias = SlopeScaleDepthBias;
+
+            if (FillMode == FillMode.WireFrame)
+                rasterizerStateDesc.FillMode = D3D11.FillMode.Wireframe;
+            else
+                rasterizerStateDesc.FillMode = D3D11.FillMode.Solid;
+
+            rasterizerStateDesc.IsDepthClipEnabled = DepthClipEnable;
+
+            // These are new DX11 features we should consider exposing
+            // as part of the extended MonoGame API.
+            rasterizerStateDesc.IsFrontCounterClockwise = false;
+            rasterizerStateDesc.IsAntialiasedLineEnabled = false;
+
+            // To support feature level 9.1 these must 
+            // be set to these exact values.
+            rasterizerStateDesc.DepthBiasClamp = 0.0f;
+
+            // Create the state.
+            return new D3D11.RasterizerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
         }
 
         partial void PlatformDispose(bool disposing)
