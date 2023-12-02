@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -62,7 +63,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 SamplerState sampler = _actualSamplers[i];
                 D3D11.SamplerState state = null;
                 if (sampler != null)
-                    state = sampler.GetState(_contextStrategy.Context);
+                {
+                    state = sampler.GetDxState();
+
+                    Debug.Assert(sampler.GraphicsDevice == _contextStrategy.Context.DeviceStrategy.Device, "The state was created for a different device!");
+                }
 
                 shaderStage.SetSampler(i, state);
 

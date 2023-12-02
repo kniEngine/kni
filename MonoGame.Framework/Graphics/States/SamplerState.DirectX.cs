@@ -15,14 +15,12 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.SamplerState _state;
 
 
-        internal D3D11.SamplerState GetState(GraphicsContext context)
+        internal D3D11.SamplerState GetDxState()
         {
             if (_state == null)
             {
                 _state = CreateDXState(this.GraphicsDevice.Strategy);
             }
-
-            Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
             return _state;
         }

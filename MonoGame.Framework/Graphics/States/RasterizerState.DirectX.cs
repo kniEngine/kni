@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.RasterizerState _state;
 
 
-        internal void PlatformApplyState(ConcreteGraphicsContext context)
+        internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
         {
             if (_state == null)
             {
@@ -31,11 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
             }
 
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-
-            // Apply the state.
-            context.D3dContext.Rasterizer.State = _state;
+            return _state;
         }
 
         internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, DepthFormat activeDepthFormat)

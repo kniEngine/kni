@@ -134,19 +134,23 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(this.D3dContext != null, "The d3d context is null!");
 
+            // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
+
             {
                 PlatformApplyBlend();
             }
 
             if (_depthStencilStateDirty)
             {
-                _actualDepthStencilState.PlatformApplyState(this);
+                D3D11.DepthStencilState depthStencilState = _actualDepthStencilState.GetDxState();
+                this.D3dContext.OutputMerger.SetDepthStencilState(depthStencilState, _actualDepthStencilState.ReferenceStencil);
                 _depthStencilStateDirty = false;
             }
 
             if (_rasterizerStateDirty)
             {
-                _actualRasterizerState.PlatformApplyState(this);
+                D3D11.RasterizerState rasterizerState = _actualRasterizerState.GetDxState(this);
+                this.D3dContext.Rasterizer.State = rasterizerState;
                 _rasterizerStateDirty = false;
             }
 
@@ -161,7 +165,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_blendStateDirty || _blendFactorDirty)
             {
-                D3D11.BlendState blendState = _actualBlendState.GetDxState(this);
+                D3D11.BlendState blendState = _actualBlendState.GetDxState();
                 RawColor4 blendFactor = BlendFactor.ToRawColor4();
                 this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 

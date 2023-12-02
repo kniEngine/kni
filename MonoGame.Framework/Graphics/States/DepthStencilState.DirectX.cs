@@ -16,18 +16,14 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.DepthStencilState _state;
 
 
-        internal void PlatformApplyState(ConcreteGraphicsContext context)
+        internal D3D11.DepthStencilState GetDxState()
         {
             if (_state == null)
             {
                 _state = CreateDXState(this.GraphicsDevice.Strategy);
             }
 
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-
-            // Apply the state.
-            context.D3dContext.OutputMerger.SetDepthStencilState(_state, ReferenceStencil);
+            return _state;
         }
 
         internal D3D11.DepthStencilState CreateDXState(GraphicsDeviceStrategy deviceStrategy)

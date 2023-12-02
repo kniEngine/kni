@@ -16,14 +16,13 @@ namespace Microsoft.Xna.Framework.Graphics
         private D3D11.BlendState _state;
 
 
-        internal D3D11.BlendState GetDxState(ConcreteGraphicsContext context)
+        internal D3D11.BlendState GetDxState()
         {
             if (_state == null)
             {
                 _state = CreateDXState(this.GraphicsDevice.Strategy);
             }
 
-            // Apply the state!
             return _state;
         }
 
