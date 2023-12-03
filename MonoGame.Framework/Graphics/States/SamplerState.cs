@@ -172,14 +172,14 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public SamplerState()
-            : base(true)
+            : base()
         {
             _strategy = new SamplerStateStrategy();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private SamplerState(string name, TextureFilter filter, TextureAddressMode addressMode)
-            : base(true)
+            : base()
         {
             Name = name;
             _strategy = new ReadonlySamplerStateStrategy(filter, addressMode);
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         internal SamplerState(SamplerState source)
-            : base(true)
+            : base()
         {
             Name = source.Name;
             _strategy = new SamplerStateStrategy(source._strategy);
