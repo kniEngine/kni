@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
