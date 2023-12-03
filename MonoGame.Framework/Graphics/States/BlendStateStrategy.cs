@@ -10,11 +10,17 @@ namespace Microsoft.Xna.Framework.Graphics
         private int _multiSampleMask;
 
         private bool _independentBlendEnable;
+        private readonly TargetBlendState[] _targetBlendState;
 
         public virtual bool IndependentBlendEnable
         {
             get { return _independentBlendEnable; }
             set { _independentBlendEnable = value; }
+        }
+
+        public TargetBlendState[] Targets
+        {
+            get { return _targetBlendState; }
         }
 
         public virtual Color BlendFactor
@@ -95,6 +101,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _multiSampleMask = Int32.MaxValue;
 
             _independentBlendEnable = false;
+            _targetBlendState = new TargetBlendState[4];
 
             //_alphaBlendFunction = BlendFunction.Add;
             //_alphaDestinationBlend = Blend.Zero;
@@ -114,6 +121,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._multiSampleMask = source.MultiSampleMask;
 
             _independentBlendEnable = source.IndependentBlendEnable;
+            _targetBlendState = new TargetBlendState[4];
 
             //_alphaBlendFunction = source.AlphaBlendFunction;
             //_alphaDestinationBlend = source.AlphaDestinationBlend;

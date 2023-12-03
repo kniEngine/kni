@@ -30,10 +30,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Build the description.
             D3D11.BlendStateDescription blendStateDesc = new D3D11.BlendStateDescription();
-            BlendState.GetDXBlendDescription(_targetBlendState[0], ref blendStateDesc.RenderTarget[0]);
-            BlendState.GetDXBlendDescription(_targetBlendState[1], ref blendStateDesc.RenderTarget[1]);
-            BlendState.GetDXBlendDescription(_targetBlendState[2], ref blendStateDesc.RenderTarget[2]);
-            BlendState.GetDXBlendDescription(_targetBlendState[3], ref blendStateDesc.RenderTarget[3]);
+            BlendState.GetDXBlendDescription(_strategy.Targets[0], ref blendStateDesc.RenderTarget[0]);
+            BlendState.GetDXBlendDescription(_strategy.Targets[1], ref blendStateDesc.RenderTarget[1]);
+            BlendState.GetDXBlendDescription(_strategy.Targets[2], ref blendStateDesc.RenderTarget[2]);
+            BlendState.GetDXBlendDescription(_strategy.Targets[3], ref blendStateDesc.RenderTarget[3]);
             blendStateDesc.IndependentBlendEnable = _strategy.IndependentBlendEnable;
 
             // This is a new DX11 feature we should consider 
