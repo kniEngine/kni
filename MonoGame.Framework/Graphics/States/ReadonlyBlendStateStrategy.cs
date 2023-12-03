@@ -6,6 +6,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal class ReadonlyBlendStateStrategy : BlendStateStrategy
     {
+        public override bool IndependentBlendEnable
+        {
+            get { return base.IndependentBlendEnable; }
+            set { throw new InvalidOperationException("The state object is readonly."); }
+        }
+
         public override Color BlendFactor
         {
             get { return base.BlendFactor; }
@@ -62,29 +68,35 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public override ColorWriteChannels ColorWriteChannels1
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels1; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
         public override ColorWriteChannels ColorWriteChannels2
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels2; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
         public override ColorWriteChannels ColorWriteChannels3
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels3; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
 
-        public ReadonlyBlendStateStrategy(Blend sourceBlend, Blend destinationBlend)
+        public ReadonlyBlendStateStrategy(Blend sourceBlend, Blend destinationBlend, BlendState blendState)
+            : base(blendState)
         {
             //base.ColorSourceBlend = sourceBlend;
             //base.AlphaSourceBlend = sourceBlend;
             //base.ColorDestinationBlend = destinationBlend;
             //base.AlphaDestinationBlend = destinationBlend;
+
+            base.Targets[0] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
+            base.Targets[1] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
+            base.Targets[2] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
+            base.Targets[3] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
         }
     }
 }

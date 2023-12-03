@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 context._lastBlendEnable = blendEnabled;
             }
 
-            if (!_independentBlendEnable)
+            if (!_strategy.IndependentBlendEnable)
             {
                 if (force ||
                     this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
@@ -70,38 +70,38 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
             }
-            else
+            else // (_strategy.IndependentBlendEnable == true)
             {
                 for (int i = 0; i < 4; i++)
                 {
                     if (force ||
-                        _targetBlendState[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
-                        _targetBlendState[i].AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
+                        _strategy.Targets[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
+                        _strategy.Targets[i].AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
                     {
                         GL.BlendEquationSeparatei(i,
-                            ToGLBlendEquationMode(_targetBlendState[i].ColorBlendFunction),
-                            ToGLBlendEquationMode(_targetBlendState[i].AlphaBlendFunction));
+                            ToGLBlendEquationMode(_strategy.Targets[i].ColorBlendFunction),
+                            ToGLBlendEquationMode(_strategy.Targets[i].AlphaBlendFunction));
                         GL.CheckGLError();
-                        context._lastBlendState[i].ColorBlendFunction = _targetBlendState[i].ColorBlendFunction;
-                        context._lastBlendState[i].AlphaBlendFunction = _targetBlendState[i].AlphaBlendFunction;
+                        context._lastBlendState[i].ColorBlendFunction = _strategy.Targets[i].ColorBlendFunction;
+                        context._lastBlendState[i].AlphaBlendFunction = _strategy.Targets[i].AlphaBlendFunction;
                     }
 
                     if (force ||
-                        _targetBlendState[i].ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
-                        _targetBlendState[i].ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
-                        _targetBlendState[i].AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
-                        _targetBlendState[i].AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
+                        _strategy.Targets[i].ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
+                        _strategy.Targets[i].ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
+                        _strategy.Targets[i].AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
+                        _strategy.Targets[i].AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
                     {
                         GL.BlendFuncSeparatei(i,
-                            ToGLBlendFunc(_targetBlendState[i].ColorSourceBlend),
-                            ToGLBlendFunc(_targetBlendState[i].ColorDestinationBlend),
-                            ToGLBlendFunc(_targetBlendState[i].AlphaSourceBlend),
-                            ToGLBlendFunc(_targetBlendState[i].AlphaDestinationBlend));
+                            ToGLBlendFunc(_strategy.Targets[i].ColorSourceBlend),
+                            ToGLBlendFunc(_strategy.Targets[i].ColorDestinationBlend),
+                            ToGLBlendFunc(_strategy.Targets[i].AlphaSourceBlend),
+                            ToGLBlendFunc(_strategy.Targets[i].AlphaDestinationBlend));
                         GL.CheckGLError();
-                        context._lastBlendState[i].ColorSourceBlend = _targetBlendState[i].ColorSourceBlend;
-                        context._lastBlendState[i].ColorDestinationBlend = _targetBlendState[i].ColorDestinationBlend;
-                        context._lastBlendState[i].AlphaSourceBlend = _targetBlendState[i].AlphaSourceBlend;
-                        context._lastBlendState[i].AlphaDestinationBlend = _targetBlendState[i].AlphaDestinationBlend;
+                        context._lastBlendState[i].ColorSourceBlend = _strategy.Targets[i].ColorSourceBlend;
+                        context._lastBlendState[i].ColorDestinationBlend = _strategy.Targets[i].ColorDestinationBlend;
+                        context._lastBlendState[i].AlphaSourceBlend = _strategy.Targets[i].AlphaSourceBlend;
+                        context._lastBlendState[i].AlphaDestinationBlend = _strategy.Targets[i].AlphaDestinationBlend;
                     }
                 }
             }
