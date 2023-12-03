@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public ReadonlySamplerStateStrategy(TextureFilter filter, TextureAddressMode addressMode)
-            :base()
+            : base()
         {
             base.Filter = filter;
             base.AddressU = addressMode;
