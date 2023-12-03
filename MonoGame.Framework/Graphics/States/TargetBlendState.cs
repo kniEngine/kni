@@ -8,7 +8,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public class TargetBlendState
     {
-        private readonly BlendState _parent;
+        private readonly IBlendStateStrategy _parentStrategy;
+        private readonly BlendState _parentBlendState;
+
         private BlendFunction _alphaBlendFunction;
         private Blend _alphaDestinationBlend;
         private Blend _alphaSourceBlend;
@@ -17,9 +19,11 @@ namespace Microsoft.Xna.Framework.Graphics
         private Blend _colorSourceBlend;
         private ColorWriteChannels _colorWriteChannels;
 
-        internal TargetBlendState(BlendState parent)
+        internal TargetBlendState(IBlendStateStrategy parentStrategy, BlendState parentBlendState)
         {
-            _parent = parent;
+            _parentStrategy = parentStrategy;
+            _parentBlendState = parentBlendState;
+
             _alphaBlendFunction = BlendFunction.Add;
             _alphaDestinationBlend = Blend.Zero;
             _alphaSourceBlend = Blend.One;
@@ -29,8 +33,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _colorWriteChannels = ColorWriteChannels.All;
         }
 
-        internal TargetBlendState(BlendState parent, Blend sourceBlend, Blend destinationBlend) 
-            : this(parent)
+        internal TargetBlendState(IBlendStateStrategy parentStrategy, BlendState parentBlendState, Blend sourceBlend, Blend destinationBlend) 
+            : this(parentStrategy, parentBlendState)
         {
             _colorSourceBlend = sourceBlend;
             _alphaSourceBlend = sourceBlend;
@@ -38,18 +42,18 @@ namespace Microsoft.Xna.Framework.Graphics
             _alphaDestinationBlend = destinationBlend;
         }
 
-        internal TargetBlendState Clone(BlendState parent)
+        internal TargetBlendState(TargetBlendState source, IBlendStateStrategy parentStrategy, BlendState parentBlendState)
         {
-            TargetBlendState clone = new TargetBlendState(parent);
-            clone.AlphaBlendFunction = this.AlphaBlendFunction;
-            clone.AlphaDestinationBlend = this.AlphaDestinationBlend;
-            clone.AlphaSourceBlend = this.AlphaSourceBlend;
-            clone.ColorBlendFunction = this.ColorBlendFunction;
-            clone.ColorDestinationBlend = this.ColorDestinationBlend;
-            clone.ColorSourceBlend = this.ColorSourceBlend;
-            clone.ColorWriteChannels = this.ColorWriteChannels;
+            _parentStrategy = parentStrategy;
+            _parentBlendState = parentBlendState;
 
-            return clone;
+            this._alphaBlendFunction = source.AlphaBlendFunction;
+            this._alphaDestinationBlend = source.AlphaDestinationBlend;
+            this._alphaSourceBlend = source.AlphaSourceBlend;
+            this._colorBlendFunction = source.ColorBlendFunction;
+            this._colorDestinationBlend = source.ColorDestinationBlend;
+            this._colorSourceBlend = source.ColorSourceBlend;
+            this._colorWriteChannels = source.ColorWriteChannels;
         }
 
         public BlendFunction AlphaBlendFunction
@@ -57,9 +61,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _alphaBlendFunction; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _alphaBlendFunction = value;
@@ -71,9 +75,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _alphaDestinationBlend; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _alphaDestinationBlend = value;
@@ -85,9 +89,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _alphaSourceBlend; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _alphaSourceBlend = value;
@@ -99,9 +103,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _colorBlendFunction; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _colorBlendFunction = value;
@@ -113,9 +117,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _colorDestinationBlend; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _colorDestinationBlend = value;
@@ -127,9 +131,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _colorSourceBlend; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _colorSourceBlend = value;
@@ -141,9 +145,9 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _colorWriteChannels; }
             set
             {
-                if (_parent._strategy is ReadonlyBlendStateStrategy)
+                if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (_parent.GraphicsDevice != null)
+                if (_parentBlendState.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
                 _colorWriteChannels = value;

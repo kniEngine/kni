@@ -223,36 +223,21 @@ namespace Microsoft.Xna.Framework.Graphics
         public BlendState()
             : base()
         {
-            _strategy = new BlendStateStrategy();
-
-            _strategy.Targets[0] = new TargetBlendState(this);
-            _strategy.Targets[1] = new TargetBlendState(this);
-            _strategy.Targets[2] = new TargetBlendState(this);
-            _strategy.Targets[3] = new TargetBlendState(this);
+            _strategy = new BlendStateStrategy(this);
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
             : base()
         {
             Name = name;
-            _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend);
-
-            _strategy.Targets[0] = new TargetBlendState(this, sourceBlend, destinationBlend);
-            _strategy.Targets[1] = new TargetBlendState(this, sourceBlend, destinationBlend);
-            _strategy.Targets[2] = new TargetBlendState(this, sourceBlend, destinationBlend);
-            _strategy.Targets[3] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend, this);
         }
 
         internal BlendState(BlendState source)
             : base()
         {
             Name = source.Name;
-            _strategy = new BlendStateStrategy(source._strategy);
-
-            _strategy.Targets[0] = source[0].Clone(this);
-            _strategy.Targets[1] = source[1].Clone(this);
-            _strategy.Targets[2] = source[2].Clone(this);
-            _strategy.Targets[3] = source[3].Clone(this);
+            _strategy = new BlendStateStrategy(source._strategy, this);
         }
 
         partial void PlatformDispose(bool disposing);

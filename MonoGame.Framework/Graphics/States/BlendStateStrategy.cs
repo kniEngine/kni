@@ -95,13 +95,17 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _targetBlendState[3].ColorWriteChannels = value; }
         }
 
-        public BlendStateStrategy()
+        public BlendStateStrategy(BlendState blendState)
         {
             _blendFactor = Color.White;
             _multiSampleMask = Int32.MaxValue;
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
+            _targetBlendState[0] = new TargetBlendState(this, blendState);
+            _targetBlendState[1] = new TargetBlendState(this, blendState);
+            _targetBlendState[2] = new TargetBlendState(this, blendState);
+            _targetBlendState[3] = new TargetBlendState(this, blendState);
 
             //_alphaBlendFunction = BlendFunction.Add;
             //_alphaDestinationBlend = Blend.Zero;
@@ -115,13 +119,17 @@ namespace Microsoft.Xna.Framework.Graphics
             //_colorWriteChannels3 = ColorWriteChannels3.All;
         }
 
-        internal BlendStateStrategy(IBlendStateStrategy source)
+        internal BlendStateStrategy(IBlendStateStrategy source, BlendState blendState)
         {
             this._blendFactor = source.BlendFactor;
             this._multiSampleMask = source.MultiSampleMask;
 
             _independentBlendEnable = source.IndependentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
+            _targetBlendState[0] = new TargetBlendState(source.Targets[0], source, blendState);
+            _targetBlendState[1] = new TargetBlendState(source.Targets[1], source, blendState);
+            _targetBlendState[2] = new TargetBlendState(source.Targets[2], source, blendState);
+            _targetBlendState[3] = new TargetBlendState(source.Targets[3], source, blendState);
 
             //_alphaBlendFunction = source.AlphaBlendFunction;
             //_alphaDestinationBlend = source.AlphaDestinationBlend;
