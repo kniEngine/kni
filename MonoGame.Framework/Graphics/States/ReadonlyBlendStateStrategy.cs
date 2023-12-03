@@ -68,19 +68,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public override ColorWriteChannels ColorWriteChannels1
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels1; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
         public override ColorWriteChannels ColorWriteChannels2
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels2; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
         public override ColorWriteChannels ColorWriteChannels3
         {
-            get { return base.ColorWriteChannels; }
+            get { return base.ColorWriteChannels3; }
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
