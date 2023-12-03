@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         internal Shader()
-            : base(true)
+            : base()
         {
         }
 

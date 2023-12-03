@@ -222,14 +222,14 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public BlendState()
-            : base(true)
+            : base()
         {
             _strategy = new BlendStateStrategy(this);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : base(true)
+            : base()
         {
             Name = name;
             _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend, this);
@@ -237,7 +237,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         internal BlendState(BlendState source)
-            : base(true)
+            : base()
         {
             Name = source.Name;
             _strategy = new BlendStateStrategy(source._strategy, this);

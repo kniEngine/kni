@@ -126,14 +126,14 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public RasterizerState()
-            : base(true)
+            : base()
         {
             _strategy = new RasterizerStateStrategy();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private RasterizerState(string name, CullMode cullMode)
-            : base(true)
+            : base()
         {
             Name = name;
             _strategy = new ReadonlyRasterizerStateStrategy(cullMode);
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         internal RasterizerState(RasterizerState source)
-            : base(true)
+            : base()
         {
             Name = source.Name;
             _strategy = new RasterizerStateStrategy(source._strategy);

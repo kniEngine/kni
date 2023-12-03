@@ -234,14 +234,14 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public DepthStencilState()
-            : base(true)
+            : base()
         {
             _strategy = new DepthStencilStateStrategy();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
-            : base(true)
+            : base()
         {
             Name = name;
             _strategy = new ReadonlyDepthStencilStateStrategy(depthBufferEnable, depthBufferWriteEnable);
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         internal DepthStencilState(DepthStencilState source)
-            : base(true)
+            : base()
         {
             Name = source.Name;
             _strategy = new DepthStencilStateStrategy(source._strategy);

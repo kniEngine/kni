@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) :
-            base(true)
+            base()
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         protected VertexBuffer()
-            : base(true)
+            : base()
         {
 		}
 

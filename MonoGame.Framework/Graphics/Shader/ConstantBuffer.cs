@@ -22,14 +22,14 @@ namespace Microsoft.Xna.Framework.Graphics
                               int[] parameterOffsets,
                               int sizeInBytes,
                               ShaderProfileType profile)
-            : base(true)
+            : base()
         {
             _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         public ConstantBuffer(ConstantBuffer cloneSource)
-            : base(true)
+            : base()
         {
             _strategy = (ConstantBufferStrategy)cloneSource._strategy.Clone();
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
