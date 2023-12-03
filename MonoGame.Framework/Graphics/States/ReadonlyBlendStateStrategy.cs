@@ -1,8 +1,10 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     internal class ReadonlyBlendStateStrategy : BlendStateStrategy
     {

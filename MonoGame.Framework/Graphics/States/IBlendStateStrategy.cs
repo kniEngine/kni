@@ -1,6 +1,10 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework.Graphics
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Microsoft.Xna.Platform.Graphics
 {
     internal interface IBlendStateStrategy
     {
