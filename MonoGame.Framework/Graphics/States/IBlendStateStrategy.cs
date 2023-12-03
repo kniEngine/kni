@@ -4,6 +4,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal interface IBlendStateStrategy
     {
+        bool IndependentBlendEnable { get; set; }
+
         Color BlendFactor { get; set; }
         int MultiSampleMask { get; set; }
         BlendFunction AlphaBlendFunction { get; set; }

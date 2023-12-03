@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 context._lastBlendEnable = blendEnabled;
             }
 
-            if (!_independentBlendEnable)
+            if (!_strategy.IndependentBlendEnable)
             {
                 if (force ||
                     this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     }
                 }
             }
-            else
+            else // (_strategy.IndependentBlendEnable == true)
             {
                 for (int i = 0; i < 4; i++)
                 {

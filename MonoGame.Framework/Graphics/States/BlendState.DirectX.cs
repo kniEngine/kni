@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.Graphics
             BlendState.GetDXBlendDescription(_targetBlendState[1], ref blendStateDesc.RenderTarget[1]);
             BlendState.GetDXBlendDescription(_targetBlendState[2], ref blendStateDesc.RenderTarget[2]);
             BlendState.GetDXBlendDescription(_targetBlendState[3], ref blendStateDesc.RenderTarget[3]);
-            blendStateDesc.IndependentBlendEnable = _independentBlendEnable;
+            blendStateDesc.IndependentBlendEnable = _strategy.IndependentBlendEnable;
 
             // This is a new DX11 feature we should consider 
             // exposing as part of the extended MonoGame API.

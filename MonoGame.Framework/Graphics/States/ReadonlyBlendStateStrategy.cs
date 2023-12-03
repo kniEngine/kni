@@ -6,6 +6,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     internal class ReadonlyBlendStateStrategy : BlendStateStrategy
     {
+        public override bool IndependentBlendEnable
+        {
+            get { return base.IndependentBlendEnable; }
+            set { throw new InvalidOperationException("The state object is readonly."); }
+        }
+
         public override Color BlendFactor
         {
             get { return base.BlendFactor; }
@@ -80,6 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         public ReadonlyBlendStateStrategy(Blend sourceBlend, Blend destinationBlend)
+            : base()
         {
             //base.ColorSourceBlend = sourceBlend;
             //base.AlphaSourceBlend = sourceBlend;

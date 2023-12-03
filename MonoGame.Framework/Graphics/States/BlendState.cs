@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
         }
 
-        private bool _independentBlendEnable;
         private readonly TargetBlendState[] _targetBlendState;
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public bool IndependentBlendEnable
         {
-            get { return _independentBlendEnable; }
+            get { return _strategy.IndependentBlendEnable; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -41,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _independentBlendEnable = value;
+                _strategy.IndependentBlendEnable = value;
             }
         }
 
@@ -248,7 +247,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _strategy = new BlendStateStrategy();
 
-            _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this);
             _targetBlendState[1] = new TargetBlendState(this);
@@ -262,7 +260,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Name = name;
             _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend);
 
-            _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this, sourceBlend, destinationBlend);
             _targetBlendState[1] = new TargetBlendState(this, sourceBlend, destinationBlend);
@@ -276,7 +273,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Name = source.Name;
             _strategy = new BlendStateStrategy(source._strategy);
 
-            _independentBlendEnable = source._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = source[0].Clone(this);
             _targetBlendState[1] = source[1].Clone(this);
