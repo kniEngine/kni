@@ -32,12 +32,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _contextStrategy = contextStrategy;
 
-            _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
-            _samplerStateAnisotropicWrap = SamplerState.AnisotropicWrap.Clone();
-            _samplerStateLinearClamp = SamplerState.LinearClamp.Clone();
-            _samplerStateLinearWrap = SamplerState.LinearWrap.Clone();
-            _samplerStatePointClamp = SamplerState.PointClamp.Clone();
-            _samplerStatePointWrap = SamplerState.PointWrap.Clone();
+            _samplerStateAnisotropicClamp = new SamplerState(SamplerState.AnisotropicClamp);
+            _samplerStateAnisotropicWrap = new SamplerState(SamplerState.AnisotropicWrap);
+            _samplerStateLinearClamp = new SamplerState(SamplerState.LinearClamp);
+            _samplerStateLinearWrap = new SamplerState(SamplerState.LinearWrap);
+            _samplerStatePointClamp = new SamplerState(SamplerState.PointClamp);
+            _samplerStatePointWrap = new SamplerState(SamplerState.PointWrap);
 
             _samplers = new SamplerState[capacity];
             _actualSamplers = new SamplerState[capacity];

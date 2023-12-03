@@ -132,12 +132,32 @@ namespace Microsoft.Xna.Framework.Graphics
             _stencilDepthBufferFail = StencilOperation.Keep;
             _twoSidedStencilMode = false;
             _counterClockwiseStencilFunction = CompareFunction.Always;
-            _counterClockwiseStencilFail = StencilOperation.Keep;
             _counterClockwiseStencilPass = StencilOperation.Keep;
+            _counterClockwiseStencilFail = StencilOperation.Keep;
             _counterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
             _stencilMask = Int32.MaxValue;
             _stencilWriteMask = Int32.MaxValue;
             _referenceStencil = 0;
+        }
+
+        internal DepthStencilStateStrategy(IDepthStencilStateStrategy source)
+        {
+            _depthBufferEnable = source.DepthBufferEnable;
+            _depthBufferWriteEnable = source.DepthBufferWriteEnable;
+            _depthBufferFunction = source.DepthBufferFunction;
+            _stencilEnable = source.StencilEnable;
+            _stencilFunction = source.StencilFunction;
+            _stencilPass = source.StencilPass;
+            _stencilFail = source.StencilFail;
+            _stencilDepthBufferFail = source.StencilDepthBufferFail;
+            _twoSidedStencilMode = source.TwoSidedStencilMode;
+            _counterClockwiseStencilFunction = source.CounterClockwiseStencilFunction;
+            _counterClockwiseStencilPass = source.CounterClockwiseStencilPass;
+            _counterClockwiseStencilFail = source.CounterClockwiseStencilFail;
+            _counterClockwiseStencilDepthBufferFail = source.CounterClockwiseStencilDepthBufferFail;
+            _stencilMask = source.StencilMask;
+            _stencilWriteMask = source.StencilWriteMask;
+            _referenceStencil = source.ReferenceStencil;
         }
     }
 }

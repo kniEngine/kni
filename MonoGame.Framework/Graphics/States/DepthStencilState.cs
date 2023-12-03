@@ -245,33 +245,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new ReadonlyDepthStencilStateStrategy(depthBufferEnable, depthBufferWriteEnable);
         }
 
-        private DepthStencilState(DepthStencilState cloneSource)
+        internal DepthStencilState(DepthStencilState source)
+            : base()
         {
-            Name = cloneSource.Name;
-
-            _strategy = new DepthStencilStateStrategy();
-
-            _strategy.DepthBufferEnable = cloneSource._strategy.DepthBufferEnable;
-            _strategy.DepthBufferWriteEnable = cloneSource._strategy.DepthBufferWriteEnable;
-            _strategy.CounterClockwiseStencilDepthBufferFail = cloneSource._strategy.CounterClockwiseStencilDepthBufferFail;
-            _strategy.CounterClockwiseStencilFail = cloneSource._strategy.CounterClockwiseStencilFail;
-            _strategy.CounterClockwiseStencilFunction = cloneSource._strategy.CounterClockwiseStencilFunction;
-            _strategy.CounterClockwiseStencilPass = cloneSource._strategy.CounterClockwiseStencilPass;
-            _strategy.DepthBufferFunction = cloneSource._strategy.DepthBufferFunction;
-            _strategy.ReferenceStencil = cloneSource._strategy.ReferenceStencil;
-            _strategy.StencilDepthBufferFail = cloneSource._strategy.StencilDepthBufferFail;
-            _strategy.StencilEnable = cloneSource._strategy.StencilEnable;
-            _strategy.StencilFail = cloneSource._strategy.StencilFail;
-            _strategy.StencilFunction = cloneSource._strategy.StencilFunction;
-            _strategy.StencilMask = cloneSource._strategy.StencilMask;
-            _strategy.StencilPass = cloneSource._strategy.StencilPass;
-            _strategy.StencilWriteMask = cloneSource._strategy.StencilWriteMask;
-            _strategy.TwoSidedStencilMode = cloneSource._strategy.TwoSidedStencilMode;
-        }
-
-        internal DepthStencilState Clone()
-        {
-            return new DepthStencilState(this);
+            Name = source.Name;
+            _strategy = new DepthStencilStateStrategy(source._strategy);
         }
 
         partial void PlatformDispose(bool disposing);

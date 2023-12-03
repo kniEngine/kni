@@ -92,7 +92,27 @@ namespace Microsoft.Xna.Framework.Graphics
             //_colorBlendFunction = BlendFunction.Add;
             //_colorDestinationBlend = Blend.Zero;
             //_colorSourceBlend = Blend.One;
-            //_colorWriteChannels = ColorWriteChannels.All;
+            //_colorWriteChannels  = ColorWriteChannels.All;
+            //_colorWriteChannels1 = ColorWriteChannels1.All;
+            //_colorWriteChannels2 = ColorWriteChannels2.All;
+            //_colorWriteChannels3 = ColorWriteChannels3.All;
+        }
+
+        internal BlendStateStrategy(IBlendStateStrategy source)
+        {
+            this._blendFactor = source.BlendFactor;
+            this._multiSampleMask = source.MultiSampleMask;
+
+            //_alphaBlendFunction = source.AlphaBlendFunction;
+            //_alphaDestinationBlend = source.AlphaDestinationBlend;
+            //_alphaSourceBlend = source.AlphaSourceBlend;
+            //_colorBlendFunction = source.ColorBlendFunction;
+            //_colorDestinationBlend = source.ColorDestinationBlend;
+            //_colorSourceBlend = source.ColorSourceBlend;
+            //_colorWriteChannels  = source.ColorWriteChannels;
+            //_colorWriteChannels1 = source.ColorWriteChannels1;
+            //_colorWriteChannels2 = source.ColorWriteChannels2;
+            //_colorWriteChannels3 = source.ColorWriteChannels3;
         }
     }
 }

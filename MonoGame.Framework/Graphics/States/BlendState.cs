@@ -270,25 +270,18 @@ namespace Microsoft.Xna.Framework.Graphics
             _targetBlendState[3] = new TargetBlendState(this, sourceBlend, destinationBlend);
         }
 
-        private BlendState(BlendState cloneSource)
+        internal BlendState(BlendState source)
+            : base()
         {
-            Name = cloneSource.Name;
+            Name = source.Name;
+            _strategy = new BlendStateStrategy(source._strategy);
 
-            _strategy = new BlendStateStrategy();
-            _strategy.BlendFactor = cloneSource._strategy.BlendFactor;
-            _strategy.MultiSampleMask = cloneSource._strategy.MultiSampleMask;
-
-            _independentBlendEnable = cloneSource._independentBlendEnable;
+            _independentBlendEnable = source._independentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = cloneSource[0].Clone(this);
-            _targetBlendState[1] = cloneSource[1].Clone(this);
-            _targetBlendState[2] = cloneSource[2].Clone(this);
-            _targetBlendState[3] = cloneSource[3].Clone(this);
-        }
-
-        internal BlendState Clone()
-        {
-            return new BlendState(this);
+            _targetBlendState[0] = source[0].Clone(this);
+            _targetBlendState[1] = source[1].Clone(this);
+            _targetBlendState[2] = source[2].Clone(this);
+            _targetBlendState[3] = source[3].Clone(this);
         }
 
         partial void PlatformDispose(bool disposing);

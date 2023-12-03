@@ -166,22 +166,22 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy._mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxTextureSlots);
             _strategy._mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxVertexTextureSlots);
 
-            _strategy._mainContext.Strategy._blendStateAdditive = BlendState.Additive.Clone();
-            _strategy._mainContext.Strategy._blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
-            _strategy._mainContext.Strategy._blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();
-            _strategy._mainContext.Strategy._blendStateOpaque = BlendState.Opaque.Clone();
+            _strategy._mainContext.Strategy._blendStateAdditive = new BlendState(BlendState.Additive);
+            _strategy._mainContext.Strategy._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
+            _strategy._mainContext.Strategy._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
+            _strategy._mainContext.Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
 
             _strategy._mainContext.Strategy.BlendState = BlendState.Opaque;
 
-            _strategy._mainContext.Strategy._depthStencilStateDefault = DepthStencilState.Default.Clone();
-            _strategy._mainContext.Strategy._depthStencilStateDepthRead = DepthStencilState.DepthRead.Clone();
-            _strategy._mainContext.Strategy._depthStencilStateNone = DepthStencilState.None.Clone();
+            _strategy._mainContext.Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
+            _strategy._mainContext.Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
+            _strategy._mainContext.Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
 
             _strategy._mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
 
-            _strategy._mainContext.Strategy._rasterizerStateCullClockwise = RasterizerState.CullClockwise.Clone();
-            _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise = RasterizerState.CullCounterClockwise.Clone();
-            _strategy._mainContext.Strategy._rasterizerStateCullNone = RasterizerState.CullNone.Clone();
+            _strategy._mainContext.Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
+            _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
+            _strategy._mainContext.Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
 
             _strategy._mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
