@@ -44,12 +44,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Debug.Assert(hasStrategy == true); // parent class will set the _strategy
         }
 
-        internal GraphicsResource()
-        {
-            IGraphicsResourceStrategy strategy = new GraphicsResourceStrategy();
-            SetResourceStrategy(strategy);
-        }
-
         protected GraphicsResource(GraphicsDevice device)
         {
             if (device == null)
