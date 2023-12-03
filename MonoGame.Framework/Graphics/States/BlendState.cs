@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BlendFunction AlphaBlendFunction
         {
-            get { return _strategy.Targets[0].AlphaBlendFunction; }
+            get { return _strategy.AlphaBlendFunction; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Blend AlphaDestinationBlend
         {
-            get { return _strategy.Targets[0].AlphaDestinationBlend; }
+            get { return _strategy.AlphaDestinationBlend; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Blend AlphaSourceBlend
         {
-            get { return _strategy.Targets[0].AlphaSourceBlend; }
+            get { return _strategy.AlphaSourceBlend; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BlendFunction ColorBlendFunction
         {
-            get { return _strategy.Targets[0].ColorBlendFunction; }
+            get { return _strategy.ColorBlendFunction; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Blend ColorDestinationBlend
         {
-            get { return _strategy.Targets[0].ColorDestinationBlend; }
+            get { return _strategy.ColorDestinationBlend; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Blend ColorSourceBlend
         {
-            get { return _strategy.Targets[0].ColorSourceBlend; }
+            get { return _strategy.ColorSourceBlend; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public ColorWriteChannels ColorWriteChannels
         {
-            get { return _strategy.Targets[0].ColorWriteChannels; }
+            get { return _strategy.ColorWriteChannels; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public ColorWriteChannels ColorWriteChannels1
         {
-            get { return _strategy.Targets[1].ColorWriteChannels; }
+            get { return _strategy.ColorWriteChannels1; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public ColorWriteChannels ColorWriteChannels2
         {
-            get { return _strategy.Targets[2].ColorWriteChannels; }
+            get { return _strategy.ColorWriteChannels2; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)
@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public ColorWriteChannels ColorWriteChannels3
         {
-            get { return _strategy.Targets[3].ColorWriteChannels; }
+            get { return _strategy.ColorWriteChannels3; }
             set
             {
                 if (_strategy is ReadonlyBlendStateStrategy)

@@ -37,61 +37,61 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public virtual BlendFunction AlphaBlendFunction
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].AlphaBlendFunction; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual Blend AlphaDestinationBlend
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].AlphaDestinationBlend; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual Blend AlphaSourceBlend
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].AlphaSourceBlend; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual BlendFunction ColorBlendFunction
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].ColorBlendFunction; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual Blend ColorDestinationBlend
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].ColorDestinationBlend; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual Blend ColorSourceBlend
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].ColorSourceBlend; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[0].ColorWriteChannels; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels1
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[1].ColorWriteChannels; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels2
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[2].ColorWriteChannels; }
             set { throw new InvalidOperationException(); }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels3
         {
-            get { throw new InvalidOperationException(); }
+            get { return _targetBlendState[3].ColorWriteChannels; }
             set { throw new InvalidOperationException(); }
         }
 
