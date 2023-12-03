@@ -57,12 +57,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.AlphaBlendFunction; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
+                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].AlphaBlendFunction = value;
+                _strategy.AlphaBlendFunction = value;
             }
         }
 
@@ -71,12 +69,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.AlphaDestinationBlend; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].AlphaDestinationBlend = value;
+                _strategy.AlphaDestinationBlend = value;
             }
         }
 
@@ -85,12 +81,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.AlphaSourceBlend; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].AlphaSourceBlend = value;
+                _strategy.AlphaSourceBlend = value;
             }
         }
 
@@ -99,12 +93,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorBlendFunction; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].ColorBlendFunction = value;
+                _strategy.ColorBlendFunction = value;
             }
         }
 
@@ -113,12 +105,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorDestinationBlend; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
+                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].ColorDestinationBlend = value;
+                _strategy.ColorDestinationBlend = value;
             }
         }
 
@@ -127,12 +117,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorSourceBlend; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].ColorSourceBlend = value;
+                _strategy.ColorSourceBlend = value;
             }
         }
 
@@ -141,12 +129,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorWriteChannels; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
+                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[0].ColorWriteChannels = value;
+                _strategy.ColorWriteChannels = value;
             }
         }
 
@@ -155,12 +141,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorWriteChannels1; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[1].ColorWriteChannels = value;
+                _strategy.ColorWriteChannels1 = value;
             }
         }
 
@@ -169,12 +153,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorWriteChannels2; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
+                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[2].ColorWriteChannels = value;
+                _strategy.ColorWriteChannels2 = value;
             }
         }
 
@@ -183,12 +165,10 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _strategy.ColorWriteChannels3; }
             set
             {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
                 if (GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
-                _strategy.Targets[3].ColorWriteChannels = value;
+                _strategy.ColorWriteChannels3 = value;
             }
         }
 

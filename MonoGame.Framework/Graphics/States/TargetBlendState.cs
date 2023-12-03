@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 
@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 if (_parent._strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
+                    throw new InvalidOperationException("The state object is readonly.");
                 if (_parent.GraphicsDevice != null)
                     throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
 

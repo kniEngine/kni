@@ -38,61 +38,61 @@ namespace Microsoft.Xna.Framework.Graphics
         public virtual BlendFunction AlphaBlendFunction
         {
             get { return _targetBlendState[0].AlphaBlendFunction; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].AlphaBlendFunction = value; }
         }
 
         public virtual Blend AlphaDestinationBlend
         {
             get { return _targetBlendState[0].AlphaDestinationBlend; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].AlphaDestinationBlend = value; }
         }
 
         public virtual Blend AlphaSourceBlend
         {
             get { return _targetBlendState[0].AlphaSourceBlend; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].AlphaSourceBlend = value; }
         }
 
         public virtual BlendFunction ColorBlendFunction
         {
             get { return _targetBlendState[0].ColorBlendFunction; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].ColorBlendFunction = value; }
         }
 
         public virtual Blend ColorDestinationBlend
         {
             get { return _targetBlendState[0].ColorDestinationBlend; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].ColorDestinationBlend = value; }
         }
 
         public virtual Blend ColorSourceBlend
         {
             get { return _targetBlendState[0].ColorSourceBlend; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].ColorSourceBlend = value; }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels
         {
             get { return _targetBlendState[0].ColorWriteChannels; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[0].ColorWriteChannels = value; }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels1
         {
             get { return _targetBlendState[1].ColorWriteChannels; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[1].ColorWriteChannels = value; }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels2
         {
             get { return _targetBlendState[2].ColorWriteChannels; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[2].ColorWriteChannels = value; }
         }
 
         public virtual ColorWriteChannels ColorWriteChannels3
         {
             get { return _targetBlendState[3].ColorWriteChannels; }
-            set { throw new InvalidOperationException(); }
+            set { _targetBlendState[3].ColorWriteChannels = value; }
         }
 
         public BlendStateStrategy()
