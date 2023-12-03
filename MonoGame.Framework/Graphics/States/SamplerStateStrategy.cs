@@ -89,5 +89,19 @@ namespace Microsoft.Xna.Framework.Graphics
             _comparisonFunction = CompareFunction.Never;
             _filterMode = TextureFilterMode.Default;
         }
+
+        internal SamplerStateStrategy(ISamplerStateStrategy source)
+        {
+            _filter = source.Filter;
+            _addressU = source.AddressU;
+            _addressV = source.AddressV;
+            _addressW = source.AddressW;
+            _borderColor = source.BorderColor;
+            _maxAnisotropy = source.MaxAnisotropy;
+            _maxMipLevel = source.MaxMipLevel;
+            _mipMapLevelOfDetailBias = source.MipMapLevelOfDetailBias;
+            _comparisonFunction = source.ComparisonFunction;
+            _filterMode = source.FilterMode;
+        }
     }
 }

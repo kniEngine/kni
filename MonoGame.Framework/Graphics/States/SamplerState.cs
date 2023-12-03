@@ -183,27 +183,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new ReadonlySamplerStateStrategy(filter, addressMode);
         }
 
-        private SamplerState(SamplerState cloneSource)
+        internal SamplerState(SamplerState source)
+            : base()
         {
-            Name = cloneSource.Name;
-
-            _strategy = new SamplerStateStrategy();
-
-            _strategy.Filter = cloneSource._strategy.Filter;
-            _strategy.AddressU = cloneSource._strategy.AddressU;
-            _strategy.AddressV = cloneSource._strategy.AddressV;
-            _strategy.AddressW = cloneSource._strategy.AddressW;
-            _strategy.BorderColor = cloneSource._strategy.BorderColor;
-            _strategy.MaxAnisotropy = cloneSource._strategy.MaxAnisotropy;
-            _strategy.MaxMipLevel = cloneSource._strategy.MaxMipLevel;
-            _strategy.MipMapLevelOfDetailBias = cloneSource._strategy.MipMapLevelOfDetailBias;
-            _strategy.ComparisonFunction = cloneSource._strategy.ComparisonFunction;
-            _strategy.FilterMode = cloneSource._strategy.FilterMode;
-        }
-
-        internal SamplerState Clone()
-        {
-            return new SamplerState(this);
+            Name = source.Name;
+            _strategy = new SamplerStateStrategy(source._strategy);
         }
 
         partial void PlatformDispose(bool disposing);

@@ -137,24 +137,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new ReadonlyRasterizerStateStrategy(cullMode);
         }
 
-        private RasterizerState(RasterizerState cloneSource)
+        internal RasterizerState(RasterizerState source)
+            : base()
         {
-            Name = cloneSource.Name;
-
-            _strategy = new RasterizerStateStrategy();
-
-            _strategy.CullMode = cloneSource._strategy.CullMode;
-            _strategy.FillMode = cloneSource._strategy.FillMode;
-            _strategy.DepthBias = cloneSource._strategy.DepthBias;
-            _strategy.MultiSampleAntiAlias = cloneSource._strategy.MultiSampleAntiAlias;
-            _strategy.ScissorTestEnable = cloneSource._strategy.ScissorTestEnable;
-            _strategy.SlopeScaleDepthBias = cloneSource._strategy.SlopeScaleDepthBias;
-            _strategy.DepthClipEnable = cloneSource._strategy.DepthClipEnable;
-        }
-
-        internal RasterizerState Clone()
-        {
-            return new RasterizerState(this);
+            Name = source.Name;
+            _strategy = new RasterizerStateStrategy(source._strategy);
         }
 
         partial void PlatformDispose(bool disposing);
