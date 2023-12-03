@@ -6,7 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class SamplerStateStrategy : ISamplerStateStrategy
+    internal class SamplerStateStrategy : GraphicsResourceStrategy
+        , ISamplerStateStrategy
     {
         private TextureFilter _filter;
         private TextureAddressMode _addressU;
@@ -79,6 +80,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public SamplerStateStrategy()
+            : base()
         {
             _filter = TextureFilter.Linear;
             _addressU = TextureAddressMode.Wrap;
@@ -93,6 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal SamplerStateStrategy(ISamplerStateStrategy source)
+            : base()
         {
             _filter = source.Filter;
             _addressU = source.AddressU;

@@ -6,7 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class BlendStateStrategy : IBlendStateStrategy
+    internal class BlendStateStrategy : GraphicsResourceStrategy
+        , IBlendStateStrategy
     {
         private Color _blendFactor;
         private int _multiSampleMask;
@@ -98,6 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public BlendStateStrategy(BlendState blendState)
+            : base()
         {
             _blendFactor = Color.White;
             _multiSampleMask = Int32.MaxValue;
@@ -122,6 +124,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal BlendStateStrategy(IBlendStateStrategy source, BlendState blendState)
+            : base()
         {
             this._blendFactor = source.BlendFactor;
             this._multiSampleMask = source.MultiSampleMask;
