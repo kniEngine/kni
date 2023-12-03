@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    BindGraphicsDevice(device.Strategy);
+                    ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
                 }
                 else
                     throw new InvalidOperationException("This rasterizer state is already bound to a different graphics device.");
@@ -126,23 +126,26 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public RasterizerState()
-            : base()
+            : base(true)
         {
             _strategy = new RasterizerStateStrategy();
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private RasterizerState(string name, CullMode cullMode)
-            : base()
+            : base(true)
         {
             Name = name;
             _strategy = new ReadonlyRasterizerStateStrategy(cullMode);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal RasterizerState(RasterizerState source)
-            : base()
+            : base(true)
         {
             Name = source.Name;
             _strategy = new RasterizerStateStrategy(source._strategy);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         partial void PlatformDispose(bool disposing);

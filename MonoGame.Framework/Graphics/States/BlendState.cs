@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    BindGraphicsDevice(device.Strategy);
+                    ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
                 }
                 else
                     throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
@@ -222,23 +222,26 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         public BlendState()
-            : base()
+            : base(true)
         {
             _strategy = new BlendStateStrategy(this);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : base()
+            : base(true)
         {
             Name = name;
             _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend, this);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal BlendState(BlendState source)
-            : base()
+            : base(true)
         {
             Name = source.Name;
             _strategy = new BlendStateStrategy(source._strategy, this);
+            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         partial void PlatformDispose(bool disposing);

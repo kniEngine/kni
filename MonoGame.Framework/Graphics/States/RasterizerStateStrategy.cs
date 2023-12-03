@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class RasterizerStateStrategy : IRasterizerStateStrategy
+    internal class RasterizerStateStrategy : GraphicsResourceStrategy
+        , IRasterizerStateStrategy
     {
         private CullMode _cullMode;
         private float _depthBias;
@@ -58,6 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public RasterizerStateStrategy()
+            : base()
         {
             _cullMode = CullMode.CullCounterClockwiseFace;
             _fillMode = FillMode.Solid;
@@ -69,6 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal RasterizerStateStrategy(IRasterizerStateStrategy source)
+            : base()
         {
             _cullMode = source.CullMode;
             _fillMode = source.FillMode;

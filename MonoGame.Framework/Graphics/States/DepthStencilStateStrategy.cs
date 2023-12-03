@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class DepthStencilStateStrategy : IDepthStencilStateStrategy
+    internal class DepthStencilStateStrategy : GraphicsResourceStrategy
+        , IDepthStencilStateStrategy
     {
         private bool _depthBufferEnable;
         private bool _depthBufferWriteEnable;
@@ -122,6 +123,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public DepthStencilStateStrategy()
+            : base()
         {
             _depthBufferEnable = true;
             _depthBufferWriteEnable = true;
@@ -142,6 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal DepthStencilStateStrategy(IDepthStencilStateStrategy source)
+            : base()
         {
             _depthBufferEnable = source.DepthBufferEnable;
             _depthBufferWriteEnable = source.DepthBufferWriteEnable;
