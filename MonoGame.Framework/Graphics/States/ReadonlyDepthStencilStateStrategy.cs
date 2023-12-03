@@ -104,6 +104,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public ReadonlyDepthStencilStateStrategy(bool depthBufferEnable, bool depthBufferWriteEnable)
+            : base()
         {
             base.DepthBufferEnable = depthBufferEnable;
             base.DepthBufferWriteEnable = depthBufferWriteEnable;
