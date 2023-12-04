@@ -226,7 +226,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
+
+                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
+                    resourceStrategy.BindGraphicsDevice(device.Strategy);
+                    SetResourceStrategy(resourceStrategy);
                 }
                 else
                     throw new InvalidOperationException("This depth stencil state is already bound to a different graphics device.");
@@ -237,7 +240,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new DepthStencilStateStrategy();
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
@@ -245,7 +247,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = name;
             _strategy = new ReadonlyDepthStencilStateStrategy(depthBufferEnable, depthBufferWriteEnable);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal DepthStencilState(DepthStencilState source)
@@ -253,7 +254,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = source.Name;
             _strategy = new DepthStencilStateStrategy(source._strategy);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         partial void PlatformDispose(bool disposing);
