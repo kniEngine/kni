@@ -40,12 +40,10 @@
 	  
   <ItemGroup>
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
     <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />
     <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
     <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
-    <Compile Include="Graphics\Texture.DirectX.cs" />
   </ItemGroup>
 
   <ItemGroup>
