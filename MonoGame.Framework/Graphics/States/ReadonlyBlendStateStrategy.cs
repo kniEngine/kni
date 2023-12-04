@@ -87,18 +87,18 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public ReadonlyBlendStateStrategy(Blend sourceBlend, Blend destinationBlend, BlendState blendState)
-            : base(blendState)
+        public ReadonlyBlendStateStrategy(Blend sourceBlend, Blend destinationBlend)
+            : base()
         {
             //base.ColorSourceBlend = sourceBlend;
             //base.AlphaSourceBlend = sourceBlend;
             //base.ColorDestinationBlend = destinationBlend;
             //base.AlphaDestinationBlend = destinationBlend;
 
-            base.Targets[0] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
-            base.Targets[1] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
-            base.Targets[2] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
-            base.Targets[3] = new TargetBlendState(this, blendState, sourceBlend, destinationBlend);
+            base.Targets[0] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            base.Targets[1] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            base.Targets[2] = new TargetBlendState(this, sourceBlend, destinationBlend);
+            base.Targets[3] = new TargetBlendState(this, sourceBlend, destinationBlend);
         }
     }
 }
