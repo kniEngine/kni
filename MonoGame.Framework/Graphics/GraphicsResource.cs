@@ -120,8 +120,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (disposing)
             {
-                _strategy.Dispose();
-                _strategy.GraphicsResource = null;
+                if (_strategy != null)
+                {
+                    _strategy.Dispose();
+                    _strategy.GraphicsResource = null;
+                }
             }
         }
 

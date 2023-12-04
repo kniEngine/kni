@@ -34,97 +34,49 @@ namespace Microsoft.Xna.Framework.Graphics
         public TextureAddressMode AddressU
         {
             get { return _strategy.AddressU; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.AddressU = value;
-            }
+            set { _strategy.AddressU = value; }
         }
 
         public TextureAddressMode AddressV
         {
             get { return _strategy.AddressV; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.AddressV = value;
-            }
+            set { _strategy.AddressV = value; }
         }
 
         public TextureAddressMode AddressW
         {
             get { return _strategy.AddressW; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.AddressW = value;
-            }
+            set { _strategy.AddressW = value; }
         }
 
         public Color BorderColor
         {
             get { return _strategy.BorderColor; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.BorderColor = value;
-            }
+            set { _strategy.BorderColor = value; }
         }
 
         public TextureFilter Filter
         {
             get { return _strategy.Filter; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.Filter = value;
-            }
+            set { _strategy.Filter = value; }
         }
 
         public int MaxAnisotropy
         {
             get { return _strategy.MaxAnisotropy; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.MaxAnisotropy = value;
-            }
+            set { _strategy.MaxAnisotropy = value; }
         }
 
         public int MaxMipLevel
         {
             get { return _strategy.MaxMipLevel; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.MaxMipLevel = value;
-            }
+            set { _strategy.MaxMipLevel = value; }
         }
 
         public float MipMapLevelOfDetailBias
         {
             get { return _strategy.MipMapLevelOfDetailBias; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.MipMapLevelOfDetailBias = value;
-            }
+            set { _strategy.MipMapLevelOfDetailBias = value; }
         }
 
         /// <summary>
@@ -133,25 +85,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public CompareFunction ComparisonFunction
         {
             get { return _strategy.ComparisonFunction; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.ComparisonFunction = value;
-            }
+            set { _strategy.ComparisonFunction = value; }
         }
 
         public TextureFilterMode FilterMode
         {
             get { return _strategy.FilterMode; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
-
-                _strategy.FilterMode = value;
-            }
+            set { _strategy.FilterMode = value; }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
@@ -164,7 +104,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
+
+                    _strategy = new ResourceSamplerStateStrategy(_strategy);
+                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
+                    resourceStrategy.BindGraphicsDevice(device.Strategy);
+                    SetResourceStrategy(resourceStrategy);
                 }
                 else
                     throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
@@ -175,7 +119,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new SamplerStateStrategy();
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private SamplerState(string name, TextureFilter filter, TextureAddressMode addressMode)
@@ -183,7 +126,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = name;
             _strategy = new ReadonlySamplerStateStrategy(filter, addressMode);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal SamplerState(SamplerState source)
@@ -191,7 +133,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = source.Name;
             _strategy = new SamplerStateStrategy(source._strategy);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         partial void PlatformDispose(bool disposing);

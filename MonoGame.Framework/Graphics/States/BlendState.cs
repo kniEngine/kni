@@ -32,15 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public bool IndependentBlendEnable
         {
             get { return _strategy.IndependentBlendEnable; }
-            set
-            {
-                if (_strategy is ReadonlyBlendStateStrategy)
-                    throw new InvalidOperationException("You cannot modify a default blend state object.");
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.IndependentBlendEnable = value;
-            }
+            set {  _strategy.IndependentBlendEnable = value; }
         }
 
         /// <summary>
@@ -56,121 +48,61 @@ namespace Microsoft.Xna.Framework.Graphics
         public BlendFunction AlphaBlendFunction
         {
             get { return _strategy.AlphaBlendFunction; }
-            set
-            {
-                 if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.AlphaBlendFunction = value;
-            }
+            set { _strategy.AlphaBlendFunction = value; }
         }
 
         public Blend AlphaDestinationBlend
         {
             get { return _strategy.AlphaDestinationBlend; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.AlphaDestinationBlend = value;
-            }
+            set { _strategy.AlphaDestinationBlend = value; }
         }
 
         public Blend AlphaSourceBlend
         {
             get { return _strategy.AlphaSourceBlend; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.AlphaSourceBlend = value;
-            }
+            set { _strategy.AlphaSourceBlend = value; }
         }
 
         public BlendFunction ColorBlendFunction
         {
             get { return _strategy.ColorBlendFunction; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorBlendFunction = value;
-            }
+            set { _strategy.ColorBlendFunction = value; }
         }
 
         public Blend ColorDestinationBlend
         {
             get { return _strategy.ColorDestinationBlend; }
-            set
-            {
-                 if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorDestinationBlend = value;
-            }
+            set { _strategy.ColorDestinationBlend = value; }
         }
 
         public Blend ColorSourceBlend
         {
             get { return _strategy.ColorSourceBlend; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorSourceBlend = value;
-            }
+            set { _strategy.ColorSourceBlend = value; }
         }
 
         public ColorWriteChannels ColorWriteChannels
         {
             get { return _strategy.ColorWriteChannels; }
-            set
-            {
-                 if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorWriteChannels = value;
-            }
+            set { _strategy.ColorWriteChannels = value; }
         }
 
         public ColorWriteChannels ColorWriteChannels1
         {
             get { return _strategy.ColorWriteChannels1; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorWriteChannels1 = value;
-            }
+            set { _strategy.ColorWriteChannels1 = value; }
         }
 
         public ColorWriteChannels ColorWriteChannels2
         {
             get { return _strategy.ColorWriteChannels2; }
-            set
-            {
-                 if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorWriteChannels2 = value;
-            }
+            set { _strategy.ColorWriteChannels2 = value; }
         }
 
         public ColorWriteChannels ColorWriteChannels3
         {
             get { return _strategy.ColorWriteChannels3; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.ColorWriteChannels3 = value;
-            }
+            set { _strategy.ColorWriteChannels3 = value; }
         }
 
         /// <summary>
@@ -183,25 +115,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public Color BlendFactor
         {
             get { return _strategy.BlendFactor; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.BlendFactor = value;
-            }
+            set { _strategy.BlendFactor = value; }
         }
 
         public int MultiSampleMask
         {
             get { return _strategy.MultiSampleMask; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
-
-                _strategy.MultiSampleMask = value;
-            }
+            set { _strategy.MultiSampleMask = value; }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
@@ -214,7 +134,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(device != null);
-                    ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
+
+                    _strategy = new ResourceBlendStateStrategy(_strategy);
+                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
+                    resourceStrategy.BindGraphicsDevice(device.Strategy);
+                    SetResourceStrategy(resourceStrategy);
                 }
                 else
                     throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
@@ -225,7 +149,6 @@ namespace Microsoft.Xna.Framework.Graphics
             : base()
         {
             _strategy = new BlendStateStrategy();
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
@@ -233,7 +156,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = name;
             _strategy = new ReadonlyBlendStateStrategy(sourceBlend, destinationBlend);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         internal BlendState(BlendState source)
@@ -241,7 +163,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             Name = source.Name;
             _strategy = new BlendStateStrategy(source._strategy);
-            SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         partial void PlatformDispose(bool disposing);
