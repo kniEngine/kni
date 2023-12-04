@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
             set { _targetBlendState[3].ColorWriteChannels = value; }
         }
 
-        public BlendStateStrategy(BlendState blendState)
+        public BlendStateStrategy()
             : base()
         {
             _blendFactor = Color.White;
@@ -106,10 +106,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _independentBlendEnable = false;
             _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = new TargetBlendState(this, blendState);
-            _targetBlendState[1] = new TargetBlendState(this, blendState);
-            _targetBlendState[2] = new TargetBlendState(this, blendState);
-            _targetBlendState[3] = new TargetBlendState(this, blendState);
+            _targetBlendState[0] = new TargetBlendState(this);
+            _targetBlendState[1] = new TargetBlendState(this);
+            _targetBlendState[2] = new TargetBlendState(this);
+            _targetBlendState[3] = new TargetBlendState(this);
 
             //_alphaBlendFunction = BlendFunction.Add;
             //_alphaDestinationBlend = Blend.Zero;
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //_colorWriteChannels3 = ColorWriteChannels3.All;
         }
 
-        internal BlendStateStrategy(IBlendStateStrategy source, BlendState blendState)
+        internal BlendStateStrategy(IBlendStateStrategy source)
             : base()
         {
             this._blendFactor = source.BlendFactor;
@@ -131,10 +131,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _independentBlendEnable = source.IndependentBlendEnable;
             _targetBlendState = new TargetBlendState[4];
-            _targetBlendState[0] = new TargetBlendState(source.Targets[0], source, blendState);
-            _targetBlendState[1] = new TargetBlendState(source.Targets[1], source, blendState);
-            _targetBlendState[2] = new TargetBlendState(source.Targets[2], source, blendState);
-            _targetBlendState[3] = new TargetBlendState(source.Targets[3], source, blendState);
+            _targetBlendState[0] = new TargetBlendState(source.Targets[0], source);
+            _targetBlendState[1] = new TargetBlendState(source.Targets[1], source);
+            _targetBlendState[2] = new TargetBlendState(source.Targets[2], source);
+            _targetBlendState[3] = new TargetBlendState(source.Targets[3], source);
 
             //_alphaBlendFunction = source.AlphaBlendFunction;
             //_alphaDestinationBlend = source.AlphaDestinationBlend;
