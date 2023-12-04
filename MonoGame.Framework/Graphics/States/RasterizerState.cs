@@ -27,85 +27,43 @@ namespace Microsoft.Xna.Framework.Graphics
         public CullMode CullMode
         {
             get { return _strategy.CullMode; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.CullMode = value;
-            }
+            set { _strategy.CullMode = value; }
         }
 
         public float DepthBias
         {
             get { return _strategy.DepthBias; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.DepthBias = value;
-            }
+            set { _strategy.DepthBias = value; }
         }
 
         public FillMode FillMode
         {
             get { return _strategy.FillMode; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.FillMode = value;
-            }
+            set { _strategy.FillMode = value; }
         }
 
         public bool MultiSampleAntiAlias
         {
             get { return _strategy.MultiSampleAntiAlias; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.MultiSampleAntiAlias = value;
-            }
+            set { _strategy.MultiSampleAntiAlias = value; }
         }
 
         public bool ScissorTestEnable
         {
             get { return _strategy.ScissorTestEnable; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.ScissorTestEnable = value;
-            }
+            set { _strategy.ScissorTestEnable = value; }
         }
 
         public float SlopeScaleDepthBias
         {
             get { return _strategy.SlopeScaleDepthBias; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.SlopeScaleDepthBias = value;
-            }
+            set { _strategy.SlopeScaleDepthBias = value; }
         }
 
         public bool DepthClipEnable
         {
             get { return _strategy.DepthClipEnable; }
-            set
-            {
-                if (GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
-
-                _strategy.DepthClipEnable = value;
-            }
+            set { _strategy.DepthClipEnable = value; }
         }
 
         internal void BindToGraphicsDevice(GraphicsDevice device)
@@ -119,6 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(device != null);
 
+                    _strategy = new ResourceRasterizerStateStrategy(_strategy);
                     GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
                     resourceStrategy.BindGraphicsDevice(device.Strategy);
                     SetResourceStrategy(resourceStrategy);

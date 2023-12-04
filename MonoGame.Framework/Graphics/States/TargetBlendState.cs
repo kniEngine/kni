@@ -61,8 +61,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _alphaBlendFunction = value;
             }
@@ -75,8 +75,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _alphaDestinationBlend = value;
             }
@@ -89,8 +89,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _alphaSourceBlend = value;
             }
@@ -103,8 +103,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _colorBlendFunction = value;
             }
@@ -117,8 +117,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _colorDestinationBlend = value;
             }
@@ -131,8 +131,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _colorSourceBlend = value;
             }
@@ -145,8 +145,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (_parentStrategy is ReadonlyBlendStateStrategy)
                     throw new InvalidOperationException("The state object is readonly.");
-                if (((IGraphicsResourceStrategy)_parentStrategy).GraphicsDevice != null)
-                    throw new InvalidOperationException("You cannot modify the blend state after it has been bound to the graphics device!");
+                if (_parentStrategy is ResourceBlendStateStrategy)
+                    throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device!");
 
                 _colorWriteChannels = value;
             }
