@@ -11,6 +11,10 @@
     <Compile Include="Graphics\.BlazorGL\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ShaderProgram.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteIndexBuffer.cs" />

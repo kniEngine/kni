@@ -105,10 +105,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(device != null);
 
-                    _strategy = new ResourceSamplerStateStrategy(_strategy);
-                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
-                    resourceStrategy.BindGraphicsDevice(device.Strategy);
-                    SetResourceStrategy(resourceStrategy);
+                    _strategy = device.CurrentContext.Strategy.CreateSamplerStateStrategy(_strategy);
+                    SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else
                     throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");

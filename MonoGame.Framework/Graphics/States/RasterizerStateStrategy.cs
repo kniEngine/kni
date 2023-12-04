@@ -70,6 +70,18 @@ namespace Microsoft.Xna.Platform.Graphics
             _depthClipEnable = true;
         }
 
+        internal RasterizerStateStrategy(GraphicsContextStrategy contextStrategy, IRasterizerStateStrategy source)
+            : base(contextStrategy)
+        {
+            _cullMode = source.CullMode;
+            _fillMode = source.FillMode;
+            _depthBias = source.DepthBias;
+            _multiSampleAntiAlias = source.MultiSampleAntiAlias;
+            _scissorTestEnable = source.ScissorTestEnable;
+            _slopeScaleDepthBias = source.SlopeScaleDepthBias;
+            _depthClipEnable = source.DepthClipEnable;
+        }
+
         internal RasterizerStateStrategy(IRasterizerStateStrategy source)
             : base()
         {

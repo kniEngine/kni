@@ -86,8 +86,8 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
         }
 
-        public ResourceBlendStateStrategy(IBlendStateStrategy source)
-            : base(source)
+        public ResourceBlendStateStrategy(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
+            : base(contextStrategy, source)
         {
         }
     }

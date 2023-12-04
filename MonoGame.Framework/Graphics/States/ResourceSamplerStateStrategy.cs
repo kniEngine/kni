@@ -69,7 +69,8 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
         }
 
-        public ResourceSamplerStateStrategy(ISamplerStateStrategy source) : base(source)
+        public ResourceSamplerStateStrategy(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source) 
+            : base(contextStrategy, source)
         {
         }
     }

@@ -805,6 +805,23 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
         }
 
+        internal override IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source)
+        {
+            return new ConcreteBlendState(this, source);
+        }
+        internal override IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source)
+        {
+            return new ConcreteDepthStencilState(this, source);
+        }
+        internal override IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy source)
+        {
+            return new ConcreteRasterizerState(this, source);
+        }
+        internal override ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source)
+        {
+            return new ConcreteSamplerState(this, source);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

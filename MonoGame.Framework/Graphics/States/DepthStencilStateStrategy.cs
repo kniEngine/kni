@@ -143,6 +143,27 @@ namespace Microsoft.Xna.Platform.Graphics
             _referenceStencil = 0;
         }
 
+        internal DepthStencilStateStrategy(GraphicsContextStrategy contextStrategy, IDepthStencilStateStrategy source)
+            : base(contextStrategy)
+        {
+            _depthBufferEnable = source.DepthBufferEnable;
+            _depthBufferWriteEnable = source.DepthBufferWriteEnable;
+            _depthBufferFunction = source.DepthBufferFunction;
+            _stencilEnable = source.StencilEnable;
+            _stencilFunction = source.StencilFunction;
+            _stencilPass = source.StencilPass;
+            _stencilFail = source.StencilFail;
+            _stencilDepthBufferFail = source.StencilDepthBufferFail;
+            _twoSidedStencilMode = source.TwoSidedStencilMode;
+            _counterClockwiseStencilFunction = source.CounterClockwiseStencilFunction;
+            _counterClockwiseStencilPass = source.CounterClockwiseStencilPass;
+            _counterClockwiseStencilFail = source.CounterClockwiseStencilFail;
+            _counterClockwiseStencilDepthBufferFail = source.CounterClockwiseStencilDepthBufferFail;
+            _stencilMask = source.StencilMask;
+            _stencilWriteMask = source.StencilWriteMask;
+            _referenceStencil = source.ReferenceStencil;
+        }
+
         internal DepthStencilStateStrategy(IDepthStencilStateStrategy source)
             : base()
         {
