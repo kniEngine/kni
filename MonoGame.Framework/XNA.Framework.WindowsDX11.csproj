@@ -427,14 +427,12 @@
     <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\GraphicsDevice.DirectX.cs" />
     <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
     <Compile Include="Graphics\States\BlendState.DirectX.cs" />
     <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />
     <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
     <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
-    <Compile Include="Graphics\Texture.DirectX.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
