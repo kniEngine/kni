@@ -13,7 +13,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class GraphicsDevice : IDisposable
+    public class GraphicsDevice : IDisposable
     {
         private GraphicsDeviceStrategy _strategy;
 
