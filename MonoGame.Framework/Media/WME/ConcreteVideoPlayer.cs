@@ -120,7 +120,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts) && _mediaEngine.ReadyState >= 2)
                 {
                     var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, base.Video.Width, base.Video.Height);
-                    DX.ComObject dstSurfRef = (DX.ComObject)_lastFrame.Handle;
+                    DX.ComObject dstSurfRef = (DX.ComObject)_lastFrame.GetTextureStrategy<ConcreteTexture>().GetTexture();
                     _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
                 }
             }

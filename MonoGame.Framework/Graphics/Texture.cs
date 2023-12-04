@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public abstract partial class Texture : GraphicsResource
+	public abstract class Texture : GraphicsResource
 	{
         protected ITextureStrategy _strategyTexture;
         
