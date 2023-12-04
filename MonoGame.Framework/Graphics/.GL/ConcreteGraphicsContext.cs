@@ -164,13 +164,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_depthStencilStateDirty)
             {
-                _actualDepthStencilState.PlatformApplyState(this);
+                _actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(this);
                 _depthStencilStateDirty = false;
             }
 
             if (_rasterizerStateDirty)
             {
-                _actualRasterizerState.PlatformApplyState(this);
+                _actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState(this);
                 _rasterizerStateDirty = false;
             }
 
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_blendStateDirty)
             {
-                _actualBlendState.PlatformApplyState(this);
+                _actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState(this);
                 _blendStateDirty = false;
             }
 

@@ -339,11 +339,11 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (this.LevelCount > 0)
                 {
-                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
+                    GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
                 }
                 else
                 {
-                    GL.TexParameter(TextureTarget.Texture2D, SamplerState.TextureParameterNameTextureMaxLevel, 1000);
+                    GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, 1000);
                 }
                 GL.CheckGLError();
             }

@@ -109,9 +109,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
@@ -146,9 +146,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualRasterizerState.PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
