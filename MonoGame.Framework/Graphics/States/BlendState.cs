@@ -26,6 +26,12 @@ namespace Microsoft.Xna.Framework.Graphics
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
         }
 
+        internal T GetStrategy<T>() where T : IBlendStateStrategy
+        {
+            return (T)_strategy;
+        }
+
+
         /// <summary>
         /// Enables use of the per-target blend states.
         /// </summary>

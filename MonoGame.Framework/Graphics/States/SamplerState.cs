@@ -30,6 +30,11 @@ namespace Microsoft.Xna.Framework.Graphics
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
         }
 
+        internal T GetStrategy<T>() where T : ISamplerStateStrategy
+        {
+            return (T)_strategy;
+        }
+
 
         public TextureAddressMode AddressU
         {

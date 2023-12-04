@@ -24,6 +24,12 @@ namespace Microsoft.Xna.Framework.Graphics
             None = new DepthStencilState("DepthStencilState.None", false, false);
         }
 
+        internal T GetStrategy<T>() where T : IDepthStencilStateStrategy
+        {
+            return (T)_strategy;
+        }
+
+
         public bool DepthBufferEnable
         {
             get { return _strategy.DepthBufferEnable; }

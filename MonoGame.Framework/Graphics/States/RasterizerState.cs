@@ -24,6 +24,12 @@ namespace Microsoft.Xna.Framework.Graphics
             CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
         }
 
+        internal T GetStrategy<T>() where T : IRasterizerStateStrategy
+        {
+            return (T)_strategy;
+        }
+
+
         public CullMode CullMode
         {
             get { return _strategy.CullMode; }
