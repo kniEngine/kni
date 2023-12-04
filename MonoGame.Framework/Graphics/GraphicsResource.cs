@@ -81,13 +81,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
-        // State objects need to be late-bound to the GraphicsDevice.
-        // Oonly one GraphicsDevice should retain ownership.
-        internal void BindGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
-        {
-            ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(deviceStrategy);
-        }
-
         internal void GraphicsResourceStrategy_ContextLost()
         {
             GraphicsContextLost();
