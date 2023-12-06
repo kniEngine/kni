@@ -23,6 +23,24 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteRasterizerState(GraphicsContextStrategy contextStrategy, IRasterizerStateStrategy source)
             : base(contextStrategy, source)
         {
+            // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
+            // TODO: Need fixing. We create the rasterizerStateDesc based on
+            // the DepthFormat of the current rendertarget. When the user set
+            // a new rendertarget the DepthBias will be wrong.
+            DepthFormat activeDepthFormat = (contextStrategy.IsRenderTargetBound)
+                                          ? contextStrategy._currentRenderTargetBindings[0].DepthFormat
+                                          : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
+
+            _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
+        }
+
+        internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
+        {
+            DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                          ? context._currentRenderTargetBindings[0].DepthFormat
+                                          : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
+
+            return _state;
         }
 
         internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, DepthFormat activeDepthFormat)
@@ -88,24 +106,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Create the state.
             return new D3D11.RasterizerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
-        }
-
-        internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
-        {
-            if (_state == null)
-            {
-                // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-                // TODO: Need fixing. We create the rasterizerStateDesc based on
-                // the DepthFormat of the current rendertarget. When the user set
-                // a new rendertarget the DepthBias will be wrong.
-                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                              ? context._currentRenderTargetBindings[0].DepthFormat
-                                              : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
-
-                _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
-            }
-
-            return _state;
         }
 
         internal override void PlatformGraphicsContextLost()
