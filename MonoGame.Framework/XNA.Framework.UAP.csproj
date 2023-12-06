@@ -456,10 +456,6 @@
     <Compile Include="Color.cs" />
 
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\States\BlendState.DirectX.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />
-    <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
-    <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />

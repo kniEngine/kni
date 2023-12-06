@@ -458,10 +458,6 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
-    <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
-    <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
 
     <Compile Include="Input\Buttons.cs" />

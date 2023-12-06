@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class BlendState : GraphicsResource
+    public class BlendState : GraphicsResource
     {
         internal IBlendStateStrategy _strategy;
 
@@ -169,7 +169,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new BlendStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -182,7 +181,6 @@ namespace Microsoft.Xna.Framework.Graphics
             for (int i = 0; i < _strategy.Targets.Length; i++)
                 _strategy.Targets[i] = null;
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }

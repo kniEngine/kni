@@ -42,10 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
-    <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
-    <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
   </ItemGroup>
 

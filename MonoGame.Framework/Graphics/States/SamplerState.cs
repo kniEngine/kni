@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class SamplerState : GraphicsResource
+    public class SamplerState : GraphicsResource
     {
         internal ISamplerStateStrategy _strategy;
 
@@ -138,7 +138,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new SamplerStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -148,7 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }

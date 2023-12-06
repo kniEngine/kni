@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RasterizerState : GraphicsResource
+    public class RasterizerState : GraphicsResource
     {
         internal IRasterizerStateStrategy _strategy;
 
@@ -111,7 +111,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new RasterizerStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -121,7 +120,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }
