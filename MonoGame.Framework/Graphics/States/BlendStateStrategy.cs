@@ -123,6 +123,31 @@ namespace Microsoft.Xna.Platform.Graphics
             //_colorWriteChannels3 = ColorWriteChannels3.All;
         }
 
+        internal BlendStateStrategy(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
+            : base(contextStrategy)
+        {
+            this._blendFactor = source.BlendFactor;
+            this._multiSampleMask = source.MultiSampleMask;
+
+            _independentBlendEnable = source.IndependentBlendEnable;
+            _targetBlendState = new TargetBlendState[4];
+            _targetBlendState[0] = new TargetBlendState(source.Targets[0], source);
+            _targetBlendState[1] = new TargetBlendState(source.Targets[1], source);
+            _targetBlendState[2] = new TargetBlendState(source.Targets[2], source);
+            _targetBlendState[3] = new TargetBlendState(source.Targets[3], source);
+
+            //_alphaBlendFunction = source.AlphaBlendFunction;
+            //_alphaDestinationBlend = source.AlphaDestinationBlend;
+            //_alphaSourceBlend = source.AlphaSourceBlend;
+            //_colorBlendFunction = source.ColorBlendFunction;
+            //_colorDestinationBlend = source.ColorDestinationBlend;
+            //_colorSourceBlend = source.ColorSourceBlend;
+            //_colorWriteChannels  = source.ColorWriteChannels;
+            //_colorWriteChannels1 = source.ColorWriteChannels1;
+            //_colorWriteChannels2 = source.ColorWriteChannels2;
+            //_colorWriteChannels3 = source.ColorWriteChannels3;
+        }
+
         internal BlendStateStrategy(IBlendStateStrategy source)
             : base()
         {

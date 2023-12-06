@@ -103,8 +103,8 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
         }
 
-        public ResourceDepthStencilStateStrategy(IDepthStencilStateStrategy source)
-            : base(source)
+        public ResourceDepthStencilStateStrategy(GraphicsContextStrategy contextStrategy, IDepthStencilStateStrategy source)
+            : base(contextStrategy, source)
         {
         }
     }

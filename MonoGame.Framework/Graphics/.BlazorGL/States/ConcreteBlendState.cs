@@ -1,17 +1,23 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class BlendState
+    internal class ConcreteBlendState : ResourceBlendStateStrategy
     {
+
+        internal ConcreteBlendState(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
         internal void PlatformApplyState(ConcreteGraphicsContext context, bool force = false)
         {
             var GL = context.GL;
@@ -32,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 context._lastBlendEnable = blendEnabled;
             }
 
-            if (!_strategy.IndependentBlendEnable)
+            if (!this.IndependentBlendEnable)
             {
                 if (force ||
                     this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
@@ -88,7 +94,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-
         private static WebGLEquationFunc ToGLBlendEquationMode(BlendFunction function)
         {
             switch (function)
@@ -140,6 +145,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }
         }
-    }
-}
 
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+}

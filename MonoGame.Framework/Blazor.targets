@@ -11,6 +11,10 @@
     <Compile Include="Graphics\.BlazorGL\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.BlazorGL\Shader\ShaderProgram.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.BlazorGL\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.BlazorGL\Vertices\ConcreteIndexBuffer.cs" />
@@ -37,12 +41,7 @@
     <Compile Include="Graphics\.BlazorGL\IRenderTargetStrategyGL.cs" />
   </ItemGroup>
 	
-  <ItemGroup>
-    <Compile Include="Graphics\States\BlendState.Blazor.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.Blazor.cs" />
-    <Compile Include="Graphics\States\RasterizerState.Blazor.cs" />
-    <Compile Include="Graphics\States\SamplerState.Blazor.cs" />
-        
+  <ItemGroup>        
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
     

@@ -231,6 +231,10 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
+	<Compile Include="Graphics\.DX11\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.DX11\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.DX11\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.DX11\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
@@ -452,10 +456,6 @@
     <Compile Include="Color.cs" />
 
     <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-    <Compile Include="Graphics\States\BlendState.DirectX.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.DirectX.cs" />
-    <Compile Include="Graphics\States\RasterizerState.DirectX.cs" />
-    <Compile Include="Graphics\States\SamplerState.DirectX.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />

@@ -1,17 +1,28 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class RasterizerState
+    internal class ConcreteRasterizerState : ResourceRasterizerStateStrategy
     {
+
+        internal ConcreteRasterizerState(GraphicsContextStrategy contextStrategy, IRasterizerStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
+
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
             var GL = context.GL;
@@ -32,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.CheckGLError();
                     break;
 
-                case Graphics.CullMode.CullClockwiseFace:
+                case CullMode.CullClockwiseFace:
                     GL.Enable(EnableCap.CullFace);
                     GL.CheckGLError();
                     GL.CullFace(CullFaceMode.Back);
@@ -44,7 +55,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     GL.CheckGLError();
                     break;
 
-                case Graphics.CullMode.CullCounterClockwiseFace:
+                case CullMode.CullCounterClockwiseFace:
                     GL.Enable(EnableCap.CullFace);
                     GL.CheckGLError();
                     GL.CullFace(CullFaceMode.Back);
@@ -137,5 +148,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // TODO: Implement MultiSampleAntiAlias
         }
+
+
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
+
 }

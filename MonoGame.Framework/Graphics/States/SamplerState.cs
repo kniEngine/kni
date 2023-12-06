@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class SamplerState : GraphicsResource
+    public class SamplerState : GraphicsResource
     {
         internal ISamplerStateStrategy _strategy;
 
@@ -28,6 +28,11 @@ namespace Microsoft.Xna.Framework.Graphics
             LinearWrap = new SamplerState("SamplerState.LinearWrap", TextureFilter.Linear, TextureAddressMode.Wrap);
             PointClamp = new SamplerState("SamplerState.PointClamp", TextureFilter.Point, TextureAddressMode.Clamp);
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
+        }
+
+        internal T GetStrategy<T>() where T : ISamplerStateStrategy
+        {
+            return (T)_strategy;
         }
 
 
@@ -105,10 +110,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(device != null);
 
-                    _strategy = new ResourceSamplerStateStrategy(_strategy);
-                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
-                    resourceStrategy.BindGraphicsDevice(device.Strategy);
-                    SetResourceStrategy(resourceStrategy);
+                    _strategy = device.CurrentContext.Strategy.CreateSamplerStateStrategy(_strategy);
+                    SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else
                     throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
@@ -135,7 +138,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new SamplerStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -145,7 +147,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }

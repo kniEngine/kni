@@ -6,6 +6,12 @@
     <Compile Include="Graphics\.Ref\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConcretePixelShader.cs" />
+	  
+	<Compile Include="Graphics\.Ref\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.Ref\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.Ref\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.Ref\States\ConcreteSamplerState.cs" />
+	  
     <Compile Include="Graphics\.Ref\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.Ref\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.Ref\Vertices\ConcreteIndexBuffer.cs" />

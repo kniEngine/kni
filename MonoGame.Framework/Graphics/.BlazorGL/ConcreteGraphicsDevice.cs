@@ -92,9 +92,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
-            _mainContext.Strategy._actualDepthStencilState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
-            _mainContext.Strategy._actualRasterizerState.PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
 
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)

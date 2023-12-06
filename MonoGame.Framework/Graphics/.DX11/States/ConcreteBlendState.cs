@@ -1,19 +1,29 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class BlendState
+    internal class ConcreteBlendState : ResourceBlendStateStrategy
     {
         private D3D11.BlendState _state;
+
+        internal ConcreteBlendState(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
 
 
         internal D3D11.BlendState GetDxState()
@@ -30,11 +40,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Build the description.
             D3D11.BlendStateDescription blendStateDesc = new D3D11.BlendStateDescription();
-            BlendState.GetDXBlendDescription(_strategy.Targets[0], ref blendStateDesc.RenderTarget[0]);
-            BlendState.GetDXBlendDescription(_strategy.Targets[1], ref blendStateDesc.RenderTarget[1]);
-            BlendState.GetDXBlendDescription(_strategy.Targets[2], ref blendStateDesc.RenderTarget[2]);
-            BlendState.GetDXBlendDescription(_strategy.Targets[3], ref blendStateDesc.RenderTarget[3]);
-            blendStateDesc.IndependentBlendEnable = _strategy.IndependentBlendEnable;
+            ConcreteBlendState.GetDXBlendDescription(this.Targets[0], ref blendStateDesc.RenderTarget[0]);
+            ConcreteBlendState.GetDXBlendDescription(this.Targets[1], ref blendStateDesc.RenderTarget[1]);
+            ConcreteBlendState.GetDXBlendDescription(this.Targets[2], ref blendStateDesc.RenderTarget[2]);
+            ConcreteBlendState.GetDXBlendDescription(this.Targets[3], ref blendStateDesc.RenderTarget[3]);
+            blendStateDesc.IndependentBlendEnable = this.IndependentBlendEnable;
 
             // This is a new DX11 feature we should consider 
             // exposing as part of the extended MonoGame API.
@@ -128,14 +138,21 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-        partial void PlatformDispose(bool disposing)
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
             }
 
             DX.Utilities.Dispose(ref _state);
+
+            base.Dispose(disposing);
         }
     }
-}
 
+}

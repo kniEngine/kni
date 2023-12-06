@@ -1,17 +1,27 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class BlendState
+    internal class ConcreteBlendState : ResourceBlendStateStrategy
     {
+
+        internal ConcreteBlendState(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
             var GL = context.GL;
@@ -32,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 context._lastBlendEnable = blendEnabled;
             }
 
-            if (!_strategy.IndependentBlendEnable)
+            if (!this.IndependentBlendEnable)
             {
                 if (force ||
                     this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
@@ -75,33 +85,33 @@ namespace Microsoft.Xna.Framework.Graphics
                 for (int i = 0; i < 4; i++)
                 {
                     if (force ||
-                        _strategy.Targets[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
-                        _strategy.Targets[i].AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
+                        this.Targets[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
+                        this.Targets[i].AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
                     {
                         GL.BlendEquationSeparatei(i,
-                            ToGLBlendEquationMode(_strategy.Targets[i].ColorBlendFunction),
-                            ToGLBlendEquationMode(_strategy.Targets[i].AlphaBlendFunction));
+                            ToGLBlendEquationMode(this.Targets[i].ColorBlendFunction),
+                            ToGLBlendEquationMode(this.Targets[i].AlphaBlendFunction));
                         GL.CheckGLError();
-                        context._lastBlendState[i].ColorBlendFunction = _strategy.Targets[i].ColorBlendFunction;
-                        context._lastBlendState[i].AlphaBlendFunction = _strategy.Targets[i].AlphaBlendFunction;
+                        context._lastBlendState[i].ColorBlendFunction = this.Targets[i].ColorBlendFunction;
+                        context._lastBlendState[i].AlphaBlendFunction = this.Targets[i].AlphaBlendFunction;
                     }
 
                     if (force ||
-                        _strategy.Targets[i].ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
-                        _strategy.Targets[i].ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
-                        _strategy.Targets[i].AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
-                        _strategy.Targets[i].AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
+                        this.Targets[i].ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
+                        this.Targets[i].ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
+                        this.Targets[i].AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
+                        this.Targets[i].AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
                     {
                         GL.BlendFuncSeparatei(i,
-                            ToGLBlendFunc(_strategy.Targets[i].ColorSourceBlend),
-                            ToGLBlendFunc(_strategy.Targets[i].ColorDestinationBlend),
-                            ToGLBlendFunc(_strategy.Targets[i].AlphaSourceBlend),
-                            ToGLBlendFunc(_strategy.Targets[i].AlphaDestinationBlend));
+                            ToGLBlendFunc(this.Targets[i].ColorSourceBlend),
+                            ToGLBlendFunc(this.Targets[i].ColorDestinationBlend),
+                            ToGLBlendFunc(this.Targets[i].AlphaSourceBlend),
+                            ToGLBlendFunc(this.Targets[i].AlphaDestinationBlend));
                         GL.CheckGLError();
-                        context._lastBlendState[i].ColorSourceBlend = _strategy.Targets[i].ColorSourceBlend;
-                        context._lastBlendState[i].ColorDestinationBlend = _strategy.Targets[i].ColorDestinationBlend;
-                        context._lastBlendState[i].AlphaSourceBlend = _strategy.Targets[i].AlphaSourceBlend;
-                        context._lastBlendState[i].AlphaDestinationBlend = _strategy.Targets[i].AlphaDestinationBlend;
+                        context._lastBlendState[i].ColorSourceBlend = this.Targets[i].ColorSourceBlend;
+                        context._lastBlendState[i].ColorDestinationBlend = this.Targets[i].ColorDestinationBlend;
+                        context._lastBlendState[i].AlphaSourceBlend = this.Targets[i].AlphaSourceBlend;
+                        context._lastBlendState[i].AlphaDestinationBlend = this.Targets[i].AlphaDestinationBlend;
                     }
                 }
             }
@@ -118,7 +128,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 context._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
             }
         }
-
 
         private static BlendEquationMode ToGLBlendEquationMode(BlendFunction function)
         {
@@ -178,6 +187,21 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("blend", "The specified blend function is not implemented.");
             }
         }
-    }
-}
 
+
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+}

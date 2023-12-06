@@ -433,6 +433,11 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);
         internal abstract VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage);
 
+        internal abstract IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source);
+        internal abstract IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source);
+        internal abstract IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy stsourcerategy);
+        internal abstract ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source);
+
         internal T ToConcrete<T>() where T : GraphicsContextStrategy
         {
             return (T)this;

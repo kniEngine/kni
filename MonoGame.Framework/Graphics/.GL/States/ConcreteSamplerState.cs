@@ -1,21 +1,34 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using ExtTextureFilterAnisotropic = Microsoft.Xna.Platform.Graphics.OpenGL.TextureParameterName;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class SamplerState
+    internal class ConcreteSamplerState : ResourceSamplerStateStrategy
     {
         private readonly float[] _openGLBorderColor = new float[4];
 
         internal const TextureParameterName TextureParameterNameTextureMaxAnisotropy = (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt;
         internal const TextureParameterName TextureParameterNameTextureMaxLevel = TextureParameterName.TextureMaxLevel;
+
+
+        internal ConcreteSamplerState(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
 
         internal void PlatformApplyState(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
         {
@@ -195,6 +208,21 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentException("No support for " + textureAddressMode);
             }
         }
-    }
-}
+ 
 
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+}

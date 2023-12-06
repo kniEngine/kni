@@ -227,6 +227,10 @@
     <Compile Include="Graphics\.GL\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
@@ -454,10 +458,6 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Graphics\States\BlendState.OpenGL.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs" />
-    <Compile Include="Graphics\States\RasterizerState.OpenGL.cs" />
-    <Compile Include="Graphics\States\SamplerState.OpenGL.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
 
     <Compile Include="Input\Buttons.cs" />

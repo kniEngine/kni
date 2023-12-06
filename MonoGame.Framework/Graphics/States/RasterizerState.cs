@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class RasterizerState : GraphicsResource
+    public class RasterizerState : GraphicsResource
     {
         internal IRasterizerStateStrategy _strategy;
 
@@ -23,6 +23,12 @@ namespace Microsoft.Xna.Framework.Graphics
             CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
             CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
         }
+
+        internal T GetStrategy<T>() where T : IRasterizerStateStrategy
+        {
+            return (T)_strategy;
+        }
+
 
         public CullMode CullMode
         {
@@ -77,10 +83,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(device != null);
 
-                    _strategy = new ResourceRasterizerStateStrategy(_strategy);
-                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
-                    resourceStrategy.BindGraphicsDevice(device.Strategy);
-                    SetResourceStrategy(resourceStrategy);
+                    _strategy = device.CurrentContext.Strategy.CreateRasterizerStateStrategy(_strategy);
+                    SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else
                     throw new InvalidOperationException("This rasterizer state is already bound to a different graphics device.");
@@ -107,7 +111,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new RasterizerStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -117,7 +120,6 @@ namespace Microsoft.Xna.Framework.Graphics
             {
             }
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }

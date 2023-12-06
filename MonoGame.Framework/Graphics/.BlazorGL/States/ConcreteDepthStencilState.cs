@@ -1,17 +1,24 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class DepthStencilState
+    internal class ConcreteDepthStencilState : ResourceDepthStencilStateStrategy
     {
+
+        internal ConcreteDepthStencilState(GraphicsContextStrategy contextStrategy, IDepthStencilStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
+
         internal void PlatformApplyState(ConcreteGraphicsContext context, bool force = false)
         {
             var GL = context.GL;
@@ -138,6 +145,20 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new ArgumentOutOfRangeException("operation");
             }
         }
-    }
-}
+  
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+}

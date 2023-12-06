@@ -9,7 +9,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class BlendState : GraphicsResource
+    public class BlendState : GraphicsResource
     {
         internal IBlendStateStrategy _strategy;
 
@@ -25,6 +25,12 @@ namespace Microsoft.Xna.Framework.Graphics
             NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
         }
+
+        internal T GetStrategy<T>() where T : IBlendStateStrategy
+        {
+            return (T)_strategy;
+        }
+
 
         /// <summary>
         /// Enables use of the per-target blend states.
@@ -135,10 +141,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(device != null);
 
-                    _strategy = new ResourceBlendStateStrategy(_strategy);
-                    GraphicsResourceStrategy resourceStrategy = (GraphicsResourceStrategy)_strategy;
-                    resourceStrategy.BindGraphicsDevice(device.Strategy);
-                    SetResourceStrategy(resourceStrategy);
+                    _strategy = device.CurrentContext.Strategy.CreateBlendStateStrategy(_strategy);
+                    SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else
                     throw new InvalidOperationException("This blend state is already bound to a different graphics device.");
@@ -165,7 +169,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy = new BlendStateStrategy(source._strategy);
         }
 
-        partial void PlatformDispose(bool disposing);
 
         protected override void Dispose(bool disposing)
         {
@@ -178,7 +181,6 @@ namespace Microsoft.Xna.Framework.Graphics
             for (int i = 0; i < _strategy.Targets.Length; i++)
                 _strategy.Targets[i] = null;
 
-            PlatformDispose(disposing);
             base.Dispose(disposing);
         }
     }

@@ -1,37 +1,28 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class RasterizerState
+    internal class ConcreteRasterizerState : ResourceRasterizerStateStrategy
     {
         private D3D11.RasterizerState _state;
 
-
-        internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
+        internal ConcreteRasterizerState(GraphicsContextStrategy contextStrategy, IRasterizerStateStrategy source)
+            : base(contextStrategy, source)
         {
-            if (_state == null)
-            {
-                // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
-                // TODO: Need fixing. We create the rasterizerStateDesc based on
-                // the DepthFormat of the current rendertarget. When the user set
-                // a new rendertarget the DepthBias will be wrong.
-                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                              ? context._currentRenderTargetBindings[0].DepthFormat
-                                              : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
-
-                _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
-            }
-
-            return _state;
         }
 
         internal D3D11.RasterizerState CreateDXState(GraphicsDeviceStrategy deviceStrategy, DepthFormat activeDepthFormat)
@@ -99,13 +90,39 @@ namespace Microsoft.Xna.Framework.Graphics
             return new D3D11.RasterizerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
         }
 
-        partial void PlatformDispose(bool disposing)
+        internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
+        {
+            if (_state == null)
+            {
+                // discussion and explanation in https://github.com/MonoGame/MonoGame/issues/4826
+                // TODO: Need fixing. We create the rasterizerStateDesc based on
+                // the DepthFormat of the current rendertarget. When the user set
+                // a new rendertarget the DepthBias will be wrong.
+                DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
+                                              ? context._currentRenderTargetBindings[0].DepthFormat
+                                              : this.GraphicsDevice.Strategy.PresentationParameters.DepthStencilFormat;
+
+                _state = CreateDXState(this.GraphicsDevice.Strategy, activeDepthFormat);
+            }
+
+            return _state;
+        }
+
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
             }
 
             DX.Utilities.Dispose(ref _state);
+
+            base.Dispose(disposing);
         }
     }
+
 }

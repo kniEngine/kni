@@ -142,14 +142,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_depthStencilStateDirty)
             {
-                D3D11.DepthStencilState depthStencilState = _actualDepthStencilState.GetDxState();
+                D3D11.DepthStencilState depthStencilState = _actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().GetDxState();
                 this.D3dContext.OutputMerger.SetDepthStencilState(depthStencilState, _actualDepthStencilState.ReferenceStencil);
                 _depthStencilStateDirty = false;
             }
 
             if (_rasterizerStateDirty)
             {
-                D3D11.RasterizerState rasterizerState = _actualRasterizerState.GetDxState(this);
+                D3D11.RasterizerState rasterizerState = _actualRasterizerState.GetStrategy<ConcreteRasterizerState>().GetDxState(this);
                 this.D3dContext.Rasterizer.State = rasterizerState;
                 _rasterizerStateDirty = false;
             }
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_blendStateDirty || _blendFactorDirty)
             {
-                D3D11.BlendState blendState = _actualBlendState.GetDxState();
+                D3D11.BlendState blendState = _actualBlendState.GetStrategy<ConcreteBlendState>().GetDxState();
                 RawColor4 blendFactor = BlendFactor.ToRawColor4();
                 this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
 
@@ -581,6 +581,23 @@ namespace Microsoft.Xna.Platform.Graphics
         internal override VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
         {
             return new ConcreteDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
+        }
+
+        internal override IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source)
+        {
+            return new ConcreteBlendState(this, source);
+        }
+        internal override IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source)
+        {
+            return new ConcreteDepthStencilState(this, source);
+        }
+        internal override IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy source)
+        {
+            return new ConcreteRasterizerState(this, source);
+        }
+        internal override ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source)
+        {
+            return new ConcreteSamplerState(this, source);
         }
 
 

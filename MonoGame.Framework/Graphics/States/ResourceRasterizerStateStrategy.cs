@@ -50,8 +50,8 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
         }
 
-        public ResourceRasterizerStateStrategy(IRasterizerStateStrategy source) 
-            : base(source)
+        public ResourceRasterizerStateStrategy(GraphicsContextStrategy contextStrategy, IRasterizerStateStrategy source) 
+            : base(contextStrategy, source)
         {
         }
     }

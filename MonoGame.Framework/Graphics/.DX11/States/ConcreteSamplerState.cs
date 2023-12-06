@@ -1,19 +1,29 @@
-// MonoGame - Copyright (C) The MonoGame Team
+﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2023 Nick Kastellanos
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Platform.Graphics;
+using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
-namespace Microsoft.Xna.Framework.Graphics
+
+namespace Microsoft.Xna.Platform.Graphics
 {
-    public partial class SamplerState
+    internal class ConcreteSamplerState : ResourceSamplerStateStrategy
     {
         private D3D11.SamplerState _state;
 
+        internal ConcreteSamplerState(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source)
+            : base(contextStrategy, source)
+        {
+        }
 
         internal D3D11.SamplerState GetDxState()
         {
@@ -136,14 +146,22 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        partial void PlatformDispose(bool disposing)
+
+        internal override void PlatformGraphicsContextLost()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
             }
 
             DX.Utilities.Dispose(ref _state);
+
+            base.Dispose(disposing);
         }
     }
-}
 
+}
