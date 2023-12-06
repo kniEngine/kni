@@ -23,15 +23,11 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteSamplerState(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source)
             : base(contextStrategy, source)
         {
+            _state = CreateDXState(this.GraphicsDevice.Strategy);
         }
 
         internal D3D11.SamplerState GetDxState()
         {
-            if (_state == null)
-            {
-                _state = CreateDXState(this.GraphicsDevice.Strategy);
-            }
-
             return _state;
         }
 

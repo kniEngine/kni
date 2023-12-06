@@ -23,15 +23,11 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteDepthStencilState(GraphicsContextStrategy contextStrategy, IDepthStencilStateStrategy source)
             : base(contextStrategy, source)
         {
+            _state = CreateDXState(this.GraphicsDevice.Strategy);
         }
 
         internal D3D11.DepthStencilState GetDxState()
         {
-            if (_state == null)
-            {
-                _state = CreateDXState(this.GraphicsDevice.Strategy);
-            }
-
             return _state;
         }
 

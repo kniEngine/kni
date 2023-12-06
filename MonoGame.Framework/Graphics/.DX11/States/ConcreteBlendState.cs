@@ -23,16 +23,11 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteBlendState(GraphicsContextStrategy contextStrategy, IBlendStateStrategy source)
             : base(contextStrategy, source)
         {
+            _state = CreateDXState(this.GraphicsDevice.Strategy);
         }
-
 
         internal D3D11.BlendState GetDxState()
         {
-            if (_state == null)
-            {
-                _state = CreateDXState(this.GraphicsDevice.Strategy);
-            }
-
             return _state;
         }
 
