@@ -469,7 +469,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
+                VertexDeclarationAttributeInfo attrInfo;
+                if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out attrInfo))
+                {
+                    attrInfo = CreateAttributeInfo(vertexShader, vertexDeclaration.InternalVertexElements, maxVertexBufferSlots);
+                    vertexDeclaration._shaderAttributeInfo.Add(programHash, attrInfo);
+                }
 
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -540,9 +545,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader vertexShader, IntPtr baseVertex)
         {
             int programHash = GetCurrentShaderProgramHash();
-            int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-            VertexDeclarationAttributeInfo attrInfo = vertexDeclaration.GetAttributeInfo(vertexShader, programHash, maxVertexBufferSlots);
 
+            int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
+            VertexDeclarationAttributeInfo attrInfo;
+            if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out attrInfo))
+            {
+                attrInfo = CreateAttributeInfo(vertexShader, vertexDeclaration.InternalVertexElements, maxVertexBufferSlots);
+                vertexDeclaration._shaderAttributeInfo.Add(programHash, attrInfo);
+            }
+            
             // Apply the vertex attribute info
             for (int i = 0; i < attrInfo.Elements.Count; i++)
             {
@@ -566,6 +577,32 @@ namespace Microsoft.Xna.Platform.Graphics
 
             SetVertexAttributeArray(attrInfo.EnabledAttributes);
             _attribsDirty = true;
+        }
+
+        private static VertexDeclarationAttributeInfo CreateAttributeInfo(Shader vertexShader, VertexElement[] internalVertexElements, int maxVertexBufferSlots)
+        {
+            // Get the vertex attribute info and cache it
+            VertexDeclarationAttributeInfo attrInfo = new VertexDeclarationAttributeInfo(maxVertexBufferSlots);
+            foreach (VertexElement ve in internalVertexElements)
+            {
+                int attributeLocation = ((ConcreteVertexShader)vertexShader.Strategy).GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
+                // XNA appears to ignore usages it can't find a match for, so we will do the same
+                if (attributeLocation < 0)
+                    continue;
+
+                VertexDeclarationAttributeInfoElement vertexDeclarationAttributeInfoElement = new VertexDeclarationAttributeInfoElement()
+                {
+                    AttributeLocation = attributeLocation,
+                    NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements(),
+                    VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType(),
+                    Normalized = ve.ToGLVertexAttribNormalized(),
+                    Offset = ve.Offset,
+                };
+                attrInfo.Elements.Add(vertexDeclarationAttributeInfoElement);
+                attrInfo.EnabledAttributes[attributeLocation] = true;
+            }
+
+            return attrInfo;
         }
 
         private static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
