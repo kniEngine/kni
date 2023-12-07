@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 attrInfo.Elements.Add(new VertexDeclarationAttributeInfoElement
                 {
                     AttributeLocation = attributeLocation,
-                    NumberOfElements = ToGLNumberOfElements(ve.VertexElementFormat),
-                    VertexAttribPointerType = ToGLVertexAttribPointerType(ve.VertexElementFormat),
-                    Normalized = ToGLVertexAttribNormalized(ve),
+                    NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements(),
+                    VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType(),
+                    Normalized = ve.ToGLVertexAttribNormalized(),
                     Offset = ve.Offset,
                 });
                 attrInfo.EnabledAttributes[attributeLocation] = true;
@@ -42,96 +42,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _shaderAttributeInfo.Add(programHash, attrInfo);
             return attrInfo;
-        }
-
-        private static int ToGLNumberOfElements(VertexElementFormat elementFormat)
-        {
-            switch (elementFormat)
-            {
-                case VertexElementFormat.Single:
-                    return 1;
-                case VertexElementFormat.Vector2:
-                    return 2;
-                case VertexElementFormat.Vector3:
-                    return 3;
-                case VertexElementFormat.Vector4:
-                    return 4;
-                case VertexElementFormat.Color:
-                    return 4;
-                case VertexElementFormat.Byte4:
-                    return 4;
-                case VertexElementFormat.Short2:
-                    return 2;
-                case VertexElementFormat.Short4:
-                    return 4;
-
-                case VertexElementFormat.NormalizedShort2:
-                    return 2;
-                case VertexElementFormat.NormalizedShort4:
-                    return 4;
-
-                case VertexElementFormat.HalfVector2:
-                    return 2;
-                case VertexElementFormat.HalfVector4:
-                    return 4;
-
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        private static WebGLDataType ToGLVertexAttribPointerType(VertexElementFormat elementFormat)
-        {
-            switch (elementFormat)
-            {
-                case VertexElementFormat.Single:
-                    return WebGLDataType.FLOAT;
-                case VertexElementFormat.Vector2:
-                    return WebGLDataType.FLOAT;
-                case VertexElementFormat.Vector3:
-                    return WebGLDataType.FLOAT;
-                case VertexElementFormat.Vector4:
-                    return WebGLDataType.FLOAT;
-                case VertexElementFormat.Color:
-                    return WebGLDataType.UBYTE;
-                case VertexElementFormat.Byte4:
-                    return WebGLDataType.UBYTE;
-                case VertexElementFormat.Short2:
-                    return WebGLDataType.SHORT;
-                case VertexElementFormat.Short4:
-                    return WebGLDataType.SHORT;
-                case VertexElementFormat.NormalizedShort2:
-                    return WebGLDataType.SHORT;
-                case VertexElementFormat.NormalizedShort4:
-                    return WebGLDataType.SHORT;
-
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        private static bool ToGLVertexAttribNormalized(VertexElement element)
-        {
-            // TODO: This may or may not be the right behavor.  
-            //
-            // For instance the VertexElementFormat.Byte4 format is not supposed
-            // to be normalized, but this line makes it so.
-            //
-            // The question is in MS XNA are types normalized based on usage or
-            // normalized based to their format?
-            //
-            if (element.VertexElementUsage == VertexElementUsage.Color)
-                return true;
-
-            switch (element.VertexElementFormat)
-            {
-                case VertexElementFormat.NormalizedShort2:
-                case VertexElementFormat.NormalizedShort4:
-                    return true;
-
-                default:
-                    return false;
-            }
         }
 
     }
