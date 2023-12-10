@@ -440,24 +440,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        // Get a hashed value based on the currently bound shaders
-        // throws an exception if no shaders are bound
-        private int GetCurrentShaderProgramHash()
-        {
-            if (VertexShader == null && PixelShader == null)
-                throw new InvalidOperationException("There is no shader bound!");
-            if (VertexShader == null)
-                return PixelShader.HashKey;
-            if (PixelShader == null)
-                return VertexShader.HashKey;
-
-            return VertexShader.HashKey ^ PixelShader.HashKey;
-        }
-
         private void PlatformApplyVertexBuffersAttribs(int baseVertex)
         {
             VertexShader vertexShader = this.VertexShader;
-            int programHash = GetCurrentShaderProgramHash();
+            int programHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
             bool bindingsChanged = false;
 
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
@@ -542,7 +528,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
         {
             VertexShader vertexShader = this.VertexShader;
-            int programHash = GetCurrentShaderProgramHash();
+            int programHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
 
             VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
             int vertexStride = vertexDeclaration.VertexStride;
