@@ -235,11 +235,6 @@ namespace Microsoft.Xna.Platform.Graphics
             this.SamplerStates.Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
         }
 
-        private int GetCurrentShaderProgramHash2()
-        {
-            return VertexShader.HashKey ^ PixelShader.HashKey;
-        }
-
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
@@ -247,7 +242,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             ShaderProgram shaderProgram;
-            int shaderProgramHash = GetCurrentShaderProgramHash2();
+            int shaderProgramHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
             if (!this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
