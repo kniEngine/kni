@@ -585,6 +585,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Get the vertex attribute info and cache it
             VertexDeclarationAttributeInfo attrInfo = new VertexDeclarationAttributeInfo(maxVertexBufferSlots);
+
             foreach (VertexElement ve in internalVertexElements)
             {
                 int attributeLocation = ((ConcreteVertexShader)vertexShader.Strategy).GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
@@ -592,16 +593,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (attributeLocation < 0)
                     continue;
 
-                VertexDeclarationAttributeInfoElement vertexDeclarationAttributeInfoElement = new VertexDeclarationAttributeInfoElement()
-                {
-                    AttributeLocation = attributeLocation,
-                    NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements(),
-                    VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType(),
-                    Normalized = ve.ToGLVertexAttribNormalized(),
-                    Offset = ve.Offset,
-                };
-                attrInfo.Elements.Add(vertexDeclarationAttributeInfoElement);
-                attrInfo.EnabledAttributes[attributeLocation] = true;
+                VertexDeclarationAttributeInfoElement vertexAttribInfoElement = new VertexDeclarationAttributeInfoElement();
+                vertexAttribInfoElement.NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements();
+                vertexAttribInfoElement.VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType();
+                vertexAttribInfoElement.Normalized = ve.ToGLVertexAttribNormalized();
+                vertexAttribInfoElement.Offset = ve.Offset;
+                vertexAttribInfoElement.AttributeLocation = attributeLocation;
+
+                attrInfo.Elements.Add(vertexAttribInfoElement);
+                attrInfo.EnabledAttributes[vertexAttribInfoElement.AttributeLocation] = true;
             }
 
             return attrInfo;
