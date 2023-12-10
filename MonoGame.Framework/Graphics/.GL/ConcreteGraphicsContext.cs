@@ -450,17 +450,11 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
-                VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
-                VertexDeclarationAttributeInfo vertexAttribInfo;
-                if (!vertexShaderStrategy._vertexAttribInfoCache.TryGetValue(internalVertexElements, out vertexAttribInfo))
-                {
-                    int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                    vertexAttribInfo = ConcreteVertexShader.CreateVertexAttribInfo(vertexShaderStrategy, internalVertexElements, maxVertexBufferSlots);
-                    vertexShaderStrategy._vertexAttribInfoCache.Add(internalVertexElements, vertexAttribInfo);
-                }
+                int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
+                VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
                 if (_attribsDirty
                 ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy
@@ -529,17 +523,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             ConcreteVertexShader vertexShaderStrategy = (ConcreteVertexShader)this.VertexShader.Strategy;
 
-            VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
             int vertexStride = vertexDeclaration.VertexStride;
             IntPtr vertexOffset = baseVertex;
 
-            VertexDeclarationAttributeInfo vertexAttribInfo;
-            if (!vertexShaderStrategy._vertexAttribInfoCache.TryGetValue(internalVertexElements, out vertexAttribInfo))
-            {
-                int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                vertexAttribInfo = ConcreteVertexShader.CreateVertexAttribInfo(vertexShaderStrategy, internalVertexElements, maxVertexBufferSlots);
-                vertexShaderStrategy._vertexAttribInfoCache.Add(internalVertexElements, vertexAttribInfo);
-            }
+            int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
+            VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
             for (int e = 0; e < vertexAttribInfo.Elements.Count; e++)
             {
