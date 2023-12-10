@@ -406,7 +406,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
                 int vertexStride = vertexDeclaration.VertexStride;
-                IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
+                IntPtr vertexOffset = (IntPtr)(vertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 VertexDeclarationAttributeInfo vertexAttribInfo;
                 if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
