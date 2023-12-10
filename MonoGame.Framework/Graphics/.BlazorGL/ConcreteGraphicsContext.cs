@@ -396,8 +396,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyVertexBuffersAttribs(int baseVertex)
         {
-            VertexShader vertexShader = this.VertexShader;
-            int programHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
+            ConcreteVertexShader vertexShaderStrategy = (ConcreteVertexShader)this.VertexShader.Strategy;
+            int programHash = (vertexShaderStrategy.HashKey ^ this.PixelShader.HashKey);
             bool bindingsChanged = false;
 
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
@@ -412,7 +412,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
                 {
                     int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                    vertexAttribInfo = CreateAttributeInfo(vertexShader, internalVertexElements, maxVertexBufferSlots);
+                    vertexAttribInfo = CreateAttributeInfo(vertexShaderStrategy, internalVertexElements, maxVertexBufferSlots);
                     vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
                 }
 
@@ -482,8 +482,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, int baseVertex)
         {
-            VertexShader vertexShader = this.VertexShader;
-            int programHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
+            ConcreteVertexShader vertexShaderStrategy = (ConcreteVertexShader)this.VertexShader.Strategy;
+            int programHash = (vertexShaderStrategy.HashKey ^ this.PixelShader.HashKey);
 
             VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
             int vertexStride = vertexDeclaration.VertexStride;
@@ -493,7 +493,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
             {
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                vertexAttribInfo = CreateAttributeInfo(vertexShader, internalVertexElements, maxVertexBufferSlots);
+                vertexAttribInfo = CreateAttributeInfo(vertexShaderStrategy, internalVertexElements, maxVertexBufferSlots);
                 vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
             }
 
@@ -520,14 +520,14 @@ namespace Microsoft.Xna.Platform.Graphics
             _attribsDirty = true;
         }
 
-        private static VertexDeclarationAttributeInfo CreateAttributeInfo(Shader vertexShader, VertexElement[] internalVertexElements, int maxVertexBufferSlots)
+        private static VertexDeclarationAttributeInfo CreateAttributeInfo(ConcreteVertexShader vertexShaderStrategy, VertexElement[] internalVertexElements, int maxVertexBufferSlots)
         {
             // Get the vertex attribute info and cache it
             VertexDeclarationAttributeInfo attrInfo = new VertexDeclarationAttributeInfo(maxVertexBufferSlots);
 
             foreach (VertexElement ve in internalVertexElements)
             {
-                int attributeLocation = ((ConcreteVertexShader)vertexShader.Strategy).GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
+                int attributeLocation = vertexShaderStrategy.GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
                 // XNA appears to ignore usages it can't find a match for, so we will do the same
                 if (attributeLocation < 0)
                     continue;
