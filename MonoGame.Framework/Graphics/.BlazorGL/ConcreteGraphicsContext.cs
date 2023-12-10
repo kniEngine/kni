@@ -418,6 +418,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
+                int vertexStride = vertexDeclaration.VertexStride;
+
                 VertexDeclarationAttributeInfo vertexAttribInfo;
                 if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
                 {
@@ -426,7 +428,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
                 }
 
-                int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (_attribsDirty
@@ -497,6 +498,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             VertexShader vertexShader = this.VertexShader;
             int programHash = GetCurrentShaderProgramHash();
+
+            int vertexStride = vertexDeclaration.VertexStride;
+
             VertexDeclarationAttributeInfo vertexAttribInfo;
             if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
             {
@@ -512,7 +516,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     element.NumberOfElements,
                     element.VertexAttribPointerType,
                     element.Normalized,
-                    vertexDeclaration.VertexStride,
+                    vertexStride,
                     (baseVertex + element.Offset));
                 GL.CheckGLError();
 
