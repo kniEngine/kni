@@ -11,6 +11,5 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class VertexDeclaration
     {
-        internal readonly Dictionary<int, VertexDeclarationAttributeInfo> _shaderAttributeInfo = new Dictionary<int, VertexDeclarationAttributeInfo>();
     }
 }
