@@ -459,8 +459,9 @@ namespace Microsoft.Xna.Platform.Graphics
             return VertexShader.HashKey ^ PixelShader.HashKey;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(Shader vertexShader, int baseVertex)
+        private void PlatformApplyVertexBuffersAttribs(int baseVertex)
         {
+            VertexShader vertexShader = this.VertexShader;
             int programHash = GetCurrentShaderProgramHash();
             bool bindingsChanged = false;
 
@@ -542,8 +543,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SetVertexAttributeArray(_newEnabledVertexAttributes);
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, Shader vertexShader, IntPtr baseVertex)
+        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
         {
+            VertexShader vertexShader = this.VertexShader;
             int programHash = GetCurrentShaderProgramHash();
 
             int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
@@ -631,7 +633,7 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(VertexShader, 0);
+            PlatformApplyVertexBuffersAttribs(0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -656,7 +658,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (GL.DrawElementsBaseVertex != null)
             {
-                PlatformApplyVertexBuffersAttribs(VertexShader, 0);
+                PlatformApplyVertexBuffersAttribs(0);
 
                 GL.DrawElementsBaseVertex(target,
                                   indexElementCount,
@@ -667,7 +669,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+                PlatformApplyVertexBuffersAttribs(baseVertex);
 
                 GL.DrawElements(target,
                                 indexElementCount,
@@ -699,7 +701,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!this.Context.DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
-                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+                PlatformApplyVertexBuffersAttribs(baseVertex);
 
                 GL.DrawElementsInstancedBaseInstance(target,
                                                      indexElementCount,
@@ -710,7 +712,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(VertexShader, baseVertex);
+                PlatformApplyVertexBuffersAttribs(baseVertex);
 
                 GL.DrawElementsInstanced(target,
                                          indexElementCount,
@@ -740,7 +742,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vbHandle.AddrOfPinnedObject());
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vbHandle.AddrOfPinnedObject());
 
                 //Draw
                 GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
@@ -779,7 +781,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
@@ -821,7 +823,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, VertexShader, vertexAddr);
+                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
