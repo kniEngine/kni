@@ -465,6 +465,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int vertexStride = vertexDeclaration.VertexStride;
+                IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 VertexDeclarationAttributeInfo vertexAttribInfo;
                 if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
@@ -473,8 +474,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     vertexAttribInfo = CreateAttributeInfo(vertexShader, vertexDeclaration.InternalVertexElements, maxVertexBufferSlots);
                     vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
                 }
-
-                IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
                 if (_attribsDirty
                 ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy
@@ -545,6 +544,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int programHash = GetCurrentShaderProgramHash();
 
             int vertexStride = vertexDeclaration.VertexStride;
+            IntPtr vertexOffset = baseVertex;
 
             VertexDeclarationAttributeInfo vertexAttribInfo;
             if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
@@ -562,7 +562,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     element.VertexAttribPointerType,
                     element.Normalized,
                     vertexStride,
-                    (IntPtr)(baseVertex.ToInt64() + element.Offset));
+                    (IntPtr)(vertexOffset.ToInt64() + element.Offset));
                 GL.CheckGLError();
 
 #if DESKTOPGL
