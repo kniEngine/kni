@@ -464,6 +464,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
+                VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexDeclaration.VertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
@@ -471,7 +472,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
                 {
                     int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                    vertexAttribInfo = CreateAttributeInfo(vertexShader, vertexDeclaration.InternalVertexElements, maxVertexBufferSlots);
+                    vertexAttribInfo = CreateAttributeInfo(vertexShader, internalVertexElements, maxVertexBufferSlots);
                     vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
                 }
 
@@ -543,6 +544,7 @@ namespace Microsoft.Xna.Platform.Graphics
             VertexShader vertexShader = this.VertexShader;
             int programHash = GetCurrentShaderProgramHash();
 
+            VertexElement[] internalVertexElements = vertexDeclaration.InternalVertexElements;
             int vertexStride = vertexDeclaration.VertexStride;
             IntPtr vertexOffset = baseVertex;
 
@@ -550,7 +552,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!vertexDeclaration._shaderAttributeInfo.TryGetValue(programHash, out vertexAttribInfo))
             {
                 int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
-                vertexAttribInfo = CreateAttributeInfo(vertexShader, vertexDeclaration.InternalVertexElements, maxVertexBufferSlots);
+                vertexAttribInfo = CreateAttributeInfo(vertexShader, internalVertexElements, maxVertexBufferSlots);
                 vertexDeclaration._shaderAttributeInfo.Add(programHash, vertexAttribInfo);
             }
 
