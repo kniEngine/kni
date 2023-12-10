@@ -42,10 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo" />

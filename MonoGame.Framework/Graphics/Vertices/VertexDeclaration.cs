@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// properties <see cref="GraphicsResource.Name"/> and <see cref="GraphicsResource.Tag"/> are
     /// ignored in <see cref="GetHashCode"/> and <see cref="Equals(VertexDeclaration)"/>!)
     /// </remarks>
-    public partial class VertexDeclaration : IEquatable<VertexDeclaration>
+    public class VertexDeclaration : IEquatable<VertexDeclaration>
     {
 
         #region ----- Data shared between structurally identical vertex declarations -----
