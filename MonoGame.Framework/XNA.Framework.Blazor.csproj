@@ -51,7 +51,6 @@
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Blazor.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="Graphics\Vertices\VertexDeclaration.Blazor.cs" />
     <Compile Include="Input\GamePad.Blazor.cs" />
     <Compile Include="Input\Joystick.Blazor.cs" />
     <Compile Include="Input\Keyboard.Blazor.cs" />
