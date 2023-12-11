@@ -6,9 +6,9 @@
 
   <ItemGroup>
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBufferCollection.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
-    <Compile Include="Graphics\.DX11\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
 	<Compile Include="Graphics\.DX11\States\ConcreteBlendState.cs" />
 	<Compile Include="Graphics\.DX11\States\ConcreteDepthStencilState.cs" />
