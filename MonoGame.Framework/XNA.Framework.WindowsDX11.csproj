@@ -379,6 +379,7 @@
     <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
+    <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollectionStrategy.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\SamplerInfo.cs" />

@@ -60,8 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
         // shaders
         private VertexShader _vertexShader;
         private PixelShader _pixelShader;
-        internal ConstantBufferCollectionStrategy _vertexConstantBuffers;
-        internal ConstantBufferCollectionStrategy _pixelConstantBuffers;
+        internal ConstantBufferCollection _vertexConstantBuffers;
+        internal ConstantBufferCollection _pixelConstantBuffers;
 
         // shaders dirty flags
         internal bool _vertexShaderDirty;
