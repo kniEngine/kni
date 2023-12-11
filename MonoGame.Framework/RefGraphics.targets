@@ -2,9 +2,9 @@
 
   <ItemGroup>
     <Compile Include="Graphics\.Ref\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.Ref\Shader\ConcreteConstantBufferCollection.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConcreteVertexShader.cs" />
-    <Compile Include="Graphics\.Ref\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\.Ref\Shader\ConcretePixelShader.cs" />
 	  
 	<Compile Include="Graphics\.Ref\States\ConcreteBlendState.cs" />

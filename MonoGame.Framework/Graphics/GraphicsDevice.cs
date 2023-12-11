@@ -160,6 +160,9 @@ namespace Microsoft.Xna.Framework.Graphics
             // Initialize the main viewport
             _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
 
+            _strategy._mainContext.Strategy._vertexConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
+            _strategy._mainContext.Strategy._pixelConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
+
             _strategy._mainContext.Strategy._vertexTextures = new TextureCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxVertexTextureSlots);
             _strategy._mainContext.Strategy._pixelTextures = new TextureCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxTextureSlots);
 
