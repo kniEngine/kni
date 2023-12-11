@@ -11,13 +11,13 @@ using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal sealed class ConstantBufferCollection
+    internal sealed class ConcreteConstantBufferCollection
     {
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
         private uint _dirty;
 
-        internal ConstantBufferCollection(int capacity)
+        internal ConcreteConstantBufferCollection(int capacity)
         {
             // hard limit of 32 because of _valid flags being 32bits.
             if (capacity > 32)
