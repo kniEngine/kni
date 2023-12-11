@@ -263,8 +263,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            _vertexConstantBuffers.Apply(this);
-            _pixelConstantBuffers.Apply(this);
+            _vertexConstantBuffers.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
+            _pixelConstantBuffers.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
 
 
             // Apply Shader Buffers

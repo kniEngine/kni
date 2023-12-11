@@ -10,12 +10,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal sealed class ConcreteConstantBufferCollection
+    internal sealed class ConcreteConstantBufferCollection : ConstantBufferCollectionStrategy
     {
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
 
         internal ConcreteConstantBufferCollection(int capacity)
+            : base(capacity)
         {
             // hard limit of 32 because of _valid flags being 32bits.
             if (capacity > 32)
@@ -25,7 +26,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _valid = 0;
         }
 
-        public ConstantBuffer this[int index]
+        public override ConstantBuffer this[int index]
         {
             get { return _buffers[index]; }
             set
@@ -43,7 +44,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void Clear()
+        internal override void Clear()
         {
             for (int slot = 0; slot < _buffers.Length; slot++)
                 _buffers[slot] = null;

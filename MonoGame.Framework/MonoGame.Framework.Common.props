@@ -125,6 +125,7 @@
     <Compile Include="Graphics\PackedVector\Short2.cs" />
     <Compile Include="Graphics\PackedVector\Short4.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
+    <Compile Include="Graphics\Shader\ConstantBufferCollectionStrategy.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferStrategy.cs" />
     <Compile Include="Graphics\Shader\SamplerInfo.cs" />
     <Compile Include="Graphics\Shader\Shader.cs" />
