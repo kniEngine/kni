@@ -142,7 +142,6 @@
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
-    <Compile Include="ReusableItemList.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.Android.cs" />
   </ItemGroup>
