@@ -44,7 +44,36 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public PresentationParameters()
         {
-            Clear();
+            backBufferFormat = SurfaceFormat.Color;
+#if IOS || TVOS
+			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
+			int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
+			int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
+			
+			// Flip the dimensions if we need to.
+			if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
+			    TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
+			{
+				width = height;
+				height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
+			}
+			
+			backBufferWidth = width;
+            backBufferHeight = height;
+#else
+            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;     
+#endif
+            deviceWindowHandle = IntPtr.Zero;
+#if IOS
+			isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
+#else
+            // isFullScreen = false;
+#endif
+            depthStencilFormat = DepthFormat.None;
+            multiSampleCount = 0;
+            PresentationInterval = PresentInterval.Default;
+            DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation.Default;
         }
 
         #endregion Constructors
@@ -174,43 +203,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
         #region Methods
-
-        /// <summary>
-        /// Reset all properties to their default values.
-        /// </summary>
-        public void Clear()
-        {
-            backBufferFormat = SurfaceFormat.Color;
-#if IOS || TVOS
-			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-			int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-			int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
-			
-			// Flip the dimensions if we need to.
-			if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
-			    TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
-			{
-				width = height;
-				height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-			}
-			
-			backBufferWidth = width;
-            backBufferHeight = height;
-#else
-            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;     
-#endif
-            deviceWindowHandle = IntPtr.Zero;
-#if IOS
-			isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
-#else
-            // isFullScreen = false;
-#endif
-            depthStencilFormat = DepthFormat.None;
-            multiSampleCount = 0;
-            PresentationInterval = PresentInterval.Default;
-            DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation.Default;
-        }
 
         /// <summary>
         /// Create a copy of this <see cref="PresentationParameters"/> instance.
