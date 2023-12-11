@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public sealed partial class TextureCollection
+    public sealed class TextureCollection
     {
         private TextureCollectionStrategy _strategy;
 
