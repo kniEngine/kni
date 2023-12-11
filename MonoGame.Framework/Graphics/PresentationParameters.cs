@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private int backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
         private IntPtr deviceWindowHandle;
         private int multiSampleCount;
-        private bool disposed;
         private bool isFullScreen;
         private bool hardwareModeSwitch = true;
 
@@ -45,6 +44,18 @@ namespace Microsoft.Xna.Framework.Graphics
         public PresentationParameters()
         {
             backBufferFormat = SurfaceFormat.Color;
+            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
+
+            deviceWindowHandle = IntPtr.Zero;
+
+            // isFullScreen = false;
+
+            depthStencilFormat = DepthFormat.None;
+            multiSampleCount = 0;
+            PresentationInterval = PresentInterval.Default;
+            DisplayOrientation = DisplayOrientation.Default;
+
 #if IOS || TVOS
 			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
 			int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
@@ -60,20 +71,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			
 			backBufferWidth = width;
             backBufferHeight = height;
-#else
-            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;     
 #endif
-            deviceWindowHandle = IntPtr.Zero;
+
 #if IOS
 			isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
-#else
-            // isFullScreen = false;
 #endif
-            depthStencilFormat = DepthFormat.None;
-            multiSampleCount = 0;
-            PresentationInterval = PresentInterval.Default;
-            DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation.Default;
         }
 
         #endregion Constructors
