@@ -28,21 +28,6 @@ namespace MonoGame.Framework
         /// <returns>Returns an instance of T generated with default parameterless T constructor</returns>
         static public T Create(string launchParameters, CoreWindow window, SwapChainPanel swapChainPanel)
         {
-            return Create(() => new T(), launchParameters, window, swapChainPanel);
-        }
-
-        /// <summary>
-        /// Creates your Game class initializing it with <paramref name="gameConstructor"/> to work within a XAML application window.
-        /// </summary>
-        /// <param name="gameConstructor">The method to construct T</param>
-        /// <param name="launchParameters">The command line arguments from launch.</param>
-        /// <param name="window">The core window object.</param>
-        /// <param name="swapChainPanel">The XAML SwapChainPanel to which we render the scene and receive input events.</param>
-        /// <returns>Returns an instance of T generated with <paramref name="gameConstructor"/></returns>
-        static public T Create(Func<T> gameConstructor, string launchParameters, CoreWindow window, SwapChainPanel swapChainPanel)
-        {
-            if (gameConstructor == null)
-                throw new NullReferenceException("gameConstructor");
             if (launchParameters == null)
                 throw new NullReferenceException("The launch parameters cannot be null!");
             if (window == null)
@@ -57,10 +42,10 @@ namespace MonoGame.Framework
             UAPGameWindow.Instance.Initialize(window, swapChainPanel, ConcreteGame.TouchQueue);
 
             // Construct the game.
-            var game = gameConstructor();
+            T game = new T();
 
             // Set the swap chain panel on the graphics mananger.
-            var gdm = game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = game.Strategy.GraphicsDeviceManager;
             if (gdm != null)
                 gdm.GetStrategy<Microsoft.Xna.Platform.ConcreteGraphicsDeviceManager>().SwapChainPanel = swapChainPanel;
             else
