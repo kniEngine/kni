@@ -378,7 +378,6 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
-    <Compile Include="ReusableItemList.cs" />
     <Compile Include="TitleContainer.cs" />
   </ItemGroup>
 
