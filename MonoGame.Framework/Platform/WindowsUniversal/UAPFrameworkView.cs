@@ -14,12 +14,10 @@ namespace Microsoft.Xna.Framework
     class UAPFrameworkView<T> : IFrameworkView
         where T : Game, new()
     {
-        public UAPFrameworkView(Action<T, IActivatedEventArgs> gameConstructorCustomizationDelegate)
+        public UAPFrameworkView()
         {
-            this._gameConstructorCustomizationDelegate = gameConstructorCustomizationDelegate;
         }
 
-        private Action<T, IActivatedEventArgs> _gameConstructorCustomizationDelegate = null;
         private CoreApplicationView _applicationView;
         private T _game;
 
@@ -40,11 +38,6 @@ namespace Microsoft.Xna.Framework
 
                 // Construct the game.                
                 _game = new T();
-
-                //Initializes it, if delegate was provided
-                if (_gameConstructorCustomizationDelegate != null)
-                    _gameConstructorCustomizationDelegate(_game, args);
-
             }
             else if (args.Kind == ActivationKind.Protocol)
             {
@@ -58,10 +51,6 @@ namespace Microsoft.Xna.Framework
                 if (_game == null)
                 {
                     _game = new T();
-
-                    //Initializes it, if delegate was provided
-                    if (_gameConstructorCustomizationDelegate != null)
-                        _gameConstructorCustomizationDelegate(_game, args);
                 }
             }
         }
