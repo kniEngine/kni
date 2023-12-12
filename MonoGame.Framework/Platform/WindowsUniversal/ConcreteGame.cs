@@ -112,8 +112,7 @@ namespace Microsoft.Xna.Platform
 
         private void CoreApplication_Suspending(object sender, SuspendingEventArgs e)
         {
-            if (_runInMainThread)
-                _enableRunLoop = false;
+            _enableRunLoop = false;
 
             if (this.GraphicsDevice != null)
                 this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Trim();
@@ -121,13 +120,10 @@ namespace Microsoft.Xna.Platform
 
         private void CoreApplication_Resuming(object sender, Object e)
         {
-            if (_runInMainThread)
+            if (!_enableRunLoop)
             {
-                if (!_enableRunLoop)
-                {
-                    _enableRunLoop = true;
-                    UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
-                }
+                _enableRunLoop = true;
+                UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
             }
         }
 
@@ -173,30 +169,14 @@ namespace Microsoft.Xna.Platform
             //Game.DoExiting();
         }
 
-        bool _runInMainThread = true;
         bool _enableRunLoop = false;
         private void StartRunLoop()
         {
-            if (UAPGameWindow.Instance.CoreWindow.CustomProperties.ContainsKey("RunInMainThread"))
-                _runInMainThread = (bool)UAPGameWindow.Instance.CoreWindow.CustomProperties["RunInMainThread"];
-            if (_runInMainThread)
+            if (!_enableRunLoop)
             {
-                if (!_enableRunLoop)
-                {
-                    _enableRunLoop = true;
-                    UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
-                }
-                return;
+                _enableRunLoop = true;
+                UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
             }
-            
-            var workItemHandler = new WorkItemHandler((action) =>
-            {
-                while (true)
-                {
-                    UAPGameWindow.Instance.Tick();
-                }
-            });
-            var tickWorker = ThreadPool.RunAsync(workItemHandler, WorkItemPriority.High, WorkItemOptions.TimeSliced);
         }
         
         private void OnRenderFrame(IdleDispatchedHandlerArgs e)

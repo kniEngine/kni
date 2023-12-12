@@ -55,26 +55,20 @@ namespace Microsoft.Xna.Framework
             DisplayInformation.GetForCurrentView().DpiChanged += InputEvents_DpiChanged;
             _currentDipFactor = DisplayInformation.GetForCurrentView().LogicalDpi / 96.0f;
 
-            bool runInMainThread = true;
-            if (window.CustomProperties.ContainsKey("RunInMainThread"))
-                runInMainThread = (bool)window.CustomProperties["RunInMainThread"];
-
             if (inputElement is SwapChainPanel || inputElement is SwapChainBackgroundPanel)
             {
                 // Create a thread to precess input events.
-                var workItemHandler = new WorkItemHandler((action) =>
+                WorkItemHandler workItemHandler = new WorkItemHandler( (action) =>
                 {
-                    var inputDevices = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
-                    if(runInMainThread)
-                    {
-                        // We subscribe only to Pen. Touch & Mouse is still processed from inputElement.
-                        // Currently PointerVisualizationSettings don't apply to CreateCoreIndependentInputSource 
-                        // and ContactFeedback is always visible when we create a coreIndependentInputSource for Touch.
-                        // If this bug get fixed we can add the Touch & Pen InputDeviceTypes.
-                        // Mouse still has a race contition in MG code.
-                        inputDevices &= ~CoreInputDeviceTypes.Touch;
-                        inputDevices &= ~CoreInputDeviceTypes.Mouse;
-                    }
+                    CoreInputDeviceTypes inputDevices = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
+
+                    // We subscribe only to Pen. Touch & Mouse is still processed from inputElement.
+                    // Currently PointerVisualizationSettings don't apply to CreateCoreIndependentInputSource 
+                    // and ContactFeedback is always visible when we create a coreIndependentInputSource for Touch.
+                    // If this bug get fixed we can add the Touch InputDeviceTypes.
+                    // Mouse still has a race contition.
+                    inputDevices &= ~CoreInputDeviceTypes.Touch;
+                    inputDevices &= ~CoreInputDeviceTypes.Mouse;
 
                     if (inputElement is SwapChainBackgroundPanel)
                         _coreIndependentInputSource = ((SwapChainBackgroundPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
