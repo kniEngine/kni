@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework
         void IFrameworkView.SetWindow(CoreWindow window)
         {
             // Initialize the singleton window.
-            UAPGameWindow.Instance.Initialize(window, null, ConcreteGame.TouchQueue);
+            UAPGameWindow.Instance.Initialize(window, null);
         }
 
         void IFrameworkView.Uninitialize()
