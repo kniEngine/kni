@@ -39,7 +39,7 @@ namespace MonoGame.Framework
             ConcreteGame.LaunchParameters = launchParameters;
 
             // Setup the window class.
-            UAPGameWindow.Instance.Initialize(window, swapChainPanel, ConcreteGame.TouchQueue);
+            UAPGameWindow.Instance.Initialize(window, swapChainPanel);
 
             // Construct the game.
             T game = new T();

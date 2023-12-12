@@ -112,10 +112,10 @@ namespace Microsoft.Xna.Framework
             Instance = new UAPGameWindow();
         }
 
-        public void Initialize(CoreWindow coreWindow, UIElement inputElement, TouchQueue touchQueue)
+        public void Initialize(CoreWindow coreWindow, UIElement inputElement)
         {
             _coreWindow = coreWindow;
-            _inputEvents = new InputEvents(_coreWindow, inputElement, touchQueue);
+            _inputEvents = new InputEvents(_coreWindow, inputElement, ConcreteGame.TouchQueue);
 
             _dinfo = DisplayInformation.GetForCurrentView();
             _appView = ApplicationView.GetForCurrentView();
@@ -138,7 +138,6 @@ namespace Microsoft.Xna.Framework
             SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
 
             SetCursor(false);
-
         }
 
         void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
