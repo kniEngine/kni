@@ -31,15 +31,7 @@ namespace Microsoft.Xna.Framework
         private ApplicationView _appView;
         private Rectangle _viewBounds;
 
-        private object _eventLocker = new object();
-
         private InputEvents _inputEvents;
-        private bool _isSizeChanged = false;
-        private Rectangle _newViewBounds;
-        private bool _isOrientationChanged = false;
-        private DisplayOrientation _newOrientation;
-        private bool _isFocusChanged = false;
-        private CoreWindowActivationState _newActivationState;
         private bool _backPressed = false;
 
         #region Internal Properties
@@ -147,23 +139,22 @@ namespace Microsoft.Xna.Framework
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
         {
-            lock (_eventLocker)
+            switch (args.WindowActivationState)
             {
-                _isFocusChanged = true;
-                _newActivationState = args.WindowActivationState;
-            }
-        }
-
-        private void UpdateFocus()
-        {
-            lock (_eventLocker)
-            {
-                _isFocusChanged = false;
-
-                if (_newActivationState == CoreWindowActivationState.Deactivated)
+                case CoreWindowActivationState.Deactivated:
                     GameStrategy.IsActive = false;
-                else
+                    break;
+
+                case CoreWindowActivationState.PointerActivated:
+                case CoreWindowActivationState.CodeActivated:
                     GameStrategy.IsActive = true;
+                    break;
+
+                default:
+#if DEBUG
+                    throw new InvalidOperationException();
+#endif
+                    break;
             }
         }
 
@@ -175,45 +166,32 @@ namespace Microsoft.Xna.Framework
 
         private void SetViewBounds(double width, double height)
         {
-            var pixelWidth = Math.Max(1, (int)Math.Round(width * _dinfo.RawPixelsPerViewPixel));
-            var pixelHeight = Math.Max(1, (int)Math.Round(height * _dinfo.RawPixelsPerViewPixel));
+            int pixelWidth = Math.Max(1, (int)Math.Round(width * _dinfo.RawPixelsPerViewPixel));
+            int pixelHeight = Math.Max(1, (int)Math.Round(height * _dinfo.RawPixelsPerViewPixel));
             _viewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
         }
 
         private void Window_SizeChanged(object sender, WindowSizeChangedEventArgs args)
         {
-            lock (_eventLocker)
-            {
-                _isSizeChanged = true;
-                var pixelWidth  = Math.Max(1, (int)Math.Round(args.Size.Width * _dinfo.RawPixelsPerViewPixel));
-                var pixelHeight = Math.Max(1, (int)Math.Round(args.Size.Height * _dinfo.RawPixelsPerViewPixel));
-                _newViewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
-            }
-        }
+            int pixelWidth  = Math.Max(1, (int)Math.Round(args.Size.Width * _dinfo.RawPixelsPerViewPixel));
+            int pixelHeight = Math.Max(1, (int)Math.Round(args.Size.Height * _dinfo.RawPixelsPerViewPixel));
 
-        private void UpdateSize()
-        {
-            lock (_eventLocker)
-            {
-                _isSizeChanged = false;
+            // Set the new client bounds.
+            _viewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
 
-                // Set the new client bounds.
-                _viewBounds = _newViewBounds;
+            // Set the default new back buffer size and viewport, but this
+            // can be overloaded by the two events below.
 
-                // Set the default new back buffer size and viewport, but this
-                // can be overloaded by the two events below.
+            var gdm = Game.Strategy.GraphicsDeviceManager;
+            gdm.IsFullScreen = _appView.IsFullScreenMode;
+            gdm.PreferredBackBufferWidth = _viewBounds.Width;
+            gdm.PreferredBackBufferHeight = _viewBounds.Height;
+            gdm.ApplyChanges();
 
-                var gdm = Game.Strategy.GraphicsDeviceManager;
-                gdm.IsFullScreen = _appView.IsFullScreenMode;
-                gdm.PreferredBackBufferWidth = _viewBounds.Width;
-                gdm.PreferredBackBufferHeight = _viewBounds.Height;
-                gdm.ApplyChanges();
-
-                // Set the new view state which will trigger the 
-                // Game.ApplicationViewChanged event and signal
-                // the client size changed event.
-                OnClientSizeChanged();
-            }
+            // Set the new view state which will trigger the 
+            // Game.ApplicationViewChanged event and signal
+            // the client size changed event.
+            OnClientSizeChanged();
         }
 
         private void Dispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
@@ -294,31 +272,17 @@ namespace Microsoft.Xna.Framework
 
         private void DisplayProperties_OrientationChanged(DisplayInformation dinfo, object sender)
         {
-            lock(_eventLocker)
+            // Set the new orientation.
+            _orientation = ToOrientation(dinfo.CurrentOrientation);
+
+            // Call the user callback.
+            OnOrientationChanged();
+
+            // If we have a valid client bounds then update the graphics device.
+            if (_viewBounds.Width > 0 && _viewBounds.Height > 0)
             {
-                _isOrientationChanged = true;
-                _newOrientation = ToOrientation(dinfo.CurrentOrientation);
-            }
-        }
-
-        private void UpdateOrientation()
-        {
-            lock (_eventLocker)
-            {
-                _isOrientationChanged = false;
-
-                // Set the new orientation.
-                _orientation = _newOrientation;
-
-                // Call the user callback.
-                OnOrientationChanged();
-
-                // If we have a valid client bounds then update the graphics device.
-                if (_viewBounds.Width > 0 && _viewBounds.Height > 0)
-                {
-                    var gdm = Game.Strategy.GraphicsDeviceManager;
-                    gdm.ApplyChanges();
-                }
+                var gdm = Game.Strategy.GraphicsDeviceManager;
+                gdm.ApplyChanges();
             }
         }
 
@@ -381,13 +345,13 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        void ProcessWindowEvents()
+        internal void Tick()
         {
             // Update input
             _inputEvents.UpdateState();
 
             // Update TextInput
-            if(!_inputEvents.TextQueue.IsEmpty)
+            if (!_inputEvents.TextQueue.IsEmpty)
             {
                 InputEvents.KeyChar ch;
                 while (_inputEvents.TextQueue.TryDequeue(out ch))
@@ -396,26 +360,8 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            // Update size
-            if (_isSizeChanged)
-                UpdateSize();
-
-            // Update orientation
-            if (_isOrientationChanged)
-                UpdateOrientation();
-
-            // Update focus
-            if (_isFocusChanged)
-                UpdateFocus();
-
             // Update back button
             UpdateBackButton();
-        }
-
-        internal void Tick()
-        {
-            // Update state based on window events.
-            ProcessWindowEvents();
 
             // Update and render the game.
             if (Game != null)
