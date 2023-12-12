@@ -14,21 +14,21 @@ namespace Microsoft.Xna.Framework
     class UAPFrameworkView<T> : IFrameworkView
         where T : Game, new()
     {
+        private CoreApplicationView _applicationView;
+        private T _game;
+
         public UAPFrameworkView()
         {
         }
 
-        private CoreApplicationView _applicationView;
-        private T _game;
-
-        public void Initialize(CoreApplicationView applicationView)
+        void IFrameworkView.Initialize(CoreApplicationView applicationView)
         {
             _applicationView = applicationView;
 
-            _applicationView.Activated += ViewActivated;
+            _applicationView.Activated += ApplicationView_Activated;
         }
 
-        private void ViewActivated(CoreApplicationView sender, IActivatedEventArgs args)
+        private void ApplicationView_Activated(CoreApplicationView sender, IActivatedEventArgs args)
         {
             if (args.Kind == ActivationKind.Launch)
             {
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework
                 ConcreteGame.LaunchParameters = ((LaunchActivatedEventArgs)args).Arguments;
                 ConcreteGame.PreviousExecutionState = ((LaunchActivatedEventArgs)args).PreviousExecutionState;
 
-                // Construct the game.                
+                // Construct the game.
                 _game = new T();
             }
             else if (args.Kind == ActivationKind.Protocol)
@@ -55,23 +55,23 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public void Load(string entryPoint)
+        void IFrameworkView.Load(string entryPoint)
         {
         }
 
-        public void Run()
+        void IFrameworkView.Run()
         {
             // Initialize and run the game.
             _game.Run();
         }
-       
-        public void SetWindow(CoreWindow window)
+
+        void IFrameworkView.SetWindow(CoreWindow window)
         {
             // Initialize the singleton window.
             UAPGameWindow.Instance.Initialize(window, null, ConcreteGame.TouchQueue);
         }
 
-        public void Uninitialize()
+        void IFrameworkView.Uninitialize()
         {
             // TODO: I have no idea when and if this is
             // called... as of Win8 build 8250 this seems 

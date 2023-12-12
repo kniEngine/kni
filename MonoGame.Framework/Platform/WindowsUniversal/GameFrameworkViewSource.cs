@@ -16,8 +16,7 @@ namespace MonoGame.Framework
         {
         }
 
-        [CLSCompliant(false)]
-        public IFrameworkView CreateView()
+        IFrameworkView IFrameworkViewSource.CreateView()
         {
             return new UAPFrameworkView<T>();
         }
