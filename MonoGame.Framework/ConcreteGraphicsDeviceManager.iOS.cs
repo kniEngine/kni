@@ -80,6 +80,7 @@ namespace Microsoft.Xna.Platform
             var presentationParameters = new PresentationParameters();
             presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
 
+            presentationParameters.IsFullScreen = UIKit.UIApplication.SharedApplication.StatusBarHidden;
             // Set "full screen"  as default
             presentationParameters.IsFullScreen = true;
             UIKit.UIApplication.SharedApplication.StatusBarHidden = presentationParameters.IsFullScreen;

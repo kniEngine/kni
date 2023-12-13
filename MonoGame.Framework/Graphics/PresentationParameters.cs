@@ -68,10 +68,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _backBufferWidth = width;
             _backBufferHeight = height;
 #endif
-
-#if IOS
-            _isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
-#endif
         }
 
         #endregion Constructors
