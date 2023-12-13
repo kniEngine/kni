@@ -40,12 +40,14 @@ namespace Microsoft.Xna.Platform
         {
             ConcreteGame._concreteGameInstance = this;
 
+            UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
+
             // Setup the game window.
-            Window = UAPGameWindow.Instance;
-            ((UAPGameWindow)Window).Game = game;
+            Window = uapGameWindow;
+            uapGameWindow.Game = game;
 
             // Register the CoreWindow with the services registry
-            Services.AddService(typeof(CoreWindow), UAPGameWindow.Instance.CoreWindow);
+            Services.AddService(typeof(CoreWindow), uapGameWindow.CoreWindow);
 
             // Setup the launch parameters.
             // - Parameters can optionally start with a forward slash.
@@ -123,7 +125,7 @@ namespace Microsoft.Xna.Platform
             if (!_enableRunLoop)
             {
                 _enableRunLoop = true;
-                UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
+                ((UAPGameWindow)Window).CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
             }
         }
 
@@ -140,7 +142,7 @@ namespace Microsoft.Xna.Platform
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
-            UAPGameWindow.Instance.RunLoop();
+            ((UAPGameWindow)Window).RunLoop();
 
             Game.DoEndRun();
             Game.DoExiting();
@@ -175,7 +177,8 @@ namespace Microsoft.Xna.Platform
             if (!_enableRunLoop)
             {
                 _enableRunLoop = true;
-                UAPGameWindow.Instance.CoreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
+                CoreWindow coreWindow = ((UAPGameWindow)Window).CoreWindow;
+                coreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
             }
         }
         
@@ -189,9 +192,9 @@ namespace Microsoft.Xna.Platform
         {
             if (_enableRunLoop)
             {
-                var dispatcher = UAPGameWindow.Instance.CoreWindow.Dispatcher;
-                if (dispatcher.ShouldYield(CoreDispatcherPriority.Idle))
-                    dispatcher.RunIdleAsync(OnRenderFrame);
+                CoreWindow coreWindow = ((UAPGameWindow)Window).CoreWindow;
+                if (coreWindow.Dispatcher.ShouldYield(CoreDispatcherPriority.Idle))
+                    coreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
                 else
                     OnRenderFrame(true);
             }
@@ -199,15 +202,15 @@ namespace Microsoft.Xna.Platform
 
         private void OnRenderFrame(bool isQueueEmpty)
         {
-            UAPGameWindow.Instance.Tick();
+            ((UAPGameWindow)Window).Tick();
             GamePad.Back = false;
 
             // Request next frame
-            var dispatcher = UAPGameWindow.Instance.CoreWindow.Dispatcher;
+            CoreWindow coreWindow = ((UAPGameWindow)Window).CoreWindow;
             if (isQueueEmpty)
-                dispatcher.RunAsync(CoreDispatcherPriority.Low, OnRenderFrame);
+                coreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, OnRenderFrame);
             else
-                dispatcher.RunIdleAsync(OnRenderFrame);
+                coreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
         }
 
         public override void BeforeInitialize()
@@ -216,9 +219,9 @@ namespace Microsoft.Xna.Platform
 
         public override void TickExiting()
         {
-            if (!UAPGameWindow.Instance.IsExiting)
+            if (!((UAPGameWindow)Window).IsExiting)
             {
-				UAPGameWindow.Instance.IsExiting = true;
+                ((UAPGameWindow)Window).IsExiting = true;
                 Application.Current.Exit();
             }
         }
@@ -234,13 +237,13 @@ namespace Microsoft.Xna.Platform
             if (pp.IsFullScreen)
             {
                 // Enter FullScreen
-                if (UAPGameWindow.Instance.AppView.TryEnterFullScreenMode())
+                if (((UAPGameWindow)Window).AppView.TryEnterFullScreenMode())
                     ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             }
             else
             {
                 // Exit FullScreen
-                UAPGameWindow.Instance.AppView.ExitFullScreenMode();
+                ((UAPGameWindow)Window).AppView.ExitFullScreenMode();
                 ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
             }
         }
@@ -253,7 +256,7 @@ namespace Microsoft.Xna.Platform
                 if (base.IsMouseVisible != value)
                 {
                     base.IsMouseVisible = value;
-                    UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+                    ((UAPGameWindow)Window).SetCursor(Game.IsMouseVisible);
                 }
                 else base.IsMouseVisible = value;
             }
@@ -266,7 +269,7 @@ namespace Microsoft.Xna.Platform
             if (gdm != null)
                 gdm.Dispose();
 
-			UAPGameWindow.Instance.Dispose();
+            ((UAPGameWindow)Window).Dispose();
 
             base.Dispose(disposing);
         }

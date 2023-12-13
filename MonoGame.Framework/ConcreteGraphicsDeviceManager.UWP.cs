@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform
             base.PreferredBackBufferWidth = clientBounds.Width;
             base.PreferredBackBufferHeight = clientBounds.Height;
 
-            base.IsFullScreen = UAPGameWindow.Instance.AppView.IsFullScreenMode;
+            base.IsFullScreen = ((UAPGameWindow)game.Window).AppView.IsFullScreenMode;
         }
 
         public override bool PreferHalfPixelOffset
