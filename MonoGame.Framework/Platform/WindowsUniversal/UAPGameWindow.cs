@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -11,19 +12,26 @@ using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.Graphics.Display;
 using Windows.Phone.UI.Input;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework
 {
     partial class UAPGameWindow : GameWindow
     {
+        private static Dictionary<IntPtr, UAPGameWindow> _instances = new Dictionary<IntPtr, UAPGameWindow>();
+
+        internal static UAPGameWindow FromHandle(IntPtr handle)
+        {
+            return _instances[handle];
+        }
+
         private DisplayOrientation _supportedOrientations;
         private DisplayOrientation _orientation;
         private CoreWindow _coreWindow;
@@ -104,9 +112,16 @@ namespace Microsoft.Xna.Framework
             Instance = new UAPGameWindow();
         }
 
+        internal UAPGameWindow()
+        {
+
+        }
+
         public void Initialize(CoreWindow coreWindow, UIElement inputElement)
         {
             _coreWindow = coreWindow;
+            _instances.Add(this.Handle, this);
+
             _inputEvents = new InputEvents(_coreWindow, inputElement, ConcreteGame.TouchQueue);
 
             _dinfo = DisplayInformation.GetForCurrentView();
@@ -373,6 +388,8 @@ namespace Microsoft.Xna.Framework
         public void Dispose()
         {
             //window.Dispose();
+
+            _instances.Remove(this.Handle);
         }
 
         #endregion
