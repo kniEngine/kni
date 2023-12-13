@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework
                 inputElement.PointerMoved += UIElement_PointerMoved;
                 inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
             }
-            else
+            else // (inputElement == null)
             {
                 // If we only have a CoreWindow then use it for input events.
                 window.PointerPressed += CoreWindow_PointerPressed;

@@ -117,12 +117,12 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        public void Initialize(CoreWindow coreWindow, UIElement inputElement)
+        public void Initialize(CoreWindow coreWindow, SwapChainPanel swapChainPanel = null)
         {
             _coreWindow = coreWindow;
             _instances.Add(this.Handle, this);
 
-            _inputEvents = new InputEvents(_coreWindow, inputElement);
+            _inputEvents = new InputEvents(_coreWindow, swapChainPanel);
 
             _dinfo = DisplayInformation.GetForCurrentView();
             _appView = ApplicationView.GetForCurrentView();
