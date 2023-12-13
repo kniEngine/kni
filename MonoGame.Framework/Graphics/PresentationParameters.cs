@@ -2,12 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
+// Copyright (C)2023 Nick Kastellanos
 
-#if IOS || TVOS
-using UIKit;
-using Microsoft.Xna.Framework.Input.Touch;
-#endif
+using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -51,27 +48,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _displayOrientation = DisplayOrientation.Default;
             _isFullScreen = false;
             _deviceWindowHandle = IntPtr.Zero;
-
-#if IOS || TVOS
-            // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-            int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-            int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
-            
-            // Flip the dimensions if we need to.
-            if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
-                TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
-            {
-                width = height;
-                height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-            }
-            
-            _backBufferWidth = width;
-            _backBufferHeight = height;
-#endif
-
-#if IOS
-            _isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
-#endif
         }
 
         #endregion Constructors
@@ -137,14 +113,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public bool IsFullScreen
         {
             get { return _isFullScreen; }
-            set
-            {
-                _isFullScreen = value;
-
-#if IOS
-                UIApplication.SharedApplication.StatusBarHidden = _isFullScreen;
-#endif
-            }
+            set { _isFullScreen = value; }
         }
         
         /// <summary>
