@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework
             DisplayInformation.GetForCurrentView().DpiChanged += InputEvents_DpiChanged;
             _currentDipFactor = DisplayInformation.GetForCurrentView().LogicalDpi / 96.0f;
 
-            if (inputElement is SwapChainPanel || inputElement is SwapChainBackgroundPanel)
+            if (inputElement is SwapChainPanel)
             {
                 // Create a thread to precess input events.
                 WorkItemHandler workItemHandler = new WorkItemHandler( (action) =>
@@ -70,10 +70,7 @@ namespace Microsoft.Xna.Framework
                     inputDevices &= ~CoreInputDeviceTypes.Touch;
                     inputDevices &= ~CoreInputDeviceTypes.Mouse;
 
-                    if (inputElement is SwapChainBackgroundPanel)
-                        _coreIndependentInputSource = ((SwapChainBackgroundPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
-                    else
-                        _coreIndependentInputSource = ((SwapChainPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
+                    _coreIndependentInputSource = ((SwapChainPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
 
                     _coreIndependentInputSource.PointerPressed += CoreWindow_PointerPressed;
                     _coreIndependentInputSource.PointerMoved += CoreWindow_PointerMoved;
