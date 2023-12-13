@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Framework
             _coreWindow = coreWindow;
             _instances.Add(this.Handle, this);
 
-            _inputEvents = new InputEvents(_coreWindow, inputElement, ConcreteGame.TouchQueue);
+            _inputEvents = new InputEvents(_coreWindow, inputElement);
 
             _dinfo = DisplayInformation.GetForCurrentView();
             _appView = ApplicationView.GetForCurrentView();

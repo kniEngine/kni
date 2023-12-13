@@ -28,8 +28,6 @@ namespace Microsoft.Xna.Platform
     {
         internal static string LaunchParameters;
 
-        internal static readonly TouchQueue TouchQueue = new TouchQueue();
-
         [CLSCompliant(false)]
         public static ApplicationExecutionState PreviousExecutionState { get; internal set; }
 
@@ -228,7 +226,7 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeUpdate()
         {
-            TouchQueue.ProcessQueued();
+            InputEvents.TouchQueue.ProcessQueued();
             return true;
         }
 

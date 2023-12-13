@@ -32,16 +32,19 @@ namespace Microsoft.Xna.Framework
         public readonly ConcurrentQueue<KeyChar> TextQueue = new ConcurrentQueue<KeyChar>();
         private KeyChar _lastEnqueuedKeyChar;
 
-        private readonly TouchQueue _touchQueue;
+        private readonly TouchQueue _touchQueue = new TouchQueue();
+
+        internal static TouchQueue TouchQueue;
 
         // To convert from DIPs (device independent pixels) to actual screen resolution pixels.
         private static float _currentDipFactor;
 
         private CoreIndependentInputSource _coreIndependentInputSource;
 
-        public InputEvents(CoreWindow window, UIElement inputElement, TouchQueue touchQueue)
+
+        public InputEvents(CoreWindow window, UIElement inputElement)
         {
-            _touchQueue = touchQueue;
+            InputEvents.TouchQueue = _touchQueue;
 
             // The key events are always tied to the window as those will
             // only arrive here if some other control hasn't gotten it.
