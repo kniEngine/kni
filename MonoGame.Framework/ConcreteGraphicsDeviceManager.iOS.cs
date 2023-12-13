@@ -46,7 +46,10 @@ namespace Microsoft.Xna.Platform
                 base.IsFullScreen = value;
 
                 if (base.GraphicsDevice != null)
+                {
                     base.GraphicsDevice.PresentationParameters.IsFullScreen = value;
+                    UIKit.UIApplication.SharedApplication.StatusBarHidden = base.GraphicsDevice.PresentationParameters.IsFullScreen;
+                }
             }
         }
 
@@ -79,6 +82,7 @@ namespace Microsoft.Xna.Platform
 
             // Set "full screen"  as default
             presentationParameters.IsFullScreen = true;
+            UIKit.UIApplication.SharedApplication.StatusBarHidden = presentationParameters.IsFullScreen;
 
             GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
             gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.

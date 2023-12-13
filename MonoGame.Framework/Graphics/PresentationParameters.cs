@@ -137,14 +137,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public bool IsFullScreen
         {
             get { return _isFullScreen; }
-            set
-            {
-                _isFullScreen = value;
-
-#if IOS
-                UIApplication.SharedApplication.StatusBarHidden = _isFullScreen;
-#endif
-            }
+            set { _isFullScreen = value; }
         }
         
         /// <summary>
