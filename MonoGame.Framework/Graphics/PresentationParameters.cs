@@ -4,10 +4,6 @@
 
 using System;
 
-#if WINDOWS_UAP
-using Windows.UI.Xaml.Controls;
-#endif
-
 #if IOS || TVOS
 using UIKit;
 using Microsoft.Xna.Framework.Input.Touch;
