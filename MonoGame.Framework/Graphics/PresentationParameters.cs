@@ -25,14 +25,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region Private Fields
 
-        private DepthFormat depthStencilFormat;
-        private SurfaceFormat backBufferFormat;
-        private int backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
-        private int backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-        private IntPtr deviceWindowHandle;
-        private int multiSampleCount;
-        private bool isFullScreen;
-        private bool hardwareModeSwitch = true;
+        private SurfaceFormat _backBufferFormat;
+        private DepthFormat _depthStencilFormat;
+        private int _backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
+        private int _backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+        private int _multiSampleCount;
+        private RenderTargetUsage _renderTargetUsage;
+        private PresentInterval _presentationInterval;
+        private DisplayOrientation _displayOrientation;
+        private bool _isFullScreen;
+        private bool _hardwareModeSwitch = true;
+        private IntPtr _deviceWindowHandle;
 
         #endregion Private Fields
 
@@ -43,38 +46,35 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public PresentationParameters()
         {
-            backBufferFormat = SurfaceFormat.Color;
-            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
-
-            deviceWindowHandle = IntPtr.Zero;
-
-            // isFullScreen = false;
-
-            depthStencilFormat = DepthFormat.None;
-            multiSampleCount = 0;
-            PresentationInterval = PresentInterval.Default;
-            DisplayOrientation = DisplayOrientation.Default;
+            _backBufferFormat = SurfaceFormat.Color;
+            _depthStencilFormat = DepthFormat.None;
+            _backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+            _backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
+            _multiSampleCount = 0;
+            _presentationInterval = PresentInterval.Default;
+            _displayOrientation = DisplayOrientation.Default;
+            _isFullScreen = false;
+            _deviceWindowHandle = IntPtr.Zero;
 
 #if IOS || TVOS
-			// Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-			int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-			int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
-			
-			// Flip the dimensions if we need to.
-			if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
-			    TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
-			{
-				width = height;
-				height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-			}
-			
-			backBufferWidth = width;
-            backBufferHeight = height;
+            // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
+            int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
+            int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
+            
+            // Flip the dimensions if we need to.
+            if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
+                TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
+            {
+                width = height;
+                height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
+            }
+            
+            _backBufferWidth = width;
+            _backBufferHeight = height;
 #endif
 
 #if IOS
-			isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
+            _isFullScreen = UIApplication.SharedApplication.StatusBarHidden;
 #endif
         }
 
@@ -87,8 +87,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public SurfaceFormat BackBufferFormat
         {
-            get { return backBufferFormat; }
-            set { backBufferFormat = value; }
+            get { return _backBufferFormat; }
+            set { _backBufferFormat = value; }
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public int BackBufferHeight
         {
-            get { return backBufferHeight; }
-            set { backBufferHeight = value; }
+            get { return _backBufferHeight; }
+            set { _backBufferHeight = value; }
         }
 
         /// <summary>
@@ -105,16 +105,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public int BackBufferWidth
         {
-            get { return backBufferWidth; }
-            set { backBufferWidth = value; }
+            get { return _backBufferWidth; }
+            set { _backBufferWidth = value; }
         }
 
         /// <summary>
         /// Get the bounds of the back buffer.
         /// </summary>
-        public Rectangle Bounds 
+        public Rectangle Bounds
         {
-            get { return new Rectangle(0, 0, backBufferWidth, backBufferHeight); }
+            get { return new Rectangle(0, 0, _backBufferWidth, _backBufferHeight); }
         }
 
         /// <summary>
@@ -122,17 +122,17 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public IntPtr DeviceWindowHandle
         {
-            get { return deviceWindowHandle; }
-            set { deviceWindowHandle = value; }
+            get { return _deviceWindowHandle; }
+            set { _deviceWindowHandle = value; }
         }
 
         /// <summary>
         /// Get or set the depth stencil format for the back buffer.
         /// </summary>
-		public DepthFormat DepthStencilFormat
+        public DepthFormat DepthStencilFormat
         {
-            get { return depthStencilFormat; }
-            set { depthStencilFormat = value; }
+            get { return _depthStencilFormat; }
+            set { _depthStencilFormat = value; }
         }
 
         /// <summary>
@@ -140,20 +140,17 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public bool IsFullScreen
         {
-			get
-            {
-				 return isFullScreen;
-            }
+            get { return _isFullScreen; }
             set
             {
-                isFullScreen = value;				
-#if IOS
-				UIApplication.SharedApplication.StatusBarHidden = isFullScreen;
-#endif
+                _isFullScreen = value;
 
-			}
+#if IOS
+                UIApplication.SharedApplication.StatusBarHidden = _isFullScreen;
+#endif
+            }
         }
-		
+        
         /// <summary>
         /// If <code>true</code> the <see cref="GraphicsDevice"/> will do a mode switch
         /// when going to full screen mode. If <code>false</code> it will instead do a
@@ -161,8 +158,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public bool HardwareModeSwitch
         {
-            get { return hardwareModeSwitch; }
-            set { hardwareModeSwitch = value; }
+            get { return _hardwareModeSwitch; }
+            set { _hardwareModeSwitch = value; }
         }
 
         /// <summary>
@@ -170,31 +167,39 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public int MultiSampleCount
         {
-            get { return multiSampleCount; }
-            set { multiSampleCount = value; }
+            get { return _multiSampleCount; }
+            set { _multiSampleCount = value; }
         }
-		
+        
         /// <summary>
         /// Get or set the presentation interval.
         /// </summary>
-        public PresentInterval PresentationInterval { get; set; }
+        public PresentInterval PresentationInterval
+        {
+            get { return _presentationInterval; }
+            set { _presentationInterval = value; }
+        }
 
         /// <summary>
         /// Get or set the display orientation.
         /// </summary>
-		public DisplayOrientation DisplayOrientation 
-		{ 
-			get; 
-			set; 
-		}
-		
+        public DisplayOrientation DisplayOrientation
+        {
+            get { return _displayOrientation; }
+            set { _displayOrientation = value; }
+        }
+        
         /// <summary>
         /// Get or set the RenderTargetUsage for the back buffer.
         /// Determines if the back buffer is cleared when it is set as the
         /// render target by the <see cref="GraphicsDevice"/>.
         /// <see cref="GraphicsDevice"/> target.
         /// </summary>
-		public RenderTargetUsage RenderTargetUsage { get; set; }
+        public RenderTargetUsage RenderTargetUsage
+        {
+            get { return _renderTargetUsage; }
+            set { _renderTargetUsage = value; }
+        }
 
         #endregion Properties
 
@@ -208,17 +213,17 @@ namespace Microsoft.Xna.Framework.Graphics
         public PresentationParameters Clone()
         {
             PresentationParameters clone = new PresentationParameters();
-            clone.backBufferFormat = this.backBufferFormat;
-            clone.backBufferHeight = this.backBufferHeight;
-            clone.backBufferWidth = this.backBufferWidth;
-            clone.deviceWindowHandle = this.deviceWindowHandle;
-            clone.depthStencilFormat = this.depthStencilFormat;
-            clone.IsFullScreen = this.IsFullScreen;
-            clone.HardwareModeSwitch = this.HardwareModeSwitch;
-            clone.multiSampleCount = this.multiSampleCount;
-            clone.PresentationInterval = this.PresentationInterval;
-            clone.DisplayOrientation = this.DisplayOrientation;
-            clone.RenderTargetUsage = this.RenderTargetUsage;
+            clone._backBufferFormat = this._backBufferFormat;
+            clone._depthStencilFormat = this._depthStencilFormat;
+            clone._backBufferHeight = this._backBufferHeight;
+            clone._backBufferWidth = this._backBufferWidth;
+            clone._multiSampleCount = this._multiSampleCount;
+            clone._renderTargetUsage = this._renderTargetUsage;
+            clone._presentationInterval = this._presentationInterval;
+            clone._displayOrientation = this._displayOrientation;
+            clone._isFullScreen = this._isFullScreen;
+            clone._hardwareModeSwitch = this._hardwareModeSwitch;
+            clone._deviceWindowHandle = this._deviceWindowHandle;
             return clone;
         }
 
