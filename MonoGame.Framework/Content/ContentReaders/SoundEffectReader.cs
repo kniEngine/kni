@@ -305,7 +305,7 @@ namespace Microsoft.Xna.Framework.Audio
 			} 
             else 
             {
-#if (WINDOWS_UAP)            
+#if (WINDOWS_UAP || WINUI)            
                 pcmOut.Dispose();
                 output.Dispose();
 #else
@@ -318,7 +318,7 @@ namespace Microsoft.Xna.Framework.Audio
 			}
 
 			// We're done writing PCM data...
-#if (WINDOWS_UAP)
+#if (WINDOWS_UAP || WINUI)
             pcmOut.Dispose();
             output.Dispose();
 #else

@@ -427,7 +427,7 @@ namespace Microsoft.Xna.Platform
         {
         }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
         private readonly object _locker = new object();
 #endif
 
@@ -449,7 +449,7 @@ namespace Microsoft.Xna.Platform
             // and/or release CPU time to other threads and processes.
             if (!IsActive)
             {
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                 lock (_locker)
                     System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
 #else
@@ -473,7 +473,7 @@ namespace Microsoft.Xna.Platform
                 {
 #if WINDOWSDX || DESKTOPGL || ANDROID || IOS || TVOS
                     System.Threading.Thread.Sleep(0);
-#elif WINDOWS_UAP
+#elif WINDOWS_UAP || WINUI
                     lock (_locker)
                         System.Threading.Monitor.Wait(_locker, 0);
 #endif

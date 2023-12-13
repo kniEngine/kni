@@ -17,7 +17,7 @@ namespace MonoGame.Framework.Utilities
         public static readonly string ForwardSlashString = new string(ForwardSlash, 1);
         public static readonly char BackwardSlash = '\\';
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
         public static readonly char NotSeparator = ForwardSlash;
         public static readonly char Separator = BackwardSlash;
 #else

@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 case PresentInterval.One:
                 case PresentInterval.Two:
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     effect = DXGI.SwapEffect.FlipSequential;
 #else
                     effect = DXGI.SwapEffect.Discard;
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
 
                 case PresentInterval.Immediate:
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     effect = DXGI.SwapEffect.FlipSequential;
 #else
                     effect = DXGI.SwapEffect.Sequential;
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
                 default:
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     effect = DXGI.SwapEffect.FlipSequential;
 #else
                     effect = DXGI.SwapEffect.Discard;
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 case SurfaceFormat.Bgra5551:
                     return DXGI.Format.B5G5R5A1_UNorm;
                 case SurfaceFormat.Bgra4444:
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     return DXGI.Format.B4G4R4A4_UNorm;
 #else
                     return (DXGI.Format)115;
