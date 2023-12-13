@@ -111,10 +111,6 @@ namespace Microsoft.Xna.Platform
             presentationParameters.DisplayOrientation = this.Game.Window.CurrentOrientation;
             presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
 
-            // The graphics device can use a XAML panel or a window
-            // to created the default swapchain target.
-            presentationParameters.SwapChainPanel = this.SwapChainPanel;
-
             // always initialize MultiSampleCount to the maximum, if users want to overwrite
             // this they have to respond to the PreparingDeviceSettingsEvent and modify
             // args.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount

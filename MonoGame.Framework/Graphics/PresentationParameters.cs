@@ -126,11 +126,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { deviceWindowHandle = value; }
         }
 
-#if WINDOWS_UAP
-        [CLSCompliant(false)]
-        public SwapChainPanel SwapChainPanel { get; set; }
-#endif
-
         /// <summary>
         /// Get or set the depth stencil format for the back buffer.
         /// </summary>
