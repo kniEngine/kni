@@ -719,25 +719,25 @@ namespace Microsoft.Xna.Platform.Graphics
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice2.Adapter)
                 using (DXGI.Factory2 dxgiFactory2 = dxgiAdapter.GetParent<DXGI.Factory2>())
                 {
-                    if (PresentationParameters.SwapChainPanel != null)
+                    _swapChainPanel = PresentationParameters.SwapChainPanel;
+                    if (_swapChainPanel != null)
                     {
-                        _swapChainPanel = PresentationParameters.SwapChainPanel;
-                        using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
+                        using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(_swapChainPanel))
                         {
                             _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, ref swapChainDesc, null);
                             nativePanel.SwapChain = _swapChain;
 
                             // update swapChain2.MatrixTransform on SizeChanged of SwapChainPanel
                             // sometimes window.SizeChanged and SwapChainPanel.SizeChanged are not synced
-                            PresentationParameters.SwapChainPanel.SizeChanged += (sender, e) =>
+                            _swapChainPanel.SizeChanged += (sender, e) =>
                             {
                                 try
                                 {
                                     using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
                                     {
                                         RawMatrix3x2 inverseScale = new RawMatrix3x2();
-                                        inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth / PresentationParameters.BackBufferWidth;
-                                        inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
+                                        inverseScale.M11 = (float)_swapChainPanel.ActualWidth / PresentationParameters.BackBufferWidth;
+                                        inverseScale.M22 = (float)_swapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
                                         swapChain2.MatrixTransform = inverseScale;
                                     };
                                 }
@@ -763,14 +763,14 @@ namespace Microsoft.Xna.Platform.Graphics
             _swapChain.Rotation = DXGI.DisplayModeRotation.Identity;
 
             // Counter act the composition scale of the render target as 
-            // we already handle this in the platform window code. 
-            if (PresentationParameters.SwapChainPanel != null)
+            // we already handle this in the platform window code.
+            if (_swapChainPanel != null)
             {
-                Windows.Foundation.IAsyncAction asyncResult = PresentationParameters.SwapChainPanel.Dispatcher.RunIdleAsync((e) =>
+                Windows.Foundation.IAsyncAction asyncResult = _swapChainPanel.Dispatcher.RunIdleAsync((e) =>
                 {
                     RawMatrix3x2 inverseScale = new RawMatrix3x2();
-                    inverseScale.M11 = (float)PresentationParameters.SwapChainPanel.ActualWidth  / PresentationParameters.BackBufferWidth;
-                    inverseScale.M22 = (float)PresentationParameters.SwapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
+                    inverseScale.M11 = (float)_swapChainPanel.ActualWidth  / PresentationParameters.BackBufferWidth;
+                    inverseScale.M22 = (float)_swapChainPanel.ActualHeight / PresentationParameters.BackBufferHeight;
                     using (DXGI.SwapChain2 swapChain2 = _swapChain.QueryInterface<DXGI.SwapChain2>())
                         swapChain2.MatrixTransform = inverseScale;
                 });
