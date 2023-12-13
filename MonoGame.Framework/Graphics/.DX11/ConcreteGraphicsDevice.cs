@@ -81,14 +81,8 @@ namespace Microsoft.Xna.Platform.Graphics
             CorrectBackBufferSize();
 #endif
 
-#if WINDOWS
             if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
-#endif
-#if WINDOWS_UAP
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
-#endif
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
@@ -572,11 +566,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // Make sure all pending rendering commands are flushed.
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();
 
-#if WINDOWS
             // We need presentation parameters to continue here.
-            if (PresentationParameters == null
-            ||  (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
-               )
+            if (PresentationParameters == null || PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
             {
                 if (_swapChain != null)
                 {
@@ -587,6 +578,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
             }
 
+#if WINDOWS
             DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
@@ -662,19 +654,6 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 #if WINDOWS_UAP
-            // We need presentation parameters to continue here.
-            if (PresentationParameters == null ||
-                   (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
-               )
-            {
-                if (_swapChain != null)
-                {
-                    _swapChain.Dispose();
-                    _swapChain = null;
-                }
-
-                return;
-            }
 
             // Did we change swap panels?
             if (PresentationParameters.SwapChainPanel != _swapChainPanel)
