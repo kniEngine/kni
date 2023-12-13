@@ -34,7 +34,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 using Windows.Storage;
 #else
 using System.Runtime.Remoting.Messaging;
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Storage
 				// thus the try catch
 				try
                 {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 					return long.MaxValue;
 #else
                     return new DriveInfo(GetDevicePath).AvailableFreeSpace;
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Framework.Storage
 				// thus the try catch
 				try
                 {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 					return true;
 #else
 					return new DriveInfo(GetDevicePath).IsReady;
@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Storage
 				// thus the try catch
 				try
                 {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 					return long.MaxValue;
 #else
 
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework.Storage
             return DeviceChanged != null;
         }
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 		// Dirty trick to avoid the need to get the delegate from the IAsyncResult (can't be done in WinRT)
 		static Delegate showDelegate;
         static Delegate containerDelegate;
@@ -221,7 +221,7 @@ namespace Microsoft.Xna.Framework.Storage
             try
             {
                 OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
                 containerDelegate = AsynchronousOpen;
 #endif
                 return AsynchronousOpen.BeginInvoke(displayName, callback, state);
@@ -321,7 +321,7 @@ namespace Microsoft.Xna.Framework.Storage
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
 			var del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
             showDelegate = del;
 #endif
 			return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
@@ -436,7 +436,7 @@ namespace Microsoft.Xna.Framework.Storage
 			StorageContainer returnValue = null;
             try
             {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
                 // AsyncResult does not exist in WinRT
                 var asyncResult = containerDelegate as OpenContainerAsynchronous;
 				if (asyncResult != null)
@@ -505,12 +505,12 @@ namespace Microsoft.Xna.Framework.Storage
                 }
                 finally
                 {
-  #if !(WINDOWS_UAP || WINUI)
+  #if !(UAP || WINUI)
                     result.AsyncWaitHandle.Close();
   #endif
 				}
 			}
-  #if WINDOWS_UAP || WINUI
+  #if UAP || WINUI
             var del = showDelegate;
             showDelegate = null;
   #else
@@ -543,7 +543,7 @@ namespace Microsoft.Xna.Framework.Storage
 		{
 			get
             {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 				return ApplicationData.Current.LocalFolder.Path; 
 #elif DESKTOPGL
                 if(CurrentPlatform.OS == OS.Linux)

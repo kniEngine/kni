@@ -17,7 +17,7 @@ using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
 using WIC = SharpDX.WIC;
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using System.Threading.Tasks;
@@ -148,7 +148,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void SaveAsJpeg(Stream stream, int width, int height)
         {
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
             Task result = SaveAsImageAsync_UAP(Windows.Graphics.Imaging.BitmapEncoder.JpegEncoderId, stream, width, height);
             result.Wait();
 #else
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
         private async Task SaveAsImageAsync_UAP(Guid encoderId, Stream stream, int width, int height)
         {
             byte[] pixelData = new byte[Width * Height * GraphicsExtensions.GetSize(Format)];
