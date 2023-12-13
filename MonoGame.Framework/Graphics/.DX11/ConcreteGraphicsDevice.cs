@@ -740,14 +740,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice2.Adapter)
                 using (DXGI.Factory2 dxgiFactory2 = dxgiAdapter.GetParent<DXGI.Factory2>())
                 {
-                    if (PresentationParameters.DeviceWindowHandle != IntPtr.Zero)
-                    {
-                        // Creates a SwapChain from a CoreWindow pointer.
-                        CoreWindow coreWindow = Marshal.GetObjectForIUnknown(PresentationParameters.DeviceWindowHandle) as CoreWindow;
-                        using (DX.ComObject comWindow = new DX.ComObject(coreWindow))
-                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref swapChainDesc);
-                    }
-                    else
+                    if (PresentationParameters.SwapChainPanel != null)
                     {
                         _swapChainPanel = PresentationParameters.SwapChainPanel;
                         using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
@@ -772,6 +765,13 @@ namespace Microsoft.Xna.Platform.Graphics
                                 catch (Exception) { }
                             };
                         }
+                    }
+                    else // (PresentationParameters.DeviceWindowHandle != IntPtr.Zero)
+                    {
+                        // Creates a SwapChain from a CoreWindow pointer.
+                        CoreWindow coreWindow = Marshal.GetObjectForIUnknown(PresentationParameters.DeviceWindowHandle) as CoreWindow;
+                        using (DX.ComObject comWindow = new DX.ComObject(coreWindow))
+                            _swapChain = new DXGI.SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref swapChainDesc);
                     }
 
                     // Ensure that DXGI does not queue more than one frame at a time. This both reduces 

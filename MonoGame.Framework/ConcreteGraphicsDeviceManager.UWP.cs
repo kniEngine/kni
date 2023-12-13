@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform
             base.PreferredBackBufferWidth = clientBounds.Width;
             base.PreferredBackBufferHeight = clientBounds.Height;
 
-            base.IsFullScreen = UAPGameWindow.Instance.AppView.IsFullScreenMode;
+            base.IsFullScreen = ((UAPGameWindow)game.Window).AppView.IsFullScreenMode;
         }
 
         public override bool PreferHalfPixelOffset
@@ -111,6 +111,16 @@ namespace Microsoft.Xna.Platform
             presentationParameters.DisplayOrientation = this.Game.Window.CurrentOrientation;
             presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
 
+            presentationParameters.SwapChainPanel = null;
+
+            // The graphics device can use a XAML panel or a window
+            // to created the default swapchain target.
+            if (this.SwapChainPanel != null)
+            {
+                presentationParameters.SwapChainPanel = this.SwapChainPanel;
+                presentationParameters.DeviceWindowHandle = IntPtr.Zero;
+            }
+
             // always initialize MultiSampleCount to the maximum, if users want to overwrite
             // this they have to respond to the PreparingDeviceSettingsEvent and modify
             // args.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount
@@ -127,19 +137,6 @@ namespace Microsoft.Xna.Platform
                 }
             }
             presentationParameters.MultiSampleCount = maxMultiSampleCount;
-
-            // The graphics device can use a XAML panel or a window
-            // to created the default swapchain target.
-            if (this.SwapChainPanel != null)
-            {
-                presentationParameters.DeviceWindowHandle = IntPtr.Zero;
-                presentationParameters.SwapChainPanel = this.SwapChainPanel;
-            }
-            else
-            {
-                presentationParameters.DeviceWindowHandle = base.Game.Window.Handle;
-                presentationParameters.SwapChainPanel = null;
-            }
 
             gdi.PresentationParameters = presentationParameters;
             var args = new PreparingDeviceSettingsEventArgs(gdi);

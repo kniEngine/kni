@@ -32,16 +32,19 @@ namespace Microsoft.Xna.Framework
         public readonly ConcurrentQueue<KeyChar> TextQueue = new ConcurrentQueue<KeyChar>();
         private KeyChar _lastEnqueuedKeyChar;
 
-        private readonly TouchQueue _touchQueue;
+        private readonly TouchQueue _touchQueue = new TouchQueue();
+
+        internal static TouchQueue TouchQueue;
 
         // To convert from DIPs (device independent pixels) to actual screen resolution pixels.
         private static float _currentDipFactor;
 
         private CoreIndependentInputSource _coreIndependentInputSource;
 
-        public InputEvents(CoreWindow window, UIElement inputElement, TouchQueue touchQueue)
+
+        public InputEvents(CoreWindow window, UIElement inputElement)
         {
-            _touchQueue = touchQueue;
+            InputEvents.TouchQueue = _touchQueue;
 
             // The key events are always tied to the window as those will
             // only arrive here if some other control hasn't gotten it.
@@ -55,7 +58,7 @@ namespace Microsoft.Xna.Framework
             DisplayInformation.GetForCurrentView().DpiChanged += InputEvents_DpiChanged;
             _currentDipFactor = DisplayInformation.GetForCurrentView().LogicalDpi / 96.0f;
 
-            if (inputElement is SwapChainPanel || inputElement is SwapChainBackgroundPanel)
+            if (inputElement is SwapChainPanel)
             {
                 // Create a thread to precess input events.
                 WorkItemHandler workItemHandler = new WorkItemHandler( (action) =>
@@ -70,10 +73,7 @@ namespace Microsoft.Xna.Framework
                     inputDevices &= ~CoreInputDeviceTypes.Touch;
                     inputDevices &= ~CoreInputDeviceTypes.Mouse;
 
-                    if (inputElement is SwapChainBackgroundPanel)
-                        _coreIndependentInputSource = ((SwapChainBackgroundPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
-                    else
-                        _coreIndependentInputSource = ((SwapChainPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
+                    _coreIndependentInputSource = ((SwapChainPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
 
                     _coreIndependentInputSource.PointerPressed += CoreWindow_PointerPressed;
                     _coreIndependentInputSource.PointerMoved += CoreWindow_PointerMoved;
