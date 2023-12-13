@@ -80,6 +80,23 @@ namespace Microsoft.Xna.Platform
             var presentationParameters = new PresentationParameters();
             presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
 
+            {
+                // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
+                int width = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
+                int height = (int)(UIKit.UIScreen.MainScreen.Bounds.Height * UIKit.UIScreen.MainScreen.Scale);
+
+                // Flip the dimensions if we need to.
+                if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft
+                || TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
+                {
+                    width = height;
+                    height = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
+                }
+
+                presentationParameters.BackBufferWidth = width;
+                presentationParameters.BackBufferHeight = height;
+            }
+
             presentationParameters.IsFullScreen = UIKit.UIApplication.SharedApplication.StatusBarHidden;
             // Set "full screen"  as default
             presentationParameters.IsFullScreen = true;

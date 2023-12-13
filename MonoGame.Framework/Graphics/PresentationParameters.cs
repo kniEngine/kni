@@ -51,23 +51,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _displayOrientation = DisplayOrientation.Default;
             _isFullScreen = false;
             _deviceWindowHandle = IntPtr.Zero;
-
-#if IOS || TVOS
-            // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-            int width = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-            int height = (int)(UIScreen.MainScreen.Bounds.Height * UIScreen.MainScreen.Scale);
-            
-            // Flip the dimensions if we need to.
-            if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft ||
-                TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
-            {
-                width = height;
-                height = (int)(UIScreen.MainScreen.Bounds.Width * UIScreen.MainScreen.Scale);
-            }
-            
-            _backBufferWidth = width;
-            _backBufferHeight = height;
-#endif
         }
 
         #endregion Constructors
