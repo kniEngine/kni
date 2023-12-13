@@ -13,7 +13,7 @@
     <OutputType>Exe</OutputType>
     <UseAppHost>true</UseAppHost>
     <AssemblyName>MonoGame.Tests</AssemblyName>
-    <DefineConstants>WINDOWS;DIRECTX</DefineConstants>    
+    <DefineConstants> WINDOWSDX;DIRECTX</DefineConstants>    
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateProgramFile>false</GenerateProgramFile>

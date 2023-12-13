@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                     if (pointerDevice.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
                         isConnected = true;
                 }
-#elif WINDOWS
+#elif WINDOWSDX
                 maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
                 isConnected = (maximumTouchCount > 0);
 #elif ANDROID
@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
 
-#if WINDOWS
+#if WINDOWSDX
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
         static extern int GetSystemMetrics(int nIndex);
 

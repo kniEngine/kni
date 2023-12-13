@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Current state of the mouse.</returns>
         public static MouseState GetState()
         {
-#if WINDOWS
+#if WINDOWSDX
             return PlatformGetState();
 #endif
 

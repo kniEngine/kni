@@ -1,4 +1,4 @@
-#if WINDOWS
+#if  WINDOWSDX
 using System;
 
 namespace SoundTest

@@ -3,7 +3,7 @@ using System;
 namespace MouseGetStateAndIsMouseVisibleTester
 {
 
-#if WINDOWS || XBOX || LINUX
+#if  WINDOWSDX || XBOX || LINUX
     static class Program
     {
         /// <summary>

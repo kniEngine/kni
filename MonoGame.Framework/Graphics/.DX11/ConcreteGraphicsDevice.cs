@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.RenderTargetView _renderTargetView;
         internal D3D11.DepthStencilView _depthStencilView;
 
-#if WINDOWS
+#if WINDOWSDX
         internal DXGI.SwapChain _swapChain;
 #endif
 
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset()
         {
-#if WINDOWS
+#if WINDOWSDX
             CorrectBackBufferSize();
 #endif
 
@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     int syncInterval = 0;
                     DXGI.PresentFlags presentFlags = DXGI.PresentFlags.None;
 
-#if WINDOWS
+#if WINDOWSDX
                     // The first argument instructs DXGI to block n VSyncs before presenting.
                     syncInterval = PresentationParameters.PresentationInterval.ToDXSwapInterval();
 #endif
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             D3D.DriverType driverType = D3D.DriverType.Hardware;   //Default value
 
-#if WINDOWS
+#if WINDOWSDX
             switch (GraphicsAdapter.UseDriverType)
             {
                 case GraphicsAdapter.DriverType.Reference:
@@ -312,7 +312,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Create the Direct3D device.
                 using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
                 {
-#if WINDOWS
+#if WINDOWSDX
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
 #if WINDOWS_UAP
@@ -333,7 +333,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 creationFlags &= ~D3D11.DeviceCreationFlags.Debug;
                 using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
                 {
-#if WINDOWS
+#if WINDOWSDX
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
 #if WINDOWS_UAP
@@ -384,13 +384,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize()
         {
-#if WINDOWS
+#if WINDOWSDX
             CorrectBackBufferSize();
 #endif
             CreateSizeDependentResources();
         }
 
-#if WINDOWS
+#if WINDOWSDX
         private void CorrectBackBufferSize()
         {
             // Window size can be modified when we're going full screen, we need to take that into account
@@ -463,7 +463,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #endif
 
-#if WINDOWS
+#if WINDOWSDX
         internal void SetHardwareFullscreen()
         {
             _swapChain.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
@@ -476,7 +476,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-#if WINDOWS
+#if WINDOWSDX
         internal void ResizeTargets()
         {
             DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
@@ -490,7 +490,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 #endif
 
-#if WINDOWS
+#if WINDOWSDX
         internal void RefreshAdapter()
         {
             if (_swapChain == null)
@@ -585,7 +585,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
-#if WINDOWS
+#if WINDOWSDX
 
             swapChainFlags = DXGI.SwapChainFlags.AllowModeSwitch;
 
@@ -932,7 +932,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             // Get Direct3D 11.1 context
-#if WINDOWS
+#if WINDOWSDX
             D3D11.DeviceContext d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
 #endif
 #if WINDOWS_UAP
