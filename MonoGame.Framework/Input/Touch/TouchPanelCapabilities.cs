@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 // XNA does not expose a pressure value, so let's assume it doesn't support it.
                 hasPressure = false;
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
                 // Is a touch device present?
                 // Iterate through all pointer devices and find the maximum number of concurrent touches possible
                 maximumTouchCount = 0;

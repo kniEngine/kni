@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
             samplerStateDesc.AddressV = ToDXTextureAddressMode(AddressV);
             samplerStateDesc.AddressW = ToDXTextureAddressMode(AddressW);
 
-#if WINDOWS_UAP || WINUI
+#if UAP || WINUI
             samplerStateDesc.BorderColor = new SharpDX.Mathematics.Interop.RawColor4(
                 BorderColor.R / 255.0f,
                 BorderColor.G / 255.0f,

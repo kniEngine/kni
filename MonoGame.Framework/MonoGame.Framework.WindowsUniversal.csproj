@@ -15,7 +15,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>WINDOWS_UAP;DIRECTX11_1;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>UAP;DIRECTX11_1;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
