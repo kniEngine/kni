@@ -654,19 +654,6 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 #if WINDOWS_UAP
-
-            // Did we change swap panels?
-            if (PresentationParameters.SwapChainPanel != _swapChainPanel)
-            {
-                _swapChainPanel = null;
-
-                if (_swapChain != null)
-                {
-                    _swapChain.Dispose();
-                    _swapChain = null;
-                }
-            }
-
             DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
@@ -719,7 +706,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 using (DXGI.Adapter dxgiAdapter = dxgiDevice2.Adapter)
                 using (DXGI.Factory2 dxgiFactory2 = dxgiAdapter.GetParent<DXGI.Factory2>())
                 {
-                    _swapChainPanel = PresentationParameters.SwapChainPanel;
+                    _swapChainPanel = UAPGameWindow.FromHandle(PresentationParameters.DeviceWindowHandle).SwapChainPanel;
                     if (_swapChainPanel != null)
                     {
                         using (DXGI.ISwapChainPanelNative nativePanel = DX.ComObject.As<DXGI.ISwapChainPanelNative>(_swapChainPanel))
