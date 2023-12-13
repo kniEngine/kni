@@ -72,7 +72,7 @@ using NUnit.Framework;
 
 namespace MonoGame.Tests.Graphics
 {
-#if !WINDOWS
+#if ! WINDOWSDX
     [Ignore("Texture3D is not implemented for the OpenGL backend.")]
 #endif
     [TestFixture]

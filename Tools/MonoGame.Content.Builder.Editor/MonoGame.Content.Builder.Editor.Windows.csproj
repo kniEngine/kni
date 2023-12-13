@@ -8,7 +8,7 @@
     <RollForward>Major</RollForward>
     <Description>The MonoGame Framework Content Builder Editor (MGCB-Editor) is a graphical tool used for editing your content projects ready for processing.</Description>
     <BaseOutputPath>..\..\Artifacts\MonoGame.Content.Builder.Editor\Windows</BaseOutputPath>
-    <DefineConstants>WINDOWS</DefineConstants>
+    <DefineConstants> WINDOWSDX</DefineConstants>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <AssemblyName>mgcb-editor-windows</AssemblyName>

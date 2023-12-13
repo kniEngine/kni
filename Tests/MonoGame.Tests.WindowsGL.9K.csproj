@@ -23,7 +23,7 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;WINDOWS;DESKTOPGL</DefineConstants>
+    <DefineConstants>DEBUG;TRACE; WINDOWSDX;DESKTOPGL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -34,7 +34,7 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWS;DESKTOPGL</DefineConstants>
+    <DefineConstants>TRACE; WINDOWSDX;DESKTOPGL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>

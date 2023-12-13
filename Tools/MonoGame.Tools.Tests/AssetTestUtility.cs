@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
-#if !WINDOWS || DIRECTX || XNA
+#if ! WINDOWSDX || DIRECTX || XNA
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -29,7 +29,7 @@ namespace MonoGame.Tests.ContentPipeline
 
         public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
-#if !WINDOWS || DIRECTX || XNA
+#if ! WINDOWSDX || DIRECTX || XNA
             var effectProcessor = new EffectProcessor();
             var context = new TestProcessorContext(TargetPlatform.Windows, "notused.xnb");
             var compiledEffect = effectProcessor.Process(new EffectContent

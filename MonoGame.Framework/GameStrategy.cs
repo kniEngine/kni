@@ -471,7 +471,7 @@ namespace Microsoft.Xna.Platform
                 /*
                 if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
                 {
-#if WINDOWS || DESKTOPGL || ANDROID || IOS || TVOS
+#if WINDOWSDX || DESKTOPGL || ANDROID || IOS || TVOS
                     System.Threading.Thread.Sleep(0);
 #elif WINDOWS_UAP
                     lock (_locker)

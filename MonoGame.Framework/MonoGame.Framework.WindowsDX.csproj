@@ -16,7 +16,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>WINDOWS;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants> WINDOWSDX;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

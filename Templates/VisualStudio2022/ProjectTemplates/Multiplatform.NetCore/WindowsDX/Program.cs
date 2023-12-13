@@ -2,7 +2,7 @@
 
 namespace $ext_safeprojectname$
 {
-#if WINDOWS || LINUX
+#if  WINDOWSDX || LINUX
     /// <summary>
     /// The main class.
     /// </summary>

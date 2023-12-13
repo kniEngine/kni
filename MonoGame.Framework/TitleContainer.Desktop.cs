@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework
     {
         static partial void PlatformInit()
         {
-#if WINDOWS || DESKTOPGL
+#if WINDOWSDX || DESKTOPGL
 #if DESKTOPGL
             // Check for the package Resources Folder first. This is where the assets
             // will be bundled.
