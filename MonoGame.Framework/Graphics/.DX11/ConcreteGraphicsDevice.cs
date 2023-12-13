@@ -16,7 +16,7 @@ using D2D = SharpDX.Direct2D1;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
 using System.Runtime.InteropServices;
 using Windows.Graphics.Display;
 using Windows.UI.Core;
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal DXGI.SwapChain _swapChain;
 #endif
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
         // The swap chain resources.
         internal DXGI.SwapChain1 _swapChain;
         internal D2D.Bitmap1 _bitmapTarget;
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     syncInterval = PresentationParameters.PresentationInterval.ToDXSwapInterval();
 #endif
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     // The first argument instructs DXGI to block until VSync, putting the application
                     // to sleep until the next VSync. This ensures we don't waste any cycles rendering
                     // frames that will never be displayed to the screen.
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 // TODO: How should we deal with a device lost case here?
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                 /*               
                 // If the device was removed either by a disconnect or a driver upgrade, we 
                 // must completely reinitialize the renderer.
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 creationFlags |= D3D11.DeviceCreationFlags.Debug;
             }
 
-#if DEBUG && WINDOWS_UAP
+#if DEBUG && (WINDOWS_UAP || WINUI)
             creationFlags |= D3D11.DeviceCreationFlags.Debug;
 #endif
 
@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             driverType = GraphicsAdapter.UseReferenceDevice
                        ? D3D.DriverType.Reference
                        : D3D.DriverType.Hardware;
@@ -315,12 +315,12 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
 #endif
                 }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                 // Necessary to enable video playback
                 D3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<D3D.DeviceMultithread>();
                 multithread.SetMultithreadProtected(true);
@@ -336,7 +336,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
 #endif
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                     _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
 #endif
                 }
@@ -344,7 +344,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _mainContext = new GraphicsContext(this);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             // Create the Direct2D device.
             using (DXGI.Device dxgiDevice = _d3dDevice.QueryInterface<DXGI.Device>())
                 _d2dDevice = new D2D.Device(_d2dFactory, dxgiDevice);
@@ -357,7 +357,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
         }
@@ -367,11 +367,11 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         private void CreateDeviceIndependentResources()
         {
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
 
             D2D.DebugLevel debugLevel = D2D.DebugLevel.None;
 
-#if DEBUG && WINDOWS_UAP
+#if DEBUG && (WINDOWS_UAP || WINUI)
             debugLevel |= D2D.DebugLevel.Information;
 #endif
 
@@ -519,7 +519,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 #endif
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
         internal void SetMultiSamplingToMaximum(PresentationParameters presentationParameters, out int quality)
         {
             quality = (int)D3D11.StandardMultisampleQualityLevels.StandardMultisamplePattern;
@@ -548,7 +548,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _depthStencilView = null;
             }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             if (_bitmapTarget != null)
             {
                 _bitmapTarget.Dispose();
@@ -653,7 +653,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
 
             _isTearingSupported = IsTearingSupported();
             if (_isTearingSupported)
@@ -802,7 +802,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 MaxDepth = 1.0f
             };
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             // Now we set up the Direct2D render target bitmap linked to the swapchain. 
             // Whenever we render to this bitmap, it will be directly rendered to the 
             // swapchain associated with the window.
@@ -878,7 +878,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
 
         internal void Trim()
         {
@@ -935,7 +935,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
             D3D11.DeviceContext d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext>();
 #endif
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             D3D11.DeviceContext1 d3dContext = _d3dDevice.ImmediateContext.QueryInterface<D3D11.DeviceContext1>();
 #endif
 
@@ -975,7 +975,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 DX.Utilities.Dispose(ref _swapChain);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
                 if (_bitmapTarget != null)
                 {
                     _bitmapTarget.Dispose();

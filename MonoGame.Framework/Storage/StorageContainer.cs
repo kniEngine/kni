@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
 using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Search;
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Storage
 			_name = name;
 			
 			// From the examples the root is based on MyDocuments folder
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var saved = "";
 #elif DESKTOPGL
             string saved = "";
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Storage
         private void CreateDirectoryAbsolute(string path)
         {
             // Now let's try to create it
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var task = folder.CreateFolderAsync(path, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var awaiter = folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter();
             return awaiter.GetResult();
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Framework.Storage
 			var dirPath = Path.Combine(_storagePath, directory);
 
             // Now let's try to delete itd
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var deleteFolder = folder.GetFolderAsync(dirPath).AsTask().GetAwaiter().GetResult();
             deleteFolder.DeleteAsync().AsTask().Wait();
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
             deleteFile.DeleteAsync().AsTask().Wait();
@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var dirPath = Path.Combine(_storagePath, directory);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
 
             try
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             // GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
             try
@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <returns>List of directory names.</returns>
 		public string[] GetDirectoryNames()
         {
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFolder, string>(e => e.Name).ToArray();
@@ -307,7 +307,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <returns>List of file names.</returns>
 		public string[] GetFileNames()
         {
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var results = folder.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFile, string>(e => e.Name).ToArray();
@@ -326,7 +326,7 @@ namespace Microsoft.Xna.Framework.Storage
 			if (string.IsNullOrEmpty(searchPattern))
 				throw new ArgumentNullException("Parameter searchPattern must contain a value.");
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             var options = new QueryOptions( CommonFileQuery.DefaultQuery, new [] { searchPattern } );
             var query = folder.CreateFileQueryWithOptions(options);
@@ -377,7 +377,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
             var folder = ApplicationData.Current.LocalFolder;
             if (fileMode == FileMode.Create || fileMode == FileMode.CreateNew)
             {

@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework
 	    /// </summary>
 		public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
-#if WINDOWSDX || WINDOWS_UAP || DESKTOPGL
+#if WINDOWSDX || WINDOWS_UAP || WINUI || DESKTOPGL
 
         /// <summary>
 		/// Use this event to user text input.
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Framework
 
         #region Keyboard events
 
-#if WINDOWSDX || WINDOWS_UAP || DESKTOPGL
+#if WINDOWSDX || WINDOWS_UAP || WINUI || DESKTOPGL
 	    /// <summary>
 	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
 	    /// </summary>

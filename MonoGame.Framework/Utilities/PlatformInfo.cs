@@ -30,7 +30,7 @@ namespace MonoGame.Framework.Utilities
                 return MonoGamePlatform.BlazorGL;
 #elif WINDOWSDX
                 return MonoGamePlatform.Windows;
-#elif WINDOWS_UAP
+#elif WINDOWS_UAP || WINUI
                 return MonoGamePlatform.WindowsUniversal;
 #elif SWITCH
                 return MonoGamePlatform.NintendoSwitch;

@@ -696,7 +696,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINUI
         internal void UAP_ResetRenderTargets()
         {
             PlatformApplyViewport();
