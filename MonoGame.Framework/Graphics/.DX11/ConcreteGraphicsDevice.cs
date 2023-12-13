@@ -578,7 +578,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
             }
 
-#if WINDOWS
             DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
             DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
                 format,
@@ -586,13 +585,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
             DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
 
+#if WINDOWS
+
             swapChainFlags = DXGI.SwapChainFlags.AllowModeSwitch;
 
             // If the swap chain already exists... update it.
             if (_swapChain != null
                 // check if multisampling hasn't changed
-                && _swapChain.Description.SampleDescription.Count == multisampleDesc.Count
-                && _swapChain.Description.SampleDescription.Quality == multisampleDesc.Quality
+            && _swapChain.Description.SampleDescription.Count == multisampleDesc.Count
+            && _swapChain.Description.SampleDescription.Quality == multisampleDesc.Quality
                )
             {
                 _swapChain.ResizeBuffers(2,
@@ -600,10 +601,8 @@ namespace Microsoft.Xna.Platform.Graphics
                                          PresentationParameters.BackBufferHeight,
                                          format,
                                          swapChainFlags);
-            }
-
-            // Otherwise, create a new swap chain.
-            else
+            }            
+            else // Otherwise, create a new swap chain.
             {
                 bool wasFullScreen = false;
                 // Dispose of old swap chain if exists
@@ -653,13 +652,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
 
-#if WINDOWS_UAP
-            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
-            DXGI.SampleDescription multisampleDesc = GetSupportedSampleDescription(
-                format,
-                PresentationParameters.MultiSampleCount);
 
-            DXGI.SwapChainFlags swapChainFlags = DXGI.SwapChainFlags.None;
+#if WINDOWS_UAP
 
             _isTearingSupported = IsTearingSupported();
             if (_isTearingSupported)
@@ -676,10 +670,8 @@ namespace Microsoft.Xna.Platform.Graphics
                                          PresentationParameters.BackBufferHeight,
                                          format,
                                          swapChainFlags);
-            }
-
-            // Otherwise, create a new swap chain.
-            else
+            }            
+            else // Otherwise, create a new swap chain.
             {
                 // SwapChain description
                 DXGI.SwapChainDescription1 swapChainDesc = new DXGI.SwapChainDescription1();
