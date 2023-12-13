@@ -2,12 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
+// Copyright (C)2023 Nick Kastellanos
 
-#if IOS || TVOS
-using UIKit;
-using Microsoft.Xna.Framework.Input.Touch;
-#endif
+using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
