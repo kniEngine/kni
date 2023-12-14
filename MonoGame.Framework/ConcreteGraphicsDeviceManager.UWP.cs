@@ -4,7 +4,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
+
+#if UAP
 using Windows.UI.Xaml.Controls;
+#endif
+
+#if WINUI
+using Microsoft.UI.Xaml.Controls;
+#endif
 
 namespace Microsoft.Xna.Platform
 {

@@ -5,7 +5,14 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+
+#if UAP
 using Windows.ApplicationModel.Resources.Core;
+#endif
+
+#if WINUI
+using Microsoft.Windows.ApplicationModel.Resources;
+#endif
 
 namespace Microsoft.Xna.Framework
 {

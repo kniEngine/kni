@@ -4,10 +4,16 @@
 
 using System;
 using Windows.UI.Core;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform;
 
+#if UAP
+using Windows.UI.Xaml.Controls;
+#endif
+
+#if WINUI
+using Microsoft.UI.Xaml.Controls;
+#endif
 
 namespace MonoGame.Framework
 {

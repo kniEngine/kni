@@ -8,18 +8,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.Graphics.Display;
-using Windows.Phone.UI.Input;
-
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
+
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.Phone.UI.Input;
+
+#if UAP
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.Graphics.Display;
+#endif
+
+#if WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Graphics.Display;
+using Microsoft.UI.Windowing;
+#endif
 
 namespace Microsoft.Xna.Framework
 {
@@ -36,19 +45,20 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _orientation;
         private CoreWindow _coreWindow;
         private DisplayInformation _dinfo;
-        private ApplicationView _appView;
         private Rectangle _viewBounds;
 
         private InputEvents _inputEvents;
         private bool _backPressed = false;
 
+        private ApplicationView _appView;
+
         #region Internal Properties
         
+        public ApplicationView AppView { get { return _appView; } }
+
         internal CoreWindow CoreWindow { get { return _coreWindow; } }
 
         internal Game Game { get; set; }
-
-        public ApplicationView AppView { get { return _appView; } }
 
         internal bool IsExiting { get; set; }
 
@@ -128,6 +138,7 @@ namespace Microsoft.Xna.Framework
             _inputEvents = new InputEvents(_coreWindow, this.SwapChainPanel);
 
             _dinfo = DisplayInformation.GetForCurrentView();
+
             _appView = ApplicationView.GetForCurrentView();
 
             _orientation = ToOrientation(_dinfo.CurrentOrientation);
@@ -141,9 +152,13 @@ namespace Microsoft.Xna.Framework
             _coreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
+            }
             else
+            {
                 SystemNavigationManager.GetForCurrentView().BackRequested += this.BackRequested;
+            }
 
             SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
 
@@ -271,14 +286,19 @@ namespace Microsoft.Xna.Framework
                 return;
 
             double rawPixelsPerViewPixel = 1.0d;
-            if (CoreWindow.GetForCurrentThread() != null)
+            CoreWindow coreWindow = CoreWindow.GetForCurrentThread();
+            if (coreWindow != null)
+            {
                 rawPixelsPerViewPixel = _dinfo.RawPixelsPerViewPixel;
+            }
             else
+            {
                 Task.Run(async () =>
                 {
                     await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                         CoreDispatcherPriority.Normal, () => { rawPixelsPerViewPixel = _dinfo.RawPixelsPerViewPixel; });
                 }).Wait();
+            }
             var viewSize = new Windows.Foundation.Size(width / rawPixelsPerViewPixel, height / rawPixelsPerViewPixel);
 
             //_appView.SetPreferredMinSize(viewSize);

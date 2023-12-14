@@ -16,6 +16,7 @@ namespace Microsoft.Xna.Platform.Media
     {
         // RAYB: This needs to be turned back into a readonly.
         private MediaEngine _mediaEngineEx;
+
         private CoreDispatcher _dispatcher;
 
         private enum SessionState { Stopped, Started, Paused }
@@ -46,6 +47,7 @@ namespace Microsoft.Xna.Platform.Media
             if (mediaEvent == MediaEngineEvent.Ended)
             {
                 _sessionState = SessionState.Stopped;
+
                 _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => base.OnSongFinishedPlaying()).AsTask();
             }
         }

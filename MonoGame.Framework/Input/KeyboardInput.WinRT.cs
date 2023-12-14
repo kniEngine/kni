@@ -3,50 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
-using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
+
+#if UAP
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+#endif
+
+#if WINUI
+using Microsoft.Windows.System;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Animation;
+#endif
 
 namespace Microsoft.Xna.Framework.Input
 {
     public static partial class KeyboardInput
     {
-        private static readonly CoreDispatcher dispatcher;
-        private static TaskCompletionSource<string> tcs;
-        private static InputDialog inputDialog;
+        private static readonly CoreDispatcher _dispatcher;
+
+        private static TaskCompletionSource<string> _tcs;
+        private static InputDialog _inputDialog;
 
         static KeyboardInput()
         {
-            dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+            _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
         private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
-            tcs = new TaskCompletionSource<string>();
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            _tcs = new TaskCompletionSource<string>();
+
+            _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                 async () =>
                 {
-                    inputDialog = new InputDialog();
-                    var result = await inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
+                    _inputDialog = new InputDialog();
+                    var result = await _inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
 
-                    if (!tcs.Task.IsCompleted)
-                        tcs.SetResult(result);
+                    if (!_tcs.Task.IsCompleted)
+                        _tcs.SetResult(result);
                 });
 
-            return tcs.Task;
+            return _tcs.Task;
         }
 
         private static void PlatformCancel(string result)
         {
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await inputDialog.CloseAsync());
+            _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await _inputDialog.CloseAsync());
 
-            tcs.SetResult(result);
+            _tcs.SetResult(result);
         }
     }
 
@@ -387,7 +402,12 @@ namespace Microsoft.Xna.Framework.Input
             Visibility = Visibility.Visible;
             _shown = true;
 
-            Window.Current.Content.KeyUp += OnGlobalKeyUp;
+#if UAP
+            Window window = Window.Current;
+#elif WINUI
+            Window window = App.Window;
+#endif
+            window.Content.KeyUp += OnGlobalKeyUp;
             _dismissTaskSource = new TaskCompletionSource<string>();
 
             _parentPanel = Parent as Panel;
@@ -417,7 +437,7 @@ namespace Microsoft.Xna.Framework.Input
             }
             else
             {
-                _temporaryParentPanel = GetDescendants(Window.Current.Content).OfType<Panel>().FirstOrDefault();
+                _temporaryParentPanel = GetDescendants(window.Content).OfType<Panel>().FirstOrDefault();
 
                 if (_temporaryParentPanel != null)
                 {
@@ -437,7 +457,7 @@ namespace Microsoft.Xna.Framework.Input
             _buttons = new List<ButtonBase>();
 
             // Button OK
-            var btnOK = new Button();
+            Button btnOK = new Button();
             if (ButtonStyle != null)
                 btnOK.Style = ButtonStyle;
             btnOK.Content = "OK";
@@ -448,7 +468,7 @@ namespace Microsoft.Xna.Framework.Input
             _buttonsPanel.Children.Add(btnOK);
 
             // Button Cancel
-            var btnCancel = new Button();
+            Button btnCancel = new Button();
             if (ButtonStyle != null)
                 btnCancel.Style = ButtonStyle;
             btnCancel.Content = "Cancel";
@@ -458,8 +478,13 @@ namespace Microsoft.Xna.Framework.Input
             _buttons.Add(btnCancel);
             _buttonsPanel.Children.Add(btnCancel);
 
-            InputPane.GetForCurrentView().Showing += InputDialog_Showing;
-            InputPane.GetForCurrentView().Hiding += InputDialod_Hiding;
+#if UAP
+            InputPane inputPane = InputPane.GetForCurrentView();
+#elif WINUI
+            InputPane inputPane = InputPaneInterop.GetForWindow();
+#endif
+            inputPane.Showing += InputDialog_Showing;
+            inputPane.Hiding += InputDialod_Hiding;
 
             if (_inputTextBox != null)
                 _inputTextBox.Focus(FocusState.Programmatic);
@@ -472,7 +497,7 @@ namespace Microsoft.Xna.Framework.Input
             await GoToVisualStateAsync(this, _layoutRoot, PopupStatesGroupName, OpenPopupStateName);
 
             // Wait for button click
-            var result = await _dismissTaskSource.Task;
+            string result = await _dismissTaskSource.Task;
 
             // Hide dialog
             if (AwaitsCloseTransition)
@@ -486,10 +511,10 @@ namespace Microsoft.Xna.Framework.Input
 #pragma warning restore 4014
             }
 
-            InputPane.GetForCurrentView().Showing -= InputDialog_Showing;
-            InputPane.GetForCurrentView().Hiding -= InputDialod_Hiding;
+            inputPane.Showing -= InputDialog_Showing;
+            inputPane.Hiding -= InputDialod_Hiding;
 
-            Window.Current.Content.KeyUp -= OnGlobalKeyUp;
+            window.Content.KeyUp -= OnGlobalKeyUp;
 
             return result;
         }
