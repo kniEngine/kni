@@ -400,7 +400,8 @@ namespace Microsoft.Xna.Framework.Input
             Visibility = Visibility.Visible;
             _shown = true;
 
-            Window.Current.Content.KeyUp += OnGlobalKeyUp;
+            Window window = Window.Current;
+            window.Content.KeyUp += OnGlobalKeyUp;
             _dismissTaskSource = new TaskCompletionSource<string>();
 
             _parentPanel = Parent as Panel;
@@ -430,7 +431,7 @@ namespace Microsoft.Xna.Framework.Input
             }
             else
             {
-                _temporaryParentPanel = GetDescendants(Window.Current.Content).OfType<Panel>().FirstOrDefault();
+                _temporaryParentPanel = GetDescendants(window.Content).OfType<Panel>().FirstOrDefault();
 
                 if (_temporaryParentPanel != null)
                 {
@@ -450,7 +451,7 @@ namespace Microsoft.Xna.Framework.Input
             _buttons = new List<ButtonBase>();
 
             // Button OK
-            var btnOK = new Button();
+            Button btnOK = new Button();
             if (ButtonStyle != null)
                 btnOK.Style = ButtonStyle;
             btnOK.Content = "OK";
@@ -461,7 +462,7 @@ namespace Microsoft.Xna.Framework.Input
             _buttonsPanel.Children.Add(btnOK);
 
             // Button Cancel
-            var btnCancel = new Button();
+            Button btnCancel = new Button();
             if (ButtonStyle != null)
                 btnCancel.Style = ButtonStyle;
             btnCancel.Content = "Cancel";
@@ -471,8 +472,9 @@ namespace Microsoft.Xna.Framework.Input
             _buttons.Add(btnCancel);
             _buttonsPanel.Children.Add(btnCancel);
 
-            InputPane.GetForCurrentView().Showing += InputDialog_Showing;
-            InputPane.GetForCurrentView().Hiding += InputDialod_Hiding;
+            InputPane inputPane = InputPane.GetForCurrentView();
+            inputPane.Showing += InputDialog_Showing;
+            inputPane.Hiding += InputDialod_Hiding;
 
             if (_inputTextBox != null)
                 _inputTextBox.Focus(FocusState.Programmatic);
@@ -485,7 +487,7 @@ namespace Microsoft.Xna.Framework.Input
             await GoToVisualStateAsync(this, _layoutRoot, PopupStatesGroupName, OpenPopupStateName);
 
             // Wait for button click
-            var result = await _dismissTaskSource.Task;
+            string result = await _dismissTaskSource.Task;
 
             // Hide dialog
             if (AwaitsCloseTransition)
@@ -499,10 +501,10 @@ namespace Microsoft.Xna.Framework.Input
 #pragma warning restore 4014
             }
 
-            InputPane.GetForCurrentView().Showing -= InputDialog_Showing;
-            InputPane.GetForCurrentView().Hiding -= InputDialod_Hiding;
+            inputPane.Showing -= InputDialog_Showing;
+            inputPane.Hiding -= InputDialod_Hiding;
 
-            Window.Current.Content.KeyUp -= OnGlobalKeyUp;
+            window.Content.KeyUp -= OnGlobalKeyUp;
 
             return result;
         }

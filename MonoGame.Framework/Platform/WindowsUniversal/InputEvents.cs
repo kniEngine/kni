@@ -359,9 +359,12 @@ namespace Microsoft.Xna.Framework
 
         private static void WakeupKeyboardInput()
         {
-            if (Window.Current != null)
-                Window.Current.CoreWindow.IsInputEnabled = true;
-            CoreWindow.GetForCurrentThread().IsInputEnabled = true;
+            Window window = Window.Current;
+            if (window != null)
+                window.CoreWindow.IsInputEnabled = true;
+
+            CoreWindow coreWindow = CoreWindow.GetForCurrentThread();
+            coreWindow.IsInputEnabled = true;
         }
     }
 }

@@ -280,14 +280,19 @@ namespace Microsoft.Xna.Framework
                 return;
 
             double rawPixelsPerViewPixel = 1.0d;
-            if (CoreWindow.GetForCurrentThread() != null)
+            CoreWindow coreWindow = CoreWindow.GetForCurrentThread();
+            if (coreWindow != null)
+            {
                 rawPixelsPerViewPixel = _dinfo.RawPixelsPerViewPixel;
+            }
             else
+            {
                 Task.Run(async () =>
                 {
                     await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                         CoreDispatcherPriority.Normal, () => { rawPixelsPerViewPixel = _dinfo.RawPixelsPerViewPixel; });
                 }).Wait();
+            }
             var viewSize = new Windows.Foundation.Size(width / rawPixelsPerViewPixel, height / rawPixelsPerViewPixel);
 
             //_appView.SetPreferredMinSize(viewSize);
