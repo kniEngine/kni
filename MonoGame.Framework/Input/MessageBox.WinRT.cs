@@ -10,13 +10,13 @@ namespace Microsoft.Xna.Framework.Input
 {
     public static partial class MessageBox
     {
-        private static readonly CoreDispatcher dispatcher;
-        private static TaskCompletionSource<int?> tcs;
-        private static IAsyncOperation<IUICommand> dialogResult; 
+        private static readonly CoreDispatcher _dispatcher;
+        private static TaskCompletionSource<int?> _tcs;
+        private static IAsyncOperation<IUICommand> _dialogResult;
 
         static MessageBox()
         {
-            dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+            _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
         private static Task<int?> PlatformShow(string title, string description, List<string> buttons)
@@ -25,38 +25,38 @@ namespace Microsoft.Xna.Framework.Input
             if (buttons.Count == 3)
                 throw new NotSupportedException("This platform does not support three buttons");
 
-            tcs = new TaskCompletionSource<int?>();
+            _tcs = new TaskCompletionSource<int?>();
 
             MessageDialog dialog = new MessageDialog(description, title);
             foreach (string button in buttons)
                 dialog.Commands.Add(new UICommand(button, null, dialog.Commands.Count));
 
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                 async () =>
                 {
                     try
                     {
                         // PlatformSetResult will cancel the task, resulting in an exception
-                        dialogResult = dialog.ShowAsync();
-                        var result = await dialogResult;
-                        if (!tcs.Task.IsCompleted)
-                            tcs.SetResult(result == null ? null : (int?)result.Id);
+                        _dialogResult = dialog.ShowAsync();
+                        var result = await _dialogResult;
+                        if (!_tcs.Task.IsCompleted)
+                            _tcs.SetResult(result == null ? null : (int?)result.Id);
                     }
                     catch (TaskCanceledException)
                     {
-                        if (!tcs.Task.IsCompleted)
-                            tcs.SetResult(null);
+                        if (!_tcs.Task.IsCompleted)
+                            _tcs.SetResult(null);
                     }
                 });
 
-            return tcs.Task;
+            return _tcs.Task;
         }
 
         private static void PlatformCancel(int? result)
         {
             // TODO: MessageDialog doesn't hide on Windows Phone 8.1
-            tcs.SetResult(result);
-            dialogResult.Cancel();
+            _tcs.SetResult(result);
+            _dialogResult.Cancel();
         }
     }
 }

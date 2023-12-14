@@ -45,19 +45,20 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _orientation;
         private CoreWindow _coreWindow;
         private DisplayInformation _dinfo;
-        private ApplicationView _appView;
         private Rectangle _viewBounds;
 
         private InputEvents _inputEvents;
         private bool _backPressed = false;
 
+        private ApplicationView _appView;
+
         #region Internal Properties
         
+        public ApplicationView AppView { get { return _appView; } }
+
         internal CoreWindow CoreWindow { get { return _coreWindow; } }
 
         internal Game Game { get; set; }
-
-        public ApplicationView AppView { get { return _appView; } }
 
         internal bool IsExiting { get; set; }
 
@@ -137,6 +138,7 @@ namespace Microsoft.Xna.Framework
             _inputEvents = new InputEvents(_coreWindow, this.SwapChainPanel);
 
             _dinfo = DisplayInformation.GetForCurrentView();
+
             _appView = ApplicationView.GetForCurrentView();
 
             _orientation = ToOrientation(_dinfo.CurrentOrientation);

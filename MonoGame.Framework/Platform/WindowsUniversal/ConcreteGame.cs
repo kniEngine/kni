@@ -244,12 +244,15 @@ namespace Microsoft.Xna.Platform
             {
                 // Enter FullScreen
                 if (((UAPGameWindow)Window).AppView.TryEnterFullScreenMode())
+                {
                     ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+                }
             }
             else
             {
                 // Exit FullScreen
                 ((UAPGameWindow)Window).AppView.ExitFullScreenMode();
+
                 ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
             }
         }

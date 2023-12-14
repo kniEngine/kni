@@ -30,36 +30,38 @@ namespace Microsoft.Xna.Framework.Input
 {
     public static partial class KeyboardInput
     {
-        private static readonly CoreDispatcher dispatcher;
-        private static TaskCompletionSource<string> tcs;
-        private static InputDialog inputDialog;
+        private static readonly CoreDispatcher _dispatcher;
+
+        private static TaskCompletionSource<string> _tcs;
+        private static InputDialog _inputDialog;
 
         static KeyboardInput()
         {
-            dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+            _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
         private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
-            tcs = new TaskCompletionSource<string>();
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            _tcs = new TaskCompletionSource<string>();
+
+            _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                 async () =>
                 {
-                    inputDialog = new InputDialog();
-                    var result = await inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
+                    _inputDialog = new InputDialog();
+                    var result = await _inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
 
-                    if (!tcs.Task.IsCompleted)
-                        tcs.SetResult(result);
+                    if (!_tcs.Task.IsCompleted)
+                        _tcs.SetResult(result);
                 });
 
-            return tcs.Task;
+            return _tcs.Task;
         }
 
         private static void PlatformCancel(string result)
         {
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await inputDialog.CloseAsync());
+            _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await _inputDialog.CloseAsync());
 
-            tcs.SetResult(result);
+            _tcs.SetResult(result);
         }
     }
 
