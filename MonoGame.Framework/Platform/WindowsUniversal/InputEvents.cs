@@ -10,13 +10,25 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Windows.Devices.Input;
-using Windows.Graphics.Display;
 using Windows.System.Threading;
 using Windows.UI.Core;
+
+#if UAP
+using Windows.Graphics.Display;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+#endif
+
+#if WINUI
+using Microsoft.Graphics.Display;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Windowing;
+#endif
 
 namespace Microsoft.Xna.Framework
 {

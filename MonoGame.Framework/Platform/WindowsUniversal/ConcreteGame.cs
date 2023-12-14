@@ -13,14 +13,22 @@ using Windows.ApplicationModel.Core;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 using Microsoft.Xna.Framework;
 //using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
+
+#if UAP
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+#endif
+
+#if WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
+#endif
 
 namespace Microsoft.Xna.Platform
 {

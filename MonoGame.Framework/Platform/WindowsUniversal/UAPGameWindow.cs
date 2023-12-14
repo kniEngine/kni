@@ -8,18 +8,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.Graphics.Display;
-using Windows.Phone.UI.Input;
-
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
+
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.Phone.UI.Input;
+
+#if UAP
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.Graphics.Display;
+#endif
+
+#if WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Graphics.Display;
+using Microsoft.UI.Windowing;
+#endif
 
 namespace Microsoft.Xna.Framework
 {
