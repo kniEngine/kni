@@ -152,9 +152,13 @@ namespace Microsoft.Xna.Framework
             _coreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
+            }
             else
+            {
                 SystemNavigationManager.GetForCurrentView().BackRequested += this.BackRequested;
+            }
 
             SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
 
