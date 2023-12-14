@@ -402,7 +402,11 @@ namespace Microsoft.Xna.Framework.Input
             Visibility = Visibility.Visible;
             _shown = true;
 
+#if UAP
             Window window = Window.Current;
+#elif WINUI
+            Window window = App.Window;
+#endif
             window.Content.KeyUp += OnGlobalKeyUp;
             _dismissTaskSource = new TaskCompletionSource<string>();
 
@@ -474,7 +478,11 @@ namespace Microsoft.Xna.Framework.Input
             _buttons.Add(btnCancel);
             _buttonsPanel.Children.Add(btnCancel);
 
+#if UAP
             InputPane inputPane = InputPane.GetForCurrentView();
+#elif WINUI
+            InputPane inputPane = InputPaneInterop.GetForWindow();
+#endif
             inputPane.Showing += InputDialog_Showing;
             inputPane.Hiding += InputDialod_Hiding;
 
