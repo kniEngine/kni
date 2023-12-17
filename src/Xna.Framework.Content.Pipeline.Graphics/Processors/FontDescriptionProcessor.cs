@@ -43,9 +43,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         public override SpriteFontContent Process(FontDescription input, ContentProcessorContext context)
         {
-            var output = new SpriteFontContent(input);
+            SpriteFontContent output = new SpriteFontContent(input);
 
-            var fontFile = FindFont(input, context);
+            string fontFile = FindFont(input, context);
 
             if (string.IsNullOrWhiteSpace(fontFile))
                 fontFile = FindFontFile(input, context);
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(fontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
 
-            var extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
             if (!extensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
@@ -61,9 +61,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             context.Logger.LogMessage("Building Font {0}", fontFile);
 
             // Get the platform specific texture profile.
-            var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
+            TextureProfile texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
 
-            var characters = new List<char>(input.Characters);
+            List<char> characters = new List<char>(input.Characters);
             // add default character
             if (input.DefaultCharacter != null)
             {
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 output.CharacterMap.Add(ch);
 
-                var texRect = glyph.Subrect;
+                Rectangle texRect = glyph.Subrect;
                 output.Glyphs.Add(texRect);
 
                 Rectangle cropping;
@@ -138,11 +138,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
-                var fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-                foreach (var key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
+                string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                 {
-                    var subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                    foreach (string font in subkey.GetValueNames().OrderBy(x => x))
+                    RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
+                    string[] valueNames = subkey.GetValueNames();
+                    Array.Sort(valueNames);
+
+                    foreach (string font in valueNames)
                     {
                         if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
                         {
@@ -150,35 +153,40 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             // The registry value might have trailing NUL characters
                             fontPath.TrimEnd(new char[] { '\0' });
 
-                            return Path.IsPathRooted(fontPath) ? fontPath : Path.Combine(fontsDirectory, fontPath);
+                            if (!Path.IsPathRooted(fontPath))
+                                fontPath = Path.Combine(fontsDirectory, fontPath);
+                            return fontPath;
                         }
                     }
                 }
             }
             else if (CurrentPlatform.OS == OS.Linux)
             {
-                string s, e;
-                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", input.FontName, input.Style.ToString()), out s, out e);
-                s = s.Trim();
+                string stdout, stderr;
+                ExternalTool.Run("/bin/bash", string.Format("-c \"fc-match -f '%{{file}}:%{{family}}\\n' '{0}:style={1}'\"", input.FontName, input.Style.ToString()), out stdout, out stderr);
+                stdout = stdout.Trim();
 
-                var split = s.Split(':');
+                string[] split = stdout.Split(':');
                 if (split.Length >= 2)
                 {
+                    string fontPath = split[0];
+                    string fontName = split[1];
+
                     // check font family, fontconfig might return a fallback
-                    if (split[1].Contains(","))
+                    if (fontName.Contains(","))
                     {
                         // this file defines multiple family names
-                        var families = split[1].Split(',');
-                        foreach (var f in families)
+                        string[] families = fontName.Split(',');
+                        foreach (string family in families)
                         {
-                            if (input.FontName.Equals(f, StringComparison.InvariantCultureIgnoreCase))
-                                return split[0];
+                            if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
+                                return fontPath;
                         }
                     }
                     else
                     {
-                        if (input.FontName.Equals(split[1], StringComparison.InvariantCultureIgnoreCase))
-                            return split[0];
+                        if (input.FontName.Equals(fontName, StringComparison.InvariantCultureIgnoreCase))
+                            return fontPath;
                     }
                 }
             }
@@ -188,15 +196,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private string FindFontFile(FontDescription input, ContentProcessorContext context)
         {
-            var extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-            var directories = new List<string>();
+            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+            List<string> directories = new List<string>();
 
             directories.Add(Path.GetDirectoryName(input.Identity.SourceFilename));
 
             // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
-                var fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
                 directories.Add(fontsDirectory);
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
@@ -206,11 +214,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 directories.Add("/System/Library/Fonts/Supplemental");
             }
 
-            foreach (var dir in directories)
+            foreach (string dir in directories)
             {
-                foreach (var ext in extensions)
+                foreach (string ext in extensions)
                 {
-                    var fontFile = Path.Combine(dir, input.FontName + ext);
+                    string fontFile = Path.Combine(dir, input.FontName + ext);
                     if (File.Exists(fontFile))
                         return fontFile;
                 }
@@ -225,7 +233,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             FontContent fontContent = new FontContent();
 
             using (Library sharpFontLib = new Library())
-            using (var face = sharpFontLib.NewFace(fontName, 0))
+            using (Face face = sharpFontLib.NewFace(fontName, 0))
             {
                 float size = (96f/72f) * input.Size;
                 int fixedSize = (int)(size * 64);
@@ -233,13 +241,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
                 // Rasterize each character in turn.
-                foreach (char character in characters)
+                foreach (char ch in characters)
                 {
-                    if (fontContent.Glyphs.ContainsKey(character))
+                    if (fontContent.Glyphs.ContainsKey(ch))
                         continue;
 
-                    var glyph = ImportGlyph(input, context, face, character);
-                    fontContent.Glyphs.Add(character, glyph);
+                    FontGlyph glyph = ImportGlyph(input, context, face, ch);
+                    fontContent.Glyphs.Add(ch, glyph);
                 }
 
 
@@ -257,7 +265,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Rasterizes a single character glyph.
-        private FontGlyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char character)
+        private FontGlyph ImportGlyph(FontDescription input, ContentProcessorContext context, Face face, char ch)
         {
             LoadFlags loadFlags   = LoadFlags.Default;
             LoadTarget loadTarget = LoadTarget.Normal;
@@ -285,7 +293,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     throw new InvalidOperationException("RenderMode");
             }
 
-            uint glyphIndex = face.GetCharIndex(character);
+            uint glyphIndex = face.GetCharIndex(ch);
             face.LoadGlyph(glyphIndex, loadFlags, loadTarget);
             face.Glyph.RenderGlyph(renderMode);
 
@@ -311,10 +319,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             else // whitespace
             {
-                var gHA = face.Glyph.Metrics.HorizontalAdvance / 64f;
-                var gVA = face.Size.Metrics.Height / 64f;
-                gHA = gHA > 0 ? gHA : gVA;
-                gVA = gVA > 0 ? gVA : gHA;
+                float gHA = face.Glyph.Metrics.HorizontalAdvance / 64f;
+                float gVA = face.Size.Metrics.Height / 64f;
+                gHA = (gHA > 0) ? gHA : gVA;
+                gVA = (gVA > 0) ? gVA : gHA;
                 glyphBitmap = new PixelBitmapContent<Vector4>((int)gHA, (int)gVA);
             }
 
@@ -408,13 +416,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         public enum SmoothingMode
         {
-            [System.ComponentModel.Description("Normal hinting")]
+            [Description("Normal hinting")]
             Normal,
-            [System.ComponentModel.Description("Light hinting")]
+            [Description("Light hinting")]
             Light,
-            [System.ComponentModel.Description("Auto-hinter")]
+            [Description("Auto-hinter")]
             AutoHint,
-            [System.ComponentModel.Description("Bitmap with 1bit alpha")]
+            [Description("Bitmap with 1bit alpha")]
             Disable,
         }
     }

@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             fontBitmap.TryGetFormat(out faceFormat);
             if (faceFormat != SurfaceFormat.Vector4)
             {
-                var colorFace = new PixelBitmapContent<Vector4>(fontBitmap.Width, fontBitmap.Height);
+                PixelBitmapContent<Vector4> colorFace = new PixelBitmapContent<Vector4>(fontBitmap.Width, fontBitmap.Height);
                 BitmapContent.Copy(fontBitmap, colorFace);
                 fontBitmap = colorFace;
             }
@@ -54,11 +54,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             Dictionary<char, FontGlyph> glyphs = ImportFont(input, context, (PixelBitmapContent<Vector4>)fontBitmap);
 
             // Optimize glyphs.
-            foreach (var glyph in glyphs.Values)
+            foreach (FontGlyph glyph in glyphs.Values)
                 glyph.Crop();
 
             // calculate line spacing.
-            foreach (var glyph in glyphs.Values)
+            foreach (FontGlyph glyph in glyphs.Values)
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
 
             // Get the platform specific texture profile.
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             Dictionary<char, FontGlyph> glyphs = new Dictionary<char, FontGlyph>();
 
-            var regions = new List<Rectangle>();
+            List<Rectangle> regions = new List<Rectangle>();
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
@@ -112,11 +112,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     if (bitmap.GetPixel(x, y) != transparentPixel)
                     {
                         // if we don't have a region that has this pixel already
-                        var re = regions.Find(r =>
+                        Rectangle rect = regions.Find(r =>
                         {
                             return r.Contains(x, y);
                         });
-                        if (re == Rectangle.Empty)
+                        if (rect == Rectangle.Empty)
                         {
                             // we have found the top, left of a image. 
                             // we now need to scan for the 'bounds'
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         }
                         else
                         {
-                            x += re.Width;
+                            x += rect.Width;
                         }
                     }
                 }
@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             for (int i = 0; i < regions.Count; i++)
             {
-                char character = (char)(FirstCharacter + i);
+                char ch = (char)(FirstCharacter + i);
 
                 Rectangle rect = regions[i];
                 PixelBitmapContent<Vector4> glyphBitmap = new PixelBitmapContent<Vector4>(rect.Width, rect.Height);
@@ -154,8 +154,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 FontGlyph glyph = new FontGlyph(glyphBitmap);
                 glyph.Kerning = kerning;
 
-                glyphs.Add(character, glyph);
-                //newbitmap.Save(""+character+".png", System.Drawing.Imaging.ImageFormat.Png);
+                glyphs.Add(ch, glyph);
+                //newbitmap.Save(""+ch+".png", System.Drawing.Imaging.ImageFormat.Png);
             }
 
             return glyphs;

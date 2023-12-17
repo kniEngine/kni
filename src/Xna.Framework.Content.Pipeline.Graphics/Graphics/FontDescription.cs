@@ -96,14 +96,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             get
             {
-                var regions = new List<CharacterRegion>();
-                var chars = new List<char>(Characters);
+                List<CharacterRegion> regions = new List<CharacterRegion>();
+                List<char> chars = new List<char>(Characters);
                 chars.Sort();
 
-                var start = chars[0];
-                var end = chars[0];
+                char start = chars[0];
+                char end = chars[0];
 
-                for (var i=1; i < chars.Count; i++)
+                for (int i=1; i < chars.Count; i++)
                 {
                     if (chars[i] != (end+1))
                     {
@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     if (characterRegion.End < characterRegion.Start)
                         throw new ArgumentException("CharacterRegion.End must be greater than CharacterRegion.Start");
 
-                    for (var start = characterRegion.Start; start <= characterRegion.End; start++)
+                    for (char start = characterRegion.Start; start <= characterRegion.End; start++)
                         Characters.Add(start);
                 }
             }

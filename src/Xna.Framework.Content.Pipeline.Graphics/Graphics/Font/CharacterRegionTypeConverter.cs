@@ -28,8 +28,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 			//  32-127
 			//  0x20-0x7F
 
-			var splitStr = source.Split('-');
-			var split = new char[splitStr.Length];
+			string[] splitStr = source.Split('-');
+            char[] split = new char[splitStr.Length];
 			for (int i = 0; i < splitStr.Length; i++)
 			{
 				split[i] = ConvertCharacter(splitStr[i]);
