@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             _usedRectangles = new List<Rectangle>();
             _freeRectangles = new List<Rectangle>();
 
-            var n = new Rectangle(0, 0, width, height);
+            Rectangle n = new Rectangle(0, 0, width, height);
             _freeRectangles.Add(n);
         }
 
@@ -142,18 +142,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private void GrowWidth()
         {
-            var grow = GrowIncrement < 0 ? BinWidth * -(GrowIncrement + 1) : BinWidth + GrowIncrement;
+            float grow = GrowIncrement < 0 ? BinWidth * -(GrowIncrement + 1) : BinWidth + GrowIncrement;
 
-            var rect = new Rectangle(BinWidth, 0, (int)grow, BinHeight);
+            Rectangle rect = new Rectangle(BinWidth, 0, (int)grow, BinHeight);
             BinWidth += (int)grow;
             _freeRectangles.Add(rect);
         }
 
         private void GrowHeight()
         {
-            var grow = GrowIncrement < 0 ? BinHeight * -(GrowIncrement + 1) : BinHeight + GrowIncrement;
+            float grow = GrowIncrement < 0 ? BinHeight * -(GrowIncrement + 1) : BinHeight + GrowIncrement;
 
-            var rect = new Rectangle(0, BinHeight, BinWidth, (int)grow);
+            Rectangle rect = new Rectangle(0, BinHeight, BinWidth, (int)grow);
             BinHeight += (int)grow;
             _freeRectangles.Add(rect);
         }
@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (Grow == GrowRule.None && newNode.Height == 0)
                 throw new Exception($"Failed to pack rectangle of size ({width}, {height}). BinWidth: {BinWidth}, BinHeight: {BinHeight}. Growing not allowed.");
 
-            var growTries = 0;
+            int growTries = 0;
             while (newNode.Height == 0)
             {
                 DoGrow();
@@ -209,8 +209,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         void FindPositionForNewNode(MaxRectsHeuristic heuristic, int width, int height, 
                   out Rectangle rect)
         {
-            var score1 = 0; // Unused in this function. We don't need to know the score after finding the position.
-            var score2 = 0;
+            int score1 = 0; // Unused in this function. We don't need to know the score after finding the position.
+            int score2 = 0;
             switch (heuristic)
             {
                 case MaxRectsHeuristic.Bssf:
@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             if (sizes == null)
                 throw new ArgumentNullException(nameof(sizes));
-            var bounds = new Rectangle[sizes.Length];
+            Rectangle[] bounds = new Rectangle[sizes.Length];
             Insert(sizes, bounds, 0, heuristic);
             return bounds;
         }
@@ -275,18 +275,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (bounds.Length - indexOffset < sizes.Length)
                 throw new ArgumentException("Packed array not large enough to hold bounds.", nameof(bounds));
 
-            var indices = new List<int>(sizes.Length);
-            for (var i = 0; i < sizes.Length; i++)
+            List<int> indices = new List<int>(sizes.Length);
+            for (int i = 0; i < sizes.Length; i++)
                 indices.Add(i);
 
             while (indices.Count > 0)
             {
                 Rectangle bestNode;
-                var bestRectIndex = GetBestRect(sizes, heuristic, indices, out bestNode);
+                int bestRectIndex = GetBestRect(sizes, heuristic, indices, out bestNode);
                 if (Grow == GrowRule.None && bestRectIndex == -1)
                     throw new Exception($"Failed to pack rectangles with {indices.Count} rectangles left. BinWidth: {BinWidth}, BinHeight: {BinHeight}. Growing not allowed.");
 
-                var growTries = 0;
+                int growTries = 0;
                 while (bestRectIndex == -1)
                 {
                     DoGrow();
@@ -297,7 +297,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 }
 
                 PlaceRect(ref bestNode);
-                var ogIndex = indices[bestRectIndex];
+                int ogIndex = indices[bestRectIndex];
                 indices.RemoveAt(bestRectIndex);
 
                 if (bestNode.Right > UsedWidth)
@@ -315,19 +315,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private int GetBestRect(Point[] sizes, MaxRectsHeuristic heuristic, List<int> indices, out Rectangle bestNode)
         {
-            var bestScore1 = int.MaxValue;
-            var bestScore2 = int.MaxValue;
-            var bestRectIndex = -1;
+            int bestScore1 = int.MaxValue;
+            int bestScore2 = int.MaxValue;
+            int bestRectIndex = -1;
             bestNode = new Rectangle();
 
-            for (var indirectIndex = 0; indirectIndex < indices.Count; indirectIndex++)
+            for (int indirectIndex = 0; indirectIndex < indices.Count; indirectIndex++)
             {
-                var i = indices[indirectIndex];
-                var score1 = 0;
-                var score2 = 0;
-                var newNode = ScoreRect(sizes[i].X + PaddingWidth * 2, sizes[i].Y + PaddingHeight * 2, heuristic,
-                    ref score1,
-                    ref score2);
+                int i = indices[indirectIndex];
+                int score1 = 0;
+                int score2 = 0;
+                Rectangle newNode = ScoreRect(sizes[i].X + PaddingWidth * 2, sizes[i].Y + PaddingHeight * 2, heuristic,
+                    ref score1, ref score2);
 
                 if (score1 < bestScore1 || (score1 == bestScore1 && score2 < bestScore2))
                 {
@@ -343,8 +342,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private void PlaceRect(ref Rectangle node)
         {
-            var numRectanglesToProcess = _freeRectangles.Count;
-            for (var i = 0; i < numRectanglesToProcess; ++i)
+            int numRectanglesToProcess = _freeRectangles.Count;
+            for (int i = 0; i < numRectanglesToProcess; ++i)
             {
                 if (SplitFreeNode(_freeRectangles[i], ref node))
                 {
@@ -361,7 +360,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private Rectangle ScoreRect(int width, int height, MaxRectsHeuristic method, ref int score1, ref int score2)
         {
-            var newNode = new Rectangle();
+            Rectangle newNode = new Rectangle();
             score1 = int.MaxValue;
             score2 = int.MaxValue;
             switch (method)
@@ -406,25 +405,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public float GetOccupancy(bool crop = false)
         {
             ulong usedSurfaceArea = 0;
-            for (var i = 0; i < _usedRectangles.Count; ++i)
+            for (int i = 0; i < _usedRectangles.Count; ++i)
                 usedSurfaceArea += (uint)_usedRectangles[i].Width * (uint)_usedRectangles[i].Height;
 
-            var available = crop ? UsedWidth * UsedHeight : BinWidth * BinHeight;
+            int available = crop ? UsedWidth * UsedHeight : BinWidth * BinHeight;
             return (float)usedSurfaceArea / available;
         }
 
         private Rectangle FindPositionForNewNodeBottomLeft(int width, int height, ref int bestY, ref int bestX)
         {
-            var bestNode = new Rectangle();
+            Rectangle bestNode = new Rectangle();
 
             bestY = int.MaxValue;
 
-            for (var i = 0; i < _freeRectangles.Count; ++i)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
             {
                 // Try to place the rectangle in upright (non-flipped) orientation.
                 if (_freeRectangles[i].Width >= width && _freeRectangles[i].Height >= height)
                 {
-                    var topSideY = _freeRectangles[i].Y + height;
+                    int topSideY = _freeRectangles[i].Y + height;
                     if (topSideY < bestY || (topSideY == bestY && _freeRectangles[i].X < bestX))
                     {
                         bestNode = new Rectangle(_freeRectangles[i].X, _freeRectangles[i].Y, width, height);
@@ -435,7 +434,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 if (AllowRotations && _freeRectangles[i].Width >= height && _freeRectangles[i].Height >= width)
                 {
-                    var topSideY = _freeRectangles[i].Y + width;
+                    int topSideY = _freeRectangles[i].Y + width;
                     if (topSideY < bestY || (topSideY == bestY && _freeRectangles[i].X < bestX))
                     {
                         bestNode = new Rectangle(_freeRectangles[i].X, _freeRectangles[i].Y, height, width);
@@ -451,19 +450,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         private Rectangle FindPositionForNewNodeBestShortSideFit(int width, int height, ref int bestShortSideFit,
             ref int bestLongSideFit)
         {
-            var bestNode = new Rectangle();
+            Rectangle bestNode = new Rectangle();
 
             bestShortSideFit = int.MaxValue;
 
-            for (var i = 0; i < _freeRectangles.Count; ++i)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
             {
                 // Try to place the rectangle in upright (non-flipped) orientation.
                 if (_freeRectangles[i].Width >= width && _freeRectangles[i].Height >= height)
                 {
-                    var leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
-                    var leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
-                    var shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
-                    var longSideFit = Math.Max(leftoverHoriz, leftoverVert);
+                    int leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
+                    int leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
+                    int shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
+                    int longSideFit = Math.Max(leftoverHoriz, leftoverVert);
 
                     if (shortSideFit < bestShortSideFit ||
                         (shortSideFit == bestShortSideFit && longSideFit < bestLongSideFit))
@@ -476,10 +475,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 if (AllowRotations && _freeRectangles[i].Width >= height && _freeRectangles[i].Height >= width)
                 {
-                    var flippedLeftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
-                    var flippedLeftoverVert = Math.Abs(_freeRectangles[i].Height - width);
-                    var flippedShortSideFit = Math.Min(flippedLeftoverHoriz, flippedLeftoverVert);
-                    var flippedLongSideFit = Math.Max(flippedLeftoverHoriz, flippedLeftoverVert);
+                    int flippedLeftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
+                    int flippedLeftoverVert = Math.Abs(_freeRectangles[i].Height - width);
+                    int flippedShortSideFit = Math.Min(flippedLeftoverHoriz, flippedLeftoverVert);
+                    int flippedLongSideFit = Math.Max(flippedLeftoverHoriz, flippedLeftoverVert);
 
                     if (flippedShortSideFit < bestShortSideFit ||
                         (flippedShortSideFit == bestShortSideFit && flippedLongSideFit < bestLongSideFit))
@@ -497,19 +496,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         private Rectangle FindPositionForNewNodeBestLongSideFit(int width, int height, ref int bestShortSideFit,
             ref int bestLongSideFit)
         {
-            var bestNode = new Rectangle();
+            Rectangle bestNode = new Rectangle();
 
             bestLongSideFit = int.MaxValue;
 
-            for (var i = 0; i < _freeRectangles.Count; ++i)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
             {
                 // Try to place the rectangle in upright (non-flipped) orientation.
                 if (_freeRectangles[i].Width >= width && _freeRectangles[i].Height >= height)
                 {
-                    var leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
-                    var leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
-                    var shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
-                    var longSideFit = Math.Max(leftoverHoriz, leftoverVert);
+                    int leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
+                    int leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
+                    int shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
+                    int longSideFit = Math.Max(leftoverHoriz, leftoverVert);
 
                     if (longSideFit < bestLongSideFit ||
                         (longSideFit == bestLongSideFit && shortSideFit < bestShortSideFit))
@@ -522,10 +521,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 if (AllowRotations && _freeRectangles[i].Width >= height && _freeRectangles[i].Height >= width)
                 {
-                    var leftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
-                    var leftoverVert = Math.Abs(_freeRectangles[i].Height - width);
-                    var shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
-                    var longSideFit = Math.Max(leftoverHoriz, leftoverVert);
+                    int leftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
+                    int leftoverVert = Math.Abs(_freeRectangles[i].Height - width);
+                    int shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
+                    int longSideFit = Math.Max(leftoverHoriz, leftoverVert);
 
                     if (longSideFit < bestLongSideFit ||
                         (longSideFit == bestLongSideFit && shortSideFit < bestShortSideFit))
@@ -543,20 +542,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         private Rectangle FindPositionForNewNodeBestAreaFit(int width, int height, ref int bestAreaFit,
             ref int bestShortSideFit)
         {
-            var bestNode = new Rectangle();
+            Rectangle bestNode = new Rectangle();
 
             bestAreaFit = int.MaxValue;
 
-            for (var i = 0; i < _freeRectangles.Count; ++i)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
             {
-                var areaFit = _freeRectangles[i].Width * _freeRectangles[i].Height - width * height;
+                int areaFit = _freeRectangles[i].Width * _freeRectangles[i].Height - width * height;
 
                 // Try to place the rectangle in upright (non-flipped) orientation.
                 if (_freeRectangles[i].Width >= width && _freeRectangles[i].Height >= height)
                 {
-                    var leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
-                    var leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
-                    var shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
+                    int leftoverHoriz = Math.Abs(_freeRectangles[i].Width - width);
+                    int leftoverVert = Math.Abs(_freeRectangles[i].Height - height);
+                    int shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
 
                     if (areaFit < bestAreaFit || (areaFit == bestAreaFit && shortSideFit < bestShortSideFit))
                     {
@@ -568,9 +567,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 if (AllowRotations && _freeRectangles[i].Width >= height && _freeRectangles[i].Height >= width)
                 {
-                    var leftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
-                    var leftoverVert = Math.Abs(_freeRectangles[i].Height - width);
-                    var shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
+                    int leftoverHoriz = Math.Abs(_freeRectangles[i].Width - height);
+                    int leftoverVert = Math.Abs(_freeRectangles[i].Height - width);
+                    int shortSideFit = Math.Min(leftoverHoriz, leftoverVert);
 
                     if (areaFit < bestAreaFit || (areaFit == bestAreaFit && shortSideFit < bestShortSideFit))
                     {
@@ -594,14 +593,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private int ContactPointScoreNode(int x, int y, int width, int height)
         {
-            var score = 0;
+            int score = 0;
 
             if (x == 0 || x + width == BinWidth)
                 score += height;
             if (y == 0 || y + height == BinHeight)
                 score += width;
 
-            for (var i = 0; i < _usedRectangles.Count; ++i)
+            for (int i = 0; i < _usedRectangles.Count; ++i)
             {
                 if (_usedRectangles[i].X == x + width || _usedRectangles[i].X + _usedRectangles[i].Width == x)
                     score += CommonIntervalLength(_usedRectangles[i].Y,
@@ -616,16 +615,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private Rectangle FindPositionForNewNodeContactPoint(int width, int height, ref int bestContactScore)
         {
-            var bestNode = new Rectangle();
+            Rectangle bestNode = new Rectangle();
 
             bestContactScore = -1;
 
-            for (var i = 0; i < _freeRectangles.Count; ++i)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
             {
                 // Try to place the rectangle in upright (non-flipped) orientation.
                 if (_freeRectangles[i].Width >= width && _freeRectangles[i].Height >= height)
                 {
-                    var score = ContactPointScoreNode(_freeRectangles[i].X, _freeRectangles[i].Y, width,
+                    int score = ContactPointScoreNode(_freeRectangles[i].X, _freeRectangles[i].Y, width,
                         height);
                     if (score > bestContactScore)
                     {
@@ -636,7 +635,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 if (AllowRotations && _freeRectangles[i].Width >= height && _freeRectangles[i].Height >= width)
                 {
-                    var score = ContactPointScoreNode(_freeRectangles[i].X, _freeRectangles[i].Y, height,
+                    int score = ContactPointScoreNode(_freeRectangles[i].X, _freeRectangles[i].Y, height,
                         width);
                     if (score > bestContactScore)
                     {
@@ -661,14 +660,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // New node at the top side of the used node.
                 if (usedNode.Top > freeNode.Top && usedNode.Top < freeNode.Bottom)
                 {
-                    var newNode = new Rectangle(freeNode.X, freeNode.Y, freeNode.Width, usedNode.Top - freeNode.Top);
+                    Rectangle newNode = new Rectangle(freeNode.X, freeNode.Y, freeNode.Width, usedNode.Top - freeNode.Top);
                     _freeRectangles.Add(newNode);
                 }
 
                 // New node at the bottom side of the used node.
                 if (usedNode.Bottom < freeNode.Bottom)
                 {
-                    var newNode = new Rectangle(freeNode.X, usedNode.Bottom, freeNode.Width, freeNode.Bottom - usedNode.Bottom);
+                    Rectangle newNode = new Rectangle(freeNode.X, usedNode.Bottom, freeNode.Width, freeNode.Bottom - usedNode.Bottom);
                     _freeRectangles.Add(newNode);
                 }
             }
@@ -678,14 +677,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // New node at the left side of the used node.
                 if (usedNode.Left > freeNode.Left && usedNode.Left < freeNode.Right)
                 {
-                    var newNode = new Rectangle(freeNode.Left, freeNode.Top, usedNode.Left - freeNode.Left, freeNode.Height);
+                    Rectangle newNode = new Rectangle(freeNode.Left, freeNode.Top, usedNode.Left - freeNode.Left, freeNode.Height);
                     _freeRectangles.Add(newNode);
                 }
 
                 // New node at the right side of the used node.
                 if (usedNode.X + usedNode.Width < freeNode.X + freeNode.Width)
                 {
-                    var newNode = new Rectangle(usedNode.Right, freeNode.Top, freeNode.Right - usedNode.Right, freeNode.Height);
+                    Rectangle newNode = new Rectangle(usedNode.Right, freeNode.Top, freeNode.Right - usedNode.Right, freeNode.Height);
                     _freeRectangles.Add(newNode);
                 }
             }
@@ -695,8 +694,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private void PruneFreeList()
         {
-            for (var i = 0; i < _freeRectangles.Count; ++i)
-                for (var j = i + 1; j < _freeRectangles.Count; ++j)
+            for (int i = 0; i < _freeRectangles.Count; ++i)
+                for (int j = i + 1; j < _freeRectangles.Count; ++j)
                 {
                     if (IsContainedIn(_freeRectangles[i], _freeRectangles[j]))
                     {

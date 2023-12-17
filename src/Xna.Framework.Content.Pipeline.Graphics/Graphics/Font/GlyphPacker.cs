@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public static BitmapContent ArrangeGlyphs(ICollection<FontGlyph> glyphs, bool requirePOT, bool requireSquare)
         {
             // Build up a list of all the glyphs needing to be arranged.
-            var arrangedGlyphs = new List<ArrangedFontGlyph>();
+            List<ArrangedFontGlyph> arrangedGlyphs = new List<ArrangedFontGlyph>();
 
             foreach (FontGlyph glyph in glyphs)
             {
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // Work out how big the output bitmap should be.
             int guessedWidth = GuessOutputWidth(glyphs);
-            var rectPacker = new MaxRectsBin(guessedWidth, 1024 * 2, GrowRule.Height);
+            MaxRectsBin rectPacker = new MaxRectsBin(guessedWidth, 1024 * 2, GrowRule.Height);
 
             for (int i = 0; i < arrangedGlyphs.Count; i++)
             {
@@ -64,9 +64,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             foreach (ArrangedFontGlyph glyph in arrangedGlyphs)
             {
-                var sourceGlyph = glyph.Glyph;
-                var sourceRegion = sourceGlyph.Subrect;
-                var destinationRegion = new Rectangle(glyph.Bounds.Location, sourceRegion.Size);
+                FontGlyph sourceGlyph = glyph.Glyph;
+                Rectangle sourceRegion = sourceGlyph.Subrect;
+                Rectangle destinationRegion = new Rectangle(glyph.Bounds.Location, sourceRegion.Size);
                 destinationRegion.Offset(1,1);
 
                 BitmapContent.Copy(sourceGlyph.Bitmap, sourceRegion, output, destinationRegion);

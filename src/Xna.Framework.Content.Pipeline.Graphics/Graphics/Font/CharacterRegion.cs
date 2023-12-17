@@ -12,11 +12,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 	    public char End;
 
 		// Enumerates all characters within the region.        
-	    public IEnumerable<Char> Characters()
+	    public IEnumerable<char> Characters()
 	    {
-	        for (var c = Start; c <= End; c++)
+	        for (char ch = Start; ch <= End; ch++)
 	        {
-	            yield return c;
+	            yield return ch;
 	        }
 	    }
 
@@ -75,8 +75,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 			if (comparer == null)
 				comparer = EqualityComparer<TSource>.Default;
 
-			// using Dictionary is not really efficient but easy to implement
-			var values = new Dictionary<TSource, object>(comparer);
+            // using Dictionary is not really efficient but easy to implement
+            Dictionary<TSource,object> values = new Dictionary<TSource,object>(comparer);
 			foreach (TSource sourceItem in source)
 			{
 				if (!values.ContainsKey(sourceItem))
