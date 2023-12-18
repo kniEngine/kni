@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform
         {
             //base.CreateDevice();
             
-            var pp = new PresentationParameters();
+            PresentationParameters pp = new PresentationParameters();
             pp.DepthStencilFormat = DepthFormat.Depth24;
 
             // Set "full screen"  as default
