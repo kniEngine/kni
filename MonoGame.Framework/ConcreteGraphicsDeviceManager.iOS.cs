@@ -97,7 +97,6 @@ namespace Microsoft.Xna.Platform
                 pp.BackBufferHeight = height;
             }
 
-            pp.IsFullScreen = UIKit.UIApplication.SharedApplication.StatusBarHidden;
             // Set "full screen"  as default
             pp.IsFullScreen = true;
             UIKit.UIApplication.SharedApplication.StatusBarHidden = pp.IsFullScreen;
