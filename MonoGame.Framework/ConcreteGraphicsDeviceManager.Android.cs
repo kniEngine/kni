@@ -80,6 +80,8 @@ namespace Microsoft.Xna.Platform
             
             PresentationParameters pp = new PresentationParameters();
             pp.DepthStencilFormat = DepthFormat.Depth24;
+            pp.BackBufferWidth = 800;
+            pp.BackBufferHeight = 480;
 
             // Set "full screen"  as default
             pp.IsFullScreen = true;

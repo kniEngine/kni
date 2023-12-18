@@ -45,6 +45,8 @@ namespace MonoGame.Tests.Graphics
             Assert.Throws<ArgumentNullException>(() =>
             {
                 PresentationParameters pp = new PresentationParameters();
+                pp.BackBufferWidth = 800;
+                pp.BackBufferWidth = 480;
                 new GraphicsDevice(null, GraphicsProfile.Reach, pp);
             });
         }
@@ -165,6 +167,8 @@ namespace MonoGame.Tests.Graphics
             Assert.Throws<ArgumentException>(() =>
             {
                 PresentationParameters pp = new PresentationParameters();
+                pp.BackBufferWidth = 800;
+                pp.BackBufferWidth = 480;
                 gd.Reset(pp);
             });
         }
