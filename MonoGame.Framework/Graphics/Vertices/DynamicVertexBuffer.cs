@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	public class DynamicVertexBuffer : VertexBuffer
     {
 
-        public bool IsContentLost { get { return _strategy.ToConcrete<ConcreteDynamicVertexBuffer>().IsContentLost; } }
+        public bool IsContentLost { get { return ((IDynamicVertexBufferStrategy)_strategy).IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;
 

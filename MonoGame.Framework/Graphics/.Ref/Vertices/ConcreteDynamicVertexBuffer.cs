@@ -20,12 +20,12 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        #region IDynamicIndexBufferStrategy
+        #region IDynamicVertexBufferStrategy
         public bool IsContentLost
         {
             get { throw new PlatformNotSupportedException(); }
         }
-        #endregion IDynamicIndexBufferStrategy
+        #endregion IDynamicVertexBufferStrategy
 
     }
 
