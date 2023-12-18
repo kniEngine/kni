@@ -18,14 +18,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region Private Fields
 
-        private SurfaceFormat _backBufferFormat;
-        private DepthFormat _depthStencilFormat;
+        private SurfaceFormat _backBufferFormat = SurfaceFormat.Color;
+        private DepthFormat _depthStencilFormat = DepthFormat.None;
         private int _backBufferWidth;
         private int _backBufferHeight;
         private int _multiSampleCount;
         private RenderTargetUsage _renderTargetUsage = RenderTargetUsage.DiscardContents;
-        private PresentInterval _presentationInterval;
-        private DisplayOrientation _displayOrientation;
+        private PresentInterval _presentationInterval = PresentInterval.Default;
+        private DisplayOrientation _displayOrientation= DisplayOrientation.Default;
         private bool _isFullScreen;
         private bool _hardwareModeSwitch = true;
         private IntPtr _deviceWindowHandle;
@@ -39,15 +39,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public PresentationParameters()
         {
-            _backBufferFormat = SurfaceFormat.Color;
-            _depthStencilFormat = DepthFormat.None;
-            _backBufferWidth = 0;
-            _backBufferHeight = 0;
-            _multiSampleCount = 0;
-            _presentationInterval = PresentInterval.Default;
-            _displayOrientation = DisplayOrientation.Default;
-            _isFullScreen = false;
-            _deviceWindowHandle = IntPtr.Zero;
         }
 
         #endregion Constructors
