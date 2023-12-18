@@ -98,9 +98,9 @@ namespace Microsoft.Xna.Platform
 
             PresentationParameters pp = new PresentationParameters();
             pp.BackBufferFormat = this.PreferredBackBufferFormat;
+            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
             pp.BackBufferWidth = this.PreferredBackBufferWidth;
             pp.BackBufferHeight = this.PreferredBackBufferHeight;
-            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
             pp.IsFullScreen = this.IsFullScreen;
             pp.HardwareModeSwitch = this.HardwareModeSwitch;
             pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
