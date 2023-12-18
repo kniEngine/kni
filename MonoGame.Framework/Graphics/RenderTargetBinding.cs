@@ -108,8 +108,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _depthFormat = renderTarget.DepthStencilFormat;
         }
 
-#if DIRECTX
-
         public RenderTargetBinding(RenderTarget3D renderTarget)
         {
             if (renderTarget == null)
@@ -120,20 +118,14 @@ namespace Microsoft.Xna.Framework.Graphics
             _depthFormat = renderTarget.DepthStencilFormat;
         }
 
-#endif 
-
         public static implicit operator RenderTargetBinding(RenderTarget2D renderTarget)
         {
             return new RenderTargetBinding(renderTarget);
         }
 
-#if DIRECTX
-
         public static implicit operator RenderTargetBinding(RenderTarget3D renderTarget)
         {
             return new RenderTargetBinding(renderTarget);
         }
-
-#endif
 	}
 }
