@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private int _backBufferWidth;
         private int _backBufferHeight;
         private int _multiSampleCount;
-        private RenderTargetUsage _renderTargetUsage;
+        private RenderTargetUsage _renderTargetUsage = RenderTargetUsage.DiscardContents;
         private PresentInterval _presentationInterval;
         private DisplayOrientation _displayOrientation;
         private bool _isFullScreen;
