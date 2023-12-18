@@ -626,7 +626,7 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dispose(disposing);
         }
 
-        internal void PlatformResolveRenderTargets()
+        internal override void PlatformResolveRenderTargets()
         {
             for (int i = 0; i < _currentRenderTargetCount; i++)
             {
@@ -648,7 +648,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyDefaultRenderTarget()
+        internal override void PlatformApplyDefaultRenderTarget()
         {
             // Set the default swap chain.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
@@ -661,7 +661,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal IRenderTarget PlatformApplyRenderTargets()
+        internal override IRenderTarget PlatformApplyRenderTargets()
         {
             // Clear the current render targets.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
