@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private SurfaceFormat _backBufferFormat;
         private DepthFormat _depthStencilFormat;
-        private int _backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
-        private int _backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+        private int _backBufferWidth;
+        private int _backBufferHeight;
         private int _multiSampleCount;
         private RenderTargetUsage _renderTargetUsage;
         private PresentInterval _presentationInterval;
@@ -41,8 +41,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _backBufferFormat = SurfaceFormat.Color;
             _depthStencilFormat = DepthFormat.None;
-            _backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-            _backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
+            _backBufferWidth = 0;
+            _backBufferHeight = 0;
             _multiSampleCount = 0;
             _presentationInterval = PresentInterval.Default;
             _displayOrientation = DisplayOrientation.Default;
