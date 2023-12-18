@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	public class DynamicIndexBuffer : IndexBuffer
 	{
 
-        public bool IsContentLost { get { return _strategy.ToConcrete<ConcreteDynamicIndexBuffer>().IsContentLost; } }
+        public bool IsContentLost { get { return ((IDynamicIndexBufferStrategy)_strategy).IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;
 

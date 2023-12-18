@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        #region IDynamicIndexBufferStrategy
+        #region IDynamicVertexBufferStrategy
         public bool IsContentLost
         {
             get
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 return _isContentLost;
             }
         }
-        #endregion IDynamicIndexBufferStrategy
+        #endregion IDynamicVertexBufferStrategy
 
     }
 
