@@ -913,7 +913,7 @@ namespace Microsoft.Xna.Platform.Graphics
             FramebufferAttachment.StencilAttachment,
         };
 
-        internal void PlatformResolveRenderTargets()
+        internal override void PlatformResolveRenderTargets()
         {
             if (!this.IsRenderTargetBound)
                 return;
@@ -1002,7 +1002,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyDefaultRenderTarget()
+        internal override void PlatformApplyDefaultRenderTarget()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
             GL.CheckGLError();
@@ -1015,7 +1015,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _pixelTextures.Strategy.Dirty();
         }
 
-        internal IRenderTarget PlatformApplyRenderTargets()
+        internal override IRenderTarget PlatformApplyRenderTargets()
         {
             int glFramebuffer = 0;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))

@@ -438,6 +438,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal abstract IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy stsourcerategy);
         internal abstract ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source);
 
+        internal abstract void PlatformResolveRenderTargets();
+        internal abstract void PlatformApplyDefaultRenderTarget();
+        internal abstract IRenderTarget PlatformApplyRenderTargets();
+
         internal T ToConcrete<T>() where T : GraphicsContextStrategy
         {
             return (T)this;
