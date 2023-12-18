@@ -77,8 +77,8 @@ namespace Microsoft.Xna.Platform
         {
             //base.CreateDevice();
             
-            var presentationParameters = new PresentationParameters();
-            presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
+            PresentationParameters pp = new PresentationParameters();
+            pp.DepthStencilFormat = DepthFormat.Depth24;
 
             {
                 // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
@@ -93,28 +93,27 @@ namespace Microsoft.Xna.Platform
                     height = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
                 }
 
-                presentationParameters.BackBufferWidth = width;
-                presentationParameters.BackBufferHeight = height;
+                pp.BackBufferWidth = width;
+                pp.BackBufferHeight = height;
             }
 
-            presentationParameters.IsFullScreen = UIKit.UIApplication.SharedApplication.StatusBarHidden;
             // Set "full screen"  as default
-            presentationParameters.IsFullScreen = true;
-            UIKit.UIApplication.SharedApplication.StatusBarHidden = presentationParameters.IsFullScreen;
+            pp.IsFullScreen = true;
+            UIKit.UIApplication.SharedApplication.StatusBarHidden = pp.IsFullScreen;
 
             GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
             gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-            gdi.PresentationParameters = presentationParameters;
+            gdi.PresentationParameters = pp;
             var pe = new PreparingDeviceSettingsEventArgs(gdi);
 
             this.OnPreparingDeviceSettings(pe);
 
-            presentationParameters = gdi.PresentationParameters;
+            pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
             // Needs to be before ApplyChanges()
-            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, presentationParameters);
+            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
 

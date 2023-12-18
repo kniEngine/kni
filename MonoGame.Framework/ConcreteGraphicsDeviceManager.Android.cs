@@ -78,27 +78,27 @@ namespace Microsoft.Xna.Platform
         {
             //base.CreateDevice();
             
-            var presentationParameters = new PresentationParameters();
-            presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
+            PresentationParameters pp = new PresentationParameters();
+            pp.DepthStencilFormat = DepthFormat.Depth24;
 
             // Set "full screen"  as default
-            presentationParameters.IsFullScreen = true;
+            pp.IsFullScreen = true;
             
-            presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
 
             GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
             gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-            gdi.PresentationParameters = presentationParameters;
+            gdi.PresentationParameters = pp;
             var pe = new PreparingDeviceSettingsEventArgs(gdi);
 
             this.OnPreparingDeviceSettings(pe);
 
-            presentationParameters = gdi.PresentationParameters;
+            pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
             // Needs to be before ApplyChanges()
-            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, presentationParameters);
+            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
 

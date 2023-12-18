@@ -42,15 +42,21 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void CtorAdapterNull()
         {
-            Assert.Throws<ArgumentNullException>(
-                () => new GraphicsDevice(null, GraphicsProfile.Reach, new PresentationParameters()));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                PresentationParameters pp = new PresentationParameters();
+                new GraphicsDevice(null, GraphicsProfile.Reach, pp);
+            });
         }
 
         [Test]
         public void CtorPresentationParametersNull()
         {
-            Assert.Throws<ArgumentNullException>(
-                () => new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.Reach, null));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                PresentationParameters pp = null;
+                new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.Reach, pp);
+            }); 
         }
 
         [Test]
@@ -156,7 +162,11 @@ namespace MonoGame.Tests.Graphics
 #endif
         public void ResetWindowHandleNullThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => gd.Reset(new PresentationParameters()));
+            Assert.Throws<ArgumentException>(() =>
+            {
+                PresentationParameters pp = new PresentationParameters();
+                gd.Reset(pp);
+            });
         }
 
 		[Test]

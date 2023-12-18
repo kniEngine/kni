@@ -107,16 +107,16 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
-            PresentationParameters presentationParameters = new PresentationParameters();
-            presentationParameters.BackBufferFormat = this.PreferredBackBufferFormat;
-            presentationParameters.BackBufferWidth = this.PreferredBackBufferWidth;
-            presentationParameters.BackBufferHeight = this.PreferredBackBufferHeight;
-            presentationParameters.DepthStencilFormat = this.PreferredDepthStencilFormat;
-            presentationParameters.IsFullScreen = this.IsFullScreen;
-            presentationParameters.HardwareModeSwitch = this.HardwareModeSwitch;
-            presentationParameters.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
-            presentationParameters.DisplayOrientation = this.Game.Window.CurrentOrientation;
-            presentationParameters.DeviceWindowHandle = this.Game.Window.Handle;
+            PresentationParameters pp = new PresentationParameters();
+            pp.BackBufferFormat = this.PreferredBackBufferFormat;
+            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
+            pp.BackBufferWidth = this.PreferredBackBufferWidth;
+            pp.BackBufferHeight = this.PreferredBackBufferHeight;
+            pp.IsFullScreen = this.IsFullScreen;
+            pp.HardwareModeSwitch = this.HardwareModeSwitch;
+            pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
+            pp.DisplayOrientation = this.Game.Window.CurrentOrientation;
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
 
             // always initialize MultiSampleCount to the maximum, if users want to overwrite
             // this they have to respond to the PreparingDeviceSettingsEvent and modify
@@ -133,9 +133,9 @@ namespace Microsoft.Xna.Platform
                     maxMultiSampleCount = 32;
                 }
             }
-            presentationParameters.MultiSampleCount = maxMultiSampleCount;
+            pp.MultiSampleCount = maxMultiSampleCount;
 
-            gdi.PresentationParameters = presentationParameters;
+            gdi.PresentationParameters = pp;
             var args = new PreparingDeviceSettingsEventArgs(gdi);
             this.OnPreparingDeviceSettings(args);
 
