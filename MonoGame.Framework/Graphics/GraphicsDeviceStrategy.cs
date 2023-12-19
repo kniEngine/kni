@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void Initialize()
         {
             // Setup
-            this.ToConcrete<ConcreteGraphicsDevice>().PlatformSetup();
+            this.PlatformSetup();
 
 #if DEBUG
             if (this.DisplayMode == null)
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Setup end
 
-            this.ToConcrete<ConcreteGraphicsDevice>().PlatformInitialize();
+            this.PlatformInitialize();
 
             // Force set the default render states.
             _mainContext.Strategy._blendStateDirty = true;
@@ -176,6 +176,8 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
+        protected abstract void PlatformSetup();
+        protected abstract void PlatformInitialize();
 
         internal int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
         {

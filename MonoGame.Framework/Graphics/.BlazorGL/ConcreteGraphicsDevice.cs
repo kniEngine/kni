@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal void PlatformSetup()
+        protected override void PlatformSetup()
         {
             // create context.
             _mainContext = new GraphicsContext(this);
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
-        internal void PlatformInitialize()
+        protected override void PlatformInitialize()
         {
             // set actual backbuffer size
             PresentationParameters.BackBufferWidth = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Width;

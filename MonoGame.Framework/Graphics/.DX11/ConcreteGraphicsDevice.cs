@@ -246,7 +246,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
 
-        internal void PlatformSetup()
+        protected override void PlatformSetup()
         {
             CreateDeviceIndependentResources();
 
@@ -382,7 +382,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
-        internal void PlatformInitialize()
+        protected override void PlatformInitialize()
         {
 #if WINDOWSDX
             CorrectBackBufferSize();
