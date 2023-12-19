@@ -54,6 +54,11 @@ namespace Microsoft.Xna.Platform.Graphics
             internal set { _graphicsAdapter = value; }
         }
 
+        public DisplayMode DisplayMode
+        {
+            get { return _graphicsAdapter.CurrentDisplayMode; }
+        }
+
         public GraphicsProfile GraphicsProfile
         {
             get { return _graphicsProfile; }
