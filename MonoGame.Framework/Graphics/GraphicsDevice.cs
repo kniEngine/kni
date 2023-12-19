@@ -398,7 +398,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public DisplayMode DisplayMode
         {
-            get { return Adapter.CurrentDisplayMode; }
+            get { return Strategy.DisplayMode; }
         }
 
         public GraphicsDeviceStatus GraphicsDeviceStatus
