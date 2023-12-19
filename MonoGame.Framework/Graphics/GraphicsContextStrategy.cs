@@ -411,6 +411,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal abstract OcclusionQueryStrategy CreateOcclusionQueryStrategy();
         internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy();
+        internal abstract ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity);
         internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
         internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 

@@ -713,6 +713,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsDebug(this);
         }
 
+        internal override ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity)
+        {
+            return new ConcreteConstantBufferCollection(capacity);
+        }
+
         internal override TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity)
         {
             return new ConcreteTextureCollection(this, capacity);
