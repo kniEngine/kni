@@ -148,7 +148,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformSetup();
 
 #if DEBUG
-            if (DisplayMode == null)
+            if (_strategy.DisplayMode == null)
             {
                 throw new Exception(
                     "Unable to determine the current display mode.  This can indicate that the " +
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Initialize the main viewport
-            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, DisplayMode.Width, DisplayMode.Height);
+            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, _strategy.DisplayMode.Width, _strategy.DisplayMode.Height);
 
             _strategy._mainContext.Strategy._vertexConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
             _strategy._mainContext.Strategy._pixelConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
