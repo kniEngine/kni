@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal ConstantBufferCollectionStrategy Strategy { get { return _strategy; } }
 
 
-        public ConstantBufferCollection(GraphicsContextStrategy strategy, int capacity)
+        public ConstantBufferCollection(GraphicsContextStrategy contextStrategy, int capacity)
         {
-            _strategy = new ConcreteConstantBufferCollection(capacity);
+            _strategy = contextStrategy.CreateConstantBufferCollectionStrategy(capacity);
         }
 
 
