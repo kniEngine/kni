@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
-            Initialize();
+            _strategy.Initialize();
         }
 
         /// <summary>
@@ -133,87 +133,12 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
-            Initialize();
+            _strategy.Initialize();
         }
 
         ~GraphicsDevice()
         {
             Dispose(false);
-        }
-
-
-        private void Initialize()
-        {
-            // Setup
-            _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformSetup();
-
-#if DEBUG
-            if (_strategy.DisplayMode == null)
-            {
-                throw new Exception(
-                    "Unable to determine the current display mode.  This can indicate that the " +
-                    "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
-                    "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
-            }
-#endif
-
-            // Initialize the main viewport
-            _strategy._mainContext.Strategy._viewport = new Viewport(0, 0, _strategy.DisplayMode.Width, _strategy.DisplayMode.Height);
-
-            _strategy._mainContext.Strategy._vertexConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
-            _strategy._mainContext.Strategy._pixelConstantBuffers = new ConstantBufferCollection(_strategy._mainContext.Strategy, 16);
-
-            _strategy._mainContext.Strategy._vertexTextures = new TextureCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxVertexTextureSlots);
-            _strategy._mainContext.Strategy._pixelTextures = new TextureCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxTextureSlots);
-
-            _strategy._mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxTextureSlots);
-            _strategy._mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(_strategy._mainContext.Strategy, Strategy.Capabilities.MaxVertexTextureSlots);
-
-            _strategy._mainContext.Strategy._blendStateAdditive = new BlendState(BlendState.Additive);
-            _strategy._mainContext.Strategy._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
-            _strategy._mainContext.Strategy._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
-            _strategy._mainContext.Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
-
-            _strategy._mainContext.Strategy.BlendState = BlendState.Opaque;
-
-            _strategy._mainContext.Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
-            _strategy._mainContext.Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
-            _strategy._mainContext.Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
-
-            _strategy._mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
-
-            _strategy._mainContext.Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
-            _strategy._mainContext.Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
-            _strategy._mainContext.Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
-
-            _strategy._mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
-
-            // Setup end
-
-            _strategy.ToConcrete<ConcreteGraphicsDevice>().PlatformInitialize();
-
-            // Force set the default render states.
-            _strategy._mainContext.Strategy._blendStateDirty = true;
-            _strategy._mainContext.Strategy._blendFactorDirty = true;
-            _strategy._mainContext.Strategy._depthStencilStateDirty = true;
-            _strategy._mainContext.Strategy._rasterizerStateDirty = true;
-            _strategy._mainContext.Strategy.BlendState = BlendState.Opaque;
-            _strategy._mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
-            _strategy._mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
-
-            // Force set the buffers and shaders on next ApplyState() call
-            _strategy._mainContext.Strategy._vertexBuffers = new VertexBufferBindings(Strategy.Capabilities.MaxVertexBufferSlots);
-            _strategy._mainContext.Strategy._vertexBuffersDirty = true;
-            _strategy._mainContext.Strategy._indexBufferDirty = true;
-            _strategy._mainContext.Strategy._vertexShaderDirty = true;
-            _strategy._mainContext.Strategy._pixelShaderDirty = true;
-
-            // Set the default scissor rect.
-            _strategy._mainContext.Strategy._scissorRectangleDirty = true;
-            _strategy._mainContext.Strategy._scissorRectangle = _strategy._mainContext.Strategy._viewport.Bounds;
-
-            // Set the default render target.
-            _strategy._mainContext.ApplyRenderTargets(null);
         }
 
         public Rectangle ScissorRectangle

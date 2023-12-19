@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal void PlatformSetup()
+        protected override void PlatformSetup()
         {
             _mainContext = new GraphicsContext(this);
 

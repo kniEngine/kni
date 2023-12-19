@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public override string ResourceNameSpriteEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.fxo"; } }
 
 
-        internal void PlatformInitialize()
+        protected override void PlatformInitialize()
         {
             var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 

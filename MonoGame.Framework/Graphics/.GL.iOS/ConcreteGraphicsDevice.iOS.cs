@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal void PlatformSetup()
+        protected override void PlatformSetup()
         {
             _mainContext = new GraphicsContext(this);
             var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
