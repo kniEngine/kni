@@ -131,6 +131,18 @@ namespace Microsoft.Xna.Framework.Graphics
                                        T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            if (data == null)
+                throw new ArgumentNullException("data");
+            if (startIndex < 0 || startIndex >= data.Length)
+                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
+            if (data.Length < startIndex + elementCount)
+                throw new ArgumentException("The data array is too small.");
+
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = Format.GetSize();
+            if (tSize > fSize || fSize % tSize != 0)
+                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
+
             int texWidth = Math.Max(Width >> level, 1);
             int texHeight = Math.Max(Height >> level, 1);
             int texDepth = Math.Max(Depth >> level, 1);
@@ -145,16 +157,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("Neither box size nor box position can be negative");
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.");
-            if (data == null)
-                throw new ArgumentNullException("data");
-            int tSize = ReflectionHelpers.SizeOf<T>();
-            int fSize = Format.GetSize();
-            if (tSize > fSize || fSize % tSize != 0)
-                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
-            if (startIndex < 0 || startIndex >= data.Length)
-                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
-            if (data.Length < startIndex + elementCount)
-                throw new ArgumentException("The data array is too small.");
 
             int dataByteSize = width*height*depth*fSize;
             if (elementCount * tSize != dataByteSize)
