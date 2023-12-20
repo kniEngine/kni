@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
