@@ -290,56 +290,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
         }
 
-        /// <summary>
-        /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
-        /// May work with other formats, but will not work with tga files.
-        /// </summary>
-        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
-        /// <param name="stream">The stream from which to read the image data.</param>
-        /// <returns>The <see cref="Texture2D"/> created from the image stream.</returns>
-        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
-        /// the images should be identical.  This call does not premultiply the image alpha, but areas of zero alpha will
-        /// result in black color data.
-        /// </remarks>
-        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
-        {
-            if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice");
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            try
-            {
-                return new Texture2D(graphicsDevice.Strategy.MainContext, stream);
-            }
-            catch(Exception e)
-            {
-                throw new InvalidOperationException("This image format is not supported", e);
-            }
-        }
-
-        /// <summary>
-        /// Converts the texture to a JPG image
-        /// </summary>
-        /// <param name="stream">Destination for the image</param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void SaveAsJpeg(Stream stream, int width, int height)
-        {
-            _strategyTexture2D.SaveAsJpeg(stream, width, height);
-        }
-
-        /// <summary>
-        /// Converts the texture to a PNG image
-        /// </summary>
-        /// <param name="stream">Destination for the image</param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void SaveAsPng(Stream stream, int width, int height)
-        {
-            _strategyTexture2D.SaveAsPng(stream, width, height);
-        }
-        
         private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
             int startIndex, int elementCount, out Rectangle checkedRect)
             where T : struct
@@ -408,7 +358,56 @@ namespace Microsoft.Xna.Framework.Graphics
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
 
+        /// <summary>
+        /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// May work with other formats, but will not work with tga files.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="stream">The stream from which to read the image data.</param>
+        /// <returns>The <see cref="Texture2D"/> created from the image stream.</returns>
+        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
+        /// the images should be identical.  This call does not premultiply the image alpha, but areas of zero alpha will
+        /// result in black color data.
+        /// </remarks>
+        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
+        {
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
+            if (stream == null)
+                throw new ArgumentNullException("stream");
 
+            try
+            {
+                return new Texture2D(graphicsDevice.Strategy.MainContext, stream);
+            }
+            catch(Exception e)
+            {
+                throw new InvalidOperationException("This image format is not supported", e);
+            }
+        }
+
+        /// <summary>
+        /// Converts the texture to a JPG image
+        /// </summary>
+        /// <param name="stream">Destination for the image</param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public void SaveAsJpeg(Stream stream, int width, int height)
+        {
+            _strategyTexture2D.SaveAsJpeg(stream, width, height);
+        }
+
+        /// <summary>
+        /// Converts the texture to a PNG image
+        /// </summary>
+        /// <param name="stream">Destination for the image</param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public void SaveAsPng(Stream stream, int width, int height)
+        {
+            _strategyTexture2D.SaveAsPng(stream, width, height);
+        }
+        
         internal static Color[] GetColorData(ITexture2DStrategy texture2D)
         {
             int colorDataLength = texture2D.Width * texture2D.Height;
