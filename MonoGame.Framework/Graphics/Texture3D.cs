@@ -60,13 +60,15 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(T[] data)
             where T : struct
 		{
-			SetData<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+            _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
 		}
 
 		public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
 		{
-			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
 		}
 
 		public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
@@ -109,7 +111,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -120,7 +123,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data)
             where T : struct
         {
-            GetData<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+            _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
         }
 
         private void ValidateParams<T>(int level,

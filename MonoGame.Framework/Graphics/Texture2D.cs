@@ -253,7 +253,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            this.GetData<T>(level, 0, rect, data, startIndex, elementCount);
+            Rectangle checkedRect;
+            ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
+            _strategyTexture2D.GetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -268,7 +270,9 @@ namespace Microsoft.Xna.Framework.Graphics
 		public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
 		{
-			this.GetData<T>(0, null, data, startIndex, elementCount);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
+            _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, startIndex, elementCount);
 		}
 
         /// <summary>
@@ -281,7 +285,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data)
             where T : struct
 		{
-			this.GetData<T>(0, null, data, 0, data.Length);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
+            _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
 		}
 
         /// <summary>

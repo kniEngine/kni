@@ -65,13 +65,17 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
         {
-            GetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, null, data, 0, data.Length, out checkedRect);
+            _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
         }
 
 	    public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
 	    {
-	        GetData<T>(cubeMapFace, 0, null, data, startIndex, elementCount);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
+            _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
 	    }
 
 	    public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
@@ -85,13 +89,17 @@ namespace Microsoft.Xna.Framework.Graphics
 		public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
 		{
-            SetData<T>(cubeMapFace, 0, null, data, 0, data.Length);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, null, data, 0, data.Length, out checkedRect);
+            _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
 		}
 
         public void SetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
 		{
-            SetData<T>(cubeMapFace, 0, null, data, startIndex, elementCount);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
+            _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
 		}
 		
         public void SetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
