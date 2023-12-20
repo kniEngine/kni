@@ -59,14 +59,16 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(T[] data)
             where T : struct
         {
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+            ValidateArrayBounds<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
         }
 
         public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
@@ -74,7 +76,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);
             _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
@@ -96,7 +99,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);                       
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);                       
             _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
@@ -110,7 +114,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
             _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
@@ -122,13 +127,12 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data)
             where T : struct
         {
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+            ValidateArrayBounds<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
             _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
         }
 
-        private void ValidateParams<T>(int level,
-                                       int left, int top, int right, int bottom, int front, int back,
-                                       T[] data, int startIndex, int elementCount)
+        private void ValidateArrayBounds<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
             if (data == null)
@@ -137,7 +141,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data array is too small.");
+        }
 
+        private void ValidateParams<T>(int level,
+                                       int left, int top, int right, int bottom, int front, int back,
+                                       int elementCount)
+            where T : struct
+        {
             int tSize = ReflectionHelpers.SizeOf<T>();
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)

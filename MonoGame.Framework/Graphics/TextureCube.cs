@@ -65,53 +65,58 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, 0, data.Length);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, data, 0, data.Length, out checkedRect);
+            ValidateParams<T>(0, null, data.Length, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
         }
 
         public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(0, null, elementCount, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
         }
 
         public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
         }
 
         public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, 0, data.Length);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, data, 0, data.Length, out checkedRect);
+            ValidateParams<T>(0, null, data.Length, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
         }
 
         public void SetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(0, null, elementCount, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
         }
         
         public void SetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
         }
 
-        private void ValidateParams<T>(int level, Rectangle? rect, T[] data, int startIndex,
-            int elementCount, out Rectangle checkedRect)
+        private void ValidateArrayBounds<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
             if (data == null)
@@ -120,7 +125,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data array is too small.");
+        }
 
+        private void ValidateParams<T>(int level, Rectangle? rect, int elementCount, out Rectangle checkedRect)
+            where T : struct
+        {
             int tSize = ReflectionHelpers.SizeOf<T>();
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)

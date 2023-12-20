@@ -166,8 +166,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -183,8 +184,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct 
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             if (rect.HasValue)
                 _strategyTexture2D.SetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
             else           
@@ -201,8 +203,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(0, null, elementCount, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, startIndex, elementCount);
         }
 
@@ -214,8 +217,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(T[] data)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, 0, data.Length);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
+            ValidateParams<T>(0, null, data.Length, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, 0, data.Length);
         }
 
@@ -234,8 +238,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -253,8 +258,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTexture2D.GetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
         }
 
@@ -270,8 +276,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(0, null, elementCount, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, startIndex, elementCount);
         }
 
@@ -285,13 +292,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, 0, data.Length);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
+            ValidateParams<T>(0, null,data.Length, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
         }
 
-        private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
-            int startIndex, int elementCount, out Rectangle checkedRect)
+        private void ValidateArrayBounds<T>(int arraySlice, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             if (arraySlice > 0 && !GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
@@ -305,7 +312,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data array is too small.");
+        }
 
+        private void ValidateParams<T>(int level, Rectangle? rect, int elementCount, out Rectangle checkedRect)
+            where T : struct
+        {
             int tSize = ReflectionHelpers.SizeOf<T>();
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
