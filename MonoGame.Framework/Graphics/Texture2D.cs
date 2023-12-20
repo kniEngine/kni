@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
             bool isInternal)
             : base()
-		{
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">New data for the texture</param>
         /// <param name="startIndex">Start position of data</param>
         /// <param name="elementCount"></param>
-		public void SetData<T>(T[] data, int startIndex, int elementCount)
+        public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
             Rectangle checkedRect;
@@ -206,14 +206,14 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture2D.SetData<T>(0, data, startIndex, elementCount);
         }
 
-		/// <summary>
+        /// <summary>
         /// Changes the texture's pixels
         /// </summary>
         /// <typeparam name="T">New data for the texture</typeparam>
         /// <param name="data"></param>
-		public void SetData<T>(T[] data)
+        public void SetData<T>(T[] data)
             where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, 0, data.Length);
@@ -267,13 +267,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         /// <param name="startIndex">First position in data where to write the pixel data</param>
         /// <param name="elementCount">Number of pixels to read</param>
-		public void GetData<T>(T[] data, int startIndex, int elementCount)
+        public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, startIndex, elementCount);
-		}
+        }
 
         /// <summary>
         /// Retrieves the contents of the texture
@@ -284,11 +284,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         public void GetData<T>(T[] data)
             where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
-		}
+        }
 
         /// <summary>
         /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
@@ -302,7 +302,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// result in black color data.
         /// </remarks>
         public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
-		{
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (stream == null)

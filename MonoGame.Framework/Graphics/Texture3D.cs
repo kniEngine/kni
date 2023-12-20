@@ -11,8 +11,8 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class Texture3D : Texture
-	{
+    public class Texture3D : Texture
+    {
         protected ITexture3DStrategy _strategyTexture3D;
 
         public int Width { get { return _strategyTexture3D.Width; } }
@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public int Depth { get { return _strategyTexture3D.Depth; } }
 
-		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, true)
         {
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format,
             bool isInternal)
             : base()
-		{
-		    if (graphicsDevice == null)
-		        throw new ArgumentNullException("graphicsDevice");
+        {
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Texture3D");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 256 || height > 256 || height > 256))
@@ -58,25 +58,25 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetData<T>(T[] data)
             where T : struct
-		{
+        {
             ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
-		}
+        }
 
-		public void SetData<T>(T[] data, int startIndex, int elementCount)
+        public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
-		{
+        {
             ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
-		}
+        }
 
-		public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-		                       T[] data, int startIndex, int elementCount)
+        public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
             where T : struct
-		{
+        {
             ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
             _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-		}
+        }
 
         /// <summary>
         /// Gets a copy of 3D texture data, specifying a mipMap level, source box, start index, and number of elements.
@@ -127,8 +127,8 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private void ValidateParams<T>(int level,
-		                               int left, int top, int right, int bottom, int front, int back,
-		                               T[] data, int startIndex, int elementCount)
+                                       int left, int top, int right, int bottom, int front, int back,
+                                       T[] data, int startIndex, int elementCount)
             where T : struct
         {
             int texWidth = Math.Max(Width >> level, 1);
@@ -162,6 +162,6 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
-	}
+    }
 }
 

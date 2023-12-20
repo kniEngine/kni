@@ -11,8 +11,8 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class TextureCube : Texture
-	{
+    public class TextureCube : Texture
+    {
         protected ITextureCubeStrategy _strategyTextureCube;
 
         /// <summary>
@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <value>The width and height of a cube map face in pixels.</value>
         public int Size { get { return _strategyTextureCube.Size; } }
-		
-		public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+        
+        public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, size, mipMap, format, true)
         {
             _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
@@ -70,38 +70,38 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
         }
 
-	    public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
+        public void GetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
-	    {
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
-	    }
+        }
 
-	    public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public void GetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
-	    {
+        {
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, data, startIndex, elementCount, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
         }
 
-		public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
+        public void SetData<T>(CubeMapFace cubeMapFace, T[] data)
             where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, null, data, 0, data.Length, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, 0, data.Length);
-		}
+        }
 
         public void SetData<T>(CubeMapFace cubeMapFace, T[] data, int startIndex, int elementCount)
             where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams<T>(0, null, data, startIndex, elementCount, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, 0, checkedRect, data, startIndex, elementCount);
-		}
-		
+        }
+        
         public void SetData<T>(CubeMapFace cubeMapFace, int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
@@ -158,6 +158,6 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
-	}
+    }
 }
 
