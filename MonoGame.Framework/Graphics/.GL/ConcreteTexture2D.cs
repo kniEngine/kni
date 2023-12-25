@@ -231,6 +231,34 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
         }
+
+        public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
+        {
+            int blockWidth, blockHeight;
+            Format.GetBlockSize(out blockWidth, out blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            // OpenGL only: The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
+                                        (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
+                                        (rect.Height < blockHeight && textureBounds.Height < blockHeight) ? textureBounds.Height : roundedHeight);
+            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+            }
+            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+            }
+            else
+            {
+                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+            }
+        }
         #endregion ITexture2DStrategy
 
 
@@ -294,7 +322,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
         }
-       private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
+        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
         {
             System.Diagnostics.Debug.Assert(_glTexture < 0);
 

@@ -43,6 +43,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+
+        public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
+        {
+            throw new PlatformNotSupportedException();
+        }
         #endregion ITextureCubeStrategy
 
 

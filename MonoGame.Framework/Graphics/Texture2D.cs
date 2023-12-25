@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
             bool isInternal)
             : base()
-		{
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
@@ -166,8 +166,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -183,8 +188,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct 
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, 0, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             if (rect.HasValue)
                 _strategyTexture2D.SetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
             else           
@@ -198,24 +208,28 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">New data for the texture</param>
         /// <param name="startIndex">Start position of data</param>
         /// <param name="elementCount"></param>
-		public void SetData<T>(T[] data, int startIndex, int elementCount)
+        public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(0, textureBounds, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, startIndex, elementCount);
         }
 
-		/// <summary>
+        /// <summary>
         /// Changes the texture's pixels
         /// </summary>
         /// <typeparam name="T">New data for the texture</typeparam>
         /// <param name="data"></param>
-		public void SetData<T>(T[] data)
+        public void SetData<T>(T[] data)
             where T : struct
-		{
+        {
+            ValidateArrayBounds<T>(0, data, 0, data.Length);
+            Rectangle textureBounds = new Rectangle(0, 0,Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, 0, null, data, 0, data.Length, out checkedRect);
+            ValidateParams<T>(0, textureBounds, data.Length, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, 0, data.Length);
         }
 
@@ -234,8 +248,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
+            ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, arraySlice, rect, data, startIndex, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -253,7 +272,14 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            this.GetData<T>(level, 0, rect, data, startIndex, elementCount);
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
+            Rectangle checkedRect;
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
+            _strategyTexture2D.GetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -265,11 +291,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         /// <param name="startIndex">First position in data where to write the pixel data</param>
         /// <param name="elementCount">Number of pixels to read</param>
-		public void GetData<T>(T[] data, int startIndex, int elementCount)
+        public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
-		{
-			this.GetData<T>(0, null, data, startIndex, elementCount);
-		}
+        {
+            ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, textureBounds, elementCount, ref textureBounds, out checkedRect);
+            _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, startIndex, elementCount);
+        }
 
         /// <summary>
         /// Retrieves the contents of the texture
@@ -280,9 +310,63 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">Destination array for the texture data</param>
         public void GetData<T>(T[] data)
             where T : struct
-		{
-			this.GetData<T>(0, null, data, 0, data.Length);
-		}
+        {
+            ValidateArrayBounds<T>(0, data, 0, data.Length);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
+            Rectangle checkedRect;
+            ValidateParams<T>(0, textureBounds, data.Length, ref textureBounds, out checkedRect);
+            _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
+        }
+
+        private void ValidateArrayBounds<T>(int arraySlice, T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            if (arraySlice > 0 && !GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
+                throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
+            if (arraySlice < 0 || arraySlice >= ArraySize)
+                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
+
+            if (data == null)
+                throw new ArgumentNullException("data");
+            if (startIndex < 0 || startIndex >= data.Length)
+                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
+            if (data.Length < startIndex + elementCount)
+                throw new ArgumentException("The data array is too small.");
+        }
+
+        private void ValidateRect<T>(int level, ref Rectangle textureBounds, Rectangle rect)
+            where T : struct
+        {
+            if (level < 0 || level >= LevelCount)
+                throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
+            if (!textureBounds.Contains(rect) || rect.Width <= 0 || rect.Height <= 0)
+                throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
+        }
+
+        private void ValidateParams<T>(int level, Rectangle rect, int elementCount, ref Rectangle textureBounds, out Rectangle checkedRect)
+            where T : struct
+        {
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = Format.GetSize();
+            if (tSize > fSize || fSize % tSize != 0)
+                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
+
+            int dataByteSize;
+            if (Format.IsCompressedFormat())
+            {
+                dataByteSize = _strategyTexture2D.GetCompressedDataByteSize(fSize, rect, ref textureBounds, out checkedRect);
+            }
+            else
+            {
+                checkedRect = rect;
+                dataByteSize = rect.Width * rect.Height * fSize;
+            }
+
+            if (elementCount * tSize != dataByteSize)
+                throw new ArgumentException(string.Format("elementCount is not the right size, " +
+                                            "elementCount * sizeof(T) is {0}, but data size is {1}.",
+                                            elementCount * tSize, dataByteSize), "elementCount");
+        }
 
         /// <summary>
         /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
@@ -296,7 +380,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// result in black color data.
         /// </remarks>
         public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
-		{
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (stream == null)
@@ -334,75 +418,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategyTexture2D.SaveAsPng(stream, width, height);
         }
         
-        private void ValidateParams<T>(int level, int arraySlice, Rectangle? rect, T[] data,
-            int startIndex, int elementCount, out Rectangle checkedRect)
-            where T : struct
-        {
-            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
-            checkedRect = rect ?? textureBounds;
-            if (level < 0 || level >= LevelCount)
-                throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
-            if (arraySlice > 0 && !GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
-                throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
-            if (arraySlice < 0 || arraySlice >= ArraySize)
-                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
-            if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
-                throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
-            if (data == null)
-                throw new ArgumentNullException("data");
-            int tSize = ReflectionHelpers.SizeOf<T>();
-            int fSize = Format.GetSize();
-            if (tSize > fSize || fSize % tSize != 0)
-                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
-            if (startIndex < 0 || startIndex >= data.Length)
-                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
-            if (data.Length < startIndex + elementCount)
-                throw new ArgumentException("The data array is too small.");
-
-            int dataByteSize;
-            if (Format.IsCompressedFormat())
-            {
-                int blockWidth, blockHeight;
-                Format.GetBlockSize(out blockWidth, out blockHeight);
-                int blockWidthMinusOne = blockWidth - 1;
-                int blockHeightMinusOne = blockHeight - 1;
-                // round x and y down to next multiple of block size; width and height up to next multiple of block size
-                int roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
-                int roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
-                checkedRect = new Rectangle(checkedRect.X & ~blockWidthMinusOne, checkedRect.Y & ~blockHeightMinusOne,
-#if OPENGL
-                    // OpenGL only: The last two mip levels require the width and height to be
-                    // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
-                    // a full block.
-                    checkedRect.Width < blockWidth && textureBounds.Width < blockWidth ? textureBounds.Width : roundedWidth,
-                    checkedRect.Height < blockHeight && textureBounds.Height < blockHeight ? textureBounds.Height : roundedHeight);
-#else
-                    roundedWidth, roundedHeight);
-#endif
-                if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
-                {
-                    dataByteSize = (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
-                }
-                else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
-                {
-                    dataByteSize = (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
-                }
-                else
-                {
-                    dataByteSize = roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
-                }
-            }
-            else
-            {
-                dataByteSize = checkedRect.Width * checkedRect.Height * fSize;
-            }
-            if (elementCount * tSize != dataByteSize)
-                throw new ArgumentException(string.Format("elementCount is not the right size, " +
-                                            "elementCount * sizeof(T) is {0}, but data size is {1}.",
-                                            elementCount * tSize, dataByteSize), "elementCount");
-        }
-
-
         internal static Color[] GetColorData(ITexture2DStrategy texture2D)
         {
             int colorDataLength = texture2D.Width * texture2D.Height;

@@ -5,15 +5,14 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.IO;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class Texture3D : Texture
-	{
+    public class Texture3D : Texture
+    {
         protected ITexture3DStrategy _strategyTexture3D;
 
         public int Width { get { return _strategyTexture3D.Width; } }
@@ -22,7 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public int Depth { get { return _strategyTexture3D.Depth; } }
 
-		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, true)
         {
             _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
@@ -33,9 +32,9 @@ namespace Microsoft.Xna.Framework.Graphics
         internal Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format,
             bool isInternal)
             : base()
-		{
-		    if (graphicsDevice == null)
-		        throw new ArgumentNullException("graphicsDevice");
+        {
+            if (graphicsDevice == null)
+                throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Texture3D");
             if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 256 || height > 256 || height > 256))
@@ -59,23 +58,28 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void SetData<T>(T[] data)
             where T : struct
-		{
-			SetData<T>(data, 0, data.Length);
-		}
+        {
+            ValidateArrayBounds<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
+            _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+        }
 
-		public void SetData<T>(T[] data, int startIndex, int elementCount)
+        public void SetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
-		{
-			SetData<T>(0, 0, 0, Width, Height, 0, Depth, data, startIndex, elementCount);
-		}
+        {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
+            _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+        }
 
-		public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-		                       T[] data, int startIndex, int elementCount)
+        public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                               T[] data, int startIndex, int elementCount)
             where T : struct
-		{
-            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+        {
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);
             _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
-		}
+        }
 
         /// <summary>
         /// Gets a copy of 3D texture data, specifying a mipMap level, source box, start index, and number of elements.
@@ -95,7 +99,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ValidateParams<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);                       
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);                       
             _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
@@ -109,7 +114,9 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
+            ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
+            _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -120,14 +127,32 @@ namespace Microsoft.Xna.Framework.Graphics
         public void GetData<T>(T[] data)
             where T : struct
         {
-            GetData<T>(data, 0, data.Length);
+            ValidateArrayBounds<T>(data, 0, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
+            _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
+        }
+
+        private void ValidateArrayBounds<T>(T[] data, int startIndex, int elementCount)
+            where T : struct
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+            if (startIndex < 0 || startIndex >= data.Length)
+                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
+            if (data.Length < startIndex + elementCount)
+                throw new ArgumentException("The data array is too small.");
         }
 
         private void ValidateParams<T>(int level,
-		                               int left, int top, int right, int bottom, int front, int back,
-		                               T[] data, int startIndex, int elementCount)
+                                       int left, int top, int right, int bottom, int front, int back,
+                                       int elementCount)
             where T : struct
         {
+            int tSize = ReflectionHelpers.SizeOf<T>();
+            int fSize = Format.GetSize();
+            if (tSize > fSize || fSize % tSize != 0)
+                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
+
             int texWidth = Math.Max(Width >> level, 1);
             int texHeight = Math.Max(Height >> level, 1);
             int texDepth = Math.Max(Depth >> level, 1);
@@ -142,16 +167,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("Neither box size nor box position can be negative");
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.");
-            if (data == null)
-                throw new ArgumentNullException("data");
-            int tSize = ReflectionHelpers.SizeOf<T>();
-            int fSize = Format.GetSize();
-            if (tSize > fSize || fSize % tSize != 0)
-                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
-            if (startIndex < 0 || startIndex >= data.Length)
-                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
-            if (data.Length < startIndex + elementCount)
-                throw new ArgumentException("The data array is too small.");
 
             int dataByteSize = width*height*depth*fSize;
             if (elementCount * tSize != dataByteSize)
@@ -159,6 +174,6 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
-	}
+    }
 }
 
