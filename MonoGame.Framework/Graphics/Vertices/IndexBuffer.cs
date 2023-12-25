@@ -6,6 +6,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
@@ -65,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <returns>The IndexElementSize enum value that matches the type</returns>
         internal static IndexElementSize SizeForType(GraphicsDevice graphicsDevice, Type type)
         {
-            switch (ReflectionHelpers.SizeOf(type))
+            switch (Marshal.SizeOf(type))
             {
                 case 2:
                     return IndexElementSize.SixteenBits;
