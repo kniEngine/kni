@@ -167,9 +167,12 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
-            ValidateRect<T>(level, rect);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -186,9 +189,12 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct 
         {
             ValidateArrayBounds<T>(0, data, startIndex, elementCount);
-            ValidateRect<T>(level, rect);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             if (rect.HasValue)
                 _strategyTexture2D.SetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
             else           
@@ -206,8 +212,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, elementCount, out checkedRect);
+            ValidateParams<T>(0, textureBounds, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, startIndex, elementCount);
         }
 
@@ -220,8 +227,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(0, data, 0, data.Length);
+            Rectangle textureBounds = new Rectangle(0, 0,Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, data.Length, out checkedRect);
+            ValidateParams<T>(0, textureBounds, data.Length, ref textureBounds, out checkedRect);
             _strategyTexture2D.SetData<T>(0, data, 0, data.Length);
         }
 
@@ -241,9 +249,12 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(arraySlice, data, startIndex, elementCount);
-            ValidateRect<T>(level, rect);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.GetData<T>(level, arraySlice, checkedRect, data, startIndex, elementCount);
         }
 
@@ -262,9 +273,12 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(0, data, startIndex, elementCount);
-            ValidateRect<T>(level, rect);
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            if (rect == null)
+                rect = textureBounds;
+            ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
-            ValidateParams<T>(level, rect, elementCount, out checkedRect);
+            ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.GetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
         }
 
@@ -281,8 +295,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(0, data, startIndex, elementCount);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null, elementCount, out checkedRect);
+            ValidateParams<T>(0, textureBounds, elementCount, ref textureBounds, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, startIndex, elementCount);
         }
 
@@ -297,8 +312,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(0, data, 0, data.Length);
+            Rectangle textureBounds = new Rectangle(0, 0, Width, Height);
             Rectangle checkedRect;
-            ValidateParams<T>(0, null,data.Length, out checkedRect);
+            ValidateParams<T>(0, textureBounds, data.Length, ref textureBounds, out checkedRect);
             _strategyTexture2D.GetData<T>(0, 0, checkedRect, data, 0, data.Length);
         }
 
@@ -318,28 +334,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("The data array is too small.");
         }
 
-        private void ValidateRect<T>(int level, Rectangle? rect)
+        private void ValidateRect<T>(int level, ref Rectangle textureBounds, Rectangle rect)
             where T : struct
         {
-            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
-            Rectangle checkedRect = rect ?? textureBounds;
-
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
-            if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
+            if (!textureBounds.Contains(rect) || rect.Width <= 0 || rect.Height <= 0)
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
         }
 
-        private void ValidateParams<T>(int level, Rectangle? rect, int elementCount, out Rectangle checkedRect)
+        private void ValidateParams<T>(int level, Rectangle rect, int elementCount, ref Rectangle textureBounds, out Rectangle checkedRect)
             where T : struct
         {
             int tSize = ReflectionHelpers.SizeOf<T>();
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
-
-            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
-            checkedRect = rect ?? textureBounds;
 
             int dataByteSize;
             if (Format.IsCompressedFormat())
@@ -349,15 +359,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 int blockWidthMinusOne = blockWidth - 1;
                 int blockHeightMinusOne = blockHeight - 1;
                 // round x and y down to next multiple of block size; width and height up to next multiple of block size
-                int roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
-                int roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
-                checkedRect = new Rectangle(checkedRect.X & ~blockWidthMinusOne, checkedRect.Y & ~blockHeightMinusOne,
+                int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+                int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+                checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
 #if OPENGL
                     // OpenGL only: The last two mip levels require the width and height to be
                     // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
                     // a full block.
-                    checkedRect.Width < blockWidth && textureBounds.Width < blockWidth ? textureBounds.Width : roundedWidth,
-                    checkedRect.Height < blockHeight && textureBounds.Height < blockHeight ? textureBounds.Height : roundedHeight);
+                    rect.Width < blockWidth && textureBounds.Width < blockWidth ? textureBounds.Width : roundedWidth,
+                    rect.Height < blockHeight && textureBounds.Height < blockHeight ? textureBounds.Height : roundedHeight);
 #else
                     roundedWidth, roundedHeight);
 #endif
@@ -376,7 +386,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                dataByteSize = checkedRect.Width * checkedRect.Height * fSize;
+                checkedRect = rect;
+                dataByteSize = rect.Width * rect.Height * fSize;
             }
 
             if (elementCount * tSize != dataByteSize)
