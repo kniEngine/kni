@@ -84,6 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateRect<T>(level, rect);
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTextureCube.GetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
@@ -111,6 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
+            ValidateRect<T>(level, rect);
             Rectangle checkedRect;
             ValidateParams<T>(level, rect, elementCount, out checkedRect);
             _strategyTextureCube.SetData<T>(cubeMapFace, level, checkedRect, data, startIndex, elementCount);
@@ -127,6 +129,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("The data array is too small.");
         }
 
+        private void ValidateRect<T>(int level, Rectangle? rect)
+            where T : struct
+        {
+            Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Size >> level, 1), Math.Max(Size >> level, 1));
+            Rectangle checkedRect = rect ?? textureBounds;
+
+            if (level < 0 || level >= LevelCount)
+                throw new ArgumentException("level must be smaller than the number of levels in this texture.");
+            if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
+                throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
+        }
+
         private void ValidateParams<T>(int level, Rectangle? rect, int elementCount, out Rectangle checkedRect)
             where T : struct
         {
@@ -137,10 +151,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Size >> level, 1), Math.Max(Size >> level, 1));
             checkedRect = rect ?? textureBounds;
-            if (level < 0 || level >= LevelCount)
-                throw new ArgumentException("level must be smaller than the number of levels in this texture.");
-            if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
-                throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
 
             int dataByteSize;
             if (Format.IsCompressedFormat())
@@ -164,6 +174,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 dataByteSize = checkedRect.Width * checkedRect.Height * fSize;
             }
+
             if (elementCount * tSize != dataByteSize)
                 throw new ArgumentException(string.Format("elementCount is not the right size, " +
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
