@@ -78,7 +78,7 @@
     <Compile Include="Content\LzxDecoder.cs" />
     <Compile Include="Content\ResourceContentManager.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="Graphics\Effect\AlphaTestEffect.cs" />
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
@@ -271,7 +271,14 @@
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Include="DisplayOrientation.cs" />
+    <Compile Include="GraphicsDeviceInformation.cs" />
+    <Compile Include="IGraphicsDeviceManager.cs" />
+    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Input\Oculus\IOculusInput.cs" />
     <Compile Include="Input\Oculus\TouchButtons.cs" />
@@ -357,9 +364,8 @@
     <Compile Include="Utilities\PlatformInfo.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="Game.cs" />
@@ -370,14 +376,11 @@
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GameWindow.cs" />
-    <Compile Include="GraphicsDeviceInformation.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
-    <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="TitleContainer.cs" />
   </ItemGroup>
 
