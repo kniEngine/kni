@@ -132,14 +132,6 @@ namespace MonoGame.Framework.Utilities
 #endif
         }
 
-        /// <summary>
-        /// Fallback handler for Marshal.SizeOf(type)
-        /// </summary>
-        internal static int SizeOf(Type type)
-        {
-            return Marshal.SizeOf(type);
-        }
-
         internal static int SizeOf<T>()
         {
             return ManagedSizeOf<T>.Value;

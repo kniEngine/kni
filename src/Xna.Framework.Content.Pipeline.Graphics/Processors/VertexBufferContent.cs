@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!type.IsValueType || type.IsAutoLayout)
                 throw new NotSupportedException("The vertex type must be a struct and have a fixed layout");
 
-            return ReflectionHelpers.SizeOf(type);
+            return Marshal.SizeOf(type);
         }
 
         /// <summary>
