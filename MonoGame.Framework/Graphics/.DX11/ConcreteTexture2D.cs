@@ -252,9 +252,35 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UnmapSubresource(stagingTexture, 0);                    
                     DX.Utilities.Dispose(ref stagingTexture);
                 }
-            }       
+            }
+        }
+
+        public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
+        {
+            int blockWidth, blockHeight;
+            Format.GetBlockSize(out blockWidth, out blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
+                                        roundedWidth, roundedHeight);
+            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+            }
+            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+            }
+            else
+            {
+                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+            }
         }
         #endregion ITexture2DStrategy
+
 
         internal void PlatformConstructTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
         {

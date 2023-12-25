@@ -143,6 +143,19 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
 #endif
         }
+
+        public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
+        {
+            // round x and y down to next multiple of four; width and height up to next multiple of four
+            int roundedWidth = (rect.Width + 3) & ~0x3;
+            int roundedHeight = (rect.Height + 3) & ~0x3;
+            // OpenGL only: The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a 4x4 block.
+            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
+                                        (rect.Width < 4 && textureBounds.Width < 4) ? textureBounds.Width : roundedWidth,
+                                        (rect.Height < 4 && textureBounds.Height < 4) ? textureBounds.Height : roundedHeight);
+            return (roundedWidth * roundedHeight * fSize / 16);
+        }
         #endregion ITextureCubeStrategy
 
 

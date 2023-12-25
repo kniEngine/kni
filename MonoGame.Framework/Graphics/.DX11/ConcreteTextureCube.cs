@@ -165,6 +165,16 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
         }
+
+        public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
+        {
+            // round x and y down to next multiple of four; width and height up to next multiple of four
+            int roundedWidth = (rect.Width + 3) & ~0x3;
+            int roundedHeight = (rect.Height + 3) & ~0x3;
+            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
+                                        roundedWidth, roundedHeight);
+            return (roundedWidth * roundedHeight * fSize / 16);
+        }
         #endregion ITextureCubeStrategy
 
         internal void PlatformConstructTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
