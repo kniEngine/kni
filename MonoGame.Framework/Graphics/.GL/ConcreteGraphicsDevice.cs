@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset()
         {
+            // Update the back buffer.
+            this.OnPresentationChanged();
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)

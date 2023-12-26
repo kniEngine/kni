@@ -73,12 +73,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public override string ResourceNameSpriteEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ref.fxo"; } }
 
 
-        internal void OnPresentationChanged()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -296,9 +296,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Strategy.Reset();
 
-            // Update the back buffer.
-            Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
-            
             Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
 
             Strategy.OnDeviceReset(EventArgs.Empty);
@@ -312,9 +309,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Strategy.OnDeviceResetting(EventArgs.Empty);
 
             Strategy.Reset(presentationParameters);
-
-            // Update the back buffer.
-            Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
 
             Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
 

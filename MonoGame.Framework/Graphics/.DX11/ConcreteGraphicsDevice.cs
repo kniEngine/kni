@@ -83,6 +83,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
+
+            // Update the back buffer.
+            this.OnPresentationChanged();
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
