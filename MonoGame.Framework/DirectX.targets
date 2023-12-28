@@ -26,6 +26,7 @@
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsContext.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsDebug.cs" />
 	<Compile Include="Graphics\.DX11\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteGraphicsFactory.cs" />
     <Compile Include="Graphics\.DX11\ConcreteOcclusionQuery.cs" />
     <Compile Include="Graphics\.DX11\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.DX11\ConcreteRenderTarget3D.cs" />
