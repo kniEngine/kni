@@ -110,6 +110,7 @@
     <Compile Include="Audio\Xact\XactHelpers.cs" />
     <Compile Include="Audio\Xact\XactSound.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
@@ -123,7 +124,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="DisplayOrientation.cs" />
     <Compile Include="DrawableGameComponent.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="GameComponentCollection.cs" />
@@ -136,18 +136,12 @@
     <Compile Include="GameWindow.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
-    <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainer.Android.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -223,7 +217,7 @@
     <Compile Include="Content\ContentTypeReaderManager.cs" />
     <Compile Include="Content\LzxDecoder.cs" />
     <Compile Include="Content\ResourceContentManager.cs" />
-	  
+
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcreteConstantBufferCollection.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcreteShader.cs" />
@@ -268,36 +262,25 @@
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
     <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
-	  
-    <Compile Include="Graphics\ClearOptions.cs" />
-    <Compile Include="Graphics\ColorWriteChannels.cs" />
-    <Compile Include="Graphics\CubeMapFace.cs" />
-    <Compile Include="Graphics\DeviceLostException.cs" />
-    <Compile Include="Graphics\DeviceNotResetException.cs" />
-    <Compile Include="GraphicsDeviceInformation.cs" />
-    <Compile Include="Graphics\GraphicsMetrics.cs" />
-    <Compile Include="Graphics\DirectionalLight.cs" />
-    <Compile Include="Graphics\DisplayModeCollection.cs" />
-    <Compile Include="Graphics\DisplayMode.cs" />
-    <Compile Include="Graphics\DxtUtil.cs" />
+
     <Compile Include="Graphics\Effect\AlphaTestEffect.cs" />
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
     <Compile Include="Graphics\Effect\DualTextureEffect.cs" />
-    <Compile Include="Graphics\Effect\EffectAnnotationCollection.cs" />
-    <Compile Include="Graphics\Effect\EffectAnnotation.cs" />
     <Compile Include="Graphics\Effect\Effect.cs" />
-    <Compile Include="Graphics\Effect\EffectReader10.cs" />
     <Compile Include="Graphics\Effect\EffectReader09.cs" />
+    <Compile Include="Graphics\Effect\EffectReader10.cs" />
+    <Compile Include="Graphics\Effect\EffectAnnotation.cs" />
+    <Compile Include="Graphics\Effect\EffectAnnotationCollection.cs" />
     <Compile Include="Graphics\Effect\EffectHelpers.cs" />
     <Compile Include="Graphics\Effect\EffectMaterial.cs" />
+    <Compile Include="Graphics\Effect\EffectParameter.cs" />
     <Compile Include="Graphics\Effect\EffectParameterClass.cs" />
     <Compile Include="Graphics\Effect\EffectParameterCollection.cs" />
-    <Compile Include="Graphics\Effect\EffectParameter.cs" />
     <Compile Include="Graphics\Effect\EffectParameterType.cs" />
-    <Compile Include="Graphics\Effect\EffectPassCollection.cs" />
     <Compile Include="Graphics\Effect\EffectPass.cs" />
-    <Compile Include="Graphics\Effect\EffectTechniqueCollection.cs" />
+    <Compile Include="Graphics\Effect\EffectPassCollection.cs" />
     <Compile Include="Graphics\Effect\EffectTechnique.cs" />
+    <Compile Include="Graphics\Effect\EffectTechniqueCollection.cs" />
     <Compile Include="Graphics\Effect\EnvironmentMapEffect.cs" />
     <Compile Include="Graphics\Effect\IEffectBones.cs" />
     <Compile Include="Graphics\Effect\IEffectFog.cs" />
@@ -305,45 +288,6 @@
     <Compile Include="Graphics\Effect\IEffectMatrices.cs" />
     <Compile Include="Graphics\Effect\SkinnedEffect.cs" />
     <Compile Include="Graphics\Effect\SpriteEffect.cs" />
-    <Compile Include="Graphics\GraphicsAdapter.cs" />
-    <Compile Include="Graphics\GraphicsAdaptersProviderStrategy.cs" />
-    <Compile Include="Graphics\GraphicsAdapterStrategy.cs" />
-    <Compile Include="Graphics\GraphicsCapabilities.cs" />
-    <Compile Include="Graphics\GraphicsContext.cs" />
-    <Compile Include="Graphics\GraphicsContextStrategy.cs" />
-    <Compile Include="Graphics\GraphicsDebug.cs" />
-    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
-    <Compile Include="Graphics\GraphicsDebugMessage.cs" />
-    <Compile Include="Graphics\GraphicsDevice.cs" />
-    <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
-    <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
-    <Compile Include="Graphics\GraphicsExtensions.cs" />
-    <Compile Include="Graphics\GraphicsFactory.cs" />
-    <Compile Include="Graphics\GraphicsProfile.cs" />
-    <Compile Include="Graphics\GraphicsResource.cs" />
-    <Compile Include="Graphics\GraphicsResourceStrategy.cs" />
-    <Compile Include="Graphics\IGraphicsResourceStrategy.cs" />
-    <Compile Include="Graphics\IGraphicsDeviceService.cs" />
-    <Compile Include="Graphics\IRenderTarget.cs" />
-    <Compile Include="Graphics\IRenderTargetStrategy.cs" />
-    <Compile Include="Graphics\IRenderTarget2DStrategy.cs" />
-    <Compile Include="Graphics\IRenderTarget3DStrategy.cs" />
-    <Compile Include="Graphics\IRenderTargetCubeStrategy.cs" />
-    <Compile Include="Graphics\ITexture2DStrategy.cs" />
-    <Compile Include="Graphics\ITexture3DStrategy.cs" />
-    <Compile Include="Graphics\ITextureCubeStrategy.cs" />
-    <Compile Include="Graphics\ITextureStrategy.cs" />
-    <Compile Include="Graphics\ModelBoneCollection.cs" />
-    <Compile Include="Graphics\ModelBone.cs" />
-    <Compile Include="Graphics\Model.cs" />
-    <Compile Include="Graphics\ModelEffectCollection.cs" />
-    <Compile Include="Graphics\ModelMeshCollection.cs" />
-    <Compile Include="Graphics\ModelMesh.cs" />
-    <Compile Include="Graphics\ModelMeshPartCollection.cs" />
-    <Compile Include="Graphics\ModelMeshPart.cs" />
-    <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
-    <Compile Include="Graphics\OcclusionQuery.cs" />
-    <Compile Include="Graphics\OcclusionQueryStrategy.cs" />
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
     <Compile Include="Graphics\PackedVector\Bgra4444.cs" />
@@ -359,23 +303,10 @@
     <Compile Include="Graphics\PackedVector\NormalizedShort2.cs" />
     <Compile Include="Graphics\PackedVector\NormalizedShort4.cs" />
     <Compile Include="Graphics\PackedVector\Rg32.cs" />
-    <Compile Include="Graphics\PackedVector\Rgba64.cs" />
     <Compile Include="Graphics\PackedVector\Rgba1010102.cs" />
+    <Compile Include="Graphics\PackedVector\Rgba64.cs" />
     <Compile Include="Graphics\PackedVector\Short2.cs" />
     <Compile Include="Graphics\PackedVector\Short4.cs" />
-    <Compile Include="Graphics\PresentationEventArgs.cs" />
-    <Compile Include="Graphics\PresentationParameters.cs" />
-    <Compile Include="Graphics\PresentInterval.cs" />
-    <Compile Include="Graphics\RenderTarget2D.cs" />
-    <Compile Include="Graphics\RenderTarget3D.cs" />
-    <Compile Include="Graphics\RenderTargetBinding.cs" />
-    <Compile Include="Graphics\RenderTargetCube.cs" />
-    <Compile Include="Graphics\RenderTargetUsage.cs" />
-    <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
-    <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.cs" />
-    <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
-    <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollectionStrategy.cs" />
@@ -388,12 +319,6 @@
     <Compile Include="Graphics\Shader\ShaderProfileType.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\Shader\VertexAttribute.cs" />
-    <Compile Include="Graphics\SpriteBatch.cs" />
-    <Compile Include="Graphics\SpriteBatcher.cs" />
-    <Compile Include="Graphics\SpriteBatchItem.cs" />
-    <Compile Include="Graphics\SpriteEffects.cs" />
-    <Compile Include="Graphics\SpriteFont.cs" />
-    <Compile Include="Graphics\SpriteSortMode.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
@@ -425,13 +350,6 @@
     <Compile Include="Graphics\States\TextureAddressMode.cs" />
     <Compile Include="Graphics\States\TextureFilter.cs" />
     <Compile Include="Graphics\States\TextureFilterMode.cs" />
-    <Compile Include="Graphics\SurfaceFormat.cs" />
-    <Compile Include="Graphics\Texture2D.cs" />
-    <Compile Include="Graphics\Texture3D.cs" />
-    <Compile Include="Graphics\TextureCollection.cs" />
-    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
-    <Compile Include="Graphics\Texture.cs" />
-    <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
     <Compile Include="Graphics\Vertices\IDynamicIndexBufferStrategy.cs" />
@@ -446,8 +364,8 @@
     <Compile Include="Graphics\Vertices\VertexBufferStrategy.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBinding.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.cs" />
-    <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.cs" />
+    <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />
     <Compile Include="Graphics\Vertices\VertexElement.cs" />
     <Compile Include="Graphics\Vertices\VertexElementFormat.cs" />
     <Compile Include="Graphics\Vertices\VertexElementUsage.cs" />
@@ -459,12 +377,94 @@
     <Compile Include="Graphics\Vertices\VertexPositionColorTexture.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionNormalTexture.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionTexture.cs" />
+    <Compile Include="Graphics\ClearOptions.cs" />
+    <Compile Include="Graphics\ColorWriteChannels.cs" />
+    <Compile Include="Graphics\CubeMapFace.cs" />
+    <Compile Include="Graphics\DeviceLostException.cs" />
+    <Compile Include="Graphics\DeviceNotResetException.cs" />
+    <Compile Include="Graphics\DirectionalLight.cs" />
+    <Compile Include="Graphics\DisplayMode.cs" />
+    <Compile Include="Graphics\DisplayModeCollection.cs" />
+    <Compile Include="Graphics\DxtUtil.cs" />
+    <Compile Include="Graphics\GraphicsAdapter.cs" />
+    <Compile Include="Graphics\GraphicsAdaptersProviderStrategy.cs" />
+    <Compile Include="Graphics\GraphicsAdapterStrategy.cs" />
+    <Compile Include="Graphics\GraphicsCapabilities.cs" />
+    <Compile Include="Graphics\GraphicsContext.cs" />
+    <Compile Include="Graphics\GraphicsContextStrategy.cs" />
+    <Compile Include="Graphics\GraphicsDebug.cs" />
+    <Compile Include="Graphics\GraphicsDebugStrategy.cs" />
+    <Compile Include="Graphics\GraphicsDebugMessage.cs" />
+    <Compile Include="Graphics\GraphicsDevice.cs" />
+    <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
+    <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
+    <Compile Include="Graphics\GraphicsExtensions.cs" />
+    <Compile Include="Graphics\GraphicsFactory.cs" />
+    <Compile Include="Graphics\GraphicsMetrics.cs" />
+    <Compile Include="Graphics\GraphicsProfile.cs" />
+    <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Graphics\GraphicsResourceStrategy.cs" />
+    <Compile Include="Graphics\IGraphicsResourceStrategy.cs" />
+    <Compile Include="Graphics\IGraphicsDeviceService.cs" />
+    <Compile Include="Graphics\IRenderTarget.cs" />
+    <Compile Include="Graphics\IRenderTargetStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget2DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTarget3DStrategy.cs" />
+    <Compile Include="Graphics\IRenderTargetCubeStrategy.cs" />
+    <Compile Include="Graphics\ITexture2DStrategy.cs" />
+    <Compile Include="Graphics\ITexture3DStrategy.cs" />
+    <Compile Include="Graphics\ITextureCubeStrategy.cs" />
+    <Compile Include="Graphics\ITextureStrategy.cs" />
+    <Compile Include="Graphics\Model.cs" />
+    <Compile Include="Graphics\ModelBone.cs" />
+    <Compile Include="Graphics\ModelBoneCollection.cs" />
+    <Compile Include="Graphics\ModelEffectCollection.cs" />
+    <Compile Include="Graphics\ModelMesh.cs" />
+    <Compile Include="Graphics\ModelMeshCollection.cs" />
+    <Compile Include="Graphics\ModelMeshPart.cs" />
+    <Compile Include="Graphics\ModelMeshPartCollection.cs" />
+    <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
+    <Compile Include="Graphics\OcclusionQuery.cs" />
+    <Compile Include="Graphics\OcclusionQueryStrategy.cs" />
+    <Compile Include="Graphics\PresentationEventArgs.cs" />
+    <Compile Include="Graphics\PresentationParameters.cs" />
+    <Compile Include="Graphics\PresentInterval.cs" />
+    <Compile Include="Graphics\RenderTarget2D.cs" />
+    <Compile Include="Graphics\RenderTarget3D.cs" />
+    <Compile Include="Graphics\RenderTargetBinding.cs" />
+    <Compile Include="Graphics\RenderTargetCube.cs" />
+    <Compile Include="Graphics\RenderTargetUsage.cs" />
+    <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
+    <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
+    <Compile Include="Graphics\SamplerStateCollection.cs" />
+    <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
+    <Compile Include="Graphics\SetDataOptions.cs" />
+    <Compile Include="Graphics\SpriteBatch.cs" />
+    <Compile Include="Graphics\SpriteBatcher.cs" />
+    <Compile Include="Graphics\SpriteBatchItem.cs" />
+    <Compile Include="Graphics\SpriteEffects.cs" />
+    <Compile Include="Graphics\SpriteFont.cs" />
+    <Compile Include="Graphics\SpriteSortMode.cs" />
+    <Compile Include="Graphics\SurfaceFormat.cs" />
+    <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\Texture2D.cs" />
+    <Compile Include="Graphics\Texture3D.cs" />
+    <Compile Include="Graphics\TextureCollection.cs" />
+    <Compile Include="Graphics\TextureCollectionStrategy.cs" />
+    <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Color.cs" />
-	  
+
+    <Compile Include="DisplayOrientation.cs" />
+    <Compile Include="GraphicsDeviceInformation.cs" />
+    <Compile Include="IGraphicsDeviceManager.cs" />
+    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
+
+    <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
+
+    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
 
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
