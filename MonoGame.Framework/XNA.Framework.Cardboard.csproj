@@ -147,6 +147,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentLoadException.cs" />
     <Compile Include="Content\ContentManager.cs" />
