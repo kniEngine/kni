@@ -32,18 +32,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public static void RegisterGraphicsFactory(GraphicsFactory graphicsFactory)
         {
+            if (graphicsFactory == null)
+                throw new NullReferenceException("graphicsFactory");
+
             lock (typeof(GraphicsFactory))
             {
                 if (_current == null)
-                {
-                    if (graphicsFactory == null)
-                        throw new NullReferenceException("graphicsFactory");
                     _current = graphicsFactory;
-                }
                 else
-                {
                     throw new InvalidOperationException("GraphicsFactory allready registered.");
-                }
             }
         }
 

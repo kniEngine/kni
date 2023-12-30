@@ -32,18 +32,15 @@ namespace Microsoft.Xna.Platform.Audio
 
         public static void RegisterAudioFactory(AudioFactory audioFactory)
         {
+            if (audioFactory == null)
+                throw new NullReferenceException("audioFactory");
+
             lock (AudioService.SyncHandle)
             {
                 if (_current == null)
-                {
-                    if (audioFactory == null)
-                        throw new NullReferenceException("audioFactory");
                     _current = audioFactory;
-                }
                 else
-                {
                     throw new InvalidOperationException("AudioFactory allready registered.");
-                }
             }
         }
 
