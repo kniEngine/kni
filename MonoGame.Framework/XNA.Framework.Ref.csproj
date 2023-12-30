@@ -33,6 +33,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+
   <Import Project="Xna.Framework.Audio.targets" />
   <Import Project="MonoGame.Framework.Common.targets" />
 

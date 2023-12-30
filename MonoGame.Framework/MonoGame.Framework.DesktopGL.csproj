@@ -43,7 +43,7 @@
 
   <Import Project="Xna.Framework.Audio.targets" />
   <Import Project="MonoGame.Framework.Common.targets" />
-  
+
   <ItemGroup>
     <Compile Remove="Input\MessageBox.cs" />
     <Compile Remove="Input\KeyboardInput.cs" />
