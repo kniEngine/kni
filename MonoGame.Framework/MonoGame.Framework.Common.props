@@ -216,6 +216,7 @@
     <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
     <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
+    <Compile Include="Graphics\GraphicsFactory.cs" />
     <Compile Include="Graphics\GraphicsMetrics.cs" />
     <Compile Include="Graphics\GraphicsProfile.cs" />
     <Compile Include="Graphics\GraphicsResource.cs" />

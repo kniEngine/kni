@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 lock (typeof(GraphicsAdaptersProviderStrategy))
                 {
                     if (_current == null)
-                        _current = new ConcreteGraphicsAdaptersProvider();
+                        _current = GraphicsFactory.Current.CreateGraphicsAdaptersProviderStrategy();
 
                     return _current;
                 }

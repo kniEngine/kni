@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
-            _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, false, presentationParameters);
+            _strategy = GraphicsFactory.Current.CreateGraphicsDeviceStrategy(this, adapter, graphicsProfile, false, presentationParameters);
             _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
             _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
-            _strategy = new ConcreteGraphicsDevice(this, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
+            _strategy = GraphicsFactory.Current.CreateGraphicsDeviceStrategy(this, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
             _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
             _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
