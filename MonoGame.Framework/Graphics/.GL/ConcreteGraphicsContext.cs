@@ -1087,7 +1087,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 foreach (RenderTargetBinding binding in bindings)
                 {
-                    if (binding.RenderTarget.GetTextureStrategy<ITextureStrategy>() == renderTargetStrategy)
+                    if (binding.RenderTarget != null && binding.RenderTarget.GetTextureStrategy<ITextureStrategy>() == renderTargetStrategy)
                     {
                         bindingsToDelete.Add(bindings);
                         break;
@@ -1108,7 +1108,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.DeleteFramebuffer(fbo);
                     GL.CheckGLError();
-
                     _glResolveFramebuffers.Remove(bindings);
                 }
             }
