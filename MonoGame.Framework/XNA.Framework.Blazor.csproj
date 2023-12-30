@@ -35,7 +35,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="Xna.Framework.Audio.props" />
-  <Import Project="MonoGame.Framework.Common.props" />
+  <Import Project="MonoGame.Framework.Common.targets" />
 
 
     
