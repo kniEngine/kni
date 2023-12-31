@@ -41,11 +41,6 @@
   <Import Project="MonoGame.Framework.Common.targets" />
 
   <ItemGroup>
-    <Compile Remove="Graphics\SpriteBatcher.cs" />
-    <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <SDKReference Include="WindowsMobile, Version=10.0.19041.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>

@@ -40,6 +40,9 @@
 	<Compile Include="Graphics\.BlazorGL\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.BlazorGL\GLExtensions.cs" />
     <Compile Include="Graphics\.BlazorGL\IRenderTargetStrategyGL.cs" />
+        
+    <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
+    
   </ItemGroup>
 	
   <ItemGroup>        

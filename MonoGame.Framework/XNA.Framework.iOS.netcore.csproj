@@ -55,6 +55,7 @@
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />
 	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
     <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
+    <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
 	  
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />

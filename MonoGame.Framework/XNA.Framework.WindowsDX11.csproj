@@ -264,6 +264,7 @@
     <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
+    <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
 
     <Compile Include="Graphics\Effect\AlphaTestEffect.cs" />
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
@@ -443,7 +444,6 @@
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\SpriteBatcherStrategy.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
-    <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
     <Compile Include="Graphics\SpriteBatchItem.cs" />
     <Compile Include="Graphics\SpriteEffects.cs" />
     <Compile Include="Graphics\SpriteFont.cs" />
