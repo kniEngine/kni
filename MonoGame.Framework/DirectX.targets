@@ -41,6 +41,7 @@
     <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
+    <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
   </ItemGroup>
 	  
   <ItemGroup>

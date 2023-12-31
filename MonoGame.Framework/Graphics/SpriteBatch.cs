@@ -6,6 +6,7 @@
 
 using System;
 using System.Text;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -16,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public class SpriteBatch : GraphicsResource
     {
         #region Private Fields
-        readonly SpriteBatcher _batcher;
+        readonly SpriteBatcherStrategy _batcher;
 
         SpriteSortMode _sortMode;
         BlendState _blendState;
@@ -55,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _spriteEffect = new SpriteEffect(graphicsDevice);
             _spritePass = _spriteEffect.CurrentTechnique.Passes[0];
 
-            _batcher = new SpriteBatcher(graphicsDevice, capacity);
+            _batcher = GraphicsFactory.Current.CreateSpriteBatcher(graphicsDevice, capacity);
 
             _beginCalled = false;
         }

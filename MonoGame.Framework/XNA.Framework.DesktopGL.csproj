@@ -252,6 +252,7 @@
 	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="Graphics\.GL.SDL\OpenGL.SDL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
+    <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
 
     <Compile Include="Graphics\Effect\AlphaTestEffect.cs" />
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
@@ -429,8 +430,8 @@
     <Compile Include="Graphics\SamplerStateCollection.cs" />
     <Compile Include="Graphics\SamplerStateCollectionStrategy.cs" />
     <Compile Include="Graphics\SetDataOptions.cs" />
+    <Compile Include="Graphics\SpriteBatcherStrategy.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
-    <Compile Include="Graphics\SpriteBatcher.cs" />
     <Compile Include="Graphics\SpriteBatchItem.cs" />
     <Compile Include="Graphics\SpriteEffects.cs" />
     <Compile Include="Graphics\SpriteFont.cs" />

@@ -36,11 +36,6 @@
   <Import Project="Xna.Framework.Audio.targets" />
   <Import Project="Xna.Framework.Graphics.targets" />
   <Import Project="MonoGame.Framework.Common.targets" />
-
-  <ItemGroup>
-    <Compile Remove="Graphics\SpriteBatcher.cs" />
-    <Compile Include="Graphics\SpriteBatcher.DirectX-OPT.cs" />
-  </ItemGroup>
   
   <ItemGroup>
     <Compile Remove="Input\KeyboardInput.cs" />

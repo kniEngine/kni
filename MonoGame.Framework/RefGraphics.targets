@@ -34,6 +34,8 @@
     <Compile Include="Graphics\.Ref\ConcreteTextureCube.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteSamplerStateCollection.cs" />
 	<Compile Include="Graphics\.Ref\ConcreteTextureCollection.cs" />
+		
+    <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
   </ItemGroup>
 
 </Project>
