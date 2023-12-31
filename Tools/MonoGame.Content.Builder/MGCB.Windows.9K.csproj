@@ -23,7 +23,7 @@
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MGCB.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE; WINDOWSDX</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;WINDOWSDX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -34,7 +34,7 @@
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Release\MGCB.xml</DocumentationFile>
-    <DefineConstants>TRACE; WINDOWSDX</DefineConstants>
+    <DefineConstants>TRACE;WINDOWSDX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
