@@ -6,11 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     /// <summary>
     /// This class handles the queueing of batch items into the GPU by creating the triangle tesselations
