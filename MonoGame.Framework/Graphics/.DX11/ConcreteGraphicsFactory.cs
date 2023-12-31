@@ -15,5 +15,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcreteGraphicsDevice(device, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
         }
+
+        internal override SpriteBatcherStrategy CreateSpriteBatcher(GraphicsDevice graphicsDevice, int capacity)
+        {
+            return new SpriteBatcher(graphicsDevice, capacity);
+        }
     }
 }

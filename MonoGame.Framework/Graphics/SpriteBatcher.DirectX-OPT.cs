@@ -18,13 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
     /// batched and will process them into short.MaxValue groups (strided by 6 for the number of vertices
     /// sent to the GPU). 
     /// </summary>
-    internal class SpriteBatcher : IDisposable
+    internal sealed class SpriteBatcher : SpriteBatcherStrategy
     {
-        /*
-         * Note that this class is fundamental to high performance for SpriteBatch games. Please exercise
-         * caution when making changes to this class.
-         */
-
         /// <summary>
         /// Initialization size for the batch item list and queue.
         /// </summary>
@@ -59,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private DynamicVertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
 
-        public int BatchItemCount { get { return _batchItemCount; } }
+        public override int BatchItemCount { get { return _batchItemCount; } }
 
         public SpriteBatcher(GraphicsDevice device, int capacity = 0)
         {
@@ -92,7 +87,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// if there is none available grow the pool and initialize new items.
         /// </summary>
         /// <returns></returns>
-        public SpriteBatchItem CreateBatchItem()
+        public override SpriteBatchItem CreateBatchItem()
         {
             if (_batchItemCount < _batchItemList.Length)
             {
@@ -173,7 +168,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="sortMode">The type of depth sorting desired for the rendering.</param>
         /// <param name="sortMode"></param>
-        public void SortBatch(SpriteSortMode sortMode)
+        public override void SortBatch(SpriteSortMode sortMode)
         {
             switch (sortMode)
             {
@@ -190,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// overflow the 16 bit array indices for vertices.
         /// </summary>
         /// <param name="effect">The custom effect to apply to the drawn geometry</param>
-        public unsafe void DrawBatch(Effect effect)
+        public unsafe override void DrawBatch(Effect effect)
         {
             // Determine how many iterations through the drawing code we need to make
             int batchIndex = 0;
@@ -318,19 +313,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region IDisposable Members
 
-        ~SpriteBatcher()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         protected bool isDisposed = false;
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (!isDisposed)
             {
@@ -346,7 +330,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        #endregion
+        #endregion IDisposable Members
     }
 }
 
