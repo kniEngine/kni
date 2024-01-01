@@ -468,7 +468,6 @@
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
-    <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
 
     <Compile Include="Input\Buttons.cs" />

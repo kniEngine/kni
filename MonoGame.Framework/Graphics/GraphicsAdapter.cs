@@ -11,7 +11,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public sealed partial class GraphicsAdapter
+    public sealed class GraphicsAdapter
     {
         internal GraphicsAdapterStrategy Strategy { get; private set; }
 
