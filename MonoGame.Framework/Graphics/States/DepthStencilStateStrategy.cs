@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class DepthStencilStateStrategy : GraphicsResourceStrategy
+    public class DepthStencilStateStrategy : GraphicsResourceStrategy
         , IDepthStencilStateStrategy
     {
         private bool _depthBufferEnable;

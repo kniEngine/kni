@@ -5,12 +5,12 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
 
-    internal sealed class VertexShader : Shader
+    public sealed class VertexShader : Shader
     {
         internal VertexShader(GraphicsDevice graphicsDevice,
             byte[] shaderBytecode,

@@ -5,12 +5,12 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ConstantBuffer : GraphicsResource
+    public class ConstantBuffer : GraphicsResource
     {
         private ConstantBufferStrategy _strategy;
         

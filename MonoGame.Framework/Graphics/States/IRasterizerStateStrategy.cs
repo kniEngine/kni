@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IRasterizerStateStrategy
+    public interface IRasterizerStateStrategy
     {
         CullMode CullMode { get; set; }
         float DepthBias { get; set; }

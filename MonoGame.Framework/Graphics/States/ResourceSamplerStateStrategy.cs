@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ResourceSamplerStateStrategy : SamplerStateStrategy
+    public class ResourceSamplerStateStrategy : SamplerStateStrategy
     {
         public override TextureFilter Filter
         {

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class SamplerStateStrategy : GraphicsResourceStrategy
+    public class SamplerStateStrategy : GraphicsResourceStrategy
         , ISamplerStateStrategy
     {
         private TextureFilter _filter;

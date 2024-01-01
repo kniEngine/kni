@@ -36,12 +36,14 @@
 // purpose and non-infringement.
 #endregion License
 
-namespace Microsoft.Xna.Framework.Graphics
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Microsoft.Xna.Platform.Graphics
 {
     /// <summary>
     /// Represents a render target.
     /// </summary>
-    internal interface IRenderTarget
+    public interface IRenderTarget
     {
         /// <summary>
         /// Gets the width of the render target in pixels

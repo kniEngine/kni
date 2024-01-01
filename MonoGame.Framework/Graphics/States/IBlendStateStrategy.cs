@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IBlendStateStrategy
+    public interface IBlendStateStrategy
     {
         bool IndependentBlendEnable { get; set; }
         TargetBlendState[] Targets { get; }

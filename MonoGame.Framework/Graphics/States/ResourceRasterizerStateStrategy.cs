@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ResourceRasterizerStateStrategy : RasterizerStateStrategy
+    public class ResourceRasterizerStateStrategy : RasterizerStateStrategy
     {
 
         public override CullMode CullMode

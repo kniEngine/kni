@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class BlendStateStrategy : GraphicsResourceStrategy
+    public class BlendStateStrategy : GraphicsResourceStrategy
         , IBlendStateStrategy
     {
         private Color _blendFactor;

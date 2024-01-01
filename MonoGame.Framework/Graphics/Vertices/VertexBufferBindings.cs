@@ -4,9 +4,10 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     /// <summary>
     /// Stores the vertex buffers to be bound to the input assembler stage.

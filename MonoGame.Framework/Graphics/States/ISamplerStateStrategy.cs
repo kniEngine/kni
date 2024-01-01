@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface ISamplerStateStrategy
+    public interface ISamplerStateStrategy
     {
         TextureFilter Filter { get; set; }
         TextureAddressMode AddressU { get; set; }
