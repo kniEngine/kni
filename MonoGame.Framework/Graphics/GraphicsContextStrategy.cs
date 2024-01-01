@@ -284,7 +284,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal VertexShader VertexShader
+        public VertexShader VertexShader
         {
             get { return _vertexShader; }
             set
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal PixelShader PixelShader
+        public PixelShader PixelShader
         {
             get { return _pixelShader; }
             set
