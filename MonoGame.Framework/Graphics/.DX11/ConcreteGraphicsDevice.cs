@@ -292,13 +292,13 @@ namespace Microsoft.Xna.Platform.Graphics
             D3D.DriverType driverType = D3D.DriverType.Hardware;   //Default value
 
 #if WINDOWSDX
-            switch (GraphicsAdapter.UseDriverType)
+            switch (presentationParameters.UseDriverType)
             {
-                case GraphicsAdapter.DriverType.Reference:
+                case PresentationParameters.DriverType.Reference:
                     driverType = D3D.DriverType.Reference;
                     break;
 
-                case GraphicsAdapter.DriverType.FastSoftware:
+                case PresentationParameters.DriverType.FastSoftware:
                     driverType = D3D.DriverType.Warp;
                     break;
             }
