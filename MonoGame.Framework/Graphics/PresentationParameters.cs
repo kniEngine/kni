@@ -30,6 +30,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool _hardwareModeSwitch = true;
         private IntPtr _deviceWindowHandle;
 
+        private bool _useDebugLayers;
+
         #endregion Private Fields
 
         #region Constructors
@@ -157,6 +159,18 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _renderTargetUsage = value; }
         }
 
+
+        /// <summary>
+        /// Used to request the graphics device should be created
+        /// with debugging features enabled.
+        /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
+        public bool UseDebugLayers
+        {
+            get { return _useDebugLayers; }
+            set { _useDebugLayers = value; }
+        }
+
         #endregion Properties
 
 
@@ -180,6 +194,9 @@ namespace Microsoft.Xna.Framework.Graphics
             clone._isFullScreen = this._isFullScreen;
             clone._hardwareModeSwitch = this._hardwareModeSwitch;
             clone._deviceWindowHandle = this._deviceWindowHandle;
+
+            clone._useDebugLayers = this._useDebugLayers;
+
             return clone;
         }
 

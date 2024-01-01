@@ -141,8 +141,6 @@ namespace Microsoft.Xna.Platform.Graphics
             set { PlatformDX_UseDriverType = value ? GraphicsAdapter.DriverType.Reference : GraphicsAdapter.DriverType.Hardware; }
         }
 
-        internal bool PlatformDX_UseDebugLayers { get; set; }
-
         internal GraphicsAdapter.DriverType PlatformDX_UseDriverType { get; set; }
 
     }

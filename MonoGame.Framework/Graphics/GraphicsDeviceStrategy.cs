@@ -102,10 +102,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        internal void Initialize()
+        internal void Initialize(PresentationParameters presentationParameters)
         {
             // Setup
-            this.PlatformSetup();
+            this.PlatformSetup(presentationParameters);
 
 #if DEBUG
             if (this.DisplayMode == null)
@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ApplyRenderTargets(null);
         }
 
-        protected abstract void PlatformSetup();
+        protected abstract void PlatformSetup(PresentationParameters presentationParameters);
         protected abstract void PlatformInitialize();
 
         internal int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
