@@ -309,10 +309,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         #region IDisposable Members
 
-        protected bool isDisposed = false;
+        private bool _isDisposed = false;
         protected override void Dispose(bool disposing)
         {
-            if (!isDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -325,7 +325,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _vertexArray = null;
                     _index = null;
                 }
-                isDisposed = true;
+                _isDisposed = true;
             }
         }
 
