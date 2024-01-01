@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct;
                 
 
-        internal abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context);
+        public abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context);
 
         internal T ToConcrete<T>() where T : GraphicsDeviceStrategy
         {

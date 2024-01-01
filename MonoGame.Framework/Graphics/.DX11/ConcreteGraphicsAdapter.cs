@@ -22,17 +22,17 @@ namespace Microsoft.Xna.Platform.Graphics
         internal DisplayModeCollection _supportedDisplayModes;
         internal DisplayMode _currentDisplayMode;
 
-        override internal DisplayModeCollection Platform_SupportedDisplayModes
+        public override DisplayModeCollection Platform_SupportedDisplayModes
         {
             get { return _supportedDisplayModes; }
         }
 
-        override internal DisplayMode Platform_CurrentDisplayMode
+        public override DisplayMode Platform_CurrentDisplayMode
         {
             get { return _currentDisplayMode; }
         }
 
-        override internal bool Platform_IsWideScreen
+        public override bool Platform_IsWideScreen
         {
             // Seems like XNA treats aspect ratios above 16:10 as wide screen.
             get { return Platform_CurrentDisplayMode.AspectRatio >= (16.0f / 10.0f); }
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
+        public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override bool Platform_QueryBackBufferFormat(
+        public override bool Platform_QueryBackBufferFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        internal override bool Platform_QueryRenderTargetFormat(
+        public override bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)

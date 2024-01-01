@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class ResourceBlendStateStrategy : BlendStateStrategy
+    public class ResourceBlendStateStrategy : BlendStateStrategy
     {
         public override bool IndependentBlendEnable
         {

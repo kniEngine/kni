@@ -51,17 +51,17 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal DisplayModeCollection Platform_SupportedDisplayModes
+        public override DisplayModeCollection Platform_SupportedDisplayModes
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal DisplayMode Platform_CurrentDisplayMode
+        public override DisplayMode Platform_CurrentDisplayMode
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal bool Platform_IsWideScreen
+        public override bool Platform_IsWideScreen
         {
             get { throw new PlatformNotSupportedException(); }
         }
@@ -70,12 +70,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
+        public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override bool Platform_QueryBackBufferFormat(
+        public override bool Platform_QueryBackBufferFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override bool Platform_QueryRenderTargetFormat(
+        public override bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)

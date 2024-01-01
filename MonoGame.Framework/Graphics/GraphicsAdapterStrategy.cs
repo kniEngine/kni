@@ -22,18 +22,18 @@ namespace Microsoft.Xna.Platform.Graphics
         virtual internal IntPtr Platform_MonitorHandle { get; set; }
         virtual internal bool Platform_IsDefaultAdapter { get; set; }
 
-        abstract internal DisplayModeCollection Platform_SupportedDisplayModes { get; }
-        abstract internal DisplayMode Platform_CurrentDisplayMode { get; }
-        abstract internal bool Platform_IsWideScreen { get; }
+        public abstract DisplayModeCollection Platform_SupportedDisplayModes { get; }
+        public abstract DisplayMode Platform_CurrentDisplayMode { get; }
+        public abstract bool Platform_IsWideScreen { get; }
 
-        abstract internal bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
+        public abstract bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 
-        abstract internal bool Platform_QueryBackBufferFormat(
+        public abstract bool Platform_QueryBackBufferFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);
 
-        abstract internal bool Platform_QueryRenderTargetFormat(
+        public abstract bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount);

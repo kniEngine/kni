@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
             set { base.Platform_IsDefaultAdapter = value; }
         }
 
-        override internal DisplayModeCollection Platform_SupportedDisplayModes
+        public override DisplayModeCollection Platform_SupportedDisplayModes
         {
             get
             {
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        override internal DisplayMode Platform_CurrentDisplayMode
+        public override DisplayMode Platform_CurrentDisplayMode
         {
             get
             {
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        override internal bool Platform_IsWideScreen
+        public override bool Platform_IsWideScreen
         {
             // Common non-widescreen modes: 4:3, 5:4, 1:1
             // Common widescreen modes: 16:9, 16:10, 2:1
@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
+        public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
         {
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
@@ -250,7 +250,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override bool Platform_QueryBackBufferFormat(
+        public override bool Platform_QueryBackBufferFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
         
-        internal override bool Platform_QueryRenderTargetFormat(
+        public override bool Platform_QueryRenderTargetFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)

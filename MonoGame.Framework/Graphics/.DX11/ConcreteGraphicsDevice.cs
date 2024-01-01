@@ -932,7 +932,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
+        public override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             // Get Direct3D 11.1 context
 #if WINDOWSDX

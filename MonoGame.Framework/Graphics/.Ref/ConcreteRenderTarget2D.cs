@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
-              Texture2D.SurfaceType surfaceType)
+              TextureSurfaceType surfaceType)
             : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared,
                    isRenderTarget: true)
         {
 
-            if (surfaceType == Texture2D.SurfaceType.RenderTargetSwapChain)
+            if (surfaceType == TextureSurfaceType.RenderTargetSwapChain)
             {
                 // Texture will be created by the RenderTargetSwapChain.
                 return;

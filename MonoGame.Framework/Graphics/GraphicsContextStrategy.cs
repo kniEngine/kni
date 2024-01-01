@@ -284,7 +284,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal VertexShader VertexShader
+        public VertexShader VertexShader
         {
             get { return _vertexShader; }
             set
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal PixelShader PixelShader
+        public PixelShader PixelShader
         {
             get { return _pixelShader; }
             set
@@ -409,35 +409,34 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void Flush();
 
 
-        internal abstract OcclusionQueryStrategy CreateOcclusionQueryStrategy();
-        internal abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy();
-        internal abstract ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity);
-        internal abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
-        internal abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
+        public abstract OcclusionQueryStrategy CreateOcclusionQueryStrategy();
+        public abstract GraphicsDebugStrategy CreateGraphicsDebugStrategy();
+        public abstract ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity);
+        public abstract TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity);
+        public abstract SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity);
 
-        internal abstract ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared);
-        internal abstract ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format);
-        internal abstract ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format);
-        internal abstract IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
-            Texture2D.SurfaceType surfaceType);
-        internal abstract IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
-        internal abstract IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
+        public abstract ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared);
+        public abstract ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format);
+        public abstract ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format);
+        public abstract IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
+        public abstract IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
+        public abstract IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
 
-        internal abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
+        public abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
 
-        internal abstract ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
-        internal abstract ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
-        internal abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
+        public abstract ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        public abstract ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        public abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
 
-        internal abstract IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);
-        internal abstract VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage);
-        internal abstract IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);
-        internal abstract VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage);
+        public abstract IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);
+        public abstract VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage);
+        public abstract IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);
+        public abstract VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage);
 
-        internal abstract IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source);
-        internal abstract IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source);
-        internal abstract IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy stsourcerategy);
-        internal abstract ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source);
+        public abstract IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source);
+        public abstract IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source);
+        public abstract IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy stsourcerategy);
+        public abstract ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source);
 
         internal abstract void PlatformResolveRenderTargets();
         internal abstract void PlatformApplyDefaultRenderTarget();

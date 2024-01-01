@@ -36,8 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	    {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
             _strategyRenderTarget2D = graphicsDevice.Strategy.MainContext.Strategy.CreateRenderTarget2DStrategy(width, height, mipMap, arraySize, shared, usage,
-                format, preferredDepthFormat, preferredMultiSampleCount,
-                surfaceType: Texture2D.SurfaceType.RenderTarget);
+                format, preferredDepthFormat, preferredMultiSampleCount);
             _strategyTexture2D = _strategyRenderTarget2D;
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);

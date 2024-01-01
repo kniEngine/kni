@@ -44,9 +44,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal abstract GraphicsAdaptersProviderStrategy CreateGraphicsAdaptersProviderStrategy();
-        internal abstract GraphicsDeviceStrategy CreateGraphicsDeviceStrategy(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters);
-        internal abstract SpriteBatcherStrategy CreateSpriteBatcher(GraphicsDevice graphicsDevice, int capacity);
+        public abstract GraphicsAdaptersProviderStrategy CreateGraphicsAdaptersProviderStrategy();
+        public abstract GraphicsDeviceStrategy CreateGraphicsDeviceStrategy(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters);
+        public abstract SpriteBatcherStrategy CreateSpriteBatcher(GraphicsDevice graphicsDevice, int capacity);
     }
 
 }

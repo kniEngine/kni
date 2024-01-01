@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IDynamicIndexBufferStrategy
+    public interface IDynamicIndexBufferStrategy
     {
         bool IsContentLost { get; }
     }

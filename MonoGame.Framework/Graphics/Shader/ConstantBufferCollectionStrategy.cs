@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal abstract class ConstantBufferCollectionStrategy
+    public abstract class ConstantBufferCollectionStrategy
     {
         public ConstantBufferCollectionStrategy(int capacity)
         {

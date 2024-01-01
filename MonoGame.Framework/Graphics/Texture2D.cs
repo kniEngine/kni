@@ -17,13 +17,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         internal ITexture2DStrategy _strategyTexture2D;
 
-        internal protected enum SurfaceType
-        {
-            Texture,
-            RenderTarget,
-            RenderTargetSwapChain,
-        }
-                
         internal float TexelWidth { get; private set; }
         internal float TexelHeight { get; private set; }
 

@@ -4,9 +4,10 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
     /// <summary>
     /// Stores the vertex layout (input elements) for the input assembler stage.
@@ -17,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// implement <see cref="IEquatable{T}"/>. Two <see cref="VertexInputLayout"/> instance are
     /// considered equal if the vertex layouts are structurally identical.
     /// </remarks>
-    internal abstract class VertexInputLayout : IEquatable<VertexInputLayout>
+    public abstract class VertexInputLayout : IEquatable<VertexInputLayout>
     {
         protected internal VertexDeclaration[] VertexDeclarations { get; private set; }
         protected internal int[] InstanceFrequencies { get; private set; }

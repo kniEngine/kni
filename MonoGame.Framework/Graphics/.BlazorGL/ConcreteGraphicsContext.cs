@@ -703,110 +703,110 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
+        public override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
         {
             return new ConcreteOcclusionQuery(this);
         }
 
-        internal override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
+        public override GraphicsDebugStrategy CreateGraphicsDebugStrategy()
         {
             return new ConcreteGraphicsDebug(this);
         }
 
-        internal override ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity)
+        public override ConstantBufferCollectionStrategy CreateConstantBufferCollectionStrategy(int capacity)
         {
             return new ConcreteConstantBufferCollection(capacity);
         }
 
-        internal override TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity)
+        public override TextureCollectionStrategy CreateTextureCollectionStrategy(int capacity)
         {
             return new ConcreteTextureCollection(this, capacity);
         }
 
-        internal override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity)
+        public override SamplerStateCollectionStrategy CreateSamplerStateCollectionStrategy(int capacity)
         {
             return new ConcreteSamplerStateCollection(this, capacity);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
+        public override ITexture2DStrategy CreateTexture2DStrategy(int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
         {
             return new ConcreteTexture2D(this, width, height, mipMap, format, arraySize, shared);
         }
 
-        internal override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
+        public override ITexture3DStrategy CreateTexture3DStrategy(int width, int height, int depth, bool mipMap, SurfaceFormat format)
         {
             return new ConcreteTexture3D(this, width, height, depth, mipMap, format);
         }
 
-        internal override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format)
+        public override ITextureCubeStrategy CreateTextureCubeStrategy(int size, bool mipMap, SurfaceFormat format)
         {
             return new ConcreteTextureCube(this, size, mipMap, format);
         }
 
-        internal override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, Texture2D.SurfaceType surfaceType)
+        public override IRenderTarget2DStrategy CreateRenderTarget2DStrategy(int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             return new ConcreteRenderTarget2D(this, width, height, mipMap, arraySize, shared, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
-                                              surfaceType: surfaceType);
+                                              surfaceType: TextureSurfaceType.RenderTarget);
         }
 
-        internal override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        public override IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             return new ConcreteRenderTarget3D(this, width, height, depth, mipMap, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount);
         }
 
-        internal override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
+        public override IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
         {
             return new ConcreteRenderTargetCube(this, size, mipMap, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount);
         }
 
-        internal override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
+        public override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
         {
             return new ConcreteTexture2D(this, stream);
         }
 
-        internal override ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        public override ShaderStrategy CreateVertexShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
         {
             return new ConcreteVertexShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
         }
-        internal override ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        public override ShaderStrategy CreatePixelShaderStrategy(byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
         {
             return new ConcretePixelShader(this, shaderBytecode, samplers, cBuffers, attributes, profile);
         }
-        internal override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
+        public override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {
             return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
         }
 
-        internal override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+        public override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
         {
             return new ConcreteIndexBuffer(this, indexElementSize, indexCount, usage);
         }
-        internal override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+        public override VertexBufferStrategy CreateVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
         {
             return new ConcreteVertexBuffer(this, vertexDeclaration, vertexCount, usage);
         }
-        internal override IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+        public override IndexBufferStrategy CreateDynamicIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
         {
             return new ConcreteDynamicIndexBuffer(this, indexElementSize, indexCount, usage);
         }
-        internal override VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
+        public override VertexBufferStrategy CreateDynamicVertexBufferStrategy(VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage)
         {
             return new ConcreteDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
         }
 
-        internal override IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source)
+        public override IBlendStateStrategy CreateBlendStateStrategy(IBlendStateStrategy source)
         {
             return new ConcreteBlendState(this, source);
         }
-        internal override IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source)
+        public override IDepthStencilStateStrategy CreateDepthStencilStateStrategy(IDepthStencilStateStrategy source)
         {
             return new ConcreteDepthStencilState(this, source);
         }
-        internal override IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy source)
+        public override IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy source)
         {
             return new ConcreteRasterizerState(this, source);
         }
-        internal override ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source)
+        public override ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source)
         {
             return new ConcreteSamplerState(this, source);
         }

@@ -9,9 +9,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public enum TextureSurfaceType
+    {
+        Texture,
+        RenderTarget,
+        RenderTargetSwapChain,
+    }
+
     public interface ITexture2DStrategy : ITextureStrategy
     {
-
         int Width { get; }
         int Height { get; }
         int ArraySize { get; }

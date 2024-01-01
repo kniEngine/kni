@@ -3,10 +3,12 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class SpriteBatchItem : IComparable<SpriteBatchItem>
+    public class SpriteBatchItem : IComparable<SpriteBatchItem>
     {
         public Texture2D Texture;
         public float SortKey;

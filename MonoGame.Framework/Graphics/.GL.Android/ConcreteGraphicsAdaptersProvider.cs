@@ -34,12 +34,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return;
         }
 
-        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        public override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get { return _adapters; }
         }
 
-        internal override GraphicsAdapter Platform_DefaultAdapter
+        public override GraphicsAdapter Platform_DefaultAdapter
         {
             get { return _adapters[0]; }
         }

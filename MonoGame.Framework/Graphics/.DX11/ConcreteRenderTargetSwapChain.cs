@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
             IntPtr windowHandle, PresentInterval presentInterval,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
             :base(contextStrategy, width, height, mipMap, 1, false, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
-                  Texture2D.SurfaceType.RenderTargetSwapChain)
+                  TextureSurfaceType.RenderTargetSwapChain)
         {
             _windowHandle = windowHandle;
             _presentInterval = presentInterval;

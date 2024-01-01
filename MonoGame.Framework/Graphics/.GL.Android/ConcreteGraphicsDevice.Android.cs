@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
+        public override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             return new ConcreteGraphicsContext(context);
         }

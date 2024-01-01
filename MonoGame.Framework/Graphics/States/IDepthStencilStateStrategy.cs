@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    internal interface IDepthStencilStateStrategy
+    public interface IDepthStencilStateStrategy
     {
         bool DepthBufferEnable { get; set; }
         bool DepthBufferWriteEnable { get; set; }
