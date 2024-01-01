@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
+        public override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
 #if DEBUG
             // create debug context, so we get better error messages (glDebugMessageCallback)

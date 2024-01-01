@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
+        public override GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context)
         {
             IntPtr handle = PresentationParameters.DeviceWindowHandle;
             GameWindow gameWindow = BlazorGameWindow.FromHandle(handle);
