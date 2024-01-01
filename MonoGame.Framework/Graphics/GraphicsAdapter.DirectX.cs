@@ -48,16 +48,5 @@ namespace Microsoft.Xna.Framework.Graphics
             set { GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDriverType = value; }
         }
 
-        /// <summary>
-        /// Used to request the graphics device should be created with debugging
-        /// features enabled.
-        /// </summary>
-        /// <remarks>Usable only on DirectX platforms.</remarks>
-        public static bool UseDebugLayers
-        {
-            get { return GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDebugLayers; }
-            set { GraphicsAdaptersProviderStrategy.Current.ToConcrete<ConcreteGraphicsAdaptersProvider>().PlatformDX_UseDebugLayers = value; }
-        }
-
     }
 }

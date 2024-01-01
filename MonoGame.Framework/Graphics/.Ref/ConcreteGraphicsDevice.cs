@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        protected override void PlatformSetup()
+        protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
             throw new PlatformNotSupportedException();
         }

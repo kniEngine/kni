@@ -249,14 +249,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
 
-        protected override void PlatformSetup()
+        protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
             CreateDeviceIndependentResources();
 
             // Windows requires BGRA support out of DX.
             D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
 
-            if (GraphicsAdapter.UseDebugLayers)
+            if (presentationParameters.UseDebugLayers)
             {
                 creationFlags |= D3D11.DeviceCreationFlags.Debug;
             }
