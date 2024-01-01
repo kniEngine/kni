@@ -135,13 +135,5 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _adapters[0]; }
         }
 
-        internal override bool Platform_UseReferenceDevice
-        {
-            get { return PlatformDX_UseDriverType == GraphicsAdapter.DriverType.Reference; }
-            set { PlatformDX_UseDriverType = value ? GraphicsAdapter.DriverType.Reference : GraphicsAdapter.DriverType.Hardware; }
-        }
-
-        internal GraphicsAdapter.DriverType PlatformDX_UseDriverType { get; set; }
-
     }
 }

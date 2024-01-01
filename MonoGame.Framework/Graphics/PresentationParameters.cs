@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private IntPtr _deviceWindowHandle;
 
         private bool _useDebugLayers;
+        private DriverType _useDriverType;
 
         #endregion Private Fields
 
@@ -171,6 +172,40 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _useDebugLayers = value; }
         }
 
+        /// <summary>
+        /// Used to request creation of a specific kind of driver.
+        /// </summary>
+        /// <remarks>
+        /// These values only work on DirectX platforms and must be defined before the graphics device
+        /// is created. <see cref="DriverType.Hardware"/> by default.
+        /// </remarks>
+        public DriverType UseDriverType
+        {
+            get { return _useDriverType; }
+            set { _useDriverType = value; }
+        }
+
+
+        /// <summary>
+        /// Defines the driver type for graphics adapter.
+        /// </summary>
+        /// <remarks>Usable only on DirectX platforms.</remarks>
+        public enum DriverType
+        {
+            /// <summary>
+            /// Hardware device been used for rendering. Maximum speed and performance.
+            /// </summary>
+            Hardware,
+            /// <summary>
+            /// Emulates the hardware device on CPU. Slowly, only for testing.
+            /// </summary>
+            Reference,
+            /// <summary>
+            /// Useful when <see cref="DriverType.Hardware"/> acceleration does not work.
+            /// </summary>
+            FastSoftware
+        }
+
         #endregion Properties
 
 
@@ -196,6 +231,7 @@ namespace Microsoft.Xna.Framework.Graphics
             clone._deviceWindowHandle = this._deviceWindowHandle;
 
             clone._useDebugLayers = this._useDebugLayers;
+            clone._useDriverType = this._useDriverType;
 
             return clone;
         }
