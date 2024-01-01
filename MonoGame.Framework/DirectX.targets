@@ -43,10 +43,6 @@
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
   </ItemGroup>
-	  
-  <ItemGroup>
-    <Compile Include="Graphics\GraphicsAdapter.DirectX.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo" />
