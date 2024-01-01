@@ -29,9 +29,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        abstract internal ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
-        abstract internal GraphicsAdapter Platform_DefaultAdapter { get; }
-        virtual internal bool Platform_UseReferenceDevice { get; set; }
+        public abstract ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
+        public abstract GraphicsAdapter Platform_DefaultAdapter { get; }
+        public virtual bool Platform_UseReferenceDevice { get; set; }
         
 
         internal T ToConcrete<T>() where T : GraphicsAdaptersProviderStrategy

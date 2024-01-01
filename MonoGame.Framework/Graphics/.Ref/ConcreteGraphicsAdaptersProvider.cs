@@ -18,12 +18,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return;
         }
 
-        internal override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
+        public override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override GraphicsAdapter Platform_DefaultAdapter
+        public override GraphicsAdapter Platform_DefaultAdapter
         {
             get { throw new PlatformNotSupportedException(); }
         }
