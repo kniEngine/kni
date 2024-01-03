@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // TODO: Implement MultiSampleAntiAlias
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
         }
 

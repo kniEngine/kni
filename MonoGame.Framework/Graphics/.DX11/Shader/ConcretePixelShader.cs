@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
             CreatePixelShader();
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _pixelShader);
 

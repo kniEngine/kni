@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return attrInfo;
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
 
             base.PlatformGraphicsContextLost();
