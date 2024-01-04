@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public partial class GraphicsDebug
+    public class GraphicsDebug
     {
         private GraphicsDebugStrategy _strategy;
 
