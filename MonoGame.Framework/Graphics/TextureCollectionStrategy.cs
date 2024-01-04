@@ -29,6 +29,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Dirty();
         }
 
+        public int Length { get { return _textures.Length; } }
+
         public Texture this[int index]
         {
             get { return _textures[index]; }
