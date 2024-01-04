@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private GraphicsDebug _graphicsDebug;
 
 
-        internal readonly object SyncHandle = new object();
+        public readonly object SyncHandle = new object();
 
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
         internal bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
