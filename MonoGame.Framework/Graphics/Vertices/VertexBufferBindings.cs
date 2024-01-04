@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     /// <summary>
     /// Stores the vertex buffers to be bound to the input assembler stage.
     /// </summary>
-    internal sealed class VertexBufferBindings : VertexInputLayout
+    public sealed class VertexBufferBindings : VertexInputLayout
     {
         private readonly VertexBuffer[] _vertexBuffers;
         private readonly int[] _vertexOffsets;
@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// Initializes a new instance of the <see cref="VertexBufferBindings" /> class.
         /// </summary>
         /// <param name="maxVertexBufferSlots">The maximum number of vertex buffer slots.</param>
-        public VertexBufferBindings(int maxVertexBufferSlots)
+        internal VertexBufferBindings(int maxVertexBufferSlots)
             : base(new VertexDeclaration[maxVertexBufferSlots], new int[maxVertexBufferSlots], 0)
         {
             _vertexBuffers = new VertexBuffer[maxVertexBufferSlots];

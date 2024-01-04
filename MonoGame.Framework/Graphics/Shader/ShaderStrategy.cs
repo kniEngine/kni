@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
         private VertexAttribute[] _attributes;
-        internal int _hashKey;
+        protected int _hashKey;
 
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int HashKey { get { return _hashKey; } }
 
 
-        internal ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        protected ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy)
         {
             _contextStrategy = contextStrategy;

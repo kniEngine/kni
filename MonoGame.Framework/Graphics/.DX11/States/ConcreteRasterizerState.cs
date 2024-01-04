@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return new D3D11.RasterizerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, rasterizerStateDesc);
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
         }
 

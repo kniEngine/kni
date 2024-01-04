@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 

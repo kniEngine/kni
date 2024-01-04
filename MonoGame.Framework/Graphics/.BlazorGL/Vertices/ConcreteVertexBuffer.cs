@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             throw new NotImplementedException();
         }

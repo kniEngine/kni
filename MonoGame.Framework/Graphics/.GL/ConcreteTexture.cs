@@ -471,7 +471,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             if (_glTexture > 0)
             {

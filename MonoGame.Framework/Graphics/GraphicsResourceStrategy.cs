@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal virtual void PlatformGraphicsContextLost()
+        protected virtual void PlatformGraphicsContextLost()
         {
 
         }

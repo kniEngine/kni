@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion ITextureStrategy
 
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             throw new PlatformNotSupportedException();
 

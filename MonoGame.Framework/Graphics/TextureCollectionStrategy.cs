@@ -13,10 +13,10 @@ namespace Microsoft.Xna.Platform.Graphics
     {   
         protected readonly GraphicsContextStrategy _contextStrategy;
 
-        internal readonly Texture[] _textures;
-        internal uint _dirty;
+        protected readonly Texture[] _textures;
+        protected uint _dirty;
 
-        internal TextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
+        protected TextureCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
         {
             // hard limit of 32 because of _dirty flags being 32bits.
             if (capacity > 32)
@@ -28,6 +28,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Dirty();
         }
+
+        public int Length { get { return _textures.Length; } }
 
         public Texture this[int index]
         {

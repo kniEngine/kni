@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _buffer);
         }

@@ -935,7 +935,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
                     GL.CheckGLError();
 
-                    for (int i = 0; i < _currentRenderTargetCount; i++)
+                    for (int i = 0; i < base.RenderTargetCount; i++)
                     {
                         IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)_currentRenderTargetBindings[i].RenderTarget;
 
@@ -963,7 +963,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
                 GL.CheckGLError();
 
-                for (int i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < base.RenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
@@ -993,7 +993,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            for (int i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < base.RenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
@@ -1037,7 +1037,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
                 GL.CheckGLError();
 
-                for (int i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < base.RenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
@@ -1067,7 +1067,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
 #if DESKTOPGL
-            GL.DrawBuffers(_currentRenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
+            GL.DrawBuffers(base.RenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
 #endif
 
             // Reset the raster state because we flip vertices

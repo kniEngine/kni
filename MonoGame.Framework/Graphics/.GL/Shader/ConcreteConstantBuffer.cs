@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _lastConstantBufferApplied = this;
         }
 
-        internal override void PlatformContextLost()
+        public override void PlatformContextLost()
         {
             // Force the uniform location to be looked up again
             _shaderProgram = null;

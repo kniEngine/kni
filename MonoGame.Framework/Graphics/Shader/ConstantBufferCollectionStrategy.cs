@@ -6,7 +6,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class ConstantBufferCollectionStrategy
     {
-        public ConstantBufferCollectionStrategy(int capacity)
+        protected ConstantBufferCollectionStrategy(int capacity)
         {
         }
 

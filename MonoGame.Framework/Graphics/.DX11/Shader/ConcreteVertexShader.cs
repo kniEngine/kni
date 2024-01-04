@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _inputLayouts = new InputLayoutCache(GraphicsDevice, ShaderBytecode);
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _inputLayouts);
             DX.Utilities.Dispose(ref _vertexShader);

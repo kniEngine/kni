@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return _resourceView;
         }
 
-        internal override void PlatformGraphicsContextLost()
+        protected override void PlatformGraphicsContextLost()
         {
             DX.Utilities.Dispose(ref _resourceView);
             DX.Utilities.Dispose(ref _texture);
