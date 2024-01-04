@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal virtual void Clear()
+        public virtual void Clear()
         {
             for (int i = 0; i < _textures.Length; i++)
             {

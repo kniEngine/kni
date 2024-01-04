@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal override void Clear()
+        public override void Clear()
         {
             base.Clear();
         }
