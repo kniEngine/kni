@@ -633,7 +633,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override void PlatformResolveRenderTargets()
         {
-            for (int i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < base.RenderTargetCount; i++)
             {
                 RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[i];
 
@@ -680,7 +680,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.Textures.Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
             }
 
-            for (int i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < base.RenderTargetCount; i++)
             {
                 RenderTargetBinding binding = _currentRenderTargetBindings[i];
                 IRenderTargetStrategyDX11 targetDX = (IRenderTargetStrategyDX11)binding.RenderTarget.GetTextureStrategy<ITextureStrategy>();

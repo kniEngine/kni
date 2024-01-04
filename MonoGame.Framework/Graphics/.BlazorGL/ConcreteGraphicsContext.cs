@@ -841,7 +841,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException();
             }
 
-            for (int i = 0; i < _currentRenderTargetCount; i++)
+            for (int i = 0; i < base.RenderTargetCount; i++)
             {
                 renderTargetBinding = _currentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
@@ -893,7 +893,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
-                for (int i = 0; i < _currentRenderTargetCount; i++)
+                for (int i = 0; i < base.RenderTargetCount; i++)
                 {
                     renderTargetBinding = _currentRenderTargetBindings[i];
                     renderTargetGL = renderTargetBinding.RenderTarget.GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
@@ -923,7 +923,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
 #if DESKTOPGL
-            //GL.DrawBuffers(_currentRenderTargetCount, _drawBuffers);
+            //GL.DrawBuffers(base.RenderTargetCount, _drawBuffers);
 #endif
 
             // Reset the raster state because we flip vertices

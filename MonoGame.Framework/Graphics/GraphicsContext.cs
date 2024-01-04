@@ -264,10 +264,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
 
             // Try to early out if the current and new bindings are equal.
-            if (Strategy._currentRenderTargetCount == renderTargetCount)
+            if (Strategy.RenderTargetCount == renderTargetCount)
             {
                 bool isEqual = true;
-                for (int i = 0; i < Strategy._currentRenderTargetCount; i++)
+                for (int i = 0; i < Strategy.RenderTargetCount; i++)
                 {
                     if (Strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
                         Strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
