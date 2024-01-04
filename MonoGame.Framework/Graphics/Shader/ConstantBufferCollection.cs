@@ -1,18 +1,18 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal sealed class ConstantBufferCollection
+    public sealed class ConstantBufferCollection
     {
         private ConstantBufferCollectionStrategy _strategy;
 
         internal ConstantBufferCollectionStrategy Strategy { get { return _strategy; } }
 
 
-        public ConstantBufferCollection(GraphicsContextStrategy contextStrategy, int capacity)
+        internal ConstantBufferCollection(GraphicsContextStrategy contextStrategy, int capacity)
         {
             _strategy = contextStrategy.CreateConstantBufferCollectionStrategy(capacity);
         }

@@ -22,9 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool _isDisposed = false;
 
-        internal Rectangle _scissorRectangle;
-        internal bool _scissorRectangleDirty;
-        internal Viewport _viewport;
+        protected internal Rectangle _scissorRectangle;
+        protected internal bool _scissorRectangleDirty;
+        protected internal Viewport _viewport;
 
         // states
         private BlendState _blendState;
@@ -35,15 +35,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal SamplerStateCollection _pixelSamplerStates;
 
         // states dirty flags
-        internal bool _blendStateDirty;
-        internal bool _blendFactorDirty;
-        internal bool _depthStencilStateDirty;
-        internal bool _rasterizerStateDirty;
+        protected internal bool _blendStateDirty;
+        protected internal bool _blendFactorDirty;
+        protected internal bool _depthStencilStateDirty;
+        protected internal bool _rasterizerStateDirty;
 
         // actual states
-        internal BlendState _actualBlendState;
-        internal DepthStencilState _actualDepthStencilState;
-        internal RasterizerState _actualRasterizerState;
+        protected internal BlendState _actualBlendState;
+        protected internal DepthStencilState _actualDepthStencilState;
+        protected internal RasterizerState _actualRasterizerState;
 
         // predefined states
         internal BlendState _blendStateAdditive;
@@ -60,8 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
         // shaders
         private VertexShader _vertexShader;
         private PixelShader _pixelShader;
-        internal ConstantBufferCollection _vertexConstantBuffers;
-        internal ConstantBufferCollection _pixelConstantBuffers;
+        protected internal ConstantBufferCollection _vertexConstantBuffers;
+        protected internal ConstantBufferCollection _pixelConstantBuffers;
 
         // shaders dirty flags
         protected internal bool _vertexShaderDirty;
@@ -69,10 +69,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // buffers
         private IndexBuffer _indexBuffer;
-        internal VertexBufferBindings _vertexBuffers;
+        protected internal VertexBufferBindings _vertexBuffers;
 
         // buffers dirty flags
-        internal bool _indexBufferDirty;
+        protected internal bool _indexBufferDirty;
         protected internal bool _vertexBuffersDirty;
 
         // textures
