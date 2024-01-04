@@ -829,7 +829,7 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
         };
 
-        internal override void PlatformResolveRenderTargets()
+        protected override void PlatformResolveRenderTargets()
         {
             if (!this.IsRenderTargetBound)
                 return;
@@ -855,7 +855,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformApplyDefaultRenderTarget()
+        protected override void PlatformApplyDefaultRenderTarget()
         {
             GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
             GL.CheckGLError();
@@ -868,7 +868,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _pixelTextures.Strategy.Dirty();
         }
 
-        internal override IRenderTarget PlatformApplyRenderTargets()
+        protected override IRenderTarget PlatformApplyRenderTargets()
         {
             WebGLFramebuffer glFramebuffer = null;
             if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))

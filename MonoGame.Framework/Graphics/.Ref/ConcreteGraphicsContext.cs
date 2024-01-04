@@ -38,17 +38,17 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformResolveRenderTargets()
+        protected override void PlatformResolveRenderTargets()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformApplyDefaultRenderTarget()
+        protected override void PlatformApplyDefaultRenderTarget()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override IRenderTarget PlatformApplyRenderTargets()
+        protected override IRenderTarget PlatformApplyRenderTargets()
         {
             throw new PlatformNotSupportedException();
         }
