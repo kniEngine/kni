@@ -197,7 +197,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         public abstract object Clone();
-        internal abstract void PlatformContextLost();
+        public abstract void PlatformContextLost();
 
 
         #region IDisposable

@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void PlatformContextLost()
+        public override void PlatformContextLost()
         {
             DX.Utilities.Dispose(ref _cbuffer);
             Dirty = true;
