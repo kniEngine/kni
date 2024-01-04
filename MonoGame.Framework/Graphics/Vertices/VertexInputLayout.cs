@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Platform.Graphics
     /// </remarks>
     public abstract class VertexInputLayout : IEquatable<VertexInputLayout>
     {
-        protected internal VertexDeclaration[] VertexDeclarations { get; private set; }
-        protected internal int[] InstanceFrequencies { get; private set; }
+        public VertexDeclaration[] VertexDeclarations { get; private set; }
+        public int[] InstanceFrequencies { get; private set; }
 
         /// <summary>
         /// Gets or sets the number of used input slots.
