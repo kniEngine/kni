@@ -281,58 +281,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     return;
             }
 
-            ApplyRenderTargets(renderTargets);
+            Strategy.ApplyRenderTargets(renderTargets);
 
             if (renderTargetCount == 0)
                 unchecked { _graphicsMetrics._targetCount++; }
             else
                 unchecked { _graphicsMetrics._targetCount += renderTargetCount; }
-        }
-
-        internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
-        {
-            bool clearTarget = false;
-
-            Strategy.PlatformResolveRenderTargets();
-
-            // Clear the current bindings.
-            Array.Clear(Strategy._currentRenderTargetBindings, 0, Strategy._currentRenderTargetBindings.Length);
-
-            int renderTargetWidth;
-            int renderTargetHeight;
-            if (renderTargets == null)
-            {
-                Strategy._currentRenderTargetCount = 0;
-
-                Strategy.PlatformApplyDefaultRenderTarget();
-                clearTarget = this.DeviceStrategy.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
-
-                renderTargetWidth = this.DeviceStrategy.PresentationParameters.BackBufferWidth;
-                renderTargetHeight = this.DeviceStrategy.PresentationParameters.BackBufferHeight;
-            }
-            else
-            {
-                // Copy the new bindings.
-                Array.Copy(renderTargets, Strategy._currentRenderTargetBindings, renderTargets.Length);
-                Strategy._currentRenderTargetCount = renderTargets.Length;
-
-                IRenderTarget renderTarget = Strategy.PlatformApplyRenderTargets();
-
-                // We clear the render target if asked.
-                clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;
-
-                renderTargetWidth = renderTarget.Width;
-                renderTargetHeight = renderTarget.Height;
-            }
-
-            // Set the viewport to the size of the first render target.
-            Strategy.Viewport = new Viewport(0, 0, renderTargetWidth, renderTargetHeight);
-
-            // Set the scissor rectangle to the size of the first render target.
-            Strategy.ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
-
-            if (clearTarget)
-                Clear(Strategy.DiscardColor);
         }
 
         /// <summary>

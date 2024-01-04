@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            _mainContext.ApplyRenderTargets(null);
+            _mainContext.Strategy.ApplyRenderTargets(null);
         }
 
         protected abstract void PlatformSetup(PresentationParameters presentationParameters);

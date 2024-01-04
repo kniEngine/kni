@@ -374,6 +374,59 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
+        {
+            bool clearTarget = false;
+
+            this.PlatformResolveRenderTargets();
+
+            // Clear the current bindings.
+            Array.Clear(_currentRenderTargetBindings, 0, _currentRenderTargetBindings.Length);
+
+            int renderTargetWidth;
+            int renderTargetHeight;
+            if (renderTargets == null)
+            {
+                _currentRenderTargetCount = 0;
+
+                this.PlatformApplyDefaultRenderTarget();
+                clearTarget = this.Context.DeviceStrategy.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+
+                renderTargetWidth = this.Context.DeviceStrategy.PresentationParameters.BackBufferWidth;
+                renderTargetHeight = this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight;
+            }
+            else
+            {
+                // Copy the new bindings.
+                Array.Copy(renderTargets, _currentRenderTargetBindings, renderTargets.Length);
+                _currentRenderTargetCount = renderTargets.Length;
+
+                IRenderTarget renderTarget = this.PlatformApplyRenderTargets();
+
+                // We clear the render target if asked.
+                clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+
+                renderTargetWidth = renderTarget.Width;
+                renderTargetHeight = renderTarget.Height;
+            }
+
+            // Set the viewport to the size of the first render target.
+            this.Viewport = new Viewport(0, 0, renderTargetWidth, renderTargetHeight);
+
+            // Set the scissor rectangle to the size of the first render target.
+            this.ScissorRectangle = new Rectangle(0, 0, renderTargetWidth, renderTargetHeight);
+
+            if (clearTarget)
+            {
+                ClearOptions options = ClearOptions.Target
+                                     | ClearOptions.DepthBuffer
+                                     | ClearOptions.Stencil;
+                this.Clear(options, this.DiscardColor.ToVector4(), this.Viewport.MaxDepth, 0);
+
+                unchecked { this.Context._graphicsMetrics._clearCount++; }
+            }
+        }
+
         internal void GetRenderTargets(RenderTargetBinding[] bindings)
         {
             Debug.Assert(bindings.Length == _currentRenderTargetCount, "Invalid bindings array length!");
@@ -438,9 +491,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract IRasterizerStateStrategy CreateRasterizerStateStrategy(IRasterizerStateStrategy stsourcerategy);
         public abstract ISamplerStateStrategy CreateSamplerStateStrategy(ISamplerStateStrategy source);
 
-        internal abstract void PlatformResolveRenderTargets();
-        internal abstract void PlatformApplyDefaultRenderTarget();
-        internal abstract IRenderTarget PlatformApplyRenderTargets();
+        protected abstract void PlatformResolveRenderTargets();
+        protected abstract void PlatformApplyDefaultRenderTarget();
+        protected abstract IRenderTarget PlatformApplyRenderTargets();
 
         internal T ToConcrete<T>() where T : GraphicsContextStrategy
         {

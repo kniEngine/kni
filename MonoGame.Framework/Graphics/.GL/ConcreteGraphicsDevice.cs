@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _mainContext.ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
 
             // Set the default render target.
-            _mainContext.ApplyRenderTargets(null);
+            _mainContext.Strategy.ApplyRenderTargets(null);
         }
 
 
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
 #endif
 
-            _mainContext.ApplyRenderTargets(null);
+            _mainContext.Strategy.ApplyRenderTargets(null);
         }
 
 

@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void OnPresentationChanged()
         {
-            _mainContext.ApplyRenderTargets(null);
+            _mainContext.Strategy.ApplyRenderTargets(null);
         }
 
 
