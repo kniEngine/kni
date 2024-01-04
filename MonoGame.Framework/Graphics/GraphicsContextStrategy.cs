@@ -64,8 +64,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConstantBufferCollection _pixelConstantBuffers;
 
         // shaders dirty flags
-        internal bool _vertexShaderDirty;
-        internal bool _pixelShaderDirty;
+        protected internal bool _vertexShaderDirty;
+        protected internal bool _pixelShaderDirty;
 
         // buffers
         private IndexBuffer _indexBuffer;
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // buffers dirty flags
         internal bool _indexBufferDirty;
-        internal bool _vertexBuffersDirty;
+        protected internal bool _vertexBuffersDirty;
 
         // textures
         internal TextureCollection _vertexTextures;
