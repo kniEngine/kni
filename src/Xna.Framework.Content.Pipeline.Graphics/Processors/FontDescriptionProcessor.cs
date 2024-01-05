@@ -47,10 +47,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string fontFile = null;
             fontFile = FindLocalFontFile(input, context);
-
-            if (fontFile == null)
-                fontFile = FindFont(input, context);
-
             if (fontFile == null)
                 fontFile = FindFontFile(input, context);
 
@@ -154,9 +150,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return null;
         }
 
-
-        private string FindFont(FontDescription input, ContentProcessorContext context)
+        private string FindFontFile(FontDescription input, ContentProcessorContext context)
         {
+            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+
+            // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
                 string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
@@ -179,6 +177,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             return fontPath;
                         }
                     }
+                }
+
+                foreach (string ext in extensions)
+                {
+                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
+                    if (File.Exists(fontFile))
+                        return fontFile;
                 }
             }
             else if (CurrentPlatform.OS == OS.Linux)
@@ -209,26 +214,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         if (input.FontName.Equals(fontName, StringComparison.InvariantCultureIgnoreCase))
                             return fontPath;
                     }
-                }
-            }
-
-            return null;
-        }
-
-        private string FindFontFile(FontDescription input, ContentProcessorContext context)
-        {
-            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-
-            // Add special per platform directories
-            if (CurrentPlatform.OS == OS.Windows)
-            {
-                string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-
-                foreach (string ext in extensions)
-                {
-                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                    if (File.Exists(fontFile))
-                        return fontFile;
                 }
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
