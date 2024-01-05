@@ -45,7 +45,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             SpriteFontContent output = new SpriteFontContent(input);
 
-            string fontFile = FindFont(input, context);
+            string fontFile = null;
+            fontFile = FindLocalFontFile(input, context);
+
+            if (string.IsNullOrWhiteSpace(fontFile))
+                fontFile = FindFont(input, context);
 
             if (string.IsNullOrWhiteSpace(fontFile))
                 fontFile = FindFontFile(input, context);
@@ -134,6 +138,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
+        private string FindLocalFontFile(FontDescription input, ContentProcessorContext context)
+        {
+            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+            List<string> directories = new List<string>();
+
+            string fontsDirectory = Path.GetDirectoryName(input.Identity.SourceFilename);
+            directories.Add(fontsDirectory);
+
+            foreach (string dir in directories)
+            {
+                foreach (string ext in extensions)
+                {
+                    string fontFile = Path.Combine(dir, input.FontName + ext);
+                    if (File.Exists(fontFile))
+                        return fontFile;
+                }
+            }
+
+            return String.Empty;
+        }
+
+
         private string FindFont(FontDescription input, ContentProcessorContext context)
         {
             if (CurrentPlatform.OS == OS.Windows)
@@ -198,8 +224,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
             List<string> directories = new List<string>();
-
-            directories.Add(Path.GetDirectoryName(input.Identity.SourceFilename));
 
             // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
