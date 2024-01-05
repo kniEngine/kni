@@ -20,6 +20,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessor(DisplayName = "Sprite Font Description - MonoGame")]
     public class FontDescriptionProcessor : ContentProcessor<FontDescription, SpriteFontContent>
     {
+        private static object _fontFamilyInfoCacheLocker = new object();
+        private static Dictionary<string, FontFamilyInfo> _fontFamilyInfoCache;
+
         SmoothingMode _smoothing = SmoothingMode.Normal;
 
         [DefaultValue(true)]
@@ -159,58 +162,129 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
-                string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-                foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
+                lock (_fontFamilyInfoCacheLocker)
                 {
-                    RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                    string[] valueNames = subkey.GetValueNames();
-                    Array.Sort(valueNames);
-
-                    foreach (string font in valueNames)
+                    if (_fontFamilyInfoCache == null)
                     {
-                        if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
+                        Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
+
+                        using (Library sharpFontLib = new Library())
                         {
-                            string fontFile = subkey.GetValue(font).ToString();
-                            // The registry value might have trailing NUL characters
-                            fontFile.TrimEnd(new char[] { '\0' });
+                            string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                            foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
+                            {
+                                RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
+                                string[] valueNames = subkey.GetValueNames();
+                                Array.Sort(valueNames);
 
-                            if (!Path.IsPathRooted(fontFile))
-                                fontFile = Path.Combine(fontsDirectory, fontFile);
+                                foreach (string font in valueNames)
+                                {
+                                    string fontFile = subkey.GetValue(font).ToString();
+                                    // The registry value might have trailing NUL characters
+                                    fontFile.TrimEnd(new char[] { '\0' });
 
-                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                            return fontFaceInfo;
+                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+                                    if (!extensions.Contains(fontExtension))
+                                        continue;
+
+                                    if (!Path.IsPathRooted(fontFile))
+                                        fontFile = Path.Combine(fontsDirectory, fontFile);
+                                    if (!File.Exists(fontFile))
+                                        continue;
+
+                                    int faceCount = 1;
+                                    for (int faceIndex = 0; faceIndex < faceCount; faceIndex++)
+                                    {
+                                        using (Face face = sharpFontLib.NewFace(fontFile, faceIndex))
+                                        {
+                                            faceCount = face.FaceCount;
+
+                                            FontFamilyInfo fontFamilyInfo;
+                                            if (!fontFamilyInfoCache.TryGetValue(face.FamilyName.ToUpperInvariant(), out fontFamilyInfo))
+                                            {
+                                                fontFamilyInfo = new FontFamilyInfo(face.FamilyName);
+                                                fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
+                                            }
+
+                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags, face.StyleName, face.FaceFlags);
+                                            fontFamilyInfo.Faces.Add(fontFaceInfo);
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
-                }
 
-                string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                foreach (string ext in extensions)
-                {
-                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                    if (File.Exists(fontFile))
+                        _fontFamilyInfoCache = fontFamilyInfoCache;
+                    }
+
+                    FontFamilyInfo familyInfo;
+                    if (_fontFamilyInfoCache.TryGetValue(input.FontName.ToUpperInvariant(), out familyInfo))
                     {
-                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                        return fontFaceInfo;
+                        foreach (FontFaceInfo faceInfo in familyInfo.Faces)
+                        {
+                            if (faceInfo.Style == input.Style)
+                                return faceInfo;
+                        }
                     }
                 }
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
             {
-                List<string> directories = new List<string>();
-                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                directories.Add("/Library/Fonts");
-                directories.Add("/System/Library/Fonts/Supplemental");
-
-                foreach (string dir in directories)
+                lock (_fontFamilyInfoCacheLocker)
                 {
-                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                    foreach (string ext in extensions)
+                    if (_fontFamilyInfoCache == null)
                     {
-                        string fontFile = Path.Combine(dir, input.FontName + ext);
-                        if (File.Exists(fontFile))
+                        Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
+
+                        using (Library sharpFontLib = new Library())
                         {
-                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                            return fontFaceInfo;
+                            List<string> directories = new List<string>();
+                            directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                            directories.Add("/Library/Fonts");
+                            directories.Add("/System/Library/Fonts/Supplemental");
+
+                            foreach (string fontsDirectory in directories)
+                            {
+                                foreach (string fontFile in Directory.GetFiles(fontsDirectory))
+                                {
+                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+                                    if (!extensions.Contains(fontExtension))
+                                        continue;
+
+                                    int faceCount = 1;
+                                    for (int faceIndex = 0; faceIndex < faceCount; faceIndex++)
+                                    {
+                                        using (Face face = sharpFontLib.NewFace(fontFile, faceIndex))
+                                        {
+                                            faceCount = face.FaceCount;
+
+                                            FontFamilyInfo fontFamilyInfo;
+                                            if (!fontFamilyInfoCache.TryGetValue(face.FamilyName.ToUpperInvariant(), out fontFamilyInfo))
+                                            {
+                                                fontFamilyInfo = new FontFamilyInfo(face.FamilyName);
+                                                fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
+                                            }
+
+                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags, face.StyleName, face.FaceFlags);
+                                            fontFamilyInfo.Faces.Add(fontFaceInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        _fontFamilyInfoCache = fontFamilyInfoCache;
+                    }
+
+                    FontFamilyInfo familyInfo;
+                    if (_fontFamilyInfoCache.TryGetValue(input.FontName.ToUpperInvariant(), out familyInfo))
+                    {
+                        foreach (FontFaceInfo faceInfo in familyInfo.Faces)
+                        {
+                            if (faceInfo.Style == input.Style)
+                                return faceInfo;
                         }
                     }
                 }
