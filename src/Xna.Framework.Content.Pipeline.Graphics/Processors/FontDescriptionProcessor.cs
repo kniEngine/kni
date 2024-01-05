@@ -45,20 +45,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             SpriteFontContent output = new SpriteFontContent(input);
 
-            string fontFile = null;
-            fontFile = FindLocalFontFile(input, context);
-            if (fontFile == null)
-                fontFile = FindFontFile(input, context);
+            FontFaceInfo faceInfo = null;
+            faceInfo = FindLocalFontFile(input, context);
+            if (faceInfo == null)
+                faceInfo = FindFontFile(input, context);
 
-            if (fontFile == null || !File.Exists(fontFile))
-                throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
+            if (faceInfo == null)
+                throw new PipelineException("Could not find \"" + input.FontName + "\" font.");
+
+            if (!File.Exists(faceInfo.FontFile))
+                throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
 
             List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            string fileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+            string fileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
             if (!extensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
-            context.Logger.LogMessage("Building Font {0}", fontFile);
+            context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
 
             // Get the platform specific texture profile.
             TextureProfile texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
@@ -72,7 +75,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             characters.Sort();
 
-            FontContent font = ImportFont(input, context, fontFile, characters);
+            FontContent font = ImportFont(input, context, faceInfo, characters);
             Dictionary<char, FontGlyph> glyphs = font.Glyphs;
 
             // Validate.
@@ -134,7 +137,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private string FindLocalFontFile(FontDescription input, ContentProcessorContext context)
+        private FontFaceInfo FindLocalFontFile(FontDescription input, ContentProcessorContext context)
         {
             string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
 
@@ -144,13 +147,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             {
                 string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
                 if (File.Exists(fontFile))
-                    return fontFile;
+                {
+                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                    return fontFaceInfo;
+                }
             }
 
             return null;
         }
 
-        private string FindFontFile(FontDescription input, ContentProcessorContext context)
+        private FontFaceInfo FindFontFile(FontDescription input, ContentProcessorContext context)
         {
             string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
 
@@ -174,7 +180,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                             if (!Path.IsPathRooted(fontFile))
                                 fontFile = Path.Combine(fontsDirectory, fontFile);
-                            return fontFile;
+
+                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                            return fontFaceInfo;
                         }
                     }
                 }
@@ -183,7 +191,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
                     if (File.Exists(fontFile))
-                        return fontFile;
+                    {
+                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                        return fontFaceInfo;
+                    }
                 }
             }
             else if (CurrentPlatform.OS == OS.Linux)
@@ -205,7 +216,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     foreach (string family in families)
                     {
                         if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
-                            return fontFile;
+                        {
+                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                            return fontFaceInfo;
+                        }
                     }
                 }
             }
@@ -222,7 +236,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         string fontFile = Path.Combine(dir, input.FontName + ext);
                         if (File.Exists(fontFile))
-                            return fontFile;
+                        {
+                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                            return fontFaceInfo;
+                        }
                     }
                 }
             }
@@ -231,12 +248,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
-        private FontContent ImportFont(FontDescription input, ContentProcessorContext context, string fontName, List<char> characters)
+        private FontContent ImportFont(FontDescription input, ContentProcessorContext context, FontFaceInfo faceInfo, List<char> characters)
         {
             FontContent fontContent = new FontContent();
 
             using (Library sharpFontLib = new Library())
-            using (Face face = sharpFontLib.NewFace(fontName, 0))
+            using (Face face = sharpFontLib.NewFace(faceInfo.FontFile, faceInfo.FaceIndex))
             {
                 float size = (96f/72f) * input.Size;
                 int fixedSize = (int)(size * 64);

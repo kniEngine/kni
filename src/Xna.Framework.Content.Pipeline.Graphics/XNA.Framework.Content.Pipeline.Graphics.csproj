@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Graphics\Font\CharacterRegion.cs" />
     <Compile Include="Graphics\Font\CharacterRegionTypeConverter.cs" />
+    <Compile Include="Graphics\Font\FontFamilyInfo.cs" />
     <Compile Include="Graphics\Font\Glyph.cs" />
     <Compile Include="Graphics\Font\GlyphPacker.cs" />
     <Compile Include="Graphics\Font\GrowRule.cs" />
