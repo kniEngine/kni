@@ -5,6 +5,22 @@ using SharpFont;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
+    internal class FontFamilyInfo
+    {
+        public readonly string FamilyName;
+        public readonly List<FontFaceInfo> Faces = new List<FontFaceInfo>();
+
+        public FontFamilyInfo(string familyName)
+        {
+            FamilyName = familyName;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{{FamilyName: {0}, FacesCount: {1} }}", FamilyName, Faces.Count);
+        }
+    }
+
     internal class FontFaceInfo
     {
         public readonly string FontFile;
