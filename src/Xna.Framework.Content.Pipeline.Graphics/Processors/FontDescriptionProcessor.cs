@@ -157,7 +157,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private FontFaceInfo FindFontFile(FontDescription input, ContentProcessorContext context)
         {
-            // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
                 string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
