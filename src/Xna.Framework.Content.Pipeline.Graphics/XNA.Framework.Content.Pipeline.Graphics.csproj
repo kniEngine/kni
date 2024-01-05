@@ -24,12 +24,12 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40' ">
-    <Reference Include="AssimpNet" >
+    <Reference Include="AssimpNet">
       <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\net40\AssimpNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
-    <Reference Include="AssimpNet" >
+    <Reference Include="AssimpNet">
       <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\netstandard1.3\AssimpNet.dll</HintPath>
     </Reference>
   </ItemGroup>
