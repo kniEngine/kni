@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(faceInfo.FontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
 
-            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
             string fileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
+            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
             if (!extensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
@@ -139,10 +139,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private FontFaceInfo FindLocalFontFile(FontDescription input, ContentProcessorContext context)
         {
-            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-
             string fontsDirectory = Path.GetDirectoryName(input.Identity.SourceFilename);
 
+            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
             foreach (string ext in extensions)
             {
                 string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
@@ -158,8 +157,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private FontFaceInfo FindFontFile(FontDescription input, ContentProcessorContext context)
         {
-            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-
             // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
@@ -187,6 +184,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     }
                 }
 
+                string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
                 foreach (string ext in extensions)
                 {
                     string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
@@ -232,6 +230,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 foreach (string dir in directories)
                 {
+                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
                     foreach (string ext in extensions)
                     {
                         string fontFile = Path.Combine(dir, input.FontName + ext);
