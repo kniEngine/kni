@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessor(DisplayName = "Sprite Font Description - MonoGame")]
     public class FontDescriptionProcessor : ContentProcessor<FontDescription, SpriteFontContent>
     {
+        private static object _fontFamilyInfoCacheLocker = new object();
+
         SmoothingMode _smoothing = SmoothingMode.Normal;
 
         [DefaultValue(true)]
@@ -159,58 +161,64 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             if (CurrentPlatform.OS == OS.Windows)
             {
-                string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-                foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
+                lock (_fontFamilyInfoCacheLocker)
                 {
-                    RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                    string[] valueNames = subkey.GetValueNames();
-                    Array.Sort(valueNames);
-
-                    foreach (string font in valueNames)
+                    string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                    foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                     {
-                        if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
+                        RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
+                        string[] valueNames = subkey.GetValueNames();
+                        Array.Sort(valueNames);
+
+                        foreach (string font in valueNames)
                         {
-                            string fontFile = subkey.GetValue(font).ToString();
-                            // The registry value might have trailing NUL characters
-                            fontFile.TrimEnd(new char[] { '\0' });
+                            if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
+                            {
+                                string fontFile = subkey.GetValue(font).ToString();
+                                // The registry value might have trailing NUL characters
+                                fontFile.TrimEnd(new char[] { '\0' });
 
-                            if (!Path.IsPathRooted(fontFile))
-                                fontFile = Path.Combine(fontsDirectory, fontFile);
+                                if (!Path.IsPathRooted(fontFile))
+                                    fontFile = Path.Combine(fontsDirectory, fontFile);
 
+                                FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                                return fontFaceInfo;
+                            }
+                        }
+                    }
+
+                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+                    foreach (string ext in extensions)
+                    {
+                        string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
+                        if (File.Exists(fontFile))
+                        {
                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
                             return fontFaceInfo;
                         }
                     }
                 }
-
-                string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                foreach (string ext in extensions)
-                {
-                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                    if (File.Exists(fontFile))
-                    {
-                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                        return fontFaceInfo;
-                    }
-                }
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
             {
-                List<string> directories = new List<string>();
-                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                directories.Add("/Library/Fonts");
-                directories.Add("/System/Library/Fonts/Supplemental");
-
-                foreach (string dir in directories)
+                lock (_fontFamilyInfoCacheLocker)
                 {
-                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                    foreach (string ext in extensions)
+                    List<string> directories = new List<string>();
+                    directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                    directories.Add("/Library/Fonts");
+                    directories.Add("/System/Library/Fonts/Supplemental");
+
+                    foreach (string dir in directories)
                     {
-                        string fontFile = Path.Combine(dir, input.FontName + ext);
-                        if (File.Exists(fontFile))
+                        string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+                        foreach (string ext in extensions)
                         {
-                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                            return fontFaceInfo;
+                            string fontFile = Path.Combine(dir, input.FontName + ext);
+                            if (File.Exists(fontFile))
+                            {
+                                FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                                return fontFaceInfo;
+                            }
                         }
                     }
                 }
