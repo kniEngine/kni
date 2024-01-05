@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                                 fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
                                             }
 
-                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags);
+                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags, face.StyleName, face.FaceFlags);
                                             fontFamilyInfo.Faces.Add(fontFaceInfo);
                                         }
                                     }
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                                 fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
                                             }
 
-                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags);
+                                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, face.StyleFlags, face.StyleName, face.FaceFlags);
                                             fontFamilyInfo.Faces.Add(fontFaceInfo);
                                         }
                                     }
