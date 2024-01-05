@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly SamplerState _samplerStatePointWrap;
 
         private readonly SamplerState[] _samplers;
-        internal readonly SamplerState[] _actualSamplers;
+        protected internal readonly SamplerState[] _actualSamplers;
 
 
         internal SamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
