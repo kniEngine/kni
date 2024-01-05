@@ -141,19 +141,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private string FindLocalFontFile(FontDescription input, ContentProcessorContext context)
         {
             string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-            List<string> directories = new List<string>();
 
             string fontsDirectory = Path.GetDirectoryName(input.Identity.SourceFilename);
-            directories.Add(fontsDirectory);
 
-            foreach (string dir in directories)
+            foreach (string ext in extensions)
             {
-                foreach (string ext in extensions)
-                {
-                    string fontFile = Path.Combine(dir, input.FontName + ext);
-                    if (File.Exists(fontFile))
-                        return fontFile;
-                }
+                string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
+                if (File.Exists(fontFile))
+                    return fontFile;
             }
 
             return null;
@@ -223,28 +218,34 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private string FindFontFile(FontDescription input, ContentProcessorContext context)
         {
             string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-            List<string> directories = new List<string>();
 
             // Add special per platform directories
             if (CurrentPlatform.OS == OS.Windows)
             {
                 string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-                directories.Add(fontsDirectory);
+
+                foreach (string ext in extensions)
+                {
+                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
+                    if (File.Exists(fontFile))
+                        return fontFile;
+                }
             }
             else if (CurrentPlatform.OS == OS.MacOSX)
             {
+                List<string> directories = new List<string>();
                 directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
                 directories.Add("/Library/Fonts");
                 directories.Add("/System/Library/Fonts/Supplemental");
-            }
 
-            foreach (string dir in directories)
-            {
-                foreach (string ext in extensions)
+                foreach (string dir in directories)
                 {
-                    string fontFile = Path.Combine(dir, input.FontName + ext);
-                    if (File.Exists(fontFile))
-                        return fontFile;
+                    foreach (string ext in extensions)
+                    {
+                        string fontFile = Path.Combine(dir, input.FontName + ext);
+                        if (File.Exists(fontFile))
+                            return fontFile;
+                    }
                 }
             }
 
