@@ -48,13 +48,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string fontFile = null;
             fontFile = FindLocalFontFile(input, context);
 
-            if (string.IsNullOrWhiteSpace(fontFile))
+            if (fontFile == null)
                 fontFile = FindFont(input, context);
 
-            if (string.IsNullOrWhiteSpace(fontFile))
+            if (fontFile == null)
                 fontFile = FindFontFile(input, context);
 
-            if (!File.Exists(fontFile))
+            if (fontFile == null || !File.Exists(fontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ fontFile +"\".");
 
             List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            return String.Empty;
+            return null;
         }
 
 
@@ -217,7 +217,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            return String.Empty;
+            return null;
         }
 
         private string FindFontFile(FontDescription input, ContentProcessorContext context)
@@ -248,7 +248,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            return String.Empty;
+            return null;
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
