@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public class Texture2D : Texture
     {
-        internal ITexture2DStrategy _strategyTexture2D;
+        protected internal ITexture2DStrategy _strategyTexture2D;
 
         internal float TexelWidth { get; private set; }
         internal float TexelHeight { get; private set; }
