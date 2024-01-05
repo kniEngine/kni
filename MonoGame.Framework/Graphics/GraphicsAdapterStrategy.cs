@@ -13,14 +13,14 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     public abstract class GraphicsAdapterStrategy
     {
-        virtual internal string Platform_DeviceName { get; set; }
-        virtual internal string Platform_Description { get; set; }
-        virtual internal int Platform_DeviceId { get; set; }
-        virtual internal int Platform_Revision { get; set; }
-        virtual internal int Platform_VendorId { get; set; }
-        virtual internal int Platform_SubSystemId { get; set; }
-        virtual internal IntPtr Platform_MonitorHandle { get; set; }
-        virtual internal bool Platform_IsDefaultAdapter { get; set; }
+        public virtual string Platform_DeviceName { get; set; }
+        public virtual string Platform_Description { get; set; }
+        public virtual int Platform_DeviceId { get; set; }
+        public virtual int Platform_Revision { get; set; }
+        public virtual int Platform_VendorId { get; set; }
+        public virtual int Platform_SubSystemId { get; set; }
+        public virtual IntPtr Platform_MonitorHandle { get; set; }
+        public virtual bool Platform_IsDefaultAdapter { get; set; }
 
         public abstract DisplayModeCollection Platform_SupportedDisplayModes { get; }
         public abstract DisplayMode Platform_CurrentDisplayMode { get; }
