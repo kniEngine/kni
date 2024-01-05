@@ -168,13 +168,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
                         {
-                            string fontPath = subkey.GetValue(font).ToString();
+                            string fontFile = subkey.GetValue(font).ToString();
                             // The registry value might have trailing NUL characters
-                            fontPath.TrimEnd(new char[] { '\0' });
+                            fontFile.TrimEnd(new char[] { '\0' });
 
-                            if (!Path.IsPathRooted(fontPath))
-                                fontPath = Path.Combine(fontsDirectory, fontPath);
-                            return fontPath;
+                            if (!Path.IsPathRooted(fontFile))
+                                fontFile = Path.Combine(fontsDirectory, fontFile);
+                            return fontFile;
                         }
                     }
                 }
@@ -195,7 +195,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 string[] split = stdout.Split(':');
                 if (split.Length >= 2)
                 {
-                    string fontPath = split[0];
+                    string fontFile = split[0];
                     string fontName = split[1];
 
                     // check font family, fontconfig might return a fallback
@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     foreach (string family in families)
                     {
                         if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
-                            return fontPath;
+                            return fontFile;
                     }
                 }
             }
