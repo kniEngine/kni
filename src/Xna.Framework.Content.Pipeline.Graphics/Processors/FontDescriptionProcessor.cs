@@ -177,29 +177,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                                 foreach (string font in valueNames)
                                 {
+                                    string fontFile = subkey.GetValue(font).ToString();
+                                    // The registry value might have trailing NUL characters
+                                    fontFile.TrimEnd(new char[] { '\0' });
+
+                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+                                    if (!extensions.Contains(fontExtension))
+                                        continue;
+
+                                    if (!Path.IsPathRooted(fontFile))
+                                        fontFile = Path.Combine(fontsDirectory, fontFile);
+                                    if (!File.Exists(fontFile))
+                                        continue;
+
                                     if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        string fontFile = subkey.GetValue(font).ToString();
-                                        // The registry value might have trailing NUL characters
-                                        fontFile.TrimEnd(new char[] { '\0' });
-
-                                        if (!Path.IsPathRooted(fontFile))
-                                            fontFile = Path.Combine(fontsDirectory, fontFile);
-
                                         FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
                                         return fontFaceInfo;
                                     }
-                                }
-                            }
-
-                            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                            foreach (string ext in extensions)
-                            {
-                                string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                                if (File.Exists(fontFile))
-                                {
-                                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                                    return fontFaceInfo;
                                 }
                             }
                         }
@@ -231,11 +227,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                             foreach (string fontsDirectory in directories)
                             {
-                                string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                                foreach (string ext in extensions)
+                                foreach (string fontFile in Directory.GetFiles(fontsDirectory))
                                 {
-                                    string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                                    if (File.Exists(fontFile))
+                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
+                                    if (!extensions.Contains(fontExtension))
+                                        continue;
+
+                                    if (Path.GetFileNameWithoutExtension(fontFile).ToUpperInvariant() == input.FontName.ToUpperInvariant())
                                     {
                                         FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
                                         return fontFaceInfo;
