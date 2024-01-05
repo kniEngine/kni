@@ -194,6 +194,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     }
                 }
             }
+            else if (CurrentPlatform.OS == OS.MacOSX)
+            {
+                List<string> directories = new List<string>();
+                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                directories.Add("/Library/Fonts");
+                directories.Add("/System/Library/Fonts/Supplemental");
+
+                foreach (string dir in directories)
+                {
+                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+                    foreach (string ext in extensions)
+                    {
+                        string fontFile = Path.Combine(dir, input.FontName + ext);
+                        if (File.Exists(fontFile))
+                        {
+                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                            return fontFaceInfo;
+                        }
+                    }
+                }
+            }
             else if (CurrentPlatform.OS == OS.Linux)
             {
                 string stdout, stderr;
@@ -213,27 +234,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     foreach (string family in families)
                     {
                         if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                            return fontFaceInfo;
-                        }
-                    }
-                }
-            }
-            else if (CurrentPlatform.OS == OS.MacOSX)
-            {
-                List<string> directories = new List<string>();
-                directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                directories.Add("/Library/Fonts");
-                directories.Add("/System/Library/Fonts/Supplemental");
-
-                foreach (string dir in directories)
-                {
-                    string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                    foreach (string ext in extensions)
-                    {
-                        string fontFile = Path.Combine(dir, input.FontName + ext);
-                        if (File.Exists(fontFile))
                         {
                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
                             return fontFaceInfo;
