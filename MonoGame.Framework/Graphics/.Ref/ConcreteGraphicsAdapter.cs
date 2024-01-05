@@ -11,42 +11,42 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
-        override internal string Platform_DeviceName
+        public override string Platform_DeviceName
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal string Platform_Description
+        public override string Platform_Description
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal int Platform_DeviceId
+        public override int Platform_DeviceId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal int Platform_Revision
+        public override int Platform_Revision
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal int Platform_VendorId
+        public override int Platform_VendorId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal int Platform_SubSystemId
+        public override int Platform_SubSystemId
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal IntPtr Platform_MonitorHandle
+        public override IntPtr Platform_MonitorHandle
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        override internal bool Platform_IsDefaultAdapter
+        public override bool Platform_IsDefaultAdapter
         {
             get { throw new PlatformNotSupportedException(); }
         }

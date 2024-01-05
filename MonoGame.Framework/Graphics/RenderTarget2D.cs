@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public class RenderTarget2D : Texture2D, IRenderTarget
 	{
-        internal IRenderTarget2DStrategy _strategyRenderTarget2D;
+        protected internal IRenderTarget2DStrategy _strategyRenderTarget2D;
 
 		public DepthFormat DepthStencilFormat { get { return _strategyRenderTarget2D.DepthStencilFormat; } }
 		

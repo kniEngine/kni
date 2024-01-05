@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void Clear()
+        public override void Clear()
         {
             for (int slot = 0; slot < _buffers.Length; slot++)
                 _buffers[slot] = null;

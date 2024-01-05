@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal TextureCollection _vertexTextures;
         internal TextureCollection _pixelTextures;
 
-        internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
+        protected internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         internal int _currentRenderTargetCount;
         internal readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
 
@@ -318,7 +318,7 @@ namespace Microsoft.Xna.Platform.Graphics
             
         }
 
-        internal void SetVertexBuffer(VertexBuffer vertexBuffer)
+        protected internal void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
             if (vertexBuffer != null)
             {
@@ -434,7 +434,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
         }
 
-        internal static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)
+        protected internal static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)
         {
             switch (primitiveType)
             {

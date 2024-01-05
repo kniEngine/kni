@@ -23,43 +23,43 @@ namespace Microsoft.Xna.Platform.Graphics
 		internal UIScreen _screen;
 
 
-        override internal string Platform_DeviceName
+        public override string Platform_DeviceName
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal string Platform_Description
+        public override string Platform_Description
         {
             get { return _description; }
             set { _description = value; }
        }
 
-        override internal int Platform_DeviceId
+        public override int Platform_DeviceId
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal int Platform_Revision
+        public override int Platform_Revision
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal int Platform_VendorId
+        public override int Platform_VendorId
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal int Platform_SubSystemId
+        public override int Platform_SubSystemId
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal IntPtr Platform_MonitorHandle
+        public override IntPtr Platform_MonitorHandle
         {
             get { throw new NotImplementedException(); }
         }
 
-        override internal bool Platform_IsDefaultAdapter
+        public override bool Platform_IsDefaultAdapter
         {
             get { return base.Platform_IsDefaultAdapter; }
             set { base.Platform_IsDefaultAdapter = value; }

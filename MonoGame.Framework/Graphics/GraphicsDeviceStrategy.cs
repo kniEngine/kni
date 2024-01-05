@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly GraphicsProfile _graphicsProfile;
         private bool _useHalfPixelOffset;
         private PresentationParameters _presentationParameters;
-        internal GraphicsCapabilities _capabilities;
-        internal GraphicsContext _mainContext;
+        protected internal GraphicsCapabilities _capabilities;
+        protected internal GraphicsContext _mainContext;
 
         /// <summary>
         /// The cache of effects from unique byte streams.
