@@ -166,38 +166,41 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     if (_fontFamilyInfoCache == null)
                     {
-                        string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
-                        foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
+                        using (Library sharpFontLib = new Library())
                         {
-                            RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
-                            string[] valueNames = subkey.GetValueNames();
-                            Array.Sort(valueNames);
-
-                            foreach (string font in valueNames)
+                            string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+                            foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
                             {
-                                if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
+                                RegistryKey subkey = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts", false);
+                                string[] valueNames = subkey.GetValueNames();
+                                Array.Sort(valueNames);
+
+                                foreach (string font in valueNames)
                                 {
-                                    string fontFile = subkey.GetValue(font).ToString();
-                                    // The registry value might have trailing NUL characters
-                                    fontFile.TrimEnd(new char[] { '\0' });
+                                    if (font.StartsWith(input.FontName, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        string fontFile = subkey.GetValue(font).ToString();
+                                        // The registry value might have trailing NUL characters
+                                        fontFile.TrimEnd(new char[] { '\0' });
 
-                                    if (!Path.IsPathRooted(fontFile))
-                                        fontFile = Path.Combine(fontsDirectory, fontFile);
+                                        if (!Path.IsPathRooted(fontFile))
+                                            fontFile = Path.Combine(fontsDirectory, fontFile);
 
+                                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                                        return fontFaceInfo;
+                                    }
+                                }
+                            }
+
+                            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+                            foreach (string ext in extensions)
+                            {
+                                string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
+                                if (File.Exists(fontFile))
+                                {
                                     FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
                                     return fontFaceInfo;
                                 }
-                            }
-                        }
-
-                        string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                        foreach (string ext in extensions)
-                        {
-                            string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                            if (File.Exists(fontFile))
-                            {
-                                FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                                return fontFaceInfo;
                             }
                         }
                     }
@@ -219,21 +222,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     if (_fontFamilyInfoCache == null)
                     {
-                        List<string> directories = new List<string>();
-                        directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
-                        directories.Add("/Library/Fonts");
-                        directories.Add("/System/Library/Fonts/Supplemental");
-
-                        foreach (string dir in directories)
+                        using (Library sharpFontLib = new Library())
                         {
-                            string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
-                            foreach (string ext in extensions)
+                            List<string> directories = new List<string>();
+                            directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
+                            directories.Add("/Library/Fonts");
+                            directories.Add("/System/Library/Fonts/Supplemental");
+
+                            foreach (string dir in directories)
                             {
-                                string fontFile = Path.Combine(dir, input.FontName + ext);
-                                if (File.Exists(fontFile))
+                                string[] extensions = new string[] { "", ".ttf", ".ttc", ".otf" };
+                                foreach (string ext in extensions)
                                 {
-                                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                                    return fontFaceInfo;
+                                    string fontFile = Path.Combine(dir, input.FontName + ext);
+                                    if (File.Exists(fontFile))
+                                    {
+                                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                                        return fontFaceInfo;
+                                    }
                                 }
                             }
                         }
