@@ -3,14 +3,15 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics
 {
-    internal class PresentationEventArgs : EventArgs
+    public class PresentationEventArgs : EventArgs
     {
         public PresentationParameters PresentationParameters { get; private set; }
 
-        public PresentationEventArgs(PresentationParameters presentationParameters)
+        internal PresentationEventArgs(PresentationParameters presentationParameters)
         {
             PresentationParameters = presentationParameters;
         }
