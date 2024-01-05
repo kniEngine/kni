@@ -199,19 +199,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     string fontName = split[1];
 
                     // check font family, fontconfig might return a fallback
+                    string[] families = new string[] { fontName };
                     if (fontName.Contains(","))
+                        families = fontName.Split(','); // this file defines multiple family names
+                    foreach (string family in families)
                     {
-                        // this file defines multiple family names
-                        string[] families = fontName.Split(',');
-                        foreach (string family in families)
-                        {
-                            if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
-                                return fontPath;
-                        }
-                    }
-                    else
-                    {
-                        if (input.FontName.Equals(fontName, StringComparison.InvariantCultureIgnoreCase))
+                        if (input.FontName.Equals(family, StringComparison.InvariantCultureIgnoreCase))
                             return fontPath;
                     }
                 }
