@@ -205,6 +205,7 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
     <Compile Include="Content\ContentTypeReader.cs" />
     <Compile Include="Content\ContentTypeReaderManager.cs" />
+    <Compile Include="Content\DxtDecoder.cs" />
     <Compile Include="Content\LzxDecoder.cs" />
     <Compile Include="Content\ResourceContentManager.cs" />
 
@@ -376,7 +377,6 @@
     <Compile Include="Graphics\DirectionalLight.cs" />
     <Compile Include="Graphics\DisplayMode.cs" />
     <Compile Include="Graphics\DisplayModeCollection.cs" />
-    <Compile Include="Graphics\DxtUtil.cs" />
     <Compile Include="Graphics\GraphicsAdapter.cs" />
     <Compile Include="Graphics\GraphicsAdaptersProviderStrategy.cs" />
     <Compile Include="Graphics\GraphicsAdapterStrategy.cs" />

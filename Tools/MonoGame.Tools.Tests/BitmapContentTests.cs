@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Content;
+using NUnit.Framework;
 
 namespace MonoGame.Tests.ContentPipeline
 {
@@ -205,11 +205,11 @@ namespace MonoGame.Tests.ContentPipeline
         {
             byte[] rgba;
             if (bitmap is Dxt1BitmapContent)
-                rgba = DxtUtil.DecompressDxt1(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
+                rgba = DxtDecoder.DecompressDxt1(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
             else if (bitmap is Dxt3BitmapContent)
-                rgba = DxtUtil.DecompressDxt3(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
+                rgba = DxtDecoder.DecompressDxt3(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
             else if (bitmap is Dxt5BitmapContent)
-                rgba = DxtUtil.DecompressDxt5(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
+                rgba = DxtDecoder.DecompressDxt5(bitmap.GetPixelData(), bitmap.Width, bitmap.Height);
             else
                 rgba = bitmap.GetPixelData();
 

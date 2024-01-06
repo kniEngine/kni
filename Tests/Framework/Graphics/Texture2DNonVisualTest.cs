@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
@@ -676,7 +677,7 @@ namespace MonoGame.Tests.Graphics
                 t.GetData(m, null, b, 0, size);
 
                 // Decompress it to validate it.
-                var b2 = DxtUtil.DecompressDxt1(b, t.Width >> m, t.Height >> m);
+                var b2 = DxtDecoder.DecompressDxt1(b, t.Width >> m, t.Height >> m);
 
                 // Should be a red opaque texture.
                 for (var p=0; p < b2.Length; p+=4)
