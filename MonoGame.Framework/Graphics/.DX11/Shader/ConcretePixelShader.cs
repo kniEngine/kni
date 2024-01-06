@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void CreatePixelShader()
         {
-            _pixelShader = new D3D11.PixelShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode);
+            _pixelShader = new D3D11.PixelShader(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode);
         }
 
         protected override void Dispose(bool disposing)

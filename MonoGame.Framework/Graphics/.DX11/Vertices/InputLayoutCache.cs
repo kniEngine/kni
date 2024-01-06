@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // Flag to print warning only once per shader.
         private bool _printWarning = true;
 #endif
-        private readonly GraphicsDevice _graphicsDevice;
+        private readonly GraphicsDeviceStrategy _graphicsDeviceStrategy;
         private readonly byte[] _shaderByteCode;
         private readonly Dictionary<VertexInputLayout, D3D11.InputLayout> _cache;
 
@@ -32,12 +32,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="shaderByteCode">The byte code of the vertex shader.</param>
-        public InputLayoutCache(GraphicsDevice graphicsDevice, byte[] shaderByteCode)
+        public InputLayoutCache(GraphicsDeviceStrategy graphicsDeviceStrategy, byte[] shaderByteCode)
         {
-            Debug.Assert(graphicsDevice != null);
+            Debug.Assert(graphicsDeviceStrategy != null);
             Debug.Assert(shaderByteCode != null);
 
-            _graphicsDevice = graphicsDevice;
+            _graphicsDeviceStrategy = graphicsDeviceStrategy;
             _shaderByteCode = shaderByteCode;
             _cache = new Dictionary<VertexInputLayout, D3D11.InputLayout>();
         }
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
             D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
             try
             {
-                inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                inputLayout = new D3D11.InputLayout(_graphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
             }
             catch (DX.SharpDXException ex)
             {
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 try
                 {
-                    inputLayout = new D3D11.InputLayout(_graphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
+                    inputLayout = new D3D11.InputLayout(_graphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
 
                     // Workaround succeeded? This means that there is a vertex shader that needs
                     // to be updated.

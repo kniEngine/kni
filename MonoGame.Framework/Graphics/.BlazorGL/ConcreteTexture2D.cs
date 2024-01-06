@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException("startIndex");
 
             System.Diagnostics.Debug.Assert(_glTexture != null);
-            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
             GL.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotImplementedException("startIndex");
 
             System.Diagnostics.Debug.Assert(_glTexture != null);
-            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
             GL.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
 
@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = WebGLTexParam.CLAMP_TO_EDGE;
 
-            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
             GL.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
@@ -309,7 +309,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, GraphicsDevice.Strategy.CurrentContext.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, base.GraphicsDeviceStrategy.CurrentContext.Strategy);
 
             base.Dispose(disposing);
         }

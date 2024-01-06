@@ -15,6 +15,11 @@ namespace Microsoft.Xna.Platform.Graphics
         private WeakDeviceStrategyEvents _deviceStrategyEvents;
         private readonly WeakReference _graphicsResourceRef = new WeakReference(null);
 
+        public GraphicsDeviceStrategy GraphicsDeviceStrategy
+        {
+            get { return _deviceStrategy; }
+        }
+
         public GraphicsDevice GraphicsDevice
         { 
             get 

@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
                     DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
                                                   ? context._currentRenderTargetBindings[0].DepthFormat
-                                                  : this.GraphicsDevice.PresentationParameters.DepthStencilFormat;
+                                                  : base.GraphicsDeviceStrategy.PresentationParameters.DepthStencilFormat;
                     int depthMul;
                     switch (activeDepthFormat)
                     {
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 context._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
-            if (this.GraphicsDevice.Strategy.Capabilities.SupportsDepthClamp &&
+            if (base.GraphicsDeviceStrategy.Capabilities.SupportsDepthClamp &&
                 (force ||
                  this.DepthClipEnable != context._lastRasterizerState.DepthClipEnable))
             {

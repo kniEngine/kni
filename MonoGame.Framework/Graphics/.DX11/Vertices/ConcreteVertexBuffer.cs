@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
             bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
 
-            _buffer = new D3D11.Buffer(this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+            _buffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
         internal D3D11.Buffer CreateStagingBuffer()
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
             stagingDesc.Usage = D3D11.ResourceUsage.Staging;
             stagingDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
+            return new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
         }
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
@@ -90,9 +90,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     region.Left = offsetInBytes;
                     region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
-                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                    lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                     {
-                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.UpdateSubresource(box, _buffer, 0, region);
                     }
@@ -100,9 +100,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 else
                 {
                     using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
-                        lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                        lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                         {
-                            D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                            D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
@@ -142,9 +142,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
-                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                    lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                     {
-                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 

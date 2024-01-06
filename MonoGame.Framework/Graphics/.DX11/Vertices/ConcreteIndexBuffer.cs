@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
             bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
 
-            _buffer = new D3D11.Buffer(this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+            _buffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
 
@@ -98,9 +98,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 region.Left = offsetInBytes;
                 region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, _buffer, 0, region);
                 }
@@ -121,11 +121,11 @@ namespace Microsoft.Xna.Platform.Graphics
             stagingDesc.CpuAccessFlags = D3D11.CpuAccessFlags.Read | D3D11.CpuAccessFlags.Write;
             stagingDesc.Usage = D3D11.ResourceUsage.Staging;
             stagingDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
-            using (D3D11.Buffer stagingBuffer = new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
+            using (D3D11.Buffer stagingBuffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc))
             {
-                lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.CopyResource(_buffer, stagingBuffer);
                 }
@@ -138,9 +138,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                     DX.DataPointer DataPointer = new DX.DataPointer(dataPtr, elementCount * TsizeInBytes);
 
-                    lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+                    lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
                     {
-                        D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         // Map the staging resource to a CPU accessible memory
                         DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);

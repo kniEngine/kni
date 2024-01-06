@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureMainThread();
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+                base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureMainThread();
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+                base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Threading.EnsureMainThread();
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if GLES
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #else
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
 
-            this.GraphicsDevice.CurrentContext.Textures.Strategy.Dirty(0);
+            base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
