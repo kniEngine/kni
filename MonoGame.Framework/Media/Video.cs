@@ -19,27 +19,27 @@ namespace Microsoft.Xna.Framework.Media
         private VideoStrategy _strategy;
 
         internal VideoStrategy Strategy { get { return _strategy; } }
-        internal GraphicsDevice GraphicsDevice { get { return Strategy.GraphicsDevice; } }
+        internal GraphicsDevice GraphicsDevice { get { return _strategy.GraphicsDevice; } }
 
         #region Public API
 
         /// <summary>
         /// I actually think this is a file PATH...
         /// </summary>
-        public string FileName { get { return Strategy.FileName; } }
+        public string FileName { get { return _strategy.FileName; } }
 
 		/// <summary>
 		/// Gets the duration of the Video.
         /// </summary>
-        public TimeSpan Duration { get { return Strategy.Duration; } }
+        public TimeSpan Duration { get { return _strategy.Duration; } }
 
         /// <summary>
         /// Gets the frame rate of this video.
         /// </summary>
         public float FramesPerSecond
         {
-            get { return Strategy.FramesPerSecond; }
-            internal set { Strategy.FramesPerSecond = value; }
+            get { return _strategy.FramesPerSecond; }
+            internal set { _strategy.FramesPerSecond = value; }
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public int Height
         {
-            get { return Strategy.Height; }
-            internal set { Strategy.Height = value; }
+            get { return _strategy.Height; }
+            internal set { _strategy.Height = value; }
         }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public VideoSoundtrackType VideoSoundtrackType
         {
-            get { return Strategy.VideoSoundtrackType; }
-            internal set { Strategy.VideoSoundtrackType = value; }
+            get { return _strategy.VideoSoundtrackType; }
+            internal set { _strategy.VideoSoundtrackType = value; }
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public int Width
         {
-            get { return Strategy.Width; }
-            internal set { Strategy.Width = value; }
+            get { return _strategy.Width; }
+            internal set { _strategy.Width = value; }
 }
 
         #endregion

@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Media
 
         public bool Equals(Song other)
         {   
-            return (other != null && this.Strategy.Filename == other.Strategy.Filename);
+            return (other != null && this._strategy.Filename == other._strategy.Filename);
         }
 
         public override bool Equals(Object obj)

@@ -20,17 +20,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public BufferUsage BufferUsage
         {
-            get { return Strategy.BufferUsage; }
+            get { return _strategy.BufferUsage; }
         }
 
         public int IndexCount
         {
-            get { return Strategy.IndexCount; }
+            get { return _strategy.IndexCount; }
         }
 
         public IndexElementSize IndexElementSize
         {
-            get { return Strategy.IndexElementSize; }
+            get { return _strategy.IndexElementSize; }
         }
 
 
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (BufferUsage == BufferUsage.WriteOnly)
                 throw new NotSupportedException("This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
 
-            Strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount);
+            _strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data.Length < (startIndex + elementCount))
                 throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
 
-            Strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
+            _strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
 	}
 }

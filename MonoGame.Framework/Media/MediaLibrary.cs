@@ -17,9 +17,9 @@ namespace Microsoft.Xna.Framework.Media
         public MediaLibraryStrategy Strategy { get { return _strategy; } }
         public bool IsDisposed { get { return _isDisposed; } }
 
-        public MediaSource MediaSource { get { return Strategy.MediaSource; } }
-        public AlbumCollection Albums { get { return Strategy.Albums;  } }
-        public SongCollection Songs { get { return Strategy.Songs; } }
+        public MediaSource MediaSource { get { return _strategy.MediaSource; } }
+        public AlbumCollection Albums { get { return _strategy.Albums;  } }
+        public SongCollection Songs { get { return _strategy.Songs; } }
         //public ArtistCollection Artists { get; private set; }
         //public GenreCollection Genres { get; private set; }
         //public PlaylistCollection Playlists { get; private set; }
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <param name="progressCallback">Callback that reports back the progress of the music library loading in percents (0-100).</param>
         public void Load(Action<int> progressCallback = null)
 	    {
-            Strategy.Load(progressCallback);
+            _strategy.Load(progressCallback);
         }
 		
 		

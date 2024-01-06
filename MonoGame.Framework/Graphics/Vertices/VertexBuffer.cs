@@ -19,17 +19,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public int VertexCount
         {
-            get { return Strategy.VertexCount; }
+            get { return _strategy.VertexCount; }
         }
 
 		public VertexDeclaration VertexDeclaration
         {
-            get { return Strategy.VertexDeclaration; }
+            get { return _strategy.VertexDeclaration; }
         }
 
 		public BufferUsage BufferUsage
         {
-            get { return Strategy.BufferUsage; }
+            get { return _strategy.BufferUsage; }
         }
 		
 		
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (elementCount > 1 && elementCount * vertexStride > vertexByteSize)
                 throw new InvalidOperationException("The array is not the correct size for the amount of data requested.");
 
-            Strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride);
+            _strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -210,9 +210,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (elementCount > 1 && (elementCount * vertexStride > bufferSize))
                 throw new InvalidOperationException("The vertex stride is larger than the vertex buffer.");
             if (vertexStride < elementSizeInBytes)
-                throw new ArgumentOutOfRangeException("The vertex stride must be greater than or equal to the size of the specified data (" + elementSizeInBytes + ").");            
+                throw new ArgumentOutOfRangeException("The vertex stride must be greater than or equal to the size of the specified data (" + elementSizeInBytes + ").");
 
-            Strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options, bufferSize, elementSizeInBytes);
+            _strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options, bufferSize, elementSizeInBytes);
         }
     }
 }
