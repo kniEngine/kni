@@ -187,9 +187,10 @@
     <Compile Include="OpenAssetImporter.cs" />
     <Compile Include="TextureImporter.cs" />
     <Compile Include="XImporter.cs" />
-    <Compile Include="Utilities\VectorConverterEx.cs" />
     <Compile Include="Utilities\FreeImageAPI.cs" />
     <Compile Include="Utilities\FreeImageAPIC.cs" />
+    <Compile Include="Utilities\GraphicsExtensions.cs" />
+    <Compile Include="Utilities\VectorConverterEx.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -203,9 +204,6 @@
     </Compile>
     <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
       <Link>Utilities\ReflectionHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MonoGame.Framework\Graphics\GraphicsExtensions.cs">
-      <Link>Utilities\GraphicsExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
   </ItemGroup>
