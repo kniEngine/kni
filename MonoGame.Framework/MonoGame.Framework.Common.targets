@@ -75,6 +75,7 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
     <Compile Include="Content\ContentTypeReader.cs" />
     <Compile Include="Content\ContentTypeReaderManager.cs" />
+    <Compile Include="Content\DxtDecoder.cs" />
     <Compile Include="Content\LzxDecoder.cs" />
     <Compile Include="Content\ResourceContentManager.cs" />
   </ItemGroup>

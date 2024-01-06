@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Content
                     case SurfaceFormat.Dxt1a:
 				        if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
 				        {
-				            levelData = DxtUtil.DecompressDxt1(levelData, levelWidth, levelHeight);
+				            levelData = DxtDecoder.DecompressDxt1(levelData, levelWidth, levelHeight);
 				            levelDataSizeInBytes = levelData.Length;
 				        }
 				        break;
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework.Content
 				            if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
-				                levelData = DxtUtil.DecompressDxt3(levelData, levelWidth, levelHeight);
+				                levelData = DxtDecoder.DecompressDxt3(levelData, levelWidth, levelHeight);
                                 levelDataSizeInBytes = levelData.Length;
                             }
 				        break;
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Content
 				            if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
-				                levelData = DxtUtil.DecompressDxt5(levelData, levelWidth, levelHeight);
+				                levelData = DxtDecoder.DecompressDxt5(levelData, levelWidth, levelHeight);
                                 levelDataSizeInBytes = levelData.Length;
                             }
 				        break;
