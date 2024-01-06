@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ARRAY, _vbo);
             GL.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+            base.GraphicsDeviceStrategy.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             GL.BufferData(WebGLBufferType.ARRAY,
                           (this.VertexDeclaration.VertexStride * this.VertexCount),
@@ -57,11 +57,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(GLVertexBuffer != null);
 
-            var GL = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
             GL.CheckGLError();
-            this.GraphicsDevice.CurrentContext.Strategy._vertexBuffersDirty = true;
+            base.GraphicsDeviceStrategy.CurrentContext.Strategy._vertexBuffersDirty = true;
 
             if (options == SetDataOptions.Discard)
             {

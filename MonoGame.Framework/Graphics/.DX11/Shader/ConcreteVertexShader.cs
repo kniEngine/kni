@@ -32,8 +32,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void CreateVertexShader()
         {
-            _vertexShader = new D3D11.VertexShader(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode, null);
-            _inputLayouts = new InputLayoutCache(GraphicsDevice, ShaderBytecode);
+            _vertexShader = new D3D11.VertexShader(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, ShaderBytecode, null);
+            _inputLayouts = new InputLayoutCache(base.GraphicsDeviceStrategy, ShaderBytecode);
         }
 
         protected override void PlatformGraphicsContextLost()

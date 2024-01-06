@@ -50,11 +50,11 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
             bufferDesc.SizeInBytes = this.BufferData.Length;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                return new D3D11.Buffer(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+                return new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
             }
         }
 

@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
             D3D11.QueryDescription queryDesc = new D3D11.QueryDescription();
             queryDesc.Flags = D3D11.QueryFlags.None;
             queryDesc.Type = D3D11.QueryType.Occlusion;
-            _query = new D3D11.Query(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
+            _query = new D3D11.Query(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, queryDesc);
         }
 
         public override void PlatformBegin()
@@ -63,9 +63,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = true;
             _isComplete = false;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.Begin(_query);
             }
@@ -79,9 +79,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = false;
             _queryPerformed = true;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.End(_query);
             }
@@ -89,9 +89,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool PlatformGetResult()
         {
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 ulong count;
                 _isComplete = d3dContext.GetData(_query, out count);

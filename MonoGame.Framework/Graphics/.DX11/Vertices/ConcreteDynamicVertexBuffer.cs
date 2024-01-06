@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bufferDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
             bufferDesc.StructureByteStride = 0;// StructureSizeInBytes
 
-            _buffer = new D3D11.Buffer(this.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
+            _buffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
@@ -50,9 +50,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
                 mode = D3D11.MapMode.WriteNoOverwrite;
 
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                 if (vertexStride == elementSizeInBytes)

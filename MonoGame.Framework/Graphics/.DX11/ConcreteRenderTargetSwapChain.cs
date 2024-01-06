@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                    ? DXGI.Format.B8G8R8A8_UNorm
                                    : preferredSurfaceFormat.ToDXFormat();
 
-            DXGI.SampleDescription multisampleDesc = GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
+            DXGI.SampleDescription multisampleDesc = base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
 
             D3D11.Device d3dDevice = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
@@ -151,9 +151,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public void Present()
         {
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 try
                 {

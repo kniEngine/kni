@@ -220,14 +220,14 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            return new D3D11.Texture2D(GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            return new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
         internal virtual void ResolveSubresource()
         {
-            lock (GraphicsDevice.Strategy.CurrentContext.Strategy.SyncHandle)
+            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = GraphicsDevice.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 System.Diagnostics.Debug.Assert(_msTexture != null);
 
