@@ -53,8 +53,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public Color DiscardColor
         {
-            get { return Strategy.DiscardColor; }
-            set { Strategy.DiscardColor = value; }
+            get { return _strategy.DiscardColor; }
+            set { _strategy.DiscardColor = value; }
         }
 
         /// <summary>
@@ -62,130 +62,130 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public GraphicsDebug GraphicsDebug
         {
-            get { return Strategy.GraphicsDebug; }
-            set { Strategy.GraphicsDebug = value; }
+            get { return _strategy.GraphicsDebug; }
+            set { _strategy.GraphicsDebug = value; }
         }
 
         public Rectangle ScissorRectangle
         {
-            get { return Strategy.ScissorRectangle; }
-            set { Strategy.ScissorRectangle = value; }
+            get { return _strategy.ScissorRectangle; }
+            set { _strategy.ScissorRectangle = value; }
         }
 
         public Viewport Viewport
         {
-            get { return Strategy.Viewport; }
-            set { Strategy.Viewport = value; }
+            get { return _strategy.Viewport; }
+            set { _strategy.Viewport = value; }
         }
 
         public BlendState BlendState
         {
-            get { return Strategy.BlendState; }
-            set { Strategy.BlendState = value; }
+            get { return _strategy.BlendState; }
+            set { _strategy.BlendState = value; }
         }
 
         public Color BlendFactor
         {
-            get { return Strategy.BlendFactor; }
-            set { Strategy.BlendFactor = value; }
+            get { return _strategy.BlendFactor; }
+            set { _strategy.BlendFactor = value; }
         }
 
         public DepthStencilState DepthStencilState
         {
-            get { return Strategy.DepthStencilState; }
-            set { Strategy.DepthStencilState = value; }
+            get { return _strategy.DepthStencilState; }
+            set { _strategy.DepthStencilState = value; }
         }
 
         public RasterizerState RasterizerState
         {
-            get { return Strategy.RasterizerState; }
-            set { Strategy.RasterizerState = value; }
+            get { return _strategy.RasterizerState; }
+            set { _strategy.RasterizerState = value; }
         }
 
         public SamplerStateCollection SamplerStates
         {
-            get { return Strategy.SamplerStates; }
+            get { return _strategy.SamplerStates; }
         }
 
         public SamplerStateCollection VertexSamplerStates
         {
-            get { return Strategy.VertexSamplerStates; }
+            get { return _strategy.VertexSamplerStates; }
         }
 
         public TextureCollection Textures
         {
-            get { return Strategy.Textures; }
+            get { return _strategy.Textures; }
         }
 
         public TextureCollection VertexTextures
         {
-            get { return Strategy.VertexTextures; }
+            get { return _strategy.VertexTextures; }
         }
 
         public IndexBuffer Indices
         {
-            get { return Strategy.Indices; }
-            set { Strategy.Indices = value; }
+            get { return _strategy.Indices; }
+            set { _strategy.Indices = value; }
         }
 
 
-        public int RenderTargetCount { get { return Strategy.RenderTargetCount; } }
-        internal bool IsRenderTargetBound { get { return Strategy.IsRenderTargetBound; } }
+        public int RenderTargetCount { get { return _strategy.RenderTargetCount; } }
+        internal bool IsRenderTargetBound { get { return _strategy.IsRenderTargetBound; } }
 
         public void Clear(Color color)
         {
             ClearOptions options = ClearOptions.Target
                                  | ClearOptions.DepthBuffer
                                  | ClearOptions.Stencil;
-            Strategy.Clear(options, color.ToVector4(), Strategy.Viewport.MaxDepth, 0);
+            _strategy.Clear(options, color.ToVector4(), _strategy.Viewport.MaxDepth, 0);
 
             unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
-            Strategy.Clear(options, color.ToVector4(), depth, stencil);
+            _strategy.Clear(options, color.ToVector4(), depth, stencil);
 
             unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
-            Strategy.Clear(options, color, depth, stencil);
+            _strategy.Clear(options, color, depth, stencil);
 
             unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
-            Strategy.SetVertexBuffer(vertexBuffer);
+            _strategy.SetVertexBuffer(vertexBuffer);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer, int vertexOffset)
         {
-            Strategy.SetVertexBuffer(vertexBuffer, vertexOffset);
+            _strategy.SetVertexBuffer(vertexBuffer, vertexOffset);
         }
 
         public void SetVertexBuffers(VertexBufferBinding[] vertexBuffers)
         {
-            Strategy.SetVertexBuffers(vertexBuffers);
+            _strategy.SetVertexBuffers(vertexBuffers);
         }
 
         internal VertexShader VertexShader
         {
-            get { return Strategy.VertexShader; }
-            set { Strategy.VertexShader = value; }
+            get { return _strategy.VertexShader; }
+            set { _strategy.VertexShader = value; }
         }
 
         internal PixelShader PixelShader
         {
-            get { return Strategy.PixelShader; }
-            set { Strategy.PixelShader = value; }
+            get { return _strategy.PixelShader; }
+            set { _strategy.PixelShader = value; }
         }
 
         public void GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            Strategy.GetRenderTargets(bindings);
+            _strategy.GetRenderTargets(bindings);
         }
 
         public void SetRenderTarget(RenderTarget2D renderTarget)
@@ -196,8 +196,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-                SetRenderTargets(Strategy._singleRenderTargetBinding);
+                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+                SetRenderTargets(_strategy._singleRenderTargetBinding);
             }
         }
 
@@ -209,8 +209,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
-                SetRenderTargets(Strategy._singleRenderTargetBinding);
+                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
+                SetRenderTargets(_strategy._singleRenderTargetBinding);
             }
         }
 
@@ -226,8 +226,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(Strategy._singleRenderTargetBinding);
+                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_strategy._singleRenderTargetBinding);
             }
         }
 
@@ -240,8 +240,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                Strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(Strategy._singleRenderTargetBinding);
+                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_strategy._singleRenderTargetBinding);
             }
         }
 
@@ -264,13 +264,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
 
             // Try to early out if the current and new bindings are equal.
-            if (Strategy.RenderTargetCount == renderTargetCount)
+            if (_strategy.RenderTargetCount == renderTargetCount)
             {
                 bool isEqual = true;
-                for (int i = 0; i < Strategy.RenderTargetCount; i++)
+                for (int i = 0; i < _strategy.RenderTargetCount; i++)
                 {
-                    if (Strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
-                        Strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
+                    if (_strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
+                        _strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
                     {
                         isEqual = false;
                         break;
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     return;
             }
 
-            Strategy.ApplyRenderTargets(renderTargets);
+            _strategy.ApplyRenderTargets(renderTargets);
 
             if (renderTargetCount == 0)
                 unchecked { _graphicsMetrics._targetCount++; }
@@ -313,10 +313,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to render from the index buffer.</param>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            if (Strategy._vertexBuffers.Count == 0)
+            if (_strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawIndexedPrimitives.");
 
-            if (Strategy.Indices == null)
+            if (_strategy.Indices == null)
                 throw new InvalidOperationException("Index buffer must be set before calling DrawIndexedPrimitives.");
 
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
@@ -325,14 +325,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
@@ -341,13 +341,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawIndexedPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
 
 
-            Strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -358,20 +358,20 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        || Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
             }
 
-            Strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -418,14 +418,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
@@ -442,13 +442,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawUserPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserPrimitives.");
 
 
-            Strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
+            _strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -462,7 +462,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="primitiveCount">The number of primitives to draw.</param>
         public void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount)
         {
-            if (Strategy._vertexBuffers.Count == 0)
+            if (_strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawPrimitives.");
 
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
@@ -471,14 +471,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
@@ -487,15 +487,15 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawPrimitives.");
 
             int vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
 
-            Strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
+            _strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -563,14 +563,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
@@ -588,13 +588,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
 
 
-            Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+            _strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -665,14 +665,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = Strategy.Textures.Strategy.Length;
+                int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = Strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
-                        if (Strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  Strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
@@ -690,13 +690,13 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration.VertexStride < ReflectionHelpers.SizeOf<T>())
                 throw new ArgumentOutOfRangeException("vertexDeclaration", "Vertex stride of vertexDeclaration should be at least as big as the stride of the actual vertices.");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawUserIndexedPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserIndexedPrimitives.");
 
 
-            Strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+            _strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
@@ -747,22 +747,22 @@ namespace Microsoft.Xna.Framework.Graphics
             if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Instancing.");
 
-            if (Strategy._vertexBuffers.Count == 0)
+            if (_strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawInstancedPrimitives.");
 
-            if (Strategy.Indices == null)
+            if (_strategy.Indices == null)
                 throw new InvalidOperationException("Index buffer must be set before calling DrawInstancedPrimitives.");
 
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            if (Strategy.VertexShader == null)
+            if (_strategy.VertexShader == null)
                 throw new InvalidOperationException("Vertex shader must be set before calling DrawInstancedPrimitives.");
-            if (Strategy.PixelShader == null)
+            if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawInstancedPrimitives.");
 
 
-            Strategy.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
+            _strategy.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
 
             unchecked { _graphicsMetrics._drawCount++; }
             unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
@@ -773,7 +773,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public void Flush()
         {
-            Strategy.Flush();
+            _strategy.Flush();
         }
 
 

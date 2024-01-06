@@ -183,55 +183,55 @@ namespace Microsoft.Xna.Framework.Media
 
         MediaQueue IMediaPlayer.Queue
         {
-            get { return Strategy.Queue; }
+            get { return _strategy.Queue; }
         }
 
         bool IMediaPlayer.IsMuted
         {
-            get { return Strategy.PlatformIsMuted; }
-            set { Strategy.PlatformIsMuted = value; }
+            get { return _strategy.PlatformIsMuted; }
+            set { _strategy.PlatformIsMuted = value; }
         }
 
         bool IMediaPlayer.IsRepeating
         {
-            get { return Strategy.PlatformIsRepeating; }
-            set { Strategy.PlatformIsRepeating = value; }
+            get { return _strategy.PlatformIsRepeating; }
+            set { _strategy.PlatformIsRepeating = value; }
         }
 
         bool IMediaPlayer.IsShuffled
         {
-            get { return Strategy.PlatformIsShuffled; }
-            set { Strategy.PlatformIsShuffled=value; }
+            get { return _strategy.PlatformIsShuffled; }
+            set { _strategy.PlatformIsShuffled=value; }
         }
 
         bool IMediaPlayer.IsVisualizationEnabled
         {
-            get { return Strategy.PlatformIsVisualizationEnabled; }
-            set { Strategy.PlatformIsVisualizationEnabled = value; }
+            get { return _strategy.PlatformIsVisualizationEnabled; }
+            set { _strategy.PlatformIsVisualizationEnabled = value; }
         }
 
         TimeSpan IMediaPlayer.PlayPosition
         {
-            get { return Strategy.PlatformPlayPosition; }
+            get { return _strategy.PlatformPlayPosition; }
         }
 
         MediaState IMediaPlayer.State
         {
-            get { return Strategy.State; }
+            get { return _strategy.State; }
         }
 
         bool IMediaPlayer.GameHasControl
         {
-            get { return Strategy.PlatformGameHasControl; }
+            get { return _strategy.PlatformGameHasControl; }
         }
 
         float IMediaPlayer.Volume
         {
-            get { return Strategy.PlatformVolume; }
+            get { return _strategy.PlatformVolume; }
             set
             {
                 var volume = MathHelper.Clamp(value, 0, 1);
-                Strategy.PlatformVolume = volume;
+                _strategy.PlatformVolume = volume;
             }
         }
 
@@ -258,23 +258,23 @@ namespace Microsoft.Xna.Framework.Media
             if (song == null)
                 throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
 
-            var previousSong = Strategy.Queue.Count > 0
-                             ? Strategy.Queue[0]
+            var previousSong = _strategy.Queue.Count > 0
+                             ? _strategy.Queue[0]
                              : null;
 
-            Strategy.PlatformClearQueue();
-            Strategy.Queue.Add(song);
-            Strategy.Queue.ActiveSongIndex = 0;
+            _strategy.PlatformClearQueue();
+            _strategy.Queue.Add(song);
+            _strategy.Queue.ActiveSongIndex = 0;
 
             if (song.IsDisposed)
                 throw new ObjectDisposedException("song");
 
-            Strategy.PlatformPlaySong(song);
-            Strategy._state = MediaState.Playing;
-            Strategy.OnPlatformMediaStateChanged();
+            _strategy.PlatformPlaySong(song);
+            _strategy._state = MediaState.Playing;
+            _strategy.OnPlatformMediaStateChanged();
 
             if (previousSong != song)
-                Strategy.OnPlatformActiveSongChanged();
+                _strategy.OnPlatformActiveSongChanged();
         }
 
         void IMediaPlayer.Play(SongCollection collection)
@@ -287,20 +287,20 @@ namespace Microsoft.Xna.Framework.Media
             if (collection == null)
                 throw new ArgumentNullException("collection", "This method does not accept null for this parameter.");
 
-            Strategy.PlatformClearQueue();
+            _strategy.PlatformClearQueue();
 
             foreach (var song in collection)
-                Strategy.Queue.Add(song);
+                _strategy.Queue.Add(song);
 
-            Strategy.Queue.ActiveSongIndex = index;
+            _strategy.Queue.ActiveSongIndex = index;
 
-            Song activeSong = Strategy.Queue.ActiveSong;
+            Song activeSong = _strategy.Queue.ActiveSong;
             if (activeSong.IsDisposed)
                 throw new ObjectDisposedException("activeSong");
 
-            Strategy.PlatformPlaySong(activeSong);
-            Strategy._state = MediaState.Playing;
-            Strategy.OnPlatformMediaStateChanged();
+            _strategy.PlatformPlaySong(activeSong);
+            _strategy._state = MediaState.Playing;
+            _strategy.OnPlatformMediaStateChanged();
         }
 
         void IMediaPlayer.Pause()
@@ -309,11 +309,11 @@ namespace Microsoft.Xna.Framework.Media
             switch (state)
             {
                 case MediaState.Playing:
-                    if (Strategy.Queue.ActiveSong != null)
+                    if (_strategy.Queue.ActiveSong != null)
                     {
-                        Strategy.PlatformPause();
-                        Strategy._state =  MediaState.Paused;
-                        Strategy.OnPlatformMediaStateChanged();
+                        _strategy.PlatformPause();
+                        _strategy._state =  MediaState.Paused;
+                        _strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
@@ -326,9 +326,9 @@ namespace Microsoft.Xna.Framework.Media
             {
                 case MediaState.Paused:
                     {
-                        Strategy.PlatformResume();
-                        Strategy._state = MediaState.Playing;
-                        Strategy.OnPlatformMediaStateChanged();
+                        _strategy.PlatformResume();
+                        _strategy._state = MediaState.Playing;
+                        _strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
@@ -342,9 +342,9 @@ namespace Microsoft.Xna.Framework.Media
                 case MediaState.Playing:
                 case MediaState.Paused:
                     {
-                        Strategy.PlatformStop();
-                        Strategy._state = MediaState.Stopped;
-                        Strategy.OnPlatformMediaStateChanged();
+                        _strategy.PlatformStop();
+                        _strategy._state = MediaState.Stopped;
+                        _strategy.OnPlatformMediaStateChanged();
                     }
                     break;
             }
@@ -353,13 +353,13 @@ namespace Microsoft.Xna.Framework.Media
         void IMediaPlayer.MoveNext()
         {
             Stop();
-            Strategy.PlatformMoveNext();
+            _strategy.PlatformMoveNext();
         }
 
         void IMediaPlayer.MovePrevious()
         {
             Stop();
-            Strategy.PlatformMovePrevious();
+            _strategy.PlatformMovePrevious();
         }
                 
     }

@@ -261,12 +261,12 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_strategy._mainContext.IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
-            Strategy.Present();
+            _strategy.Present();
         }
 
         public void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
-            Strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
+            _strategy.Present(sourceRectangle, destinationRectangle, overrideWindowHandle);
         }
 
         private void OnDeviceResetting(EventArgs e)
@@ -292,13 +292,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
-            Strategy.OnDeviceResetting(EventArgs.Empty);
+            _strategy.OnDeviceResetting(EventArgs.Empty);
 
-            Strategy.Reset();
+            _strategy.Reset();
 
-            Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
+            _strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
 
-            Strategy.OnDeviceReset(EventArgs.Empty);
+            _strategy.OnDeviceReset(EventArgs.Empty);
         }
 
         public void Reset(PresentationParameters presentationParameters)
@@ -306,18 +306,18 @@ namespace Microsoft.Xna.Framework.Graphics
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
 
-            Strategy.OnDeviceResetting(EventArgs.Empty);
+            _strategy.OnDeviceResetting(EventArgs.Empty);
 
-            Strategy.Reset(presentationParameters);
+            _strategy.Reset(presentationParameters);
 
-            Strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
+            _strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
 
-            Strategy.OnDeviceReset(EventArgs.Empty);
+            _strategy.OnDeviceReset(EventArgs.Empty);
         }
 
         public DisplayMode DisplayMode
         {
-            get { return Strategy.DisplayMode; }
+            get { return _strategy.DisplayMode; }
         }
 
         public GraphicsDeviceStatus GraphicsDeviceStatus
@@ -647,7 +647,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1} bytes.",
                                             elementCount * tSize, dataByteSize), "elementCount");
 
-            Strategy.GetBackBufferData(rect, data, startIndex, elementCount);
+            _strategy.GetBackBufferData(rect, data, startIndex, elementCount);
         }
 
         // uniformly scales down the given rectangle by 10%
