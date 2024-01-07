@@ -208,9 +208,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 _device.SetVertexBuffer(_vertexBuffer);
                 _device.Indices = _indexBuffer;
 
-                lock (_device.Strategy.CurrentContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = _device.Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     //map vertexBaffer
                     D3D11.MapMode mode = D3D11.MapMode.WriteNoOverwrite;

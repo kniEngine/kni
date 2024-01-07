@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
 using Android.Views;
 
 namespace Microsoft.Xna.Platform
@@ -180,7 +181,7 @@ namespace Microsoft.Xna.Platform
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
 
             // Set the viewport from client bounds
-            if (!base.GraphicsDevice.Strategy._mainContext.IsRenderTargetBound)
+            if (!((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy._mainContext.IsRenderTargetBound)
             {
                 base.GraphicsDevice.Viewport = new Viewport(0, 0, newClientBounds.Width, newClientBounds.Height);
                 base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, newClientBounds.Width, newClientBounds.Height);

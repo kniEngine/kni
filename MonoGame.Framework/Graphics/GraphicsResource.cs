@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
             IGraphicsResourceStrategy strategy = new GraphicsResourceStrategy();
             SetResourceStrategy(strategy);
             Debug.Assert(device != null);
-            ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(device.Strategy);
+            ((GraphicsResourceStrategy)_strategy).BindGraphicsDevice(((IPlatformGraphicsDevice)device).Strategy);
         }
 
         protected void SetResourceStrategy(IGraphicsResourceStrategy strategy)

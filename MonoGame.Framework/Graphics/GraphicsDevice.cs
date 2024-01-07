@@ -14,10 +14,11 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class GraphicsDevice : IDisposable
+        , IPlatformGraphicsDevice
     {
         private GraphicsDeviceStrategy _strategy;
 
-        internal GraphicsDeviceStrategy Strategy { get { return _strategy; } }
+        GraphicsDeviceStrategy IPlatformGraphicsDevice.Strategy { get { return _strategy; } }
 
         internal GraphicsContext CurrentContext { get { return _strategy.CurrentContext; } }
 

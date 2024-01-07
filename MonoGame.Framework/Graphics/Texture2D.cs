@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize)
             : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, true)
         {
-            _strategyTexture2D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
+            _strategyTexture2D = ((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
         }
@@ -90,29 +90,29 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (width > 2048 || height > 2048))
                 throw new NotSupportedException("Reach profile supports a maximum Texture2D size of 2048");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && (width > 4096 || height > 4096))
                 throw new NotSupportedException("HiDef profile supports a maximum Texture2D size of 4096");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 8192 || height > 8192))
                 throw new NotSupportedException("FL10_0 profile supports a maximum Texture2D size of 8192");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 8192 || height > 8192))
                 throw new NotSupportedException("FL10_1 profile supports a maximum Texture2D size of 8192");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 16384 || height > 16384))
                 throw new NotSupportedException("FL11_0 profile supports a maximum Texture2D size of 16384");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 16384 || height > 16384))
                 throw new NotSupportedException("FL11_1 profile supports a maximum Texture2D size of 16384");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && mipMap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && mipMap && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires mipmapped Texture2D sizes to be powers of two");            
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && GraphicsExtensions.IsCompressedFormat(format) && (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
                 throw new NotSupportedException("Reach profile requires compressed Texture2D sizes to be powers of two");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
                 throw new NotSupportedException("Reach profile does not support Texture2D format "+ format);
             if (width <= 0)
                 throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");
             if (height <= 0)
                 throw new ArgumentOutOfRangeException("height","Texture height must be greater than zero");
-            if (arraySize > 1 && !graphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
+            if (arraySize > 1 && !((IPlatformGraphicsDevice)graphicsDevice).Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
             this.TexelWidth = 1f / (float)width;
@@ -314,7 +314,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void ValidateArrayBounds<T>(int arraySlice, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            if (arraySlice > 0 && !GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
+            if (arraySlice > 0 && !((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.Capabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
             if (arraySlice < 0 || arraySlice >= ArraySize)
                 throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                return new Texture2D(graphicsDevice.Strategy.MainContext, stream);
+                return new Texture2D(((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext, stream);
             }
             catch(Exception e)
             {

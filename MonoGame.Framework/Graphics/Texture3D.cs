@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, true)
         {
-            _strategyTexture3D = graphicsDevice.Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
+            _strategyTexture3D = ((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
         }
@@ -35,17 +35,17 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Texture3D");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && (width > 256 || height > 256 || height > 256))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && (width > 256 || height > 256 || height > 256))
                 throw new NotSupportedException("HiDef profile supports a maximum Texture3D size of 256");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 2048 || height > 2048 || height > 2048))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_0 && (width > 2048 || height > 2048 || height > 2048))
                 throw new NotSupportedException("FL10_0 profile supports a maximum Texture3D size of 2048");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 2048 || height > 2048 || height > 2048))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_1 && (width > 2048 || height > 2048 || height > 2048))
                 throw new NotSupportedException("FL10_1 profile supports a maximum Texture3D size of 2048");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 2048 || height > 2048 || height > 2048))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_0 && (width > 2048 || height > 2048 || height > 2048))
                 throw new NotSupportedException("FL11_0 profile supports a maximum Texture3D size of 2048");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 2048 || height > 2048 || height > 2048))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_1 && (width > 2048 || height > 2048 || height > 2048))
                 throw new NotSupportedException("FL11_1 profile supports a maximum Texture3D size of 2048");
             if (width <= 0)
                 throw new ArgumentOutOfRangeException("width","Texture width must be greater than zero");

@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("The Reach profile does not support occlusion queries.");
 
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateOcclusionQueryStrategy();

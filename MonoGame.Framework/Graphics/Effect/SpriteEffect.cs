@@ -5,6 +5,8 @@
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
+using Microsoft.Xna.Platform.Graphics;
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new SpriteEffect.
         /// </summary>
         public SpriteEffect(GraphicsDevice device)
-            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameSpriteEffect))
+            : base(device, ((IPlatformGraphicsDevice)device).Strategy.GetResourceStreamBytes(((IPlatformGraphicsDevice)device).Strategy.ResourceNameSpriteEffect))
         {
             CacheEffectParameters();
 

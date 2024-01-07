@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Media
             MediaManager.Startup();
 
             _devManager = new DXGIDeviceManager();
-            _devManager.ResetDevice(ConcreteGame.ConcreteGameInstance.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice);
+            _devManager.ResetDevice(((IPlatformGraphicsDevice)ConcreteGame.ConcreteGameInstance.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice);
 
             using (var factory = new MediaEngineClassFactory())
             using (var attributes = new MediaEngineAttributes

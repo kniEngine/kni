@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
             _strategy = graphicsDevice.CurrentContext.Strategy.CreateDynamicIndexBufferStrategy(indexElementSize, indexCount, usage);

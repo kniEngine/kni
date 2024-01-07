@@ -258,7 +258,7 @@ namespace MonoGame.Framework
             {
                 EnterFullScreen(pp);
                 if (!pp.HardwareModeSwitch)
-                    _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
+                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
             }
         }
 
@@ -276,9 +276,9 @@ namespace MonoGame.Framework
                 // gameloop is paused during windows resize.
                 try 
                 {
-                    if (!_concreteGame.GraphicsDevice.Strategy._mainContext.IsRenderTargetBound)
+                    if (!((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy._mainContext.IsRenderTargetBound)
                     {   
-                        _concreteGame.GraphicsDevice.Strategy.Present();
+                        ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.Present();
                     }
                     else
                     {
@@ -303,7 +303,7 @@ namespace MonoGame.Framework
             {
                 // we may need to restore full screen when coming back from a minimized window
                 if (_lastFormState == FormWindowState.Minimized)
-                    _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
+                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
                 UpdateBackBufferSize();
             }
 
@@ -321,7 +321,7 @@ namespace MonoGame.Framework
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
                 if (_concreteGame.GraphicsDevice != null)
-                    _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
+                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
             }
 
             OnClientSizeChanged();
@@ -470,7 +470,7 @@ namespace MonoGame.Framework
                 if( _concreteGame.IsActive )
                 {
                     // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
-                    _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().ResizeTargets();
+                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ResizeTargets();
 				}
                 else
                 {
@@ -506,7 +506,7 @@ namespace MonoGame.Framework
             if (!IsFullScreen)
                 _locationBeforeFullScreen = Form.Location;
 
-            _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
+            ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
 
             if (!pp.HardwareModeSwitch)
             {
@@ -533,7 +533,7 @@ namespace MonoGame.Framework
         {
             _switchingFullScreen = true;
 
-            _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
+            ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
             IsBorderless = false;
             Form.WindowState = FormWindowState.Normal;
@@ -552,7 +552,7 @@ namespace MonoGame.Framework
         {
             _switchingFullScreen = true;
 
-            _concreteGame.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
+            ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
             IsBorderless = false;
             Form.WindowState = FormWindowState.Minimized;

@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, size, mipMap, format, true)
         {
-            _strategyTextureCube = graphicsDevice.Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
+            _strategyTextureCube = ((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext.Strategy.CreateTextureCubeStrategy(size, mipMap, format);
             _strategyTexture = _strategyTextureCube;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
         }
@@ -35,21 +35,21 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && size > 512)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && size > 512)
                 throw new NotSupportedException("Reach profile supports a maximum TextureCube size of 512");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.HiDef && size > 4096)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.HiDef && size > 4096)
                 throw new NotSupportedException("HiDef profile supports a maximum TextureCube size of 4096");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_0 && size > 8192)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_0 && size > 8192)
                 throw new NotSupportedException("FL10_0 profile supports a maximum TextureCube size of 8192");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL10_1 && size > 8192)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL10_1 && size > 8192)
                 throw new NotSupportedException("FL10_1 profile supports a maximum TextureCube size of 8192");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_0 && size > 16384)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_0 && size > 16384)
                 throw new NotSupportedException("FL11_0 profile supports a maximum TextureCube size of 16384");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.FL11_1 && size > 16384)
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.FL11_1 && size > 16384)
                 throw new NotSupportedException("FL11_1 profile supports a maximum TextureCube size of 16384");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && !MathHelper.IsPowerOfTwo(size))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && !MathHelper.IsPowerOfTwo(size))
                 throw new NotSupportedException("Reach profile requires TextureCube sizes to be powers of two");
-            if (graphicsDevice.Strategy.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.NormalizedByte2 || format == SurfaceFormat.NormalizedByte4 || format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
+            if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && (format == SurfaceFormat.NormalizedByte2 || format == SurfaceFormat.NormalizedByte4 || format == SurfaceFormat.Rgba1010102 || format == SurfaceFormat.Rg32 || format == SurfaceFormat.Rgba64 || format == SurfaceFormat.Alpha8 || format == SurfaceFormat.Single || format == SurfaceFormat.Vector2 || format == SurfaceFormat.Vector4 || format == SurfaceFormat.HalfSingle || format == SurfaceFormat.HalfVector2 || format == SurfaceFormat.HalfVector4 || format == SurfaceFormat.HdrBlendable))
                 throw new NotSupportedException("Reach profile does not support Texture2D format "+ format);
             if (size <= 0)
                 throw new ArgumentOutOfRangeException("size","Cube size must be greater than zero");

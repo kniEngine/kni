@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Graphics;
 using MonoGame.Framework.Utilities;
 
 
@@ -506,7 +507,7 @@ namespace Microsoft.Xna.Framework
             device.PresentationParameters.BackBufferWidth = width;
             device.PresentationParameters.BackBufferHeight = height;
 
-            if (!device.Strategy._mainContext.IsRenderTargetBound)
+            if (!((IPlatformGraphicsDevice)device).Strategy._mainContext.IsRenderTargetBound)
             {
                 device.Viewport = new Viewport(0, 0, width, height);
                 device.ScissorRectangle = new Rectangle(0, 0, width, height);

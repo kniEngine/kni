@@ -8,9 +8,10 @@
 #endregion
 
 #region Using Statements
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Microsoft.Xna.Platform.Graphics;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -310,7 +311,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new BasicEffect with default parameter settings.
         /// </summary>
         public BasicEffect(GraphicsDevice device)
-            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameBasicEffect))
+            : base(device, ((IPlatformGraphicsDevice)device).Strategy.GetResourceStreamBytes(((IPlatformGraphicsDevice)device).Strategy.ResourceNameBasicEffect))
         {
             CacheEffectParameters(null);
 

@@ -43,6 +43,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Platform.Graphics;
 
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -88,7 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("renderTarget");
             if (arraySlice < 0 || arraySlice >= renderTarget.ArraySize)
                 throw new ArgumentOutOfRangeException("arraySlice");
-            if (!renderTarget.GraphicsDevice.Strategy.Capabilities.SupportsTextureArrays)
+            if (!((IPlatformGraphicsDevice)renderTarget.GraphicsDevice).Strategy.Capabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
 
             _renderTarget = renderTarget;
