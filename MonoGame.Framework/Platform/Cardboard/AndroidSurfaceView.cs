@@ -209,7 +209,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
                 
@@ -300,7 +300,7 @@ namespace Microsoft.Xna.Framework
 
                     if (_game.Strategy.GraphicsDevice != null)
                     {
-                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
 
@@ -803,7 +803,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game.Strategy.GraphicsDevice != null)
             {
-                ((Microsoft.Xna.Platform.Graphics.ConcreteGraphicsDevice)_game.Strategy.GraphicsDevice.Strategy).Android_ReInitializeContext();
+                ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_ReInitializeContext();
 
                 IsResuming = true;
                 if (_gameWindow.Resumer != null)
@@ -820,7 +820,7 @@ namespace Microsoft.Xna.Framework
                         Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                         // DeviceReset events
-                        _game.Strategy.GraphicsDevice.Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
+                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
 
                         IsResuming = false;
                     });

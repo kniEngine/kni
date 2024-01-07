@@ -11,6 +11,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformGraphicsDevice
+    {
+        GraphicsDeviceStrategy Strategy { get; }
+    }
+
     public abstract class GraphicsDeviceStrategy : IDisposable
     {
         GraphicsDevice _device;

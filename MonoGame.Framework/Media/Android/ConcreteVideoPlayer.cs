@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Media
             {
                 base.Video = value;
                 if (value != null)
-                    CreateGLVideoSurfaceTexture(value.GraphicsDevice.Strategy);
+                    CreateGLVideoSurfaceTexture(((IPlatformGraphicsDevice)value.GraphicsDevice).Strategy);
             }
         }
 

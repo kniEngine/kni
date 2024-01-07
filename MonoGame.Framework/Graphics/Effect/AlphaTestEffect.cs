@@ -8,9 +8,10 @@
 #endregion
 
 #region Using Statements
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Microsoft.Xna.Platform.Graphics;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -238,7 +239,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new AlphaTestEffect with default parameter settings.
         /// </summary>
         public AlphaTestEffect(GraphicsDevice device)
-            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameAlphaTestEffect))
+            : base(device, ((IPlatformGraphicsDevice)device).Strategy.GetResourceStreamBytes(((IPlatformGraphicsDevice)device).Strategy.ResourceNameAlphaTestEffect))
         {
             CacheEffectParameters();
         }

@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Platform
         {
             get
             {
-                var graphicsDeviceService = this.GraphicsDeviceService;
+                IGraphicsDeviceService graphicsDeviceService = this.GraphicsDeviceService;
 
                 if (graphicsDeviceService == null)
                     throw new InvalidOperationException("No Graphics Device Service");

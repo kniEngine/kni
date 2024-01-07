@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics;
 using NUnit.Framework;
 
 namespace MonoGame.Tests.Graphics
@@ -512,7 +513,7 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void TooHighMultiSampleCountClampedToMaxSupported()
         {
-            int maxMultiSampleCount = gd.Strategy.ToConcrete<Microsoft.Xna.Platform.Graphics.ConcreteGraphicsDevice>().GetMaxMultiSampleCount(gd.Strategy.PresentationParameters.BackBufferFormat);
+            int maxMultiSampleCount = ((IPlatformGraphicsDevice)gd).Strategy.ToConcrete<Microsoft.Xna.Platform.Graphics.ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsDevice)gd).Strategy.PresentationParameters.BackBufferFormat);
             gdm.PreferMultiSampling = true;
 
             gdm.PreparingDeviceSettings += (sender, args) =>

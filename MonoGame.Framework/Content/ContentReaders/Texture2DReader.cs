@@ -6,6 +6,7 @@ using System;
 using Microsoft.Xna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Content
 {
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Framework.Content
 
             // If the system does not fully support Power of Two textures,
             // skip any mip maps supplied with any non PoT textures.
-            if (levelCount > 1 && !input.GetGraphicsDevice().Strategy.Capabilities.SupportsNonPowerOfTwo &&
+            if (levelCount > 1 && !((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsNonPowerOfTwo &&
                 (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
             {
                 levelCountOutput = 1;
@@ -36,21 +37,21 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				case SurfaceFormat.Dxt1:
 				case SurfaceFormat.Dxt1a:
-					if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsDxt1)
+					if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt1SRgb:
-					if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsDxt1)
+					if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsDxt1)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.Dxt3:
 				case SurfaceFormat.Dxt5:
-					if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc)
+					if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.Color;
 					break;
 				case SurfaceFormat.Dxt3SRgb:
 				case SurfaceFormat.Dxt5SRgb:
-					if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc)
+					if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc)
 						convertedFormat = SurfaceFormat.ColorSRgb;
 					break;
 				case SurfaceFormat.NormalizedByte4:
@@ -77,7 +78,7 @@ namespace Microsoft.Xna.Framework.Content
 					case SurfaceFormat.Dxt1:
                     case SurfaceFormat.Dxt1SRgb:
                     case SurfaceFormat.Dxt1a:
-				        if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
+				        if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsDxt1 && convertedFormat == SurfaceFormat.Color)
 				        {
 				            levelData = DxtDecoder.DecompressDxt1(levelData, levelWidth, levelHeight);
 				            levelDataSizeInBytes = levelData.Length;
@@ -85,8 +86,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt3:
 					case SurfaceFormat.Dxt3SRgb:
-                        if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc)
-				            if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc &&
+                        if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc)
+				            if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtDecoder.DecompressDxt3(levelData, levelWidth, levelHeight);
@@ -95,8 +96,8 @@ namespace Microsoft.Xna.Framework.Content
 				        break;
 					case SurfaceFormat.Dxt5:
 					case SurfaceFormat.Dxt5SRgb:
-                        if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc)
-				            if (!input.GetGraphicsDevice().Strategy.Capabilities.SupportsS3tc &&
+                        if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc)
+				            if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsS3tc &&
 				                convertedFormat == SurfaceFormat.Color)
 				            {
 				                levelData = DxtDecoder.DecompressDxt5(levelData, levelWidth, levelHeight);

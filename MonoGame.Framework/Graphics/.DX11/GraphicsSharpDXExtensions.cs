@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public static object GetD3D11Device(this GraphicsDevice device)
         {
-            D3D11.Device d3dDevice = device.Strategy.ToConcrete<ConcreteGraphicsDevice>()._d3dDevice;
+            D3D11.Device d3dDevice = ((IPlatformGraphicsDevice)device).Strategy.ToConcrete<ConcreteGraphicsDevice>()._d3dDevice;
             return d3dDevice;
         }
 

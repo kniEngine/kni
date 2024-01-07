@@ -11,6 +11,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -345,7 +346,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new SkinnedEffect with default parameter settings.
         /// </summary>
         public SkinnedEffect(GraphicsDevice device)
-            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameSkinnedEffect))
+            : base(device, ((IPlatformGraphicsDevice)device).Strategy.GetResourceStreamBytes(((IPlatformGraphicsDevice)device).Strategy.ResourceNameSkinnedEffect))
         {
             CacheEffectParameters(null);
 

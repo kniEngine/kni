@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
                               ShaderProfileType profile)
             : base()
         {
-            _strategy = device.Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
+            _strategy = ((IPlatformGraphicsDevice)device).Strategy.MainContext.Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

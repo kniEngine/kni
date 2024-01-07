@@ -10,6 +10,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -214,7 +215,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Creates a new DualTextureEffect with default parameter settings.
         /// </summary>
         public DualTextureEffect(GraphicsDevice device)
-            : base(device, device.Strategy.GetResourceStreamBytes(device.Strategy.ResourceNameDualTextureEffect))
+            : base(device, ((IPlatformGraphicsDevice)device).Strategy.GetResourceStreamBytes(((IPlatformGraphicsDevice)device).Strategy.ResourceNameDualTextureEffect))
         {
             CacheEffectParameters();
         }

@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 DX.DataRectangle rect = new DX.DataRectangle(s.DataPointer, bsource.Size.Width * 4);
 
-                return new D3D11.Texture2D(device.Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
+                return new D3D11.Texture2D(((IPlatformGraphicsDevice)device).Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
             }
         }
 
