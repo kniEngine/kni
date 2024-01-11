@@ -99,18 +99,18 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.FilterMode = value; }
         }
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
+        internal void BindToGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
         {
             if (_strategy is ReadonlySamplerStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
-            if (this.GraphicsDevice != device)
+            if (this.GraphicsDevice != deviceStrategy.Device)
             {
                 if (this.GraphicsDevice == null)
                 {
-                    System.Diagnostics.Debug.Assert(device != null);
+                    System.Diagnostics.Debug.Assert(deviceStrategy.Device != null);
 
-                    _strategy = device.CurrentContext.Strategy.CreateSamplerStateStrategy(_strategy);
+                    _strategy = deviceStrategy.CurrentContext.Strategy.CreateSamplerStateStrategy(_strategy);
                     SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else
