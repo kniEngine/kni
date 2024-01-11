@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     System.Diagnostics.Debug.Assert(deviceStrategy.Device != null);
 
-                    _strategy = deviceStrategy.CurrentContext.Strategy.CreateRasterizerStateStrategy(_strategy);
+                    _strategy = ((IPlatformGraphicsContext)deviceStrategy.CurrentContext).Strategy.CreateRasterizerStateStrategy(_strategy);
                     SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else

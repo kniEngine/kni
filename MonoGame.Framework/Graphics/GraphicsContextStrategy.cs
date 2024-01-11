@@ -14,6 +14,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformGraphicsContext
+    {
+        GraphicsContextStrategy Strategy { get; }
+    }
+
     public abstract class GraphicsContextStrategy : IDisposable
     {
         private GraphicsContext _context;

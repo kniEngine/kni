@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy)
         {
-            IWebGLRenderingContext GL = deviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            IWebGLRenderingContext GL = ((IPlatformGraphicsContext)deviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 

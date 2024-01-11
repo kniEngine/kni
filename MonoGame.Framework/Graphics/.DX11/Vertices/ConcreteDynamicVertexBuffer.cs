@@ -50,9 +50,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
                 mode = D3D11.MapMode.WriteNoOverwrite;
 
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                 if (vertexStride == elementSizeInBytes)

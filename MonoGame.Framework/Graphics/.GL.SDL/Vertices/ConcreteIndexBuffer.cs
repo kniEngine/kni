@@ -35,11 +35,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLIndexBuffer != 0);
 
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
             GL.CheckGLError();
-            base.GraphicsDeviceStrategy.CurrentContext.Strategy._indexBufferDirty = true;
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);

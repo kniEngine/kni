@@ -15,6 +15,7 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed class GraphicsContext : IDisposable
+        , IPlatformGraphicsContext
     {
         private GraphicsContextStrategy _strategy;
         private GraphicsDeviceStrategy _deviceStrategy;
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal GraphicsMetrics _graphicsMetrics;
 
-        internal GraphicsContextStrategy Strategy { get { return _strategy; } }
+        GraphicsContextStrategy IPlatformGraphicsContext.Strategy { get { return _strategy; } }
         internal GraphicsDeviceStrategy DeviceStrategy { get { return _deviceStrategy; } }
 
 

@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
             : this(graphicsDevice, width, height, depth, mipMap, format, true)
         {
-            _strategyTexture3D = graphicsDevice.MainContext.Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
+            _strategyTexture3D = ((IPlatformGraphicsContext)graphicsDevice.MainContext).Strategy.CreateTexture3DStrategy(width, height, depth, mipMap, format);
             _strategyTexture = _strategyTexture3D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture3D);
         }

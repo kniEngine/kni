@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy, int majorVersion, int minorVersion)
         {
-            var GL = deviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)deviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 

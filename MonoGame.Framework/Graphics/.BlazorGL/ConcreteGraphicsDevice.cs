@@ -67,16 +67,16 @@ namespace Microsoft.Xna.Platform.Graphics
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this);
 
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
         protected override void PlatformInitialize()
         {
             // set actual backbuffer size
-            PresentationParameters.BackBufferWidth = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Width;
-            PresentationParameters.BackBufferHeight = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Height;
+            PresentationParameters.BackBufferWidth = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Width;
+            PresentationParameters.BackBufferHeight = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GlContext.Canvas.Height;
 
-            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // TODO: check for FramebufferObjectARB
             //if (this.Capabilities.SupportsFramebufferObjectARB
@@ -94,13 +94,13 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
-            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
-            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0,  null);
         }
 
 
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            var GL = CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int maxMultiSampleCount = 0;
             return maxMultiSampleCount;
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void OnPresentationChanged()
         {
-            _mainContext.Strategy.ApplyRenderTargets(null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 

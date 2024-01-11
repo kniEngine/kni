@@ -90,9 +90,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     region.Left = offsetInBytes;
                     region.Right = offsetInBytes + (elementCount * elementSizeInBytes);
 
-                    lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                    lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                     {
-                        D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.UpdateSubresource(box, _buffer, 0, region);
                     }
@@ -100,9 +100,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 else
                 {
                     using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
-                        lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                        lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                         {
-                            D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                            D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
@@ -142,9 +142,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
-                    lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                    lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                     {
-                        D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                        D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 

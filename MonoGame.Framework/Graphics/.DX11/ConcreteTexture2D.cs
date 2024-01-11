@@ -106,9 +106,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 // TODO: We need to deal with threaded contexts here!
                 int arraySlice = 0;
                 int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
                 }
@@ -140,9 +140,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // TODO: We need to deal with threaded contexts here!
                 int subresourceIndex = arraySlice * this.LevelCount + level;
-                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
                 }
@@ -177,9 +177,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             D3D11.Texture2D stagingTexture = new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
 
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 int subresourceIndex = arraySlice * this.LevelCount + level;
 

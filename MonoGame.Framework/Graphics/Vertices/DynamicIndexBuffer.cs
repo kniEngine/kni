@@ -7,27 +7,27 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class DynamicIndexBuffer : IndexBuffer
-	{
+    public class DynamicIndexBuffer : IndexBuffer
+    {
 
         public bool IsContentLost { get { return ((IDynamicIndexBufferStrategy)_strategy).IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;
 
-   		public DynamicIndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
+        public DynamicIndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
             this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage)
         {
         }
 
         public DynamicIndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage) :
-			base()
-		{
+            base()
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateDynamicIndexBufferStrategy(indexElementSize, indexCount, usage);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateDynamicIndexBufferStrategy(indexElementSize, indexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

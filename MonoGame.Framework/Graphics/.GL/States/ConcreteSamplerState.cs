@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
 
-            var GL = context.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)context).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             switch (Filter)
             {

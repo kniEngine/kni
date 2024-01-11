@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
             int tSize = ReflectionHelpers.SizeOf<T>();
@@ -93,9 +93,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformInitialize()
         {
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
             ||  ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectEXT)
@@ -111,28 +111,28 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, null);
         }
 
 
         internal void Android_ReInitializeContext()
         {
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            _mainContext.Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             // Ensure the vertex attributes are reset
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._enabledVertexAttributes.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._enabledVertexAttributes.Clear();
 
             // Free all the cached shader programs.
             ClearProgramCache();
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._shaderProgram = null;
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._shaderProgram = null;
 
             if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
             ||  ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectEXT)
@@ -148,54 +148,54 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Force resetting states
-            _mainContext.Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
-            _mainContext.Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)_mainContext.Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState.GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState.GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._actualRasterizerState.GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[this.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, IntPtr.Zero, 0, null);
 
 
             // Force set the default render states.
-            _mainContext.Strategy._blendStateDirty = true;
-            _mainContext.Strategy._blendFactorDirty = true;
-            _mainContext.Strategy._depthStencilStateDirty = true;
-            _mainContext.Strategy._rasterizerStateDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
             _mainContext.BlendState = BlendState.Opaque;
             _mainContext.DepthStencilState = DepthStencilState.Default;
             _mainContext.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Clear the texture and sampler collections forcing
             // the state to be reapplied.
-            _mainContext.Strategy.VertexTextures.Clear();
-            _mainContext.Strategy.VertexSamplerStates.Clear();
-            _mainContext.Strategy.Textures.Clear();
-            _mainContext.Strategy.SamplerStates.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.VertexTextures.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.VertexSamplerStates.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.Textures.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.SamplerStates.Clear();
 
             // Clear constant buffers
-            _mainContext.Strategy._vertexConstantBuffers.Clear();
-            _mainContext.Strategy._pixelConstantBuffers.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers.Clear();
+            ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers.Clear();
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
-            _mainContext.Strategy._vertexBuffersDirty = true;
-            _mainContext.Strategy._indexBufferDirty = true;
-            _mainContext.Strategy._vertexShaderDirty = true;
-            _mainContext.Strategy._pixelShaderDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffersDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._indexBufferDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
 
             // Set the default scissor rect.
-            _mainContext.Strategy._scissorRectangleDirty = true;
-            _mainContext.ScissorRectangle = _mainContext.Strategy._viewport.Bounds;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
+            _mainContext.ScissorRectangle = ((IPlatformGraphicsContext)_mainContext).Strategy._viewport.Bounds;
 
             // Set the default render target.
-            _mainContext.Strategy.ApplyRenderTargets(null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 
         private void ClearProgramCache()
         {
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             foreach (ShaderProgram shaderProgram in ProgramCache.Values)
             {
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            var GL = this.MainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)this.MainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int maxMultiSampleCount = 0;
             GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);
@@ -220,12 +220,12 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void OnPresentationChanged()
         {
 #if DESKTOPGL
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
             Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
 #endif
 
-            _mainContext.Strategy.ApplyRenderTargets(null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 

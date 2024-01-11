@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             try
             {
-                lock (_mainContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsContext)_mainContext).Strategy.SyncHandle)
                 {
                     int syncInterval = 0;
                     DXGI.PresentFlags presentFlags = DXGI.PresentFlags.None;
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                 {
-                    lock (_mainContext.Strategy.SyncHandle)
+                    lock (((IPlatformGraphicsContext)_mainContext).Strategy.SyncHandle)
                     {
                         // Copy the data from the GPU to the staging texture.
                         // if MSAA is enabled we need to first copy to a resource without MSAA
@@ -172,16 +172,16 @@ namespace Microsoft.Xna.Platform.Graphics
                             texture2DDesc.CpuAccessFlags = D3D11.CpuAccessFlags.None;
                             using (D3D11.Texture2D noMsTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                             {
-                                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, texture2DDesc.Format);
+                                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.ResolveSubresource(backBufferTexture, 0, noMsTex, 0, texture2DDesc.Format);
                                 if (rect.HasValue)
                                 {
                                     Rectangle r = rect.Value;
-                                    _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(noMsTex, 0,
+                                    ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(noMsTex, 0,
                                         new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex,
                                         0);
                                 }
                                 else
-                                    _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(noMsTex, stagingTex);
+                                    ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(noMsTex, stagingTex);
                             }
                         }
                         else
@@ -189,18 +189,18 @@ namespace Microsoft.Xna.Platform.Graphics
                             if (rect.HasValue)
                             {
                                 Rectangle r = rect.Value;
-                                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(backBufferTexture, 0,
+                                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(backBufferTexture, 0,
                                     new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex, 0);
                             }
                             else
-                                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(backBufferTexture, stagingTex);
+                                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(backBufferTexture, stagingTex);
                         }
 
                         // Copy the data to the array.
                         DX.DataStream stream = null;
                         try
                         {
-                            DX.DataBox databox = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                            DX.DataBox databox = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                             int elementsInRow, rows;
                             if (rect.HasValue)
@@ -537,7 +537,7 @@ namespace Microsoft.Xna.Platform.Graphics
             PresentationParameters.MultiSampleCount =
                 GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
 
             if (_renderTargetView != null)
@@ -561,13 +561,13 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             // Clear the current render targets.
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._currentDepthStencilView = null;
-            Array.Clear(_mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets, 0, _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets.Length);
-            Array.Clear(_mainContext.Strategy._currentRenderTargetBindings, 0, _mainContext.Strategy._currentRenderTargetBindings.Length);
-            _mainContext.Strategy._currentRenderTargetCount = 0;
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentDepthStencilView = null;
+            Array.Clear(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets, 0, ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets.Length);
+            Array.Clear(((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetBindings, 0, ((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetBindings.Length);
+            ((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetCount = 0;
 
             // Make sure all pending rendering commands are flushed.
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();
 
             // We need presentation parameters to continue here.
             if (PresentationParameters == null || PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
@@ -960,7 +960,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void OnPresentationChanged()
         {
             CreateSizeDependentResources();
-            _mainContext.Strategy.ApplyRenderTargets(null);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 

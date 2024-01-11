@@ -63,9 +63,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = true;
             _isComplete = false;
 
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.Begin(_query);
             }
@@ -79,9 +79,9 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = false;
             _queryPerformed = true;
 
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 d3dContext.End(_query);
             }
@@ -89,9 +89,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool PlatformGetResult()
         {
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 ulong count;
                 _isComplete = d3dContext.GetData(_query, out count);

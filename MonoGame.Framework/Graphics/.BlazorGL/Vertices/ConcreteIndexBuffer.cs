@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
             GL.CheckGLError();
-            base.GraphicsDeviceStrategy.CurrentContext.Strategy._indexBufferDirty = true;
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
             GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
                           sizeInBytes, _usageHint);
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(GLIndexBuffer != null);
 
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             int sizeInBytes = elementSizeInByte * elementCount;
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
             GL.CheckGLError();
-            base.GraphicsDeviceStrategy.CurrentContext.Strategy._indexBufferDirty = true;
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
             if (options == SetDataOptions.Discard)
             {

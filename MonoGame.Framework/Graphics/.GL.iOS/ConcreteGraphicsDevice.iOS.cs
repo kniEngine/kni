@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
         protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
             _mainContext = new GraphicsContext(this);
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // try getting the context version
             // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
 

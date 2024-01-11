@@ -8,14 +8,14 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class DynamicVertexBuffer : VertexBuffer
+    public class DynamicVertexBuffer : VertexBuffer
     {
 
         public bool IsContentLost { get { return ((IDynamicVertexBufferStrategy)_strategy).IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;
 
-		public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
+        public DynamicVertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage)
             : this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
         {
         }
@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateDynamicVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateDynamicVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

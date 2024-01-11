@@ -123,62 +123,62 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             // Initialize the main viewport
-            _mainContext.Strategy._viewport = new Viewport(0, 0, this.DisplayMode.Width, this.DisplayMode.Height);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, this.DisplayMode.Width, this.DisplayMode.Height);
 
-            _mainContext.Strategy._vertexConstantBuffers = new ConstantBufferCollection(_mainContext.Strategy, 16);
-            _mainContext.Strategy._pixelConstantBuffers = new ConstantBufferCollection(_mainContext.Strategy, 16);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
 
-            _mainContext.Strategy._vertexTextures = new TextureCollection(_mainContext.Strategy, this.Capabilities.MaxVertexTextureSlots);
-            _mainContext.Strategy._pixelTextures = new TextureCollection(_mainContext.Strategy, this.Capabilities.MaxTextureSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexTextures = new TextureCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, this.Capabilities.MaxVertexTextureSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelTextures = new TextureCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, this.Capabilities.MaxTextureSlots);
 
-            _mainContext.Strategy._pixelSamplerStates = new SamplerStateCollection(_mainContext.Strategy, this.Capabilities.MaxTextureSlots);
-            _mainContext.Strategy._vertexSamplerStates = new SamplerStateCollection(_mainContext.Strategy, this.Capabilities.MaxVertexTextureSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelSamplerStates = new SamplerStateCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, this.Capabilities.MaxTextureSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexSamplerStates = new SamplerStateCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, this.Capabilities.MaxVertexTextureSlots);
 
-            _mainContext.Strategy._blendStateAdditive = new BlendState(BlendState.Additive);
-            _mainContext.Strategy._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
-            _mainContext.Strategy._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
-            _mainContext.Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateAdditive = new BlendState(BlendState.Additive);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
 
-            _mainContext.Strategy.BlendState = BlendState.Opaque;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
 
-            _mainContext.Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
-            _mainContext.Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
-            _mainContext.Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
 
             _mainContext.DepthStencilState = DepthStencilState.Default;
 
-            _mainContext.Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
-            _mainContext.Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
-            _mainContext.Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
 
-            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Setup end
 
             this.PlatformInitialize();
 
             // Force set the default render states.
-            _mainContext.Strategy._blendStateDirty = true;
-            _mainContext.Strategy._blendFactorDirty = true;
-            _mainContext.Strategy._depthStencilStateDirty = true;
-            _mainContext.Strategy._rasterizerStateDirty = true;
-            _mainContext.Strategy.BlendState = BlendState.Opaque;
-            _mainContext.Strategy.DepthStencilState = DepthStencilState.Default;
-            _mainContext.Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
-            _mainContext.Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
-            _mainContext.Strategy._vertexBuffersDirty = true;
-            _mainContext.Strategy._indexBufferDirty = true;
-            _mainContext.Strategy._vertexShaderDirty = true;
-            _mainContext.Strategy._pixelShaderDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffersDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._indexBufferDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
 
             // Set the default scissor rect.
-            _mainContext.Strategy._scissorRectangleDirty = true;
-            _mainContext.Strategy._scissorRectangle = _mainContext.Strategy._viewport.Bounds;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangle =  ((IPlatformGraphicsContext)_mainContext).Strategy._viewport.Bounds;
 
             // Set the default render target.
-            _mainContext.Strategy.ApplyRenderTargets(null);
+             ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
         protected abstract void PlatformSetup(PresentationParameters presentationParameters);
