@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.SamplerState state = null;
                 if (sampler != null)
                 {
-                    state = sampler.GetStrategy<ConcreteSamplerState>().GetDxState();
+                    state = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().GetDxState();
 
                     Debug.Assert(sampler.GraphicsDevice == _contextStrategy.Context.DeviceStrategy.Device, "The state was created for a different device!");
                 }

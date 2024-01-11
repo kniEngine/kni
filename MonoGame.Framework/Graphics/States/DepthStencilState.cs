@@ -10,8 +10,14 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class DepthStencilState : GraphicsResource
+        , IPlatformDepthStencilState
     {
         internal IDepthStencilStateStrategy _strategy;
+
+        T IPlatformDepthStencilState.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         public static readonly DepthStencilState Default;
         public static readonly DepthStencilState DepthRead;
@@ -22,11 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
             Default = new DepthStencilState("DepthStencilState.Default", true, true);
             DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
             None = new DepthStencilState("DepthStencilState.None", false, false);
-        }
-
-        internal T GetStrategy<T>() where T : IDepthStencilStateStrategy
-        {
-            return (T)_strategy;
         }
 
 

@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformSamplerState
+    {
+        T GetStrategy<T>() where T : ISamplerStateStrategy;
+    }
+
     public interface ISamplerStateStrategy
     {
         TextureFilter Filter { get; set; }

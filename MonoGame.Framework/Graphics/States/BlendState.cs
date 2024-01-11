@@ -10,8 +10,14 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class BlendState : GraphicsResource
+        , IPlatformBlendState
     {
         internal IBlendStateStrategy _strategy;
+
+        T IPlatformBlendState.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         public static readonly BlendState Additive;
         public static readonly BlendState AlphaBlend;
@@ -24,11 +30,6 @@ namespace Microsoft.Xna.Framework.Graphics
             AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
             NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
             Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
-        }
-
-        internal T GetStrategy<T>() where T : IBlendStateStrategy
-        {
-            return (T)_strategy;
         }
 
 
