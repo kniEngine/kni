@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(value, SamplerState.PointWrap))
                     newSamplerState = _samplerStatePointWrap;
 
-                newSamplerState.BindToGraphicsDevice(_contextStrategy.Context.DeviceStrategy.Device);
+                newSamplerState.BindToGraphicsDevice(_contextStrategy.Context.DeviceStrategy);
 
                 _actualSamplers[index] = newSamplerState;
             }
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 _samplers[i] = SamplerState.LinearWrap;
 
-                _samplerStateLinearWrap.BindToGraphicsDevice(_contextStrategy.Context.DeviceStrategy.Device);
+                _samplerStateLinearWrap.BindToGraphicsDevice(_contextStrategy.Context.DeviceStrategy);
                 _actualSamplers[i] = _samplerStateLinearWrap;
             }
         }
