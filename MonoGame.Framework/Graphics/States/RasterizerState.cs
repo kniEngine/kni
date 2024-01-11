@@ -10,8 +10,14 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class RasterizerState : GraphicsResource
+        , IPlatformRasterizerState
     {
         internal IRasterizerStateStrategy _strategy;
+
+        T IPlatformRasterizerState.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         public static readonly RasterizerState CullClockwise;
         public static readonly RasterizerState CullCounterClockwise;
@@ -22,11 +28,6 @@ namespace Microsoft.Xna.Framework.Graphics
             CullClockwise = new RasterizerState("RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
             CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
             CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
-        }
-
-        internal T GetStrategy<T>() where T : IRasterizerStateStrategy
-        {
-            return (T)_strategy;
         }
 
 

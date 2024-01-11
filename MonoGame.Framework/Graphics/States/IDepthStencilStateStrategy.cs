@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformDepthStencilState
+    {
+        T GetStrategy<T>() where T : IDepthStencilStateStrategy;
+    }
+
     public interface IDepthStencilStateStrategy
     {
         bool DepthBufferEnable { get; set; }

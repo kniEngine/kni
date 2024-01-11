@@ -10,6 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class SamplerState : GraphicsResource
+        , IPlatformSamplerState
     {
         internal ISamplerStateStrategy _strategy;
 
@@ -30,7 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
             PointWrap = new SamplerState("SamplerState.PointWrap", TextureFilter.Point, TextureAddressMode.Wrap);
         }
 
-        internal T GetStrategy<T>() where T : ISamplerStateStrategy
+        T IPlatformSamplerState.GetStrategy<T>()
         {
             return (T)_strategy;
         }
