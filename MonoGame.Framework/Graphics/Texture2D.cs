@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Graphics
         protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize)
             : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, true)
         {
-            _strategyTexture2D = ((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
+            _strategyTexture2D = graphicsDevice.MainContext.Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
         }
@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                return new Texture2D(((IPlatformGraphicsDevice)graphicsDevice).Strategy.MainContext, stream);
+                return new Texture2D(graphicsDevice.MainContext, stream);
             }
             catch(Exception e)
             {

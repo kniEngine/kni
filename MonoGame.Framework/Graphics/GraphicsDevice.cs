@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         GraphicsDeviceStrategy IPlatformGraphicsDevice.Strategy { get { return _strategy; } }
 
+        internal GraphicsContext MainContext { get { return _strategy.MainContext; } }
         internal GraphicsContext CurrentContext { get { return _strategy.CurrentContext; } }
 
 
