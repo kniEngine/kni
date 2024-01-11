@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _dirty |= (((uint)1) << i);
         }
 
-        internal T ToConcrete<T>() where T : TextureCollectionStrategy
+        public T ToConcrete<T>() where T : TextureCollectionStrategy
         {
             return (T)this;
         }

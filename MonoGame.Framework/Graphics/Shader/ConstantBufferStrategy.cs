@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._profile = source._profile;
         }
 
-        internal T ToConcrete<T>() where T : ConstantBufferStrategy
+        public T ToConcrete<T>() where T : ConstantBufferStrategy
         {
             return (T)this;
         }

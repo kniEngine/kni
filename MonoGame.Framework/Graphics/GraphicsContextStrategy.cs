@@ -500,7 +500,7 @@ namespace Microsoft.Xna.Platform.Graphics
         protected abstract void PlatformApplyDefaultRenderTarget();
         protected abstract IRenderTarget PlatformApplyRenderTargets();
 
-        internal T ToConcrete<T>() where T : GraphicsContextStrategy
+        public T ToConcrete<T>() where T : GraphicsContextStrategy
         {
             return (T)this;
         }
