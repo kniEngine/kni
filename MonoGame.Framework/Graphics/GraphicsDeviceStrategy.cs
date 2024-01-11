@@ -251,7 +251,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract GraphicsContextStrategy CreateGraphicsContextStrategy(GraphicsContext context);
 
-        internal T ToConcrete<T>() where T : GraphicsDeviceStrategy
+        public T ToConcrete<T>() where T : GraphicsDeviceStrategy
         {
             return (T)this;
         }

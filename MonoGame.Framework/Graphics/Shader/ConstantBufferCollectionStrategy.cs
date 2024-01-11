@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void Clear();
 
 
-        internal T ToConcrete<T>() where T : ConstantBufferCollectionStrategy
+        public T ToConcrete<T>() where T : ConstantBufferCollectionStrategy
         {
             return (T)this;
         }

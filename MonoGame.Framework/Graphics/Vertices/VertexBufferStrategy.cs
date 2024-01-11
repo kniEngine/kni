@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _bufferUsage; }
         }
 
-        internal T ToConcrete<T>() where T : VertexBufferStrategy
+        public T ToConcrete<T>() where T : VertexBufferStrategy
         {
             return (T)this;
         }

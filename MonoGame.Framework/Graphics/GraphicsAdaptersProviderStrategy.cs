@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract ReadOnlyCollection<GraphicsAdapter> Platform_Adapters { get; }
         public abstract GraphicsAdapter Platform_DefaultAdapter { get; }
         public virtual bool Platform_UseReferenceDevice { get; set; }
-        
 
-        internal T ToConcrete<T>() where T : GraphicsAdaptersProviderStrategy
+
+        public T ToConcrete<T>() where T : GraphicsAdaptersProviderStrategy
         {
             return (T)this;
         }

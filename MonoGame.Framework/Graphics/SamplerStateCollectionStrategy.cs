@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal T ToConcrete<T>() where T : SamplerStateCollectionStrategy
+        public T ToConcrete<T>() where T : SamplerStateCollectionStrategy
         {
             return (T)this;
         }

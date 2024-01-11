@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _elementSizeInBytes; }
         }
 
-        internal T ToConcrete<T>() where T : IndexBufferStrategy
+        public T ToConcrete<T>() where T : IndexBufferStrategy
         {
             return (T)this;
         }
