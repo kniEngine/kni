@@ -205,8 +205,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_indexBufferDirty)
             {
                 this.D3dContext.InputAssembler.SetIndexBuffer(
-                    Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DXIndexBuffer,
-                    Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType,
+                    ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DXIndexBuffer,
+                    ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType,
                     0);
                 _indexBufferDirty = false;
             }
@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     int vertexStride = vertexDeclaration.VertexStride;
                     int vertexOffsetInBytes = vertexBufferBinding.VertexOffset * vertexStride;
                     this.D3dContext.InputAssembler.SetVertexBuffers(
-                        slot, new D3D11.VertexBufferBinding(vertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, vertexStride, vertexOffsetInBytes));
+                        slot, new D3D11.VertexBufferBinding(((IPlatformVertexBuffer)vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, vertexStride, vertexOffsetInBytes));
                 }
 
                 // TODO: do we need to reset the previously set slots?
@@ -423,7 +423,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 startIndex = 0;
             }
 
-            userIndexBuffer.Buffer.SetData<T>(startIndex * userIndexBuffer.Buffer.Strategy.ElementSizeInBytes, indexData, indexOffset, indexCount, setDataOptions);
+            userIndexBuffer.Buffer.SetData<T>(startIndex * ((IPlatformIndexBuffer)userIndexBuffer.Buffer).Strategy.ElementSizeInBytes, indexData, indexOffset, indexCount, setDataOptions);
             userIndexBuffer.Offset = startIndex + indexCount;
 
             Indices = userIndexBuffer.Buffer;

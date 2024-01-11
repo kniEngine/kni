@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformVertexBuffer
+    {
+        VertexBufferStrategy Strategy { get; }
+    }
+
     public abstract class VertexBufferStrategy : GraphicsResourceStrategy
     {
         internal readonly GraphicsContextStrategy _contextStrategy;

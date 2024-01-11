@@ -219,7 +219,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         mode = D3D11.MapMode.WriteDiscard;
                         _baseQuad = 0;
                     }
-                    DX.DataBox dataBox = d3dContext.MapSubresource(_vertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0, mode, D3D11.MapFlags.None);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0, mode, D3D11.MapFlags.None);
                     VertexPositionColorTexture* vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
                     // create batch
@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         *(vertexArrayPtr + 3) = item.vertexBR;
                     }
                     // unmap and set vertexbuffer
-                    d3dContext.UnmapSubresource(_vertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0);
+                    d3dContext.UnmapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0);
                 }
 
                 // draw batch

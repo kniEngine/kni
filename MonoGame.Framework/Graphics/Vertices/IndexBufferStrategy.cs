@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformIndexBuffer
+    {
+        IndexBufferStrategy Strategy { get; }
+    }
+
     public abstract class IndexBufferStrategy : GraphicsResourceStrategy
     {
         internal readonly GraphicsContextStrategy _contextStrategy;

@@ -13,10 +13,11 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class IndexBuffer : GraphicsResource
+        , IPlatformIndexBuffer
     {
         internal IndexBufferStrategy _strategy;
 
-        internal IndexBufferStrategy Strategy { get { return _strategy; } }
+        IndexBufferStrategy IPlatformIndexBuffer.Strategy { get { return _strategy; } }
 
         public BufferUsage BufferUsage
         {

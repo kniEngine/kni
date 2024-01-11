@@ -12,10 +12,11 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class VertexBuffer : GraphicsResource
+        , IPlatformVertexBuffer
     {
         internal VertexBufferStrategy _strategy;
 
-        internal VertexBufferStrategy Strategy { get { return _strategy; } }
+        VertexBufferStrategy IPlatformVertexBuffer.Strategy { get { return _strategy; } }
 
         public int VertexCount
         {
