@@ -17,25 +17,25 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal VertexBufferStrategy Strategy { get { return _strategy; } }
 
-		public int VertexCount
+        public int VertexCount
         {
             get { return _strategy.VertexCount; }
         }
 
-		public VertexDeclaration VertexDeclaration
+        public VertexDeclaration VertexDeclaration
         {
             get { return _strategy.VertexDeclaration; }
         }
 
-		public BufferUsage BufferUsage
+        public BufferUsage BufferUsage
         {
             get { return _strategy.BufferUsage; }
         }
-		
-		
-		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage) :
-			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
-		{
+        
+        
+        public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage usage) :
+            this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, usage)
+        {
         }
 
         public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage usage) :
@@ -44,14 +44,14 @@ namespace Microsoft.Xna.Framework.Graphics
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexBufferStrategy(vertexDeclaration, vertexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
         protected VertexBuffer()
             : base()
         {
-		}
+        }
 
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentOutOfRangeException("elementCount", "This parameter must be a valid index within the array.");
             if (BufferUsage == BufferUsage.WriteOnly)
                 throw new NotSupportedException("Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
-			if (elementCount > 1 && elementCount * vertexStride > vertexByteSize)
+            if (elementCount > 1 && elementCount * vertexStride > vertexByteSize)
                 throw new InvalidOperationException("The array is not the correct size for the amount of data requested.");
 
             _strategy.GetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride);
@@ -171,12 +171,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to copy from <paramref name="data"/>.
         /// The combination of <paramref name="startIndex"/> and <paramref name="elementCount"/> 
         /// must be within the <paramref name="data"/> array bounds.</param>
-		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+        public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
             int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
             SetDataInternal<T>(0, data, startIndex, elementCount, elementSizeInBytes, SetDataOptions.None);
-		}
-		
+        }
+        
         /// <summary>
         /// Sets the vertex buffer data. This is the same as calling <see cref="SetData{T}(int, T[], int, int, int)"/> 
         /// with <c>offsetInBytes</c> and <c>startIndex</c> equal to <c>0</c>, <c>elementCount</c> equal to <c>data.Length</c>, 

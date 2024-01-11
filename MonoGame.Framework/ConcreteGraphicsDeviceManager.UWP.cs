@@ -199,7 +199,7 @@ namespace Microsoft.Xna.Platform
                 // For a UAP app we need to re-apply the
                 // render target before every draw.
                 // I guess the OS changes it and doesn't restore it?
-                device.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().UAP_ResetRenderTargets();
+                ((IPlatformGraphicsContext)device.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().UAP_ResetRenderTargets();
             }
 
             return true;

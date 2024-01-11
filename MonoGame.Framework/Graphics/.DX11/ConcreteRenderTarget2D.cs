@@ -225,9 +225,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal virtual void ResolveSubresource()
         {
-            lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 System.Diagnostics.Debug.Assert(_msTexture != null);
 

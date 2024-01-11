@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     ConstantBuffer cb = _effect.ConstantBuffers[_vertexShader.CBuffers[c]];
                     cb.Strategy.Update(_effect.Parameters);
-                    context.Strategy._vertexConstantBuffers[c] = cb;
+                    ((IPlatformGraphicsContext)context).Strategy._vertexConstantBuffers[c] = cb;
                 }
             }
 
@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     ConstantBuffer cb = _effect.ConstantBuffers[_pixelShader.CBuffers[c]];
                     cb.Strategy.Update(_effect.Parameters);
-                    context.Strategy._pixelConstantBuffers[c] = cb;
+                    ((IPlatformGraphicsContext)context).Strategy._pixelConstantBuffers[c] = cb;
                 }
             }
 

@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int w, h;
             Texture.GetSizeForLevel(Width, Height, level, out w, out h);
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
 
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // TODO: check for non renderable formats (formats that can't be attached to FBO)
 
@@ -309,7 +309,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, base.GraphicsDeviceStrategy.CurrentContext.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy);
 
             base.Dispose(disposing);
         }

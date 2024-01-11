@@ -34,11 +34,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Debug.Assert(GLVertexBuffer != 0);
 
-            var GL = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GL.CheckGLError();
-            base.GraphicsDeviceStrategy.CurrentContext.Strategy._vertexBuffersDirty = true;
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
             // Pointer to the start of data in the vertex buffer
             IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);

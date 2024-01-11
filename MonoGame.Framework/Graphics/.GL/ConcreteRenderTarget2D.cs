@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, base.GraphicsDeviceStrategy.CurrentContext.Strategy);
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy);
 
             base.Dispose(disposing);
         }

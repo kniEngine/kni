@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             base.Present();
 
-            var GL = _mainContext.Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Sdl.Current.OpenGL.SwapWindow(this.PresentationParameters.DeviceWindowHandle);
             GL.CheckGLError();
@@ -82,11 +82,11 @@ namespace Microsoft.Xna.Platform.Graphics
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
             // Initialize draw buffer attachment array
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
-            for (int i = 0; i < _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
-                _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
+            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
 
-            _mainContext.Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
 
 

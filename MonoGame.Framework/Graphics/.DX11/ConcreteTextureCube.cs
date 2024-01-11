@@ -73,9 +73,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     Right = checkedRect.Right
                 };
 
-                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     d3dContext.UpdateSubresource(box, this.GetTexture(), subresourceIndex, region);
                 }
@@ -109,9 +109,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
-                lock (base.GraphicsDeviceStrategy.CurrentContext.Strategy.SyncHandle)
+                lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
-                    D3D11.DeviceContext d3dContext = base.GraphicsDeviceStrategy.CurrentContext.Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                    D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
                     int subresourceIndex = (int)face * this.LevelCount + level;

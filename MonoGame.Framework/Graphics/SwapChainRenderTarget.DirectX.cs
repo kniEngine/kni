@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
             : base(graphicsDevice, width, height, mipMap, QuerySelectedFormat(graphicsDevice, preferredFormat), false, 1, true)
         {
             SurfaceFormat format = QuerySelectedFormat(graphicsDevice, preferredFormat);
-            _strategyRenderTargetSwapChain = new ConcreteRenderTargetSwapChain(graphicsDevice.MainContext.Strategy, width, height, mipMap, usage,
+            _strategyRenderTargetSwapChain = new ConcreteRenderTargetSwapChain(((IPlatformGraphicsContext)graphicsDevice.MainContext).Strategy, width, height, mipMap, usage,
                 windowHandle, presentInterval,
                 format, preferredDepthFormat, preferredMultiSampleCount);
             _strategyRenderTarget2D = _strategyRenderTargetSwapChain;

@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
 
             _graphicsDeviceStrategy = graphicsDeviceStrategy;
 
-            var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)_graphicsDeviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
 
             _glVideoSurfaceTexture = GL.GenTexture();
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Platform.Media
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(this.Video.GraphicsDevice, this.Video.Width, this.Video.Height, false, SurfaceFormat.Color);
 
-            var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = ((IPlatformGraphicsContext)_graphicsDeviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             if (_frameAvailable)
             {
@@ -276,7 +276,7 @@ namespace Microsoft.Xna.Platform.Media
 
             if (_graphicsDeviceStrategy != null)
             {
-                var GL = _graphicsDeviceStrategy.MainContext.Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                var GL = ((IPlatformGraphicsContext)_graphicsDeviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                 if (_glVideoSurfaceTexture != 0)
                 {

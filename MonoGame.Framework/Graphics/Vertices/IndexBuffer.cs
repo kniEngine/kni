@@ -34,12 +34,12 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
-			this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage)
-		{
-		}
+        public IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
+            this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage)
+        {
+        }
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+        public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base()
         {
             if (graphicsDevice == null)
@@ -47,12 +47,12 @@ namespace Microsoft.Xna.Framework.Graphics
             if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach && indexElementSize == IndexElementSize.ThirtyTwoBits)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateIndexBufferStrategy(indexElementSize, indexCount, usage);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
 
-		protected IndexBuffer()
+        protected IndexBuffer()
             : base()
         {
         }
@@ -105,12 +105,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             SetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, SetDataOptions.None);
         }
-        		
-		public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+                
+        public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
             SetDataInternal<T>(0, data, startIndex, elementCount, SetDataOptions.None);
-		}
-		
+        }
+        
         public void SetData<T>(T[] data) where T : struct
         {
             SetDataInternal<T>(0, data, 0, data.Length, SetDataOptions.None);
@@ -125,5 +125,5 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy.SetData<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
-	}
+    }
 }

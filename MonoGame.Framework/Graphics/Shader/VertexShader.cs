@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ShaderProfileType profile)
             : base()
         {
-            _strategy = graphicsDevice.CurrentContext.Strategy.CreateVertexShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
