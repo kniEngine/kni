@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Only implemented for DirectX </remarks>
         public void SetRenderTarget(RenderTarget2D renderTarget, int arraySlice)
         {
-            if (!this.DeviceStrategy.Capabilities.SupportsTextureArrays)
+            if (!_deviceStrategy.Capabilities.SupportsTextureArrays)
                 throw new InvalidOperationException("Texture arrays are not supported on this graphics device");
 
             if (renderTarget == null)
@@ -257,9 +257,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     renderTargets = null;
             }
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && renderTargetCount > 1)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && renderTargetCount > 1)
                 throw new NotSupportedException("Reach profile supports a maximum of 1 simultaneous rendertargets");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && renderTargetCount > 4)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && renderTargetCount > 4)
                 throw new NotSupportedException("HiDef profile supports a maximum of 4 simultaneous rendertargets");
             if (renderTargetCount > 8)
                 throw new NotSupportedException("Current profile supports a maximum of 8 simultaneous rendertargets");
@@ -320,11 +320,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_strategy.Indices == null)
                 throw new InvalidOperationException("Index buffer must be set before calling DrawIndexedPrimitives.");
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
                 throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -357,7 +357,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // internal DrawIndexedPrimitives without checks, used by SpriteBatcher.
         internal void SB_DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
         {
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -413,11 +413,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexOffset < 0 || vertexOffset >= vertexData.Length)
                 throw new ArgumentOutOfRangeException("vertexOffset");
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
                 throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -466,11 +466,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_strategy._vertexBuffers.Count == 0)
                 throw new InvalidOperationException("Vertex buffer must be set before calling DrawPrimitives.");
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
                 throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -558,11 +558,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (indexOffset < 0 || indexOffset >= indexData.Length)
                 throw new ArgumentOutOfRangeException("indexOffset");
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
                 throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -639,7 +639,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// in the array of vertices.</remarks>
         public void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support 32 bit indices");
 
             if (vertexData == null || vertexData.Length == 0)
@@ -660,11 +660,11 @@ namespace Microsoft.Xna.Framework.Graphics
             if (indexOffset < 0 || indexOffset >= indexData.Length)
                 throw new ArgumentOutOfRangeException("indexOffset");
 
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
                 throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
                 int texturesCount = _strategy.Textures.Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
@@ -745,7 +745,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Draw geometry with data from multiple bound vertex streams at different frequencies.</remarks>
         public void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (this.DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
                 throw new NotSupportedException("Reach profile does not support Instancing.");
 
             if (_strategy._vertexBuffers.Count == 0)
