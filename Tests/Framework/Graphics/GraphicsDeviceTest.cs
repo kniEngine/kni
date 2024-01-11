@@ -785,13 +785,13 @@ namespace MonoGame.Tests.Graphics
 
             int vbo;
             GL.GetInteger(GetPName.ArrayBufferBinding, out vbo);
-            Assert.AreEqual(vb1.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer, vbo);
+            Assert.AreEqual(((IPlatformVertexBuffer)vb1).Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer, vbo);
 
             gd.SetVertexBuffer(vb2);
             gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
 
             GL.GetInteger(GetPName.ArrayBufferBinding, out vbo);
-            Assert.AreEqual(vb2.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer, vbo);
+            Assert.AreEqual(((IPlatformVertexBuffer)vb2).Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer, vbo);
 
             se.Dispose();
             vb1.Dispose();

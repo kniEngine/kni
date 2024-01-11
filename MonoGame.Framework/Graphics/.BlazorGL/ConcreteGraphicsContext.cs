@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
                 GL.CheckGLError();
                 _indexBufferDirty = false;
             }
@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
                 if (_attribsDirty
-                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, vertexAttribInfo)
                 ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
@@ -418,7 +418,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     bindingsChanged = true;
 
-                    GL.BindBuffer(WebGLBufferType.ARRAY, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
+                    GL.BindBuffer(WebGLBufferType.ARRAY, ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
                     GL.CheckGLError();
 
                     for (int e = 0; e < vertexAttribInfo.Elements.Count; e++)
@@ -446,7 +446,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
 
-                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy;
+                    _bufferBindingInfos[slot].GLVertexBuffer = ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy;
                     _bufferBindingInfos[slot].AttributeInfo = vertexAttribInfo;
                     _bufferBindingInfos[slot].VertexOffset = vertexOffset;
                     _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
@@ -550,8 +550,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            WebGLDataType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
-            int indexOffsetInBytes = (startIndex * Indices.Strategy.ElementSizeInBytes);
+            WebGLDataType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            int indexOffsetInBytes = (startIndex * ((IPlatformIndexBuffer)Indices).Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 

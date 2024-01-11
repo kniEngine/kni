@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (_indexBufferDirty)
             {
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().GLIndexBuffer);
                 GL.CheckGLError();
                 _indexBufferDirty = false;
             }
@@ -457,7 +457,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
                 if (_attribsDirty
-                ||  _bufferBindingInfos[slot].GLVertexBuffer != vertexBufferBinding.VertexBuffer.Strategy
+                ||  _bufferBindingInfos[slot].GLVertexBuffer != ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, vertexAttribInfo)
                 ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
@@ -465,7 +465,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     bindingsChanged = true;
 
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferBinding.VertexBuffer.Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().GLVertexBuffer);
                     GL.CheckGLError();
 
                     for (int e = 0; e < vertexAttribInfo.Elements.Count; e++)
@@ -492,7 +492,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
 
-                    _bufferBindingInfos[slot].GLVertexBuffer = vertexBufferBinding.VertexBuffer.Strategy;
+                    _bufferBindingInfos[slot].GLVertexBuffer = ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy;
                     _bufferBindingInfos[slot].AttributeInfo = vertexAttribInfo;
                     _bufferBindingInfos[slot].VertexOffset = vertexOffset;
                     _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
@@ -597,8 +597,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
-            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
+            DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * ((IPlatformIndexBuffer)Indices).Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -637,8 +637,8 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            DrawElementsType indexElementType = Indices.Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
-            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * Indices.Strategy.ElementSizeInBytes);
+            DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            IntPtr indexOffsetInBytes = (IntPtr)(startIndex * ((IPlatformIndexBuffer)Indices).Strategy.ElementSizeInBytes);
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
