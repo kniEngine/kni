@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformShader
+    {
+        ShaderStrategy Strategy { get; }
+    }
+
     public abstract class ShaderStrategy : GraphicsResourceStrategy
     {
         internal readonly GraphicsContextStrategy _contextStrategy;
@@ -31,6 +36,11 @@ namespace Microsoft.Xna.Platform.Graphics
             this._CBuffers = cBuffers;
             this._attributes = attributes;
 
+        }
+
+        public T ToConcrete<T>() where T : ShaderStrategy
+        {
+            return (T)this;
         }
 
         protected override void Dispose(bool disposing)

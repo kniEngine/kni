@@ -245,20 +245,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(((ConcreteVertexShader)VertexShader.Strategy).DXVertexShader);
+                this.D3dContext.VertexShader.Set(((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().DXVertexShader);
 
                 unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = ((ConcreteVertexShader)VertexShader.Strategy).InputLayouts.GetOrCreate(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(((ConcretePixelShader)PixelShader.Strategy).DXPixelShader);
+                this.D3dContext.PixelShader.Set(((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>().DXPixelShader);
                 _pixelShaderDirty = false;
 
                 unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
@@ -266,8 +266,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            _vertexConstantBuffers.Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, VertexShader.Strategy, this.D3dContext.VertexShader);
-            _pixelConstantBuffers.Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, PixelShader.Strategy, this.D3dContext.PixelShader);
+            _vertexConstantBuffers.Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, ((IPlatformShader)this.VertexShader).Strategy, this.D3dContext.VertexShader);
+            _pixelConstantBuffers.Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, ((IPlatformShader)this.PixelShader).Strategy, this.D3dContext.PixelShader);
 
 
             // Apply Shader Buffers

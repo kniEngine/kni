@@ -360,11 +360,11 @@ namespace Microsoft.Xna.Platform.Graphics
             int program = GL.CreateProgram();
             GL.CheckGLError();
 
-            int vertexShaderHandle = ((ConcreteVertexShader)vertexShader.Strategy).ShaderHandle;
+            int vertexShaderHandle = ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().ShaderHandle;
             GL.AttachShader(program, vertexShaderHandle);
             GL.CheckGLError();
 
-            int pixelShaderHandle = ((ConcretePixelShader)pixelShader.Strategy).ShaderHandle;
+            int pixelShaderHandle = ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ShaderHandle;
             GL.AttachShader(program, pixelShaderHandle);
             GL.CheckGLError();
 
@@ -376,9 +376,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GL.CheckGLError();
 
-            ((ConcreteVertexShader)vertexShader.Strategy).GetVertexAttributeLocations(this, program);
+            ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().GetVertexAttributeLocations(this, program);
 
-            ((ConcretePixelShader)pixelShader.Strategy).ApplySamplerTextureUnits(this, program);
+            ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ApplySamplerTextureUnits(this, program);
 
             int linkStatus;
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
@@ -442,7 +442,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyVertexBuffersAttribs(int baseVertex)
         {
-            ConcreteVertexShader vertexShaderStrategy = (ConcreteVertexShader)this.VertexShader.Strategy;
+            ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
             bool bindingsChanged = false;
 
@@ -521,7 +521,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
         {
-            ConcreteVertexShader vertexShaderStrategy = (ConcreteVertexShader)this.VertexShader.Strategy;
+            ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
             int vertexStride = vertexDeclaration.VertexStride;
             IntPtr vertexOffset = baseVertex;
