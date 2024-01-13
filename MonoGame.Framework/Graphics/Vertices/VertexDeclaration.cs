@@ -23,13 +23,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- Data shared between structurally identical vertex declarations -----
 
-        private sealed class Data : IEquatable<Data>
+        private sealed class VertexDeclarationData : IEquatable<VertexDeclarationData>
         {
             private readonly int _hashCode;
             public readonly int VertexStride;
             public VertexElement[] Elements;
 
-            public Data(int vertexStride, VertexElement[] elements)
+            public VertexDeclarationData(int vertexStride, VertexElement[] elements)
             {
                 VertexStride = vertexStride;
                 Elements = elements;
@@ -48,10 +48,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             public override bool Equals(object obj)
             {
-                return Equals(obj as Data);
+                return Equals(obj as VertexDeclarationData);
             }
 
-            public bool Equals(Data other)
+            public bool Equals(VertexDeclarationData other)
             {
                 if (ReferenceEquals(null, other))
                     return false;
@@ -82,18 +82,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- VertexDeclaration Cache -----
 
-        private static readonly Dictionary<Data, VertexDeclaration> _vertexDeclarationCache;
+        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationCache;
 
         static VertexDeclaration()
         {
-            _vertexDeclarationCache = new Dictionary<Data, VertexDeclaration>();
+            _vertexDeclarationCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
         }
 
         internal static VertexDeclaration GetOrCreate(int vertexStride, VertexElement[] elements)
         {
             lock (_vertexDeclarationCache)
             {
-                var data = new Data(vertexStride, elements);
+                var data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
                 if (!_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
                 {
@@ -110,14 +110,14 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private VertexDeclaration(Data data)
+        private VertexDeclaration(VertexDeclarationData data)
         {
             _data = data;
         }
         #endregion
 
 
-        private readonly Data _data;
+        private readonly VertexDeclarationData _data;
 
         /// <summary>
         /// Gets the internal vertex elements array.
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_vertexDeclarationCache)
             {
-                var data = new Data(vertexStride, elements);
+                var data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
                 if (_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
                 {
