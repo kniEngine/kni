@@ -8,10 +8,11 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class OcclusionQuery : GraphicsResource
+        , IPlatformOcclusionQuery
     {
         private OcclusionQueryStrategy _strategy;
 
-        internal OcclusionQueryStrategy Strategy { get { return _strategy; } }
+        OcclusionQueryStrategy IPlatformOcclusionQuery.Strategy { get { return _strategy; } }
 
         /// <summary>
         /// Gets a value indicating whether the occlusion query has completed.
