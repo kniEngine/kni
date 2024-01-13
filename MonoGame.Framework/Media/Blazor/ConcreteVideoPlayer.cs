@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Media
 
             base.Video = video;
 
-            ConcreteVideoStrategy videoStrategy = (ConcreteVideoStrategy)video.Strategy;
+            ConcreteVideoStrategy videoStrategy = ((IPlatformVideo)video).Strategy.ToConcrete<ConcreteVideoStrategy>();
 
             _player.Src = videoStrategy.FileName;
             _player.Load();

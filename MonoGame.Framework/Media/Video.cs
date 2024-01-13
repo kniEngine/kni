@@ -14,11 +14,12 @@ namespace Microsoft.Xna.Framework.Media
     /// Represents a video.
     /// </summary>
     public sealed class Video : IDisposable
+        , IPlatformVideo
     {
-        private bool _disposed;
         private VideoStrategy _strategy;
+        private bool _isDisposed;
 
-        internal VideoStrategy Strategy { get { return _strategy; } }
+        VideoStrategy IPlatformVideo.Strategy { get { return _strategy; } }
         internal GraphicsDevice GraphicsDevice { get { return _strategy.GraphicsDevice; } }
 
         #region Public API
@@ -96,14 +97,14 @@ namespace Microsoft.Xna.Framework.Media
 
         void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
                     _strategy.Dispose();
                 }
 
-                _disposed = true;
+                _isDisposed = true;
             }
         }
 
