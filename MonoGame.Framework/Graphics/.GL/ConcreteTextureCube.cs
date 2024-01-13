@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     int startBytes = startIndex * elementSizeInByte;
                     IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
-                    base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
                     GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
 
-            base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.CheckGLError();
             GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glTexture = GL.GenTexture();
                 GL.CheckGLError();
 
-                base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);

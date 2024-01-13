@@ -11,10 +11,11 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed class TextureCollection
+        : IPlatformTextureCollection
     {
         private TextureCollectionStrategy _strategy;
 
-        internal TextureCollectionStrategy Strategy { get { return _strategy; } }
+        TextureCollectionStrategy IPlatformTextureCollection.Strategy { get { return _strategy; } }
 
 
         internal TextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
