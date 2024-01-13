@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public GraphicsAdapter Adapter
         {
             get { return _graphicsAdapter; }
-            internal set { _graphicsAdapter = value; }
+            protected set { _graphicsAdapter = value; }
         }
 
         public DisplayMode DisplayMode
