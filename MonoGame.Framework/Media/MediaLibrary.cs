@@ -10,11 +10,12 @@ using Microsoft.Xna.Platform.Media;
 namespace Microsoft.Xna.Framework.Media
 {
 	public partial class MediaLibrary : IDisposable
-	{
+        , IPlatformMediaLibrary
+    {
         private MediaLibraryStrategy _strategy;
         bool _isDisposed;
 
-        public MediaLibraryStrategy Strategy { get { return _strategy; } }
+        MediaLibraryStrategy IPlatformMediaLibrary.Strategy { get { return _strategy; } }
         public bool IsDisposed { get { return _isDisposed; } }
 
         public MediaSource MediaSource { get { return _strategy.MediaSource; } }

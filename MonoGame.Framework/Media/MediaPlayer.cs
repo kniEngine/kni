@@ -11,6 +11,7 @@ using Microsoft.Xna.Platform.Media;
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class MediaPlayer : IMediaPlayer
+        , IPlatformMediaPlayer
     {
         private static MediaPlayer _current;
 
@@ -165,7 +166,7 @@ namespace Microsoft.Xna.Framework.Media
         private event EventHandler<EventArgs> _mediaStateChanged;
 
 
-        internal MediaPlayerStrategy Strategy { get { return _strategy; } }
+        MediaPlayerStrategy IPlatformMediaPlayer.Strategy { get { return _strategy; } }
 
 
         event EventHandler<EventArgs> IMediaPlayer.ActiveSongChanged

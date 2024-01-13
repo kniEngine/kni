@@ -10,10 +10,11 @@ using Microsoft.Xna.Platform.Media;
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Album : IDisposable
+        , IPlatformAlbum
     {
         private AlbumStrategy _strategy;
 
-        public AlbumStrategy Strategy { get { return _strategy; } }
+        AlbumStrategy IPlatformAlbum.Strategy { get { return _strategy; } }
 
 
         public Artist Artist

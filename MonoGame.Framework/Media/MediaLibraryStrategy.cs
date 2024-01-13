@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
+    public interface IPlatformMediaLibrary
+    {
+        MediaLibraryStrategy Strategy { get; }
+    }
+
     abstract public class MediaLibraryStrategy : IDisposable
     {
         public virtual MediaSource MediaSource { get; private set; }
