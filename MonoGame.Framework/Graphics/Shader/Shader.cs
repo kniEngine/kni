@@ -11,10 +11,11 @@ namespace Microsoft.Xna.Platform.Graphics
 {
 
     public abstract class Shader : GraphicsResource
-	{
-        internal ShaderStrategy _strategy;
+        , IPlatformShader
+    {
+        protected ShaderStrategy _strategy;
 
-        internal ShaderStrategy Strategy { get { return _strategy; } }
+        ShaderStrategy IPlatformShader.Strategy { get { return _strategy; } }
         
         /// <summary>
         /// A hash value which can be used to compare shaders.
