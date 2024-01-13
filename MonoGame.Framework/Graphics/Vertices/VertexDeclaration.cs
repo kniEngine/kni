@@ -96,15 +96,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- VertexDeclaration Cache -----
 
-        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
+        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationDataCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
 
         internal static VertexDeclaration GetOrCreate(int vertexStride, VertexElement[] elements)
         {
-            lock (_vertexDeclarationCache)
+            lock (_vertexDeclarationDataCache)
             {
                 VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
-                if (!_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
+                if (!_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
                 {
                     // Data.Elements have already been set in the Data ctor. However, entries
                     // in the vertex declaration cache must be immutable. Therefore, we create a 
@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     data.Elements = (VertexElement[])elements.Clone();
 
                     vertexDeclaration = new VertexDeclaration(data);
-                    _vertexDeclarationCache[data] = vertexDeclaration;
+                    _vertexDeclarationDataCache[data] = vertexDeclaration;
                 }
 
                 return vertexDeclaration;
@@ -162,12 +162,12 @@ namespace Microsoft.Xna.Framework.Graphics
             if ((elements == null) || (elements.Length == 0))
                 throw new ArgumentNullException("elements", "Elements cannot be empty");
 
-            lock (_vertexDeclarationCache)
+            lock (_vertexDeclarationDataCache)
             {
                 VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
 
                 VertexDeclaration vertexDeclaration;
-                if (_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
+                if (_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
                 {
                     // Reuse existing data.
                     _data = vertexDeclaration._data;
@@ -177,7 +177,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Cache new vertex declaration.
                     data.Elements = (VertexElement[])elements.Clone();
                     _data = data;
-                    _vertexDeclarationCache[data] = this;
+                    _vertexDeclarationDataCache[data] = this;
                 }
             }
         }
