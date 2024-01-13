@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
+    public interface IPlatformAlbum
+    {
+        AlbumStrategy Strategy { get; }
+    }
+
     abstract public class AlbumStrategy : IDisposable
     {
         abstract public string Name { get; }

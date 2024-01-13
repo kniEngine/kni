@@ -11,6 +11,11 @@ using FrameworkMedia = Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
+    public interface IPlatformMediaPlayer
+    {
+        MediaPlayerStrategy Strategy { get; }
+    }
+
     abstract public class MediaPlayerStrategy : IDisposable
     {
         private float _volume = 1.0f;
