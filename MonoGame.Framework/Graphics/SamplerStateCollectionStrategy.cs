@@ -9,6 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformSamplerStateCollection
+    {
+        SamplerStateCollectionStrategy Strategy { get; }
+    }
+
     public abstract class SamplerStateCollectionStrategy
     {
         protected readonly GraphicsContextStrategy _contextStrategy;
