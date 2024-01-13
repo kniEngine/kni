@@ -11,6 +11,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformGraphicsAdapter
+    {
+        GraphicsAdapterStrategy Strategy { get; }
+    }
+
     public abstract class GraphicsAdapterStrategy
     {
         public virtual string Platform_DeviceName { get; set; }

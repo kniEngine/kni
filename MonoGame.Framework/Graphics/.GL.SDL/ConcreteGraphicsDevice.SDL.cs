@@ -72,11 +72,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext = new GraphicsContext(this);
 
-            var GL = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().GL;
+            var GL = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().GL;
 
             // get the GL version.
-            _glMajorVersion = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
-            _glMinorVersion = GraphicsAdapter.DefaultAdapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
+            _glMajorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
+            _glMinorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
 
             _capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
