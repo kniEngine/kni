@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Media
                 ConcreteTexture2D texture2D = _lastFrame.GetTextureStrategy<ConcreteTexture2D>();
 
                 System.Diagnostics.Debug.Assert(texture2D._glTexture != null);
-                texture2D.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+                ((IPlatformTextureCollection)texture2D.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, texture2D._glTexture);

@@ -326,10 +326,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -359,10 +359,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -419,10 +419,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -472,10 +472,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -564,10 +564,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
@@ -666,10 +666,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                int texturesCount = _strategy.Textures.Strategy.Length;
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
                 for (int i = 0; i < texturesCount; i++)
                 {
-                    Texture2D tx2D = _strategy.Textures.Strategy[i] as Texture2D;
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
                     if (tx2D != null)
                     {
                         if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)

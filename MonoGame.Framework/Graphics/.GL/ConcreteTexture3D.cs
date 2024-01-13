@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
-                    base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
                     GL.BindTexture(_glTarget, _glTexture);
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glTexture = GL.GenTexture();
                 GL.CheckGLError();
 
-                base.GraphicsDeviceStrategy.CurrentContext.Textures.Strategy.Dirty(0);
+                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(_glTarget, _glTexture);

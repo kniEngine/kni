@@ -9,6 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformTextureCollection
+    {
+        TextureCollectionStrategy Strategy { get; }
+    }
+
     public abstract class TextureCollectionStrategy
     {   
         protected readonly GraphicsContextStrategy _contextStrategy;
