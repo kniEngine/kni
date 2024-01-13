@@ -80,14 +80,14 @@ namespace Microsoft.Xna.Platform.Graphics
             internal set { _presentationParameters = value; }
         }
 
-        internal GraphicsCapabilities Capabilities
+        public GraphicsCapabilities Capabilities
         {
             get { return _capabilities; }
         }
 
-        internal GraphicsContext MainContext { get { return _mainContext; } }
+        public GraphicsContext MainContext { get { return _mainContext; } }
 
-        internal GraphicsContext CurrentContext { get { return _mainContext; } }
+        public GraphicsContext CurrentContext { get { return _mainContext; } }
 
 
         protected GraphicsDeviceStrategy(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
