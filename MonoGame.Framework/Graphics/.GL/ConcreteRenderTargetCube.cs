@@ -28,11 +28,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            if (!contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
+            if (!((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer
             ||  GL.RenderbufferStorageMultisample == null)
                 maxMultiSampleCount = 0;
-            this._multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            this._multiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
 

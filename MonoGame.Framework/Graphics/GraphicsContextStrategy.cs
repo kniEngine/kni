@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
     public interface IPlatformGraphicsContext
     {
         GraphicsContextStrategy Strategy { get; }
+        GraphicsDeviceStrategy DeviceStrategy { get; }
     }
 
     public abstract class GraphicsContextStrategy : IDisposable
@@ -161,12 +162,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_blendState, BlendState.Opaque))
                     newBlendState = _blendStateOpaque;
 
-                if (newBlendState.IndependentBlendEnable && !Context.DeviceStrategy.Capabilities.SupportsSeparateBlendStates)
+                if (newBlendState.IndependentBlendEnable && !((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsSeparateBlendStates)
                     throw new PlatformNotSupportedException("Independent blend states requires at least OpenGL 4.0 or GL_ARB_draw_buffers_blend. Try upgrading your graphics drivers.");
 
                 // Blend state is now bound to a device... no one should
                 // be changing the state of the blend state object now!
-                newBlendState.BindToGraphicsDevice(this.Context.DeviceStrategy);
+                newBlendState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
 
                 _actualBlendState = newBlendState;
 
@@ -212,7 +213,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_depthStencilState, DepthStencilState.None))
                     newDepthStencilState = _depthStencilStateNone;
 
-                newDepthStencilState.BindToGraphicsDevice(this.Context.DeviceStrategy);
+                newDepthStencilState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
 
                 _actualDepthStencilState = newDepthStencilState;
 
@@ -232,7 +233,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_rasterizerState == value)
                     return;
 
-                if (!value.DepthClipEnable && !Context.DeviceStrategy.Capabilities.SupportsDepthClamp)
+                if (!value.DepthClipEnable && !((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsDepthClamp)
                     throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
 
                 _rasterizerState = value;
@@ -247,7 +248,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_rasterizerState, RasterizerState.CullNone))
                     newRasterizerState = _rasterizerStateCullNone;
 
-                newRasterizerState.BindToGraphicsDevice(this.Context.DeviceStrategy);
+                newRasterizerState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
 
                 _actualRasterizerState = newRasterizerState;
 
@@ -363,13 +364,13 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                if (vertexBuffers.Length <= this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots)
+                if (vertexBuffers.Length <= ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots)
                 {
                     _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
                 }
                 else
                 {
-                    string message = String.Format("Max number of vertex buffers is {0}.", this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots);
+                    string message = String.Format("Max number of vertex buffers is {0}.", ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }
@@ -395,10 +396,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 _currentRenderTargetCount = 0;
 
                 this.PlatformApplyDefaultRenderTarget();
-                clearTarget = this.Context.DeviceStrategy.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
+                clearTarget = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
 
-                renderTargetWidth = this.Context.DeviceStrategy.PresentationParameters.BackBufferWidth;
-                renderTargetHeight = this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight;
+                renderTargetWidth = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferWidth;
+                renderTargetHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
             }
             else
             {

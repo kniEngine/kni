@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
             width = result.Width;
             height = result.Height;
-            ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+            ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 width = bmpSource.Size.Width;
                 height = bmpSource.Size.Height;
-                ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+                ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
                 // TODO: use texture.SetData(...)
                 D3D11.Texture2DDescription texture2DDesc;
@@ -118,8 +118,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, dataStream);
                     DX.DataRectangle rect = new DX.DataRectangle(dataStream.DataPointer, bmpSource.Size.Width * 4);
-                    _texture = new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
-                    _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _texture);
+                    _texture = new D3D11.Texture2D(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
+                    _resourceView = new D3D11.ShaderResourceView(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _texture);
                 }
             }
         }

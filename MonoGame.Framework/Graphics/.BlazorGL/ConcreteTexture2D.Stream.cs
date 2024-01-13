@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
             width = result.Width;
             height = result.Height;
-            ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+            ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);

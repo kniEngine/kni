@@ -30,15 +30,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
         {
-            _glContext = SDL.OpenGL.CreateGLContext(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            _glContext = SDL.OpenGL.CreateGLContext(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
 
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, 0);
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
             _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
             _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
 
-            MakeCurrent(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(context.DeviceStrategy.PresentationParameters.PresentationInterval);
+            MakeCurrent(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.PresentationInterval);
             SDL.OpenGL.SetSwapInterval(swapInterval);
         }
 

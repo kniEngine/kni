@@ -350,7 +350,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (baseInstance > 0)
                 {
-                    if (!this.Context.DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
+                    if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                         throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
 
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);
@@ -379,7 +379,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 int requiredVertexCount = Math.Max(vertexCount, 4 * 256);
                 requiredVertexCount = (requiredVertexCount + 255) & (~255); // grow in chunks of 256.
-                userVertexBuffer.Buffer = new DynamicVertexBuffer(this.Context.DeviceStrategy.Device, vertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
+                userVertexBuffer.Buffer = new DynamicVertexBuffer(((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, vertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
                 userVertexBuffer.Count = userVertexBuffer.Buffer.VertexCount;
             }
 
@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 int requiredIndexCount = Math.Max(indexCount, 6 * 512);
                 requiredIndexCount = (requiredIndexCount + 511) & (~511); // grow in chunks of 512.
-                userIndexBuffer.Buffer = new DynamicIndexBuffer(this.Context.DeviceStrategy.Device, userIndexBuffer.ElementSize, requiredIndexCount, BufferUsage.WriteOnly);
+                userIndexBuffer.Buffer = new DynamicIndexBuffer(((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, userIndexBuffer.ElementSize, requiredIndexCount, BufferUsage.WriteOnly);
                 userIndexBuffer.Count = userIndexBuffer.Buffer.IndexCount;
             }
 
@@ -657,8 +657,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Set the default swap chain.
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
-            _currentRenderTargets[0] = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._renderTargetView;
-            _currentDepthStencilView = this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._depthStencilView;
+            _currentRenderTargets[0] = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._renderTargetView;
+            _currentDepthStencilView = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._depthStencilView;
 
             lock (this.SyncHandle)
             {

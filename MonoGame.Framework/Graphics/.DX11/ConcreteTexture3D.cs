@@ -165,9 +165,9 @@ namespace Microsoft.Xna.Platform.Graphics
             texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             System.Diagnostics.Debug.Assert(_texture == null);
-            D3D11.Resource texture = new D3D11.Texture3D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
+            D3D11.Resource texture = new D3D11.Texture3D(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc);
             _texture = texture;
-            _resourceView = new D3D11.ShaderResourceView(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+            _resourceView = new D3D11.ShaderResourceView(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
         }
 
     }

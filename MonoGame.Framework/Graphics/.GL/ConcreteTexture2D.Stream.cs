@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
             width = result.Width;
             height = result.Height;
-            ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+            ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 width = image.Width;
                 height = image.Height;
-                ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+                ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
                 byte[] data = new byte[width * height * 4];
 
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 width = image.Width;
                 height = image.Height;
-                ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+                ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
                 int[] data = new int[width * height];
                 if ((width != image.Width) || (height != image.Height))
@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 CGImage cgImage = uiImage.CGImage;
                 width = (int)cgImage.Width;
                 height = (int)cgImage.Height;
-                ValidateBounds(contextStrategy.Context.DeviceStrategy, width, height);
+                ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
                 
                 byte[] data = new byte[width * height * 4];
 

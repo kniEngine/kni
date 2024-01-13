@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Rectangle scissorRect = _scissorRectangle;
             if (!IsRenderTargetBound)
-                scissorRect.Y = this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
+                scissorRect.Y = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
             GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
             GL.CheckGLError();
             _scissorRectangleDirty = false;
@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this.IsRenderTargetBound)
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
             else
-                GL.Viewport(_viewport.X, this.Context.DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+                GL.Viewport(_viewport.X, ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
             GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
@@ -282,11 +282,11 @@ namespace Microsoft.Xna.Platform.Graphics
             // Lookup the shader program.
             ShaderProgram shaderProgram;
             int shaderProgramHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
-            if (!this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
+            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
                 shaderProgram = CreateProgram(this.VertexShader, this.PixelShader);
-                this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
+               ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
             }
 
             if (shaderProgram.Program == -1)
@@ -332,7 +332,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _posFixup.X = 1.0f;
             _posFixup.Y = 1.0f;
-            if (!this.Context.DeviceStrategy.UseHalfPixelOffset)
+            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.UseHalfPixelOffset)
             {
                 _posFixup.Z = 0f;
                 _posFixup.W = 0f;
@@ -453,7 +453,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
-                int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
+                int maxVertexBufferSlots = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots;
                 VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
                 if (_attribsDirty
@@ -480,7 +480,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         // only set the divisor if instancing is supported
-                        if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
+                        if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
                         {
                             GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
                             GL.CheckGLError();
@@ -526,7 +526,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int vertexStride = vertexDeclaration.VertexStride;
             IntPtr vertexOffset = baseVertex;
 
-            int maxVertexBufferSlots = this.Context.DeviceStrategy.Capabilities.MaxVertexBufferSlots;
+            int maxVertexBufferSlots = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots;
             VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
             for (int e = 0; e < vertexAttribInfo.Elements.Count; e++)
@@ -541,7 +541,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
 
 #if DESKTOPGL
-                if (this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
+                if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
                     GL.CheckGLError();
@@ -629,7 +629,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!this.Context.DeviceStrategy.Capabilities.SupportsInstancing)
+            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();
@@ -644,7 +644,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (baseInstance > 0)
             {
-                if (!this.Context.DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
+                if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
                 PlatformApplyVertexBuffersAttribs(baseVertex);
@@ -972,16 +972,16 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
                     GL.CheckGLError();
-                    Debug.Assert(this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer);
+                    Debug.Assert(((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer);
                     GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height,
                                        0, 0, renderTarget.Width, renderTarget.Height,
                                        ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
                     GL.CheckGLError();
                 }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer)
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents &&((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer)
                 {
-                    Debug.Assert(this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer);
+                    Debug.Assert(((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GL.CheckGLError();
                 }
@@ -1009,7 +1009,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer,((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
             GL.CheckGLError();
 
             // Reset the raster state because we flip vertices

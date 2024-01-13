@@ -32,8 +32,8 @@ namespace Microsoft.Xna.Platform.Graphics
             _windowHandle = windowHandle;
             _presentInterval = presentInterval;
 
-            int maxMultiSampleCount = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(contextStrategy.Context.DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = contextStrategy.Context.DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
+            _multiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
 
             ((ConcreteRenderTarget2D)this)._renderTargetViews = new D3D11.RenderTargetView[1];
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             DXGI.SampleDescription multisampleDesc = base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(dxgiFormat, MultiSampleCount);
 
-            D3D11.Device d3dDevice = contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
+            D3D11.Device d3dDevice = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
 
             CreateSwapChainTexture(d3dDevice, width, height, multisampleDesc, dxgiFormat);
             if (preferredDepthFormat != DepthFormat.None)
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_mipMap)
                     texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
 
-                return new D3D11.Texture2D(contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+                return new D3D11.Texture2D(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
             }
             else
             {

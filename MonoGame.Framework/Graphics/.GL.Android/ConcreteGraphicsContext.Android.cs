@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
             int[] attribs = view.GLesVersion.GetAttributes();
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(Context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
             if (!view.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(Context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
             if (!view.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))

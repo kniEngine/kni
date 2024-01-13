@@ -365,7 +365,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
             GL.CheckGLError();
 #endif
-            if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
+            if (((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
                 {
