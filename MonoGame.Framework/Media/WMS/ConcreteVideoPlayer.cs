@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Platform.Media
             if (_lastFrame == null)
                 _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
-            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
             byte[] texData = _videoPlatformStream.SampleGrabber.TextureData;
             if (texData != null)
                 _lastFrame.SetData(texData);
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             // Set the new video.
-            VideoPlatformStream _videoPlatformStream = ((ConcreteVideoStrategy)base.Video.Strategy).GetVideoPlatformStream();
+            VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
             _session.SetTopology(SessionSetTopologyFlags.Immediate, _videoPlatformStream.Topology);
 
             // Get the clock.

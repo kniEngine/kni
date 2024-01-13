@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
+    public interface IPlatformVideo
+    {
+        VideoStrategy Strategy { get; }
+    }
+
     public class VideoStrategy : IDisposable
     {
         public VideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan duration)
@@ -47,6 +52,10 @@ namespace Microsoft.Xna.Platform.Media
         /// </summary>
         public VideoSoundtrackType VideoSoundtrackType { get; internal set; }
 
+        public T ToConcrete<T>() where T : VideoStrategy
+        {
+            return (T)this;
+        }
 
         #region IDisposable Members
         
