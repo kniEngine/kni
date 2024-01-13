@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <paramref name="elements"/> is <see langword="null"/> or empty.
         /// </exception>
         public VertexDeclaration(params VertexElement[] elements)
-            : this(GetVertexStride(elements), elements)
+            : this(CalculateVertexStride(elements), elements)
 		{
 		}
 
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private static int GetVertexStride(VertexElement[] elements)
+        private static int CalculateVertexStride(VertexElement[] elements)
 		{
 			int max = 0;
 			for (int i = 0; i < elements.Length; i++)
