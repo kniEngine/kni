@@ -291,14 +291,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (this.LevelCount > 0)
                 {
                     throw new NotImplementedException();
-                    // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);
+                    //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);
+                    //GL.CheckGLError();
                 }
                 else
                 {
                     throw new NotImplementedException();
                     // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, 1000);
+                    //GL.CheckGLError();
                 }
-                GL.CheckGLError();
             }
         }
 
