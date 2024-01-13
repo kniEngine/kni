@@ -104,16 +104,16 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
-                if (!_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
-                {
-                    // Data.Elements have already been set in the Data ctor. However, entries
-                    // in the vertex declaration cache must be immutable. Therefore, we create a 
-                    // copy of the array, which the user cannot access.
-                    data.Elements = (VertexElement[])elements.Clone();
+                if (_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
+                    return vertexDeclaration;
 
-                    vertexDeclaration = new VertexDeclaration(data);
-                    _vertexDeclarationDataCache[data] = vertexDeclaration;
-                }
+                // Data.Elements have already been set in the Data ctor. However, entries
+                // in the vertex declaration cache must be immutable. Therefore, we create a 
+                // copy of the array, which the user cannot access.
+                data.Elements = (VertexElement[])elements.Clone();
+
+                vertexDeclaration = new VertexDeclaration(data);
+                _vertexDeclarationDataCache[data] = vertexDeclaration;
 
                 return vertexDeclaration;
             }
